@@ -1,0 +1,246 @@
+# vaporize@wrkstrm-core.cli
+
+Vaporize is the wrkstrm-core build/install/uninstall/open/run gate for Swift
+artifacts and Apple app bundles. Agents should use this CLI when they need to
+build, install, reinstall, uninstall, open, or run SwiftPM-built CLIs, app
+bundles, Xcode projects, or Xcode workspaces.
+
+The name is doctrine: Vaporize builds. Warehouse stores. Vaporware is the main
+unit of economics. Agents call Vaporize instead of improvising local shell
+choreography, and use warehouse mode to store or emit vaporware inventory
+receipts.
+
+Vaporize is intentionally not a swift-universal tool. The Xcode project/workspace
+surface is Apple product infrastructure, and the restricted native-tool route is
+owned by wrkstrm-core.
+
+The package path, executable product, and command surface are all
+`vaporize@wrkstrm-core.cli` per operator OD-N 2026-06-11. The legacy
+`craze@wrkstrm-core.cli` package directory, compatibility executable, and
+`craze.cli.tool.json` manifest have been retired with no compatibility
+breadcrumbs (axiom: `no-compatibility-breadcrumbs-after-false-home-rehome`).
+The legacy `x-craze-collapse-path` annotation key remains supported by the
+scanner as a read-only fallback so historical vaporware records still
+classify; the canonical write key is `x-vaporize-collapse-path`.
+
+## Requirements
+
+- macOS 26.0+
+- Swift 6.2+
+
+## Canonical installed command
+
+```bash
+vaporize install --artifact cli --package-path <package> --product <product> --configuration release --force
+vaporize uninstall --artifact cli --package-path <package> --product <product>
+vaporize build --artifact cli --package-path <package> --product <product> --configuration release
+vaporize run --artifact cli --package-path <package> --product <product> --configuration release -- <arguments>
+vaporize run --artifact app --package-path <package> --product <app-product> --configuration release --force
+vaporize pass -- swift --version
+vaporize setup --xcode-component MetalToolchain
+vaporize status --path <records> --format text
+vaporize warehouse --path <records> --receipt-path <receipt.json>
+```
+
+## CLI install and uninstall
+
+```bash
+vaporize install \
+  --artifact cli \
+  --package-path private/universal/substrate/collectives/clia-org/private/universal/domain/tooling/spm/clia-agent \
+  --product clia \
+  --configuration release
+```
+
+Force a reinstall (uninstall then install):
+
+```bash
+vaporize install \
+  --artifact cli \
+  --package-path private/universal/substrate/collectives/clia-org/private/universal/domain/tooling/spm/clia-agent \
+  --product clia \
+  --configuration release \
+  --force
+```
+
+Uninstall a CLI product:
+
+```bash
+vaporize uninstall \
+  --artifact cli \
+  --package-path private/universal/substrate/collectives/clia-org/private/universal/domain/tooling/spm/clia-agent \
+  --product clia
+```
+
+## App install and open
+
+SwiftPM package:
+
+```bash
+vaporize install \
+  --artifact app \
+  --package-path private/universal/substrate/collectives/clia-org/private/universal/domain/tooling/spm/clia \
+  --product clia-mac \
+  --configuration release \
+  --destination /Applications \
+  --force \
+  --launch
+```
+
+Xcode project (no Package.swift):
+
+```bash
+vaporize install \
+  --artifact app \
+  --package-path private/universal/substrate/collectives/clia-org/private/apple/apps/clia \
+  --product clia-mac \
+  --configuration release \
+  --destination /Applications \
+  --xcode-project private/universal/substrate/collectives/clia-org/private/apple/apps/clia/clia.xcodeproj \
+  --scheme clia-mac-app \
+  --derived-data-path private/universal/substrate/collectives/clia-org/private/apple/apps/clia/.build/xcode-derived \
+  --xcode-destination 'platform=macOS,arch=arm64' \
+  --xcode-build-setting CODE_SIGNING_ALLOWED=NO \
+  --force \
+  --launch
+```
+
+Xcode workspace (no Package.swift):
+
+```bash
+vaporize install \
+  --artifact app \
+  --package-path /path/to/workspace/root \
+  --product MyApp \
+  --configuration release \
+  --destination /Applications \
+  --xcode-workspace /path/to/Workspace.xcworkspace \
+  --scheme MyApp \
+  --derived-data-path /path/to/.build/xcode-derived \
+  --xcode-destination 'platform=macOS,arch=arm64' \
+  --force \
+  --launch
+```
+
+When the built `.app` bundle name differs from the install product name, keep
+the install product stable and locate the built artifact with `--app-bundle-name`:
+
+```bash
+vaporize install \
+  --artifact app \
+  --package-path private/universal/substrate/collectives/wrkstrm-core/private/apple/apps/creative-selection \
+  --product creative-selection \
+  --app-bundle-name creative-selection.debug \
+  --configuration debug \
+  --destination /Applications \
+  --xcode-project private/universal/substrate/collectives/wrkstrm-core/private/apple/apps/creative-selection/creative-selection.xcodeproj \
+  --scheme creative-selection \
+  --derived-data-path private/universal/substrate/collectives/wrkstrm-core/private/apple/apps/creative-selection/.derived-data \
+  --xcode-destination 'platform=macOS,arch=arm64' \
+  --xcode-build-setting CODE_SIGNING_ALLOWED=NO \
+  --xcode-build-setting SKIP_APPLICATION_DEPLOY=YES \
+  --force
+```
+
+Run an app product. This installs by default and opens the installed app:
+
+```bash
+vaporize run \
+  --artifact app \
+  --package-path /path/to/workspace/root \
+  --product MyApp \
+  --configuration release \
+  --force
+```
+
+Uninstall an app from the destination directory:
+
+```bash
+vaporize uninstall \
+  --artifact app \
+  --package-path /path/to/workspace/root \
+  --product MyApp \
+  --destination /Applications
+```
+
+## Build and run CLIs
+
+Build a SwiftPM product through Vaporize. Build mode installs by default unless
+`--skip-install` is provided.
+
+```bash
+vaporize build \
+  --artifact cli \
+  --package-path private/universal/substrate/collectives/swift-universal/private/universal/domain/build/spm/common-shell \
+  --product common-shell-cli \
+  --configuration release
+```
+
+Run a SwiftPM executable product through Vaporize. Run mode installs by default,
+then executes the installed product from `~/.swiftpm/bin/<product>`.
+
+```bash
+vaporize run \
+  --artifact cli \
+  --package-path private/universal/substrate/collectives/swift-universal/private/universal/domain/build/spm/common-shell \
+  --product common-shell-cli \
+  --configuration release \
+  -- --help
+```
+
+## Swift pass-through
+
+Pass-through mode is the no-fuss lane for Swift commands that do not need an
+install/open wrapper. It runs through CommonProcess and preserves normal stdout,
+stderr, and exit-code behavior.
+
+```bash
+vaporize pass -- swift package describe \
+  --package-path private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli
+```
+
+Use `--analyze` or `--receipt-path` when a run should emit a structured receipt
+for later analysis:
+
+```bash
+vaporize pass \
+  --analyze \
+  --receipt-path /tmp/vaporize-swift-version.receipt.json \
+  -- swift --version
+```
+
+Receipt fields include the tool, executable, arguments, working directory,
+CommonProcess request id, runner kind, exit code or signal, process identifier,
+and stdout/stderr byte counts.
+
+## Xcode component setup
+
+Setup mode is the owned lane for Xcode component downloads required by Apple app
+builds. It keeps direct `xcodebuild` calls inside Vaporize:
+
+```bash
+vaporize setup --xcode-component MetalToolchain
+```
+
+Use this when SwiftTerm or another dependency needs the Metal compiler and Xcode
+reports a missing Metal Toolchain.
+
+## Notes
+
+- Direct `xcodebuild` is blacklisted as a restricted native tool for agent use.
+  Agents route Swift app build/install/open/run proof through
+  `vaporize@wrkstrm-core.cli`; Vaporize may invoke `xcodebuild` only as an
+  implementation detail.
+- CLI install/uninstall uses `swift package experimental-install` and
+  `swift package experimental-uninstall` under the hood.
+- App install uses `swift build` with the Xcode build system, or a typed
+  `xcodebuild` invocation when Xcode project/workspace fields are provided.
+- Xcode build settings must be passed as repeatable `--xcode-build-setting`
+  `KEY=VALUE` fields. Do not smuggle native-tool shell fragments into runbooks.
+- Pass-through mode currently defaults to Swift. It is for analyzable Swift
+  command proof, not for bypassing the restricted `xcodebuild` route.
+- Build mode installs by default. Use `--skip-install` only when explicitly
+  proving build output without installing it.
+- Run mode installs by default. CLI runs execute the installed binary; app runs
+  open the installed app.
+- If the tool or app is already installed, re-run with `--force` to replace it.
