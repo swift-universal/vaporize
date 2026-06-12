@@ -3,7 +3,7 @@
   "artifactId": "vaporize-v0.0.1-provenance-artifact",
   "subjectAppSlug": "vaporize@wrkstrm-core.cli",
   "subjectReleaseSlug": "v0.0.1",
-  "generatedAt": "2026-06-12T22:28:11Z",
+  "generatedAt": "2026-06-12T22:43:14Z",
   "generatedBy": "codex-crisie",
   "status": "captured-for-forward-pkl-migration",
   "purpose": "Collect the v0.0.1 release-prep receipts and provenance in one artifact so the next migration slice can proceed from durable evidence rather than chat memory.",
@@ -112,7 +112,11 @@
     },
     {
       "path": "private/apple/spm/vaporize@wrkstrm-core.cli/tests/vaporize-cli-tests/AppleProjectYMLReaderTests.swift",
-      "purpose": "Covers Concourse project.yml parsing, PklSwift parity comparison, transitional YAML generation, multi-target parsing, and WRAPPER_NAME expansion."
+      "purpose": "Covers Concourse project.yml parsing, multi-target parsing, and WRAPPER_NAME expansion."
+    },
+    {
+      "path": "private/apple/spm/vaporize@wrkstrm-core.cli/tests/vaporize-cli-tests/AppleProjectPklTests.swift",
+      "purpose": "Covers PklSwift parity comparison and transitional YAML generation from Concourse project.pkl."
     },
     {
       "path": "private/apple/apps/concourse/concourse.xcodeproj/project.pbxproj",

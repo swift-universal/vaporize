@@ -8,7 +8,7 @@
   "packetVersion": "v0.0.1",
   "reviewKind": "internal-essential-tool-release-prep",
   "packetStatus": "blocked-pending-pkl-backed-xcode-world-state-generation",
-  "emittedAt": "2026-06-12T22:28:11Z",
+  "emittedAt": "2026-06-12T22:43:14Z",
   "emittedBy": "codex-crisie",
   "lifecycleStage": "internal-cli-release-prep",
   "releaseTarget": {
@@ -88,6 +88,12 @@
       "s": ["vaporize", "v0.0.1", "project-yml-reader-tests"],
       "t": "Vaporize AppleProjectYMLReader tests",
       "tg": [{"k": "rp", "rt": "mono", "v": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/tests/vaporize-cli-tests/AppleProjectYMLReaderTests.swift"}]
+    },
+    {
+      "LinkRefModel": "0.3.0",
+      "s": ["vaporize", "v0.0.1", "apple-project-pkl-tests"],
+      "t": "Vaporize AppleProject Pkl tests",
+      "tg": [{"k": "rp", "rt": "mono", "v": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/tests/vaporize-cli-tests/AppleProjectPklTests.swift"}]
     },
     {
       "LinkRefModel": "0.3.0",

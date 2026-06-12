@@ -1,6 +1,6 @@
 # Vaporize v0.0.1 - Provenance Artifact
 
-**Generated:** 2026-06-12T22:28:11Z
+**Generated:** 2026-06-12T22:43:14Z
 **Status:** captured for forward Pkl migration
 **Subject:** `vaporize@wrkstrm-core.cli` v0.0.1 release prep
 
