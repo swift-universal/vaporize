@@ -8,7 +8,7 @@
   "packetVersion": "v0.0.1",
   "reviewKind": "internal-essential-tool-release-prep",
   "packetStatus": "blocked-pending-pkl-project-generation",
-  "emittedAt": "2026-06-12T21:55:38Z",
+  "emittedAt": "2026-06-12T22:11:11Z",
   "emittedBy": "codex-crisie",
   "lifecycleStage": "internal-cli-release-prep",
   "releaseTarget": {
@@ -111,6 +111,24 @@
       "s": ["vaporize", "v0.0.1", "provenance-artifact"],
       "t": "Vaporize v0.0.1 provenance artifact",
       "tg": [{"k": "rp", "rt": "mono", "v": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/vaporize-v0.0.1-provenance-artifact.json"}]
+    },
+    {
+      "LinkRefModel": "0.3.0",
+      "s": ["vaporize", "v0.0.1", "apple-project-spec-pkl-schema"],
+      "t": "Vaporize AppleProjectSpec Pkl schema",
+      "tg": [{"k": "rp", "rt": "mono", "v": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/Pkl/AppleProjectSpec.pkl"}]
+    },
+    {
+      "LinkRefModel": "0.3.0",
+      "s": ["vaporize", "v0.0.1", "concourse-project-pkl"],
+      "t": "Concourse Pkl parity specimen",
+      "tg": [{"k": "rp", "rt": "mono", "v": "private/universal/substrate/collectives/wrkstrm-core/private/apple/apps/concourse/project.pkl"}]
+    },
+    {
+      "LinkRefModel": "0.3.0",
+      "s": ["vaporize", "v0.0.1", "concourse-yml-pkl-comparison"],
+      "t": "Concourse project.yml to project.pkl comparison receipt",
+      "tg": [{"k": "rp", "rt": "mono", "v": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/concourse-project-yml-pkl-comparison.receipt.json"}]
     }
   ],
   "qaEvidence": {
@@ -124,7 +142,9 @@
     "projectYMLInspectionResult": "PASS",
     "projectYMLFleetParseAudit": "PASS: 155/155 discovered project.yml files under private/universal/substrate/collectives parsed through inspect-project-yml",
     "oldToolVaporizeBuildComparison": "PASS-WITH-NOTE: Concourse old XcodeGen script build and Vaporize app build both pass after Vaporize derives WRAPPER_NAME from project.yml",
-    "provenanceArtifact": "PASS: v0.0.1 provenance artifact captures receipts, validation commands, savepoints, proven claims, unproven claims, and forward path"
+    "provenanceArtifact": "PASS: v0.0.1 provenance artifact captures receipts, validation commands, savepoints, proven claims, unproven claims, and forward path",
+    "pklParityComparisonCommand": "vaporize compare-project-yml-pkl --path private/apple/apps/concourse/project.yml --pkl-path private/apple/apps/concourse/project.pkl --format json --receipt-path private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/concourse-project-yml-pkl-comparison.receipt.json",
+    "pklParityComparisonResult": "PASS: matched=true, mismatchCount=0"
   },
   "gateResults": [
     {
@@ -181,6 +201,11 @@
       "gateRef": "GATE-17-provenance-artifact-captured",
       "status": "PASS",
       "rationale": "Provenance artifact captures receipts, validation commands, savepoint events, and forward Pkl migration boundary"
+    },
+    {
+      "gateRef": "GATE-18-concourse-pkl-parity-specimen",
+      "status": "PASS",
+      "rationale": "Concourse project.pkl amends AppleProjectSpec.pkl and compare-project-yml-pkl reports zero mismatches against legacy project.yml"
     }
   ],
   "knownFollowUps": [
@@ -214,6 +239,7 @@
     "x-apple-project-yml-inspection": "inspect-project-yml parses legacy XcodeGen project.yml files into Swift AppleProjectSpec data and emits a vaporize-apple-project-yml-inspection receipt. It is read-only migration intake, not forward source-of-truth generation. Fleet audit parsed 155/155 discovered project.yml files under private/universal/substrate/collectives.",
     "x-old-tool-vaporize-build-comparison": "Concourse old XcodeGen script build and Vaporize app build both pass after Vaporize derives legacy WRAPPER_NAME from project.yml. The first Vaporize run exposed and then closed an artifact-location default mismatch.",
     "x-provenance-artifact": "vaporize-v0.0.1-provenance-artifact.json collects release-prep receipts, validation commands, savepoints, proven claims, unproven claims, and the forward Pkl migration path.",
+    "x-pkl-parity-specimen": "Concourse now has project.pkl amending AppleProjectSpec.pkl. compare-project-yml-pkl evaluates Pkl to JSON, decodes YAML and Pkl into AppleProjectSpec, and emits a zero-mismatch comparison receipt.",
     "x-pkl-project-generation-gate": "Internal v0.0.1 release is blocked until our owned Apple project-generation path moves off XcodeGen and onto Pkl, with any leftover XcodeGen surfaces quarantined as compatibility.",
     "x-xcodegen-to-pkl-investigation": "Investigation found 155 project.yml files, 185 checked-in .xcodeproj/project.pbxproj files, direct XcodeGen runner surfaces, and no existing Pkl Apple-project generation model. The first approved mitigation slice now reads legacy YAML through Swift and receipts Concourse inspection."
   }

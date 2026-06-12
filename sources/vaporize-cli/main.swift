@@ -22,7 +22,8 @@ struct VaporizeCLI: AsyncParsableCommand {
       pass, use, toolchain, setup. Vaporware-awareness modes: status + warehouse enumerate and \
       store vaporware at a path per the `x-vaporize-collapse-path` annotation \
       convention. Project-generation bridge mode: inspect-project-yml reads \
-      legacy XcodeGen YAML into an owned Swift model without rewriting it. \
+      legacy XcodeGen YAML into an owned Swift model without rewriting it; \
+      compare-project-yml-pkl compares that model with a Pkl parity specimen. \
       Legacy `inventory` and `x-craze-collapse-path` remain compatibility \
       aliases during migration.
       """
@@ -43,6 +44,7 @@ struct VaporizeCLI: AsyncParsableCommand {
     case warehouse
     case validateJSON = "validate-json"
     case inspectProjectYML = "inspect-project-yml"
+    case compareProjectYMLPkl = "compare-project-yml-pkl"
     case inventory
 
     /// Substrate package-graph subfunction. Forwards remaining arguments to
@@ -63,7 +65,7 @@ struct VaporizeCLI: AsyncParsableCommand {
     case app
   }
 
-  @Argument(help: "Mode: install, uninstall, build, run, pass, use, toolchain, setup, status, warehouse, validate-json, inspect-project-yml, inventory, or graph (forwards to package-graph@wrkstrm.cli).")
+  @Argument(help: "Mode: install, uninstall, build, run, pass, use, toolchain, setup, status, warehouse, validate-json, inspect-project-yml, compare-project-yml-pkl, inventory, or graph (forwards to package-graph@wrkstrm.cli).")
   var mode: Mode
 
   @Option(name: .customLong("artifact"), help: "Artifact kind: cli or app.")
@@ -173,12 +175,17 @@ struct VaporizeCLI: AsyncParsableCommand {
 
   @Option(
     name: .customLong("path"),
-    help: "Path for status, warehouse, validate-json, or inspect-project-yml modes.")
+    help: "Path for status, warehouse, validate-json, inspect-project-yml, or compare-project-yml-pkl modes.")
   var vaporScanPath: String?
 
   @Option(
+    name: .customLong("pkl-path"),
+    help: "Path to an AppleProjectSpec Pkl record for compare-project-yml-pkl mode.")
+  var pklPath: String?
+
+  @Option(
     name: .customLong("format"),
-    help: "Output format for status or inspect-project-yml mode: text (default) or json.")
+    help: "Output format for status, inspect-project-yml, or compare-project-yml-pkl mode: text (default) or json.")
   var vaporOutputFormat: VaporOutputFormatArgument = .text
 
   @Argument(parsing: .remaining, help: "Arguments forwarded to run, pass, or toolchain mode.")
@@ -210,6 +217,8 @@ struct VaporizeCLI: AsyncParsableCommand {
       try await validateJSON()
     case .inspectProjectYML:
       try await inspectProjectYML()
+    case .compareProjectYMLPkl:
+      try await compareProjectYMLPkl()
     case .inventory:
       try await runVaporWarehouse()
     case .graph:
@@ -781,6 +790,48 @@ struct VaporizeCLI: AsyncParsableCommand {
       let data = try encoder.encode(receipt)
       FileHandle.standardOutput.write(data)
       FileHandle.standardOutput.write(Data("\n".utf8))
+    }
+  }
+
+  private func compareProjectYMLPkl() async throws {
+    guard let vaporScanPath, !vaporScanPath.isEmpty else {
+      throw ValidationError("--path is required for compare-project-yml-pkl mode.")
+    }
+    guard let pklPath, !pklPath.isEmpty else {
+      throw ValidationError("--pkl-path is required for compare-project-yml-pkl mode.")
+    }
+
+    let requestId = "vaporize-compare-project-yml-pkl-\(UUID().uuidString)"
+    let ymlSpec = try AppleProjectYMLReader.load(url: URL(fileURLWithPath: vaporScanPath))
+    let pklSpec = try await AppleProjectPklLoader.load(url: URL(fileURLWithPath: pklPath))
+    let receipt = AppleProjectSpecComparator.receipt(
+      ymlSpec: ymlSpec,
+      pklSpec: pklSpec,
+      ymlPath: vaporScanPath,
+      pklPath: pklPath,
+      requestId: requestId
+    )
+    try emitReceiptIfRequested(receipt)
+
+    switch vaporOutputFormat {
+    case .text:
+      let status = receipt.matched ? "matched" : "mismatched"
+      print("project.yml <-> project.pkl: \(status) mismatches=\(receipt.mismatchCount)")
+      if !receipt.mismatches.isEmpty {
+        let joinedMismatches = receipt.mismatches.joined(separator: ", ")
+        print("mismatches: \(joinedMismatches)")
+      }
+    case .json:
+      let encoder = JSONEncoder()
+      encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
+      let data = try encoder.encode(receipt)
+      FileHandle.standardOutput.write(data)
+      FileHandle.standardOutput.write(Data("\n".utf8))
+    }
+
+    guard receipt.matched else {
+      let joinedMismatches = receipt.mismatches.joined(separator: ", ")
+      throw ValidationError("project.yml and project.pkl differ: \(joinedMismatches)")
     }
   }
 

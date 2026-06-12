@@ -2,7 +2,7 @@
 
 **Status:** release-blocker investigation complete
 **Generated:** 2026-06-12T20:58:02Z
-**Updated:** 2026-06-12T21:55:38Z
+**Updated:** 2026-06-12T22:11:11Z
 **Component:** `vaporize@wrkstrm-core.cli`
 **Tool classification:** `internal-essential-tool`
 
@@ -40,6 +40,11 @@ The first approved migration-prep slice is now landed:
 - `vaporize-v0.0.1-provenance-artifact.json` collects the release-prep
   receipts, validation commands, savepoints, proven claims, unproven claims,
   and forward Pkl migration path.
+- `Pkl/AppleProjectSpec.pkl` plus Concourse `project.pkl` are the first Pkl
+  parity specimen.
+- `concourse-project-yml-pkl-comparison.receipt.json` records that
+  `compare-project-yml-pkl` found zero mismatches between Concourse YAML and
+  Pkl-evaluated project data.
 
 This does not unblock v0.0.1 by itself. It gives the Pkl migration a tested
 Swift intake surface so the next slice can compare Pkl-evaluated project data
@@ -124,11 +129,6 @@ directly through `xcodegen generate`.
 
 ## Next Concrete Work
 
-- Author `AppleProjectSpec.pkl`.
-- Port `wrkstrm-core/private/apple/apps/concourse/project.yml` as the first
-  Pkl specimen.
-- Define a comparison receipt between `inspect-project-yml` output and
-  Pkl-evaluated project data.
 - Define `PklProjectGenerationReceipt`.
 - Add a Vaporize enforcement bead that scans for unclassified substrate-owned
   XcodeGen invocations.

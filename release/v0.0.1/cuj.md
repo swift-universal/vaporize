@@ -1,7 +1,7 @@
 # Vaporize v0.0.1 - Critical User Journeys
 
 **Status:** release-prep draft; blocked pending Pkl project-generation migration
-**Updated:** 2026-06-12T21:16:27Z
+**Updated:** 2026-06-12T22:11:11Z
 **Component:** `vaporize@wrkstrm-core.cli`
 **Tool classification:** `internal-essential-tool`
 
@@ -165,6 +165,28 @@ Success:
 
 - Release review is based on current artifacts, tests, and known blockers, not
   chat memory.
+
+## CUJ-10 - Assistant Compares Legacy YAML With Pkl Specimen
+
+1. Assistant ports one legacy `project.yml` into a Pkl record that amends
+   `AppleProjectSpec.pkl`.
+2. Assistant runs
+   `vaporize compare-project-yml-pkl --path <project.yml> --pkl-path <project.pkl> --receipt-path <receipt>`.
+3. Vaporize evaluates the Pkl record to JSON.
+4. Vaporize decodes both legacy YAML and Pkl JSON into Swift `AppleProjectSpec`.
+5. Vaporize emits a `vaporize-apple-project-yml-pkl-comparison` receipt.
+
+Success:
+
+- The comparison reports zero mismatches before any generator writes project
+  world-state.
+- A mismatch blocks the next migration step and names the mismatched signature
+  section.
+
+Failure truth:
+
+- A matched comparison is parity evidence for one specimen only; it is not
+  fleet build parity and not Pkl-backed project generation.
 
 ## Deferred CUJ - Assistant Builds A Pkl-Backed Apple Project
 

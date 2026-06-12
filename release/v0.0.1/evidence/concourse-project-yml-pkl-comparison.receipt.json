@@ -1,0 +1,175 @@
+{
+  "matched" : true,
+  "migrationPhase" : "pkl-parity-specimen",
+  "mismatchCount" : 0,
+  "mismatches" : [
+
+  ],
+  "pklPath" : "private\/apple\/apps\/concourse\/project.pkl",
+  "pklSignature" : {
+    "options" : {
+      "createIntermediateGroups" : "true",
+      "minimumXcodeGenVersion" : "2.39.0",
+      "useBaseInternationalization" : "true"
+    },
+    "packages" : {
+      "WrkstrmOnboarding" : {
+        "path" : "..\/..\/..\/..\/..\/wrkstrm-components\/private\/onboarding\/spm\/wrkstrm-onboarding"
+      },
+      "WrkstrmWalkthrough" : {
+        "path" : "..\/..\/..\/..\/..\/wrkstrm-components\/private\/walkthrough\/spm\/wrkstrm-walkthrough"
+      },
+      "common-terminal" : {
+        "path" : "..\/..\/..\/..\/..\/swift-universal\/private\/universal\/domain\/build\/spm\/common-terminal-view"
+      }
+    },
+    "projectName" : "concourse",
+    "settingsBase" : {
+      "INSTALL_PATH" : "\/Applications\/categories\/developer-tools",
+      "MACOSX_DEPLOYMENT_TARGET" : "26.0",
+      "SUBSTRATE_APP_STORE_CATEGORY_PRIMARY" : "Developer Tools",
+      "SUBSTRATE_APP_STORE_CATEGORY_SECONDARY" : "Utilities",
+      "SWIFT_VERSION" : "6.4"
+    },
+    "targets" : {
+      "concourse" : {
+        "dependencies" : [
+          {
+            "package" : "common-terminal",
+            "product" : "CommonTerminalView"
+          },
+          {
+            "package" : "WrkstrmOnboarding",
+            "product" : "WrkstrmOnboarding"
+          },
+          {
+            "package" : "WrkstrmWalkthrough",
+            "product" : "WrkstrmWalkthrough"
+          }
+        ],
+        "deploymentTarget" : "26.0",
+        "platform" : "macOS",
+        "postBuildScripts" : [
+          {
+            "basedOnDependencyAnalysis" : false,
+            "name" : "Deploy to Applications",
+            "normalizedScript" : "set -euo pipefail\nif [ \"${SKIP_APPLICATION_DEPLOY:-NO}\" = \"YES\" ]; then\necho \"Skipping \/Applications deploy because SKIP_APPLICATION_DEPLOY=YES\"\nexit 0\nfi\nINSTALL_ROOT=\"${INSTALL_PATH:-\/Applications\/categories\/developer-tools}\"\nmkdir -p \"$INSTALL_ROOT\"\nDEST=\"${INSTALL_ROOT}\/${FULL_PRODUCT_NAME}\"\nrm -rf \"$DEST\"\ncp -R \"${TARGET_BUILD_DIR}\/${FULL_PRODUCT_NAME}\" \"$DEST\""
+          }
+        ],
+        "preBuildScripts" : [
+
+        ],
+        "settingConfigs" : {
+          "Debug" : {
+            "PRODUCT_BUNDLE_IDENTIFIER" : "studio.laussat.concourse.macos.debug",
+            "SUBSTRATE_APP_DISPLAY_NAME" : "Concourse $(MARKETING_VERSION) Debug",
+            "WRAPPER_NAME" : "concourse-$(MARKETING_VERSION)-debug.app"
+          },
+          "Release" : {
+            "PRODUCT_BUNDLE_IDENTIFIER" : "studio.laussat.concourse.macos.release",
+            "SUBSTRATE_APP_DISPLAY_NAME" : "Concourse $(MARKETING_VERSION) TestFlight",
+            "WRAPPER_NAME" : "concourse-$(MARKETING_VERSION)-testflight.app"
+          }
+        },
+        "settingsBase" : {
+          "CODE_SIGNING_ALLOWED" : "false",
+          "CODE_SIGNING_REQUIRED" : "false",
+          "CURRENT_PROJECT_VERSION" : "1",
+          "GENERATE_INFOPLIST_FILE" : "false",
+          "INFOPLIST_FILE" : "Sources\/mac-app\/Info.plist",
+          "MARKETING_VERSION" : "0.1.0",
+          "PRODUCT_NAME" : "concourse"
+        },
+        "sourcePaths" : [
+          "Sources\/mac-app"
+        ],
+        "type" : "application"
+      }
+    }
+  },
+  "receiptKind" : "vaporize-apple-project-yml-pkl-comparison",
+  "requestId" : "vaporize-compare-project-yml-pkl-C007E3D2-BAE0-44FA-B80F-DE7763E8FDC9",
+  "schemaVersion" : "0.1.0",
+  "ymlPath" : "private\/apple\/apps\/concourse\/project.yml",
+  "ymlSignature" : {
+    "options" : {
+      "createIntermediateGroups" : "true",
+      "minimumXcodeGenVersion" : "2.39.0",
+      "useBaseInternationalization" : "true"
+    },
+    "packages" : {
+      "WrkstrmOnboarding" : {
+        "path" : "..\/..\/..\/..\/..\/wrkstrm-components\/private\/onboarding\/spm\/wrkstrm-onboarding"
+      },
+      "WrkstrmWalkthrough" : {
+        "path" : "..\/..\/..\/..\/..\/wrkstrm-components\/private\/walkthrough\/spm\/wrkstrm-walkthrough"
+      },
+      "common-terminal" : {
+        "path" : "..\/..\/..\/..\/..\/swift-universal\/private\/universal\/domain\/build\/spm\/common-terminal-view"
+      }
+    },
+    "projectName" : "concourse",
+    "settingsBase" : {
+      "INSTALL_PATH" : "\/Applications\/categories\/developer-tools",
+      "MACOSX_DEPLOYMENT_TARGET" : "26.0",
+      "SUBSTRATE_APP_STORE_CATEGORY_PRIMARY" : "Developer Tools",
+      "SUBSTRATE_APP_STORE_CATEGORY_SECONDARY" : "Utilities",
+      "SWIFT_VERSION" : "6.4"
+    },
+    "targets" : {
+      "concourse" : {
+        "dependencies" : [
+          {
+            "package" : "common-terminal",
+            "product" : "CommonTerminalView"
+          },
+          {
+            "package" : "WrkstrmOnboarding",
+            "product" : "WrkstrmOnboarding"
+          },
+          {
+            "package" : "WrkstrmWalkthrough",
+            "product" : "WrkstrmWalkthrough"
+          }
+        ],
+        "deploymentTarget" : "26.0",
+        "platform" : "macOS",
+        "postBuildScripts" : [
+          {
+            "basedOnDependencyAnalysis" : false,
+            "name" : "Deploy to Applications",
+            "normalizedScript" : "set -euo pipefail\nif [ \"${SKIP_APPLICATION_DEPLOY:-NO}\" = \"YES\" ]; then\necho \"Skipping \/Applications deploy because SKIP_APPLICATION_DEPLOY=YES\"\nexit 0\nfi\nINSTALL_ROOT=\"${INSTALL_PATH:-\/Applications\/categories\/developer-tools}\"\nmkdir -p \"$INSTALL_ROOT\"\nDEST=\"${INSTALL_ROOT}\/${FULL_PRODUCT_NAME}\"\nrm -rf \"$DEST\"\ncp -R \"${TARGET_BUILD_DIR}\/${FULL_PRODUCT_NAME}\" \"$DEST\""
+          }
+        ],
+        "preBuildScripts" : [
+
+        ],
+        "settingConfigs" : {
+          "Debug" : {
+            "PRODUCT_BUNDLE_IDENTIFIER" : "studio.laussat.concourse.macos.debug",
+            "SUBSTRATE_APP_DISPLAY_NAME" : "Concourse $(MARKETING_VERSION) Debug",
+            "WRAPPER_NAME" : "concourse-$(MARKETING_VERSION)-debug.app"
+          },
+          "Release" : {
+            "PRODUCT_BUNDLE_IDENTIFIER" : "studio.laussat.concourse.macos.release",
+            "SUBSTRATE_APP_DISPLAY_NAME" : "Concourse $(MARKETING_VERSION) TestFlight",
+            "WRAPPER_NAME" : "concourse-$(MARKETING_VERSION)-testflight.app"
+          }
+        },
+        "settingsBase" : {
+          "CODE_SIGNING_ALLOWED" : "false",
+          "CODE_SIGNING_REQUIRED" : "false",
+          "CURRENT_PROJECT_VERSION" : "1",
+          "GENERATE_INFOPLIST_FILE" : "false",
+          "INFOPLIST_FILE" : "Sources\/mac-app\/Info.plist",
+          "MARKETING_VERSION" : "0.1.0",
+          "PRODUCT_NAME" : "concourse"
+        },
+        "sourcePaths" : [
+          "Sources\/mac-app"
+        ],
+        "type" : "application"
+      }
+    }
+  }
+}

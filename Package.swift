@@ -39,6 +39,8 @@ let package = Package(
     .target(
       name: "AppleProjectSpecCore",
       dependencies: [
+        .product(name: "CommonProcess", package: "common-process"),
+        .product(name: "CommonProcessExecutionKit", package: "common-process"),
         .product(name: "Yams", package: "Yams"),
       ],
       path: "sources/apple-project-spec-core"

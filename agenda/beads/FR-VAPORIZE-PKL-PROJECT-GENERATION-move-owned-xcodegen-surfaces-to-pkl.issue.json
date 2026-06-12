@@ -108,6 +108,12 @@
       "status": "complete",
       "description": "Release-prep receipts, validation commands, savepoints, proven claims, unproven claims, and forward path are captured in one provenance artifact for the next Pkl migration slice.",
       "artifact": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/vaporize-v0.0.1-provenance-artifact.json"
+    },
+    {
+      "slice": "concourse-pkl-parity-specimen",
+      "status": "complete",
+      "description": "AppleProjectSpec.pkl and Concourse project.pkl landed; Vaporize compare-project-yml-pkl evaluates Pkl to JSON and reports zero mismatches against the Swift-read legacy YAML signature.",
+      "receipt": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/concourse-project-yml-pkl-comparison.receipt.json"
     }
   ],
   "linkedTypedRecords": {
@@ -118,6 +124,7 @@
     "concourseProjectYMLInspectionReceipt": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/concourse-project-yml-inspection.receipt.json",
     "projectYMLFleetParseAuditReceipt": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/project-yml-fleet-parse-audit.receipt.json",
     "concourseOldToolVaporizeBuildComparisonReceipt": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/concourse-old-tool-vaporize-build-comparison.receipt.json",
+    "concourseProjectYMLPklComparisonReceipt": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/concourse-project-yml-pkl-comparison.receipt.json",
     "provenanceArtifact": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/vaporize-v0.0.1-provenance-artifact.json",
     "priorXcodeGenBead": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/agenda/beads/FR-VAPORIZE-XCODEGEN-INTEGRATION-substrate-canonical-xcodegen-aware-build.issue.json"
   }

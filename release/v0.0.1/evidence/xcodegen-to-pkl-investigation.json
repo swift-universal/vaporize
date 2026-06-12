@@ -4,7 +4,7 @@
   "subjectAppSlug": "vaporize@wrkstrm-core.cli",
   "subjectReleaseSlug": "v0.0.1",
   "generatedAt": "2026-06-12T20:58:02Z",
-  "updatedAt": "2026-06-12T21:55:38Z",
+  "updatedAt": "2026-06-12T22:11:11Z",
   "generatedBy": "codex-crisie",
   "status": "release-blocker-investigation-with-approved-swift-yaml-read-slice",
   "toolClassification": "internal-essential-tool",
@@ -164,6 +164,15 @@
       "artifact": "private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/vaporize-v0.0.1-provenance-artifact.json",
       "result": "Release-prep receipts, validation commands, savepoint events, proven claims, unproven claims, and forward path are captured in one artifact.",
       "boundary": "Provenance artifact supports forward migration work; it does not unblock internal v0.0.1 release."
+    },
+    {
+      "slice": "concourse-pkl-parity-specimen",
+      "status": "complete",
+      "schema": "private/apple/spm/vaporize@wrkstrm-core.cli/Pkl/AppleProjectSpec.pkl",
+      "specimen": "private/apple/apps/concourse/project.pkl",
+      "receipt": "private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/concourse-project-yml-pkl-comparison.receipt.json",
+      "result": "compare-project-yml-pkl matched Concourse project.yml and project.pkl with zero mismatches.",
+      "boundary": "This proves one Pkl parity specimen; it does not generate .xcodeproj world-state."
     }
   ],
   "recommendedMigrationPlan": [
@@ -183,8 +192,6 @@
     "Do not claim v0.0.1 is internally releasable while Pkl project-generation evidence is missing."
   ],
   "nextConcreteWork": [
-    "Create AppleProjectSpec.pkl and one Concourse Pkl port as the first parity specimen.",
-    "Add a typed comparison receipt between inspect-project-yml output and Pkl-evaluated project data before project generation.",
     "Author a PklProjectGenerationReceipt model for the Pkl-to-world-state step.",
     "Add a Vaporize bead for release-gate enforcement that scans for unclassified substrate-owned XcodeGen invocations.",
     "Update versioned-macos-app-install workflow tool refs from xcodegen to Vaporize/Pkl generation once the owned mode exists."

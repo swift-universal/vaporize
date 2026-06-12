@@ -1,3 +1,5 @@
+import CommonProcess
+import CommonProcessExecutionKit
 import Foundation
 import Yams
 
@@ -256,6 +258,224 @@ public enum AppleProjectYMLReader {
       packageNames: spec.packages.keys.sorted(),
       targetSummaries: targetSummaries
     )
+  }
+}
+
+public enum AppleProjectPklLoaderError: Error, CustomStringConvertible {
+  case evaluationFailed(path: String, exitCode: Int32, stderr: String)
+  case nonJSONOutput(path: String, raw: String, underlying: Error)
+
+  public var description: String {
+    switch self {
+    case .evaluationFailed(let path, let exitCode, let stderr):
+      return "pkl eval failed for \(path) with exit \(exitCode): \(stderr)"
+    case .nonJSONOutput(let path, let raw, let underlying):
+      return "pkl eval for \(path) produced non-JSON output (\(underlying)): \(raw.prefix(160))"
+    }
+  }
+}
+
+public enum AppleProjectPklLoader {
+  public static func load(url: URL) async throws -> AppleProjectSpec {
+    let command = CommandSpec(
+      executable: .name("pkl"),
+      args: ["eval", "--format", "json", url.path],
+      env: .inherit(updating: nil),
+      workingDirectory: nil,
+      requestId: "apple-project-pkl-load-\(UUID().uuidString)"
+    )
+    let output = try await RunnerControllerFactory.run(command: command)
+
+    guard output.isSuccess else {
+      let code: Int32
+      switch output.exitStatus {
+      case .exited(let exitCode):
+        code = Int32(exitCode)
+      case .signalled(let signal):
+        code = Int32(-signal)
+      }
+      throw AppleProjectPklLoaderError.evaluationFailed(
+        path: url.path,
+        exitCode: code,
+        stderr: output.stderrText
+      )
+    }
+
+    do {
+      return try JSONDecoder().decode(AppleProjectSpec.self, from: output.stdout)
+    } catch {
+      throw AppleProjectPklLoaderError.nonJSONOutput(
+        path: url.path,
+        raw: output.stdoutText,
+        underlying: error
+      )
+    }
+  }
+}
+
+public enum AppleProjectSpecComparator {
+  public static func receipt(
+    ymlSpec: AppleProjectSpec,
+    pklSpec: AppleProjectSpec,
+    ymlPath: String,
+    pklPath: String,
+    requestId: String
+  ) -> AppleProjectSpecComparisonReceipt {
+    let ymlSignature = AppleProjectSpecParitySignature(spec: ymlSpec)
+    let pklSignature = AppleProjectSpecParitySignature(spec: pklSpec)
+    let mismatchDescriptions = mismatches(yml: ymlSignature, pkl: pklSignature)
+    return AppleProjectSpecComparisonReceipt(
+      ymlPath: ymlPath,
+      pklPath: pklPath,
+      requestId: requestId,
+      matched: mismatchDescriptions.isEmpty,
+      mismatchCount: mismatchDescriptions.count,
+      mismatches: mismatchDescriptions,
+      ymlSignature: ymlSignature,
+      pklSignature: pklSignature
+    )
+  }
+
+  private static func mismatches(
+    yml: AppleProjectSpecParitySignature,
+    pkl: AppleProjectSpecParitySignature
+  ) -> [String] {
+    var mismatches: [String] = []
+    appendMismatch("projectName", yml.projectName, pkl.projectName, to: &mismatches)
+    appendMismatch("options", yml.options, pkl.options, to: &mismatches)
+    appendMismatch("settingsBase", yml.settingsBase, pkl.settingsBase, to: &mismatches)
+    appendMismatch("packages", yml.packages, pkl.packages, to: &mismatches)
+    appendMismatch("targets", yml.targets, pkl.targets, to: &mismatches)
+    return mismatches
+  }
+
+  private static func appendMismatch<T: Equatable>(
+    _ label: String,
+    _ yml: T,
+    _ pkl: T,
+    to mismatches: inout [String]
+  ) {
+    if yml != pkl {
+      mismatches.append(label)
+    }
+  }
+}
+
+public struct AppleProjectSpecComparisonReceipt: Codable, Equatable, Sendable {
+  public var schemaVersion = "0.1.0"
+  public var receiptKind = "vaporize-apple-project-yml-pkl-comparison"
+  public var migrationPhase = "pkl-parity-specimen"
+  public var ymlPath: String
+  public var pklPath: String
+  public var requestId: String
+  public var matched: Bool
+  public var mismatchCount: Int
+  public var mismatches: [String]
+  public var ymlSignature: AppleProjectSpecParitySignature
+  public var pklSignature: AppleProjectSpecParitySignature
+}
+
+public struct AppleProjectSpecParitySignature: Codable, Equatable, Sendable {
+  public var projectName: String
+  public var options: [String: String]
+  public var settingsBase: [String: String]
+  public var packages: [String: AppleProjectPackageSignature]
+  public var targets: [String: AppleProjectTargetSignature]
+
+  public init(spec: AppleProjectSpec) {
+    self.projectName = spec.name
+    self.options = [
+      "minimumXcodeGenVersion": spec.options?.minimumXcodeGenVersion,
+      "useBaseInternationalization": spec.options?.useBaseInternationalization.map(String.init),
+      "createIntermediateGroups": spec.options?.createIntermediateGroups.map(String.init),
+    ].compactMapValues { $0 }
+    self.settingsBase = signatureMap(spec.settings?.base)
+    self.packages = spec.packages.mapValues { AppleProjectPackageSignature(package: $0) }
+    self.targets = spec.targets.mapValues { AppleProjectTargetSignature(target: $0) }
+  }
+}
+
+public struct AppleProjectPackageSignature: Codable, Equatable, Sendable {
+  public var path: String?
+  public var url: String?
+  public var from: String?
+  public var branch: String?
+  public var exact: String?
+  public var revision: String?
+
+  public init(package: AppleProjectPackage) {
+    self.path = package.path
+    self.url = package.url
+    self.from = package.from
+    self.branch = package.branch
+    self.exact = package.exact
+    self.revision = package.revision
+  }
+}
+
+public struct AppleProjectTargetSignature: Codable, Equatable, Sendable {
+  public var type: String?
+  public var platform: String?
+  public var deploymentTarget: String?
+  public var sourcePaths: [String]
+  public var settingsBase: [String: String]
+  public var settingConfigs: [String: [String: String]]
+  public var dependencies: [AppleProjectDependencySignature]
+  public var preBuildScripts: [AppleProjectBuildScriptSignature]
+  public var postBuildScripts: [AppleProjectBuildScriptSignature]
+
+  public init(target: AppleProjectTarget) {
+    self.type = target.type
+    self.platform = target.platform
+    self.deploymentTarget = target.deploymentTarget?.stringValue
+    self.sourcePaths = (target.sources ?? []).map(\.path)
+    self.settingsBase = signatureMap(target.settings?.base)
+    self.settingConfigs = (target.settings?.configs ?? [:]).mapValues(signatureMap)
+    self.dependencies = (target.dependencies ?? []).map(AppleProjectDependencySignature.init)
+    self.preBuildScripts = (target.preBuildScripts ?? []).map(AppleProjectBuildScriptSignature.init)
+    self.postBuildScripts = (target.postBuildScripts ?? []).map(AppleProjectBuildScriptSignature.init)
+  }
+}
+
+public struct AppleProjectDependencySignature: Codable, Equatable, Sendable {
+  public var package: String?
+  public var product: String?
+  public var target: String?
+  public var embed: Bool?
+  public var codeSign: Bool?
+
+  public init(dependency: AppleProjectDependency) {
+    self.package = dependency.package
+    self.product = dependency.product
+    self.target = dependency.target
+    self.embed = dependency.embed
+    self.codeSign = dependency.codeSign
+  }
+}
+
+public struct AppleProjectBuildScriptSignature: Codable, Equatable, Sendable {
+  public var name: String?
+  public var basedOnDependencyAnalysis: Bool?
+  public var normalizedScript: String
+
+  public init(script: AppleProjectBuildScript) {
+    self.name = script.name
+    self.basedOnDependencyAnalysis = script.basedOnDependencyAnalysis
+    self.normalizedScript = script.script.normalizedProjectScript
+  }
+}
+
+private func signatureMap(_ values: [String: AppleProjectValue]?) -> [String: String] {
+  guard let values else { return [:] }
+  return values.compactMapValues(\.stringValue)
+}
+
+extension String {
+  fileprivate var normalizedProjectScript: String {
+    split(whereSeparator: \.isNewline)
+      .map { line in line.trimmingCharacters(in: .whitespacesAndNewlines) }
+      .filter { !$0.isEmpty }
+      .joined(separator: "\n")
   }
 }
 

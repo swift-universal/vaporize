@@ -1,0 +1,83 @@
+/// Apple project-generation truth for Vaporize migration work.
+///
+/// This Pkl module is the first typed bridge away from legacy XcodeGen
+/// `project.yml`. It intentionally mirrors the Swift `AppleProjectSpec` read
+/// model so migration can prove parity before project world-state generation.
+///
+/// Boundary: this schema is project data, not an Xcode project generator.
+@ModuleInfo { minPklVersion = "0.31.0" }
+
+module vaporize.AppleProjectSpec
+
+class Options {
+  minimumXcodeGenVersion: String?
+  useBaseInternationalization: Boolean?
+  createIntermediateGroups: Boolean?
+}
+
+class Settings {
+  base: Mapping<String, Any>?
+  configs: Mapping<String, Mapping<String, Any>>?
+}
+
+class PackageDependency {
+  path: String?
+  url: String?
+  from: String?
+  branch: String?
+  exact: String?
+  revision: String?
+}
+
+class Source {
+  path: String
+  name: String?
+  type: String?
+  optional: Boolean?
+  excludes: Listing<String>?
+}
+
+class Info {
+  path: String?
+  properties: Mapping<String, Any>?
+}
+
+class Dependency {
+  package: String?
+  product: String?
+  target: String?
+  embed: Boolean?
+  codeSign: Boolean?
+}
+
+class BuildScript {
+  name: String?
+  basedOnDependencyAnalysis: Boolean?
+  script: String
+}
+
+class Target {
+  type: String?
+  platform: String?
+  deploymentTarget: Any?
+  sources: Listing<Source>?
+  info: Info?
+  settings: Settings?
+  dependencies: Listing<Dependency>?
+  preBuildScripts: Listing<BuildScript>?
+  postBuildScripts: Listing<BuildScript>?
+}
+
+class Scheme {
+  shared: Boolean?
+  build: Any?
+  run: Any?
+  test: Any?
+}
+
+name: String
+options: Options?
+settings: Settings?
+packages: Mapping<String, PackageDependency> = new {}
+targets: Mapping<String, Target> = new {}
+schemes: Mapping<String, Scheme> = new {}

@@ -57,6 +57,39 @@ func readsConcourseProjectYML() throws {
   #expect(receipt.packageCount == 3)
 }
 
+@Test("Compares Concourse project.yml with the Pkl parity specimen")
+func comparesConcourseProjectYMLWithPklSpecimen() async throws {
+  let packageRoot = URL(fileURLWithPath: #filePath)
+    .deletingLastPathComponent()
+    .deletingLastPathComponent()
+    .deletingLastPathComponent()
+  let projectYML = packageRoot
+    .appendingPathComponent("../../apps/concourse/project.yml")
+    .standardizedFileURL
+  let projectPkl = packageRoot
+    .appendingPathComponent("../../apps/concourse/project.pkl")
+    .standardizedFileURL
+
+  let ymlSpec = try AppleProjectYMLReader.load(url: projectYML)
+  let pklSpec = try await AppleProjectPklLoader.load(url: projectPkl)
+  let receipt = AppleProjectSpecComparator.receipt(
+    ymlSpec: ymlSpec,
+    pklSpec: pklSpec,
+    ymlPath: projectYML.path,
+    pklPath: projectPkl.path,
+    requestId: "concourse-project-yml-pkl-comparison-test"
+  )
+
+  #expect(receipt.receiptKind == "vaporize-apple-project-yml-pkl-comparison")
+  #expect(receipt.matched == true)
+  #expect(receipt.mismatchCount == 0)
+  #expect(receipt.pklSignature.projectName == "concourse")
+  #expect(
+    receipt.pklSignature.targets["concourse"]?.settingConfigs["Debug"]?["WRAPPER_NAME"]
+      == "concourse-$(MARKETING_VERSION)-debug.app"
+  )
+}
+
 @Test("Reads multi-target YAML shapes without requiring generation")
 func readsMultiTargetProjectYMLShape() throws {
   let yaml = """
