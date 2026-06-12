@@ -3,14 +3,15 @@
   "artifactId": "vaporize-v0.0.1-provenance-artifact",
   "subjectAppSlug": "vaporize@wrkstrm-core.cli",
   "subjectReleaseSlug": "v0.0.1",
-  "generatedAt": "2026-06-12T22:57:36Z",
+  "generatedAt": "2026-06-12T23:06:11Z",
   "generatedBy": "codex-crisie",
   "status": "captured-for-forward-pkl-migration",
   "purpose": "Collect the v0.0.1 release-prep receipts and provenance in one artifact so the next migration slice can proceed from durable evidence rather than chat memory.",
   "releaseVerdict": {
     "currentStatus": "blocked-pending-pkl-project-generation",
     "proven": [
-      "Vaporize package tests pass through Vaporize toolchain mode: 58 tests across VaporizeCLITests, SwiftCLIInstallerTests, and SwiftAppInstallerTests, covering Apple project migration paths, CLI command parsing, pass/use/toolchain modes, JSON validation, inventory scanner/renderer behavior, graph forwarding, and installer argument/Xcode paths.",
+      "CUJ-derived test coverage is explicit: 53 required Swift test obligations plus 4 release evidence checks across 12 active CUJs.",
+      "Vaporize package tests pass through Vaporize toolchain mode: 64 executable Swift tests across VaporizeCLITests, SwiftCLIInstallerTests, and SwiftAppInstallerTests.",
       "Legacy XcodeGen project.yml files parse through the Swift YAML read bridge.",
       "All 155 discovered project.yml files under private/universal/substrate/collectives parsed through inspect-project-yml.",
       "Concourse old XcodeGen script build and Vaporize app build both pass after Vaporize derives legacy WRAPPER_NAME from project.yml.",
@@ -87,6 +88,12 @@
       "result": "BLOCKS-INTERNAL-V0.0.1"
     },
     {
+      "receiptKind": "cuj-test-coverage",
+      "path": "private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/cuj-test-coverage.json",
+      "claim": "Required test count is derived from PRD requirements through active draft CUJs.",
+      "result": "PASS: 53 Swift test obligations, 4 release evidence checks, 64 executable Swift tests"
+    },
+    {
       "receiptKind": "launch-review-packet",
       "path": "private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/launch-review-packet.json",
       "claim": "Release-prep packet gathers release target, QA evidence, gate results, and follow-ups.",
@@ -140,11 +147,15 @@
     },
     {
       "path": "private/apple/spm/vaporize@wrkstrm-core.cli/tests/vaporize-cli-tests/VaporizeCommandParsingTests.swift",
-      "purpose": "Covers mode parsing, compatibility aliases, output format parsing, and graph forwarded arguments."
+      "purpose": "Covers canonical command identity, CLI/app option parsing, compatibility aliases, output format parsing, and graph forwarded arguments."
     },
     {
       "path": "private/apple/spm/vaporize@wrkstrm-core.cli/tests/vaporize-cli-tests/VaporizePassThroughModeTests.swift",
       "purpose": "Covers pass mode Swift tool normalization, default tool behavior, and separator handling."
+    },
+    {
+      "path": "private/apple/spm/vaporize@wrkstrm-core.cli/tests/vaporize-cli-tests/VaporizeReceiptShapeTests.swift",
+      "purpose": "Covers pass, use, and toolchain receipt schema fields required by the active CUJs."
     },
     {
       "path": "private/apple/spm/vaporize@wrkstrm-core.cli/tests/vaporize-cli-tests/VaporizeUseCommonProcessTests.swift",
@@ -189,12 +200,16 @@
     {
       "path": "private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/generated/concourse.apple-project-spec.generated.yml",
       "purpose": "Generated transitional AppleProjectSpec YAML from Concourse project.pkl; migration evidence only, not checked-in project.yml replacement or .xcodeproj world-state."
+    },
+    {
+      "path": "private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/cuj-test-coverage.json",
+      "purpose": "Defines the PRD/CUJ-derived required test floor for active v0.0.1 journeys."
     }
   ],
   "validationEvidence": [
     {
       "command": "vaporize toolchain -- swift test --package-path private/apple/spm/vaporize@wrkstrm-core.cli",
-      "result": "PASS: 58 tests (45 VaporizeCLITests, 4 SwiftCLIInstallerTests, 9 SwiftAppInstallerTests)"
+      "result": "PASS: 64 tests (51 VaporizeCLITests, 4 SwiftCLIInstallerTests, 9 SwiftAppInstallerTests)"
     },
     {
       "command": "vaporize validate-json --path private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/concourse-project-yml-inspection.receipt.json",
@@ -241,6 +256,10 @@
       "result": "PASS"
     },
     {
+      "command": "vaporize validate-json --path private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/cuj-test-coverage.json",
+      "result": "PASS"
+    },
+    {
       "command": "vaporize validate-json --path private/apple/spm/vaporize@wrkstrm-core.cli/agenda/beads/FR-VAPORIZE-PKL-PROJECT-GENERATION-move-owned-xcodegen-surfaces-to-pkl.issue.json",
       "result": "PASS"
     }
@@ -274,7 +293,7 @@
     {
       "eventID": "D4FABA98-0FF1-44EA-920A-80CE08517921",
       "triggeredAt": "2026-06-12T22:49:51Z",
-      "scope": "Apple project test-suite split and expansion to 27 focused CLI tests."
+      "scope": "Apple project test-suite split and focused CLI coverage expansion before the CUJ-derived coverage contract."
     }
   ],
   "forwardPath": [

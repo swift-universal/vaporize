@@ -1,0 +1,186 @@
+{
+  "CUJTestCoverageModel": "0.0.1-untyped",
+  "coverageId": "vaporize-v0.0.1-cuj-test-coverage",
+  "subjectAppSlug": "vaporize@wrkstrm-core.cli",
+  "subjectReleaseSlug": "v0.0.1",
+  "generatedAt": "2026-06-12T23:06:11Z",
+  "generatedBy": "codex-crisie",
+  "status": "active-cuj-coverage-floor-defined",
+  "sourceRule": "Required test count is derived from PRD requirements through active draft CUJs. Actual executable tests may exceed the required floor.",
+  "sourceArtifacts": {
+    "prd": "private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/prd.md",
+    "cuj": "private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/cuj.md",
+    "releaseGates": "private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/release-gates.md"
+  },
+  "counts": {
+    "activeCUJCount": 12,
+    "deferredCUJCount": 2,
+    "requiredSwiftTestObligationCount": 53,
+    "requiredReleaseEvidenceCheckCount": 4,
+    "currentExecutableSwiftTestCount": 64,
+    "currentExecutableSwiftTestBreakdown": {
+      "VaporizeCLITests": 51,
+      "SwiftCLIInstallerTests": 4,
+      "SwiftAppInstallerTests": 9
+    }
+  },
+  "coverage": [
+    {
+      "cuj": "CUJ-01",
+      "title": "Assistant Builds And Installs A SwiftPM CLI",
+      "prdRefs": ["FR-001", "FR-002", "FR-004"],
+      "requiredSwiftTestObligations": 5,
+      "status": "covered",
+      "evidence": [
+        "VaporizeCommandParsingTests.swift",
+        "SwiftCLIInstallerTests.swift"
+      ]
+    },
+    {
+      "cuj": "CUJ-02",
+      "title": "Assistant Builds And Launches A Mac App",
+      "prdRefs": ["FR-003", "FR-004", "FR-015"],
+      "requiredSwiftTestObligations": 9,
+      "status": "covered",
+      "evidence": [
+        "VaporizeCommandParsingTests.swift",
+        "SwiftAppInstallerTests.swift",
+        "AppleProjectAppBundleNameResolverTests.swift"
+      ]
+    },
+    {
+      "cuj": "CUJ-03",
+      "title": "Assistant Runs A Swift Proof Command With A Receipt",
+      "prdRefs": ["FR-005"],
+      "requiredSwiftTestObligations": 4,
+      "status": "covered",
+      "evidence": [
+        "VaporizePassThroughModeTests.swift",
+        "VaporizeReceiptShapeTests.swift"
+      ]
+    },
+    {
+      "cuj": "CUJ-04",
+      "title": "Assistant Uses A CommonProcess Invocation Directly",
+      "prdRefs": ["FR-006"],
+      "requiredSwiftTestObligations": 4,
+      "status": "covered",
+      "evidence": [
+        "VaporizeUseCommonProcessTests.swift",
+        "VaporizeReceiptShapeTests.swift"
+      ]
+    },
+    {
+      "cuj": "CUJ-05",
+      "title": "Assistant Uses Xcode-Selected Swift Without Direct xcrun",
+      "prdRefs": ["FR-010"],
+      "requiredSwiftTestObligations": 6,
+      "status": "covered",
+      "evidence": [
+        "VaporizeToolchainModeTests.swift",
+        "VaporizeReceiptShapeTests.swift"
+      ]
+    },
+    {
+      "cuj": "CUJ-06",
+      "title": "Assistant Validates Release Packet JSON Without jq",
+      "prdRefs": ["FR-011"],
+      "requiredSwiftTestObligations": 2,
+      "status": "covered",
+      "evidence": [
+        "VaporizeJSONValidationTests.swift"
+      ]
+    },
+    {
+      "cuj": "CUJ-07",
+      "title": "Assistant Inventories Vaporware State",
+      "prdRefs": ["FR-007", "FR-008"],
+      "requiredSwiftTestObligations": 10,
+      "status": "covered",
+      "evidence": [
+        "VaporizeVaporInventoryScannerTests.swift",
+        "VaporizeInventoryRendererTests.swift",
+        "VaporizeCommandParsingTests.swift"
+      ]
+    },
+    {
+      "cuj": "CUJ-08",
+      "title": "Assistant Inspects Legacy XcodeGen Project YAML",
+      "prdRefs": ["FR-015"],
+      "requiredSwiftTestObligations": 5,
+      "status": "covered",
+      "evidence": [
+        "AppleProjectYMLReaderTests.swift",
+        "AppleProjectValueTests.swift",
+        "concourse-project-yml-inspection.receipt.json",
+        "project-yml-fleet-parse-audit.receipt.json"
+      ]
+    },
+    {
+      "cuj": "CUJ-09",
+      "title": "Release Reviewer Reads The Packet",
+      "prdRefs": ["FR-012", "FR-013", "FR-014"],
+      "requiredSwiftTestObligations": 0,
+      "requiredReleaseEvidenceChecks": 4,
+      "status": "covered-with-release-evidence",
+      "evidence": [
+        "prd.md",
+        "cuj.md",
+        "release-gates.md",
+        "launch-review-packet.json"
+      ]
+    },
+    {
+      "cuj": "CUJ-10",
+      "title": "Assistant Compares Legacy YAML With Pkl Specimen",
+      "prdRefs": ["FR-016"],
+      "requiredSwiftTestObligations": 4,
+      "status": "covered",
+      "evidence": [
+        "AppleProjectPklTests.swift",
+        "AppleProjectSpecComparatorTests.swift",
+        "concourse-project-yml-pkl-comparison.receipt.json"
+      ]
+    },
+    {
+      "cuj": "CUJ-11",
+      "title": "Assistant Generates Transitional YAML From Pkl",
+      "prdRefs": ["FR-017"],
+      "requiredSwiftTestObligations": 3,
+      "status": "covered",
+      "evidence": [
+        "AppleProjectPklTests.swift",
+        "AppleProjectValueTests.swift",
+        "concourse-pkl-project-yml-generation.receipt.json",
+        "concourse-generated-yml-pkl-comparison.receipt.json"
+      ]
+    },
+    {
+      "cuj": "CUJ-12",
+      "title": "Assistant Runs Package Graph Analysis Through Vaporize",
+      "prdRefs": ["FR-009"],
+      "requiredSwiftTestObligations": 1,
+      "status": "covered",
+      "evidence": [
+        "VaporizeCommandParsingTests.swift"
+      ]
+    }
+  ],
+  "deferredCoverage": [
+    {
+      "title": "Assistant Builds A Pkl-Backed Apple Project",
+      "blockingRef": "FR-VAPORIZE-PKL-PROJECT-GENERATION-move-owned-xcodegen-surfaces-to-pkl",
+      "status": "deferred-release-blocking"
+    },
+    {
+      "title": "Assistant Discovers Targets Through Vaporize",
+      "blockingRef": "FR-VAPORIZE-LIST-TARGETS-substrate-canonical-target-discovery",
+      "status": "deferred"
+    }
+  ],
+  "boundaries": [
+    "This artifact defines the active-CUJ coverage floor; it does not approve v0.0.1 release.",
+    "Pkl-backed .xcodeproj world-state generation remains release-blocking.",
+    "Actual executable Swift tests may exceed the required count when extra regression coverage is useful."
+  ]
+}

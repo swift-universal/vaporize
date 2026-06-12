@@ -4,7 +4,7 @@
   "subjectAppSlug": "vaporize@wrkstrm-core.cli",
   "subjectReleaseSlug": "v0.0.1",
   "generatedAt": "2026-06-12T20:58:02Z",
-  "updatedAt": "2026-06-12T22:57:36Z",
+  "updatedAt": "2026-06-12T23:06:11Z",
   "generatedBy": "codex-crisie",
   "status": "release-blocker-investigation-with-pklswift-transitional-yaml-slice",
   "toolClassification": "internal-essential-tool",
@@ -213,7 +213,7 @@
         "private/apple/spm/vaporize@wrkstrm-core.cli/tests/swift-cli-installer-tests/SwiftCLIInstallerTests.swift",
         "private/apple/spm/vaporize@wrkstrm-core.cli/tests/swift-app-installer-tests/SwiftAppInstallerTests.swift"
       ],
-      "result": "vaporize toolchain -- swift test passed 58 tests: 45 VaporizeCLITests, 4 SwiftCLIInstallerTests, and 9 SwiftAppInstallerTests.",
+      "result": "CUJ coverage contract requires 53 Swift test obligations plus 4 release evidence checks; vaporize toolchain -- swift test passed 64 executable Swift tests: 51 VaporizeCLITests, 4 SwiftCLIInstallerTests, and 9 SwiftAppInstallerTests.",
       "boundary": "This expands release proof across major Vaporize features; it does not unblock the Pkl-backed .xcodeproj world-state generation gate."
     }
   ],

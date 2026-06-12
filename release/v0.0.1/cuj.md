@@ -1,7 +1,7 @@
 # Vaporize v0.0.1 - Critical User Journeys
 
 **Status:** release-prep draft; blocked pending Pkl project-generation migration
-**Updated:** 2026-06-12T22:11:11Z
+**Updated:** 2026-06-12T23:06:11Z
 **Component:** `vaporize@wrkstrm-core.cli`
 **Tool classification:** `internal-essential-tool`
 
@@ -212,6 +212,57 @@ Failure truth:
 
 - This is transitional YAML generation. It does not prove final buildable
   project generation, fleet parity, or internal release readiness.
+
+## CUJ-12 - Assistant Runs Package Graph Analysis Through Vaporize
+
+1. Assistant needs package graph analysis while staying inside the Vaporize
+   tool boundary.
+2. Assistant runs `vaporize graph -- <package-graph-args>`.
+3. Vaporize resolves `package-graph@wrkstrm.cli` and forwards the remaining
+   arguments without interpreting them as Vaporize options.
+4. Assistant receives package graph output from the canonical Vaporize surface.
+
+Success:
+
+- The assistant does not call `package-graph@wrkstrm.cli` as a separate
+  primary tool when the release surface says Vaporize owns the lane.
+- Forwarded arguments remain package-graph arguments rather than being
+  consumed by Vaporize's parser.
+
+Failure truth:
+
+- If the package graph package cannot be resolved, Vaporize reports the
+  resolution failure instead of silently falling back to a broad repository
+  scan.
+
+## Test Coverage Contract
+
+Test count is derived from PRD requirements through the active draft CUJs.
+The executable Swift suite is allowed to exceed this number, but release gates
+must know the required floor.
+
+| CUJ | PRD refs | Required Swift test obligations |
+| --- | --- | ---: |
+| CUJ-01 | FR-001, FR-002, FR-004 | 5 |
+| CUJ-02 | FR-003, FR-004, FR-015 | 9 |
+| CUJ-03 | FR-005 | 4 |
+| CUJ-04 | FR-006 | 4 |
+| CUJ-05 | FR-010 | 6 |
+| CUJ-06 | FR-011 | 2 |
+| CUJ-07 | FR-007, FR-008 | 10 |
+| CUJ-08 | FR-015 | 5 |
+| CUJ-09 | FR-012, FR-013, FR-014 | 0 Swift tests; 4 release evidence checks |
+| CUJ-10 | FR-016 | 4 |
+| CUJ-11 | FR-017 | 3 |
+| CUJ-12 | FR-009 | 1 |
+
+Current active-CUJ requirement:
+
+- Required Swift test obligations: 53
+- Required release evidence checks: 4
+- Current executable Swift tests: 64
+- Coverage artifact:
+  `release/v0.0.1/evidence/cuj-test-coverage.json`
 
 ## Deferred CUJ - Assistant Builds A Pkl-Backed Apple Project
 

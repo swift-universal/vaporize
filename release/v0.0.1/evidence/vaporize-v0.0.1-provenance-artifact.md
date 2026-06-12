@@ -1,6 +1,6 @@
 # Vaporize v0.0.1 - Provenance Artifact
 
-**Generated:** 2026-06-12T22:57:36Z
+**Generated:** 2026-06-12T23:06:11Z
 **Status:** captured for forward Pkl migration
 **Subject:** `vaporize@wrkstrm-core.cli` v0.0.1 release prep
 
@@ -9,12 +9,11 @@ chat memory.
 
 ## Proven
 
-- Vaporize package tests pass through `vaporize toolchain`: 58 tests across
-  `VaporizeCLITests`, `SwiftCLIInstallerTests`, and
-  `SwiftAppInstallerTests`, covering Apple project migration paths, CLI
-  command parsing, pass/use/toolchain modes, JSON validation, inventory
-  scanner/renderer behavior, graph forwarding, and installer argument/Xcode
-  paths.
+- CUJ-derived test coverage is explicit: 53 required Swift test obligations
+  plus 4 release evidence checks across 12 active CUJs.
+- Vaporize package tests pass through `vaporize toolchain`: 64 executable Swift
+  tests across `VaporizeCLITests`, `SwiftCLIInstallerTests`, and
+  `SwiftAppInstallerTests`.
 - Concourse `project.yml` parses into Swift `AppleProjectSpec`.
 - Fleet intake audit parsed 155/155 discovered `project.yml` files.
 - Old XcodeGen script build and Vaporize app build both pass for Concourse
@@ -44,6 +43,7 @@ chat memory.
 | `concourse-pkl-project-yml-generation.receipt.json` | Concourse Pkl emits transitional YAML | PASS-WITH-NOTE |
 | `concourse-generated-yml-pkl-comparison.receipt.json` | Generated YAML matches Concourse Pkl | PASS |
 | `xcodegen-to-pkl-investigation.json` | Migration scope and blockers are captured | BLOCKS-INTERNAL-V0.0.1 |
+| `cuj-test-coverage.json` | PRD/CUJ-derived required test floor is captured | PASS |
 | `launch-review-packet.json` | Release-prep packet is gathered | VALID-JSON |
 
 ## Savepoints
@@ -60,7 +60,7 @@ chat memory.
   `generate-project-yml`, transitional Concourse YAML artifact, generation and
   comparison receipts, release packet updates, and blocker-bead progress.
 - `D4FABA98-0FF1-44EA-920A-80CE08517921` - Apple project test-suite split and
-  expansion to 27 focused CLI tests.
+  focused CLI coverage expansion before the CUJ-derived coverage contract.
 
 ## Forward Path
 

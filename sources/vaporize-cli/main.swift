@@ -1071,7 +1071,7 @@ struct PassThroughRequest {
   }
 }
 
-private struct PassThroughReceipt: Codable, Equatable {
+struct PassThroughReceipt: Codable, Equatable {
   var schemaVersion = "0.1.0"
   var receiptKind = "vaporize-pass-through"
   var tool: String
@@ -1088,7 +1088,7 @@ private struct PassThroughReceipt: Codable, Equatable {
   var processIdentifier: String?
 }
 
-private struct ToolchainReceipt: Codable, Equatable {
+struct ToolchainReceipt: Codable, Equatable {
   var schemaVersion = "0.1.0"
   var receiptKind = "vaporize-toolchain"
   var tool: String
@@ -1105,7 +1105,7 @@ private struct ToolchainReceipt: Codable, Equatable {
   var processIdentifier: String?
 }
 
-private struct UseReceipt: Codable, Equatable {
+struct UseReceipt: Codable, Equatable {
   var schemaVersion = "0.1.0"
   var receiptKind = "vaporize-use-common-process"
   var specSource: String

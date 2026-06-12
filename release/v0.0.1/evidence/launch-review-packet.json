@@ -8,7 +8,7 @@
   "packetVersion": "v0.0.1",
   "reviewKind": "internal-essential-tool-release-prep",
   "packetStatus": "blocked-pending-pkl-backed-xcode-world-state-generation",
-  "emittedAt": "2026-06-12T22:57:36Z",
+  "emittedAt": "2026-06-12T23:06:11Z",
   "emittedBy": "codex-crisie",
   "lifecycleStage": "internal-cli-release-prep",
   "releaseTarget": {
@@ -55,6 +55,12 @@
     },
     {
       "LinkRefModel": "0.3.0",
+      "s": ["vaporize", "v0.0.1", "cuj-test-coverage"],
+      "t": "Vaporize v0.0.1 CUJ test coverage",
+      "tg": [{"k": "rp", "rt": "mono", "v": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/cuj-test-coverage.json"}]
+    },
+    {
+      "LinkRefModel": "0.3.0",
       "s": ["vaporize", "v0.0.1", "use-mode-source"],
       "t": "Vaporize use mode source",
       "tg": [{"k": "rp", "rt": "mono", "v": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/sources/vaporize-cli/main.swift"}]
@@ -88,6 +94,12 @@
       "s": ["vaporize", "v0.0.1", "pass-through-mode-tests"],
       "t": "Vaporize pass-through mode tests",
       "tg": [{"k": "rp", "rt": "mono", "v": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/tests/vaporize-cli-tests/VaporizePassThroughModeTests.swift"}]
+    },
+    {
+      "LinkRefModel": "0.3.0",
+      "s": ["vaporize", "v0.0.1", "receipt-shape-tests"],
+      "t": "Vaporize receipt shape tests",
+      "tg": [{"k": "rp", "rt": "mono", "v": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/tests/vaporize-cli-tests/VaporizeReceiptShapeTests.swift"}]
     },
     {
       "LinkRefModel": "0.3.0",
@@ -213,12 +225,17 @@
   "qaEvidence": {
     "testCommand": "vaporize toolchain -- swift test --package-path private/apple/spm/vaporize@wrkstrm-core.cli",
     "testResult": "PASS",
-    "testCount": 58,
+    "testCount": 64,
     "testBreakdown": {
-      "VaporizeCLITests": 45,
+      "VaporizeCLITests": 51,
       "SwiftCLIInstallerTests": 4,
       "SwiftAppInstallerTests": 9
     },
+    "cujCoverageContract": "release/v0.0.1/evidence/cuj-test-coverage.json",
+    "activeCUJCount": 12,
+    "deferredCUJCount": 2,
+    "requiredSwiftTestObligationCount": 53,
+    "requiredReleaseEvidenceCheckCount": 4,
     "bareSwiftToolchainResult": "BLOCKED: bare swift is 6.3.2; Package.swift requires Swift tools 6.4",
     "requiredToolchainResult": "PASS: Vaporize toolchain mode owns Xcode-selected Swift via internal xcrun",
     "jsonValidationCommand": "vaporize validate-json --path release/v0.0.1/evidence/launch-review-packet.json",
@@ -246,9 +263,9 @@
       "rationale": "CUJ set exists at release/v0.0.1/cuj.md"
     },
     {
-      "gateRef": "GATE-05-focused-tests",
+      "gateRef": "GATE-05-cuj-derived-package-tests",
       "status": "PASS",
-      "rationale": "Vaporize package tests passed 58 tests through Vaporize toolchain mode across CLI, CLI installer, and app installer targets"
+      "rationale": "CUJ coverage contract requires 53 Swift test obligations plus 4 release evidence checks; Vaporize package tests passed 64 executable tests through Vaporize toolchain mode"
     },
     {
       "gateRef": "GATE-07-cli-help",
@@ -334,7 +351,8 @@
     "x-provenance-artifact": "vaporize-v0.0.1-provenance-artifact.json collects release-prep receipts, validation commands, savepoints, proven claims, unproven claims, and the forward Pkl migration path.",
     "x-pkl-parity-specimen": "Concourse now has project.pkl amending AppleProjectSpec.pkl. compare-project-yml-pkl evaluates Pkl through PklSwift, decodes YAML and Pkl into AppleProjectSpec, and emits a zero-mismatch comparison receipt.",
     "x-pkl-transitional-yaml-generation": "generate-project-yml evaluates Concourse project.pkl through PklSwift and emits transitional AppleProjectSpec YAML plus a generation receipt. The generated YAML compares back to Pkl with zero mismatches, but .xcodeproj world-state is not generated.",
-    "x-major-feature-test-suite": "Vaporize package tests now cover major release features: command parsing, pass/use/toolchain, JSON validation, inventory scanner/renderer, graph forwarding, Apple project YAML/Pkl migration paths, SwiftPM CLI installer arguments, and app installer Xcode invocation paths.",
+    "x-cuj-test-coverage": "Required test count is derived from PRD requirements through active draft CUJs. Current floor: 53 Swift test obligations plus 4 release evidence checks. Current executable suite: 64 Swift tests.",
+    "x-major-feature-test-suite": "Vaporize package tests now cover major release features: command parsing, pass/use/toolchain receipts, JSON validation, inventory scanner/renderer, graph forwarding, Apple project YAML/Pkl migration paths, SwiftPM CLI installer arguments, and app installer Xcode invocation paths.",
     "x-pkl-project-generation-gate": "Internal v0.0.1 release is blocked until our owned Apple project-generation path moves off XcodeGen and onto Pkl-backed .xcodeproj world-state generation, with any leftover XcodeGen surfaces quarantined as compatibility.",
     "x-xcodegen-to-pkl-investigation": "Investigation found 155 project.yml files, 185 checked-in .xcodeproj/project.pbxproj files, direct XcodeGen runner surfaces, and no existing Pkl Apple-project generation model. The first approved mitigation slice now reads legacy YAML through Swift and receipts Concourse inspection."
   }

@@ -2,7 +2,7 @@
 
 **Status:** release-blocker investigation complete
 **Generated:** 2026-06-12T20:58:02Z
-**Updated:** 2026-06-12T22:57:36Z
+**Updated:** 2026-06-12T23:06:11Z
 **Component:** `vaporize@wrkstrm-core.cli`
 **Tool classification:** `internal-essential-tool`
 
@@ -61,10 +61,9 @@ The first approved migration-prep slice is now landed:
   boundary: transitional YAML was emitted; `.xcodeproj` world-state was not.
 - `concourse-generated-yml-pkl-comparison.receipt.json` records that generated
   YAML still matches Concourse Pkl with zero mismatches.
-- The full Vaporize package test suite now passes 58 tests through
-  `vaporize toolchain`, including major-feature coverage for command parsing,
-  pass/use/toolchain modes, inventory scanner/renderer behavior, graph
-  forwarding, CLI installer arguments, and app installer Xcode paths.
+- The CUJ-derived coverage floor now requires 53 Swift test obligations plus
+  4 release evidence checks; the full Vaporize package test suite passes 64
+  executable Swift tests through `vaporize toolchain`.
 
 This does not unblock v0.0.1 by itself. It gives the Pkl migration a tested
 Swift intake surface so the next slice can compare Pkl-evaluated project data

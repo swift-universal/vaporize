@@ -1,7 +1,7 @@
 # Vaporize v0.0.1 - PRD
 
 **Status:** release-prep draft; blocked pending Pkl-backed Xcode world-state generation
-**Updated:** 2026-06-12T22:57:36Z
+**Updated:** 2026-06-12T23:06:11Z
 **Component:** `vaporize@wrkstrm-core.cli`
 **Release target:** internal essential substrate CLI
 **Tool classification:** `internal-essential-tool`
@@ -133,8 +133,12 @@ Supporting audiences:
 
 - Vaporize's package test suite passes with the Swift 6.4 toolchain:
   `vaporize toolchain -- swift test --package-path private/apple/spm/vaporize@wrkstrm-core.cli`.
-  Current proof: 58 tests across `VaporizeCLITests`,
-  `SwiftCLIInstallerTests`, and `SwiftAppInstallerTests`.
+  Current proof: the CUJ-derived coverage floor requires 53 Swift test
+  obligations plus 4 release evidence checks; the executable suite passes 64
+  tests across `VaporizeCLITests`, `SwiftCLIInstallerTests`, and
+  `SwiftAppInstallerTests`.
+- CUJ test coverage is recorded in
+  `release/v0.0.1/evidence/cuj-test-coverage.json`.
 - CLI help advertises `use`, `toolchain`, `validate-json`,
   `inspect-project-yml`, and `--common-process-spec`.
 - Release packet JSON validates with
