@@ -4,18 +4,27 @@
   "packetId": "vaporize-v0.0.1-launch-review-packet",
   "subjectAppSlug": "vaporize@wrkstrm-core.cli",
   "subjectReleaseSlug": "v0.0.1",
-  "subjectWareKindSlug": "internal-cli",
+  "subjectWareKindSlug": "internal-essential-cli",
   "packetVersion": "v0.0.1",
-  "reviewKind": "engineering-release-prep",
-  "packetStatus": "conditional-ready-for-release-review",
-  "emittedAt": "2026-06-12T20:26:28Z",
+  "reviewKind": "internal-essential-tool-release-prep",
+  "packetStatus": "blocked-pending-pkl-project-generation",
+  "emittedAt": "2026-06-12T20:49:26Z",
   "emittedBy": "codex-crisie",
   "lifecycleStage": "internal-cli-release-prep",
   "releaseTarget": {
-    "currentTarget": "internal-substrate-cli",
+    "currentTarget": "internal-essential-substrate-cli",
     "graduationTarget": "substrate-canonical-vaporware-collapse-gate",
     "graduationVersion": "v0.0.1",
-    "alternativeLane": "defer-open-feature-beads"
+    "distribution": "internal-only",
+    "toolClassification": "internal-essential-tool",
+    "essentialFor": [
+      "assistant-build-install-launch",
+      "release-packet-validation",
+      "xcode-selected-swift-toolchain-proof",
+      "vaporware-collapse-inventory"
+    ],
+    "blockingPrecondition": "substrate-owned Apple project generation moves off XcodeGen to a Pkl-backed owned path, or remaining XcodeGen surfaces are explicitly quarantined as historical/external compatibility",
+    "alternativeLane": "remain-in-release-prep"
   },
   "evidenceRefs": [
     {
@@ -97,18 +106,23 @@
     },
     {
       "gateRef": "GATE-12-open-feature-beads",
-      "status": "PASS-CONDITIONAL",
-      "rationale": "Open beads are named as follow-ups; Launch Review can choose whether any become release blockers"
+      "status": "BLOCKED",
+      "rationale": "The Pkl project-generation bead is a blocker for internal v0.0.1"
     },
     {
       "gateRef": "GATE-13-tree-cleanliness",
       "status": "BLOCKED-BY-EXISTING-TREE",
       "rationale": "Mono startup reported 511 diff-files; release prep must rely on scoped paths"
+    },
+    {
+      "gateRef": "GATE-14-pkl-project-generation",
+      "status": "BLOCKED",
+      "rationale": "Final internal release waits until substrate-owned XcodeGen-backed Apple surfaces move to Pkl or are explicitly quarantined"
     }
   ],
   "knownFollowUps": [
     "FR-VAPORIZE-LIST-TARGETS-substrate-canonical-target-discovery",
-    "FR-VAPORIZE-XCODEGEN-INTEGRATION-substrate-canonical-xcodegen-aware-build",
+    "FR-VAPORIZE-PKL-PROJECT-GENERATION-move-owned-xcodegen-surfaces-to-pkl",
     "FR-VAPORIZE-AUTO-INCREMENT-BUILD-NUMBERS",
     "FR-VAPORIZE-REALIZE-typed-vaporware-unit",
     "FR-VAPORIZE-TOOL-CALL-OBSERVABILITY",
@@ -130,8 +144,10 @@
   "schemaFamilyRef": "launch-review-packet-schemas v0.0.1",
   "extensions": {
     "x-release-prep-note": "This packet is release-prep evidence, not final founder approval.",
+    "x-tool-classification": "internal-essential-tool: internal-only, release-gating assistant tool whose absence blocks build/install/launch/release-proof workflows.",
     "x-common-process-use-surface": "use mode consumes CommonProcess CommandSpec JSON via --common-process-spec and emits a vaporize-use-common-process receipt when requested.",
     "x-toolchain-surface": "toolchain mode owns Xcode-selected Swift invocation; assistants should not call xcrun directly.",
-    "x-json-validation-surface": "validate-json mode owns JSON packet validation; assistants should not call jq directly."
+    "x-json-validation-surface": "validate-json mode owns JSON packet validation; assistants should not call jq directly.",
+    "x-pkl-project-generation-gate": "Internal v0.0.1 release is blocked until our owned Apple project-generation path moves off XcodeGen and onto Pkl, with any leftover XcodeGen surfaces quarantined as compatibility."
   }
 }

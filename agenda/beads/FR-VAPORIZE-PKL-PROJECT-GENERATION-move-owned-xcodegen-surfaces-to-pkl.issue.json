@@ -1,0 +1,97 @@
+{
+  "schemaVersion": "0.0.1-untyped",
+  "slug": "FR-VAPORIZE-PKL-PROJECT-GENERATION-move-owned-xcodegen-surfaces-to-pkl",
+  "title": "Move substrate-owned Apple project generation off XcodeGen and onto Pkl before Vaporize internal v0.0.1 release",
+  "kind": "bead-feature-request",
+  "severity": "blocker",
+  "status": "open",
+  "createdAt": "2026-06-12T20:49:26Z",
+  "createdBy": "operator-named 2026-06-12: 'this is going to be an internal release! once we move off of xcodegen for our own using pkl!'",
+  "category": "internal-essential-tooling-coverage",
+  "toolClassification": "internal-essential-tool",
+  "releaseGateRef": "vaporize-v0.0.1:GATE-14-pkl-project-generation",
+  "identityReframe": {
+    "from": "Vaporize v0.0.1 could treat XcodeGen integration as a deferred or forward canonical app-build convenience.",
+    "to": "Vaporize v0.0.1 is an internal essential tool release. For substrate-owned Apple surfaces, the forward project-generation path is Pkl-backed and owned; XcodeGen is historical compatibility, not the release horizon.",
+    "implications": [
+      "Do not deepen XcodeGen as the forward canonical path for our own apps.",
+      "Treat XcodeGen-backed owned surfaces as blockers for internal v0.0.1 until migrated or quarantined.",
+      "Release evidence must classify Vaporize as an internal essential tool rather than a public distribution artifact.",
+      "Pkl project-generation receipts become the proof surface for typed project truth collapsing into buildable Apple world-state."
+    ]
+  },
+  "operatorDirectionRefs": [
+    "operator://rismay/2026-06-12/internal-essential-release-after-pkl-project-generation"
+  ],
+  "axiomCitations": [
+    "[[substrate-typed-swift-over-python-internal-tooling-over-third-party-discipline]]",
+    "[[vaporize-is-the-substrate-canonical-tool-for-modification]]",
+    "[[tool-authoring-runs-spawn-software-workstream]]",
+    "[[lift-existing-patterns-not-reimplement]]"
+  ],
+  "problem": {
+    "statement": "Vaporize owns build/install/launch proof lanes, but substrate-owned Apple app homes still have project-generation truth expressed through XcodeGen project.yml and generated pbxproj state. Treating XcodeGen integration as the forward answer preserves the old dependency. Internal v0.0.1 should release only after our owned project generation moves to Pkl or the remaining XcodeGen surfaces are explicitly quarantined.",
+    "consequence": "Without this gate, Vaporize can look internally releasable while still depending on an out-of-band generation model for owned app surfaces. Assistants would keep learning the wrong release boundary: XcodeGen as the future path instead of Pkl-backed typed project generation."
+  },
+  "criticalUserJourney": {
+    "actor": "Assistant building or installing a substrate-owned Apple app through Vaporize",
+    "goal": "Build from current typed project-generation truth without direct XcodeGen choreography",
+    "journey": [
+      "Assistant receives a substrate-owned Apple app home.",
+      "The app home exposes project-generation truth through a Pkl-backed owned surface.",
+      "Assistant runs Vaporize build/install/launch.",
+      "Vaporize collapses typed generation truth into buildable Xcode world-state before invoking the build implementation.",
+      "Vaporize emits evidence that the project-generation step was owned, typed, and internal-essential-tool compliant."
+    ],
+    "successSignals": [
+      "Release packet GATE-14 passes.",
+      "No substrate-owned internal release path names XcodeGen integration as the future canonical answer.",
+      "Any remaining XcodeGen surface is explicitly tagged historical, external, or compatibility-only.",
+      "Vaporize v0.0.1 can be described as an internal essential tool without hiding project-generation drift."
+    ],
+    "failureSignals": [
+      "Release packet treats XcodeGen integration as a non-blocking follow-up for our owned apps.",
+      "Assistant runs XcodeGen directly or adds a new XcodeGen-specific forward path instead of moving project generation to Pkl.",
+      "Pkl project-generation evidence is missing but v0.0.1 is marked ready."
+    ]
+  },
+  "productRequirementsDocument": {
+    "summary": "Before Vaporize v0.0.1 can release internally, substrate-owned XcodeGen-backed Apple project-generation surfaces must move to a Pkl-backed owned path or be explicitly quarantined. Vaporize remains the assistant-facing gate; Pkl becomes the owned project-generation truth for our apps.",
+    "scope": {
+      "in": [
+        "Inventory substrate-owned Apple app homes that still depend on XcodeGen.",
+        "Define the Pkl-backed project-generation surface Vaporize will own or invoke.",
+        "Add release evidence proving each owned app home is migrated or quarantined.",
+        "Update Vaporize release packet language from XcodeGen integration to Pkl project-generation gate.",
+        "Keep XcodeGen only as historical or external compatibility where migration is out of scope."
+      ],
+      "out": [
+        "Public Vaporize distribution.",
+        "App Store readiness.",
+        "Migrating external or maintainer-owned XcodeGen projects unless explicitly pulled into substrate ownership.",
+        "Deepening XcodeGen as the forward canonical generation model for substrate-owned apps."
+      ]
+    }
+  },
+  "dispositionOfPriorXcodeGenBead": {
+    "priorBead": "FR-VAPORIZE-XCODEGEN-INTEGRATION-substrate-canonical-xcodegen-aware-build",
+    "status": "historical-evidence-retained",
+    "forwardDisposition": "Use as evidence of the failure class only. Do not treat it as the forward canonical release path for substrate-owned app generation."
+  },
+  "releaseGateDiscipline": {
+    "blocksRelease": true,
+    "blockedReleaseRef": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/",
+    "requiredProof": [
+      "Pkl-backed project-generation path identified and documented.",
+      "Owned XcodeGen-backed Apple surfaces inventoried.",
+      "Each owned surface migrated or quarantined.",
+      "Vaporize release packet revalidated after the migration evidence lands."
+    ]
+  },
+  "linkedTypedRecords": {
+    "releasePRD": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/prd.md",
+    "releaseGates": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/release-gates.md",
+    "launchReviewPacket": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/launch-review-packet.json",
+    "priorXcodeGenBead": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/agenda/beads/FR-VAPORIZE-XCODEGEN-INTEGRATION-substrate-canonical-xcodegen-aware-build.issue.json"
+  }
+}

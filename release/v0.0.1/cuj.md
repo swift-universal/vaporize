@@ -1,8 +1,9 @@
 # Vaporize v0.0.1 - Critical User Journeys
 
-**Status:** release-prep draft
-**Updated:** 2026-06-12T20:26:28Z
+**Status:** release-prep draft; blocked pending Pkl project-generation migration
+**Updated:** 2026-06-12T20:49:26Z
 **Component:** `vaporize@wrkstrm-core.cli`
+**Tool classification:** `internal-essential-tool`
 
 ## CUJ-01 - Assistant Builds And Installs A SwiftPM CLI
 
@@ -40,9 +41,10 @@ Success:
 
 Failure truth:
 
-- If XcodeGen/project generation is required, the release packet points to
-  `FR-VAPORIZE-XCODEGEN-INTEGRATION-substrate-canonical-xcodegen-aware-build`
-  rather than smuggling an ad-hoc pre-step.
+- If the app home still requires XcodeGen/project generation, final internal
+  release stays blocked by
+  `FR-VAPORIZE-PKL-PROJECT-GENERATION-move-owned-xcodegen-surfaces-to-pkl`
+  rather than smuggling an ad-hoc XcodeGen pre-step.
 
 ## CUJ-03 - Assistant Runs A Swift Proof Command With A Receipt
 
@@ -131,12 +133,33 @@ Success:
    success and failure truth.
 3. Reviewer opens `release/v0.0.1/release-gates.md`.
 4. Reviewer opens `release/v0.0.1/evidence/launch-review-packet.json`.
-5. Reviewer decides whether v0.0.1 is approved, blocked, or conditionally ready.
+5. Reviewer verifies that Vaporize is classified as an internal essential tool,
+   not a public release artifact.
+6. Reviewer decides whether v0.0.1 is approved, blocked, or conditionally ready.
 
 Success:
 
 - Release review is based on current artifacts, tests, and known blockers, not
   chat memory.
+
+## Deferred CUJ - Assistant Builds A Pkl-Backed Apple Project
+
+This journey blocks final internal v0.0.1 release.
+
+1. Assistant receives a substrate-owned Apple app home currently backed by
+   XcodeGen.
+2. The app home exposes its project-generation truth through a Pkl-backed owned
+   path rather than direct XcodeGen choreography.
+3. Assistant runs the Vaporize build/install path.
+4. Vaporize owns the transition from typed generation truth to buildable
+   world-state and emits release evidence.
+
+Current status:
+
+- Blocked by
+  `FR-VAPORIZE-PKL-PROJECT-GENERATION-move-owned-xcodegen-surfaces-to-pkl`.
+- Existing XcodeGen surfaces remain historical compatibility, not the forward
+  release path for our own apps.
 
 ## Deferred CUJ - Assistant Discovers Targets Through Vaporize
 

@@ -1,9 +1,10 @@
 # Vaporize v0.0.1 - PRD
 
-**Status:** release-prep draft
-**Updated:** 2026-06-12T20:26:28Z
+**Status:** release-prep draft; blocked pending Pkl project-generation migration
+**Updated:** 2026-06-12T20:49:26Z
 **Component:** `vaporize@wrkstrm-core.cli`
-**Release target:** internal substrate CLI
+**Release target:** internal essential substrate CLI
+**Tool classification:** `internal-essential-tool`
 
 ## Summary
 
@@ -18,9 +19,19 @@ putting build, install, run, open, pass-through, CommonProcess invocation,
 Xcode-selected Swift execution, JSON validation, warehouse inventory, and
 package graph access behind one recognizable gate.
 
+The release classification is `internal-essential-tool`: an internal-only tool
+whose absence blocks assistants from completing build, install, launch, release
+packet validation, and Apple toolchain proof workflows. This is not a public
+distribution release. Final v0.0.1 internal release is blocked until
+substrate-owned Apple project generation moves off XcodeGen and onto a
+Pkl-backed owned generation path, or any remaining XcodeGen surfaces are
+explicitly quarantined as historical/external compatibility.
+
 ## Goals
 
 - Ship one canonical CLI name: `vaporize@wrkstrm-core.cli`.
+- Classify Vaporize as an internal essential tool for assistant build,
+  install, launch, and release-proof workflows.
 - Support SwiftPM CLI build, install, uninstall, and run flows.
 - Support Apple app build, install, uninstall, and launch flows for SwiftPM,
   Xcode project, and Xcode workspace homes.
@@ -35,6 +46,8 @@ package graph access behind one recognizable gate.
   `x-vaporize-collapse-path` records, with legacy `x-craze-collapse-path`
   read-only fallback.
 - Preserve graph analysis through the `graph` forwarder.
+- Block final internal v0.0.1 release until substrate-owned XcodeGen project
+  generation is replaced by a Pkl-backed owned path.
 - Produce a release packet with PRD, CUJs, release gates, and launch-review
   evidence.
 
@@ -44,9 +57,12 @@ package graph access behind one recognizable gate.
   substrate CLI release.
 - Do not complete schema-universal integration for typed vaporware units in this
   release.
-- Do not block this release on `list-targets`, `realize`, XcodeGen integration,
-  auto-incremented build numbers, or full tool-call observability; those remain
-  tracked release follow-ups.
+- Do not make XcodeGen integration the forward canonical path for
+  substrate-owned apps. XcodeGen may remain as legacy compatibility, but the
+  internal release path moves our owned generation surfaces to Pkl.
+- Do not block this release on `list-targets`, `realize`, auto-incremented
+  build numbers, or full tool-call observability; those remain tracked release
+  follow-ups.
 - Do not remove historical compatibility understanding for legacy `craze`
   records; this release can classify legacy annotation keys while naming
   Vaporize as the forward canonical surface.
@@ -82,6 +98,8 @@ Supporting audiences:
 | FR-010 | Xcode-selected toolchain route | `toolchain -- swift <args>` invokes `xcrun swift <args>` inside Vaporize and rejects unsupported tools. |
 | FR-011 | JSON validation route | `validate-json --path <json>` validates JSON with Foundation and can emit a receipt. |
 | FR-012 | Release packet | PRD, CUJs, release gates, and launch-review packet exist under `release/v0.0.1/`. |
+| FR-013 | Internal essential tool classification | Release evidence names Vaporize as `internal-essential-tool` and records which assistant workflows it blocks when absent. |
+| FR-014 | Pkl project-generation release gate | Final internal v0.0.1 release is blocked until substrate-owned XcodeGen-managed Apple surfaces move to a Pkl-backed generation path or are explicitly quarantined. |
 
 ## Release Criteria
 
@@ -91,6 +109,11 @@ Supporting audiences:
   `--common-process-spec`.
 - Release packet JSON validates with
   `vaporize validate-json --path release/v0.0.1/evidence/launch-review-packet.json`.
+- Release evidence classifies Vaporize as an internal essential tool rather
+  than a public release artifact.
+- Pkl project-generation migration for substrate-owned Apple surfaces is
+  complete or remaining XcodeGen surfaces are explicitly quarantined outside the
+  v0.0.1 internal release path.
 - Release gates honestly mark open follow-ups and drift rather than smoothing
   them into a false green state.
 - Documentation drift is either repaired before final release or marked as an
@@ -99,7 +122,7 @@ Supporting audiences:
 ## Known Release Follow-Ups
 
 - `FR-VAPORIZE-LIST-TARGETS-substrate-canonical-target-discovery`
-- `FR-VAPORIZE-XCODEGEN-INTEGRATION-substrate-canonical-xcodegen-aware-build`
+- `FR-VAPORIZE-PKL-PROJECT-GENERATION-move-owned-xcodegen-surfaces-to-pkl`
 - `FR-VAPORIZE-AUTO-INCREMENT-BUILD-NUMBERS`
 - `FR-VAPORIZE-REALIZE-typed-vaporware-unit`
 - `FR-VAPORIZE-TOOL-CALL-OBSERVABILITY`

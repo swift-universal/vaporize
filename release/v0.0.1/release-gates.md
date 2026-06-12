@@ -1,18 +1,19 @@
 # Vaporize v0.0.1 - Release Gates
 
-**Status:** release-prep draft
-**Updated:** 2026-06-12T20:26:28Z
+**Status:** release-prep draft; blocked pending Pkl project-generation migration
+**Updated:** 2026-06-12T20:49:26Z
 **Component:** `vaporize@wrkstrm-core.cli`
+**Tool classification:** `internal-essential-tool`
 
 ## Current Verdict
 
-**CONDITIONAL-READY-FOR-RELEASE-REVIEW.**
+**BLOCKED-FOR-INTERNAL-ESSENTIAL-RELEASE.**
 
 The focused Vaporize CLI tests pass through Vaporize's owned Xcode-selected
 toolchain mode, and the current help surface advertises the release's
 implemented modes including `use`, `toolchain`, and `validate-json`. Final
-release approval is still gated by documentation cleanup and explicit
-disposition of open feature beads.
+internal v0.0.1 release approval is still blocked because substrate-owned Apple
+project generation must move off XcodeGen and onto a Pkl-backed owned path.
 
 ## Gate Table
 
@@ -29,13 +30,14 @@ disposition of open feature beads.
 | GATE-09 - Vapor inventory tests pass | PASS | Existing `VaporizeVaporInventoryScannerTests.swift` ran inside the 9-test target. |
 | GATE-10 - JSON release packet validates | PASS | `vaporize validate-json --path release/v0.0.1/evidence/launch-review-packet.json` passed. |
 | GATE-11 - README matches release surface | BLOCKED | README still needs final audit for Swift tools version, `use` mode, and remaining legacy `craze` wording. Existing README was already modified before this release-prep slice, so this gate is tracked rather than silently edited. |
-| GATE-12 - Open feature beads dispositioned | CONDITIONAL-PASS | Follow-ups are named in PRD and launch-review packet; they do not block an internal v0.0.1 release unless founder/Launch Review upgrades one to blocker. |
+| GATE-12 - Open feature beads dispositioned | BLOCKED | Follow-ups are named in PRD and launch-review packet; the Pkl project-generation bead is a release blocker for internal v0.0.1. |
 | GATE-13 - Full repository cleanliness | BLOCKED-BY-EXISTING-TREE | Startup reported 511 diff-files. Release review must use scoped paths, not broad worktree cleanliness. |
+| GATE-14 - Pkl project generation for owned Apple surfaces | BLOCKED | Final internal release waits until our XcodeGen-backed owned surfaces move to Pkl or are explicitly quarantined as historical/external compatibility. |
 
 ## Open Follow-Up Beads
 
 - `FR-VAPORIZE-LIST-TARGETS-substrate-canonical-target-discovery`
-- `FR-VAPORIZE-XCODEGEN-INTEGRATION-substrate-canonical-xcodegen-aware-build`
+- `FR-VAPORIZE-PKL-PROJECT-GENERATION-move-owned-xcodegen-surfaces-to-pkl`
 - `FR-VAPORIZE-AUTO-INCREMENT-BUILD-NUMBERS`
 - `FR-VAPORIZE-REALIZE-typed-vaporware-unit`
 - `FR-VAPORIZE-TOOL-CALL-OBSERVABILITY`
@@ -44,8 +46,8 @@ disposition of open feature beads.
 
 ## Release Review Questions
 
-- Is v0.0.1 allowed to ship as an internal CLI release with target discovery
-  deferred?
+- Which substrate-owned XcodeGen-backed Apple surfaces must migrate to Pkl
+  before internal v0.0.1 can release?
 - Is `use --common-process-spec` enough for the first CommonProcess-style
   invocation surface, or must a higher-level typed wrapper land before release?
 - Should README drift be fixed in this release branch before launch review, or
