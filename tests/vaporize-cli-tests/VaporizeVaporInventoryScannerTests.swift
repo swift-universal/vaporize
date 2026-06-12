@@ -137,8 +137,8 @@ func receiptShape() throws {
   #expect(receipt.vaporizeVersion == "test-version")
   #expect(receipt.totalJsonFilesScanned == 1)
   #expect(receipt.summary.collapsed == 1)
-  #expect(receipt.schemaVersion == "0.1.0-untyped-vaporize-warehouse")
-  #expect(receipt.warehouseReceiptModel == "0.1.0-untyped")
+  #expect(receipt.schemaVersion == "0.0.1-untyped-vaporize-warehouse")
+  #expect(receipt.warehouseReceiptModel == "0.0.1-untyped")
 }
 
 @Test("Errors when --path does not exist")

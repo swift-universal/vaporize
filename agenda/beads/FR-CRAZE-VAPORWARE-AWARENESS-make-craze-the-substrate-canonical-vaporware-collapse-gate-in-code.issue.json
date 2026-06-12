@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "0.1.0-untyped",
+  "schemaVersion": "0.0.1-untyped",
   "slug": "FR-CRAZE-VAPORWARE-AWARENESS-make-craze-the-substrate-canonical-vaporware-collapse-gate-in-code",
   "title": "Make craze vaporware-aware in code — read CrateModel + x-craze-collapse-path annotations, emit craze-collapse-receipts, become the substrate-canonical vaporware-collapse gate in IMPLEMENTATION not just doctrine",
   "kind": "bead-feature-request-substrate-architecture-evolution",
@@ -27,7 +27,7 @@
       "scope": "Text-based recognition of vapor annotations in JSON files. No schema dependency. Smallest viable lift — ships in a single craze release without waiting for the coordinated cut v0.0.1.",
       "deliverables": [
         "New mode: `craze status --path <dir>` — walks the path, scans .json files for `\"x-craze-collapse-path\":` key, reports per-file: collapse-status (collapsed/collapse-pending/collapse-blocked/permanent-vapor/unannotated), pendingCapabilityRefs counts, collapseGateRefs counts.",
-        "New mode: `craze inventory --path <dir>` — emits typed JSON vapor-inventory for the path (later: typed CrateInventoryReceiptModel; for now: untyped 0.1.0-untyped shape).",
+        "New mode: `craze inventory --path <dir>` — emits typed JSON vapor-inventory for the path (later: typed CrateInventoryReceiptModel; for now: untyped 0.0.1-untyped shape).",
         "Help-banner update: existing modes' help text names craze as the substrate-canonical vaporware-collapse gate.",
         "Internal command-name fix: ArgumentParser command-name + help banner says 'savepoint@kura-org.cli' format (composes with FR-SAVEPOINT-CLI-RENAME naming-pattern catch — craze SHOULD already say craze@wrkstrm-core.cli internally; audit + fix if drifted)."
       ],

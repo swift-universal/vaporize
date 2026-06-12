@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "0.1.0-untyped",
+  "schemaVersion": "0.0.1-untyped",
   "slug": "FR-VAPORIZE-REALIZE-typed-vaporware-unit",
   "title": "Teach Vaporize to realize typed VaporwareUnit records into collapse plans and receipts",
   "kind": "bead-feature-request",

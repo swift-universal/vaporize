@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "0.1.0-untyped",
+  "schemaVersion": "0.0.1-untyped",
   "slug": "FR-CRAZE-LIST-TARGETS-substrate-canonical-target-discovery",
   "title": "craze list-targets: substrate-canonical typed target discovery (find AND build through one gate)",
   "kind": "bead-feature-request",

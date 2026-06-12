@@ -67,12 +67,12 @@ struct VaporInventorySummary: Codable, Equatable {
 }
 
 /// Phase 0 untyped warehouse receipt emitted by `vaporize warehouse`. Schema
-/// version is intentionally stamped `0.1.0-untyped-vaporize-warehouse` to
+/// version is intentionally stamped `0.0.1-untyped-vaporize-warehouse` to
 /// flag the Phase 0 status — Phase 2 replaces this with the typed schema-family
 /// equivalent once `FR-VAPOR-COORDINATION-CUT-v0.0.1` lands.
 struct VaporInventoryReceipt: Codable, Equatable {
-  var schemaVersion: String = "0.1.0-untyped-vaporize-warehouse"
-  var warehouseReceiptModel: String = "0.1.0-untyped"
+  var schemaVersion: String = "0.0.1-untyped-vaporize-warehouse"
+  var warehouseReceiptModel: String = "0.0.1-untyped"
   var scannedPath: String
   var scannedAt: String
   var vaporizeVersion: String
@@ -171,7 +171,7 @@ struct VaporInventoryScanner {
   }
 
   /// Build an untyped warehouse receipt from a scan result. Used by
-  /// `vaporize warehouse` to emit the Phase 0 `0.1.0-untyped` receipt shape.
+  /// `vaporize warehouse` to emit the Phase 0 `0.0.1-untyped` receipt shape.
   func receipt(
     from result: VaporScanResult,
     vaporizeVersion: String,
