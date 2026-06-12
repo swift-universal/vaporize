@@ -1,7 +1,7 @@
 # Vaporize v0.0.1 - Release Gates
 
 **Status:** release-prep draft; blocked pending Pkl-backed Xcode world-state generation
-**Updated:** 2026-06-12T22:48:43Z
+**Updated:** 2026-06-12T22:57:36Z
 **Component:** `vaporize@wrkstrm-core.cli`
 **Tool classification:** `internal-essential-tool`
 
@@ -9,15 +9,15 @@
 
 **BLOCKED-FOR-INTERNAL-ESSENTIAL-RELEASE.**
 
-The focused Vaporize CLI tests pass through Vaporize's owned Xcode-selected
+The Vaporize package tests pass through Vaporize's owned Xcode-selected
 toolchain mode, and the current help surface advertises the release's
 implemented modes including `use`, `toolchain`, `validate-json`, and
 `inspect-project-yml`. The approved Swift YAML read bridge, PklSwift-backed
-Pkl parity specimen, and transitional YAML generation slice are now landed and
-receipted for Concourse. Final internal v0.0.1 release approval is still
-blocked because substrate-owned Apple project generation must move off XcodeGen
-and onto an owned Pkl-backed `.xcodeproj` world-state path or be explicitly
-quarantined.
+Pkl parity specimen, transitional YAML generation slice, and major-feature
+test expansion are now landed and receipted. Final internal v0.0.1 release
+approval is still blocked because substrate-owned Apple project generation
+must move off XcodeGen and onto an owned Pkl-backed `.xcodeproj` world-state
+path or be explicitly quarantined.
 
 ## Gate Table
 
@@ -27,11 +27,11 @@ quarantined.
 | GATE-02 - CUJs authored | PASS | `release/v0.0.1/cuj.md` |
 | GATE-03 - Release gates authored | PASS | This file |
 | GATE-04 - Launch-review packet authored | PASS | `release/v0.0.1/evidence/launch-review-packet.json` |
-| GATE-05 - Focused tests pass | PASS | `vaporize toolchain -- swift test --package-path private/apple/spm/vaporize@wrkstrm-core.cli --filter VaporizeCLITests` passed 27 tests across YAML reader, Pkl, comparator, bundle resolver, value/renderer, JSON validation, CommonProcess use, toolchain, and inventory suites. |
+| GATE-05 - Package tests pass | PASS | `vaporize toolchain -- swift test --package-path private/apple/spm/vaporize@wrkstrm-core.cli` passed 58 tests: 45 `VaporizeCLITests`, 4 `SwiftCLIInstallerTests`, and 9 `SwiftAppInstallerTests`. Coverage spans Apple project YAML/Pkl/comparator/bundle/value paths, CLI command parsing, pass/use/toolchain, JSON validation, inventory scanner/renderer, graph forwarding, Swift CLI installer args, and app installer Xcode paths. |
 | GATE-06 - Required toolchain owned by Vaporize | PASS-WITH-NOTE | Bare `swift test` used Swift 6.3.2 and failed because Package.swift requires tools 6.4. Vaporize `toolchain` now owns Xcode-selected Swift via internal `xcrun`. |
 | GATE-07 - CLI help reflects release surface | PASS | Vaporize help advertises `use`, `toolchain`, `validate-json`, `inspect-project-yml`, `compare-project-yml-pkl`, `generate-project-yml`, and `--common-process-spec`. |
-| GATE-08 - CommonProcess use mode tested | PASS | `VaporizeUseCommonProcessTests.swift` decodes valid spec JSON and rejects invalid executable refs. |
-| GATE-09 - Vapor inventory tests pass | PASS | Existing `VaporizeVaporInventoryScannerTests.swift` ran inside the 27-test target. |
+| GATE-08 - CommonProcess use mode tested | PASS | `VaporizeUseCommonProcessTests.swift` decodes valid spec JSON, loads a spec from disk, and rejects invalid executable refs. |
+| GATE-09 - Vapor inventory tests pass | PASS | `VaporizeVaporInventoryScannerTests.swift` and `VaporizeInventoryRendererTests.swift` ran inside the 45-test CLI target. |
 | GATE-10 - JSON release packet validates | PASS | `vaporize validate-json --path release/v0.0.1/evidence/launch-review-packet.json` passed. |
 | GATE-11 - README matches release surface | BLOCKED | README still needs final audit for Swift tools version, `use` mode, and remaining legacy `craze` wording. Existing README was already modified before this release-prep slice, so this gate is tracked rather than silently edited. |
 | GATE-12 - Open feature beads dispositioned | BLOCKED | Follow-ups are named in PRD and launch-review packet; the Pkl project-generation bead is a release blocker for internal v0.0.1. |

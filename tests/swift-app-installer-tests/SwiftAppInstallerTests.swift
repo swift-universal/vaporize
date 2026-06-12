@@ -152,6 +152,60 @@ func rejectsAmbiguousXcodeContainer() throws {
 }
 
 @Test
+func rejectsMissingXcodeScheme() throws {
+  let request = SwiftAppInstaller.Request(
+    packagePath: "/workspace/App",
+    product: "CreativeSelection",
+    configuration: .release,
+    destination: "/Applications",
+    forceReinstall: false,
+    skipBuild: true,
+    xcodeProject: "/workspace/App/CreativeSelection.xcodeproj"
+  )
+
+  #expect(throws: InstallerError.self) {
+    try request.xcodeBuildInvocation()
+  }
+}
+
+@Test
+func rejectsMissingXcodeProjectOrWorkspace() throws {
+  let request = SwiftAppInstaller.Request(
+    packagePath: "/workspace/App",
+    product: "CreativeSelection",
+    configuration: .release,
+    destination: "/Applications",
+    forceReinstall: false,
+    skipBuild: true,
+    xcodeScheme: "CreativeSelection",
+    xcodeSDK: "macosx"
+  )
+
+  #expect(throws: InstallerError.self) {
+    try request.xcodeBuildInvocation()
+  }
+}
+
+@Test
+func rejectsMalformedXcodeBuildSetting() throws {
+  let request = SwiftAppInstaller.Request(
+    packagePath: "/workspace/App",
+    product: "CreativeSelection",
+    configuration: .release,
+    destination: "/Applications",
+    forceReinstall: false,
+    skipBuild: true,
+    xcodeProject: "/workspace/App/CreativeSelection.xcodeproj",
+    xcodeScheme: "CreativeSelection",
+    xcodeBuildSettings: ["=NO"]
+  )
+
+  #expect(throws: InstallerError.self) {
+    try request.xcodeBuildInvocation()
+  }
+}
+
+@Test
 func appBundleNameControlsLocatedBundleWithoutChangingInstallProduct() throws {
   let tmp = URL(fileURLWithPath: NSTemporaryDirectory())
     .appendingPathComponent(UUID().uuidString)

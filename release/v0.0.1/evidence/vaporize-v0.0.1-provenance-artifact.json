@@ -3,14 +3,14 @@
   "artifactId": "vaporize-v0.0.1-provenance-artifact",
   "subjectAppSlug": "vaporize@wrkstrm-core.cli",
   "subjectReleaseSlug": "v0.0.1",
-  "generatedAt": "2026-06-12T22:48:43Z",
+  "generatedAt": "2026-06-12T22:57:36Z",
   "generatedBy": "codex-crisie",
   "status": "captured-for-forward-pkl-migration",
   "purpose": "Collect the v0.0.1 release-prep receipts and provenance in one artifact so the next migration slice can proceed from durable evidence rather than chat memory.",
   "releaseVerdict": {
     "currentStatus": "blocked-pending-pkl-project-generation",
     "proven": [
-      "Vaporize focused tests pass through Vaporize toolchain mode: 27 tests across YAML reader, Pkl, comparator, bundle resolver, value/renderer, JSON validation, CommonProcess use, toolchain, and inventory suites.",
+      "Vaporize package tests pass through Vaporize toolchain mode: 58 tests across VaporizeCLITests, SwiftCLIInstallerTests, and SwiftAppInstallerTests, covering Apple project migration paths, CLI command parsing, pass/use/toolchain modes, JSON validation, inventory scanner/renderer behavior, graph forwarding, and installer argument/Xcode paths.",
       "Legacy XcodeGen project.yml files parse through the Swift YAML read bridge.",
       "All 155 discovered project.yml files under private/universal/substrate/collectives parsed through inspect-project-yml.",
       "Concourse old XcodeGen script build and Vaporize app build both pass after Vaporize derives legacy WRAPPER_NAME from project.yml.",
@@ -108,7 +108,11 @@
     },
     {
       "path": "private/apple/spm/vaporize@wrkstrm-core.cli/sources/vaporize-cli/main.swift",
-      "purpose": "Adds inspect-project-yml, compare-project-yml-pkl, and generate-project-yml modes, and uses project.yml-derived app bundle name compatibility for Xcode app builds."
+      "purpose": "Adds inspect-project-yml, compare-project-yml-pkl, and generate-project-yml modes, uses project.yml-derived app bundle name compatibility for Xcode app builds, and exposes pass-through request normalization for tests."
+    },
+    {
+      "path": "private/apple/spm/vaporize@wrkstrm-core.cli/sources/swift-cli-installer/SwiftCLIInstaller.swift",
+      "purpose": "Keeps SwiftPM install/uninstall argument construction testable for the internal CLI installer path."
     },
     {
       "path": "private/apple/spm/vaporize@wrkstrm-core.cli/tests/vaporize-cli-tests/AppleProjectYMLReaderTests.swift",
@@ -135,6 +139,42 @@
       "purpose": "Provides shared Concourse fixture URLs and YAML decode helpers for Apple project tests."
     },
     {
+      "path": "private/apple/spm/vaporize@wrkstrm-core.cli/tests/vaporize-cli-tests/VaporizeCommandParsingTests.swift",
+      "purpose": "Covers mode parsing, compatibility aliases, output format parsing, and graph forwarded arguments."
+    },
+    {
+      "path": "private/apple/spm/vaporize@wrkstrm-core.cli/tests/vaporize-cli-tests/VaporizePassThroughModeTests.swift",
+      "purpose": "Covers pass mode Swift tool normalization, default tool behavior, and separator handling."
+    },
+    {
+      "path": "private/apple/spm/vaporize@wrkstrm-core.cli/tests/vaporize-cli-tests/VaporizeUseCommonProcessTests.swift",
+      "purpose": "Covers CommonProcess CommandSpec decoding, file loading, and validation rejection for use mode."
+    },
+    {
+      "path": "private/apple/spm/vaporize@wrkstrm-core.cli/tests/vaporize-cli-tests/VaporizeToolchainModeTests.swift",
+      "purpose": "Covers Xcode-selected Swift toolchain argument normalization and unsupported tool rejection."
+    },
+    {
+      "path": "private/apple/spm/vaporize@wrkstrm-core.cli/tests/vaporize-cli-tests/VaporizeVaporInventoryScannerTests.swift",
+      "purpose": "Covers vaporware status classification, legacy x-craze compatibility, malformed JSON handling, recursive scans, and path errors."
+    },
+    {
+      "path": "private/apple/spm/vaporize@wrkstrm-core.cli/tests/vaporize-cli-tests/VaporizeInventoryRendererTests.swift",
+      "purpose": "Covers text and JSON rendering for status and warehouse inventory evidence."
+    },
+    {
+      "path": "private/apple/spm/vaporize@wrkstrm-core.cli/tests/vaporize-cli-tests/VaporizeJSONValidationTests.swift",
+      "purpose": "Covers Foundation-backed JSON validation success and failure paths."
+    },
+    {
+      "path": "private/apple/spm/vaporize@wrkstrm-core.cli/tests/swift-cli-installer-tests/SwiftCLIInstallerTests.swift",
+      "purpose": "Covers install-message matching and SwiftPM install/uninstall argument construction."
+    },
+    {
+      "path": "private/apple/spm/vaporize@wrkstrm-core.cli/tests/swift-app-installer-tests/SwiftAppInstallerTests.swift",
+      "purpose": "Covers app bundle lookup, derived data precedence, Xcode invocation construction, and invalid Xcode configuration rejection."
+    },
+    {
       "path": "private/apple/apps/concourse/concourse.xcodeproj/project.pbxproj",
       "purpose": "Regenerated by the old XcodeGen reference path during the old/new build comparison."
     },
@@ -153,8 +193,8 @@
   ],
   "validationEvidence": [
     {
-      "command": "vaporize toolchain -- swift test --package-path private/apple/spm/vaporize@wrkstrm-core.cli --filter VaporizeCLITests",
-      "result": "PASS: 27 tests"
+      "command": "vaporize toolchain -- swift test --package-path private/apple/spm/vaporize@wrkstrm-core.cli",
+      "result": "PASS: 58 tests (45 VaporizeCLITests, 4 SwiftCLIInstallerTests, 9 SwiftAppInstallerTests)"
     },
     {
       "command": "vaporize validate-json --path private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/concourse-project-yml-inspection.receipt.json",
@@ -230,6 +270,11 @@
       "eventID": "CFC7AE2A-1E63-4358-BE75-4C514A6CCC87",
       "triggeredAt": "2026-06-12T22:34:05Z",
       "scope": "PklSwift dependency, generate-project-yml mode, transitional Concourse YAML artifact, generation and comparison receipts, release packet updates, and blocker-bead progress."
+    },
+    {
+      "eventID": "D4FABA98-0FF1-44EA-920A-80CE08517921",
+      "triggeredAt": "2026-06-12T22:49:51Z",
+      "scope": "Apple project test-suite split and expansion to 27 focused CLI tests."
     }
   ],
   "forwardPath": [

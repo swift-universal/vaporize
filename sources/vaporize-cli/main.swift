@@ -1037,13 +1037,13 @@ enum VaporOutputFormatArgument: String, ExpressibleByArgument {
   }
 }
 
-private enum PassThroughTool: String, Codable {
+enum PassThroughTool: String, Codable {
   case swift
 
   var executableName: String { rawValue }
 }
 
-private struct PassThroughRequest {
+struct PassThroughRequest {
   var tool: PassThroughTool
   var executableName: String
   var arguments: [String]

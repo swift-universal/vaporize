@@ -36,6 +36,37 @@ func decodesCommonProcessCommandSpecForUseMode() throws {
   #expect(command.streamingMode == .buffered)
 }
 
+@Test("Loads a CommonProcess CommandSpec from a file")
+func loadsCommonProcessCommandSpecFromFile() throws {
+  let fixture = FileManager.default.temporaryDirectory
+    .appendingPathComponent("vaporize-use-spec-\(UUID().uuidString).json")
+  defer { try? FileManager.default.removeItem(at: fixture) }
+  try """
+  {
+    "executable": {
+      "ref": { "path": { "_0": "/bin/echo" } },
+      "options": [],
+      "arguments": []
+    },
+    "args": ["from-file"],
+    "requestId": "vaporize-use-file-test",
+    "runnerKind": "auto",
+    "streamingMode": "buffered"
+  }
+  """.write(to: fixture, atomically: true, encoding: .utf8)
+
+  let command = try CommonProcessSpecLoader.load(path: fixture.path)
+
+  switch command.executable.ref {
+  case .path(let path):
+    #expect(path == "/bin/echo")
+  default:
+    Issue.record("expected executable path ref")
+  }
+  #expect(command.args == ["from-file"])
+  #expect(command.requestId == "vaporize-use-file-test")
+}
+
 @Test("Rejects invalid CommonProcess CommandSpec for use mode")
 func rejectsInvalidCommonProcessCommandSpecForUseMode() {
   let json = Data(

@@ -79,7 +79,7 @@ public struct SwiftCLIInstaller: Sendable {
     )
   }
 
-  private func installArguments() -> [String] {
+  func installArguments() -> [String] {
     let args: [String] = [
       "package",
       "--package-path",
@@ -93,7 +93,7 @@ public struct SwiftCLIInstaller: Sendable {
     return args
   }
 
-  private func uninstallArguments() -> [String] {
+  func uninstallArguments() -> [String] {
     [
       "package",
       "--package-path",

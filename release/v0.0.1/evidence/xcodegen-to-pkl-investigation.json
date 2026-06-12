@@ -4,7 +4,7 @@
   "subjectAppSlug": "vaporize@wrkstrm-core.cli",
   "subjectReleaseSlug": "v0.0.1",
   "generatedAt": "2026-06-12T20:58:02Z",
-  "updatedAt": "2026-06-12T22:48:43Z",
+  "updatedAt": "2026-06-12T22:57:36Z",
   "generatedBy": "codex-crisie",
   "status": "release-blocker-investigation-with-pklswift-transitional-yaml-slice",
   "toolClassification": "internal-essential-tool",
@@ -197,6 +197,24 @@
       "comparisonReceipt": "private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/concourse-generated-yml-pkl-comparison.receipt.json",
       "result": "generate-project-yml evaluated Concourse project.pkl through PklSwift, emitted transitional AppleProjectSpec YAML, and the generated YAML compared back to Pkl with zero mismatches.",
       "boundary": "This generates transitional YAML only; it does not rewrite checked-in project.yml and does not generate .xcodeproj world-state."
+    },
+    {
+      "slice": "vaporize-major-feature-test-expansion",
+      "status": "complete",
+      "surface": "vaporize package test suite",
+      "tests": [
+        "private/apple/spm/vaporize@wrkstrm-core.cli/tests/vaporize-cli-tests/VaporizeCommandParsingTests.swift",
+        "private/apple/spm/vaporize@wrkstrm-core.cli/tests/vaporize-cli-tests/VaporizePassThroughModeTests.swift",
+        "private/apple/spm/vaporize@wrkstrm-core.cli/tests/vaporize-cli-tests/VaporizeUseCommonProcessTests.swift",
+        "private/apple/spm/vaporize@wrkstrm-core.cli/tests/vaporize-cli-tests/VaporizeToolchainModeTests.swift",
+        "private/apple/spm/vaporize@wrkstrm-core.cli/tests/vaporize-cli-tests/VaporizeVaporInventoryScannerTests.swift",
+        "private/apple/spm/vaporize@wrkstrm-core.cli/tests/vaporize-cli-tests/VaporizeInventoryRendererTests.swift",
+        "private/apple/spm/vaporize@wrkstrm-core.cli/tests/vaporize-cli-tests/VaporizeJSONValidationTests.swift",
+        "private/apple/spm/vaporize@wrkstrm-core.cli/tests/swift-cli-installer-tests/SwiftCLIInstallerTests.swift",
+        "private/apple/spm/vaporize@wrkstrm-core.cli/tests/swift-app-installer-tests/SwiftAppInstallerTests.swift"
+      ],
+      "result": "vaporize toolchain -- swift test passed 58 tests: 45 VaporizeCLITests, 4 SwiftCLIInstallerTests, and 9 SwiftAppInstallerTests.",
+      "boundary": "This expands release proof across major Vaporize features; it does not unblock the Pkl-backed .xcodeproj world-state generation gate."
     }
   ],
   "recommendedMigrationPlan": [

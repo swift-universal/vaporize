@@ -73,6 +73,38 @@ func classifiesPermanentVapor() throws {
   #expect(result.summary.permanentVapor == 1)
 }
 
+@Test("Classifies legacy x-craze collapse-path annotations")
+func classifiesLegacyCrazeCollapsePathAnnotation() throws {
+  let fixture = try makeFixtureDirectory(named: "legacy-craze-key")
+  defer { try? FileManager.default.removeItem(at: fixture) }
+  try writeJSON(
+    """
+    {
+      "metadata": {
+        "annotations": [
+          {
+            "x-craze-collapse-path": {
+              "status": "collapse-blocked",
+              "collapseGateRefs": ["legacy-gate"],
+              "pendingCapabilityRefs": ["missing-tool"]
+            }
+          }
+        ]
+      }
+    }
+    """,
+    name: "legacy.json",
+    in: fixture
+  )
+
+  let result = try VaporInventoryScanner().scan(path: fixture.path)
+  let classification = try #require(result.classifications.first)
+  #expect(classification.status == .collapseBlocked)
+  #expect(classification.collapseGateRefsCount == 1)
+  #expect(classification.pendingCapabilityRefsCount == 1)
+  #expect(result.summary.collapseBlocked == 1)
+}
+
 @Test("Classifies a file with no annotation as unannotated")
 func classifiesUnannotated() throws {
   let fixture = try makeFixtureDirectory(named: "unannotated")
@@ -85,6 +117,23 @@ func classifiesUnannotated() throws {
     in: fixture
   )
   let result = try VaporInventoryScanner().scan(path: fixture.path)
+  #expect(result.summary.unannotated == 1)
+}
+
+@Test("Malformed JSON with an annotation key is counted as unannotated")
+func malformedJSONWithAnnotationKeyIsUnannotated() throws {
+  let fixture = try makeFixtureDirectory(named: "malformed-annotation")
+  defer { try? FileManager.default.removeItem(at: fixture) }
+  try """
+  { "x-vaporize-collapse-path": { "status": "collapsed",
+  """.write(
+    to: fixture.appendingPathComponent("broken.json"),
+    atomically: true,
+    encoding: .utf8
+  )
+
+  let result = try VaporInventoryScanner().scan(path: fixture.path)
+  #expect(result.totalJsonFilesScanned == 1)
   #expect(result.summary.unannotated == 1)
 }
 
@@ -148,6 +197,26 @@ func errorsOnMissingPath() {
   #expect(throws: VaporInventoryScanner.ScannerError.self) {
     _ = try VaporInventoryScanner().scan(path: missing.path)
   }
+}
+
+@Test("Errors when --path points at a file")
+func errorsOnFilePath() throws {
+  let fixture = try makeFixtureDirectory(named: "file-path")
+  defer { try? FileManager.default.removeItem(at: fixture) }
+  let file = fixture.appendingPathComponent("record.json")
+  try "{}".write(to: file, atomically: true, encoding: .utf8)
+
+  #expect(throws: VaporInventoryScanner.ScannerError.self) {
+    _ = try VaporInventoryScanner().scan(path: file.path)
+  }
+}
+
+@Test("Resolves relative scan paths to absolute standardized paths")
+func resolvesRelativeScanPaths() {
+  let resolved = VaporInventoryScanner.resolveAbsolutePath("./private/../private/universal")
+
+  #expect(resolved.hasPrefix("/"))
+  #expect(resolved.hasSuffix("/private/universal"))
 }
 
 // MARK: - Helpers
