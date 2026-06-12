@@ -51,6 +51,9 @@ chat memory.
 - `A1FC2C04-AD43-448E-8B72-291E226AB429` - Pkl schema, Concourse Pkl parity
   specimen, `compare-project-yml-pkl` mode, and zero-mismatch comparison
   receipt.
+- `CFC7AE2A-1E63-4358-BE75-4C514A6CCC87` - PklSwift dependency,
+  `generate-project-yml`, transitional Concourse YAML artifact, generation and
+  comparison receipts, release packet updates, and blocker-bead progress.
 
 ## Forward Path
 

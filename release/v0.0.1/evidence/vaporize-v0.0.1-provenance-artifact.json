@@ -205,6 +205,11 @@
       "eventID": "A1FC2C04-AD43-448E-8B72-291E226AB429",
       "triggeredAt": "2026-06-12T22:12:51Z",
       "scope": "Pkl schema, Concourse Pkl parity specimen, compare-project-yml-pkl mode, and zero-mismatch comparison receipt."
+    },
+    {
+      "eventID": "CFC7AE2A-1E63-4358-BE75-4C514A6CCC87",
+      "triggeredAt": "2026-06-12T22:34:05Z",
+      "scope": "PklSwift dependency, generate-project-yml mode, transitional Concourse YAML artifact, generation and comparison receipts, release packet updates, and blocker-bead progress."
     }
   ],
   "forwardPath": [
