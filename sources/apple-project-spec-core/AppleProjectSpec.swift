@@ -371,8 +371,26 @@ public enum AppleProjectSpecComparator {
   }
 }
 
+public enum VaporizeAppleProjectReceiptSchema {
+  public static let schemaFamilySlug = "vaporize-schemas"
+  public static let schemaFamilyVersion = "0.0.1"
+
+  private static let schemaRoot =
+    "private/universal/domain/tooling/schema-families/vaporize-schemas/v0.0.1/json/vaporize-schemas-v000-000-001/schemas"
+
+  public static let inspectionSchemaRef =
+    "\(schemaRoot)/apple-project-yml-inspection-receipt/apple-project-yml-inspection-receipt.schema.json"
+  public static let comparisonSchemaRef =
+    "\(schemaRoot)/apple-project-yml-pkl-comparison-receipt/apple-project-yml-pkl-comparison-receipt.schema.json"
+  public static let generationSchemaRef =
+    "\(schemaRoot)/pkl-project-yml-generation-receipt/pkl-project-yml-generation-receipt.schema.json"
+}
+
 public struct AppleProjectSpecComparisonReceipt: Codable, Equatable, Sendable {
   public var schemaVersion = "0.1.0"
+  public var schemaFamilySlug = VaporizeAppleProjectReceiptSchema.schemaFamilySlug
+  public var schemaFamilyVersion = VaporizeAppleProjectReceiptSchema.schemaFamilyVersion
+  public var schemaRef = VaporizeAppleProjectReceiptSchema.comparisonSchemaRef
   public var receiptKind = "vaporize-apple-project-yml-pkl-comparison"
   public var migrationPhase = "pkl-parity-specimen"
   public var ymlPath: String
@@ -387,6 +405,9 @@ public struct AppleProjectSpecComparisonReceipt: Codable, Equatable, Sendable {
 
 public struct PklProjectGenerationReceipt: Codable, Equatable, Sendable {
   public var schemaVersion = "0.1.0"
+  public var schemaFamilySlug = VaporizeAppleProjectReceiptSchema.schemaFamilySlug
+  public var schemaFamilyVersion = VaporizeAppleProjectReceiptSchema.schemaFamilyVersion
+  public var schemaRef = VaporizeAppleProjectReceiptSchema.generationSchemaRef
   public var receiptKind = "vaporize-pkl-project-yml-generation"
   public var generationPhase = "pkl-to-transitional-apple-project-spec-yaml"
   public var generatorStatus = "transitional-yaml-only"
@@ -595,6 +616,9 @@ public enum AppleProjectAppBundleNameResolver {
 
 public struct AppleProjectYMLInspectionReceipt: Codable, Equatable, Sendable {
   public var schemaVersion = "0.1.0"
+  public var schemaFamilySlug = VaporizeAppleProjectReceiptSchema.schemaFamilySlug
+  public var schemaFamilyVersion = VaporizeAppleProjectReceiptSchema.schemaFamilyVersion
+  public var schemaRef = VaporizeAppleProjectReceiptSchema.inspectionSchemaRef
   public var receiptKind = "vaporize-apple-project-yml-inspection"
   public var bridgeStatus = "legacy-xcodegen-yaml-read-only"
   public var migrationPhase = "swift-yaml-read-parity"

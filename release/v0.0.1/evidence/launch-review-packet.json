@@ -325,8 +325,8 @@
     },
     {
       "gateRef": "GATE-20-schema-universal-extraction",
-      "status": "PASS-WITH-NOTE",
-      "rationale": "Initial vaporize-schemas v0.0.1 JSON schemas and fixtures landed in schema-universal for CUJ coverage, provenance, launch-review specialization, and Apple project YAML/Pkl receipts; Swift model package generation remains follow-up"
+      "status": "PASS",
+      "rationale": "vaporize-schemas v0.0.1 now includes JSON schemas, canonical fixtures, and a fixture-backed Swift model package for CUJ coverage, provenance, launch-review specialization, and Apple project YAML/Pkl receipts"
     }
   ],
   "knownFollowUps": [
@@ -362,7 +362,7 @@
     "x-provenance-artifact": "vaporize-v0.0.1-provenance-artifact.json collects release-prep receipts, validation commands, savepoints, proven claims, unproven claims, and the forward Pkl migration path.",
     "x-pkl-parity-specimen": "Concourse now has project.pkl amending AppleProjectSpec.pkl. compare-project-yml-pkl evaluates Pkl through PklSwift, decodes YAML and Pkl into AppleProjectSpec, and emits a zero-mismatch comparison receipt.",
     "x-pkl-transitional-yaml-generation": "generate-project-yml evaluates Concourse project.pkl through PklSwift and emits transitional AppleProjectSpec YAML plus a generation receipt. The generated YAML compares back to Pkl with zero mismatches, but .xcodeproj world-state is not generated.",
-    "x-schema-universal-extraction": "vaporize-schemas v0.0.1 extracts initial JSON schemas and fixtures for Vaporize CUJ coverage, provenance, launch-review specialization, and Apple project YAML/Pkl receipts under schema-universal.",
+    "x-schema-universal-extraction": "vaporize-schemas v0.0.1 extracts JSON schemas, canonical fixtures, and a fixture-backed Swift model package for Vaporize CUJ coverage, provenance, launch-review specialization, and Apple project YAML/Pkl receipts under schema-universal.",
     "x-cuj-test-coverage": "Required test count is derived from PRD requirements through active draft CUJs. Current floor: 53 Swift test obligations plus 4 release evidence checks, all targetable by CUJ-specific SwiftPM bundles. Current executable suite: 70 Swift tests.",
     "x-major-feature-test-suite": "Vaporize package tests now cover major release features through 12 CUJ-specific SwiftPM bundles: command parsing, pass/use/toolchain receipts, JSON validation, inventory scanner/renderer, graph forwarding, Apple project YAML/Pkl migration paths, SwiftPM CLI installer arguments, and app installer Xcode invocation paths.",
     "x-pkl-project-generation-gate": "Internal v0.0.1 release is blocked until our owned Apple project-generation path moves off XcodeGen and onto Pkl-backed .xcodeproj world-state generation, with any leftover XcodeGen surfaces quarantined as compatibility.",

@@ -5,7 +5,7 @@
   "mismatches" : [
 
   ],
-  "pklPath" : "private\/universal\/substrate\/collectives\/wrkstrm-core\/private\/apple\/apps\/concourse\/project.pkl",
+  "pklPath" : "private\/apple\/apps\/concourse\/project.pkl",
   "pklSignature" : {
     "options" : {
       "createIntermediateGroups" : "true",
@@ -88,9 +88,12 @@
     }
   },
   "receiptKind" : "vaporize-apple-project-yml-pkl-comparison",
-  "requestId" : "vaporize-compare-project-yml-pkl-BAB3EC5E-FBE6-4C0C-878E-A01B5C43AD7D",
+  "requestId" : "vaporize-compare-project-yml-pkl-5DDBFEE4-2D12-4A5C-9E28-D35EE4532908",
+  "schemaFamilySlug" : "vaporize-schemas",
+  "schemaFamilyVersion" : "0.0.1",
+  "schemaRef" : "private\/universal\/domain\/tooling\/schema-families\/vaporize-schemas\/v0.0.1\/json\/vaporize-schemas-v000-000-001\/schemas\/apple-project-yml-pkl-comparison-receipt\/apple-project-yml-pkl-comparison-receipt.schema.json",
   "schemaVersion" : "0.1.0",
-  "ymlPath" : "private\/universal\/substrate\/collectives\/wrkstrm-core\/private\/apple\/apps\/concourse\/project.yml",
+  "ymlPath" : "private\/apple\/apps\/concourse\/project.yml",
   "ymlSignature" : {
     "options" : {
       "createIntermediateGroups" : "true",

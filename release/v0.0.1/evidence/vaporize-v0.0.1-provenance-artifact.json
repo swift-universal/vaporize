@@ -111,8 +111,8 @@
     {
       "receiptKind": "vaporize-schema-universal-extraction",
       "path": "private/universal/substrate/collectives/schema-universal/private/universal/domain/tooling/schema-families/vaporize-schemas/v0.0.1",
-      "claim": "Initial schema-universal JSON schemas and fixtures exist for durable Vaporize release evidence and receipts.",
-      "result": "PASS-WITH-NOTE: Swift model package generation remains follow-up"
+      "claim": "Schema-universal JSON schemas, canonical fixtures, and a Swift model package exist for durable Vaporize release evidence and receipts.",
+      "result": "PASS: fixture-backed Swift model package decodes canonical release evidence and receipts"
     }
   ],
   "sourceChangeSurfaces": [
@@ -215,9 +215,17 @@
     {
       "path": "private/universal/substrate/collectives/schema-universal/private/universal/domain/tooling/schema-families/vaporize-schemas/v0.0.1/fixtures",
       "purpose": "Carries canonical fixtures copied from live Vaporize v0.0.1 release evidence."
+    },
+    {
+      "path": "private/universal/substrate/collectives/schema-universal/private/universal/domain/tooling/schema-families/vaporize-schemas/v0.0.1/spm/vaporize-schemas-v000-000-001",
+      "purpose": "Defines the Vaporize_Schemas_v000_000_001 Swift model package and fixture-backed Swift Testing suite for extracted Vaporize release schemas."
     }
   ],
   "validationEvidence": [
+    {
+      "command": "vaporize toolchain -- swift test --package-path private/universal/substrate/collectives/schema-universal/private/universal/domain/tooling/schema-families/vaporize-schemas/v0.0.1/spm/vaporize-schemas-v000-000-001",
+      "result": "PASS: 7 Swift Testing tests decode and round-trip canonical Vaporize schema fixtures"
+    },
     {
       "command": "vaporize toolchain -- swift test --package-path private/apple/spm/vaporize@wrkstrm-core.cli",
       "result": "PASS: 70 tests across 12 CUJ-specific SwiftPM bundles"
@@ -271,8 +279,8 @@
       "result": "PASS"
     },
     {
-      "command": "vaporize validate-json over every JSON file under private/universal/substrate/collectives/schema-universal/private/universal/domain/tooling/schema-families/vaporize-schemas/v0.0.1",
-      "result": "PASS: 6 fixtures and 6 schema files"
+      "command": "vaporize validate-json over every source JSON file under private/universal/substrate/collectives/schema-universal/private/universal/domain/tooling/schema-families/vaporize-schemas/v0.0.1, excluding SwiftPM .build artifacts",
+      "result": "PASS: 18 source JSON files, including 6 schemas, 6 canonical fixtures, and 6 Swift test-resource fixture copies"
     },
     {
       "command": "schema-tighten@schema-universal.cli audit --repo-root private/universal/substrate/collectives/schema-universal/private/universal/domain/tooling/schema-families/vaporize-schemas/v0.0.1 --schema-universal-root private/universal/substrate/collectives/schema-universal",

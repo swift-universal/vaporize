@@ -5,18 +5,18 @@ options:
   createIntermediateGroups: true
 settings:
   base:
+    MACOSX_DEPLOYMENT_TARGET: '26.0'
+    SUBSTRATE_APP_STORE_CATEGORY_SECONDARY: Utilities
     SUBSTRATE_APP_STORE_CATEGORY_PRIMARY: Developer Tools
     INSTALL_PATH: /Applications/categories/developer-tools
-    MACOSX_DEPLOYMENT_TARGET: '26.0'
     SWIFT_VERSION: '6.4'
-    SUBSTRATE_APP_STORE_CATEGORY_SECONDARY: Utilities
 packages:
   WrkstrmWalkthrough:
     path: ../../../../../wrkstrm-components/private/walkthrough/spm/wrkstrm-walkthrough
-  common-terminal:
-    path: ../../../../../swift-universal/private/universal/domain/build/spm/common-terminal-view
   WrkstrmOnboarding:
     path: ../../../../../wrkstrm-components/private/onboarding/spm/wrkstrm-onboarding
+  common-terminal:
+    path: ../../../../../swift-universal/private/universal/domain/build/spm/common-terminal-view
 targets:
   concourse:
     type: application
@@ -26,18 +26,18 @@ targets:
     - path: Sources/mac-app
     settings:
       base:
-        CURRENT_PROJECT_VERSION: 1
-        PRODUCT_NAME: concourse
         GENERATE_INFOPLIST_FILE: false
-        CODE_SIGNING_REQUIRED: false
-        INFOPLIST_FILE: Sources/mac-app/Info.plist
         CODE_SIGNING_ALLOWED: false
+        CURRENT_PROJECT_VERSION: 1
         MARKETING_VERSION: 0.1.0
+        INFOPLIST_FILE: Sources/mac-app/Info.plist
+        PRODUCT_NAME: concourse
+        CODE_SIGNING_REQUIRED: false
       configs:
         Debug:
           PRODUCT_BUNDLE_IDENTIFIER: studio.laussat.concourse.macos.debug
-          SUBSTRATE_APP_DISPLAY_NAME: Concourse $(MARKETING_VERSION) Debug
           WRAPPER_NAME: concourse-$(MARKETING_VERSION)-debug.app
+          SUBSTRATE_APP_DISPLAY_NAME: Concourse $(MARKETING_VERSION) Debug
         Release:
           PRODUCT_BUNDLE_IDENTIFIER: studio.laussat.concourse.macos.release
           WRAPPER_NAME: concourse-$(MARKETING_VERSION)-testflight.app
