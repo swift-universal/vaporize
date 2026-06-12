@@ -1,0 +1,161 @@
+{
+  "XcodeGenToPklMigrationInvestigationModel": "0.0.1-untyped",
+  "investigationId": "vaporize-v0.0.1-xcodegen-to-pkl-investigation-2026-06-12",
+  "subjectAppSlug": "vaporize@wrkstrm-core.cli",
+  "subjectReleaseSlug": "v0.0.1",
+  "generatedAt": "2026-06-12T20:58:02Z",
+  "generatedBy": "codex-crisie",
+  "status": "release-blocker-investigation-complete",
+  "toolClassification": "internal-essential-tool",
+  "verdict": {
+    "releaseImpact": "BLOCK_INTERNAL_V0_0_1",
+    "statement": "Vaporize v0.0.1 should remain in release prep until substrate-owned Apple project-generation truth moves from XcodeGen project.yml surfaces to a Pkl-backed owned path, with any remaining XcodeGen surfaces explicitly quarantined as compatibility or historical evidence.",
+    "why": "The tree has broad project.yml and checked-in pbxproj reliance, direct XcodeGen runner code, and no existing Pkl Apple-project generation model. Releasing Vaporize as an internal essential tool before that migration would teach assistants the wrong project-generation boundary."
+  },
+  "inventory": {
+    "projectYmlFileCount": 155,
+    "checkedInXcodeProjectPbxprojFileCount": 185,
+    "pklishFileCount": 9,
+    "pklCurrentState": "Existing Pkl surfaces are org-prefix or digikoma-adjacent evidence; no Apple project-generation Pkl model was found in the audited paths.",
+    "xcodegenExecutablePresentOnOperatorMachine": true,
+    "pklExecutablePresentOnOperatorMachine": true,
+    "pklVersionEvidence": "Pkl 0.31.1 evidence exists under takumi-org digikoma-pkl interface."
+  },
+  "projectYmlByCollective": [
+    {"collective": "wrkstrm-components", "count": 45},
+    {"collective": "wrkstrm-app", "count": 45},
+    {"collective": "wrkstrm-research", "count": 18},
+    {"collective": "clia-app-org", "count": 11},
+    {"collective": "wrkstrm-core", "count": 7},
+    {"collective": "todo3", "count": 5},
+    {"collective": "takumi-org", "count": 4},
+    {"collective": "slate-org", "count": 4},
+    {"collective": "kura-org", "count": 3},
+    {"collective": "tau-app", "count": 2},
+    {"collective": "laussat-studio", "count": 2},
+    {"collective": "clia-org", "count": 2},
+    {"collective": "wrkstrm-finance", "count": 1},
+    {"collective": "wrkstrm", "count": 1},
+    {"collective": "vapor-wares-org", "count": 1},
+    {"collective": "switch-on-day", "count": 1},
+    {"collective": "swift-irc", "count": 1},
+    {"collective": "service-universal", "count": 1},
+    {"collective": "codeswiftly", "count": 1}
+  ],
+  "pbxprojByCollective": [
+    {"collective": "wrkstrm-app", "count": 51},
+    {"collective": "wrkstrm-components", "count": 44},
+    {"collective": "wrkstrm-research", "count": 19},
+    {"collective": "kura-org", "count": 15},
+    {"collective": "clia-app-org", "count": 12},
+    {"collective": "todo3", "count": 9},
+    {"collective": "wrkstrm-core", "count": 6},
+    {"collective": "slate-org", "count": 4},
+    {"collective": "wrkstrm-games", "count": 3},
+    {"collective": "tau-app", "count": 3},
+    {"collective": "takumi-org", "count": 3},
+    {"collective": "codeswiftly", "count": 3},
+    {"collective": "wrkstrm", "count": 2},
+    {"collective": "switch-on-day", "count": 2},
+    {"collective": "laussat-studio", "count": 2},
+    {"collective": "clia-org", "count": 2},
+    {"collective": "wrkstrm-finance", "count": 1},
+    {"collective": "vapor-wares-org", "count": 1},
+    {"collective": "swift-ui-universal", "count": 1},
+    {"collective": "swift-irc", "count": 1},
+    {"collective": "service-universal", "count": 1}
+  ],
+  "representativeSpecFeatures": [
+    "XcodeGen options with minimumXcodeGenVersion 2.38.0 or 2.39.0",
+    "global settings.base values such as SWIFT_VERSION, deployment targets, INSTALL_PATH, and app category metadata",
+    "target settings for PRODUCT_NAME, PRODUCT_BUNDLE_IDENTIFIER, WRAPPER_NAME, MARKETING_VERSION, CURRENT_PROJECT_VERSION, entitlements, and signing toggles",
+    "macOS, iOS, Catalyst, helper/status app, and embedded-target shapes",
+    "Swift package dependencies with relative paths into sibling collectives",
+    "sources, Info.plist paths, generated Info.plist properties, postBuildScripts, and schemes"
+  ],
+  "directXcodegenInvocationSurfaces": [
+    {
+      "path": "private/universal/substrate/collectives/clia-org/private/universal/domain/tooling/spm/scaffold-app-from-web-cli/Sources/ScaffoldAppFromWebKit/BuildAndInstall.swift",
+      "kind": "swift-process-runner",
+      "evidence": "Runs /usr/bin/env xcodegen generate, then xcodebuild, install, and launch."
+    },
+    {
+      "path": "private/universal/substrate/collectives/wrkstrm-app/private/universal/domain/tooling/spm/Sources/WrkstrmAppScaffold/AppScaffoldEngine.swift",
+      "kind": "swift-process-runner",
+      "evidence": "Resolves project.yml/XcodeGen.yml and runs xcodegen generate through ScaffoldProcess."
+    },
+    {
+      "path": "private/universal/substrate/collectives/wrkstrm-core/private/universal/domain/build/spm/app-artifacts/Tools/WrkstrmCoreAppArtifactsCLI/PatchInstallPathCommand.swift",
+      "kind": "swift-process-runner",
+      "evidence": "Patches project.yml and regenerates with /opt/homebrew/bin/xcodegen unless --no-regen is set."
+    },
+    {
+      "path": "private/universal/substrate/collectives/wrkstrm-core/private/apple/apps/shared/scripts/build_and_run_xcode_app.sh",
+      "kind": "shell-runner",
+      "evidence": "Runs xcodegen generate --spec when project.yml is newer than project.pbxproj."
+    },
+    {
+      "path": "private/universal/substrate/collectives/wrkstrm-app/private/apple/apps/shared/scripts/build_and_run_xcode_app.sh",
+      "kind": "shell-runner",
+      "evidence": "Same stale-project regeneration pattern as wrkstrm-core shared app script."
+    },
+    {
+      "path": "private/universal/substrate/collectives/kura-org/private/apple/shared/scripts/build_and_run_xcode_app.sh",
+      "kind": "shell-runner",
+      "evidence": "Runs xcodegen generate --spec when project.yml is stale relative to pbxproj."
+    },
+    {
+      "path": "private/universal/substrate/collectives/slate-org/private/apple/apps/shared/scripts/build_and_run_xcode_app.sh",
+      "kind": "shell-runner",
+      "evidence": "Runs xcodegen generate --spec when project.yml is stale relative to pbxproj."
+    },
+    {
+      "path": "private/universal/substrate/collectives/spaces-universal/private/universal/kura-spaces/workflows/versioned-macos-app-install/v0.1.0/versioned-macos-app-install.workflow.su.json",
+      "kind": "workflow-tool-ref",
+      "evidence": "The workflow state names xcodegen generate as a tool for patch-project-and-plist-surfaces."
+    }
+  ],
+  "riskTiers": [
+    {
+      "tier": "T0-release-blockers",
+      "scope": "wrkstrm-core apps and Vaporize release evidence",
+      "reason": "Vaporize v0.0.1 is owned here; these are closest to the internal-essential release proof."
+    },
+    {
+      "tier": "T1-canonical-generators-and-scaffolds",
+      "scope": "wrkstrm-app scaffold tooling, clia-org scaffold-app-from-web-cli, app-artifacts patch-path",
+      "reason": "These create or mutate future project-generation surfaces, so they must stop producing new XcodeGen debt first."
+    },
+    {
+      "tier": "T2-shared-app-runners",
+      "scope": "wrkstrm-core, wrkstrm-app, kura-org, slate-org shared build_and_run scripts",
+      "reason": "They encode direct XcodeGen regeneration behavior into day-to-day app workflows."
+    },
+    {
+      "tier": "T3-fleet-migration",
+      "scope": "wrkstrm-app, wrkstrm-components, wrkstrm-research, clia-app-org, and long-tail app homes",
+      "reason": "This is the broad conversion from project.yml to Pkl-backed owned project generation."
+    }
+  ],
+  "recommendedMigrationPlan": [
+    "Freeze: do not add new substrate-owned project.yml surfaces unless they are explicitly marked legacy-compatibility.",
+    "Model: author an AppleProjectSpec Pkl module for the common project.yml shape: options, settings, packages, targets, sources, info, scripts, schemes, and configurations.",
+    "Shadow parity: for one wrkstrm-core app, express the existing project.yml as Pkl and prove that the rendered transitional YAML is semantically equivalent. This is a parity harness only, not the final release path.",
+    "Owned generator: add a Swift-owned generator path that consumes Pkl-evaluated project data and writes the .xcodeproj world-state with receipts.",
+    "Vaporize integration: add a Vaporize generation mode that owns Pkl evaluation, project world-state generation, receipt emission, and app build/install composition.",
+    "Cutover: migrate wrkstrm-core apps first, then generator/scaffold surfaces, then wrkstrm-app and wrkstrm-components fleet surfaces.",
+    "Quarantine: tag any remaining XcodeGen path as historical, external, or compatibility-only; make release gates fail on unclassified substrate-owned XcodeGen use."
+  ],
+  "doNotDo": [
+    "Do not mark XcodeGen integration as the forward canonical Vaporize release path.",
+    "Do not mechanically rename project.yml to a Pkl file without a typed model and generation receipt.",
+    "Do not let app runners invoke xcodegen directly after Vaporize owns the lane.",
+    "Do not claim v0.0.1 is internally releasable while Pkl project-generation evidence is missing."
+  ],
+  "nextConcreteWork": [
+    "Create AppleProjectSpec.pkl and one Concourse Pkl port as the first parity specimen.",
+    "Author a PklProjectGenerationReceipt model for the Pkl-to-world-state step.",
+    "Add a Vaporize bead for release-gate enforcement that scans for unclassified substrate-owned XcodeGen invocations.",
+    "Update versioned-macos-app-install workflow tool refs from xcodegen to Vaporize/Pkl generation once the owned mode exists."
+  ]
+}

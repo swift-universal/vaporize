@@ -47,6 +47,12 @@
     },
     {
       "LinkRefModel": "0.3.0",
+      "s": ["vaporize", "v0.0.1", "xcodegen-to-pkl-investigation"],
+      "t": "Vaporize v0.0.1 XcodeGen to Pkl migration investigation",
+      "tg": [{"k": "rp", "rt": "mono", "v": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/xcodegen-to-pkl-investigation.json"}]
+    },
+    {
+      "LinkRefModel": "0.3.0",
       "s": ["vaporize", "v0.0.1", "use-mode-source"],
       "t": "Vaporize use mode source",
       "tg": [{"k": "rp", "rt": "mono", "v": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/sources/vaporize-cli/main.swift"}]
@@ -148,6 +154,7 @@
     "x-common-process-use-surface": "use mode consumes CommonProcess CommandSpec JSON via --common-process-spec and emits a vaporize-use-common-process receipt when requested.",
     "x-toolchain-surface": "toolchain mode owns Xcode-selected Swift invocation; assistants should not call xcrun directly.",
     "x-json-validation-surface": "validate-json mode owns JSON packet validation; assistants should not call jq directly.",
-    "x-pkl-project-generation-gate": "Internal v0.0.1 release is blocked until our owned Apple project-generation path moves off XcodeGen and onto Pkl, with any leftover XcodeGen surfaces quarantined as compatibility."
+    "x-pkl-project-generation-gate": "Internal v0.0.1 release is blocked until our owned Apple project-generation path moves off XcodeGen and onto Pkl, with any leftover XcodeGen surfaces quarantined as compatibility.",
+    "x-xcodegen-to-pkl-investigation": "Investigation found 155 project.yml files, 185 checked-in .xcodeproj/project.pbxproj files, direct XcodeGen runner surfaces, and no existing Pkl Apple-project generation model."
   }
 }
