@@ -43,6 +43,9 @@ chat memory.
 - `8D119C0F-65AD-4633-A776-EC15350BA4A5` - fleet parse audit receipt.
 - `65A98CBC-F745-4B23-9E41-4361DAECF054` - old/new Concourse build
   comparison and `WRAPPER_NAME` compatibility fix.
+- `A1FC2C04-AD43-448E-8B72-291E226AB429` - Pkl schema, Concourse Pkl parity
+  specimen, `compare-project-yml-pkl` mode, and zero-mismatch comparison
+  receipt.
 
 ## Forward Path
 

@@ -169,8 +169,8 @@
       "scope": "Old tool / Vaporize Concourse build comparison, WRAPPER_NAME compatibility fix, and linked release evidence."
     },
     {
-      "eventID": "pending",
-      "triggeredAt": "2026-06-12T22:11:11Z",
+      "eventID": "A1FC2C04-AD43-448E-8B72-291E226AB429",
+      "triggeredAt": "2026-06-12T22:12:51Z",
       "scope": "Pkl schema, Concourse Pkl parity specimen, compare-project-yml-pkl mode, and zero-mismatch comparison receipt."
     }
   ],
