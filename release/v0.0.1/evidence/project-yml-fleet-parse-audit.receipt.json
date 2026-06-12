@@ -1,0 +1,20 @@
+{
+  "receiptKind": "vaporize-project-yml-fleet-parse-audit",
+  "schemaVersion": "0.0.1-untyped",
+  "emittedAt": "2026-06-12T21:25:15Z",
+  "emittedBy": "codex-crisie",
+  "tool": "vaporize@wrkstrm-core.cli",
+  "mode": "inspect-project-yml",
+  "scope": "private/universal/substrate/collectives",
+  "selectionCommand": "rg --files private/universal/substrate/collectives -g 'project.yml'",
+  "auditCommand": "for each discovered project.yml: vaporize inspect-project-yml --path <path> --format text",
+  "result": {
+    "projectYMLTotal": 155,
+    "projectYMLParsed": 155,
+    "projectYMLFailed": 0
+  },
+  "parseCompatibilityVerdict": "all-discovered-project-yml-files-parse-through-apple-project-spec-core",
+  "buildCompatibilityVerdict": "not-proven",
+  "boundary": "This receipt proves read compatibility for discovered legacy XcodeGen project.yml files. It does not prove that every project builds, installs, launches, has a valid checked-in pbxproj, or is ready for Pkl-backed generation.",
+  "releaseImpact": "The Swift YAML read bridge appears broad enough for fleet intake. Vaporize v0.0.1 remains blocked on Pkl-backed project generation and classified XcodeGen quarantine."
+}

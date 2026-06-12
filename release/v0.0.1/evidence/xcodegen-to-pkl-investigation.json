@@ -147,6 +147,8 @@
       "source": "private/apple/spm/vaporize@wrkstrm-core.cli/sources/apple-project-spec-core/AppleProjectSpec.swift",
       "tests": "private/apple/spm/vaporize@wrkstrm-core.cli/tests/vaporize-cli-tests/AppleProjectYMLReaderTests.swift",
       "receipt": "private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/concourse-project-yml-inspection.receipt.json",
+      "fleetAuditReceipt": "private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/project-yml-fleet-parse-audit.receipt.json",
+      "fleetAuditResult": "155/155 discovered project.yml files under private/universal/substrate/collectives parsed through inspect-project-yml",
       "scope": "Read-only migration intake for legacy XcodeGen project.yml; does not rewrite YAML, invoke XcodeGen, or generate .xcodeproj world-state."
     }
   ],

@@ -35,7 +35,7 @@ and onto a Pkl-backed owned path.
 | GATE-12 - Open feature beads dispositioned | BLOCKED | Follow-ups are named in PRD and launch-review packet; the Pkl project-generation bead is a release blocker for internal v0.0.1. |
 | GATE-13 - Full repository cleanliness | BLOCKED-BY-EXISTING-TREE | Startup reported 511 diff-files. Release review must use scoped paths, not broad worktree cleanliness. |
 | GATE-14 - Pkl project generation for owned Apple surfaces | BLOCKED | Final internal release waits until our XcodeGen-backed owned surfaces move to Pkl or are explicitly quarantined as historical/external compatibility. |
-| GATE-15 - Swift YAML read bridge | PASS | `inspect-project-yml` parsed `private/apple/apps/concourse/project.yml` into Swift `AppleProjectSpec` data and emitted `release/v0.0.1/evidence/concourse-project-yml-inspection.receipt.json`; this is read-only parity evidence, not release-unblocking generation. |
+| GATE-15 - Swift YAML read bridge | PASS | `inspect-project-yml` parsed `private/apple/apps/concourse/project.yml` into Swift `AppleProjectSpec` data and emitted `release/v0.0.1/evidence/concourse-project-yml-inspection.receipt.json`; fleet audit parsed 155/155 discovered `project.yml` files and emitted `release/v0.0.1/evidence/project-yml-fleet-parse-audit.receipt.json`. This is read-only parity evidence, not release-unblocking generation or build proof. |
 
 ## Open Follow-Up Beads
 

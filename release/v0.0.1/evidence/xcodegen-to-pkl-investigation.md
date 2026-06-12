@@ -31,10 +31,14 @@ The first approved migration-prep slice is now landed:
   multi-target fixture.
 - `concourse-project-yml-inspection.receipt.json` records the Concourse intake
   proof for release review.
+- `project-yml-fleet-parse-audit.receipt.json` records that 155/155 discovered
+  `project.yml` files under `private/universal/substrate/collectives` parsed
+  through `inspect-project-yml`.
 
 This does not unblock v0.0.1 by itself. It gives the Pkl migration a tested
 Swift intake surface so the next slice can compare Pkl-evaluated project data
-against the legacy YAML shape before generating project world-state.
+against the legacy YAML shape before generating project world-state. The fleet
+audit proves read compatibility, not that every project builds.
 
 ## Live Inventory
 

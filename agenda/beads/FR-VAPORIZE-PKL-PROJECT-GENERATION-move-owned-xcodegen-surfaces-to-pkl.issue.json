@@ -93,7 +93,9 @@
       "slice": "swift-yaml-read-parity",
       "status": "complete",
       "description": "Vaporize now has read-only Swift YAML intake for legacy XcodeGen project.yml files through inspect-project-yml. This supports Pkl parity work but does not satisfy the project-generation release gate.",
-      "receipt": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/concourse-project-yml-inspection.receipt.json"
+      "receipt": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/concourse-project-yml-inspection.receipt.json",
+      "fleetAuditReceipt": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/project-yml-fleet-parse-audit.receipt.json",
+      "fleetAuditResult": "155/155 discovered project.yml files parsed through inspect-project-yml"
     }
   ],
   "linkedTypedRecords": {
@@ -102,6 +104,7 @@
     "launchReviewPacket": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/launch-review-packet.json",
     "xcodegenToPklInvestigation": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/xcodegen-to-pkl-investigation.json",
     "concourseProjectYMLInspectionReceipt": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/concourse-project-yml-inspection.receipt.json",
+    "projectYMLFleetParseAuditReceipt": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/project-yml-fleet-parse-audit.receipt.json",
     "priorXcodeGenBead": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/agenda/beads/FR-VAPORIZE-XCODEGEN-INTEGRATION-substrate-canonical-xcodegen-aware-build.issue.json"
   }
 }
