@@ -1,6 +1,6 @@
 # Vaporize v0.0.1 - Provenance Artifact
 
-**Generated:** 2026-06-12T22:43:14Z
+**Generated:** 2026-06-12T22:48:43Z
 **Status:** captured for forward Pkl migration
 **Subject:** `vaporize@wrkstrm-core.cli` v0.0.1 release prep
 
@@ -9,7 +9,9 @@ chat memory.
 
 ## Proven
 
-- Focused Vaporize tests pass through `vaporize toolchain`: 17 tests.
+- Focused Vaporize tests pass through `vaporize toolchain`: 27 tests across
+  YAML reader, Pkl, comparator, bundle resolver, value/renderer, JSON
+  validation, CommonProcess use, toolchain, and inventory suites.
 - Concourse `project.yml` parses into Swift `AppleProjectSpec`.
 - Fleet intake audit parsed 155/155 discovered `project.yml` files.
 - Old XcodeGen script build and Vaporize app build both pass for Concourse

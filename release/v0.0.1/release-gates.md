@@ -1,7 +1,7 @@
 # Vaporize v0.0.1 - Release Gates
 
 **Status:** release-prep draft; blocked pending Pkl-backed Xcode world-state generation
-**Updated:** 2026-06-12T22:28:11Z
+**Updated:** 2026-06-12T22:48:43Z
 **Component:** `vaporize@wrkstrm-core.cli`
 **Tool classification:** `internal-essential-tool`
 
@@ -27,11 +27,11 @@ quarantined.
 | GATE-02 - CUJs authored | PASS | `release/v0.0.1/cuj.md` |
 | GATE-03 - Release gates authored | PASS | This file |
 | GATE-04 - Launch-review packet authored | PASS | `release/v0.0.1/evidence/launch-review-packet.json` |
-| GATE-05 - Focused tests pass | PASS | `vaporize toolchain -- swift test --package-path private/apple/spm/vaporize@wrkstrm-core.cli --filter VaporizeCLITests` passed 17 tests. |
+| GATE-05 - Focused tests pass | PASS | `vaporize toolchain -- swift test --package-path private/apple/spm/vaporize@wrkstrm-core.cli --filter VaporizeCLITests` passed 27 tests across YAML reader, Pkl, comparator, bundle resolver, value/renderer, JSON validation, CommonProcess use, toolchain, and inventory suites. |
 | GATE-06 - Required toolchain owned by Vaporize | PASS-WITH-NOTE | Bare `swift test` used Swift 6.3.2 and failed because Package.swift requires tools 6.4. Vaporize `toolchain` now owns Xcode-selected Swift via internal `xcrun`. |
 | GATE-07 - CLI help reflects release surface | PASS | Vaporize help advertises `use`, `toolchain`, `validate-json`, `inspect-project-yml`, `compare-project-yml-pkl`, `generate-project-yml`, and `--common-process-spec`. |
 | GATE-08 - CommonProcess use mode tested | PASS | `VaporizeUseCommonProcessTests.swift` decodes valid spec JSON and rejects invalid executable refs. |
-| GATE-09 - Vapor inventory tests pass | PASS | Existing `VaporizeVaporInventoryScannerTests.swift` ran inside the 17-test target. |
+| GATE-09 - Vapor inventory tests pass | PASS | Existing `VaporizeVaporInventoryScannerTests.swift` ran inside the 27-test target. |
 | GATE-10 - JSON release packet validates | PASS | `vaporize validate-json --path release/v0.0.1/evidence/launch-review-packet.json` passed. |
 | GATE-11 - README matches release surface | BLOCKED | README still needs final audit for Swift tools version, `use` mode, and remaining legacy `craze` wording. Existing README was already modified before this release-prep slice, so this gate is tracked rather than silently edited. |
 | GATE-12 - Open feature beads dispositioned | BLOCKED | Follow-ups are named in PRD and launch-review packet; the Pkl project-generation bead is a release blocker for internal v0.0.1. |

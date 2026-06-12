@@ -8,7 +8,7 @@
   "packetVersion": "v0.0.1",
   "reviewKind": "internal-essential-tool-release-prep",
   "packetStatus": "blocked-pending-pkl-backed-xcode-world-state-generation",
-  "emittedAt": "2026-06-12T22:43:14Z",
+  "emittedAt": "2026-06-12T22:48:43Z",
   "emittedBy": "codex-crisie",
   "lifecycleStage": "internal-cli-release-prep",
   "releaseTarget": {
@@ -97,6 +97,30 @@
     },
     {
       "LinkRefModel": "0.3.0",
+      "s": ["vaporize", "v0.0.1", "apple-project-comparator-tests"],
+      "t": "Vaporize AppleProject comparator tests",
+      "tg": [{"k": "rp", "rt": "mono", "v": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/tests/vaporize-cli-tests/AppleProjectSpecComparatorTests.swift"}]
+    },
+    {
+      "LinkRefModel": "0.3.0",
+      "s": ["vaporize", "v0.0.1", "apple-project-bundle-resolver-tests"],
+      "t": "Vaporize AppleProject app bundle resolver tests",
+      "tg": [{"k": "rp", "rt": "mono", "v": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/tests/vaporize-cli-tests/AppleProjectAppBundleNameResolverTests.swift"}]
+    },
+    {
+      "LinkRefModel": "0.3.0",
+      "s": ["vaporize", "v0.0.1", "apple-project-value-tests"],
+      "t": "Vaporize AppleProject value and renderer tests",
+      "tg": [{"k": "rp", "rt": "mono", "v": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/tests/vaporize-cli-tests/AppleProjectValueTests.swift"}]
+    },
+    {
+      "LinkRefModel": "0.3.0",
+      "s": ["vaporize", "v0.0.1", "apple-project-test-support"],
+      "t": "Vaporize AppleProject test support",
+      "tg": [{"k": "rp", "rt": "mono", "v": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/tests/vaporize-cli-tests/AppleProjectTestSupport.swift"}]
+    },
+    {
+      "LinkRefModel": "0.3.0",
       "s": ["vaporize", "v0.0.1", "concourse-project-yml-inspection-receipt"],
       "t": "Concourse legacy project.yml inspection receipt",
       "tg": [{"k": "rp", "rt": "mono", "v": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/concourse-project-yml-inspection.receipt.json"}]
@@ -159,7 +183,7 @@
   "qaEvidence": {
     "testCommand": "vaporize toolchain -- swift test --package-path private/apple/spm/vaporize@wrkstrm-core.cli --filter VaporizeCLITests",
     "testResult": "PASS",
-    "testCount": 17,
+    "testCount": 27,
     "bareSwiftToolchainResult": "BLOCKED: bare swift is 6.3.2; Package.swift requires Swift tools 6.4",
     "requiredToolchainResult": "PASS: Vaporize toolchain mode owns Xcode-selected Swift via internal xcrun",
     "jsonValidationCommand": "vaporize validate-json --path release/v0.0.1/evidence/launch-review-packet.json",
@@ -189,7 +213,7 @@
     {
       "gateRef": "GATE-05-focused-tests",
       "status": "PASS",
-      "rationale": "Focused VaporizeCLITests passed through Vaporize toolchain mode"
+      "rationale": "Focused VaporizeCLITests passed 27 tests through Vaporize toolchain mode"
     },
     {
       "gateRef": "GATE-07-cli-help",

@@ -2,28 +2,15 @@ import AppleProjectSpecCore
 import Foundation
 import Testing
 
-private let vaporizePackageRoot = URL(fileURLWithPath: #filePath)
-  .deletingLastPathComponent()
-  .deletingLastPathComponent()
-  .deletingLastPathComponent()
-
-private let concourseProjectYML = vaporizePackageRoot
-  .appendingPathComponent("../../apps/concourse/project.yml")
-  .standardizedFileURL
-
-private let concourseProjectPkl = vaporizePackageRoot
-  .appendingPathComponent("../../apps/concourse/project.pkl")
-  .standardizedFileURL
-
 @Test("Compares Concourse project.yml with the Pkl parity specimen")
 func comparesConcourseProjectYMLWithPklSpecimen() async throws {
-  let ymlSpec = try AppleProjectYMLReader.load(url: concourseProjectYML)
-  let pklSpec = try await AppleProjectPklLoader.load(url: concourseProjectPkl)
+  let ymlSpec = try AppleProjectYMLReader.load(url: concourseProjectYMLURL)
+  let pklSpec = try await AppleProjectPklLoader.load(url: concourseProjectPklURL)
   let receipt = AppleProjectSpecComparator.receipt(
     ymlSpec: ymlSpec,
     pklSpec: pklSpec,
-    ymlPath: concourseProjectYML.path,
-    pklPath: concourseProjectPkl.path,
+    ymlPath: concourseProjectYMLURL.path,
+    pklPath: concourseProjectPklURL.path,
     requestId: "concourse-project-yml-pkl-comparison-test"
   )
 
@@ -50,17 +37,17 @@ func generatesTransitionalProjectYMLFromPklSpecimen() async throws {
   defer { try? FileManager.default.removeItem(at: temporaryDirectory) }
 
   let receipt = try await AppleProjectSpecYMLGenerator.generate(
-    pklURL: concourseProjectPkl,
+    pklURL: concourseProjectPklURL,
     outputURL: generatedYML,
     requestId: "concourse-project-yml-generation-test"
   )
   let generatedSpec = try AppleProjectYMLReader.load(url: generatedYML)
-  let pklSpec = try await AppleProjectPklLoader.load(url: concourseProjectPkl)
+  let pklSpec = try await AppleProjectPklLoader.load(url: concourseProjectPklURL)
   let comparison = AppleProjectSpecComparator.receipt(
     ymlSpec: generatedSpec,
     pklSpec: pklSpec,
     ymlPath: generatedYML.path,
-    pklPath: concourseProjectPkl.path,
+    pklPath: concourseProjectPklURL.path,
     requestId: "concourse-generated-yml-pkl-comparison-test"
   )
 
@@ -74,4 +61,19 @@ func generatesTransitionalProjectYMLFromPklSpecimen() async throws {
   #expect(receipt.targetNames == ["concourse"])
   #expect(comparison.matched == true)
   #expect(comparison.mismatchCount == 0)
+}
+
+@Test("Pkl loader wraps evaluation failures with the source path")
+func pklLoaderWrapsEvaluationFailuresWithSourcePath() async throws {
+  let missingPkl = FileManager.default.temporaryDirectory
+    .appendingPathComponent("missing-\(UUID().uuidString).pkl")
+
+  do {
+    _ = try await AppleProjectPklLoader.load(url: missingPkl)
+    Issue.record("Expected Pkl load to fail for missing file.")
+  } catch let error as AppleProjectPklLoaderError {
+    #expect(String(describing: error).contains(missingPkl.path))
+  } catch {
+    Issue.record("Expected AppleProjectPklLoaderError, got \(error).")
+  }
 }

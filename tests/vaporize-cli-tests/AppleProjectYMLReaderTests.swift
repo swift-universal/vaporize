@@ -4,18 +4,10 @@ import Testing
 
 @Test("Reads Concourse project.yml into AppleProjectSpec")
 func readsConcourseProjectYML() throws {
-  let packageRoot = URL(fileURLWithPath: #filePath)
-    .deletingLastPathComponent()
-    .deletingLastPathComponent()
-    .deletingLastPathComponent()
-  let projectYML = packageRoot
-    .appendingPathComponent("../../apps/concourse/project.yml")
-    .standardizedFileURL
-
-  let spec = try AppleProjectYMLReader.load(url: projectYML)
+  let spec = try AppleProjectYMLReader.load(url: concourseProjectYMLURL)
   let receipt = AppleProjectYMLReader.receipt(
     for: spec,
-    path: projectYML.path,
+    path: concourseProjectYMLURL.path,
     requestId: "concourse-project-yml-test"
   )
 
@@ -36,20 +28,6 @@ func readsConcourseProjectYML() throws {
   #expect(
     spec.targets["concourse"]?.settings?.configs?["Release"]?["WRAPPER_NAME"]?.stringValue
       == "concourse-$(MARKETING_VERSION)-testflight.app"
-  )
-  #expect(
-    AppleProjectAppBundleNameResolver.appBundleName(
-      in: spec,
-      targetName: "concourse",
-      configuration: "Debug"
-    ) == "concourse-0.1.0-debug"
-  )
-  #expect(
-    AppleProjectAppBundleNameResolver.appBundleName(
-      in: spec,
-      targetName: "concourse",
-      configuration: "Release"
-    ) == "concourse-0.1.0-testflight"
   )
   #expect(receipt.receiptKind == "vaporize-apple-project-yml-inspection")
   #expect(receipt.bridgeStatus == "legacy-xcodegen-yaml-read-only")
@@ -116,7 +94,7 @@ func readsMultiTargetProjectYMLShape() throws {
           config: Debug
     """
 
-  let spec = try AppleProjectYMLReader.decode(data: Data(yaml.utf8))
+  let spec = try decodeAppleProjectYML(yaml)
   let receipt = AppleProjectYMLReader.receipt(
     for: spec,
     path: "fixture/project.yml",
@@ -132,13 +110,6 @@ func readsMultiTargetProjectYMLShape() throws {
   #expect(spec.targets["fixture-app"]?.dependencies?.last?.target == "fixture-helper")
   #expect(spec.targets["fixture-app"]?.dependencies?.last?.embed == true)
   #expect(spec.targets["fixture-app"]?.preBuildScripts?.first?.name == "Audit")
-  #expect(
-    AppleProjectAppBundleNameResolver.appBundleName(
-      in: spec,
-      targetName: "fixture-app",
-      configuration: "Debug"
-    ) == "fixture-app-2.5.0-dev"
-  )
   #expect(spec.schemes["fixture-app"]?.shared == true)
   #expect(receipt.targetCount == 2)
   #expect(receipt.schemeCount == 1)

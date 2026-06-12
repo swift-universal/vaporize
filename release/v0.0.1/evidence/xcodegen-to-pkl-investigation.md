@@ -2,7 +2,7 @@
 
 **Status:** release-blocker investigation complete
 **Generated:** 2026-06-12T20:58:02Z
-**Updated:** 2026-06-12T22:43:14Z
+**Updated:** 2026-06-12T22:48:43Z
 **Component:** `vaporize@wrkstrm-core.cli`
 **Tool classification:** `internal-essential-tool`
 
@@ -34,6 +34,11 @@ The first approved migration-prep slice is now landed:
   multi-target fixture.
 - `AppleProjectPklTests.swift` covers PklSwift parity comparison and
   transitional YAML generation from Concourse `project.pkl`.
+- `AppleProjectSpecComparatorTests.swift`,
+  `AppleProjectAppBundleNameResolverTests.swift`, and
+  `AppleProjectValueTests.swift` cover mismatch reporting, script
+  normalization, bundle-name expansion/failure, scalar decoding, source
+  shorthand, and renderer round-trip behavior.
 - `concourse-project-yml-inspection.receipt.json` records the Concourse intake
   proof for release review.
 - `project-yml-fleet-parse-audit.receipt.json` records that 155/155 discovered

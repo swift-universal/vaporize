@@ -4,7 +4,7 @@
   "subjectAppSlug": "vaporize@wrkstrm-core.cli",
   "subjectReleaseSlug": "v0.0.1",
   "generatedAt": "2026-06-12T20:58:02Z",
-  "updatedAt": "2026-06-12T22:43:14Z",
+  "updatedAt": "2026-06-12T22:48:43Z",
   "generatedBy": "codex-crisie",
   "status": "release-blocker-investigation-with-pklswift-transitional-yaml-slice",
   "toolClassification": "internal-essential-tool",
@@ -145,7 +145,12 @@
       "status": "complete",
       "surface": "inspect-project-yml",
       "source": "private/apple/spm/vaporize@wrkstrm-core.cli/sources/apple-project-spec-core/AppleProjectSpec.swift",
-      "tests": "private/apple/spm/vaporize@wrkstrm-core.cli/tests/vaporize-cli-tests/AppleProjectYMLReaderTests.swift",
+      "tests": [
+        "private/apple/spm/vaporize@wrkstrm-core.cli/tests/vaporize-cli-tests/AppleProjectYMLReaderTests.swift",
+        "private/apple/spm/vaporize@wrkstrm-core.cli/tests/vaporize-cli-tests/AppleProjectValueTests.swift",
+        "private/apple/spm/vaporize@wrkstrm-core.cli/tests/vaporize-cli-tests/AppleProjectSpecComparatorTests.swift",
+        "private/apple/spm/vaporize@wrkstrm-core.cli/tests/vaporize-cli-tests/AppleProjectAppBundleNameResolverTests.swift"
+      ],
       "receipt": "private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/concourse-project-yml-inspection.receipt.json",
       "fleetAuditReceipt": "private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/project-yml-fleet-parse-audit.receipt.json",
       "fleetAuditResult": "155/155 discovered project.yml files under private/universal/substrate/collectives parsed through inspect-project-yml",
@@ -170,7 +175,10 @@
       "status": "complete",
       "schema": "private/apple/spm/vaporize@wrkstrm-core.cli/Pkl/AppleProjectSpec.pkl",
       "specimen": "private/apple/apps/concourse/project.pkl",
-      "tests": "private/apple/spm/vaporize@wrkstrm-core.cli/tests/vaporize-cli-tests/AppleProjectPklTests.swift",
+      "tests": [
+        "private/apple/spm/vaporize@wrkstrm-core.cli/tests/vaporize-cli-tests/AppleProjectPklTests.swift",
+        "private/apple/spm/vaporize@wrkstrm-core.cli/tests/vaporize-cli-tests/AppleProjectSpecComparatorTests.swift"
+      ],
       "receipt": "private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/concourse-project-yml-pkl-comparison.receipt.json",
       "result": "compare-project-yml-pkl matched Concourse project.yml and project.pkl with zero mismatches.",
       "boundary": "This proves one Pkl parity specimen; it does not generate .xcodeproj world-state."
@@ -180,7 +188,10 @@
       "status": "complete-with-boundary",
       "surface": "generate-project-yml",
       "dependency": "PklSwift 0.8.2",
-      "tests": "private/apple/spm/vaporize@wrkstrm-core.cli/tests/vaporize-cli-tests/AppleProjectPklTests.swift",
+      "tests": [
+        "private/apple/spm/vaporize@wrkstrm-core.cli/tests/vaporize-cli-tests/AppleProjectPklTests.swift",
+        "private/apple/spm/vaporize@wrkstrm-core.cli/tests/vaporize-cli-tests/AppleProjectValueTests.swift"
+      ],
       "generatedYML": "private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/generated/concourse.apple-project-spec.generated.yml",
       "generationReceipt": "private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/concourse-pkl-project-yml-generation.receipt.json",
       "comparisonReceipt": "private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/concourse-generated-yml-pkl-comparison.receipt.json",
