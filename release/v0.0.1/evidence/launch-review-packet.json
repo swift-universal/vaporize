@@ -67,99 +67,87 @@
     },
     {
       "LinkRefModel": "0.3.0",
-      "s": ["vaporize", "v0.0.1", "use-mode-tests"],
-      "t": "Vaporize CommonProcess use mode tests",
-      "tg": [{"k": "rp", "rt": "mono", "v": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/tests/vaporize-cli-tests/VaporizeUseCommonProcessTests.swift"}]
+      "s": ["vaporize", "v0.0.1", "cuj-01-swiftpm-cli-tests"],
+      "t": "Vaporize CUJ-01 SwiftPM CLI test bundle",
+      "tg": [{"k": "rp", "rt": "mono", "v": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/tests/cuj-01-swiftpm-cli/VaporizeCUJ01SwiftPMCLITests.swift"}]
     },
     {
       "LinkRefModel": "0.3.0",
-      "s": ["vaporize", "v0.0.1", "toolchain-mode-tests"],
-      "t": "Vaporize toolchain mode tests",
-      "tg": [{"k": "rp", "rt": "mono", "v": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/tests/vaporize-cli-tests/VaporizeToolchainModeTests.swift"}]
+      "s": ["vaporize", "v0.0.1", "cuj-02-mac-app-tests"],
+      "t": "Vaporize CUJ-02 Mac app test bundle",
+      "tg": [{"k": "rp", "rt": "mono", "v": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/tests/cuj-02-mac-app/VaporizeCUJ02MacAppTests.swift"}]
     },
     {
       "LinkRefModel": "0.3.0",
-      "s": ["vaporize", "v0.0.1", "json-validation-tests"],
-      "t": "Vaporize JSON validation tests",
-      "tg": [{"k": "rp", "rt": "mono", "v": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/tests/vaporize-cli-tests/VaporizeJSONValidationTests.swift"}]
+      "s": ["vaporize", "v0.0.1", "cuj-03-pass-through-tests"],
+      "t": "Vaporize CUJ-03 pass-through test bundle",
+      "tg": [{"k": "rp", "rt": "mono", "v": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/tests/cuj-03-pass-through/VaporizeCUJ03PassThroughTests.swift"}]
     },
     {
       "LinkRefModel": "0.3.0",
-      "s": ["vaporize", "v0.0.1", "command-parsing-tests"],
-      "t": "Vaporize command parsing tests",
-      "tg": [{"k": "rp", "rt": "mono", "v": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/tests/vaporize-cli-tests/VaporizeCommandParsingTests.swift"}]
+      "s": ["vaporize", "v0.0.1", "cuj-04-common-process-use-tests"],
+      "t": "Vaporize CUJ-04 CommonProcess use test bundle",
+      "tg": [{"k": "rp", "rt": "mono", "v": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/tests/cuj-04-common-process-use/VaporizeCUJ04CommonProcessUseTests.swift"}]
     },
     {
       "LinkRefModel": "0.3.0",
-      "s": ["vaporize", "v0.0.1", "pass-through-mode-tests"],
-      "t": "Vaporize pass-through mode tests",
-      "tg": [{"k": "rp", "rt": "mono", "v": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/tests/vaporize-cli-tests/VaporizePassThroughModeTests.swift"}]
+      "s": ["vaporize", "v0.0.1", "cuj-05-toolchain-tests"],
+      "t": "Vaporize CUJ-05 toolchain test bundle",
+      "tg": [{"k": "rp", "rt": "mono", "v": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/tests/cuj-05-toolchain/VaporizeCUJ05ToolchainTests.swift"}]
     },
     {
       "LinkRefModel": "0.3.0",
-      "s": ["vaporize", "v0.0.1", "receipt-shape-tests"],
-      "t": "Vaporize receipt shape tests",
-      "tg": [{"k": "rp", "rt": "mono", "v": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/tests/vaporize-cli-tests/VaporizeReceiptShapeTests.swift"}]
+      "s": ["vaporize", "v0.0.1", "cuj-06-json-validation-tests"],
+      "t": "Vaporize CUJ-06 JSON validation test bundle",
+      "tg": [{"k": "rp", "rt": "mono", "v": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/tests/cuj-06-json-validation/VaporizeCUJ06JSONValidationTests.swift"}]
     },
     {
       "LinkRefModel": "0.3.0",
-      "s": ["vaporize", "v0.0.1", "inventory-renderer-tests"],
-      "t": "Vaporize inventory renderer tests",
-      "tg": [{"k": "rp", "rt": "mono", "v": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/tests/vaporize-cli-tests/VaporizeInventoryRendererTests.swift"}]
+      "s": ["vaporize", "v0.0.1", "cuj-07-vapor-inventory-tests"],
+      "t": "Vaporize CUJ-07 vapor inventory test bundle",
+      "tg": [{"k": "rp", "rt": "mono", "v": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/tests/cuj-07-vapor-inventory/VaporizeCUJ07VaporInventoryTests.swift"}]
     },
     {
       "LinkRefModel": "0.3.0",
-      "s": ["vaporize", "v0.0.1", "swift-cli-installer-tests"],
-      "t": "Vaporize Swift CLI installer tests",
-      "tg": [{"k": "rp", "rt": "mono", "v": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/tests/swift-cli-installer-tests/SwiftCLIInstallerTests.swift"}]
+      "s": ["vaporize", "v0.0.1", "cuj-08-project-yml-inspection-tests"],
+      "t": "Vaporize CUJ-08 project YAML inspection test bundle",
+      "tg": [{"k": "rp", "rt": "mono", "v": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/tests/cuj-08-project-yml-inspection/VaporizeCUJ08ProjectYMLInspectionTests.swift"}]
     },
     {
       "LinkRefModel": "0.3.0",
-      "s": ["vaporize", "v0.0.1", "swift-app-installer-tests"],
-      "t": "Vaporize Swift app installer tests",
-      "tg": [{"k": "rp", "rt": "mono", "v": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/tests/swift-app-installer-tests/SwiftAppInstallerTests.swift"}]
+      "s": ["vaporize", "v0.0.1", "cuj-09-release-review-tests"],
+      "t": "Vaporize CUJ-09 release review test bundle",
+      "tg": [{"k": "rp", "rt": "mono", "v": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/tests/cuj-09-release-review/VaporizeCUJ09ReleaseReviewTests.swift"}]
+    },
+    {
+      "LinkRefModel": "0.3.0",
+      "s": ["vaporize", "v0.0.1", "cuj-10-yml-pkl-comparison-tests"],
+      "t": "Vaporize CUJ-10 YAML/Pkl comparison test bundle",
+      "tg": [{"k": "rp", "rt": "mono", "v": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/tests/cuj-10-yml-pkl-comparison/VaporizeCUJ10YMLPklComparisonTests.swift"}]
+    },
+    {
+      "LinkRefModel": "0.3.0",
+      "s": ["vaporize", "v0.0.1", "cuj-11-pkl-yml-generation-tests"],
+      "t": "Vaporize CUJ-11 Pkl YAML generation test bundle",
+      "tg": [{"k": "rp", "rt": "mono", "v": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/tests/cuj-11-pkl-yml-generation/VaporizeCUJ11PklYMLGenerationTests.swift"}]
+    },
+    {
+      "LinkRefModel": "0.3.0",
+      "s": ["vaporize", "v0.0.1", "cuj-12-package-graph-tests"],
+      "t": "Vaporize CUJ-12 package graph test bundle",
+      "tg": [{"k": "rp", "rt": "mono", "v": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/tests/cuj-12-package-graph/VaporizeCUJ12PackageGraphTests.swift"}]
+    },
+    {
+      "LinkRefModel": "0.3.0",
+      "s": ["vaporize", "v0.0.1", "vaporize-test-support"],
+      "t": "Vaporize AppleProject test support",
+      "tg": [{"k": "rp", "rt": "mono", "v": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/tests/vaporize-test-support/AppleProjectTestSupport.swift"}]
     },
     {
       "LinkRefModel": "0.3.0",
       "s": ["vaporize", "v0.0.1", "apple-project-spec-core"],
       "t": "Vaporize AppleProjectSpecCore Swift YAML read bridge",
       "tg": [{"k": "rp", "rt": "mono", "v": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/sources/apple-project-spec-core/AppleProjectSpec.swift"}]
-    },
-    {
-      "LinkRefModel": "0.3.0",
-      "s": ["vaporize", "v0.0.1", "project-yml-reader-tests"],
-      "t": "Vaporize AppleProjectYMLReader tests",
-      "tg": [{"k": "rp", "rt": "mono", "v": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/tests/vaporize-cli-tests/AppleProjectYMLReaderTests.swift"}]
-    },
-    {
-      "LinkRefModel": "0.3.0",
-      "s": ["vaporize", "v0.0.1", "apple-project-pkl-tests"],
-      "t": "Vaporize AppleProject Pkl tests",
-      "tg": [{"k": "rp", "rt": "mono", "v": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/tests/vaporize-cli-tests/AppleProjectPklTests.swift"}]
-    },
-    {
-      "LinkRefModel": "0.3.0",
-      "s": ["vaporize", "v0.0.1", "apple-project-comparator-tests"],
-      "t": "Vaporize AppleProject comparator tests",
-      "tg": [{"k": "rp", "rt": "mono", "v": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/tests/vaporize-cli-tests/AppleProjectSpecComparatorTests.swift"}]
-    },
-    {
-      "LinkRefModel": "0.3.0",
-      "s": ["vaporize", "v0.0.1", "apple-project-bundle-resolver-tests"],
-      "t": "Vaporize AppleProject app bundle resolver tests",
-      "tg": [{"k": "rp", "rt": "mono", "v": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/tests/vaporize-cli-tests/AppleProjectAppBundleNameResolverTests.swift"}]
-    },
-    {
-      "LinkRefModel": "0.3.0",
-      "s": ["vaporize", "v0.0.1", "apple-project-value-tests"],
-      "t": "Vaporize AppleProject value and renderer tests",
-      "tg": [{"k": "rp", "rt": "mono", "v": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/tests/vaporize-cli-tests/AppleProjectValueTests.swift"}]
-    },
-    {
-      "LinkRefModel": "0.3.0",
-      "s": ["vaporize", "v0.0.1", "apple-project-test-support"],
-      "t": "Vaporize AppleProject test support",
-      "tg": [{"k": "rp", "rt": "mono", "v": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/tests/vaporize-cli-tests/AppleProjectTestSupport.swift"}]
     },
     {
       "LinkRefModel": "0.3.0",
@@ -225,17 +213,27 @@
   "qaEvidence": {
     "testCommand": "vaporize toolchain -- swift test --package-path private/apple/spm/vaporize@wrkstrm-core.cli",
     "testResult": "PASS",
-    "testCount": 64,
+    "testCount": 70,
     "testBreakdown": {
-      "VaporizeCLITests": 51,
-      "SwiftCLIInstallerTests": 4,
-      "SwiftAppInstallerTests": 9
+      "VaporizeCUJ01SwiftPMCLITests": 7,
+      "VaporizeCUJ02MacAppTests": 14,
+      "VaporizeCUJ03PassThroughTests": 4,
+      "VaporizeCUJ04CommonProcessUseTests": 4,
+      "VaporizeCUJ05ToolchainTests": 6,
+      "VaporizeCUJ06JSONValidationTests": 2,
+      "VaporizeCUJ07VaporInventoryTests": 16,
+      "VaporizeCUJ08ProjectYMLInspectionTests": 5,
+      "VaporizeCUJ09ReleaseReviewTests": 4,
+      "VaporizeCUJ10YMLPklComparisonTests": 4,
+      "VaporizeCUJ11PklYMLGenerationTests": 3,
+      "VaporizeCUJ12PackageGraphTests": 1
     },
     "cujCoverageContract": "release/v0.0.1/evidence/cuj-test-coverage.json",
     "activeCUJCount": 12,
     "deferredCUJCount": 2,
     "requiredSwiftTestObligationCount": 53,
     "requiredReleaseEvidenceCheckCount": 4,
+    "requiredTargetableTestObligationCount": 57,
     "bareSwiftToolchainResult": "BLOCKED: bare swift is 6.3.2; Package.swift requires Swift tools 6.4",
     "requiredToolchainResult": "PASS: Vaporize toolchain mode owns Xcode-selected Swift via internal xcrun",
     "jsonValidationCommand": "vaporize validate-json --path release/v0.0.1/evidence/launch-review-packet.json",
@@ -265,7 +263,7 @@
     {
       "gateRef": "GATE-05-cuj-derived-package-tests",
       "status": "PASS",
-      "rationale": "CUJ coverage contract requires 53 Swift test obligations plus 4 release evidence checks; Vaporize package tests passed 64 executable tests through Vaporize toolchain mode"
+      "rationale": "CUJ coverage contract requires 53 Swift test obligations plus 4 release evidence checks; Vaporize package tests passed 70 executable tests across 12 CUJ-specific SwiftPM bundles through Vaporize toolchain mode"
     },
     {
       "gateRef": "GATE-07-cli-help",
@@ -351,8 +349,8 @@
     "x-provenance-artifact": "vaporize-v0.0.1-provenance-artifact.json collects release-prep receipts, validation commands, savepoints, proven claims, unproven claims, and the forward Pkl migration path.",
     "x-pkl-parity-specimen": "Concourse now has project.pkl amending AppleProjectSpec.pkl. compare-project-yml-pkl evaluates Pkl through PklSwift, decodes YAML and Pkl into AppleProjectSpec, and emits a zero-mismatch comparison receipt.",
     "x-pkl-transitional-yaml-generation": "generate-project-yml evaluates Concourse project.pkl through PklSwift and emits transitional AppleProjectSpec YAML plus a generation receipt. The generated YAML compares back to Pkl with zero mismatches, but .xcodeproj world-state is not generated.",
-    "x-cuj-test-coverage": "Required test count is derived from PRD requirements through active draft CUJs. Current floor: 53 Swift test obligations plus 4 release evidence checks. Current executable suite: 64 Swift tests.",
-    "x-major-feature-test-suite": "Vaporize package tests now cover major release features: command parsing, pass/use/toolchain receipts, JSON validation, inventory scanner/renderer, graph forwarding, Apple project YAML/Pkl migration paths, SwiftPM CLI installer arguments, and app installer Xcode invocation paths.",
+    "x-cuj-test-coverage": "Required test count is derived from PRD requirements through active draft CUJs. Current floor: 53 Swift test obligations plus 4 release evidence checks, all targetable by CUJ-specific SwiftPM bundles. Current executable suite: 70 Swift tests.",
+    "x-major-feature-test-suite": "Vaporize package tests now cover major release features through 12 CUJ-specific SwiftPM bundles: command parsing, pass/use/toolchain receipts, JSON validation, inventory scanner/renderer, graph forwarding, Apple project YAML/Pkl migration paths, SwiftPM CLI installer arguments, and app installer Xcode invocation paths.",
     "x-pkl-project-generation-gate": "Internal v0.0.1 release is blocked until our owned Apple project-generation path moves off XcodeGen and onto Pkl-backed .xcodeproj world-state generation, with any leftover XcodeGen surfaces quarantined as compatibility.",
     "x-xcodegen-to-pkl-investigation": "Investigation found 155 project.yml files, 185 checked-in .xcodeproj/project.pbxproj files, direct XcodeGen runner surfaces, and no existing Pkl Apple-project generation model. The first approved mitigation slice now reads legacy YAML through Swift and receipts Concourse inspection."
   }

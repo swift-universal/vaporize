@@ -4,7 +4,7 @@ import Testing
 
 @testable import VaporizeCLI
 
-@Test("Decodes a CommonProcess CommandSpec for use mode")
+@Test("CUJ-04 decodes a CommonProcess CommandSpec")
 func decodesCommonProcessCommandSpecForUseMode() throws {
   let json = Data(
     """
@@ -36,7 +36,7 @@ func decodesCommonProcessCommandSpecForUseMode() throws {
   #expect(command.streamingMode == .buffered)
 }
 
-@Test("Loads a CommonProcess CommandSpec from a file")
+@Test("CUJ-04 loads a CommonProcess CommandSpec from a file")
 func loadsCommonProcessCommandSpecFromFile() throws {
   let fixture = FileManager.default.temporaryDirectory
     .appendingPathComponent("vaporize-use-spec-\(UUID().uuidString).json")
@@ -67,7 +67,7 @@ func loadsCommonProcessCommandSpecFromFile() throws {
   #expect(command.requestId == "vaporize-use-file-test")
 }
 
-@Test("Rejects invalid CommonProcess CommandSpec for use mode")
+@Test("CUJ-04 rejects invalid CommonProcess CommandSpec")
 func rejectsInvalidCommonProcessCommandSpecForUseMode() {
   let json = Data(
     """
@@ -84,4 +84,32 @@ func rejectsInvalidCommonProcessCommandSpecForUseMode() {
   #expect(throws: CommandSpecValidationError.self) {
     _ = try CommonProcessSpecLoader.decode(data: json)
   }
+}
+
+@Test("CUJ-04 use receipt records CommonProcess invocation shape")
+func useReceiptRecordsCommonProcessInvocationShape() throws {
+  let receipt = UseReceipt(
+    specSource: "spec.json",
+    executableRef: "name:echo",
+    argumentCount: 1,
+    workingDirectory: "/workspace/pkg",
+    requestId: "vaporize-use-test",
+    runnerKind: "foundation",
+    streamingMode: "buffered",
+    succeeded: true,
+    exitCode: 0,
+    signal: nil,
+    stdoutBytes: 6,
+    stderrBytes: 0,
+    processIdentifier: "pid-3"
+  )
+  let data = try JSONEncoder().encode(receipt)
+  let decoded = try JSONDecoder().decode(UseReceipt.self, from: data)
+
+  #expect(decoded.schemaVersion == "0.1.0")
+  #expect(decoded.receiptKind == "vaporize-use-common-process")
+  #expect(decoded.specSource == "spec.json")
+  #expect(decoded.executableRef == "name:echo")
+  #expect(decoded.argumentCount == 1)
+  #expect(decoded.streamingMode == "buffered")
 }

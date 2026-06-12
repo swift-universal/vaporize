@@ -82,24 +82,98 @@ let package = Package(
       ],
       path: "sources/vaporize-cli"
     ),
-    .testTarget(
-      name: "SwiftCLIInstallerTests",
-      dependencies: ["SwiftCLIInstaller"],
-      path: "tests/swift-cli-installer-tests"
+    .target(
+      name: "VaporizeTestSupport",
+      dependencies: ["AppleProjectSpecCore"],
+      path: "tests/vaporize-test-support"
     ),
     .testTarget(
-      name: "SwiftAppInstallerTests",
-      dependencies: ["SwiftAppInstaller"],
-      path: "tests/swift-app-installer-tests"
+      name: "VaporizeCUJ01SwiftPMCLITests",
+      dependencies: [
+        "SwiftCLIInstaller",
+        "VaporizeCLI",
+        .product(name: "ArgumentParser", package: "swift-argument-parser"),
+      ],
+      path: "tests/cuj-01-swiftpm-cli"
     ),
     .testTarget(
-      name: "VaporizeCLITests",
+      name: "VaporizeCUJ02MacAppTests",
       dependencies: [
         "AppleProjectSpecCore",
+        "SwiftAppInstaller",
+        "VaporizeCLI",
+        "VaporizeTestSupport",
+        .product(name: "ArgumentParser", package: "swift-argument-parser"),
+      ],
+      path: "tests/cuj-02-mac-app"
+    ),
+    .testTarget(
+      name: "VaporizeCUJ03PassThroughTests",
+      dependencies: ["VaporizeCLI"],
+      path: "tests/cuj-03-pass-through"
+    ),
+    .testTarget(
+      name: "VaporizeCUJ04CommonProcessUseTests",
+      dependencies: [
         "VaporizeCLI",
         .product(name: "CommonProcess", package: "common-process"),
       ],
-      path: "tests/vaporize-cli-tests"
+      path: "tests/cuj-04-common-process-use"
+    ),
+    .testTarget(
+      name: "VaporizeCUJ05ToolchainTests",
+      dependencies: ["VaporizeCLI"],
+      path: "tests/cuj-05-toolchain"
+    ),
+    .testTarget(
+      name: "VaporizeCUJ06JSONValidationTests",
+      dependencies: ["VaporizeCLI"],
+      path: "tests/cuj-06-json-validation"
+    ),
+    .testTarget(
+      name: "VaporizeCUJ07VaporInventoryTests",
+      dependencies: [
+        "VaporizeCLI",
+        .product(name: "ArgumentParser", package: "swift-argument-parser"),
+      ],
+      path: "tests/cuj-07-vapor-inventory"
+    ),
+    .testTarget(
+      name: "VaporizeCUJ08ProjectYMLInspectionTests",
+      dependencies: [
+        "AppleProjectSpecCore",
+        "VaporizeTestSupport",
+      ],
+      path: "tests/cuj-08-project-yml-inspection"
+    ),
+    .testTarget(
+      name: "VaporizeCUJ09ReleaseReviewTests",
+      dependencies: [],
+      path: "tests/cuj-09-release-review"
+    ),
+    .testTarget(
+      name: "VaporizeCUJ10YMLPklComparisonTests",
+      dependencies: [
+        "AppleProjectSpecCore",
+        "VaporizeTestSupport",
+      ],
+      path: "tests/cuj-10-yml-pkl-comparison"
+    ),
+    .testTarget(
+      name: "VaporizeCUJ11PklYMLGenerationTests",
+      dependencies: [
+        "AppleProjectSpecCore",
+        "VaporizeTestSupport",
+      ],
+      path: "tests/cuj-11-pkl-yml-generation"
+    ),
+    .testTarget(
+      name: "VaporizeCUJ12PackageGraphTests",
+      dependencies: [
+        "VaporizeCLI",
+        .product(name: "ArgumentParser", package: "swift-argument-parser"),
+      ],
+      path: "tests/cuj-12-package-graph"
     ),
   ]
 )

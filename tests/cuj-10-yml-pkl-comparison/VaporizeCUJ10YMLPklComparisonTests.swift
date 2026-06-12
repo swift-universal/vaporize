@@ -1,8 +1,43 @@
 import AppleProjectSpecCore
 import Foundation
 import Testing
+import VaporizeTestSupport
 
-@Test("Comparator reports targeted mismatch sections")
+@Test("CUJ-10 compares Concourse project.yml with the Pkl parity specimen")
+func comparesConcourseProjectYMLWithPklSpecimen() async throws {
+  let ymlSpec = try AppleProjectYMLReader.load(url: concourseProjectYMLURL)
+  let pklSpec = try await AppleProjectPklLoader.load(url: concourseProjectPklURL)
+  let receipt = AppleProjectSpecComparator.receipt(
+    ymlSpec: ymlSpec,
+    pklSpec: pklSpec,
+    ymlPath: concourseProjectYMLURL.path,
+    pklPath: concourseProjectPklURL.path,
+    requestId: "concourse-project-yml-pkl-comparison-test"
+  )
+
+  #expect(receipt.receiptKind == "vaporize-apple-project-yml-pkl-comparison")
+  #expect(receipt.matched == true)
+  #expect(receipt.mismatchCount == 0)
+  #expect(receipt.pklSignature.projectName == "concourse")
+  #expect(receipt.pklSignature.targets["concourse"]?.settingConfigs["Debug"]?["WRAPPER_NAME"] == "concourse-$(MARKETING_VERSION)-debug.app")
+}
+
+@Test("CUJ-10 Pkl loader wraps evaluation failures with the source path")
+func pklLoaderWrapsEvaluationFailuresWithSourcePath() async throws {
+  let missingPkl = FileManager.default.temporaryDirectory
+    .appendingPathComponent("missing-\(UUID().uuidString).pkl")
+
+  do {
+    _ = try await AppleProjectPklLoader.load(url: missingPkl)
+    Issue.record("Expected Pkl load to fail for missing file.")
+  } catch let error as AppleProjectPklLoaderError {
+    #expect(String(describing: error).contains(missingPkl.path))
+  } catch {
+    Issue.record("Expected AppleProjectPklLoaderError, got \(error).")
+  }
+}
+
+@Test("CUJ-10 comparator reports targeted mismatch sections")
 func comparatorReportsTargetedMismatchSections() throws {
   let ymlSpec = try decodeAppleProjectYML(
     """
@@ -56,7 +91,7 @@ func comparatorReportsTargetedMismatchSections() throws {
   #expect(receipt.mismatches == ["projectName", "options", "settingsBase", "packages", "targets"])
 }
 
-@Test("Comparator normalizes multi-line scripts")
+@Test("CUJ-10 comparator normalizes multi-line scripts")
 func comparatorNormalizesMultiLineScripts() throws {
   let ymlSpec = try decodeAppleProjectYML(
     """

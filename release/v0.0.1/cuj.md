@@ -260,7 +260,8 @@ Current active-CUJ requirement:
 
 - Required Swift test obligations: 53
 - Required release evidence checks: 4
-- Current executable Swift tests: 64
+- Required targetable test obligations: 57
+- Current executable Swift tests: 70 across 12 CUJ-specific SwiftPM bundles
 - Coverage artifact:
   `release/v0.0.1/evidence/cuj-test-coverage.json`
 

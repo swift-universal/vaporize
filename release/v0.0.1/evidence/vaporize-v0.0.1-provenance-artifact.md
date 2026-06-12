@@ -1,6 +1,6 @@
 # Vaporize v0.0.1 - Provenance Artifact
 
-**Generated:** 2026-06-12T23:06:11Z
+**Generated:** 2026-06-12T23:24:02Z
 **Status:** captured for forward Pkl migration
 **Subject:** `vaporize@wrkstrm-core.cli` v0.0.1 release prep
 
@@ -11,9 +11,8 @@ chat memory.
 
 - CUJ-derived test coverage is explicit: 53 required Swift test obligations
   plus 4 release evidence checks across 12 active CUJs.
-- Vaporize package tests pass through `vaporize toolchain`: 64 executable Swift
-  tests across `VaporizeCLITests`, `SwiftCLIInstallerTests`, and
-  `SwiftAppInstallerTests`.
+- Vaporize package tests pass through `vaporize toolchain`: 70 executable Swift
+  tests across 12 CUJ-specific SwiftPM test bundles.
 - Concourse `project.yml` parses into Swift `AppleProjectSpec`.
 - Fleet intake audit parsed 155/155 discovered `project.yml` files.
 - Old XcodeGen script build and Vaporize app build both pass for Concourse

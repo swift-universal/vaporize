@@ -62,8 +62,9 @@ The first approved migration-prep slice is now landed:
 - `concourse-generated-yml-pkl-comparison.receipt.json` records that generated
   YAML still matches Concourse Pkl with zero mismatches.
 - The CUJ-derived coverage floor now requires 53 Swift test obligations plus
-  4 release evidence checks; the full Vaporize package test suite passes 64
-  executable Swift tests through `vaporize toolchain`.
+  4 release evidence checks, all targetable by CUJ-specific SwiftPM bundles;
+  the full Vaporize package test suite passes 70 executable Swift tests through
+  `vaporize toolchain`.
 
 This does not unblock v0.0.1 by itself. It gives the Pkl migration a tested
 Swift intake surface so the next slice can compare Pkl-evaluated project data

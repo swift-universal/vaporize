@@ -146,10 +146,10 @@
       "surface": "inspect-project-yml",
       "source": "private/apple/spm/vaporize@wrkstrm-core.cli/sources/apple-project-spec-core/AppleProjectSpec.swift",
       "tests": [
-        "private/apple/spm/vaporize@wrkstrm-core.cli/tests/vaporize-cli-tests/AppleProjectYMLReaderTests.swift",
-        "private/apple/spm/vaporize@wrkstrm-core.cli/tests/vaporize-cli-tests/AppleProjectValueTests.swift",
-        "private/apple/spm/vaporize@wrkstrm-core.cli/tests/vaporize-cli-tests/AppleProjectSpecComparatorTests.swift",
-        "private/apple/spm/vaporize@wrkstrm-core.cli/tests/vaporize-cli-tests/AppleProjectAppBundleNameResolverTests.swift"
+        "private/apple/spm/vaporize@wrkstrm-core.cli/tests/cuj-02-mac-app/VaporizeCUJ02MacAppTests.swift",
+        "private/apple/spm/vaporize@wrkstrm-core.cli/tests/cuj-08-project-yml-inspection/VaporizeCUJ08ProjectYMLInspectionTests.swift",
+        "private/apple/spm/vaporize@wrkstrm-core.cli/tests/cuj-10-yml-pkl-comparison/VaporizeCUJ10YMLPklComparisonTests.swift",
+        "private/apple/spm/vaporize@wrkstrm-core.cli/tests/cuj-11-pkl-yml-generation/VaporizeCUJ11PklYMLGenerationTests.swift"
       ],
       "receipt": "private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/concourse-project-yml-inspection.receipt.json",
       "fleetAuditReceipt": "private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/project-yml-fleet-parse-audit.receipt.json",
@@ -176,8 +176,7 @@
       "schema": "private/apple/spm/vaporize@wrkstrm-core.cli/Pkl/AppleProjectSpec.pkl",
       "specimen": "private/apple/apps/concourse/project.pkl",
       "tests": [
-        "private/apple/spm/vaporize@wrkstrm-core.cli/tests/vaporize-cli-tests/AppleProjectPklTests.swift",
-        "private/apple/spm/vaporize@wrkstrm-core.cli/tests/vaporize-cli-tests/AppleProjectSpecComparatorTests.swift"
+        "private/apple/spm/vaporize@wrkstrm-core.cli/tests/cuj-10-yml-pkl-comparison/VaporizeCUJ10YMLPklComparisonTests.swift"
       ],
       "receipt": "private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/concourse-project-yml-pkl-comparison.receipt.json",
       "result": "compare-project-yml-pkl matched Concourse project.yml and project.pkl with zero mismatches.",
@@ -189,8 +188,7 @@
       "surface": "generate-project-yml",
       "dependency": "PklSwift 0.8.2",
       "tests": [
-        "private/apple/spm/vaporize@wrkstrm-core.cli/tests/vaporize-cli-tests/AppleProjectPklTests.swift",
-        "private/apple/spm/vaporize@wrkstrm-core.cli/tests/vaporize-cli-tests/AppleProjectValueTests.swift"
+        "private/apple/spm/vaporize@wrkstrm-core.cli/tests/cuj-11-pkl-yml-generation/VaporizeCUJ11PklYMLGenerationTests.swift"
       ],
       "generatedYML": "private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/generated/concourse.apple-project-spec.generated.yml",
       "generationReceipt": "private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/concourse-pkl-project-yml-generation.receipt.json",
@@ -203,17 +201,20 @@
       "status": "complete",
       "surface": "vaporize package test suite",
       "tests": [
-        "private/apple/spm/vaporize@wrkstrm-core.cli/tests/vaporize-cli-tests/VaporizeCommandParsingTests.swift",
-        "private/apple/spm/vaporize@wrkstrm-core.cli/tests/vaporize-cli-tests/VaporizePassThroughModeTests.swift",
-        "private/apple/spm/vaporize@wrkstrm-core.cli/tests/vaporize-cli-tests/VaporizeUseCommonProcessTests.swift",
-        "private/apple/spm/vaporize@wrkstrm-core.cli/tests/vaporize-cli-tests/VaporizeToolchainModeTests.swift",
-        "private/apple/spm/vaporize@wrkstrm-core.cli/tests/vaporize-cli-tests/VaporizeVaporInventoryScannerTests.swift",
-        "private/apple/spm/vaporize@wrkstrm-core.cli/tests/vaporize-cli-tests/VaporizeInventoryRendererTests.swift",
-        "private/apple/spm/vaporize@wrkstrm-core.cli/tests/vaporize-cli-tests/VaporizeJSONValidationTests.swift",
-        "private/apple/spm/vaporize@wrkstrm-core.cli/tests/swift-cli-installer-tests/SwiftCLIInstallerTests.swift",
-        "private/apple/spm/vaporize@wrkstrm-core.cli/tests/swift-app-installer-tests/SwiftAppInstallerTests.swift"
+        "private/apple/spm/vaporize@wrkstrm-core.cli/tests/cuj-01-swiftpm-cli/VaporizeCUJ01SwiftPMCLITests.swift",
+        "private/apple/spm/vaporize@wrkstrm-core.cli/tests/cuj-02-mac-app/VaporizeCUJ02MacAppTests.swift",
+        "private/apple/spm/vaporize@wrkstrm-core.cli/tests/cuj-03-pass-through/VaporizeCUJ03PassThroughTests.swift",
+        "private/apple/spm/vaporize@wrkstrm-core.cli/tests/cuj-04-common-process-use/VaporizeCUJ04CommonProcessUseTests.swift",
+        "private/apple/spm/vaporize@wrkstrm-core.cli/tests/cuj-05-toolchain/VaporizeCUJ05ToolchainTests.swift",
+        "private/apple/spm/vaporize@wrkstrm-core.cli/tests/cuj-06-json-validation/VaporizeCUJ06JSONValidationTests.swift",
+        "private/apple/spm/vaporize@wrkstrm-core.cli/tests/cuj-07-vapor-inventory/VaporizeCUJ07VaporInventoryTests.swift",
+        "private/apple/spm/vaporize@wrkstrm-core.cli/tests/cuj-08-project-yml-inspection/VaporizeCUJ08ProjectYMLInspectionTests.swift",
+        "private/apple/spm/vaporize@wrkstrm-core.cli/tests/cuj-09-release-review/VaporizeCUJ09ReleaseReviewTests.swift",
+        "private/apple/spm/vaporize@wrkstrm-core.cli/tests/cuj-10-yml-pkl-comparison/VaporizeCUJ10YMLPklComparisonTests.swift",
+        "private/apple/spm/vaporize@wrkstrm-core.cli/tests/cuj-11-pkl-yml-generation/VaporizeCUJ11PklYMLGenerationTests.swift",
+        "private/apple/spm/vaporize@wrkstrm-core.cli/tests/cuj-12-package-graph/VaporizeCUJ12PackageGraphTests.swift"
       ],
-      "result": "CUJ coverage contract requires 53 Swift test obligations plus 4 release evidence checks; vaporize toolchain -- swift test passed 64 executable Swift tests: 51 VaporizeCLITests, 4 SwiftCLIInstallerTests, and 9 SwiftAppInstallerTests.",
+      "result": "CUJ coverage contract requires 53 Swift test obligations plus 4 release evidence checks; vaporize toolchain -- swift test passed 70 executable Swift tests across 12 CUJ-specific SwiftPM bundles.",
       "boundary": "This expands release proof across major Vaporize features; it does not unblock the Pkl-backed .xcodeproj world-state generation gate."
     }
   ],

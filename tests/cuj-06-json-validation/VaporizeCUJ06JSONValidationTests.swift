@@ -3,7 +3,7 @@ import Testing
 
 @testable import VaporizeCLI
 
-@Test("Validates JSON with Foundation")
+@Test("CUJ-06 validates JSON with Foundation")
 func validatesJSONWithFoundation() throws {
   let data = Data(#"{"ok":true}"#.utf8)
 
@@ -21,7 +21,7 @@ func validatesJSONWithFoundation() throws {
   #expect(receipt.errorMessage == nil)
 }
 
-@Test("Rejects invalid JSON with Foundation")
+@Test("CUJ-06 rejects invalid JSON with Foundation")
 func rejectsInvalidJSONWithFoundation() {
   let data = Data(#"{"ok":}"#.utf8)
 

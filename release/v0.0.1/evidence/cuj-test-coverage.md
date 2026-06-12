@@ -1,6 +1,6 @@
 # Vaporize v0.0.1 - CUJ Test Coverage
 
-**Generated:** 2026-06-12T23:06:11Z
+**Generated:** 2026-06-12T23:24:02Z
 **Status:** active CUJ coverage floor defined
 **Component:** `vaporize@wrkstrm-core.cli`
 
@@ -19,7 +19,25 @@ than treating the current test count as self-justifying.
 | Deferred CUJs | 2 |
 | Required Swift test obligations | 53 |
 | Required release evidence checks | 4 |
-| Current executable Swift tests | 64 |
+| Required targetable test obligations | 57 |
+| Current executable Swift tests | 70 |
+
+## Targetable Test Bundles
+
+| CUJ | SwiftPM test target | Current tests |
+| --- | --- | ---: |
+| CUJ-01 | `VaporizeCUJ01SwiftPMCLITests` | 7 |
+| CUJ-02 | `VaporizeCUJ02MacAppTests` | 14 |
+| CUJ-03 | `VaporizeCUJ03PassThroughTests` | 4 |
+| CUJ-04 | `VaporizeCUJ04CommonProcessUseTests` | 4 |
+| CUJ-05 | `VaporizeCUJ05ToolchainTests` | 6 |
+| CUJ-06 | `VaporizeCUJ06JSONValidationTests` | 2 |
+| CUJ-07 | `VaporizeCUJ07VaporInventoryTests` | 16 |
+| CUJ-08 | `VaporizeCUJ08ProjectYMLInspectionTests` | 5 |
+| CUJ-09 | `VaporizeCUJ09ReleaseReviewTests` | 4 |
+| CUJ-10 | `VaporizeCUJ10YMLPklComparisonTests` | 4 |
+| CUJ-11 | `VaporizeCUJ11PklYMLGenerationTests` | 3 |
+| CUJ-12 | `VaporizeCUJ12PackageGraphTests` | 1 |
 
 ## Coverage By CUJ
 

@@ -3,7 +3,7 @@
   "coverageId": "vaporize-v0.0.1-cuj-test-coverage",
   "subjectAppSlug": "vaporize@wrkstrm-core.cli",
   "subjectReleaseSlug": "v0.0.1",
-  "generatedAt": "2026-06-12T23:06:11Z",
+  "generatedAt": "2026-06-12T23:24:02Z",
   "generatedBy": "codex-crisie",
   "status": "active-cuj-coverage-floor-defined",
   "sourceRule": "Required test count is derived from PRD requirements through active draft CUJs. Actual executable tests may exceed the required floor.",
@@ -17,11 +17,21 @@
     "deferredCUJCount": 2,
     "requiredSwiftTestObligationCount": 53,
     "requiredReleaseEvidenceCheckCount": 4,
-    "currentExecutableSwiftTestCount": 64,
+    "requiredTargetableTestObligationCount": 57,
+    "currentExecutableSwiftTestCount": 70,
     "currentExecutableSwiftTestBreakdown": {
-      "VaporizeCLITests": 51,
-      "SwiftCLIInstallerTests": 4,
-      "SwiftAppInstallerTests": 9
+      "VaporizeCUJ01SwiftPMCLITests": 7,
+      "VaporizeCUJ02MacAppTests": 14,
+      "VaporizeCUJ03PassThroughTests": 4,
+      "VaporizeCUJ04CommonProcessUseTests": 4,
+      "VaporizeCUJ05ToolchainTests": 6,
+      "VaporizeCUJ06JSONValidationTests": 2,
+      "VaporizeCUJ07VaporInventoryTests": 16,
+      "VaporizeCUJ08ProjectYMLInspectionTests": 5,
+      "VaporizeCUJ09ReleaseReviewTests": 4,
+      "VaporizeCUJ10YMLPklComparisonTests": 4,
+      "VaporizeCUJ11PklYMLGenerationTests": 3,
+      "VaporizeCUJ12PackageGraphTests": 1
     }
   },
   "coverage": [
@@ -32,8 +42,7 @@
       "requiredSwiftTestObligations": 5,
       "status": "covered",
       "evidence": [
-        "VaporizeCommandParsingTests.swift",
-        "SwiftCLIInstallerTests.swift"
+        "VaporizeCUJ01SwiftPMCLITests.swift"
       ]
     },
     {
@@ -43,9 +52,7 @@
       "requiredSwiftTestObligations": 9,
       "status": "covered",
       "evidence": [
-        "VaporizeCommandParsingTests.swift",
-        "SwiftAppInstallerTests.swift",
-        "AppleProjectAppBundleNameResolverTests.swift"
+        "VaporizeCUJ02MacAppTests.swift"
       ]
     },
     {
@@ -55,8 +62,7 @@
       "requiredSwiftTestObligations": 4,
       "status": "covered",
       "evidence": [
-        "VaporizePassThroughModeTests.swift",
-        "VaporizeReceiptShapeTests.swift"
+        "VaporizeCUJ03PassThroughTests.swift"
       ]
     },
     {
@@ -66,8 +72,7 @@
       "requiredSwiftTestObligations": 4,
       "status": "covered",
       "evidence": [
-        "VaporizeUseCommonProcessTests.swift",
-        "VaporizeReceiptShapeTests.swift"
+        "VaporizeCUJ04CommonProcessUseTests.swift"
       ]
     },
     {
@@ -77,8 +82,7 @@
       "requiredSwiftTestObligations": 6,
       "status": "covered",
       "evidence": [
-        "VaporizeToolchainModeTests.swift",
-        "VaporizeReceiptShapeTests.swift"
+        "VaporizeCUJ05ToolchainTests.swift"
       ]
     },
     {
@@ -88,7 +92,7 @@
       "requiredSwiftTestObligations": 2,
       "status": "covered",
       "evidence": [
-        "VaporizeJSONValidationTests.swift"
+        "VaporizeCUJ06JSONValidationTests.swift"
       ]
     },
     {
@@ -98,9 +102,7 @@
       "requiredSwiftTestObligations": 10,
       "status": "covered",
       "evidence": [
-        "VaporizeVaporInventoryScannerTests.swift",
-        "VaporizeInventoryRendererTests.swift",
-        "VaporizeCommandParsingTests.swift"
+        "VaporizeCUJ07VaporInventoryTests.swift"
       ]
     },
     {
@@ -110,8 +112,7 @@
       "requiredSwiftTestObligations": 5,
       "status": "covered",
       "evidence": [
-        "AppleProjectYMLReaderTests.swift",
-        "AppleProjectValueTests.swift",
+        "VaporizeCUJ08ProjectYMLInspectionTests.swift",
         "concourse-project-yml-inspection.receipt.json",
         "project-yml-fleet-parse-audit.receipt.json"
       ]
@@ -124,6 +125,7 @@
       "requiredReleaseEvidenceChecks": 4,
       "status": "covered-with-release-evidence",
       "evidence": [
+        "VaporizeCUJ09ReleaseReviewTests.swift",
         "prd.md",
         "cuj.md",
         "release-gates.md",
@@ -137,8 +139,7 @@
       "requiredSwiftTestObligations": 4,
       "status": "covered",
       "evidence": [
-        "AppleProjectPklTests.swift",
-        "AppleProjectSpecComparatorTests.swift",
+        "VaporizeCUJ10YMLPklComparisonTests.swift",
         "concourse-project-yml-pkl-comparison.receipt.json"
       ]
     },
@@ -149,8 +150,7 @@
       "requiredSwiftTestObligations": 3,
       "status": "covered",
       "evidence": [
-        "AppleProjectPklTests.swift",
-        "AppleProjectValueTests.swift",
+        "VaporizeCUJ11PklYMLGenerationTests.swift",
         "concourse-pkl-project-yml-generation.receipt.json",
         "concourse-generated-yml-pkl-comparison.receipt.json"
       ]
@@ -162,7 +162,7 @@
       "requiredSwiftTestObligations": 1,
       "status": "covered",
       "evidence": [
-        "VaporizeCommandParsingTests.swift"
+        "VaporizeCUJ12PackageGraphTests.swift"
       ]
     }
   ],

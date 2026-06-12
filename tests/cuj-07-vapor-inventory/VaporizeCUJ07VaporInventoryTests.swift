@@ -1,9 +1,41 @@
+import ArgumentParser
 import Foundation
 import Testing
 
 @testable import VaporizeCLI
 
-@Test("Classifies a collapsed annotation at the top level")
+@Test("CUJ-07 parses status mode with JSON output")
+func parsesStatusModeWithJSONOutput() throws {
+  let command = try VaporizeCLI.parse([
+    "status",
+    "--path",
+    "/tmp/vaporware",
+    "--format",
+    "json",
+  ])
+
+  #expect(command.mode == .status)
+  #expect(command.vaporScanPath == "/tmp/vaporware")
+  #expect(command.vaporOutputFormat == .json)
+  #expect(command.vaporOutputFormat.rendererFormat == .json)
+}
+
+@Test("CUJ-07 parses inventory as the warehouse compatibility alias")
+func parsesInventoryCompatibilityAlias() throws {
+  let command = try VaporizeCLI.parse([
+    "inventory",
+    "--path",
+    "/tmp/vaporware",
+    "--receipt-path",
+    "/tmp/receipt.json",
+  ])
+
+  #expect(command.mode == .inventory)
+  #expect(command.vaporScanPath == "/tmp/vaporware")
+  #expect(command.receiptPath == "/tmp/receipt.json")
+}
+
+@Test("CUJ-07 classifies a collapsed annotation at the top level")
 func classifiesCollapsedAtTopLevel() throws {
   let fixture = try makeFixtureDirectory(named: "collapsed-top-level")
   defer { try? FileManager.default.removeItem(at: fixture) }
@@ -28,7 +60,7 @@ func classifiesCollapsedAtTopLevel() throws {
   #expect(result.summary.collapsed == 1)
 }
 
-@Test("Classifies a collapse-pending annotation nested under extensions")
+@Test("CUJ-07 classifies a collapse-pending annotation nested under extensions")
 func classifiesCollapsePendingNestedUnderExtensions() throws {
   let fixture = try makeFixtureDirectory(named: "collapse-pending-nested")
   defer { try? FileManager.default.removeItem(at: fixture) }
@@ -56,15 +88,13 @@ func classifiesCollapsePendingNestedUnderExtensions() throws {
   #expect(result.summary.collapsePending == 1)
 }
 
-@Test("Classifies permanent-vapor annotation")
+@Test("CUJ-07 classifies permanent vapor")
 func classifiesPermanentVapor() throws {
   let fixture = try makeFixtureDirectory(named: "permanent-vapor")
   defer { try? FileManager.default.removeItem(at: fixture) }
   try writeJSON(
     """
-    {
-      "x-vaporize-collapse-path": { "status": "permanent-vapor" }
-    }
+    { "x-vaporize-collapse-path": { "status": "permanent-vapor" } }
     """,
     name: "record.json",
     in: fixture
@@ -73,7 +103,7 @@ func classifiesPermanentVapor() throws {
   #expect(result.summary.permanentVapor == 1)
 }
 
-@Test("Classifies legacy x-craze collapse-path annotations")
+@Test("CUJ-07 classifies legacy x-craze collapse-path annotations")
 func classifiesLegacyCrazeCollapsePathAnnotation() throws {
   let fixture = try makeFixtureDirectory(named: "legacy-craze-key")
   defer { try? FileManager.default.removeItem(at: fixture) }
@@ -105,7 +135,7 @@ func classifiesLegacyCrazeCollapsePathAnnotation() throws {
   #expect(result.summary.collapseBlocked == 1)
 }
 
-@Test("Classifies a file with no annotation as unannotated")
+@Test("CUJ-07 classifies a file with no annotation as unannotated")
 func classifiesUnannotated() throws {
   let fixture = try makeFixtureDirectory(named: "unannotated")
   defer { try? FileManager.default.removeItem(at: fixture) }
@@ -120,7 +150,7 @@ func classifiesUnannotated() throws {
   #expect(result.summary.unannotated == 1)
 }
 
-@Test("Malformed JSON with an annotation key is counted as unannotated")
+@Test("CUJ-07 malformed JSON with an annotation key is counted as unannotated")
 func malformedJSONWithAnnotationKeyIsUnannotated() throws {
   let fixture = try makeFixtureDirectory(named: "malformed-annotation")
   defer { try? FileManager.default.removeItem(at: fixture) }
@@ -137,7 +167,7 @@ func malformedJSONWithAnnotationKeyIsUnannotated() throws {
   #expect(result.summary.unannotated == 1)
 }
 
-@Test("Walks the directory recursively and ignores non-JSON files")
+@Test("CUJ-07 walks the directory recursively and ignores non-JSON files")
 func walksRecursively() throws {
   let fixture = try makeFixtureDirectory(named: "recursive-walk")
   defer { try? FileManager.default.removeItem(at: fixture) }
@@ -157,7 +187,6 @@ func walksRecursively() throws {
     name: "b.json",
     in: nested
   )
-  // Non-JSON files must not be counted.
   try "ignore me".write(
     to: fixture.appendingPathComponent("readme.md"),
     atomically: true,
@@ -169,7 +198,7 @@ func walksRecursively() throws {
   #expect(result.summary.collapseBlocked == 1)
 }
 
-@Test("Receipt embeds scanned path, version, and totals")
+@Test("CUJ-07 receipt embeds scanned path, version, and totals")
 func receiptShape() throws {
   let fixture = try makeFixtureDirectory(named: "receipt-shape")
   defer { try? FileManager.default.removeItem(at: fixture) }
@@ -190,7 +219,7 @@ func receiptShape() throws {
   #expect(receipt.warehouseReceiptModel == "0.0.1-untyped")
 }
 
-@Test("Errors when --path does not exist")
+@Test("CUJ-07 errors when path does not exist")
 func errorsOnMissingPath() {
   let missing = FileManager.default.temporaryDirectory
     .appendingPathComponent("vaporize-vaporware-missing-\(UUID().uuidString)")
@@ -199,7 +228,7 @@ func errorsOnMissingPath() {
   }
 }
 
-@Test("Errors when --path points at a file")
+@Test("CUJ-07 errors when path points at a file")
 func errorsOnFilePath() throws {
   let fixture = try makeFixtureDirectory(named: "file-path")
   defer { try? FileManager.default.removeItem(at: fixture) }
@@ -211,7 +240,7 @@ func errorsOnFilePath() throws {
   }
 }
 
-@Test("Resolves relative scan paths to absolute standardized paths")
+@Test("CUJ-07 resolves relative scan paths to absolute standardized paths")
 func resolvesRelativeScanPaths() {
   let resolved = VaporInventoryScanner.resolveAbsolutePath("./private/../private/universal")
 
@@ -219,7 +248,93 @@ func resolvesRelativeScanPaths() {
   #expect(resolved.hasSuffix("/private/universal"))
 }
 
-// MARK: - Helpers
+@Test("CUJ-07 renderer formats relative paths and summary counts")
+func rendererFormatsRelativePathsAndSummaryCounts() {
+  let result = VaporScanResult(
+    scannedPath: "/workspace/vapor",
+    classifications: [
+      VaporClassification(
+        filePath: "/workspace/vapor/nested/blocked.json",
+        status: .collapseBlocked,
+        pendingCapabilityRefsCount: 2,
+        collapseGateRefsCount: 1
+      ),
+      VaporClassification(
+        filePath: "/other/place/collapsed.json",
+        status: .collapsed,
+        pendingCapabilityRefsCount: 0,
+        collapseGateRefsCount: 3
+      ),
+    ],
+    summary: VaporInventorySummary(
+      collapsed: 1,
+      collapsePending: 0,
+      collapseBlocked: 1,
+      permanentVapor: 0,
+      unannotated: 0
+    ),
+    totalJsonFilesScanned: 2
+  )
+
+  let rendered = VaporInventoryRenderer.renderText(result)
+
+  #expect(rendered.contains("vaporize status - vaporware classification at /workspace/vapor"))
+  #expect(rendered.contains("nested/blocked.json"))
+  #expect(rendered.contains("/other/place/collapsed.json"))
+  #expect(rendered.contains("collapse-blocked"))
+  #expect(rendered.contains("total .json files scanned:    2"))
+  #expect(rendered.contains("collapsed:                    1"))
+}
+
+@Test("CUJ-07 renderer reports an empty inventory explicitly")
+func rendererReportsEmptyInventoryExplicitly() {
+  let rendered = VaporInventoryRenderer.renderText(
+    VaporScanResult(
+      scannedPath: "/workspace/empty",
+      classifications: [],
+      summary: VaporInventorySummary(),
+      totalJsonFilesScanned: 0
+    )
+  )
+
+  #expect(rendered.contains("(no .json files found at path)"))
+  #expect(rendered.contains("unannotated:                  0"))
+}
+
+@Test("CUJ-07 renderer JSON decodes as a warehouse receipt")
+func rendererJSONDecodesAsWarehouseReceipt() throws {
+  let result = VaporScanResult(
+    scannedPath: "/workspace/vapor",
+    classifications: [
+      VaporClassification(
+        filePath: "/workspace/vapor/record.json",
+        status: .permanentVapor,
+        pendingCapabilityRefsCount: 0,
+        collapseGateRefsCount: 0
+      ),
+    ],
+    summary: VaporInventorySummary(
+      collapsed: 0,
+      collapsePending: 0,
+      collapseBlocked: 0,
+      permanentVapor: 1,
+      unannotated: 0
+    ),
+    totalJsonFilesScanned: 1
+  )
+  let data = try VaporInventoryRenderer.renderJSON(
+    result,
+    vaporizeVersion: "test-version",
+    scannedAt: Date(timeIntervalSince1970: 0)
+  )
+  let receipt = try JSONDecoder().decode(VaporInventoryReceipt.self, from: data)
+
+  #expect(receipt.vaporizeVersion == "test-version")
+  #expect(receipt.scannedAt == "1970-01-01T00:00:00Z")
+  #expect(receipt.totalJsonFilesScanned == 1)
+  #expect(receipt.summary.permanentVapor == 1)
+  #expect(receipt.perFileClassifications.first?.filePath == "/workspace/vapor/record.json")
+}
 
 private func makeFixtureDirectory(named name: String) throws -> URL {
   let url = FileManager.default.temporaryDirectory

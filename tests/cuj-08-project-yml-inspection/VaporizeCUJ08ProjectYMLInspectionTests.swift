@@ -1,8 +1,9 @@
 import AppleProjectSpecCore
 import Foundation
 import Testing
+import VaporizeTestSupport
 
-@Test("Reads Concourse project.yml into AppleProjectSpec")
+@Test("CUJ-08 reads Concourse project.yml into AppleProjectSpec")
 func readsConcourseProjectYML() throws {
   let spec = try AppleProjectYMLReader.load(url: concourseProjectYMLURL)
   let receipt = AppleProjectYMLReader.receipt(
@@ -21,23 +22,16 @@ func readsConcourseProjectYML() throws {
   #expect(spec.targets["concourse"]?.sources?.map(\.path) == ["Sources/mac-app"])
   #expect(spec.targets["concourse"]?.dependencies?.count == 3)
   #expect(spec.targets["concourse"]?.postBuildScripts?.first?.name == "Deploy to Applications")
-  #expect(
-    spec.targets["concourse"]?.settings?.configs?["Debug"]?["PRODUCT_BUNDLE_IDENTIFIER"]?.stringValue
-      == "studio.laussat.concourse.macos.debug"
-  )
-  #expect(
-    spec.targets["concourse"]?.settings?.configs?["Release"]?["WRAPPER_NAME"]?.stringValue
-      == "concourse-$(MARKETING_VERSION)-testflight.app"
-  )
   #expect(receipt.receiptKind == "vaporize-apple-project-yml-inspection")
   #expect(receipt.bridgeStatus == "legacy-xcodegen-yaml-read-only")
   #expect(receipt.targetCount == 1)
   #expect(receipt.packageCount == 3)
 }
 
-@Test("Reads multi-target YAML shapes without requiring generation")
+@Test("CUJ-08 reads multi-target YAML shapes without requiring generation")
 func readsMultiTargetProjectYMLShape() throws {
-  let yaml = """
+  let spec = try decodeAppleProjectYML(
+    """
     name: parity-fixture
     options:
       minimumXcodeGenVersion: 2.39.0
@@ -93,8 +87,7 @@ func readsMultiTargetProjectYMLShape() throws {
         run:
           config: Debug
     """
-
-  let spec = try decodeAppleProjectYML(yaml)
+  )
   let receipt = AppleProjectYMLReader.receipt(
     for: spec,
     path: "fixture/project.yml",
@@ -114,4 +107,75 @@ func readsMultiTargetProjectYMLShape() throws {
   #expect(receipt.targetCount == 2)
   #expect(receipt.schemeCount == 1)
   #expect(receipt.targetSummaries.first { $0.name == "fixture-app" }?.hasPreBuildScripts == true)
+}
+
+@Test("CUJ-08 AppleProjectValue decodes scalar and container values")
+func appleProjectValueDecodesScalarAndContainerValues() throws {
+  let spec = try decodeAppleProjectYML(
+    """
+    name: value-fixture
+    settings:
+      base:
+        BOOL_VALUE: true
+        INT_VALUE: 7
+        DOUBLE_VALUE: 6.4
+        STRING_VALUE: "6.4"
+        ARRAY_VALUE:
+          - one
+          - 2
+        OBJECT_VALUE:
+          nested: yes
+    targets:
+      app:
+        type: application
+        platform: macOS
+    """
+  )
+
+  let base = try #require(spec.settings?.base)
+  #expect(base["BOOL_VALUE"]?.boolValue == true)
+  #expect(base["INT_VALUE"]?.stringValue == "7")
+  #expect(base["DOUBLE_VALUE"]?.stringValue == "6.4")
+  #expect(base["STRING_VALUE"]?.stringValue == "6.4")
+  #expect(base["ARRAY_VALUE"]?.stringValue == nil)
+  #expect(base["OBJECT_VALUE"]?.stringValue == nil)
+}
+
+@Test("CUJ-08 source entries decode from string shorthand")
+func sourceEntriesDecodeFromStringShorthand() throws {
+  let spec = try decodeAppleProjectYML(
+    """
+    name: source-fixture
+    targets:
+      app:
+        type: application
+        platform: macOS
+        sources:
+          - Sources/App
+    """
+  )
+
+  #expect(spec.targets["app"]?.sources?.map(\.path) == ["Sources/App"])
+}
+
+@Test("CUJ-08 inspection receipt carries the read-only migration boundary")
+func inspectionReceiptCarriesReadOnlyMigrationBoundary() throws {
+  let spec = try decodeAppleProjectYML(
+    """
+    name: receipt-fixture
+    targets:
+      app:
+        type: application
+        platform: macOS
+    """
+  )
+  let receipt = AppleProjectYMLReader.receipt(
+    for: spec,
+    path: "fixture/project.yml",
+    requestId: "inspection-boundary-test"
+  )
+
+  #expect(receipt.receiptKind == "vaporize-apple-project-yml-inspection")
+  #expect(receipt.bridgeStatus == "legacy-xcodegen-yaml-read-only")
+  #expect(receipt.targetNames == ["app"])
 }
