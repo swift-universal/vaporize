@@ -4,12 +4,13 @@
   "subjectAppSlug": "vaporize@wrkstrm-core.cli",
   "subjectReleaseSlug": "v0.0.1",
   "generatedAt": "2026-06-12T20:58:02Z",
+  "updatedAt": "2026-06-12T21:16:27Z",
   "generatedBy": "codex-crisie",
-  "status": "release-blocker-investigation-complete",
+  "status": "release-blocker-investigation-with-approved-swift-yaml-read-slice",
   "toolClassification": "internal-essential-tool",
   "verdict": {
     "releaseImpact": "BLOCK_INTERNAL_V0_0_1",
-    "statement": "Vaporize v0.0.1 should remain in release prep until substrate-owned Apple project-generation truth moves from XcodeGen project.yml surfaces to a Pkl-backed owned path, with any remaining XcodeGen surfaces explicitly quarantined as compatibility or historical evidence.",
+    "statement": "Vaporize v0.0.1 should remain in release prep until substrate-owned Apple project-generation truth moves from XcodeGen project.yml surfaces to a Pkl-backed owned path, with any remaining XcodeGen surfaces explicitly quarantined as compatibility or historical evidence. The approved Swift YAML read bridge is now landed as migration intake, not as release-unblocking generation.",
     "why": "The tree has broad project.yml and checked-in pbxproj reliance, direct XcodeGen runner code, and no existing Pkl Apple-project generation model. Releasing Vaporize as an internal essential tool before that migration would teach assistants the wrong project-generation boundary."
   },
   "inventory": {
@@ -17,6 +18,7 @@
     "checkedInXcodeProjectPbxprojFileCount": 185,
     "pklishFileCount": 9,
     "pklCurrentState": "Existing Pkl surfaces are org-prefix or digikoma-adjacent evidence; no Apple project-generation Pkl model was found in the audited paths.",
+    "swiftYMLReadBridgeState": "AppleProjectSpecCore reads legacy XcodeGen project.yml into Swift AppleProjectSpec data and inspect-project-yml emits read-only inspection receipts.",
     "xcodegenExecutablePresentOnOperatorMachine": true,
     "pklExecutablePresentOnOperatorMachine": true,
     "pklVersionEvidence": "Pkl 0.31.1 evidence exists under takumi-org digikoma-pkl interface."
@@ -137,8 +139,20 @@
       "reason": "This is the broad conversion from project.yml to Pkl-backed owned project generation."
     }
   ],
+  "completedSlices": [
+    {
+      "slice": "swift-yaml-read-parity",
+      "status": "complete",
+      "surface": "inspect-project-yml",
+      "source": "private/apple/spm/vaporize@wrkstrm-core.cli/sources/apple-project-spec-core/AppleProjectSpec.swift",
+      "tests": "private/apple/spm/vaporize@wrkstrm-core.cli/tests/vaporize-cli-tests/AppleProjectYMLReaderTests.swift",
+      "receipt": "private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/concourse-project-yml-inspection.receipt.json",
+      "scope": "Read-only migration intake for legacy XcodeGen project.yml; does not rewrite YAML, invoke XcodeGen, or generate .xcodeproj world-state."
+    }
+  ],
   "recommendedMigrationPlan": [
     "Freeze: do not add new substrate-owned project.yml surfaces unless they are explicitly marked legacy-compatibility.",
+    "Read bridge: use Vaporize inspect-project-yml as the quarantined Swift intake surface for legacy project.yml parity evidence.",
     "Model: author an AppleProjectSpec Pkl module for the common project.yml shape: options, settings, packages, targets, sources, info, scripts, schemes, and configurations.",
     "Shadow parity: for one wrkstrm-core app, express the existing project.yml as Pkl and prove that the rendered transitional YAML is semantically equivalent. This is a parity harness only, not the final release path.",
     "Owned generator: add a Swift-owned generator path that consumes Pkl-evaluated project data and writes the .xcodeproj world-state with receipts.",
@@ -154,6 +168,7 @@
   ],
   "nextConcreteWork": [
     "Create AppleProjectSpec.pkl and one Concourse Pkl port as the first parity specimen.",
+    "Add a typed comparison receipt between inspect-project-yml output and Pkl-evaluated project data before project generation.",
     "Author a PklProjectGenerationReceipt model for the Pkl-to-world-state step.",
     "Add a Vaporize bead for release-gate enforcement that scans for unclassified substrate-owned XcodeGen invocations.",
     "Update versioned-macos-app-install workflow tool refs from xcodegen to Vaporize/Pkl generation once the owned mode exists."

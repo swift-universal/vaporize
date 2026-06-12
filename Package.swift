@@ -18,13 +18,13 @@ let commonProcessDependency = localOrRemote(
   from: "0.3.5"
 )
 
-
 let package = Package(
   name: "vaporize@wrkstrm-core-cli",
   platforms: [
     .macOS("26.0")
   ],
   products: [
+    .library(name: "AppleProjectSpecCore", targets: ["AppleProjectSpecCore"]),
     .library(name: "SwiftCLIInstaller", targets: ["SwiftCLIInstaller"]),
     .library(name: "SwiftAppInstaller", targets: ["SwiftAppInstaller"]),
     .executable(name: "vaporize@wrkstrm-core.cli", targets: ["VaporizeCLI"]),
@@ -33,8 +33,16 @@ let package = Package(
     commonProcessDependency,
     commonShellDependency,
     .package(url: "https://github.com/apple/swift-argument-parser", from: "1.6.0"),
+    .package(url: "https://github.com/jpsim/Yams", from: "5.1.0"),
   ],
   targets: [
+    .target(
+      name: "AppleProjectSpecCore",
+      dependencies: [
+        .product(name: "Yams", package: "Yams"),
+      ],
+      path: "sources/apple-project-spec-core"
+    ),
     .target(
       name: "SwiftCLIInstaller",
       dependencies: [
@@ -56,6 +64,7 @@ let package = Package(
     .executableTarget(
       name: "VaporizeCLI",
       dependencies: [
+        "AppleProjectSpecCore",
         "SwiftCLIInstaller",
         "SwiftAppInstaller",
         .product(name: "CommonShell", package: "common-shell"),
@@ -78,6 +87,7 @@ let package = Package(
     .testTarget(
       name: "VaporizeCLITests",
       dependencies: [
+        "AppleProjectSpecCore",
         "VaporizeCLI",
         .product(name: "CommonProcess", package: "common-process"),
       ],

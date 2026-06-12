@@ -1,7 +1,7 @@
 # Vaporize v0.0.1 - PRD
 
 **Status:** release-prep draft; blocked pending Pkl project-generation migration
-**Updated:** 2026-06-12T20:49:26Z
+**Updated:** 2026-06-12T21:16:27Z
 **Component:** `vaporize@wrkstrm-core.cli`
 **Release target:** internal essential substrate CLI
 **Tool classification:** `internal-essential-tool`
@@ -16,8 +16,14 @@ commands executed, vaporware inventories emitted, and receipts captured.
 This release prepares Vaporize v0.0.1 as a usable internal command surface for
 assistants. It should reduce direct shell and direct `xcodebuild` choreography by
 putting build, install, run, open, pass-through, CommonProcess invocation,
-Xcode-selected Swift execution, JSON validation, warehouse inventory, and
-package graph access behind one recognizable gate.
+Xcode-selected Swift execution, JSON validation, warehouse inventory, read-only
+legacy Apple project YAML inspection, and package graph access behind one
+recognizable gate.
+
+The approved migration-prep slice adds a Swift YAML read bridge for legacy
+XcodeGen `project.yml` files. That bridge is deliberately read-only: it lets
+Vaporize inspect and receipt existing project shape as Swift data while Pkl
+becomes the forward project-generation source of truth.
 
 The release classification is `internal-essential-tool`: an internal-only tool
 whose absence blocks assistants from completing build, install, launch, release
@@ -42,6 +48,9 @@ explicitly quarantined as historical/external compatibility.
   `xcrun` invocation.
 - Provide `validate-json` so release packets validate through Vaporize rather
   than direct `jq`.
+- Provide `inspect-project-yml` so legacy XcodeGen project specs can be parsed
+  into Swift project data and receipted without rewriting or regenerating
+  anything.
 - Provide `status` and `warehouse` inventory modes for
   `x-vaporize-collapse-path` records, with legacy `x-craze-collapse-path`
   read-only fallback.
@@ -100,15 +109,18 @@ Supporting audiences:
 | FR-012 | Release packet | PRD, CUJs, release gates, and launch-review packet exist under `release/v0.0.1/`. |
 | FR-013 | Internal essential tool classification | Release evidence names Vaporize as `internal-essential-tool` and records which assistant workflows it blocks when absent. |
 | FR-014 | Pkl project-generation release gate | Final internal v0.0.1 release is blocked until substrate-owned XcodeGen-managed Apple surfaces move to a Pkl-backed generation path or are explicitly quarantined. |
+| FR-015 | Swift YAML read bridge | `inspect-project-yml --path <project.yml>` parses legacy XcodeGen project YAML into Swift `AppleProjectSpec` data and emits an inspection receipt without rewriting YAML, invoking XcodeGen, or generating an Xcode project. |
 
 ## Release Criteria
 
 - Focused Vaporize CLI test target passes with the Swift 6.4 toolchain:
   `vaporize toolchain -- swift test --package-path private/apple/spm/vaporize@wrkstrm-core.cli --filter VaporizeCLITests`.
-- CLI help advertises `use`, `toolchain`, `validate-json`, and
-  `--common-process-spec`.
+- CLI help advertises `use`, `toolchain`, `validate-json`,
+  `inspect-project-yml`, and `--common-process-spec`.
 - Release packet JSON validates with
   `vaporize validate-json --path release/v0.0.1/evidence/launch-review-packet.json`.
+- Concourse legacy project inspection receipt validates with
+  `vaporize validate-json --path release/v0.0.1/evidence/concourse-project-yml-inspection.receipt.json`.
 - Release evidence classifies Vaporize as an internal essential tool rather
   than a public release artifact.
 - Pkl project-generation migration for substrate-owned Apple surfaces is

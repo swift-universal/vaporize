@@ -1,7 +1,7 @@
 # Vaporize v0.0.1 - Critical User Journeys
 
 **Status:** release-prep draft; blocked pending Pkl project-generation migration
-**Updated:** 2026-06-12T20:49:26Z
+**Updated:** 2026-06-12T21:16:27Z
 **Component:** `vaporize@wrkstrm-core.cli`
 **Tool classification:** `internal-essential-tool`
 
@@ -126,7 +126,31 @@ Success:
 - Legacy `x-craze-collapse-path` records remain visible while forward docs name
   `x-vaporize-collapse-path`.
 
-## CUJ-08 - Release Reviewer Reads The Packet
+## CUJ-08 - Assistant Inspects Legacy XcodeGen Project YAML
+
+1. Assistant receives a legacy XcodeGen `project.yml` during the Pkl migration.
+2. Assistant runs
+   `vaporize inspect-project-yml --path <project.yml> --format json --receipt-path <receipt>`.
+3. Vaporize parses the YAML into Swift `AppleProjectSpec` data.
+4. Vaporize emits a `vaporize-apple-project-yml-inspection` receipt with
+   project, target, package, and scheme counts.
+5. Assistant uses the receipt to choose the next parity or migration step.
+
+Success:
+
+- The assistant does not invoke XcodeGen directly.
+- The bridge is read-only: no YAML rewrite, no pbxproj generation, no release
+  claim that YAML remains the forward source of truth.
+- Pkl migration work gets a tested Swift intake shape before world-state
+  generation is attempted.
+
+Failure truth:
+
+- If the YAML cannot be parsed into the supported read model, Vaporize reports
+  the failure and the migration stays blocked rather than silently generating
+  partial project state.
+
+## CUJ-09 - Release Reviewer Reads The Packet
 
 1. Reviewer opens `release/v0.0.1/prd.md`.
 2. Reviewer opens this CUJ file and checks that each critical journey has

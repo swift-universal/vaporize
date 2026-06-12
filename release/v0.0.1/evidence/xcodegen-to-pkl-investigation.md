@@ -2,6 +2,7 @@
 
 **Status:** release-blocker investigation complete
 **Generated:** 2026-06-12T20:58:02Z
+**Updated:** 2026-06-12T21:16:27Z
 **Component:** `vaporize@wrkstrm-core.cli`
 **Tool classification:** `internal-essential-tool`
 
@@ -17,6 +18,23 @@ The important distinction:
 - Vaporize is the assistant-facing internal essential gate.
 - XcodeGen may remain as historical or external compatibility, but should not
   be the forward release horizon for our own apps.
+
+## Completed Approved Slice
+
+The first approved migration-prep slice is now landed:
+
+- `AppleProjectSpecCore` reads legacy XcodeGen `project.yml` into Swift
+  `AppleProjectSpec` data.
+- `vaporize inspect-project-yml` emits a read-only
+  `vaporize-apple-project-yml-inspection` receipt.
+- `AppleProjectYMLReaderTests.swift` covers the real Concourse spec and a
+  multi-target fixture.
+- `concourse-project-yml-inspection.receipt.json` records the Concourse intake
+  proof for release review.
+
+This does not unblock v0.0.1 by itself. It gives the Pkl migration a tested
+Swift intake surface so the next slice can compare Pkl-evaluated project data
+against the legacy YAML shape before generating project world-state.
 
 ## Live Inventory
 
@@ -80,22 +98,26 @@ directly through `xcodegen generate`.
 
 1. Freeze new debt: no new substrate-owned `project.yml` surfaces unless
    explicitly tagged legacy compatibility.
-2. Model the common project shape as `AppleProjectSpec.pkl`.
-3. Port Concourse first as a parity specimen.
-4. Use a shadow parity bridge only to prove equivalence; do not call that the
+2. Use `inspect-project-yml` as the read-only Swift intake surface for legacy
+   parity evidence.
+3. Model the common project shape as `AppleProjectSpec.pkl`.
+4. Port Concourse first as a parity specimen.
+5. Use a shadow parity bridge only to prove equivalence; do not call that the
    final release path.
-5. Add a Swift-owned generator that consumes Pkl-evaluated project data and
+6. Add a Swift-owned generator that consumes Pkl-evaluated project data and
    writes `.xcodeproj` world-state with receipts.
-6. Add Vaporize generation mode around Pkl evaluation, world-state generation,
+7. Add Vaporize generation mode around Pkl evaluation, world-state generation,
    receipt emission, and app build/install composition.
-7. Migrate generator/scaffold surfaces before broad fleet conversion.
-8. Gate release on all remaining XcodeGen uses being migrated or quarantined.
+8. Migrate generator/scaffold surfaces before broad fleet conversion.
+9. Gate release on all remaining XcodeGen uses being migrated or quarantined.
 
 ## Next Concrete Work
 
 - Author `AppleProjectSpec.pkl`.
 - Port `wrkstrm-core/private/apple/apps/concourse/project.yml` as the first
   Pkl specimen.
+- Define a comparison receipt between `inspect-project-yml` output and
+  Pkl-evaluated project data.
 - Define `PklProjectGenerationReceipt`.
 - Add a Vaporize enforcement bead that scans for unclassified substrate-owned
   XcodeGen invocations.

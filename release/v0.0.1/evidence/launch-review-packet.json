@@ -8,7 +8,7 @@
   "packetVersion": "v0.0.1",
   "reviewKind": "internal-essential-tool-release-prep",
   "packetStatus": "blocked-pending-pkl-project-generation",
-  "emittedAt": "2026-06-12T20:49:26Z",
+  "emittedAt": "2026-06-12T21:16:27Z",
   "emittedBy": "codex-crisie",
   "lifecycleStage": "internal-cli-release-prep",
   "releaseTarget": {
@@ -21,7 +21,8 @@
       "assistant-build-install-launch",
       "release-packet-validation",
       "xcode-selected-swift-toolchain-proof",
-      "vaporware-collapse-inventory"
+      "vaporware-collapse-inventory",
+      "legacy-project-yml-inspection"
     ],
     "blockingPrecondition": "substrate-owned Apple project generation moves off XcodeGen to a Pkl-backed owned path, or remaining XcodeGen surfaces are explicitly quarantined as historical/external compatibility",
     "alternativeLane": "remain-in-release-prep"
@@ -74,15 +75,35 @@
       "s": ["vaporize", "v0.0.1", "json-validation-tests"],
       "t": "Vaporize JSON validation tests",
       "tg": [{"k": "rp", "rt": "mono", "v": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/tests/vaporize-cli-tests/VaporizeJSONValidationTests.swift"}]
+    },
+    {
+      "LinkRefModel": "0.3.0",
+      "s": ["vaporize", "v0.0.1", "apple-project-spec-core"],
+      "t": "Vaporize AppleProjectSpecCore Swift YAML read bridge",
+      "tg": [{"k": "rp", "rt": "mono", "v": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/sources/apple-project-spec-core/AppleProjectSpec.swift"}]
+    },
+    {
+      "LinkRefModel": "0.3.0",
+      "s": ["vaporize", "v0.0.1", "project-yml-reader-tests"],
+      "t": "Vaporize AppleProjectYMLReader tests",
+      "tg": [{"k": "rp", "rt": "mono", "v": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/tests/vaporize-cli-tests/AppleProjectYMLReaderTests.swift"}]
+    },
+    {
+      "LinkRefModel": "0.3.0",
+      "s": ["vaporize", "v0.0.1", "concourse-project-yml-inspection-receipt"],
+      "t": "Concourse legacy project.yml inspection receipt",
+      "tg": [{"k": "rp", "rt": "mono", "v": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/concourse-project-yml-inspection.receipt.json"}]
     }
   ],
   "qaEvidence": {
     "testCommand": "vaporize toolchain -- swift test --package-path private/apple/spm/vaporize@wrkstrm-core.cli --filter VaporizeCLITests",
     "testResult": "PASS",
-    "testCount": 13,
+    "testCount": 15,
     "bareSwiftToolchainResult": "BLOCKED: bare swift is 6.3.2; Package.swift requires Swift tools 6.4",
     "requiredToolchainResult": "PASS: Vaporize toolchain mode owns Xcode-selected Swift via internal xcrun",
-    "jsonValidationCommand": "vaporize validate-json --path release/v0.0.1/evidence/launch-review-packet.json"
+    "jsonValidationCommand": "vaporize validate-json --path release/v0.0.1/evidence/launch-review-packet.json",
+    "projectYMLInspectionCommand": "vaporize inspect-project-yml --path private/apple/apps/concourse/project.yml --format json --receipt-path release/v0.0.1/evidence/concourse-project-yml-inspection.receipt.json",
+    "projectYMLInspectionResult": "PASS"
   },
   "gateResults": [
     {
@@ -103,7 +124,7 @@
     {
       "gateRef": "GATE-07-cli-help",
       "status": "PASS",
-      "rationale": "Help surface advertises use, toolchain, validate-json, and --common-process-spec"
+      "rationale": "Help surface advertises use, toolchain, validate-json, inspect-project-yml, and --common-process-spec"
     },
     {
       "gateRef": "GATE-11-readme-release-docs",
@@ -124,6 +145,11 @@
       "gateRef": "GATE-14-pkl-project-generation",
       "status": "BLOCKED",
       "rationale": "Final internal release waits until substrate-owned XcodeGen-backed Apple surfaces move to Pkl or are explicitly quarantined"
+    },
+    {
+      "gateRef": "GATE-15-swift-yaml-read-bridge",
+      "status": "PASS",
+      "rationale": "inspect-project-yml parsed Concourse project.yml into Swift AppleProjectSpec data and emitted a read-only inspection receipt"
     }
   ],
   "knownFollowUps": [
@@ -154,7 +180,8 @@
     "x-common-process-use-surface": "use mode consumes CommonProcess CommandSpec JSON via --common-process-spec and emits a vaporize-use-common-process receipt when requested.",
     "x-toolchain-surface": "toolchain mode owns Xcode-selected Swift invocation; assistants should not call xcrun directly.",
     "x-json-validation-surface": "validate-json mode owns JSON packet validation; assistants should not call jq directly.",
+    "x-apple-project-yml-inspection": "inspect-project-yml parses legacy XcodeGen project.yml files into Swift AppleProjectSpec data and emits a vaporize-apple-project-yml-inspection receipt. It is read-only migration intake, not forward source-of-truth generation.",
     "x-pkl-project-generation-gate": "Internal v0.0.1 release is blocked until our owned Apple project-generation path moves off XcodeGen and onto Pkl, with any leftover XcodeGen surfaces quarantined as compatibility.",
-    "x-xcodegen-to-pkl-investigation": "Investigation found 155 project.yml files, 185 checked-in .xcodeproj/project.pbxproj files, direct XcodeGen runner surfaces, and no existing Pkl Apple-project generation model."
+    "x-xcodegen-to-pkl-investigation": "Investigation found 155 project.yml files, 185 checked-in .xcodeproj/project.pbxproj files, direct XcodeGen runner surfaces, and no existing Pkl Apple-project generation model. The first approved mitigation slice now reads legacy YAML through Swift and receipts Concourse inspection."
   }
 }

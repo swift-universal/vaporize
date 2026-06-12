@@ -1,4 +1,5 @@
 import ArgumentParser
+import AppleProjectSpecCore
 import CommonProcess
 import CommonProcessExecutionKit
 import CommonShell
@@ -20,8 +21,10 @@ struct VaporizeCLI: AsyncParsableCommand {
       processes run, receipts emit. Modes: install, uninstall, build, run, \
       pass, use, toolchain, setup. Vaporware-awareness modes: status + warehouse enumerate and \
       store vaporware at a path per the `x-vaporize-collapse-path` annotation \
-      convention. Legacy `inventory` and `x-craze-collapse-path` remain \
-      compatibility aliases during migration.
+      convention. Project-generation bridge mode: inspect-project-yml reads \
+      legacy XcodeGen YAML into an owned Swift model without rewriting it. \
+      Legacy `inventory` and `x-craze-collapse-path` remain compatibility \
+      aliases during migration.
       """
   )
 
@@ -39,6 +42,7 @@ struct VaporizeCLI: AsyncParsableCommand {
     case status
     case warehouse
     case validateJSON = "validate-json"
+    case inspectProjectYML = "inspect-project-yml"
     case inventory
 
     /// Substrate package-graph subfunction. Forwards remaining arguments to
@@ -59,7 +63,7 @@ struct VaporizeCLI: AsyncParsableCommand {
     case app
   }
 
-  @Argument(help: "Mode: install, uninstall, build, run, pass, use, toolchain, setup, status, warehouse, validate-json, inventory, or graph (forwards to package-graph@wrkstrm.cli).")
+  @Argument(help: "Mode: install, uninstall, build, run, pass, use, toolchain, setup, status, warehouse, validate-json, inspect-project-yml, inventory, or graph (forwards to package-graph@wrkstrm.cli).")
   var mode: Mode
 
   @Option(name: .customLong("artifact"), help: "Artifact kind: cli or app.")
@@ -169,12 +173,12 @@ struct VaporizeCLI: AsyncParsableCommand {
 
   @Option(
     name: .customLong("path"),
-    help: "Path for status, warehouse, or validate-json modes.")
+    help: "Path for status, warehouse, validate-json, or inspect-project-yml modes.")
   var vaporScanPath: String?
 
   @Option(
     name: .customLong("format"),
-    help: "Output format for status mode: text (default) or json.")
+    help: "Output format for status or inspect-project-yml mode: text (default) or json.")
   var vaporOutputFormat: VaporOutputFormatArgument = .text
 
   @Argument(parsing: .remaining, help: "Arguments forwarded to run, pass, or toolchain mode.")
@@ -204,6 +208,8 @@ struct VaporizeCLI: AsyncParsableCommand {
       try await runVaporWarehouse()
     case .validateJSON:
       try await validateJSON()
+    case .inspectProjectYML:
+      try await inspectProjectYML()
     case .inventory:
       try await runVaporWarehouse()
     case .graph:
@@ -687,6 +693,34 @@ struct VaporizeCLI: AsyncParsableCommand {
       )
       try emitReceiptIfRequested(receipt)
       throw ValidationError("invalid JSON at \(vaporScanPath): \(error)")
+    }
+  }
+
+  private func inspectProjectYML() async throws {
+    guard let vaporScanPath, !vaporScanPath.isEmpty else {
+      throw ValidationError("--path is required for inspect-project-yml mode.")
+    }
+
+    let requestId = "vaporize-inspect-project-yml-\(UUID().uuidString)"
+    let spec = try AppleProjectYMLReader.load(url: URL(fileURLWithPath: vaporScanPath))
+    let receipt = AppleProjectYMLReader.receipt(
+      for: spec,
+      path: vaporScanPath,
+      requestId: requestId
+    )
+    try emitReceiptIfRequested(receipt)
+
+    switch vaporOutputFormat {
+    case .text:
+      print(
+        "project.yml: \(receipt.projectName) targets=\(receipt.targetCount) packages=\(receipt.packageCount) schemes=\(receipt.schemeCount)"
+      )
+    case .json:
+      let encoder = JSONEncoder()
+      encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
+      let data = try encoder.encode(receipt)
+      FileHandle.standardOutput.write(data)
+      FileHandle.standardOutput.write(Data("\n".utf8))
     }
   }
 

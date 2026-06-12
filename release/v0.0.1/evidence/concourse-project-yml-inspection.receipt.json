@@ -1,0 +1,31 @@
+{
+  "bridgeStatus" : "legacy-xcodegen-yaml-read-only",
+  "migrationPhase" : "swift-yaml-read-parity",
+  "packageCount" : 3,
+  "packageNames" : [
+    "WrkstrmOnboarding",
+    "WrkstrmWalkthrough",
+    "common-terminal"
+  ],
+  "path" : "private\/apple\/apps\/concourse\/project.yml",
+  "projectName" : "concourse",
+  "receiptKind" : "vaporize-apple-project-yml-inspection",
+  "requestId" : "vaporize-inspect-project-yml-8909521B-65BB-4D7C-BE31-88EA5FC2BAAE",
+  "schemaVersion" : "0.1.0",
+  "schemeCount" : 0,
+  "targetCount" : 1,
+  "targetNames" : [
+    "concourse"
+  ],
+  "targetSummaries" : [
+    {
+      "dependencyCount" : 3,
+      "hasPostBuildScripts" : true,
+      "hasPreBuildScripts" : false,
+      "name" : "concourse",
+      "platform" : "macOS",
+      "sourceCount" : 1,
+      "type" : "application"
+    }
+  ]
+}
