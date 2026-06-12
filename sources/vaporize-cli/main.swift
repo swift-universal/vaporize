@@ -18,7 +18,7 @@ struct VaporizeCLI: AsyncParsableCommand {
     abstract: """
       Substrate-canonical vaporware-collapse gate. vaporize transmutes typed \
       substrate-vaporware into world-state: binaries land, .app installs, \
-      processes run, receipts emit. Modes: install, uninstall, build, run, \
+      processes run, receipts emit. Modes: install, uninstall, build, test, run, \
       pass, use, toolchain, setup. Vaporware-awareness modes: status + warehouse enumerate and \
       store vaporware at a path per the `x-vaporize-collapse-path` annotation \
       convention. Project-generation bridge mode: inspect-project-yml reads \
@@ -35,6 +35,7 @@ struct VaporizeCLI: AsyncParsableCommand {
     case install
     case uninstall
     case build
+    case test
     case run
     case pass
     case use
@@ -68,7 +69,7 @@ struct VaporizeCLI: AsyncParsableCommand {
     case app
   }
 
-  @Argument(help: "Mode: install, uninstall, build, run, pass, use, toolchain, setup, status, warehouse, validate-json, inspect-project-yml, compare-project-yml-pkl, generate-project-yml, inventory, or graph (forwards to package-graph@wrkstrm.cli).")
+  @Argument(help: "Mode: install, uninstall, build, test, run, pass, use, toolchain, setup, status, warehouse, validate-json, inspect-project-yml, compare-project-yml-pkl, generate-project-yml, inventory, or graph (forwards to package-graph@wrkstrm.cli).")
   var mode: Mode
 
   @Option(name: .customLong("artifact"), help: "Artifact kind: cli or app.")
@@ -196,7 +197,7 @@ struct VaporizeCLI: AsyncParsableCommand {
     help: "Output format for status, inspect-project-yml, compare-project-yml-pkl, or generate-project-yml mode: text (default) or json.")
   var vaporOutputFormat: VaporOutputFormatArgument = .text
 
-  @Argument(parsing: .remaining, help: "Arguments forwarded to run, pass, or toolchain mode.")
+  @Argument(parsing: .remaining, help: "Arguments forwarded to test, run, pass, or toolchain mode.")
   var forwardedArguments: [String] = []
 
   mutating func run() async throws {
@@ -207,6 +208,8 @@ struct VaporizeCLI: AsyncParsableCommand {
       try await uninstallArtifact()
     case .build:
       try await buildArtifact()
+    case .test:
+      try await testArtifact()
     case .run:
       try await runArtifact()
     case .pass:
@@ -271,6 +274,15 @@ struct VaporizeCLI: AsyncParsableCommand {
       } else {
         try await installApp(launchApp: launch)
       }
+    }
+  }
+
+  private func testArtifact() async throws {
+    switch artifact {
+    case .cli:
+      try await runSwift(arguments: try swiftTestArguments())
+    case .app:
+      throw ValidationError("test mode currently supports SwiftPM package tests only; use --artifact cli.")
     }
   }
 
@@ -467,6 +479,17 @@ struct VaporizeCLI: AsyncParsableCommand {
       "-c", configuration.rawValue,
       "--product", product,
     ]
+  }
+
+  func swiftTestArguments() throws -> [String] {
+    let packagePath = try requirePackagePath()
+    var arguments = [
+      "test",
+      "--package-path", packagePath,
+      "-c", configuration.rawValue,
+    ]
+    arguments.append(contentsOf: forwardedArguments)
+    return arguments
   }
 
   private func requirePackagePath() throws -> String {

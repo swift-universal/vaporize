@@ -1,8 +1,8 @@
 # vaporize@wrkstrm-core.cli
 
-Vaporize is the wrkstrm-core build/install/uninstall/open/run gate for Swift
+Vaporize is the wrkstrm-core build/test/install/uninstall/open/run gate for Swift
 artifacts and Apple app bundles. Agents should use this CLI when they need to
-build, install, reinstall, uninstall, open, or run SwiftPM-built CLIs, app
+build, test, install, reinstall, uninstall, open, or run SwiftPM-built CLIs, app
 bundles, Xcode projects, or Xcode workspaces.
 
 The name is doctrine: Vaporize builds. Warehouse stores. Vaporware is the main
@@ -16,7 +16,7 @@ owned by wrkstrm-core.
 
 The package path, executable product, and command surface are all
 `vaporize@wrkstrm-core.cli` per operator OD-N 2026-06-11. The legacy
-`craze@wrkstrm-core.cli` package directory, compatibility executable, and
+`vaporize@wrkstrm-core.cli` package directory, compatibility executable, and
 `craze.cli.tool.json` manifest have been retired with no compatibility
 breadcrumbs (axiom: `no-compatibility-breadcrumbs-after-false-home-rehome`).
 The legacy `x-craze-collapse-path` annotation key remains supported by the
@@ -34,6 +34,7 @@ classify; the canonical write key is `x-vaporize-collapse-path`.
 vaporize install --artifact cli --package-path <package> --product <product> --configuration release --force
 vaporize uninstall --artifact cli --package-path <package> --product <product>
 vaporize build --artifact cli --package-path <package> --product <product> --configuration release
+vaporize test --package-path <package> --configuration debug -- --filter <test-filter>
 vaporize run --artifact cli --package-path <package> --product <product> --configuration release -- <arguments>
 vaporize run --artifact app --package-path <package> --product <app-product> --configuration release --force
 vaporize pass -- swift --version
