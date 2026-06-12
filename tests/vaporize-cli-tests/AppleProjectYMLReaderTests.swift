@@ -37,6 +37,20 @@ func readsConcourseProjectYML() throws {
     spec.targets["concourse"]?.settings?.configs?["Release"]?["WRAPPER_NAME"]?.stringValue
       == "concourse-$(MARKETING_VERSION)-testflight.app"
   )
+  #expect(
+    AppleProjectAppBundleNameResolver.appBundleName(
+      in: spec,
+      targetName: "concourse",
+      configuration: "Debug"
+    ) == "concourse-0.1.0-debug"
+  )
+  #expect(
+    AppleProjectAppBundleNameResolver.appBundleName(
+      in: spec,
+      targetName: "concourse",
+      configuration: "Release"
+    ) == "concourse-0.1.0-testflight"
+  )
   #expect(receipt.receiptKind == "vaporize-apple-project-yml-inspection")
   #expect(receipt.bridgeStatus == "legacy-xcodegen-yaml-read-only")
   #expect(receipt.targetCount == 1)
@@ -78,7 +92,12 @@ func readsMultiTargetProjectYMLShape() throws {
         settings:
           base:
             PRODUCT_BUNDLE_IDENTIFIER: com.example.fixture
+            PRODUCT_NAME: fixture-app
+            MARKETING_VERSION: 2.5.0
             TARGETED_DEVICE_FAMILY: "1,2"
+          configs:
+            Debug:
+              WRAPPER_NAME: "$(PRODUCT_NAME)-$(MARKETING_VERSION)-dev.app"
         dependencies:
           - package: FixtureKit
             product: FixtureKit
@@ -113,6 +132,13 @@ func readsMultiTargetProjectYMLShape() throws {
   #expect(spec.targets["fixture-app"]?.dependencies?.last?.target == "fixture-helper")
   #expect(spec.targets["fixture-app"]?.dependencies?.last?.embed == true)
   #expect(spec.targets["fixture-app"]?.preBuildScripts?.first?.name == "Audit")
+  #expect(
+    AppleProjectAppBundleNameResolver.appBundleName(
+      in: spec,
+      targetName: "fixture-app",
+      configuration: "Debug"
+    ) == "fixture-app-2.5.0-dev"
+  )
   #expect(spec.schemes["fixture-app"]?.shared == true)
   #expect(receipt.targetCount == 2)
   #expect(receipt.schemeCount == 1)

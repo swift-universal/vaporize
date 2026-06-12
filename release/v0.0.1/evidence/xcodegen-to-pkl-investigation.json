@@ -150,6 +150,13 @@
       "fleetAuditReceipt": "private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/project-yml-fleet-parse-audit.receipt.json",
       "fleetAuditResult": "155/155 discovered project.yml files under private/universal/substrate/collectives parsed through inspect-project-yml",
       "scope": "Read-only migration intake for legacy XcodeGen project.yml; does not rewrite YAML, invoke XcodeGen, or generate .xcodeproj world-state."
+    },
+    {
+      "slice": "old-tool-vaporize-build-comparison",
+      "status": "complete-for-concourse",
+      "receipt": "private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/concourse-old-tool-vaporize-build-comparison.receipt.json",
+      "result": "Old XcodeGen script build and Vaporize app build both pass for Concourse after Vaporize derives WRAPPER_NAME from project.yml.",
+      "boundary": "One-specimen build comparison; does not prove fleet build parity or Pkl generation."
     }
   ],
   "recommendedMigrationPlan": [

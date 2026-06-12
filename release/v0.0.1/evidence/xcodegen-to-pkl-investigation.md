@@ -34,11 +34,15 @@ The first approved migration-prep slice is now landed:
 - `project-yml-fleet-parse-audit.receipt.json` records that 155/155 discovered
   `project.yml` files under `private/universal/substrate/collectives` parsed
   through `inspect-project-yml`.
+- `concourse-old-tool-vaporize-build-comparison.receipt.json` records that the
+  old XcodeGen script build and the Vaporize app build both pass for Concourse
+  after Vaporize derives `WRAPPER_NAME` from the legacy YAML.
 
 This does not unblock v0.0.1 by itself. It gives the Pkl migration a tested
 Swift intake surface so the next slice can compare Pkl-evaluated project data
 against the legacy YAML shape before generating project world-state. The fleet
-audit proves read compatibility, not that every project builds.
+audit proves read compatibility, and the Concourse build comparison proves one
+specimen, not that every project builds.
 
 ## Live Inventory
 

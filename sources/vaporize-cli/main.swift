@@ -289,7 +289,7 @@ struct VaporizeCLI: AsyncParsableCommand {
     let request = SwiftAppInstaller.Request(
       packagePath: packagePath,
       product: product,
-      appBundleName: appBundleName,
+      appBundleName: resolvedAppBundleName(product: product),
       configuration: configuration,
       destination: destination,
       forceReinstall: forceReinstall,
@@ -332,7 +332,7 @@ struct VaporizeCLI: AsyncParsableCommand {
     let request = SwiftAppInstaller.Request(
       packagePath: packagePath,
       product: product,
-      appBundleName: appBundleName,
+      appBundleName: resolvedAppBundleName(product: product),
       configuration: configuration,
       destination: destination,
       forceReinstall: forceReinstall,
@@ -366,6 +366,66 @@ struct VaporizeCLI: AsyncParsableCommand {
       arguments: [installedAppURL(product: product).path],
       sourceTag: "vaporize-open-app"
     )
+  }
+
+  private func resolvedAppBundleName(product: String) -> String? {
+    if let appBundleName, !appBundleName.isEmpty {
+      return appBundleName
+    }
+    guard xcodeProject != nil || xcodeWorkspace != nil else {
+      return nil
+    }
+
+    for url in candidateProjectYMLURLs() where FileManager.default.fileExists(atPath: url.path) {
+      guard let spec = try? AppleProjectYMLReader.load(url: url) else {
+        continue
+      }
+      let targetName = xcodeScheme ?? product
+      if let resolved = AppleProjectAppBundleNameResolver.appBundleName(
+        in: spec,
+        targetName: targetName,
+        configuration: configuration.rawValue.capitalized
+      ) {
+        return resolved
+      }
+    }
+
+    return nil
+  }
+
+  private func candidateProjectYMLURLs() -> [URL] {
+    var candidates: [URL] = []
+    if let xcodeProject {
+      candidates.append(projectYMLURL(nextTo: xcodeProject))
+    }
+    if let xcodeWorkspace {
+      candidates.append(projectYMLURL(nextTo: xcodeWorkspace))
+    }
+    if let packagePath {
+      candidates.append(absoluteURL(for: packagePath).appendingPathComponent("project.yml"))
+    }
+    var seen: Set<String> = []
+    return candidates.filter { url in
+      let path = url.standardizedFileURL.path
+      if seen.contains(path) { return false }
+      seen.insert(path)
+      return true
+    }
+  }
+
+  private func projectYMLURL(nextTo path: String) -> URL {
+    absoluteURL(for: path)
+      .deletingLastPathComponent()
+      .appendingPathComponent("project.yml")
+  }
+
+  private func absoluteURL(for path: String) -> URL {
+    if path.hasPrefix("/") {
+      return URL(fileURLWithPath: path).standardizedFileURL
+    }
+    return URL(fileURLWithPath: FileManager.default.currentDirectoryPath)
+      .appendingPathComponent(path)
+      .standardizedFileURL
   }
 
   private func installedCLIPath(product: String) -> String {

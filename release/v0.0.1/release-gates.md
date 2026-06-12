@@ -36,6 +36,7 @@ and onto a Pkl-backed owned path.
 | GATE-13 - Full repository cleanliness | BLOCKED-BY-EXISTING-TREE | Startup reported 511 diff-files. Release review must use scoped paths, not broad worktree cleanliness. |
 | GATE-14 - Pkl project generation for owned Apple surfaces | BLOCKED | Final internal release waits until our XcodeGen-backed owned surfaces move to Pkl or are explicitly quarantined as historical/external compatibility. |
 | GATE-15 - Swift YAML read bridge | PASS | `inspect-project-yml` parsed `private/apple/apps/concourse/project.yml` into Swift `AppleProjectSpec` data and emitted `release/v0.0.1/evidence/concourse-project-yml-inspection.receipt.json`; fleet audit parsed 155/155 discovered `project.yml` files and emitted `release/v0.0.1/evidence/project-yml-fleet-parse-audit.receipt.json`. This is read-only parity evidence, not release-unblocking generation or build proof. |
+| GATE-16 - Old tool / Vaporize build comparison | PASS-WITH-NOTE | Old XcodeGen script build and Vaporize app build both pass for Concourse after Vaporize derives the legacy `WRAPPER_NAME` from `project.yml`. Evidence: `release/v0.0.1/evidence/concourse-old-tool-vaporize-build-comparison.receipt.json`. This proves one specimen, not fleet build parity. |
 
 ## Open Follow-Up Beads
 
@@ -58,3 +59,6 @@ and onto a Pkl-backed owned path.
 - Is the read-only `inspect-project-yml` bridge enough intake surface for the
   first Pkl parity specimen, or should the next slice add a typed comparison
   receipt before project generation?
+- Should Vaporize preserve this legacy `WRAPPER_NAME` compatibility only until
+  Pkl generation lands, or should it remain as a permanent compatibility bridge
+  for quarantined XcodeGen projects?

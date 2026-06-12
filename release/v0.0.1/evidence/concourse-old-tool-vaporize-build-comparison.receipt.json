@@ -1,0 +1,53 @@
+{
+  "receiptKind": "vaporize-old-tool-new-tool-build-comparison",
+  "schemaVersion": "0.0.1-untyped",
+  "emittedAt": "2026-06-12T21:39:34Z",
+  "emittedBy": "codex-crisie",
+  "subject": {
+    "project": "concourse",
+    "projectYML": "private/apple/apps/concourse/project.yml",
+    "xcodeProject": "private/apple/apps/concourse/concourse.xcodeproj",
+    "scheme": "concourse",
+    "configuration": "Debug",
+    "destination": "platform=macOS,arch=arm64",
+    "buildSetting": "SKIP_APPLICATION_DEPLOY=YES"
+  },
+  "oldToolReference": {
+    "tool": "shared build_and_run_xcode_app.sh",
+    "projectGeneration": "xcodegen generate --spec project.yml",
+    "build": "xcodebuild -project concourse.xcodeproj -scheme concourse -configuration Debug -destination platform=macOS,arch=arm64 -derivedDataPath /tmp/vaporize-compare-old-concourse-derived SKIP_APPLICATION_DEPLOY=YES build",
+    "exitCode": 0,
+    "result": "PASS",
+    "builtApp": "/tmp/vaporize-compare-old-concourse-derived/Build/Products/Debug/concourse-0.1.0-debug.app"
+  },
+  "newToolInitialRun": {
+    "tool": "vaporize@wrkstrm-core.cli",
+    "command": "vaporize build --artifact app --package-path private/apple/apps/concourse --product concourse --configuration debug --xcode-project private/apple/apps/concourse/concourse.xcodeproj --scheme concourse --xcode-destination platform=macOS,arch=arm64 --derived-data-path /tmp/vaporize-compare-new-concourse-derived --xcode-build-setting SKIP_APPLICATION_DEPLOY=YES",
+    "exitCode": 1,
+    "result": "FAIL",
+    "errorClass": "artifact-location-default-mismatch",
+    "firstError": "App bundle not found; checked /tmp/vaporize-compare-new-concourse-derived/Build/Products/Debug/concourse.app while XcodeGen built concourse-0.1.0-debug.app",
+    "builtAppStillProduced": "/tmp/vaporize-compare-new-concourse-derived/Build/Products/Debug/concourse-0.1.0-debug.app"
+  },
+  "compatibilityFix": {
+    "source": "AppleProjectAppBundleNameResolver",
+    "behavior": "When an app build uses an Xcode project or workspace and --app-bundle-name is omitted, Vaporize reads adjacent project.yml and resolves WRAPPER_NAME for the selected target/configuration.",
+    "resolvedDebugBundleName": "concourse-0.1.0-debug",
+    "boundary": "This is compatibility lookup only. It does not make project.yml the forward source of truth for generation."
+  },
+  "newToolRerun": {
+    "tool": "vaporize@wrkstrm-core.cli",
+    "command": "vaporize build --artifact app --package-path private/apple/apps/concourse --product concourse --configuration debug --destination /tmp/vaporize-compare-new-auto-install --force --xcode-project private/apple/apps/concourse/concourse.xcodeproj --scheme concourse --xcode-destination platform=macOS,arch=arm64 --derived-data-path /tmp/vaporize-compare-new-concourse-derived-auto --xcode-build-setting SKIP_APPLICATION_DEPLOY=YES",
+    "exitCode": 0,
+    "result": "PASS",
+    "builtApp": "/tmp/vaporize-compare-new-concourse-derived-auto/Build/Products/Debug/concourse-0.1.0-debug.app",
+    "installedApp": "/tmp/vaporize-compare-new-auto-install/concourse.app"
+  },
+  "comparisonVerdict": {
+    "oldToolBuildOutcome": "PASS",
+    "newToolBuildOutcomeAfterCompatibilityFix": "PASS",
+    "sameCompilerErrorClass": "no-errors-on-this-specimen",
+    "observedDivergenceClosed": "Vaporize now derives XcodeGen WRAPPER_NAME for legacy project.yml compatibility when app-bundle-name is omitted.",
+    "remainingBoundary": "This proves one old-tool/new-tool Concourse build comparison. It does not prove Pkl-backed project generation or fleet build parity."
+  }
+}

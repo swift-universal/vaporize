@@ -99,6 +99,12 @@
       "s": ["vaporize", "v0.0.1", "project-yml-fleet-parse-audit"],
       "t": "Vaporize legacy project.yml fleet parse audit",
       "tg": [{"k": "rp", "rt": "mono", "v": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/project-yml-fleet-parse-audit.receipt.json"}]
+    },
+    {
+      "LinkRefModel": "0.3.0",
+      "s": ["vaporize", "v0.0.1", "concourse-old-tool-vaporize-build-comparison"],
+      "t": "Concourse old tool and Vaporize build comparison receipt",
+      "tg": [{"k": "rp", "rt": "mono", "v": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/concourse-old-tool-vaporize-build-comparison.receipt.json"}]
     }
   ],
   "qaEvidence": {
@@ -110,7 +116,8 @@
     "jsonValidationCommand": "vaporize validate-json --path release/v0.0.1/evidence/launch-review-packet.json",
     "projectYMLInspectionCommand": "vaporize inspect-project-yml --path private/apple/apps/concourse/project.yml --format json --receipt-path release/v0.0.1/evidence/concourse-project-yml-inspection.receipt.json",
     "projectYMLInspectionResult": "PASS",
-    "projectYMLFleetParseAudit": "PASS: 155/155 discovered project.yml files under private/universal/substrate/collectives parsed through inspect-project-yml"
+    "projectYMLFleetParseAudit": "PASS: 155/155 discovered project.yml files under private/universal/substrate/collectives parsed through inspect-project-yml",
+    "oldToolVaporizeBuildComparison": "PASS-WITH-NOTE: Concourse old XcodeGen script build and Vaporize app build both pass after Vaporize derives WRAPPER_NAME from project.yml"
   },
   "gateResults": [
     {
@@ -157,6 +164,11 @@
       "gateRef": "GATE-15-swift-yaml-read-bridge",
       "status": "PASS",
       "rationale": "inspect-project-yml parsed Concourse project.yml and 155/155 discovered project.yml files under private/universal/substrate/collectives; this proves read compatibility, not build success"
+    },
+    {
+      "gateRef": "GATE-16-old-tool-vaporize-build-comparison",
+      "status": "PASS-WITH-NOTE",
+      "rationale": "Concourse old XcodeGen script build and Vaporize app build both pass after Vaporize derives legacy WRAPPER_NAME from project.yml; this is one-specimen parity, not fleet build parity"
     }
   ],
   "knownFollowUps": [
@@ -188,6 +200,7 @@
     "x-toolchain-surface": "toolchain mode owns Xcode-selected Swift invocation; assistants should not call xcrun directly.",
     "x-json-validation-surface": "validate-json mode owns JSON packet validation; assistants should not call jq directly.",
     "x-apple-project-yml-inspection": "inspect-project-yml parses legacy XcodeGen project.yml files into Swift AppleProjectSpec data and emits a vaporize-apple-project-yml-inspection receipt. It is read-only migration intake, not forward source-of-truth generation. Fleet audit parsed 155/155 discovered project.yml files under private/universal/substrate/collectives.",
+    "x-old-tool-vaporize-build-comparison": "Concourse old XcodeGen script build and Vaporize app build both pass after Vaporize derives legacy WRAPPER_NAME from project.yml. The first Vaporize run exposed and then closed an artifact-location default mismatch.",
     "x-pkl-project-generation-gate": "Internal v0.0.1 release is blocked until our owned Apple project-generation path moves off XcodeGen and onto Pkl, with any leftover XcodeGen surfaces quarantined as compatibility.",
     "x-xcodegen-to-pkl-investigation": "Investigation found 155 project.yml files, 185 checked-in .xcodeproj/project.pbxproj files, direct XcodeGen runner surfaces, and no existing Pkl Apple-project generation model. The first approved mitigation slice now reads legacy YAML through Swift and receipts Concourse inspection."
   }
