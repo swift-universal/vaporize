@@ -1,8 +1,8 @@
-# Vaporize v0.1.0 - PRD
+# Vaporize v0.0.1 - PRD
 
-**Status:** release-prep draft  
-**Updated:** 2026-06-12T20:26:28Z  
-**Component:** `vaporize@wrkstrm-core.cli`  
+**Status:** release-prep draft
+**Updated:** 2026-06-12T20:26:28Z
+**Component:** `vaporize@wrkstrm-core.cli`
 **Release target:** internal substrate CLI
 
 ## Summary
@@ -12,10 +12,11 @@ product work. It turns typed or operator-selected buildable intent into
 world-state: CLIs installed, app bundles built and launched, CommonProcess
 commands executed, vaporware inventories emitted, and receipts captured.
 
-This release prepares Vaporize v0.1.0 as a usable internal command surface for
+This release prepares Vaporize v0.0.1 as a usable internal command surface for
 assistants. It should reduce direct shell and direct `xcodebuild` choreography by
 putting build, install, run, open, pass-through, CommonProcess invocation,
-warehouse inventory, and package graph access behind one recognizable gate.
+Xcode-selected Swift execution, JSON validation, warehouse inventory, and
+package graph access behind one recognizable gate.
 
 ## Goals
 
@@ -26,6 +27,10 @@ warehouse inventory, and package graph access behind one recognizable gate.
 - Keep direct `xcodebuild` use inside Vaporize as an implementation detail.
 - Provide analyzable `pass` execution for Swift commands through CommonProcess.
 - Provide `use` execution for caller-supplied CommonProcess `CommandSpec` JSON.
+- Provide `toolchain` execution for Xcode-selected Swift through Vaporize-owned
+  `xcrun` invocation.
+- Provide `validate-json` so release packets validate through Vaporize rather
+  than direct `jq`.
 - Provide `status` and `warehouse` inventory modes for
   `x-vaporize-collapse-path` records, with legacy `x-craze-collapse-path`
   read-only fallback.
@@ -74,14 +79,18 @@ Supporting audiences:
 | FR-007 | Vaporware inventory | `status` and `warehouse` scan JSON records for `x-vaporize-collapse-path`, classify vapor state, and emit text or JSON receipts. |
 | FR-008 | Compatibility inventory | Legacy `x-craze-collapse-path` annotations remain readable for classification only. |
 | FR-009 | Package graph forwarder | `graph` forwards to `package-graph@wrkstrm.cli` from the same canonical Vaporize surface. |
-| FR-010 | Release packet | PRD, CUJs, release gates, and launch-review packet exist under `release/v0.1.0/`. |
+| FR-010 | Xcode-selected toolchain route | `toolchain -- swift <args>` invokes `xcrun swift <args>` inside Vaporize and rejects unsupported tools. |
+| FR-011 | JSON validation route | `validate-json --path <json>` validates JSON with Foundation and can emit a receipt. |
+| FR-012 | Release packet | PRD, CUJs, release gates, and launch-review packet exist under `release/v0.0.1/`. |
 
 ## Release Criteria
 
 - Focused Vaporize CLI test target passes with the Swift 6.4 toolchain:
-  `xcrun swift test --package-path private/apple/spm/vaporize@wrkstrm-core.cli --filter VaporizeCLITests`.
-- CLI help advertises `use` and `--common-process-spec`.
-- Release packet JSON validates with `jq -e .`.
+  `vaporize toolchain -- swift test --package-path private/apple/spm/vaporize@wrkstrm-core.cli --filter VaporizeCLITests`.
+- CLI help advertises `use`, `toolchain`, `validate-json`, and
+  `--common-process-spec`.
+- Release packet JSON validates with
+  `vaporize validate-json --path release/v0.0.1/evidence/launch-review-packet.json`.
 - Release gates honestly mark open follow-ups and drift rather than smoothing
   them into a false green state.
 - Documentation drift is either repaired before final release or marked as an
@@ -95,4 +104,3 @@ Supporting audiences:
 - `FR-VAPORIZE-REALIZE-typed-vaporware-unit`
 - `FR-VAPORIZE-TOOL-CALL-OBSERVABILITY`
 - `FR-VAPORIZE-DRIFT-CATCH-retire-craze-canonical-language`
-

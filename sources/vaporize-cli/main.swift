@@ -18,7 +18,7 @@ struct VaporizeCLI: AsyncParsableCommand {
       Substrate-canonical vaporware-collapse gate. vaporize transmutes typed \
       substrate-vaporware into world-state: binaries land, .app installs, \
       processes run, receipts emit. Modes: install, uninstall, build, run, \
-      pass, use, setup. Vaporware-awareness modes: status + warehouse enumerate and \
+      pass, use, toolchain, setup. Vaporware-awareness modes: status + warehouse enumerate and \
       store vaporware at a path per the `x-vaporize-collapse-path` annotation \
       convention. Legacy `inventory` and `x-craze-collapse-path` remain \
       compatibility aliases during migration.
@@ -32,11 +32,13 @@ struct VaporizeCLI: AsyncParsableCommand {
     case run
     case pass
     case use
+    case toolchain
     case setup
 
     // Phase 0 vaporware-awareness modes.
     case status
     case warehouse
+    case validateJSON = "validate-json"
     case inventory
 
     /// Substrate package-graph subfunction. Forwards remaining arguments to
@@ -57,7 +59,7 @@ struct VaporizeCLI: AsyncParsableCommand {
     case app
   }
 
-  @Argument(help: "Mode: install, uninstall, build, run, pass, use, setup, status, warehouse, inventory, or graph (forwards to package-graph@wrkstrm.cli).")
+  @Argument(help: "Mode: install, uninstall, build, run, pass, use, toolchain, setup, status, warehouse, validate-json, inventory, or graph (forwards to package-graph@wrkstrm.cli).")
   var mode: Mode
 
   @Option(name: .customLong("artifact"), help: "Artifact kind: cli or app.")
@@ -156,13 +158,18 @@ struct VaporizeCLI: AsyncParsableCommand {
   var commonProcessSpecPath: String?
 
   @Option(
+    name: .customLong("developer-dir"),
+    help: "DEVELOPER_DIR override for toolchain mode.")
+  var developerDirectory: String?
+
+  @Option(
     name: .customLong("xcode-component"),
     help: "Xcode component to download in setup mode, for example MetalToolchain.")
   var xcodeComponent: String?
 
   @Option(
     name: .customLong("path"),
-    help: "Directory to scan for vaporware annotations (status, warehouse modes).")
+    help: "Path for status, warehouse, or validate-json modes.")
   var vaporScanPath: String?
 
   @Option(
@@ -170,7 +177,7 @@ struct VaporizeCLI: AsyncParsableCommand {
     help: "Output format for status mode: text (default) or json.")
   var vaporOutputFormat: VaporOutputFormatArgument = .text
 
-  @Argument(parsing: .remaining, help: "Arguments forwarded to run or pass mode.")
+  @Argument(parsing: .remaining, help: "Arguments forwarded to run, pass, or toolchain mode.")
   var forwardedArguments: [String] = []
 
   mutating func run() async throws {
@@ -187,12 +194,16 @@ struct VaporizeCLI: AsyncParsableCommand {
       try await passThrough()
     case .use:
       try await useCommonProcessSpec()
+    case .toolchain:
+      try await runToolchain()
     case .setup:
       try await setup()
     case .status:
       try await runVaporStatus()
     case .warehouse:
       try await runVaporWarehouse()
+    case .validateJSON:
+      try await validateJSON()
     case .inventory:
       try await runVaporWarehouse()
     case .graph:
@@ -473,6 +484,58 @@ struct VaporizeCLI: AsyncParsableCommand {
     }
   }
 
+  private func runToolchain() async throws {
+    let request = try XcodeToolchainRequest(arguments: forwardedArguments)
+    let requestId = "vaporize-toolchain-\(UUID().uuidString)"
+    let workingDirectory = passWorkingDirectory ?? FileManager.default.currentDirectoryPath
+    let environmentUpdates = developerDirectory.map { ["DEVELOPER_DIR": $0] }
+    let command = CommandSpec(
+      executable: .name("xcrun"),
+      args: request.xcrunArguments,
+      env: .inherit(updating: environmentUpdates),
+      workingDirectory: workingDirectory,
+      logOptions: .init(
+        exposure: .none,
+        tags: [
+          "source": "vaporize-toolchain",
+          "canonicalSource": "vaporize-toolchain",
+          "tool": request.tool.rawValue,
+        ]
+      ),
+      requestId: requestId,
+      runnerKind: .auto,
+      streamingMode: .buffered
+    )
+    try command.validateOrThrow()
+
+    let output = try await RunnerControllerFactory.run(command: command)
+    FileHandle.standardOutput.write(output.stdout)
+    FileHandle.standardError.write(output.stderr)
+
+    let receipt = ToolchainReceipt(
+      tool: request.tool.rawValue,
+      arguments: request.arguments,
+      workingDirectory: workingDirectory,
+      requestId: requestId,
+      runnerKind: "auto",
+      developerDirectorySet: developerDirectory != nil,
+      succeeded: output.isSuccess,
+      exitCode: output.exitStatus.exitCode,
+      signal: output.exitStatus.signal,
+      stdoutBytes: output.stdout.count,
+      stderrBytes: output.stderr.count,
+      processIdentifier: output.processIdentifier
+    )
+    try emitReceiptIfRequested(receipt)
+
+    guard output.isSuccess else {
+      if let exitCode = output.exitStatus.exitCode {
+        throw ExitCode(Int32(exitCode))
+      }
+      throw ExitCode.failure
+    }
+  }
+
   private func setup() async throws {
     guard let xcodeComponent, !xcodeComponent.isEmpty else {
       throw ValidationError("--xcode-component is required for setup mode.")
@@ -599,6 +662,34 @@ struct VaporizeCLI: AsyncParsableCommand {
     return try scanner.scan(path: vaporScanPath)
   }
 
+  private func validateJSON() async throws {
+    guard let vaporScanPath, !vaporScanPath.isEmpty else {
+      throw ValidationError("--path is required for validate-json mode.")
+    }
+
+    let requestId = "vaporize-validate-json-\(UUID().uuidString)"
+    let data = try Data(contentsOf: URL(fileURLWithPath: vaporScanPath))
+    do {
+      let receipt = try JSONValidation.validate(
+        data: data,
+        path: vaporScanPath,
+        requestId: requestId
+      )
+      try emitReceiptIfRequested(receipt)
+      print("valid JSON: \(vaporScanPath)")
+    } catch {
+      let receipt = JSONValidationReceipt(
+        path: vaporScanPath,
+        requestId: requestId,
+        valid: false,
+        byteCount: data.count,
+        errorMessage: String(describing: error)
+      )
+      try emitReceiptIfRequested(receipt)
+      throw ValidationError("invalid JSON at \(vaporScanPath): \(error)")
+    }
+  }
+
   private func emitReceiptIfRequested(_ receipt: some Encodable) throws {
     guard analyzeExecution || receiptPath != nil else { return }
     let encoder = JSONEncoder()
@@ -672,6 +763,51 @@ enum CommonProcessSpecLoader {
     let command = try JSONDecoder().decode(CommandSpec.self, from: data)
     try command.validateOrThrow()
     return command
+  }
+}
+
+enum XcodeToolchainTool: String, Codable, Equatable {
+  case swift
+}
+
+struct XcodeToolchainRequest: Equatable {
+  var tool: XcodeToolchainTool
+  var arguments: [String]
+
+  var xcrunArguments: [String] {
+    [tool.rawValue] + arguments
+  }
+
+  init(arguments rawArguments: [String]) throws {
+    var tokens = rawArguments
+    while tokens.first == "--" {
+      tokens.removeFirst()
+    }
+    guard let rawTool = tokens.first, !rawTool.isEmpty else {
+      throw ValidationError("toolchain mode requires an Xcode tool, for example: vaporize toolchain -- swift --version.")
+    }
+    guard let tool = XcodeToolchainTool(rawValue: rawTool) else {
+      throw ValidationError("toolchain mode currently supports swift only; got \(rawTool).")
+    }
+    tokens.removeFirst()
+    if tokens.first == "--" {
+      tokens.removeFirst()
+    }
+    self.tool = tool
+    self.arguments = tokens
+  }
+}
+
+enum JSONValidation {
+  static func validate(data: Data, path: String, requestId: String) throws -> JSONValidationReceipt {
+    _ = try JSONSerialization.jsonObject(with: data)
+    return JSONValidationReceipt(
+      path: path,
+      requestId: requestId,
+      valid: true,
+      byteCount: data.count,
+      errorMessage: nil
+    )
   }
 }
 
@@ -766,6 +902,23 @@ private struct PassThroughReceipt: Codable, Equatable {
   var processIdentifier: String?
 }
 
+private struct ToolchainReceipt: Codable, Equatable {
+  var schemaVersion = "0.1.0"
+  var receiptKind = "vaporize-toolchain"
+  var tool: String
+  var arguments: [String]
+  var workingDirectory: String
+  var requestId: String
+  var runnerKind: String
+  var developerDirectorySet: Bool
+  var succeeded: Bool
+  var exitCode: Int?
+  var signal: Int?
+  var stdoutBytes: Int
+  var stderrBytes: Int
+  var processIdentifier: String?
+}
+
 private struct UseReceipt: Codable, Equatable {
   var schemaVersion = "0.1.0"
   var receiptKind = "vaporize-use-common-process"
@@ -782,4 +935,14 @@ private struct UseReceipt: Codable, Equatable {
   var stdoutBytes: Int
   var stderrBytes: Int
   var processIdentifier: String?
+}
+
+struct JSONValidationReceipt: Codable, Equatable {
+  var schemaVersion = "0.1.0"
+  var receiptKind = "vaporize-json-validation"
+  var path: String
+  var requestId: String
+  var valid: Bool
+  var byteCount: Int
+  var errorMessage: String?
 }

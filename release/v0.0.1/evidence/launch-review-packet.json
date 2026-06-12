@@ -1,11 +1,11 @@
 {
   "LaunchReviewPacketModel": "0.1.0",
   "schemaVersion": "0.1.0",
-  "packetId": "vaporize-v0.1.0-launch-review-packet",
+  "packetId": "vaporize-v0.0.1-launch-review-packet",
   "subjectAppSlug": "vaporize@wrkstrm-core.cli",
-  "subjectReleaseSlug": "v0.1.0",
+  "subjectReleaseSlug": "v0.0.1",
   "subjectWareKindSlug": "internal-cli",
-  "packetVersion": "v0.1.0",
+  "packetVersion": "v0.0.1",
   "reviewKind": "engineering-release-prep",
   "packetStatus": "conditional-ready-for-release-review",
   "emittedAt": "2026-06-12T20:26:28Z",
@@ -14,68 +14,81 @@
   "releaseTarget": {
     "currentTarget": "internal-substrate-cli",
     "graduationTarget": "substrate-canonical-vaporware-collapse-gate",
-    "graduationVersion": "v0.1.0",
+    "graduationVersion": "v0.0.1",
     "alternativeLane": "defer-open-feature-beads"
   },
   "evidenceRefs": [
     {
       "LinkRefModel": "0.3.0",
-      "s": ["vaporize", "v0.1.0", "prd"],
-      "t": "Vaporize v0.1.0 PRD",
-      "tg": [{"k": "rp", "rt": "mono", "v": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.1.0/prd.md"}]
+      "s": ["vaporize", "v0.0.1", "prd"],
+      "t": "Vaporize v0.0.1 PRD",
+      "tg": [{"k": "rp", "rt": "mono", "v": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/prd.md"}]
     },
     {
       "LinkRefModel": "0.3.0",
-      "s": ["vaporize", "v0.1.0", "cuj"],
-      "t": "Vaporize v0.1.0 critical user journeys",
-      "tg": [{"k": "rp", "rt": "mono", "v": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.1.0/cuj.md"}]
+      "s": ["vaporize", "v0.0.1", "cuj"],
+      "t": "Vaporize v0.0.1 critical user journeys",
+      "tg": [{"k": "rp", "rt": "mono", "v": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/cuj.md"}]
     },
     {
       "LinkRefModel": "0.3.0",
-      "s": ["vaporize", "v0.1.0", "release-gates"],
-      "t": "Vaporize v0.1.0 release gates",
-      "tg": [{"k": "rp", "rt": "mono", "v": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.1.0/release-gates.md"}]
+      "s": ["vaporize", "v0.0.1", "release-gates"],
+      "t": "Vaporize v0.0.1 release gates",
+      "tg": [{"k": "rp", "rt": "mono", "v": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/release-gates.md"}]
     },
     {
       "LinkRefModel": "0.3.0",
-      "s": ["vaporize", "v0.1.0", "use-mode-source"],
+      "s": ["vaporize", "v0.0.1", "use-mode-source"],
       "t": "Vaporize use mode source",
       "tg": [{"k": "rp", "rt": "mono", "v": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/sources/vaporize-cli/main.swift"}]
     },
     {
       "LinkRefModel": "0.3.0",
-      "s": ["vaporize", "v0.1.0", "use-mode-tests"],
+      "s": ["vaporize", "v0.0.1", "use-mode-tests"],
       "t": "Vaporize CommonProcess use mode tests",
       "tg": [{"k": "rp", "rt": "mono", "v": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/tests/vaporize-cli-tests/VaporizeUseCommonProcessTests.swift"}]
+    },
+    {
+      "LinkRefModel": "0.3.0",
+      "s": ["vaporize", "v0.0.1", "toolchain-mode-tests"],
+      "t": "Vaporize toolchain mode tests",
+      "tg": [{"k": "rp", "rt": "mono", "v": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/tests/vaporize-cli-tests/VaporizeToolchainModeTests.swift"}]
+    },
+    {
+      "LinkRefModel": "0.3.0",
+      "s": ["vaporize", "v0.0.1", "json-validation-tests"],
+      "t": "Vaporize JSON validation tests",
+      "tg": [{"k": "rp", "rt": "mono", "v": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/tests/vaporize-cli-tests/VaporizeJSONValidationTests.swift"}]
     }
   ],
   "qaEvidence": {
-    "testCommand": "xcrun swift test --package-path private/apple/spm/vaporize@wrkstrm-core.cli --filter VaporizeCLITests",
+    "testCommand": "vaporize toolchain -- swift test --package-path private/apple/spm/vaporize@wrkstrm-core.cli --filter VaporizeCLITests",
     "testResult": "PASS",
-    "testCount": 9,
+    "testCount": 13,
     "bareSwiftToolchainResult": "BLOCKED: bare swift is 6.3.2; Package.swift requires Swift tools 6.4",
-    "requiredToolchainResult": "PASS: xcrun swift reports Swift 6.4"
+    "requiredToolchainResult": "PASS: Vaporize toolchain mode owns Xcode-selected Swift via internal xcrun",
+    "jsonValidationCommand": "vaporize validate-json --path release/v0.0.1/evidence/launch-review-packet.json"
   },
   "gateResults": [
     {
       "gateRef": "GATE-01-prd-authored",
       "status": "PASS",
-      "rationale": "PRD exists at release/v0.1.0/prd.md"
+      "rationale": "PRD exists at release/v0.0.1/prd.md"
     },
     {
       "gateRef": "GATE-02-cuj-authored",
       "status": "PASS",
-      "rationale": "CUJ set exists at release/v0.1.0/cuj.md"
+      "rationale": "CUJ set exists at release/v0.0.1/cuj.md"
     },
     {
       "gateRef": "GATE-05-focused-tests",
       "status": "PASS",
-      "rationale": "Focused VaporizeCLITests passed 9 tests under xcrun Swift 6.4"
+      "rationale": "Focused VaporizeCLITests passed through Vaporize toolchain mode"
     },
     {
       "gateRef": "GATE-07-cli-help",
       "status": "PASS",
-      "rationale": "Help surface advertises use and --common-process-spec"
+      "rationale": "Help surface advertises use, toolchain, validate-json, and --common-process-spec"
     },
     {
       "gateRef": "GATE-11-readme-release-docs",
@@ -117,6 +130,8 @@
   "schemaFamilyRef": "launch-review-packet-schemas v0.0.1",
   "extensions": {
     "x-release-prep-note": "This packet is release-prep evidence, not final founder approval.",
-    "x-common-process-use-surface": "use mode consumes CommonProcess CommandSpec JSON via --common-process-spec and emits a vaporize-use-common-process receipt when requested."
+    "x-common-process-use-surface": "use mode consumes CommonProcess CommandSpec JSON via --common-process-spec and emits a vaporize-use-common-process receipt when requested.",
+    "x-toolchain-surface": "toolchain mode owns Xcode-selected Swift invocation; assistants should not call xcrun directly.",
+    "x-json-validation-surface": "validate-json mode owns JSON packet validation; assistants should not call jq directly."
   }
 }

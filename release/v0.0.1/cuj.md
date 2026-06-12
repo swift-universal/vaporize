@@ -1,7 +1,7 @@
-# Vaporize v0.1.0 - Critical User Journeys
+# Vaporize v0.0.1 - Critical User Journeys
 
-**Status:** release-prep draft  
-**Updated:** 2026-06-12T20:26:28Z  
+**Status:** release-prep draft
+**Updated:** 2026-06-12T20:26:28Z
 **Component:** `vaporize@wrkstrm-core.cli`
 
 ## CUJ-01 - Assistant Builds And Installs A SwiftPM CLI
@@ -81,7 +81,35 @@ Failure truth:
 - Invalid specs fail at validation before execution.
 - Non-zero process exits propagate as non-zero Vaporize exits.
 
-## CUJ-05 - Assistant Inventories Vaporware State
+## CUJ-05 - Assistant Uses Xcode-Selected Swift Without Direct xcrun
+
+1. Assistant needs the Xcode-selected Swift toolchain because bare `swift` is not
+   the required toolchain.
+2. Assistant runs `vaporize toolchain -- swift <args>`.
+3. Vaporize invokes `xcrun swift <args>` internally.
+4. Vaporize preserves stdout, stderr, and exit semantics.
+5. Vaporize can emit a `vaporize-toolchain` receipt when requested.
+
+Success:
+
+- The assistant does not call `xcrun` directly.
+- Unsupported Xcode tools fail at Vaporize's parser boundary instead of turning
+  `toolchain` into a general bypass for restricted native tools.
+
+## CUJ-06 - Assistant Validates Release Packet JSON Without jq
+
+1. Assistant creates or updates a release packet JSON file.
+2. Assistant runs `vaporize validate-json --path <packet.json>`.
+3. Vaporize parses the file with Foundation.
+4. Vaporize prints a concise validity result and can emit a
+   `vaporize-json-validation` receipt when requested.
+
+Success:
+
+- The assistant does not call `jq` directly for release packet validation.
+- Invalid JSON is caught before launch review consumes the packet.
+
+## CUJ-07 - Assistant Inventories Vaporware State
 
 1. Assistant receives a record tree or component home.
 2. Assistant runs `vaporize status --path <records> --format text` for human
@@ -96,14 +124,14 @@ Success:
 - Legacy `x-craze-collapse-path` records remain visible while forward docs name
   `x-vaporize-collapse-path`.
 
-## CUJ-06 - Release Reviewer Reads The Packet
+## CUJ-08 - Release Reviewer Reads The Packet
 
-1. Reviewer opens `release/v0.1.0/prd.md`.
+1. Reviewer opens `release/v0.0.1/prd.md`.
 2. Reviewer opens this CUJ file and checks that each critical journey has
    success and failure truth.
-3. Reviewer opens `release/v0.1.0/release-gates.md`.
-4. Reviewer opens `release/v0.1.0/evidence/launch-review-packet.json`.
-5. Reviewer decides whether v0.1.0 is approved, blocked, or conditionally ready.
+3. Reviewer opens `release/v0.0.1/release-gates.md`.
+4. Reviewer opens `release/v0.0.1/evidence/launch-review-packet.json`.
+5. Reviewer decides whether v0.0.1 is approved, blocked, or conditionally ready.
 
 Success:
 
@@ -112,7 +140,7 @@ Success:
 
 ## Deferred CUJ - Assistant Discovers Targets Through Vaporize
 
-This journey is important but not v0.1.0-green yet.
+This journey is important but not v0.0.1-green yet.
 
 1. Assistant receives a directory and desired artifact.
 2. Assistant runs `vaporize list-targets --package-path <dir>`.
@@ -123,4 +151,3 @@ Current status:
 
 - Deferred to
   `FR-VAPORIZE-LIST-TARGETS-substrate-canonical-target-discovery`.
-
