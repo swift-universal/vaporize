@@ -18,7 +18,7 @@ struct VaporizeCLI: AsyncParsableCommand {
       Substrate-canonical vaporware-collapse gate. vaporize transmutes typed \
       substrate-vaporware into world-state: binaries land, .app installs, \
       processes run, receipts emit. Modes: install, uninstall, build, run, \
-      pass, setup. Vaporware-awareness modes: status + warehouse enumerate and \
+      pass, use, setup. Vaporware-awareness modes: status + warehouse enumerate and \
       store vaporware at a path per the `x-vaporize-collapse-path` annotation \
       convention. Legacy `inventory` and `x-craze-collapse-path` remain \
       compatibility aliases during migration.
@@ -31,6 +31,7 @@ struct VaporizeCLI: AsyncParsableCommand {
     case build
     case run
     case pass
+    case use
     case setup
 
     // Phase 0 vaporware-awareness modes.
@@ -56,7 +57,7 @@ struct VaporizeCLI: AsyncParsableCommand {
     case app
   }
 
-  @Argument(help: "Mode: install, uninstall, build, run, pass, setup, status, warehouse, inventory, or graph (forwards to package-graph@wrkstrm.cli).")
+  @Argument(help: "Mode: install, uninstall, build, run, pass, use, setup, status, warehouse, inventory, or graph (forwards to package-graph@wrkstrm.cli).")
   var mode: Mode
 
   @Option(name: .customLong("artifact"), help: "Artifact kind: cli or app.")
@@ -136,18 +137,23 @@ struct VaporizeCLI: AsyncParsableCommand {
 
   @Flag(
     name: .customLong("analyze"),
-    help: "Emit a JSON CommonProcess receipt for pass mode.")
-  var analyzePassThrough: Bool = false
+    help: "Emit a JSON execution receipt for pass or use mode.")
+  var analyzeExecution: Bool = false
 
   @Option(
     name: .customLong("receipt-path"),
-    help: "Write the pass-through JSON receipt to this path.")
+    help: "Write the pass-through or use JSON receipt to this path.")
   var receiptPath: String?
 
   @Option(
     name: .customLong("working-directory"),
     help: "Working directory for pass mode. Defaults to the current directory.")
   var passWorkingDirectory: String?
+
+  @Option(
+    name: .customLong("common-process-spec"),
+    help: "Path to a CommonProcess CommandSpec JSON for use mode. Use '-' for stdin.")
+  var commonProcessSpecPath: String?
 
   @Option(
     name: .customLong("xcode-component"),
@@ -179,6 +185,8 @@ struct VaporizeCLI: AsyncParsableCommand {
       try await runArtifact()
     case .pass:
       try await passThrough()
+    case .use:
+      try await useCommonProcessSpec()
     case .setup:
       try await setup()
     case .status:
@@ -430,6 +438,41 @@ struct VaporizeCLI: AsyncParsableCommand {
     }
   }
 
+  private func useCommonProcessSpec() async throws {
+    guard let commonProcessSpecPath, !commonProcessSpecPath.isEmpty else {
+      throw ValidationError("--common-process-spec is required for use mode.")
+    }
+
+    let command = try CommonProcessSpecLoader.load(path: commonProcessSpecPath)
+    let output = try await RunnerControllerFactory.run(command: command)
+    FileHandle.standardOutput.write(output.stdout)
+    FileHandle.standardError.write(output.stderr)
+
+    let receipt = UseReceipt(
+      specSource: commonProcessSpecPath,
+      executableRef: executableRefDescription(command.executable),
+      argumentCount: command.args.count,
+      workingDirectory: command.workingDirectory,
+      requestId: command.requestId,
+      runnerKind: runnerKindName(command.runnerKind),
+      streamingMode: command.streamingMode.rawValue,
+      succeeded: output.isSuccess,
+      exitCode: output.exitStatus.exitCode,
+      signal: output.exitStatus.signal,
+      stdoutBytes: output.stdout.count,
+      stderrBytes: output.stderr.count,
+      processIdentifier: output.processIdentifier
+    )
+    try emitReceiptIfRequested(receipt)
+
+    guard output.isSuccess else {
+      if let exitCode = output.exitStatus.exitCode {
+        throw ExitCode(Int32(exitCode))
+      }
+      throw ExitCode.failure
+    }
+  }
+
   private func setup() async throws {
     guard let xcodeComponent, !xcodeComponent.isEmpty else {
       throw ValidationError("--xcode-component is required for setup mode.")
@@ -556,8 +599,8 @@ struct VaporizeCLI: AsyncParsableCommand {
     return try scanner.scan(path: vaporScanPath)
   }
 
-  private func emitReceiptIfRequested(_ receipt: PassThroughReceipt) throws {
-    guard analyzePassThrough || receiptPath != nil else { return }
+  private func emitReceiptIfRequested(_ receipt: some Encodable) throws {
+    guard analyzeExecution || receiptPath != nil else { return }
     let encoder = JSONEncoder()
     encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
     let data = try encoder.encode(receipt)
@@ -571,7 +614,7 @@ struct VaporizeCLI: AsyncParsableCommand {
       try data.write(to: url)
     }
 
-    if analyzePassThrough {
+    if analyzeExecution {
       FileHandle.standardError.write(data)
       FileHandle.standardError.write(Data("\n".utf8))
     }
@@ -611,6 +654,50 @@ struct VaporizeCLI: AsyncParsableCommand {
     )
     guard !output.isEmpty else { return }
     print(output, terminator: output.hasSuffix("\n") ? "" : "\n")
+  }
+}
+
+enum CommonProcessSpecLoader {
+  static func load(path: String) throws -> CommandSpec {
+    let data: Data
+    if path == "-" {
+      data = FileHandle.standardInput.readDataToEndOfFile()
+    } else {
+      data = try Data(contentsOf: URL(fileURLWithPath: path))
+    }
+    return try decode(data: data)
+  }
+
+  static func decode(data: Data) throws -> CommandSpec {
+    let command = try JSONDecoder().decode(CommandSpec.self, from: data)
+    try command.validateOrThrow()
+    return command
+  }
+}
+
+private func executableRefDescription(_ executable: Executable) -> String {
+  switch executable.ref {
+  case .name(let name):
+    return "name:\(name)"
+  case .path(let path):
+    return "path:\(path)"
+  case .none:
+    return "argv"
+  }
+}
+
+private func runnerKindName(_ runnerKind: ProcessRunnerKind?) -> String {
+  switch runnerKind ?? .auto {
+  case .auto:
+    return "auto"
+  case .foundation:
+    return "foundation"
+  case .subprocess:
+    return "subprocess"
+  case .tscbasic:
+    return "tscbasic"
+  case .seatbelt:
+    return "seatbelt"
   }
 }
 
@@ -671,6 +758,24 @@ private struct PassThroughReceipt: Codable, Equatable {
   var workingDirectory: String
   var requestId: String
   var runnerKind: String
+  var succeeded: Bool
+  var exitCode: Int?
+  var signal: Int?
+  var stdoutBytes: Int
+  var stderrBytes: Int
+  var processIdentifier: String?
+}
+
+private struct UseReceipt: Codable, Equatable {
+  var schemaVersion = "0.1.0"
+  var receiptKind = "vaporize-use-common-process"
+  var specSource: String
+  var executableRef: String
+  var argumentCount: Int
+  var workingDirectory: String?
+  var requestId: String
+  var runnerKind: String
+  var streamingMode: String
   var succeeded: Bool
   var exitCode: Int?
   var signal: Int?

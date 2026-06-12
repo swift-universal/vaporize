@@ -1,0 +1,122 @@
+{
+  "LaunchReviewPacketModel": "0.1.0",
+  "schemaVersion": "0.1.0",
+  "packetId": "vaporize-v0.1.0-launch-review-packet",
+  "subjectAppSlug": "vaporize@wrkstrm-core.cli",
+  "subjectReleaseSlug": "v0.1.0",
+  "subjectWareKindSlug": "internal-cli",
+  "packetVersion": "v0.1.0",
+  "reviewKind": "engineering-release-prep",
+  "packetStatus": "conditional-ready-for-release-review",
+  "emittedAt": "2026-06-12T20:26:28Z",
+  "emittedBy": "codex-crisie",
+  "lifecycleStage": "internal-cli-release-prep",
+  "releaseTarget": {
+    "currentTarget": "internal-substrate-cli",
+    "graduationTarget": "substrate-canonical-vaporware-collapse-gate",
+    "graduationVersion": "v0.1.0",
+    "alternativeLane": "defer-open-feature-beads"
+  },
+  "evidenceRefs": [
+    {
+      "LinkRefModel": "0.3.0",
+      "s": ["vaporize", "v0.1.0", "prd"],
+      "t": "Vaporize v0.1.0 PRD",
+      "tg": [{"k": "rp", "rt": "mono", "v": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.1.0/prd.md"}]
+    },
+    {
+      "LinkRefModel": "0.3.0",
+      "s": ["vaporize", "v0.1.0", "cuj"],
+      "t": "Vaporize v0.1.0 critical user journeys",
+      "tg": [{"k": "rp", "rt": "mono", "v": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.1.0/cuj.md"}]
+    },
+    {
+      "LinkRefModel": "0.3.0",
+      "s": ["vaporize", "v0.1.0", "release-gates"],
+      "t": "Vaporize v0.1.0 release gates",
+      "tg": [{"k": "rp", "rt": "mono", "v": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.1.0/release-gates.md"}]
+    },
+    {
+      "LinkRefModel": "0.3.0",
+      "s": ["vaporize", "v0.1.0", "use-mode-source"],
+      "t": "Vaporize use mode source",
+      "tg": [{"k": "rp", "rt": "mono", "v": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/sources/vaporize-cli/main.swift"}]
+    },
+    {
+      "LinkRefModel": "0.3.0",
+      "s": ["vaporize", "v0.1.0", "use-mode-tests"],
+      "t": "Vaporize CommonProcess use mode tests",
+      "tg": [{"k": "rp", "rt": "mono", "v": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/tests/vaporize-cli-tests/VaporizeUseCommonProcessTests.swift"}]
+    }
+  ],
+  "qaEvidence": {
+    "testCommand": "xcrun swift test --package-path private/apple/spm/vaporize@wrkstrm-core.cli --filter VaporizeCLITests",
+    "testResult": "PASS",
+    "testCount": 9,
+    "bareSwiftToolchainResult": "BLOCKED: bare swift is 6.3.2; Package.swift requires Swift tools 6.4",
+    "requiredToolchainResult": "PASS: xcrun swift reports Swift 6.4"
+  },
+  "gateResults": [
+    {
+      "gateRef": "GATE-01-prd-authored",
+      "status": "PASS",
+      "rationale": "PRD exists at release/v0.1.0/prd.md"
+    },
+    {
+      "gateRef": "GATE-02-cuj-authored",
+      "status": "PASS",
+      "rationale": "CUJ set exists at release/v0.1.0/cuj.md"
+    },
+    {
+      "gateRef": "GATE-05-focused-tests",
+      "status": "PASS",
+      "rationale": "Focused VaporizeCLITests passed 9 tests under xcrun Swift 6.4"
+    },
+    {
+      "gateRef": "GATE-07-cli-help",
+      "status": "PASS",
+      "rationale": "Help surface advertises use and --common-process-spec"
+    },
+    {
+      "gateRef": "GATE-11-readme-release-docs",
+      "status": "BLOCKED",
+      "rationale": "README requires final audit for Swift tools version, use mode, and remaining legacy craze wording"
+    },
+    {
+      "gateRef": "GATE-12-open-feature-beads",
+      "status": "PASS-CONDITIONAL",
+      "rationale": "Open beads are named as follow-ups; Launch Review can choose whether any become release blockers"
+    },
+    {
+      "gateRef": "GATE-13-tree-cleanliness",
+      "status": "BLOCKED-BY-EXISTING-TREE",
+      "rationale": "Mono startup reported 511 diff-files; release prep must rely on scoped paths"
+    }
+  ],
+  "knownFollowUps": [
+    "FR-VAPORIZE-LIST-TARGETS-substrate-canonical-target-discovery",
+    "FR-VAPORIZE-XCODEGEN-INTEGRATION-substrate-canonical-xcodegen-aware-build",
+    "FR-VAPORIZE-AUTO-INCREMENT-BUILD-NUMBERS",
+    "FR-VAPORIZE-REALIZE-typed-vaporware-unit",
+    "FR-VAPORIZE-TOOL-CALL-OBSERVABILITY",
+    "FR-VAPORIZE-DRIFT-CATCH-retire-craze-canonical-language",
+    "FR-VAPORIZE-PRODUCT-RELEASE-DIR-RENAME-MODE"
+  ],
+  "signoffs": {
+    "audienceApproverSignoffRef": null,
+    "engineeringApproverSignoffRef": null,
+    "founderSignoffRef": null
+  },
+  "directorVerdict": null,
+  "axiomCitations": [
+    "[[vaporize-builds-vaporware-warehouse-stores-vaporware]]",
+    "[[shared-components-pass-every-launch-gate-audit-feature-request-launch-review-no-shortcuts]]",
+    "[[lift-existing-patterns-not-reimplement]]",
+    "[[treat-operator-as-founder-finished-products-only]]"
+  ],
+  "schemaFamilyRef": "launch-review-packet-schemas v0.0.1",
+  "extensions": {
+    "x-release-prep-note": "This packet is release-prep evidence, not final founder approval.",
+    "x-common-process-use-surface": "use mode consumes CommonProcess CommandSpec JSON via --common-process-spec and emits a vaporize-use-common-process receipt when requested."
+  }
+}

@@ -77,7 +77,10 @@ let package = Package(
     ),
     .testTarget(
       name: "VaporizeCLITests",
-      dependencies: ["VaporizeCLI"],
+      dependencies: [
+        "VaporizeCLI",
+        .product(name: "CommonProcess", package: "common-process"),
+      ],
       path: "tests/vaporize-cli-tests"
     ),
   ]
