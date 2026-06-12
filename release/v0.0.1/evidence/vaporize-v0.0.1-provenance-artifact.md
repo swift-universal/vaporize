@@ -22,6 +22,9 @@ chat memory.
 - Concourse `project.pkl` generates transitional `AppleProjectSpec` YAML
   through PklSwift, and the generated YAML compares back to Pkl with zero
   mismatches.
+- Initial schema-universal extraction exists as `vaporize-schemas v0.0.1` for
+  CUJ coverage, provenance, launch-review specialization, and Apple project
+  YAML/Pkl receipts.
 - Release evidence JSON validates through `vaporize validate-json`.
 
 ## Not Proven
@@ -44,6 +47,7 @@ chat memory.
 | `xcodegen-to-pkl-investigation.json` | Migration scope and blockers are captured | BLOCKS-INTERNAL-V0.0.1 |
 | `cuj-test-coverage.json` | PRD/CUJ-derived required test floor is captured | PASS |
 | `launch-review-packet.json` | Release-prep packet is gathered | VALID-JSON |
+| `vaporize-schemas v0.0.1` | Initial schema-universal extraction is captured | PASS-WITH-NOTE |
 
 ## Savepoints
 

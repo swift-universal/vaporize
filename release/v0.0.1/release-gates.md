@@ -1,7 +1,7 @@
 # Vaporize v0.0.1 - Release Gates
 
 **Status:** release-prep draft; blocked pending Pkl-backed Xcode world-state generation
-**Updated:** 2026-06-12T23:06:11Z
+**Updated:** 2026-06-12T23:36:38Z
 **Component:** `vaporize@wrkstrm-core.cli`
 **Tool classification:** `internal-essential-tool`
 
@@ -15,10 +15,12 @@ The Vaporize package tests pass 70 executable Swift tests across 12 targetable
 CUJ-specific SwiftPM bundles through Vaporize's owned Xcode-selected toolchain
 mode. The approved Swift YAML read bridge,
 PklSwift-backed Pkl parity specimen, transitional YAML generation slice, and
-major-feature test expansion are landed and receipted. Final internal v0.0.1
-release approval is still blocked because substrate-owned Apple project
-generation must move off XcodeGen and onto an owned Pkl-backed `.xcodeproj`
-world-state path or be explicitly quarantined.
+major-feature test expansion are landed and receipted. The initial
+schema-universal extraction for Vaporize evidence is also landed as
+`vaporize-schemas v0.0.1`. Final internal v0.0.1 release approval is still
+blocked because substrate-owned Apple project generation must move off XcodeGen
+and onto an owned Pkl-backed `.xcodeproj` world-state path or be explicitly
+quarantined.
 
 ## Gate Table
 
@@ -43,6 +45,7 @@ world-state path or be explicitly quarantined.
 | GATE-17 - Provenance artifact captured | PASS | `release/v0.0.1/evidence/vaporize-v0.0.1-provenance-artifact.json` and `.md` collect the receipts, validation commands, savepoint events, proven claims, unproven claims, and forward path for the Pkl migration slice. |
 | GATE-18 - Concourse Pkl parity specimen | PASS | `private/apple/apps/concourse/project.pkl` amends `Pkl/AppleProjectSpec.pkl`; `compare-project-yml-pkl` uses PklSwift and reports zero mismatches in `release/v0.0.1/evidence/concourse-project-yml-pkl-comparison.receipt.json`. This proves one Pkl parity specimen, not buildable project generation. |
 | GATE-19 - Concourse Pkl transitional YAML generation | PASS-WITH-NOTE | `generate-project-yml` uses PklSwift to emit `release/v0.0.1/evidence/generated/concourse.apple-project-spec.generated.yml` plus `release/v0.0.1/evidence/concourse-pkl-project-yml-generation.receipt.json`; `release/v0.0.1/evidence/concourse-generated-yml-pkl-comparison.receipt.json` proves generated YAML still matches Pkl. The receipt explicitly says `.xcodeproj` world-state was not generated. |
+| GATE-20 - Schema-universal extraction | PASS-WITH-NOTE | Initial `vaporize-schemas v0.0.1` JSON schemas and fixtures landed under `schema-universal/private/universal/domain/tooling/schema-families/vaporize-schemas/v0.0.1`. The new schema files and fixtures validate as JSON through Vaporize, and `schema-tighten audit` reports 0 safe-to-migrate hits for the slice. Swift model package generation remains a follow-up. |
 
 ## Open Follow-Up Beads
 

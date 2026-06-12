@@ -1,5 +1,9 @@
 {
-  "CUJTestCoverageModel": "0.0.1-untyped",
+  "VaporizeCUJTestCoverageModel": "0.1.0",
+  "schemaVersion": "0.1.0",
+  "schemaFamilySlug": "vaporize-schemas",
+  "schemaFamilyVersion": "0.0.1",
+  "schemaRef": "private/universal/domain/tooling/schema-families/vaporize-schemas/v0.0.1/json/vaporize-schemas-v000-000-001/schemas/vaporize-cuj-test-coverage/vaporize-cuj-test-coverage.schema.json",
   "coverageId": "vaporize-v0.0.1-cuj-test-coverage",
   "subjectAppSlug": "vaporize@wrkstrm-core.cli",
   "subjectReleaseSlug": "v0.0.1",

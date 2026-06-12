@@ -3,6 +3,7 @@
 **Generated:** 2026-06-12T23:24:02Z
 **Status:** active CUJ coverage floor defined
 **Component:** `vaporize@wrkstrm-core.cli`
+**Schema:** `vaporize-schemas v0.0.1` / `VaporizeCUJTestCoverageModel`
 
 ## Rule
 

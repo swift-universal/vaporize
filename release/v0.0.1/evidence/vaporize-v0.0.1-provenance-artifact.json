@@ -1,5 +1,9 @@
 {
-  "ProvenanceArtifactModel": "0.0.1-untyped",
+  "VaporizeProvenanceArtifactModel": "0.1.0",
+  "schemaVersion": "0.1.0",
+  "schemaFamilySlug": "vaporize-schemas",
+  "schemaFamilyVersion": "0.0.1",
+  "schemaRef": "private/universal/domain/tooling/schema-families/vaporize-schemas/v0.0.1/json/vaporize-schemas-v000-000-001/schemas/vaporize-provenance-artifact/vaporize-provenance-artifact.schema.json",
   "artifactId": "vaporize-v0.0.1-provenance-artifact",
   "subjectAppSlug": "vaporize@wrkstrm-core.cli",
   "subjectReleaseSlug": "v0.0.1",
@@ -17,6 +21,7 @@
       "Concourse old XcodeGen script build and Vaporize app build both pass after Vaporize derives legacy WRAPPER_NAME from project.yml.",
       "Concourse project.pkl evaluates through PklSwift and matches the Swift-read project.yml parity signature with zero mismatches.",
       "Concourse project.pkl generates transitional AppleProjectSpec YAML through PklSwift, and the generated YAML compares back to Pkl with zero mismatches.",
+      "Initial schema-universal extraction exists as vaporize-schemas v0.0.1 for CUJ coverage, provenance, launch-review specialization, and Apple project YAML/Pkl receipts.",
       "JSON release evidence validates through Vaporize validate-json."
     ],
     "notProven": [
@@ -42,6 +47,10 @@
     {
       "kind": "launch-review-packet",
       "path": "private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/launch-review-packet.json"
+    },
+    {
+      "kind": "schema-universal-family",
+      "path": "private/universal/substrate/collectives/schema-universal/private/universal/domain/tooling/schema-families/vaporize-schemas/v0.0.1"
     }
   ],
   "receiptInventory": [
@@ -98,6 +107,12 @@
       "path": "private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/launch-review-packet.json",
       "claim": "Release-prep packet gathers release target, QA evidence, gate results, and follow-ups.",
       "result": "VALID-JSON"
+    },
+    {
+      "receiptKind": "vaporize-schema-universal-extraction",
+      "path": "private/universal/substrate/collectives/schema-universal/private/universal/domain/tooling/schema-families/vaporize-schemas/v0.0.1",
+      "claim": "Initial schema-universal JSON schemas and fixtures exist for durable Vaporize release evidence and receipts.",
+      "result": "PASS-WITH-NOTE: Swift model package generation remains follow-up"
     }
   ],
   "sourceChangeSurfaces": [
@@ -192,6 +207,14 @@
     {
       "path": "private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/cuj-test-coverage.json",
       "purpose": "Defines the PRD/CUJ-derived required test floor for active v0.0.1 journeys."
+    },
+    {
+      "path": "private/universal/substrate/collectives/schema-universal/private/universal/domain/tooling/schema-families/vaporize-schemas/v0.0.1/json/vaporize-schemas-v000-000-001/schemas",
+      "purpose": "Extracts initial JSON schemas for Vaporize CUJ coverage, provenance, launch-review specialization, and Apple project YAML/Pkl receipts."
+    },
+    {
+      "path": "private/universal/substrate/collectives/schema-universal/private/universal/domain/tooling/schema-families/vaporize-schemas/v0.0.1/fixtures",
+      "purpose": "Carries canonical fixtures copied from live Vaporize v0.0.1 release evidence."
     }
   ],
   "validationEvidence": [
@@ -246,6 +269,14 @@
     {
       "command": "vaporize validate-json --path private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/cuj-test-coverage.json",
       "result": "PASS"
+    },
+    {
+      "command": "vaporize validate-json over every JSON file under private/universal/substrate/collectives/schema-universal/private/universal/domain/tooling/schema-families/vaporize-schemas/v0.0.1",
+      "result": "PASS: 6 fixtures and 6 schema files"
+    },
+    {
+      "command": "schema-tighten@schema-universal.cli audit --repo-root private/universal/substrate/collectives/schema-universal/private/universal/domain/tooling/schema-families/vaporize-schemas/v0.0.1 --schema-universal-root private/universal/substrate/collectives/schema-universal",
+      "result": "PASS: 0 safe-to-migrate hits"
     },
     {
       "command": "vaporize validate-json --path private/apple/spm/vaporize@wrkstrm-core.cli/agenda/beads/FR-VAPORIZE-PKL-PROJECT-GENERATION-move-owned-xcodegen-surfaces-to-pkl.issue.json",
