@@ -23,7 +23,9 @@ struct VaporizeCLI: AsyncParsableCommand {
       store vaporware at a path per the `x-vaporize-collapse-path` annotation \
       convention. Project-generation bridge mode: inspect-project-yml reads \
       legacy XcodeGen YAML into an owned Swift model without rewriting it; \
-      compare-project-yml-pkl compares that model with a Pkl parity specimen. \
+      compare-project-yml-pkl compares that model with a Pkl parity specimen; \
+      generate-project-yml emits transitional AppleProjectSpec YAML from Pkl \
+      with a generation receipt. \
       Legacy `inventory` and `x-craze-collapse-path` remain compatibility \
       aliases during migration.
       """
@@ -45,6 +47,7 @@ struct VaporizeCLI: AsyncParsableCommand {
     case validateJSON = "validate-json"
     case inspectProjectYML = "inspect-project-yml"
     case compareProjectYMLPkl = "compare-project-yml-pkl"
+    case generateProjectYML = "generate-project-yml"
     case inventory
 
     /// Substrate package-graph subfunction. Forwards remaining arguments to
@@ -65,7 +68,7 @@ struct VaporizeCLI: AsyncParsableCommand {
     case app
   }
 
-  @Argument(help: "Mode: install, uninstall, build, run, pass, use, toolchain, setup, status, warehouse, validate-json, inspect-project-yml, compare-project-yml-pkl, inventory, or graph (forwards to package-graph@wrkstrm.cli).")
+  @Argument(help: "Mode: install, uninstall, build, run, pass, use, toolchain, setup, status, warehouse, validate-json, inspect-project-yml, compare-project-yml-pkl, generate-project-yml, inventory, or graph (forwards to package-graph@wrkstrm.cli).")
   var mode: Mode
 
   @Option(name: .customLong("artifact"), help: "Artifact kind: cli or app.")
@@ -180,12 +183,17 @@ struct VaporizeCLI: AsyncParsableCommand {
 
   @Option(
     name: .customLong("pkl-path"),
-    help: "Path to an AppleProjectSpec Pkl record for compare-project-yml-pkl mode.")
+    help: "Path to an AppleProjectSpec Pkl record for compare-project-yml-pkl or generate-project-yml mode.")
   var pklPath: String?
 
   @Option(
+    name: .customLong("output-path"),
+    help: "Output path for generate-project-yml mode.")
+  var generatedOutputPath: String?
+
+  @Option(
     name: .customLong("format"),
-    help: "Output format for status, inspect-project-yml, or compare-project-yml-pkl mode: text (default) or json.")
+    help: "Output format for status, inspect-project-yml, compare-project-yml-pkl, or generate-project-yml mode: text (default) or json.")
   var vaporOutputFormat: VaporOutputFormatArgument = .text
 
   @Argument(parsing: .remaining, help: "Arguments forwarded to run, pass, or toolchain mode.")
@@ -219,6 +227,8 @@ struct VaporizeCLI: AsyncParsableCommand {
       try await inspectProjectYML()
     case .compareProjectYMLPkl:
       try await compareProjectYMLPkl()
+    case .generateProjectYML:
+      try await generateProjectYML()
     case .inventory:
       try await runVaporWarehouse()
     case .graph:
@@ -832,6 +842,37 @@ struct VaporizeCLI: AsyncParsableCommand {
     guard receipt.matched else {
       let joinedMismatches = receipt.mismatches.joined(separator: ", ")
       throw ValidationError("project.yml and project.pkl differ: \(joinedMismatches)")
+    }
+  }
+
+  private func generateProjectYML() async throws {
+    guard let pklPath, !pklPath.isEmpty else {
+      throw ValidationError("--pkl-path is required for generate-project-yml mode.")
+    }
+    guard let generatedOutputPath, !generatedOutputPath.isEmpty else {
+      throw ValidationError("--output-path is required for generate-project-yml mode.")
+    }
+
+    let requestId = "vaporize-generate-project-yml-\(UUID().uuidString)"
+    let receipt = try await AppleProjectSpecYMLGenerator.generate(
+      pklURL: URL(fileURLWithPath: pklPath),
+      outputURL: URL(fileURLWithPath: generatedOutputPath),
+      requestId: requestId
+    )
+    try emitReceiptIfRequested(receipt)
+
+    switch vaporOutputFormat {
+    case .text:
+      print(
+        "project.pkl -> project.yml: \(receipt.projectName) targets=\(receipt.targetCount) packages=\(receipt.packageCount) bytes=\(receipt.generatedByteCount)"
+      )
+      print(receipt.boundary)
+    case .json:
+      let encoder = JSONEncoder()
+      encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
+      let data = try encoder.encode(receipt)
+      FileHandle.standardOutput.write(data)
+      FileHandle.standardOutput.write(Data("\n".utf8))
     }
   }
 

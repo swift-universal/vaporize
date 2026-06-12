@@ -1,7 +1,7 @@
 # Vaporize v0.0.1 - PRD
 
-**Status:** release-prep draft; blocked pending Pkl project-generation migration
-**Updated:** 2026-06-12T22:11:11Z
+**Status:** release-prep draft; blocked pending Pkl-backed Xcode world-state generation
+**Updated:** 2026-06-12T22:28:11Z
 **Component:** `vaporize@wrkstrm-core.cli`
 **Release target:** internal essential substrate CLI
 **Tool classification:** `internal-essential-tool`
@@ -26,8 +26,14 @@ Vaporize inspect and receipt existing project shape as Swift data while Pkl
 becomes the forward project-generation source of truth.
 
 The next parity slice adds a Pkl schema plus the first Concourse `project.pkl`
-specimen, then compares Pkl-evaluated JSON against the Swift-read legacy YAML
-signature before any project-generation code is attempted.
+specimen, then compares PklSwift-evaluated data against the Swift-read legacy
+YAML signature before any project-generation code is attempted.
+
+The current generation slice imports Apple's `pkl-swift` package and adds
+`generate-project-yml`. That mode evaluates Concourse `project.pkl` through
+PklSwift, emits transitional `AppleProjectSpec` YAML, and receipts the
+generation boundary. This is useful migration evidence, but it is not the final
+owned `.xcodeproj` world-state generator.
 
 The release classification is `internal-essential-tool`: an internal-only tool
 whose absence blocks assistants from completing build, install, launch, release
@@ -58,6 +64,9 @@ explicitly quarantined as historical/external compatibility.
 - Provide `compare-project-yml-pkl` so a legacy `project.yml` and Pkl parity
   specimen can be evaluated into the same Swift model and receipted before
   project world-state generation.
+- Provide `generate-project-yml` so a Pkl specimen can emit transitional
+  `AppleProjectSpec` YAML with a generation receipt, without rewriting checked
+  in legacy YAML or generating `.xcodeproj` world-state.
 - Provide `status` and `warehouse` inventory modes for
   `x-vaporize-collapse-path` records, with legacy `x-craze-collapse-path`
   read-only fallback.
@@ -117,7 +126,8 @@ Supporting audiences:
 | FR-013 | Internal essential tool classification | Release evidence names Vaporize as `internal-essential-tool` and records which assistant workflows it blocks when absent. |
 | FR-014 | Pkl project-generation release gate | Final internal v0.0.1 release is blocked until substrate-owned XcodeGen-managed Apple surfaces move to a Pkl-backed generation path or are explicitly quarantined. |
 | FR-015 | Swift YAML read bridge | `inspect-project-yml --path <project.yml>` parses legacy XcodeGen project YAML into Swift `AppleProjectSpec` data and emits an inspection receipt without rewriting YAML, invoking XcodeGen, or generating an Xcode project. |
-| FR-016 | Pkl parity specimen comparison | `compare-project-yml-pkl --path <project.yml> --pkl-path <project.pkl>` evaluates Pkl to JSON, decodes both inputs into Swift `AppleProjectSpec`, compares parity signatures, and emits a comparison receipt. |
+| FR-016 | Pkl parity specimen comparison | `compare-project-yml-pkl --path <project.yml> --pkl-path <project.pkl>` evaluates Pkl through PklSwift, decodes both inputs into Swift `AppleProjectSpec`, compares parity signatures, and emits a comparison receipt. |
+| FR-017 | Pkl transitional YAML generation | `generate-project-yml --pkl-path <project.pkl> --output-path <generated.yml>` evaluates Pkl through PklSwift, writes transitional `AppleProjectSpec` YAML, and emits a `vaporize-pkl-project-yml-generation` receipt that explicitly marks `.xcodeproj` world-state generation as not performed. |
 
 ## Release Criteria
 
@@ -131,11 +141,15 @@ Supporting audiences:
   `vaporize validate-json --path release/v0.0.1/evidence/concourse-project-yml-inspection.receipt.json`.
 - Concourse YAML/Pkl comparison receipt validates with
   `vaporize validate-json --path release/v0.0.1/evidence/concourse-project-yml-pkl-comparison.receipt.json`.
+- Concourse Pkl transitional YAML generation receipt validates with
+  `vaporize validate-json --path release/v0.0.1/evidence/concourse-pkl-project-yml-generation.receipt.json`.
+- Concourse generated YAML/Pkl comparison receipt validates with
+  `vaporize validate-json --path release/v0.0.1/evidence/concourse-generated-yml-pkl-comparison.receipt.json`.
 - Release evidence classifies Vaporize as an internal essential tool rather
   than a public release artifact.
-- Pkl project-generation migration for substrate-owned Apple surfaces is
-  complete or remaining XcodeGen surfaces are explicitly quarantined outside the
-  v0.0.1 internal release path.
+- Pkl-backed `.xcodeproj` world-state generation for substrate-owned Apple
+  surfaces is complete or remaining XcodeGen surfaces are explicitly
+  quarantined outside the v0.0.1 internal release path.
 - Release gates honestly mark open follow-ups and drift rather than smoothing
   them into a false green state.
 - Documentation drift is either repaired before final release or marked as an

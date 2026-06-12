@@ -172,8 +172,9 @@ Success:
    `AppleProjectSpec.pkl`.
 2. Assistant runs
    `vaporize compare-project-yml-pkl --path <project.yml> --pkl-path <project.pkl> --receipt-path <receipt>`.
-3. Vaporize evaluates the Pkl record to JSON.
-4. Vaporize decodes both legacy YAML and Pkl JSON into Swift `AppleProjectSpec`.
+3. Vaporize evaluates the Pkl record through PklSwift.
+4. Vaporize decodes both legacy YAML and PklSwift output into Swift
+   `AppleProjectSpec`.
 5. Vaporize emits a `vaporize-apple-project-yml-pkl-comparison` receipt.
 
 Success:
@@ -187,6 +188,30 @@ Failure truth:
 
 - A matched comparison is parity evidence for one specimen only; it is not
   fleet build parity and not Pkl-backed project generation.
+
+## CUJ-11 - Assistant Generates Transitional YAML From Pkl
+
+1. Assistant has a Pkl parity specimen for one owned Apple app.
+2. Assistant runs
+   `vaporize generate-project-yml --pkl-path <project.pkl> --output-path <generated.yml> --receipt-path <receipt>`.
+3. Vaporize evaluates the Pkl record through PklSwift.
+4. Vaporize writes transitional `AppleProjectSpec` YAML to the requested output
+   path.
+5. Vaporize emits a `vaporize-pkl-project-yml-generation` receipt.
+6. Assistant runs `compare-project-yml-pkl` against the generated YAML and Pkl
+   specimen to prove round-trip parity.
+
+Success:
+
+- Generated YAML exists, decodes through `AppleProjectYMLReader`, and compares
+  back to Pkl with zero mismatches.
+- The generation receipt explicitly records that `.xcodeproj` world-state was
+  not generated.
+
+Failure truth:
+
+- This is transitional YAML generation. It does not prove final buildable
+  project generation, fleet parity, or internal release readiness.
 
 ## Deferred CUJ - Assistant Builds A Pkl-Backed Apple Project
 
@@ -204,6 +229,9 @@ Current status:
 
 - Blocked by
   `FR-VAPORIZE-PKL-PROJECT-GENERATION-move-owned-xcodegen-surfaces-to-pkl`.
+- The Concourse Pkl specimen can now generate transitional `AppleProjectSpec`
+  YAML through PklSwift, but Vaporize still does not generate `.xcodeproj`
+  world-state from that Pkl truth.
 - Existing XcodeGen surfaces remain historical compatibility, not the forward
   release path for our own apps.
 

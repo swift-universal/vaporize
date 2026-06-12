@@ -17,6 +17,10 @@ let commonProcessDependency = localOrRemote(
   url: "https://github.com/swift-universal/common-process.git",
   from: "0.3.5"
 )
+let pklSwiftDependency = Package.Dependency.package(
+  url: "https://github.com/apple/pkl-swift",
+  from: "0.8.2"
+)
 
 let package = Package(
   name: "vaporize@wrkstrm-core-cli",
@@ -32,6 +36,7 @@ let package = Package(
   dependencies: [
     commonProcessDependency,
     commonShellDependency,
+    pklSwiftDependency,
     .package(url: "https://github.com/apple/swift-argument-parser", from: "1.6.0"),
     .package(url: "https://github.com/jpsim/Yams", from: "5.1.0"),
   ],
@@ -41,6 +46,7 @@ let package = Package(
       dependencies: [
         .product(name: "CommonProcess", package: "common-process"),
         .product(name: "CommonProcessExecutionKit", package: "common-process"),
+        .product(name: "PklSwift", package: "pkl-swift"),
         .product(name: "Yams", package: "Yams"),
       ],
       path: "sources/apple-project-spec-core"

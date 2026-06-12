@@ -1,6 +1,6 @@
 # Vaporize v0.0.1 - Provenance Artifact
 
-**Generated:** 2026-06-12T22:11:11Z
+**Generated:** 2026-06-12T22:28:11Z
 **Status:** captured for forward Pkl migration
 **Subject:** `vaporize@wrkstrm-core.cli` v0.0.1 release prep
 
@@ -9,18 +9,21 @@ chat memory.
 
 ## Proven
 
-- Focused Vaporize tests pass through `vaporize toolchain`: 15 tests.
+- Focused Vaporize tests pass through `vaporize toolchain`: 17 tests.
 - Concourse `project.yml` parses into Swift `AppleProjectSpec`.
 - Fleet intake audit parsed 155/155 discovered `project.yml` files.
 - Old XcodeGen script build and Vaporize app build both pass for Concourse
   after Vaporize derives legacy `WRAPPER_NAME` from `project.yml`.
-- Concourse `project.pkl` evaluates through Pkl and matches the Swift-read
+- Concourse `project.pkl` evaluates through PklSwift and matches the Swift-read
   legacy YAML parity signature with zero mismatches.
+- Concourse `project.pkl` generates transitional `AppleProjectSpec` YAML
+  through PklSwift, and the generated YAML compares back to Pkl with zero
+  mismatches.
 - Release evidence JSON validates through `vaporize validate-json`.
 
 ## Not Proven
 
-- Pkl-backed Apple project generation exists.
+- Pkl-backed `.xcodeproj` world-state generation exists.
 - The full fleet builds through Vaporize.
 - Remaining XcodeGen surfaces are migrated or quarantined.
 - Vaporize v0.0.1 is ready for final internal-essential release.
@@ -33,6 +36,8 @@ chat memory.
 | `project-yml-fleet-parse-audit.receipt.json` | 155 discovered `project.yml` files parse | PASS |
 | `concourse-old-tool-vaporize-build-comparison.receipt.json` | Old tool and Vaporize agree on Concourse build | PASS-WITH-NOTE |
 | `concourse-project-yml-pkl-comparison.receipt.json` | Concourse Pkl specimen matches legacy YAML | PASS |
+| `concourse-pkl-project-yml-generation.receipt.json` | Concourse Pkl emits transitional YAML | PASS-WITH-NOTE |
+| `concourse-generated-yml-pkl-comparison.receipt.json` | Generated YAML matches Concourse Pkl | PASS |
 | `xcodegen-to-pkl-investigation.json` | Migration scope and blockers are captured | BLOCKS-INTERNAL-V0.0.1 |
 | `launch-review-packet.json` | Release-prep packet is gathered | VALID-JSON |
 
@@ -49,10 +54,10 @@ chat memory.
 
 ## Forward Path
 
-1. Define `PklProjectGenerationReceipt`.
-2. Add Vaporize-owned Pkl generation mode.
-3. Repeat old tool / Vaporize / Pkl-generation comparisons across more
+1. Add Pkl-backed `.xcodeproj` world-state generation.
+2. Repeat old tool / Vaporize / Pkl-generation comparisons across more
    specimens before claiming fleet parity.
+3. Quarantine or migrate remaining substrate-owned XcodeGen surfaces.
 
 The machine-readable companion is
 `vaporize-v0.0.1-provenance-artifact.json`.

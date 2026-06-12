@@ -1,0 +1,60 @@
+name: concourse
+options:
+  minimumXcodeGenVersion: 2.39.0
+  useBaseInternationalization: true
+  createIntermediateGroups: true
+settings:
+  base:
+    SUBSTRATE_APP_STORE_CATEGORY_PRIMARY: Developer Tools
+    INSTALL_PATH: /Applications/categories/developer-tools
+    MACOSX_DEPLOYMENT_TARGET: '26.0'
+    SWIFT_VERSION: '6.4'
+    SUBSTRATE_APP_STORE_CATEGORY_SECONDARY: Utilities
+packages:
+  WrkstrmWalkthrough:
+    path: ../../../../../wrkstrm-components/private/walkthrough/spm/wrkstrm-walkthrough
+  common-terminal:
+    path: ../../../../../swift-universal/private/universal/domain/build/spm/common-terminal-view
+  WrkstrmOnboarding:
+    path: ../../../../../wrkstrm-components/private/onboarding/spm/wrkstrm-onboarding
+targets:
+  concourse:
+    type: application
+    platform: macOS
+    deploymentTarget: '26.0'
+    sources:
+    - path: Sources/mac-app
+    settings:
+      base:
+        CURRENT_PROJECT_VERSION: 1
+        PRODUCT_NAME: concourse
+        GENERATE_INFOPLIST_FILE: false
+        CODE_SIGNING_REQUIRED: false
+        INFOPLIST_FILE: Sources/mac-app/Info.plist
+        CODE_SIGNING_ALLOWED: false
+        MARKETING_VERSION: 0.1.0
+      configs:
+        Debug:
+          PRODUCT_BUNDLE_IDENTIFIER: studio.laussat.concourse.macos.debug
+          SUBSTRATE_APP_DISPLAY_NAME: Concourse $(MARKETING_VERSION) Debug
+          WRAPPER_NAME: concourse-$(MARKETING_VERSION)-debug.app
+        Release:
+          PRODUCT_BUNDLE_IDENTIFIER: studio.laussat.concourse.macos.release
+          WRAPPER_NAME: concourse-$(MARKETING_VERSION)-testflight.app
+          SUBSTRATE_APP_DISPLAY_NAME: Concourse $(MARKETING_VERSION) TestFlight
+    dependencies:
+    - package: common-terminal
+      product: CommonTerminalView
+    - package: WrkstrmOnboarding
+      product: WrkstrmOnboarding
+    - package: WrkstrmWalkthrough
+      product: WrkstrmWalkthrough
+    postBuildScripts:
+    - name: Deploy to Applications
+      basedOnDependencyAnalysis: false
+      script: "set -euo pipefail\nif [ \"${SKIP_APPLICATION_DEPLOY:-NO}\" = \"YES\"
+        ]; then\n  echo \"Skipping /Applications deploy because SKIP_APPLICATION_DEPLOY=YES\"\n
+        \ exit 0\nfi\nINSTALL_ROOT=\"${INSTALL_PATH:-/Applications/categories/developer-tools}\"\nmkdir
+        -p \"$INSTALL_ROOT\"\nDEST=\"${INSTALL_ROOT}/${FULL_PRODUCT_NAME}\"\nrm -rf
+        \"$DEST\"\ncp -R \"${TARGET_BUILD_DIR}/${FULL_PRODUCT_NAME}\" \"$DEST\""
+schemes: {}

@@ -1,6 +1,24 @@
 {
-  "originHash" : "d2b27f44feb80bcbc96138328da56a5ce7beff7af23bfed8485acff3e2ffaaf0",
+  "originHash" : "5fd30ec5666c8d37889e87cb99bf29c162b06ef3c47c5d1187d00909f89a94d6",
   "pins" : [
+    {
+      "identity" : "pkl-swift",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/apple/pkl-swift",
+      "state" : {
+        "revision" : "40e5decb9481c8c5d8c64389255166023c936900",
+        "version" : "0.8.2"
+      }
+    },
+    {
+      "identity" : "semanticversion",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/SwiftPackageIndex/SemanticVersion",
+      "state" : {
+        "revision" : "330bab3e41aad91fb3b1b0f779d1325738e54b93",
+        "version" : "0.5.3"
+      }
+    },
     {
       "identity" : "swift-argument-parser",
       "kind" : "remoteSourceControl",

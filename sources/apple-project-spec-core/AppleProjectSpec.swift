@@ -1,6 +1,5 @@
-import CommonProcess
-import CommonProcessExecutionKit
 import Foundation
+import PklSwift
 import Yams
 
 public struct AppleProjectSpec: Codable, Equatable, Sendable {
@@ -262,54 +261,65 @@ public enum AppleProjectYMLReader {
 }
 
 public enum AppleProjectPklLoaderError: Error, CustomStringConvertible {
-  case evaluationFailed(path: String, exitCode: Int32, stderr: String)
-  case nonJSONOutput(path: String, raw: String, underlying: Error)
+  case evaluationFailed(path: String, underlying: Error)
 
   public var description: String {
     switch self {
-    case .evaluationFailed(let path, let exitCode, let stderr):
-      return "pkl eval failed for \(path) with exit \(exitCode): \(stderr)"
-    case .nonJSONOutput(let path, let raw, let underlying):
-      return "pkl eval for \(path) produced non-JSON output (\(underlying)): \(raw.prefix(160))"
+    case .evaluationFailed(let path, let underlying):
+      return "PklSwift evaluation failed for \(path): \(underlying)"
     }
   }
 }
 
 public enum AppleProjectPklLoader {
   public static func load(url: URL) async throws -> AppleProjectSpec {
-    let command = CommandSpec(
-      executable: .name("pkl"),
-      args: ["eval", "--format", "json", url.path],
-      env: .inherit(updating: nil),
-      workingDirectory: nil,
-      requestId: "apple-project-pkl-load-\(UUID().uuidString)"
-    )
-    let output = try await RunnerControllerFactory.run(command: command)
-
-    guard output.isSuccess else {
-      let code: Int32
-      switch output.exitStatus {
-      case .exited(let exitCode):
-        code = Int32(exitCode)
-      case .signalled(let signal):
-        code = Int32(-signal)
+    do {
+      return try await PklSwift.withEvaluator { evaluator in
+        try await evaluator.evaluateModule(source: .path(url.path), as: AppleProjectSpec.self)
       }
+    } catch {
       throw AppleProjectPklLoaderError.evaluationFailed(
         path: url.path,
-        exitCode: code,
-        stderr: output.stderrText
-      )
-    }
-
-    do {
-      return try JSONDecoder().decode(AppleProjectSpec.self, from: output.stdout)
-    } catch {
-      throw AppleProjectPklLoaderError.nonJSONOutput(
-        path: url.path,
-        raw: output.stdoutText,
         underlying: error
       )
     }
+  }
+}
+
+public enum AppleProjectYMLRenderer {
+  public static func renderData(spec: AppleProjectSpec) throws -> Data {
+    let yaml = try YAMLEncoder().encode(spec)
+    return Data(yaml.utf8)
+  }
+}
+
+public enum AppleProjectSpecYMLGenerator {
+  public static func generate(
+    pklURL: URL,
+    outputURL: URL,
+    requestId: String
+  ) async throws -> PklProjectGenerationReceipt {
+    let spec = try await AppleProjectPklLoader.load(url: pklURL)
+    let data = try AppleProjectYMLRenderer.renderData(spec: spec)
+    try FileManager.default.createDirectory(
+      at: outputURL.deletingLastPathComponent(),
+      withIntermediateDirectories: true
+    )
+    try data.write(to: outputURL)
+
+    return PklProjectGenerationReceipt(
+      pklPath: pklURL.path,
+      outputPath: outputURL.path,
+      requestId: requestId,
+      projectName: spec.name,
+      targetCount: spec.targets.count,
+      packageCount: spec.packages.count,
+      schemeCount: spec.schemes.count,
+      targetNames: spec.targets.keys.sorted(),
+      packageNames: spec.packages.keys.sorted(),
+      generatedByteCount: data.count,
+      pklSignature: AppleProjectSpecParitySignature(spec: spec)
+    )
   }
 }
 
@@ -372,6 +382,27 @@ public struct AppleProjectSpecComparisonReceipt: Codable, Equatable, Sendable {
   public var mismatchCount: Int
   public var mismatches: [String]
   public var ymlSignature: AppleProjectSpecParitySignature
+  public var pklSignature: AppleProjectSpecParitySignature
+}
+
+public struct PklProjectGenerationReceipt: Codable, Equatable, Sendable {
+  public var schemaVersion = "0.1.0"
+  public var receiptKind = "vaporize-pkl-project-yml-generation"
+  public var generationPhase = "pkl-to-transitional-apple-project-spec-yaml"
+  public var generatorStatus = "transitional-yaml-only"
+  public var pklPath: String
+  public var outputPath: String
+  public var requestId: String
+  public var projectName: String
+  public var targetCount: Int
+  public var packageCount: Int
+  public var schemeCount: Int
+  public var targetNames: [String]
+  public var packageNames: [String]
+  public var generatedByteCount: Int
+  public var buildableWorldStateGenerated = false
+  public var xcodeProjectGenerated = false
+  public var boundary = "Generates transitional AppleProjectSpec YAML from Pkl; does not rewrite checked-in project.yml and does not generate .xcodeproj world-state."
   public var pklSignature: AppleProjectSpecParitySignature
 }
 

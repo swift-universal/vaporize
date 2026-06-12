@@ -7,8 +7,8 @@
   "subjectWareKindSlug": "internal-essential-cli",
   "packetVersion": "v0.0.1",
   "reviewKind": "internal-essential-tool-release-prep",
-  "packetStatus": "blocked-pending-pkl-project-generation",
-  "emittedAt": "2026-06-12T22:11:11Z",
+  "packetStatus": "blocked-pending-pkl-backed-xcode-world-state-generation",
+  "emittedAt": "2026-06-12T22:28:11Z",
   "emittedBy": "codex-crisie",
   "lifecycleStage": "internal-cli-release-prep",
   "releaseTarget": {
@@ -22,7 +22,8 @@
       "release-packet-validation",
       "xcode-selected-swift-toolchain-proof",
       "vaporware-collapse-inventory",
-      "legacy-project-yml-inspection"
+      "legacy-project-yml-inspection",
+      "pkl-project-migration-evidence"
     ],
     "blockingPrecondition": "substrate-owned Apple project generation moves off XcodeGen to a Pkl-backed owned path, or remaining XcodeGen surfaces are explicitly quarantined as historical/external compatibility",
     "alternativeLane": "remain-in-release-prep"
@@ -129,12 +130,30 @@
       "s": ["vaporize", "v0.0.1", "concourse-yml-pkl-comparison"],
       "t": "Concourse project.yml to project.pkl comparison receipt",
       "tg": [{"k": "rp", "rt": "mono", "v": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/concourse-project-yml-pkl-comparison.receipt.json"}]
+    },
+    {
+      "LinkRefModel": "0.3.0",
+      "s": ["vaporize", "v0.0.1", "concourse-generated-project-yml"],
+      "t": "Concourse generated transitional AppleProjectSpec YAML",
+      "tg": [{"k": "rp", "rt": "mono", "v": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/generated/concourse.apple-project-spec.generated.yml"}]
+    },
+    {
+      "LinkRefModel": "0.3.0",
+      "s": ["vaporize", "v0.0.1", "concourse-pkl-yml-generation-receipt"],
+      "t": "Concourse Pkl to transitional YAML generation receipt",
+      "tg": [{"k": "rp", "rt": "mono", "v": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/concourse-pkl-project-yml-generation.receipt.json"}]
+    },
+    {
+      "LinkRefModel": "0.3.0",
+      "s": ["vaporize", "v0.0.1", "concourse-generated-yml-pkl-comparison"],
+      "t": "Concourse generated YAML to project.pkl comparison receipt",
+      "tg": [{"k": "rp", "rt": "mono", "v": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/concourse-generated-yml-pkl-comparison.receipt.json"}]
     }
   ],
   "qaEvidence": {
     "testCommand": "vaporize toolchain -- swift test --package-path private/apple/spm/vaporize@wrkstrm-core.cli --filter VaporizeCLITests",
     "testResult": "PASS",
-    "testCount": 15,
+    "testCount": 17,
     "bareSwiftToolchainResult": "BLOCKED: bare swift is 6.3.2; Package.swift requires Swift tools 6.4",
     "requiredToolchainResult": "PASS: Vaporize toolchain mode owns Xcode-selected Swift via internal xcrun",
     "jsonValidationCommand": "vaporize validate-json --path release/v0.0.1/evidence/launch-review-packet.json",
@@ -144,7 +163,11 @@
     "oldToolVaporizeBuildComparison": "PASS-WITH-NOTE: Concourse old XcodeGen script build and Vaporize app build both pass after Vaporize derives WRAPPER_NAME from project.yml",
     "provenanceArtifact": "PASS: v0.0.1 provenance artifact captures receipts, validation commands, savepoints, proven claims, unproven claims, and forward path",
     "pklParityComparisonCommand": "vaporize compare-project-yml-pkl --path private/apple/apps/concourse/project.yml --pkl-path private/apple/apps/concourse/project.pkl --format json --receipt-path private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/concourse-project-yml-pkl-comparison.receipt.json",
-    "pklParityComparisonResult": "PASS: matched=true, mismatchCount=0"
+    "pklParityComparisonResult": "PASS: PklSwift-backed evaluation matched=true, mismatchCount=0",
+    "pklTransitionalYMLGenerationCommand": "vaporize generate-project-yml --pkl-path private/apple/apps/concourse/project.pkl --output-path private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/generated/concourse.apple-project-spec.generated.yml --format json --receipt-path private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/concourse-pkl-project-yml-generation.receipt.json",
+    "pklTransitionalYMLGenerationResult": "PASS-WITH-NOTE: PklSwift generated transitional AppleProjectSpec YAML; .xcodeproj world-state was not generated",
+    "generatedYMLPklComparisonCommand": "vaporize compare-project-yml-pkl --path private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/generated/concourse.apple-project-spec.generated.yml --pkl-path private/apple/apps/concourse/project.pkl --format json --receipt-path private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/concourse-generated-yml-pkl-comparison.receipt.json",
+    "generatedYMLPklComparisonResult": "PASS: matched=true, mismatchCount=0"
   },
   "gateResults": [
     {
@@ -185,7 +208,7 @@
     {
       "gateRef": "GATE-14-pkl-project-generation",
       "status": "BLOCKED",
-      "rationale": "Final internal release waits until substrate-owned XcodeGen-backed Apple surfaces move to Pkl or are explicitly quarantined"
+      "rationale": "Concourse has PklSwift-backed transitional YAML generation, but final internal release still waits for Pkl-backed .xcodeproj world-state generation or explicit quarantine of XcodeGen-backed owned surfaces"
     },
     {
       "gateRef": "GATE-15-swift-yaml-read-bridge",
@@ -205,7 +228,12 @@
     {
       "gateRef": "GATE-18-concourse-pkl-parity-specimen",
       "status": "PASS",
-      "rationale": "Concourse project.pkl amends AppleProjectSpec.pkl and compare-project-yml-pkl reports zero mismatches against legacy project.yml"
+      "rationale": "Concourse project.pkl amends AppleProjectSpec.pkl and compare-project-yml-pkl uses PklSwift to report zero mismatches against legacy project.yml"
+    },
+    {
+      "gateRef": "GATE-19-concourse-pkl-transitional-yaml-generation",
+      "status": "PASS-WITH-NOTE",
+      "rationale": "generate-project-yml uses PklSwift to emit transitional AppleProjectSpec YAML and a generation receipt; generated YAML compares back to Pkl with zero mismatches, but .xcodeproj world-state is not generated"
     }
   ],
   "knownFollowUps": [
@@ -239,8 +267,9 @@
     "x-apple-project-yml-inspection": "inspect-project-yml parses legacy XcodeGen project.yml files into Swift AppleProjectSpec data and emits a vaporize-apple-project-yml-inspection receipt. It is read-only migration intake, not forward source-of-truth generation. Fleet audit parsed 155/155 discovered project.yml files under private/universal/substrate/collectives.",
     "x-old-tool-vaporize-build-comparison": "Concourse old XcodeGen script build and Vaporize app build both pass after Vaporize derives legacy WRAPPER_NAME from project.yml. The first Vaporize run exposed and then closed an artifact-location default mismatch.",
     "x-provenance-artifact": "vaporize-v0.0.1-provenance-artifact.json collects release-prep receipts, validation commands, savepoints, proven claims, unproven claims, and the forward Pkl migration path.",
-    "x-pkl-parity-specimen": "Concourse now has project.pkl amending AppleProjectSpec.pkl. compare-project-yml-pkl evaluates Pkl to JSON, decodes YAML and Pkl into AppleProjectSpec, and emits a zero-mismatch comparison receipt.",
-    "x-pkl-project-generation-gate": "Internal v0.0.1 release is blocked until our owned Apple project-generation path moves off XcodeGen and onto Pkl, with any leftover XcodeGen surfaces quarantined as compatibility.",
+    "x-pkl-parity-specimen": "Concourse now has project.pkl amending AppleProjectSpec.pkl. compare-project-yml-pkl evaluates Pkl through PklSwift, decodes YAML and Pkl into AppleProjectSpec, and emits a zero-mismatch comparison receipt.",
+    "x-pkl-transitional-yaml-generation": "generate-project-yml evaluates Concourse project.pkl through PklSwift and emits transitional AppleProjectSpec YAML plus a generation receipt. The generated YAML compares back to Pkl with zero mismatches, but .xcodeproj world-state is not generated.",
+    "x-pkl-project-generation-gate": "Internal v0.0.1 release is blocked until our owned Apple project-generation path moves off XcodeGen and onto Pkl-backed .xcodeproj world-state generation, with any leftover XcodeGen surfaces quarantined as compatibility.",
     "x-xcodegen-to-pkl-investigation": "Investigation found 155 project.yml files, 185 checked-in .xcodeproj/project.pbxproj files, direct XcodeGen runner surfaces, and no existing Pkl Apple-project generation model. The first approved mitigation slice now reads legacy YAML through Swift and receipts Concourse inspection."
   }
 }

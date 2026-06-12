@@ -90,6 +90,52 @@ func comparesConcourseProjectYMLWithPklSpecimen() async throws {
   )
 }
 
+@Test("Generates transitional AppleProjectSpec YAML from Concourse project.pkl")
+func generatesTransitionalProjectYMLFromPklSpecimen() async throws {
+  let packageRoot = URL(fileURLWithPath: #filePath)
+    .deletingLastPathComponent()
+    .deletingLastPathComponent()
+    .deletingLastPathComponent()
+  let projectPkl = packageRoot
+    .appendingPathComponent("../../apps/concourse/project.pkl")
+    .standardizedFileURL
+  let temporaryDirectory = FileManager.default.temporaryDirectory
+    .appendingPathComponent("vaporize-pkl-yml-generation-\(UUID().uuidString)")
+  let generatedYML = temporaryDirectory.appendingPathComponent("concourse.generated.project.yml")
+
+  try FileManager.default.createDirectory(
+    at: temporaryDirectory,
+    withIntermediateDirectories: true
+  )
+  defer { try? FileManager.default.removeItem(at: temporaryDirectory) }
+
+  let receipt = try await AppleProjectSpecYMLGenerator.generate(
+    pklURL: projectPkl,
+    outputURL: generatedYML,
+    requestId: "concourse-project-yml-generation-test"
+  )
+  let generatedSpec = try AppleProjectYMLReader.load(url: generatedYML)
+  let pklSpec = try await AppleProjectPklLoader.load(url: projectPkl)
+  let comparison = AppleProjectSpecComparator.receipt(
+    ymlSpec: generatedSpec,
+    pklSpec: pklSpec,
+    ymlPath: generatedYML.path,
+    pklPath: projectPkl.path,
+    requestId: "concourse-generated-yml-pkl-comparison-test"
+  )
+
+  #expect(FileManager.default.fileExists(atPath: generatedYML.path))
+  #expect(receipt.receiptKind == "vaporize-pkl-project-yml-generation")
+  #expect(receipt.generationPhase == "pkl-to-transitional-apple-project-spec-yaml")
+  #expect(receipt.generatorStatus == "transitional-yaml-only")
+  #expect(receipt.buildableWorldStateGenerated == false)
+  #expect(receipt.xcodeProjectGenerated == false)
+  #expect(receipt.generatedByteCount > 0)
+  #expect(receipt.targetNames == ["concourse"])
+  #expect(comparison.matched == true)
+  #expect(comparison.mismatchCount == 0)
+}
+
 @Test("Reads multi-target YAML shapes without requiring generation")
 func readsMultiTargetProjectYMLShape() throws {
   let yaml = """

@@ -83,6 +83,7 @@
     "blockedReleaseRef": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/",
     "requiredProof": [
       "Pkl-backed project-generation path identified and documented.",
+      "PklSwift-backed transitional YAML generation receipted for at least one specimen.",
       "Owned XcodeGen-backed Apple surfaces inventoried.",
       "Each owned surface migrated or quarantined.",
       "Vaporize release packet revalidated after the migration evidence lands."
@@ -112,8 +113,16 @@
     {
       "slice": "concourse-pkl-parity-specimen",
       "status": "complete",
-      "description": "AppleProjectSpec.pkl and Concourse project.pkl landed; Vaporize compare-project-yml-pkl evaluates Pkl to JSON and reports zero mismatches against the Swift-read legacy YAML signature.",
+      "description": "AppleProjectSpec.pkl and Concourse project.pkl landed; Vaporize compare-project-yml-pkl evaluates Pkl through PklSwift and reports zero mismatches against the Swift-read legacy YAML signature.",
       "receipt": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/concourse-project-yml-pkl-comparison.receipt.json"
+    },
+    {
+      "slice": "concourse-pklswift-transitional-yaml-generation",
+      "status": "complete-with-boundary",
+      "description": "Vaporize imports PklSwift, generate-project-yml evaluates Concourse project.pkl, emits transitional AppleProjectSpec YAML, and compares the generated YAML back to Pkl with zero mismatches. This does not generate .xcodeproj world-state.",
+      "generatedYML": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/generated/concourse.apple-project-spec.generated.yml",
+      "generationReceipt": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/concourse-pkl-project-yml-generation.receipt.json",
+      "comparisonReceipt": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/concourse-generated-yml-pkl-comparison.receipt.json"
     }
   ],
   "linkedTypedRecords": {
@@ -125,6 +134,9 @@
     "projectYMLFleetParseAuditReceipt": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/project-yml-fleet-parse-audit.receipt.json",
     "concourseOldToolVaporizeBuildComparisonReceipt": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/concourse-old-tool-vaporize-build-comparison.receipt.json",
     "concourseProjectYMLPklComparisonReceipt": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/concourse-project-yml-pkl-comparison.receipt.json",
+    "concourseGeneratedProjectYML": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/generated/concourse.apple-project-spec.generated.yml",
+    "concoursePklProjectYMLGenerationReceipt": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/concourse-pkl-project-yml-generation.receipt.json",
+    "concourseGeneratedYMLPklComparisonReceipt": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/concourse-generated-yml-pkl-comparison.receipt.json",
     "provenanceArtifact": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/vaporize-v0.0.1-provenance-artifact.json",
     "priorXcodeGenBead": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/agenda/beads/FR-VAPORIZE-XCODEGEN-INTEGRATION-substrate-canonical-xcodegen-aware-build.issue.json"
   }

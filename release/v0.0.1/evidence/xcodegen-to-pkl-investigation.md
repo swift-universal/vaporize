@@ -2,7 +2,7 @@
 
 **Status:** release-blocker investigation complete
 **Generated:** 2026-06-12T20:58:02Z
-**Updated:** 2026-06-12T22:11:11Z
+**Updated:** 2026-06-12T22:28:11Z
 **Component:** `vaporize@wrkstrm-core.cli`
 **Tool classification:** `internal-essential-tool`
 
@@ -10,12 +10,15 @@
 
 Vaporize v0.0.1 should stay blocked for internal release until
 substrate-owned Apple project-generation truth moves off XcodeGen and onto a
-Pkl-backed owned path.
+Pkl-backed owned `.xcodeproj` world-state path, or remaining XcodeGen surfaces
+are explicitly quarantined.
 
 The important distinction:
 
 - Pkl is the forward source-of-truth surface.
 - Vaporize is the assistant-facing internal essential gate.
+- PklSwift-backed transitional YAML generation is migration evidence, not final
+  buildable project generation.
 - XcodeGen may remain as historical or external compatibility, but should not
   be the forward release horizon for our own apps.
 
@@ -43,14 +46,20 @@ The first approved migration-prep slice is now landed:
 - `Pkl/AppleProjectSpec.pkl` plus Concourse `project.pkl` are the first Pkl
   parity specimen.
 - `concourse-project-yml-pkl-comparison.receipt.json` records that
-  `compare-project-yml-pkl` found zero mismatches between Concourse YAML and
-  Pkl-evaluated project data.
+  `compare-project-yml-pkl` uses PklSwift and found zero mismatches between
+  Concourse YAML and Pkl-evaluated project data.
+- `generate-project-yml` imports PklSwift-backed project data and emits
+  transitional `AppleProjectSpec` YAML.
+- `concourse-pkl-project-yml-generation.receipt.json` records the generation
+  boundary: transitional YAML was emitted; `.xcodeproj` world-state was not.
+- `concourse-generated-yml-pkl-comparison.receipt.json` records that generated
+  YAML still matches Concourse Pkl with zero mismatches.
 
 This does not unblock v0.0.1 by itself. It gives the Pkl migration a tested
 Swift intake surface so the next slice can compare Pkl-evaluated project data
-against the legacy YAML shape before generating project world-state. The fleet
-audit proves read compatibility, and the Concourse build comparison proves one
-specimen, not that every project builds.
+against the legacy YAML shape and emit transitional YAML before generating
+`.xcodeproj` world-state. The fleet audit proves read compatibility, and the
+Concourse build comparison proves one specimen, not that every project builds.
 
 ## Live Inventory
 
@@ -72,9 +81,11 @@ Project specs by largest owner:
 | `clia-app-org` | 11 |
 | `wrkstrm-core` | 7 |
 
-Existing Pkl is not yet an Apple project-generation lane. The Pkl surfaces I
-found are org-prefix and digikoma-adjacent evidence, not a project model for
-Xcode targets, packages, schemes, Info.plist, scripts, or pbxproj generation.
+Existing Pkl is now an Apple project parity lane for Concourse:
+`AppleProjectSpec.pkl` plus `private/apple/apps/concourse/project.pkl`.
+Vaporize imports PklSwift and can emit transitional YAML from that model. It is
+not yet a `.xcodeproj` world-state generation lane for Xcode targets,
+packages, schemes, Info.plist, scripts, or pbxproj generation.
 
 ## Representative Shape
 
@@ -118,8 +129,9 @@ directly through `xcodegen generate`.
    parity evidence.
 3. Model the common project shape as `AppleProjectSpec.pkl`.
 4. Port Concourse first as a parity specimen.
-5. Use a shadow parity bridge only to prove equivalence; do not call that the
-   final release path.
+5. Use a shadow parity bridge only to prove equivalence; Concourse now has that
+   bridge through PklSwift-backed transitional YAML generation, but it is not
+   the final release path.
 6. Add a Swift-owned generator that consumes Pkl-evaluated project data and
    writes `.xcodeproj` world-state with receipts.
 7. Add Vaporize generation mode around Pkl evaluation, world-state generation,
@@ -129,7 +141,7 @@ directly through `xcodegen generate`.
 
 ## Next Concrete Work
 
-- Define `PklProjectGenerationReceipt`.
+- Add a Pkl-backed `.xcodeproj` world-state generator and receipt.
 - Add a Vaporize enforcement bead that scans for unclassified substrate-owned
   XcodeGen invocations.
 - Update `versioned-macos-app-install` workflow refs after Vaporize owns the

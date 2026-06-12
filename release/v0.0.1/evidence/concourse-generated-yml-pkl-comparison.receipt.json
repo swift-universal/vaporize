@@ -88,9 +88,9 @@
     }
   },
   "receiptKind" : "vaporize-apple-project-yml-pkl-comparison",
-  "requestId" : "vaporize-compare-project-yml-pkl-BAB3EC5E-FBE6-4C0C-878E-A01B5C43AD7D",
+  "requestId" : "vaporize-compare-project-yml-pkl-04F27C25-39D6-4883-98DA-3C7A67FC5BCE",
   "schemaVersion" : "0.1.0",
-  "ymlPath" : "private\/universal\/substrate\/collectives\/wrkstrm-core\/private\/apple\/apps\/concourse\/project.yml",
+  "ymlPath" : "private\/universal\/substrate\/collectives\/wrkstrm-core\/private\/apple\/spm\/vaporize@wrkstrm-core.cli\/release\/v0.0.1\/evidence\/generated\/concourse.apple-project-spec.generated.yml",
   "ymlSignature" : {
     "options" : {
       "createIntermediateGroups" : "true",

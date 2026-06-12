@@ -3,7 +3,7 @@
   "artifactId": "vaporize-v0.0.1-provenance-artifact",
   "subjectAppSlug": "vaporize@wrkstrm-core.cli",
   "subjectReleaseSlug": "v0.0.1",
-  "generatedAt": "2026-06-12T22:11:11Z",
+  "generatedAt": "2026-06-12T22:28:11Z",
   "generatedBy": "codex-crisie",
   "status": "captured-for-forward-pkl-migration",
   "purpose": "Collect the v0.0.1 release-prep receipts and provenance in one artifact so the next migration slice can proceed from durable evidence rather than chat memory.",
@@ -14,11 +14,12 @@
       "Legacy XcodeGen project.yml files parse through the Swift YAML read bridge.",
       "All 155 discovered project.yml files under private/universal/substrate/collectives parsed through inspect-project-yml.",
       "Concourse old XcodeGen script build and Vaporize app build both pass after Vaporize derives legacy WRAPPER_NAME from project.yml.",
-      "Concourse project.pkl evaluates through Pkl and matches the Swift-read project.yml parity signature with zero mismatches.",
+      "Concourse project.pkl evaluates through PklSwift and matches the Swift-read project.yml parity signature with zero mismatches.",
+      "Concourse project.pkl generates transitional AppleProjectSpec YAML through PklSwift, and the generated YAML compares back to Pkl with zero mismatches.",
       "JSON release evidence validates through Vaporize validate-json."
     ],
     "notProven": [
-      "Pkl-backed Apple project generation exists.",
+      "Pkl-backed .xcodeproj world-state generation exists.",
       "The full fleet builds through Vaporize.",
       "Remaining XcodeGen surfaces are migrated or quarantined.",
       "Vaporize v0.0.1 is ready for final internal-essential release."
@@ -68,6 +69,18 @@
       "result": "PASS: matched=true, mismatchCount=0"
     },
     {
+      "receiptKind": "vaporize-pkl-project-yml-generation",
+      "path": "private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/concourse-pkl-project-yml-generation.receipt.json",
+      "claim": "Concourse project.pkl emits transitional AppleProjectSpec YAML through PklSwift.",
+      "result": "PASS-WITH-NOTE: .xcodeproj world-state not generated"
+    },
+    {
+      "receiptKind": "vaporize-apple-project-yml-pkl-comparison",
+      "path": "private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/concourse-generated-yml-pkl-comparison.receipt.json",
+      "claim": "Generated transitional YAML matches the Concourse Pkl specimen.",
+      "result": "PASS: matched=true, mismatchCount=0"
+    },
+    {
       "receiptKind": "xcodegen-to-pkl-migration-investigation",
       "path": "private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/xcodegen-to-pkl-investigation.json",
       "claim": "XcodeGen-to-Pkl migration scope, risk tiers, completed slices, and next work are captured.",
@@ -83,23 +96,23 @@
   "sourceChangeSurfaces": [
     {
       "path": "private/apple/spm/vaporize@wrkstrm-core.cli/Package.swift",
-      "purpose": "Adds AppleProjectSpecCore and Yams dependency wiring."
+      "purpose": "Adds AppleProjectSpecCore plus PklSwift and Yams dependency wiring."
     },
     {
       "path": "private/apple/spm/vaporize@wrkstrm-core.cli/Package.resolved",
-      "purpose": "Pins Yams dependency resolved by SwiftPM."
+      "purpose": "Pins PklSwift, Yams, and transitive dependencies resolved by SwiftPM."
     },
     {
       "path": "private/apple/spm/vaporize@wrkstrm-core.cli/sources/apple-project-spec-core/AppleProjectSpec.swift",
-      "purpose": "Defines Swift project.yml read model, inspection receipt, and legacy app bundle name resolver."
+      "purpose": "Defines Swift project model, PklSwift loader, transitional YAML generator, inspection/comparison/generation receipts, and legacy app bundle name resolver."
     },
     {
       "path": "private/apple/spm/vaporize@wrkstrm-core.cli/sources/vaporize-cli/main.swift",
-      "purpose": "Adds inspect-project-yml and compare-project-yml-pkl modes, and uses project.yml-derived app bundle name compatibility for Xcode app builds."
+      "purpose": "Adds inspect-project-yml, compare-project-yml-pkl, and generate-project-yml modes, and uses project.yml-derived app bundle name compatibility for Xcode app builds."
     },
     {
       "path": "private/apple/spm/vaporize@wrkstrm-core.cli/tests/vaporize-cli-tests/AppleProjectYMLReaderTests.swift",
-      "purpose": "Covers Concourse project.yml parsing, multi-target parsing, and WRAPPER_NAME expansion."
+      "purpose": "Covers Concourse project.yml parsing, PklSwift parity comparison, transitional YAML generation, multi-target parsing, and WRAPPER_NAME expansion."
     },
     {
       "path": "private/apple/apps/concourse/concourse.xcodeproj/project.pbxproj",
@@ -111,13 +124,17 @@
     },
     {
       "path": "private/apple/apps/concourse/project.pkl",
-      "purpose": "Ports Concourse legacy project.yml into the first Pkl parity specimen."
+      "purpose": "Ports Concourse legacy project.yml into the first Pkl parity specimen and keeps build-setting values string-shaped where required."
+    },
+    {
+      "path": "private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/generated/concourse.apple-project-spec.generated.yml",
+      "purpose": "Generated transitional AppleProjectSpec YAML from Concourse project.pkl; migration evidence only, not checked-in project.yml replacement or .xcodeproj world-state."
     }
   ],
   "validationEvidence": [
     {
       "command": "vaporize toolchain -- swift test --package-path private/apple/spm/vaporize@wrkstrm-core.cli --filter VaporizeCLITests",
-      "result": "PASS: 15 tests"
+      "result": "PASS: 17 tests"
     },
     {
       "command": "vaporize validate-json --path private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/concourse-project-yml-inspection.receipt.json",
@@ -137,6 +154,22 @@
     },
     {
       "command": "vaporize validate-json --path private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/concourse-project-yml-pkl-comparison.receipt.json",
+      "result": "PASS"
+    },
+    {
+      "command": "vaporize generate-project-yml --pkl-path private/apple/apps/concourse/project.pkl --output-path private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/generated/concourse.apple-project-spec.generated.yml --format json --receipt-path private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/concourse-pkl-project-yml-generation.receipt.json",
+      "result": "PASS-WITH-NOTE: transitional YAML generated, .xcodeproj world-state not generated"
+    },
+    {
+      "command": "vaporize validate-json --path private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/concourse-pkl-project-yml-generation.receipt.json",
+      "result": "PASS"
+    },
+    {
+      "command": "vaporize compare-project-yml-pkl --path private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/generated/concourse.apple-project-spec.generated.yml --pkl-path private/apple/apps/concourse/project.pkl --format json --receipt-path private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/concourse-generated-yml-pkl-comparison.receipt.json",
+      "result": "PASS: matched=true, mismatchCount=0"
+    },
+    {
+      "command": "vaporize validate-json --path private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/concourse-generated-yml-pkl-comparison.receipt.json",
       "result": "PASS"
     },
     {
@@ -175,14 +208,15 @@
     }
   ],
   "forwardPath": [
-    "Define PklProjectGenerationReceipt.",
-    "Add a Vaporize-owned Pkl generation mode that collapses typed project truth to buildable Xcode world-state.",
-    "Run old tool / Vaporize / Pkl-generation comparisons on more than one specimen before claiming fleet parity."
+    "Add Pkl-backed .xcodeproj world-state generation.",
+    "Run old tool / Vaporize / Pkl-generation comparisons on more than one specimen before claiming fleet parity.",
+    "Quarantine or migrate remaining substrate-owned XcodeGen surfaces."
   ],
   "boundaries": [
     "This artifact is provenance for release-prep work, not founder approval.",
     "This artifact does not mark Vaporize v0.0.1 internally releasable.",
     "Legacy project.yml read compatibility is a bridge for comparison and migration, not the forward source-of-truth claim.",
+    "Generated transitional AppleProjectSpec YAML is migration evidence, not a checked-in project.yml replacement or .xcodeproj generator.",
     "Concourse build comparison is one-specimen evidence and must not be generalized to the whole fleet without additional receipts."
   ]
 }
