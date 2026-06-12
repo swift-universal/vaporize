@@ -1,7 +1,7 @@
 # Vaporize v0.0.1 - Release Gates
 
 **Status:** release-prep draft; blocked pending Pkl project-generation migration
-**Updated:** 2026-06-12T21:16:27Z
+**Updated:** 2026-06-12T21:55:38Z
 **Component:** `vaporize@wrkstrm-core.cli`
 **Tool classification:** `internal-essential-tool`
 
@@ -37,6 +37,7 @@ and onto a Pkl-backed owned path.
 | GATE-14 - Pkl project generation for owned Apple surfaces | BLOCKED | Final internal release waits until our XcodeGen-backed owned surfaces move to Pkl or are explicitly quarantined as historical/external compatibility. |
 | GATE-15 - Swift YAML read bridge | PASS | `inspect-project-yml` parsed `private/apple/apps/concourse/project.yml` into Swift `AppleProjectSpec` data and emitted `release/v0.0.1/evidence/concourse-project-yml-inspection.receipt.json`; fleet audit parsed 155/155 discovered `project.yml` files and emitted `release/v0.0.1/evidence/project-yml-fleet-parse-audit.receipt.json`. This is read-only parity evidence, not release-unblocking generation or build proof. |
 | GATE-16 - Old tool / Vaporize build comparison | PASS-WITH-NOTE | Old XcodeGen script build and Vaporize app build both pass for Concourse after Vaporize derives the legacy `WRAPPER_NAME` from `project.yml`. Evidence: `release/v0.0.1/evidence/concourse-old-tool-vaporize-build-comparison.receipt.json`. This proves one specimen, not fleet build parity. |
+| GATE-17 - Provenance artifact captured | PASS | `release/v0.0.1/evidence/vaporize-v0.0.1-provenance-artifact.json` and `.md` collect the receipts, validation commands, savepoint events, proven claims, unproven claims, and forward path for the Pkl migration slice. |
 
 ## Open Follow-Up Beads
 

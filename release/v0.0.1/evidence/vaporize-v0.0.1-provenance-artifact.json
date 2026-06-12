@@ -1,0 +1,164 @@
+{
+  "ProvenanceArtifactModel": "0.0.1-untyped",
+  "artifactId": "vaporize-v0.0.1-provenance-artifact",
+  "subjectAppSlug": "vaporize@wrkstrm-core.cli",
+  "subjectReleaseSlug": "v0.0.1",
+  "generatedAt": "2026-06-12T21:55:38Z",
+  "generatedBy": "codex-crisie",
+  "status": "captured-for-forward-pkl-migration",
+  "purpose": "Collect the v0.0.1 release-prep receipts and provenance in one artifact so the next migration slice can proceed from durable evidence rather than chat memory.",
+  "releaseVerdict": {
+    "currentStatus": "blocked-pending-pkl-project-generation",
+    "proven": [
+      "Vaporize focused tests pass through Vaporize toolchain mode.",
+      "Legacy XcodeGen project.yml files parse through the Swift YAML read bridge.",
+      "All 155 discovered project.yml files under private/universal/substrate/collectives parsed through inspect-project-yml.",
+      "Concourse old XcodeGen script build and Vaporize app build both pass after Vaporize derives legacy WRAPPER_NAME from project.yml.",
+      "JSON release evidence validates through Vaporize validate-json."
+    ],
+    "notProven": [
+      "Pkl-backed Apple project generation exists.",
+      "Pkl-evaluated project data matches legacy project.yml data.",
+      "The full fleet builds through Vaporize.",
+      "Remaining XcodeGen surfaces are migrated or quarantined.",
+      "Vaporize v0.0.1 is ready for final internal-essential release."
+    ]
+  },
+  "primaryReleaseSurfaces": [
+    {
+      "kind": "prd",
+      "path": "private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/prd.md"
+    },
+    {
+      "kind": "critical-user-journeys",
+      "path": "private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/cuj.md"
+    },
+    {
+      "kind": "release-gates",
+      "path": "private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/release-gates.md"
+    },
+    {
+      "kind": "launch-review-packet",
+      "path": "private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/launch-review-packet.json"
+    }
+  ],
+  "receiptInventory": [
+    {
+      "receiptKind": "vaporize-apple-project-yml-inspection",
+      "path": "private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/concourse-project-yml-inspection.receipt.json",
+      "claim": "Concourse project.yml parses into Swift AppleProjectSpec data.",
+      "result": "PASS"
+    },
+    {
+      "receiptKind": "vaporize-project-yml-fleet-parse-audit",
+      "path": "private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/project-yml-fleet-parse-audit.receipt.json",
+      "claim": "All discovered project.yml files under private/universal/substrate/collectives parse through inspect-project-yml.",
+      "result": "PASS: 155/155 parsed, 0 failed"
+    },
+    {
+      "receiptKind": "vaporize-old-tool-new-tool-build-comparison",
+      "path": "private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/concourse-old-tool-vaporize-build-comparison.receipt.json",
+      "claim": "Old XcodeGen script build and Vaporize app build agree on Concourse after legacy WRAPPER_NAME compatibility.",
+      "result": "PASS-WITH-NOTE: one specimen only"
+    },
+    {
+      "receiptKind": "xcodegen-to-pkl-migration-investigation",
+      "path": "private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/xcodegen-to-pkl-investigation.json",
+      "claim": "XcodeGen-to-Pkl migration scope, risk tiers, completed slices, and next work are captured.",
+      "result": "BLOCKS-INTERNAL-V0.0.1"
+    },
+    {
+      "receiptKind": "launch-review-packet",
+      "path": "private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/launch-review-packet.json",
+      "claim": "Release-prep packet gathers release target, QA evidence, gate results, and follow-ups.",
+      "result": "VALID-JSON"
+    }
+  ],
+  "sourceChangeSurfaces": [
+    {
+      "path": "private/apple/spm/vaporize@wrkstrm-core.cli/Package.swift",
+      "purpose": "Adds AppleProjectSpecCore and Yams dependency wiring."
+    },
+    {
+      "path": "private/apple/spm/vaporize@wrkstrm-core.cli/Package.resolved",
+      "purpose": "Pins Yams dependency resolved by SwiftPM."
+    },
+    {
+      "path": "private/apple/spm/vaporize@wrkstrm-core.cli/sources/apple-project-spec-core/AppleProjectSpec.swift",
+      "purpose": "Defines Swift project.yml read model, inspection receipt, and legacy app bundle name resolver."
+    },
+    {
+      "path": "private/apple/spm/vaporize@wrkstrm-core.cli/sources/vaporize-cli/main.swift",
+      "purpose": "Adds inspect-project-yml mode and uses project.yml-derived app bundle name compatibility for Xcode app builds."
+    },
+    {
+      "path": "private/apple/spm/vaporize@wrkstrm-core.cli/tests/vaporize-cli-tests/AppleProjectYMLReaderTests.swift",
+      "purpose": "Covers Concourse project.yml parsing, multi-target parsing, and WRAPPER_NAME expansion."
+    },
+    {
+      "path": "private/apple/apps/concourse/concourse.xcodeproj/project.pbxproj",
+      "purpose": "Regenerated by the old XcodeGen reference path during the old/new build comparison."
+    }
+  ],
+  "validationEvidence": [
+    {
+      "command": "vaporize toolchain -- swift test --package-path private/apple/spm/vaporize@wrkstrm-core.cli --filter VaporizeCLITests",
+      "result": "PASS: 15 tests"
+    },
+    {
+      "command": "vaporize validate-json --path private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/concourse-project-yml-inspection.receipt.json",
+      "result": "PASS"
+    },
+    {
+      "command": "vaporize validate-json --path private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/project-yml-fleet-parse-audit.receipt.json",
+      "result": "PASS"
+    },
+    {
+      "command": "vaporize validate-json --path private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/concourse-old-tool-vaporize-build-comparison.receipt.json",
+      "result": "PASS"
+    },
+    {
+      "command": "vaporize validate-json --path private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/launch-review-packet.json",
+      "result": "PASS"
+    },
+    {
+      "command": "vaporize validate-json --path private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/xcodegen-to-pkl-investigation.json",
+      "result": "PASS"
+    },
+    {
+      "command": "vaporize validate-json --path private/apple/spm/vaporize@wrkstrm-core.cli/agenda/beads/FR-VAPORIZE-PKL-PROJECT-GENERATION-move-owned-xcodegen-surfaces-to-pkl.issue.json",
+      "result": "PASS"
+    }
+  ],
+  "savepointEvents": [
+    {
+      "eventID": "DF8697F3-DCED-4FA3-AF36-103D818F23E7",
+      "triggeredAt": "2026-06-12T21:19:29Z",
+      "scope": "Initial Swift YAML bridge, release docs, tests, and Concourse inspection receipt."
+    },
+    {
+      "eventID": "8D119C0F-65AD-4633-A776-EC15350BA4A5",
+      "triggeredAt": "2026-06-12T21:26:09Z",
+      "scope": "Fleet project.yml parse audit receipt and linked release evidence."
+    },
+    {
+      "eventID": "65A98CBC-F745-4B23-9E41-4361DAECF054",
+      "triggeredAt": "2026-06-12T21:40:53Z",
+      "scope": "Old tool / Vaporize Concourse build comparison, WRAPPER_NAME compatibility fix, and linked release evidence."
+    }
+  ],
+  "forwardPath": [
+    "Author AppleProjectSpec.pkl.",
+    "Port Concourse project.yml as the first Pkl parity specimen.",
+    "Emit a typed comparison receipt between inspect-project-yml output and Pkl-evaluated data.",
+    "Define PklProjectGenerationReceipt.",
+    "Add a Vaporize-owned Pkl generation mode that collapses typed project truth to buildable Xcode world-state.",
+    "Run old tool / Vaporize / Pkl-generation comparisons on more than one specimen before claiming fleet parity."
+  ],
+  "boundaries": [
+    "This artifact is provenance for release-prep work, not founder approval.",
+    "This artifact does not mark Vaporize v0.0.1 internally releasable.",
+    "Legacy project.yml read compatibility is a bridge for comparison and migration, not the forward source-of-truth claim.",
+    "Concourse build comparison is one-specimen evidence and must not be generalized to the whole fleet without additional receipts."
+  ]
+}

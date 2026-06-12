@@ -4,7 +4,7 @@
   "subjectAppSlug": "vaporize@wrkstrm-core.cli",
   "subjectReleaseSlug": "v0.0.1",
   "generatedAt": "2026-06-12T20:58:02Z",
-  "updatedAt": "2026-06-12T21:16:27Z",
+  "updatedAt": "2026-06-12T21:55:38Z",
   "generatedBy": "codex-crisie",
   "status": "release-blocker-investigation-with-approved-swift-yaml-read-slice",
   "toolClassification": "internal-essential-tool",
@@ -157,6 +157,13 @@
       "receipt": "private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/concourse-old-tool-vaporize-build-comparison.receipt.json",
       "result": "Old XcodeGen script build and Vaporize app build both pass for Concourse after Vaporize derives WRAPPER_NAME from project.yml.",
       "boundary": "One-specimen build comparison; does not prove fleet build parity or Pkl generation."
+    },
+    {
+      "slice": "provenance-artifact-capture",
+      "status": "complete",
+      "artifact": "private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/vaporize-v0.0.1-provenance-artifact.json",
+      "result": "Release-prep receipts, validation commands, savepoint events, proven claims, unproven claims, and forward path are captured in one artifact.",
+      "boundary": "Provenance artifact supports forward migration work; it does not unblock internal v0.0.1 release."
     }
   ],
   "recommendedMigrationPlan": [

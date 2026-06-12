@@ -2,7 +2,7 @@
 
 **Status:** release-blocker investigation complete
 **Generated:** 2026-06-12T20:58:02Z
-**Updated:** 2026-06-12T21:16:27Z
+**Updated:** 2026-06-12T21:55:38Z
 **Component:** `vaporize@wrkstrm-core.cli`
 **Tool classification:** `internal-essential-tool`
 
@@ -37,6 +37,9 @@ The first approved migration-prep slice is now landed:
 - `concourse-old-tool-vaporize-build-comparison.receipt.json` records that the
   old XcodeGen script build and the Vaporize app build both pass for Concourse
   after Vaporize derives `WRAPPER_NAME` from the legacy YAML.
+- `vaporize-v0.0.1-provenance-artifact.json` collects the release-prep
+  receipts, validation commands, savepoints, proven claims, unproven claims,
+  and forward Pkl migration path.
 
 This does not unblock v0.0.1 by itself. It gives the Pkl migration a tested
 Swift intake surface so the next slice can compare Pkl-evaluated project data
