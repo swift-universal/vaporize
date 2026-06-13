@@ -7,15 +7,15 @@
   "artifactId": "vaporize-v0.0.1-provenance-artifact",
   "subjectAppSlug": "vaporize@wrkstrm-core.cli",
   "subjectReleaseSlug": "v0.0.1",
-  "generatedAt": "2026-06-13T08:18:07Z",
+  "generatedAt": "2026-06-13T21:28:11Z",
   "generatedBy": "codex-crisie",
   "status": "captured-for-forward-pkl-migration",
   "purpose": "Collect the v0.0.1 release-prep receipts and provenance in one artifact so the next migration slice can proceed from durable evidence rather than chat memory.",
   "releaseVerdict": {
     "currentStatus": "blocked-pending-fleet-pkl-project-generation",
     "proven": [
-      "CUJ-derived test coverage is explicit: 60 required Swift test obligations plus 4 release evidence checks across 14 active CUJs.",
-      "Vaporize package tests pass through Vaporize toolchain mode: 77 executable Swift tests across 14 CUJ-specific SwiftPM test bundles.",
+      "CUJ-derived test coverage is explicit: 64 required Swift test obligations plus 4 release evidence checks across 15 active CUJs.",
+      "Vaporize package tests pass through Vaporize toolchain mode: 81 executable Swift tests across 15 CUJ-specific SwiftPM test bundles.",
       "Legacy XcodeGen project.yml files parse through the Swift YAML read bridge.",
       "All 155 discovered project.yml files under private/universal/substrate/collectives parsed through inspect-project-yml.",
       "Concourse old XcodeGen script build and Vaporize app build both pass after Vaporize derives legacy WRAPPER_NAME from project.yml.",
@@ -23,12 +23,14 @@
       "Concourse project.pkl generates transitional AppleProjectSpec YAML through PklSwift, and the generated YAML compares back to Pkl with zero mismatches.",
       "Creative Selection v0.2 project.yml imports into a generated project.pkl parity specimen, evaluates through PklSwift, and compares back to YAML with zero mismatches.",
       "Creative Selection v0.2 project.pkl generates first-slice .xcodeproj world-state through Vaporize generate-xcodeproj.",
+      "Shared Xcode workspace product-cache reuse has a first slice: cache-first app lookup, paired option validation, and shared workspace/DerivedData build invocation are covered by CUJ-15.",
       "Initial schema-universal extraction exists as vaporize-schemas v0.0.1 for CUJ coverage, provenance, launch-review specialization, and Apple project YAML/Pkl receipts.",
       "JSON release evidence validates through Vaporize validate-json."
     ],
     "notProven": [
       "The full fleet builds through Vaporize.",
       "Pkl-backed .xcodeproj generation covers scheme/resource/package feature parity across the required fleet.",
+      "Vaporize automatically discovers the requested product or scheme from the shared Xcode workspace cache.",
       "Remaining XcodeGen surfaces are migrated or quarantined.",
       "Vaporize v0.0.1 is ready for final internal-essential release."
     ]
@@ -120,7 +122,7 @@
       "receiptKind": "cuj-test-coverage",
       "path": "private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/cuj-test-coverage.json",
       "claim": "Required test count is derived from PRD requirements through active draft CUJs.",
-      "result": "PASS: 60 Swift test obligations, 4 release evidence checks, 64 targetable obligations, 77 executable Swift tests"
+      "result": "PASS: 64 Swift test obligations, 4 release evidence checks, 68 targetable obligations, 81 executable Swift tests"
     },
     {
       "receiptKind": "launch-review-packet",
@@ -150,7 +152,11 @@
     },
     {
       "path": "private/apple/spm/vaporize@wrkstrm-core.cli/sources/vaporize-cli/main.swift",
-      "purpose": "Adds inspect-project-yml, compare-project-yml-pkl, import-project-yml, and generate-project-yml modes, uses project.yml-derived app bundle name compatibility for Xcode app builds, and exposes pass-through request normalization for tests."
+      "purpose": "Adds inspect-project-yml, compare-project-yml-pkl, import-project-yml, and generate-project-yml modes, uses project.yml-derived app bundle name compatibility for Xcode app builds, exposes shared Xcode workspace product-cache flags, and exposes pass-through request normalization for tests."
+    },
+    {
+      "path": "private/apple/spm/vaporize@wrkstrm-core.cli/sources/swift-app-installer/SwiftAppInstaller.swift",
+      "purpose": "Implements SwiftPM and Xcode app build/install flow, including shared Xcode workspace product-cache lookup and build invocation."
     },
     {
       "path": "private/apple/spm/vaporize@wrkstrm-core.cli/sources/swift-cli-installer/SwiftCLIInstaller.swift",
@@ -217,6 +223,10 @@
       "purpose": "Covers CUJ-14 generate-xcodeproj parsing, Pkl-backed .xcodeproj output, source-root handling, and deterministic renderer behavior."
     },
     {
+      "path": "private/apple/spm/vaporize@wrkstrm-core.cli/tests/cuj-15-xcode-product-cache/VaporizeCUJ15XcodeProductCacheTests.swift",
+      "purpose": "Covers CUJ-15 shared Xcode workspace product-cache option parsing, cache-first app lookup, build invocation, and paired option validation."
+    },
+    {
       "path": "private/apple/apps/concourse/concourse.xcodeproj/project.pbxproj",
       "purpose": "Regenerated by the old XcodeGen reference path during the old/new build comparison."
     },
@@ -264,7 +274,11 @@
     },
     {
       "command": "vaporize toolchain -- swift test --package-path private/apple/spm/vaporize@wrkstrm-core.cli",
-      "result": "PASS: 77 tests across 14 CUJ-specific SwiftPM bundles"
+      "result": "PASS: 81 tests across 15 CUJ-specific SwiftPM bundles"
+    },
+    {
+      "command": "vaporize toolchain -- swift test --package-path private/apple/spm/vaporize@wrkstrm-core.cli --filter VaporizeCUJ15XcodeProductCacheTests",
+      "result": "PASS: CUJ-15 product-cache option parsing, cache-first lookup, shared workspace invocation, and paired option validation"
     },
     {
       "command": "vaporize validate-json --path private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/concourse-project-yml-inspection.receipt.json",
@@ -382,6 +396,7 @@
   "forwardPath": [
     "Expand Pkl-backed .xcodeproj world-state generation beyond the first Creative Selection v0.2 slice.",
     "Run old tool / Vaporize / Pkl-generation comparisons beyond Concourse and Creative Selection v0.2 before claiming fleet parity.",
+    "Promote shared workspace product-cache reuse into workspace product/scheme discovery once the maintained workspace fleet is known.",
     "Quarantine or migrate remaining substrate-owned XcodeGen surfaces."
   ],
   "boundaries": [
@@ -390,6 +405,7 @@
     "Legacy project.yml read compatibility is a bridge for comparison and migration, not the forward source-of-truth claim.",
     "Generated project.pkl import specimens are migration evidence, not .xcodeproj generators.",
     "Generated transitional AppleProjectSpec YAML is migration evidence, not a checked-in project.yml replacement or .xcodeproj generator.",
+    "Shared Xcode workspace product-cache reuse is a cache lookup and build-invocation slice, not automatic workspace product discovery.",
     "Concourse build comparison is one-specimen evidence and must not be generalized to the whole fleet without additional receipts."
   ]
 }

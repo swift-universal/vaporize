@@ -1,7 +1,7 @@
 # Vaporize v0.0.1 - Critical User Journeys
 
-**Status:** release-prep draft; blocked pending Pkl project-generation migration
-**Updated:** 2026-06-13T08:18:07Z
+**Status:** release-prep draft; blocked pending fleet Pkl project-generation parity
+**Updated:** 2026-06-13T21:28:11Z
 **Component:** `vaporize@wrkstrm-core.cli`
 **Tool classification:** `internal-essential-tool`
 
@@ -289,6 +289,36 @@ Failure truth:
   fleet build parity, scheme generation, all XcodeGen feature parity, or final
   internal release readiness.
 
+## CUJ-15 - Assistant Reuses A Warm Xcode Workspace Product Cache
+
+1. Assistant knows the target app also exists in a large Xcode workspace that
+   is kept warm by regular builds.
+2. Assistant runs `vaporize install --artifact app` with the normal app
+   package/project identity plus `--xcode-product-cache-workspace` and
+   `--xcode-product-cache-derived-data-path`.
+3. Vaporize checks the shared DerivedData product path before local DerivedData
+   and SwiftPM build output candidates.
+4. If the shared app product already exists, Vaporize installs that product
+   without rebuilding the local project.
+5. If the shared product is not warm, Vaporize builds through the shared
+   workspace and shared DerivedData path using the requested scheme.
+
+Success:
+
+- The huge workspace can act as the product cache for every project it contains.
+- Local app installs do not rebuild when the shared workspace cache already has
+  the requested `.app` product.
+- Cache workspace and cache DerivedData options are accepted only as a pair.
+- A local project/workspace path may still describe the app home while the
+  actual build invocation uses the shared cache workspace.
+
+Failure truth:
+
+- This does not yet discover schemes/products automatically from the workspace.
+- This does not prove the whole fleet is present in the large workspace cache.
+- A cold or stale cache falls back to the shared workspace build path, not to
+  an untyped direct `xcodebuild` run.
+
 ## Test Coverage Contract
 
 Test count is derived from PRD requirements through the active draft CUJs.
@@ -311,13 +341,14 @@ must know the required floor.
 | CUJ-12 | FR-009 | 1 |
 | CUJ-13 | FR-018 | 4 |
 | CUJ-14 | FR-020 | 3 |
+| CUJ-15 | FR-003, FR-021 | 4 |
 
 Current active-CUJ requirement:
 
-- Required Swift test obligations: 60
+- Required Swift test obligations: 64
 - Required release evidence checks: 4
-- Required targetable test obligations: 64
-- Current executable Swift tests: 77 across 14 CUJ-specific SwiftPM bundles
+- Required targetable test obligations: 68
+- Current executable Swift tests: 81 across 15 CUJ-specific SwiftPM bundles
 - Coverage artifact:
   `release/v0.0.1/evidence/cuj-test-coverage.json`
 
@@ -344,6 +375,9 @@ Current status:
   disposition are proven.
 - Existing XcodeGen surfaces remain historical compatibility, not the forward
   release path for our own apps.
+- Shared workspace product-cache reuse may speed this journey once the fleet is
+  known to be present in the maintained workspace, but CUJ-15 does not replace
+  fleet parity proof.
 
 ## Deferred CUJ - Assistant Discovers Targets Through Vaporize
 

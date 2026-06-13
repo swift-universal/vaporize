@@ -1,6 +1,6 @@
 # Vaporize v0.0.1 - Provenance Artifact
 
-**Generated:** 2026-06-13T08:18:07Z
+**Generated:** 2026-06-13T21:28:11Z
 **Status:** captured for forward Pkl migration
 **Subject:** `vaporize@wrkstrm-core.cli` v0.0.1 release prep
 
@@ -9,10 +9,10 @@ chat memory.
 
 ## Proven
 
-- CUJ-derived test coverage is explicit: 60 required Swift test obligations
-  plus 4 release evidence checks across 14 active CUJs.
-- Vaporize package tests pass through `vaporize toolchain`: 77 executable Swift
-  tests across 14 CUJ-specific SwiftPM test bundles.
+- CUJ-derived test coverage is explicit: 64 required Swift test obligations
+  plus 4 release evidence checks across 15 active CUJs.
+- Vaporize package tests pass through `vaporize toolchain`: 81 executable Swift
+  tests across 15 CUJ-specific SwiftPM test bundles.
 - Concourse `project.yml` parses into Swift `AppleProjectSpec`.
 - Fleet intake audit parsed 155/155 discovered `project.yml` files.
 - Old XcodeGen script build and Vaporize app build both pass for Concourse
@@ -27,6 +27,9 @@ chat memory.
   mismatches.
 - Creative Selection v0.2 `project.pkl` generates first-slice `.xcodeproj`
   world-state through `generate-xcodeproj`.
+- Shared Xcode workspace product-cache reuse has a first slice: cache-first app
+  lookup, paired option validation, and shared workspace/DerivedData build
+  invocation are covered by CUJ-15.
 - Initial schema-universal extraction exists as `vaporize-schemas v0.0.1` for
   CUJ coverage, provenance, launch-review specialization, and Apple project
   YAML/Pkl receipts.
@@ -37,6 +40,8 @@ chat memory.
 - The full fleet builds through Vaporize.
 - Pkl-backed `.xcodeproj` generation covers scheme/resource/package feature
   parity across the required fleet.
+- Vaporize automatically discovers the requested product or scheme from the
+  shared Xcode workspace cache.
 - Remaining XcodeGen surfaces are migrated or quarantined.
 - Vaporize v0.0.1 is ready for final internal-essential release.
 
@@ -53,6 +58,7 @@ chat memory.
 | `creative-selection-v0.2-project-yml-pkl-import.receipt.json` | Creative Selection v0.2 YAML imports into Pkl | PASS-WITH-NOTE |
 | `creative-selection-v0.2-project-yml-pkl-comparison.receipt.json` | Imported Creative Selection v0.2 Pkl matches YAML | PASS |
 | `creative-selection-v0.2-pkl-xcodeproj-generation.receipt.json` | Creative Selection v0.2 Pkl emits first-slice `.xcodeproj` world-state | PASS-WITH-NOTE |
+| `VaporizeCUJ15XcodeProductCacheTests.swift` | Shared workspace product cache lookup and invocation slice is covered | PASS-WITH-NOTE |
 | `xcodegen-to-pkl-investigation.json` | Migration scope and blockers are captured | BLOCKS-INTERNAL-V0.0.1 |
 | `cuj-test-coverage.json` | PRD/CUJ-derived required test floor is captured | PASS |
 | `launch-review-packet.json` | Release-prep packet is gathered | VALID-JSON |
@@ -80,7 +86,9 @@ chat memory.
    Creative Selection v0.2 slice.
 2. Repeat old tool / Vaporize / Pkl-generation comparisons beyond Concourse and
    Creative Selection v0.2 before claiming fleet parity.
-3. Quarantine or migrate remaining substrate-owned XcodeGen surfaces.
+3. Promote shared workspace product-cache reuse into workspace product/scheme
+   discovery once the maintained workspace fleet is known.
+4. Quarantine or migrate remaining substrate-owned XcodeGen surfaces.
 
 The machine-readable companion is
 `vaporize-v0.0.1-provenance-artifact.json`.

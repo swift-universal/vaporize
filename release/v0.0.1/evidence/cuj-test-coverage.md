@@ -1,6 +1,6 @@
 # Vaporize v0.0.1 - CUJ Test Coverage
 
-**Generated:** 2026-06-13T08:18:07Z
+**Generated:** 2026-06-13T21:28:11Z
 **Status:** active CUJ coverage floor defined
 **Component:** `vaporize@wrkstrm-core.cli`
 **Schema:** `vaporize-schemas v0.0.1` / `VaporizeCUJTestCoverageModel`
@@ -16,12 +16,12 @@ than treating the current test count as self-justifying.
 
 | Metric | Count |
 | --- | ---: |
-| Active CUJs | 14 |
+| Active CUJs | 15 |
 | Deferred CUJs | 2 |
-| Required Swift test obligations | 60 |
+| Required Swift test obligations | 64 |
 | Required release evidence checks | 4 |
-| Required targetable test obligations | 64 |
-| Current executable Swift tests | 77 |
+| Required targetable test obligations | 68 |
+| Current executable Swift tests | 81 |
 
 ## Targetable Test Bundles
 
@@ -41,6 +41,7 @@ than treating the current test count as self-justifying.
 | CUJ-12 | `VaporizeCUJ12PackageGraphTests` | 1 |
 | CUJ-13 | `VaporizeCUJ13YMLPklImportTests` | 4 |
 | CUJ-14 | `VaporizeCUJ14PklXcodeProjectGenerationTests` | 3 |
+| CUJ-15 | `VaporizeCUJ15XcodeProductCacheTests` | 4 |
 
 ## Coverage By CUJ
 
@@ -60,11 +61,15 @@ than treating the current test count as self-justifying.
 | CUJ-12 | FR-009 | 1 | Graph forwarded argument parsing |
 | CUJ-13 | FR-018 | 4 | Legacy YAML import parsing, generated Pkl evaluation, YAML/Pkl comparison, nested value rendering |
 | CUJ-14 | FR-020 | 3 | generate-xcodeproj parsing, Pkl-backed .xcodeproj output, deterministic renderer proof |
+| CUJ-15 | FR-003, FR-021 | 4 | Product-cache option parsing, cache-first app lookup, shared workspace build invocation, paired option validation |
 
 ## Deferred Coverage
 
 - Fleet Pkl-backed `.xcodeproj` build parity and XcodeGen quarantine
   disposition remain deferred and release blocking.
+- Automatic shared-workspace scheme/product discovery remains deferred; CUJ-15
+  covers cache-first lookup and shared workspace invocation when the scheme is
+  already known.
 - `list-targets` target discovery remains deferred and outside the current
   v0.0.1 green path.
 

@@ -1,7 +1,7 @@
 # Vaporize v0.0.1 - Release Gates
 
 **Status:** release-prep draft; blocked pending fleet Pkl-backed Xcode world-state parity
-**Updated:** 2026-06-13T08:18:07Z
+**Updated:** 2026-06-13T21:28:11Z
 **Component:** `vaporize@wrkstrm-core.cli`
 **Tool classification:** `internal-essential-tool`
 
@@ -10,14 +10,16 @@
 **BLOCKED-FOR-INTERNAL-ESSENTIAL-RELEASE.**
 
 The CUJ-derived test coverage contract now defines the required floor:
-60 Swift test obligations plus 4 release evidence checks across 14 active CUJs.
-The Vaporize package tests pass 77 executable Swift tests across 14 targetable
+64 Swift test obligations plus 4 release evidence checks across 15 active CUJs.
+The Vaporize package tests pass 81 executable Swift tests across 15 targetable
 CUJ-specific SwiftPM bundles through Vaporize's owned Xcode-selected toolchain
 mode. The approved Swift YAML read bridge,
 PklSwift-backed Pkl parity specimen, transitional YAML generation slice,
 legacy-YAML-to-Pkl import slice, and major-feature test expansion are landed
 and receipted. The first Pkl-backed `.xcodeproj` world-state generation slice is
-also landed for Creative Selection v0.2. The initial
+also landed for Creative Selection v0.2. The shared Xcode workspace product
+cache first slice is landed for cache-first app lookup and shared workspace
+build invocation. The initial
 schema-universal extraction for Vaporize evidence is also landed as
 `vaporize-schemas v0.0.1`. Final internal v0.0.1 release approval is still
 blocked because substrate-owned Apple project generation still needs fleet build
@@ -32,13 +34,13 @@ disposition for any remaining XcodeGen surfaces.
 | GATE-02 - CUJs authored | PASS | `release/v0.0.1/cuj.md` |
 | GATE-03 - Release gates authored | PASS | This file |
 | GATE-04 - Launch-review packet authored | PASS | `release/v0.0.1/evidence/launch-review-packet.json` |
-| GATE-05 - CUJ-derived package tests pass | PASS | `release/v0.0.1/evidence/cuj-test-coverage.json` requires 60 Swift test obligations plus 4 release evidence checks across 14 active CUJs. `vaporize toolchain -- swift test --package-path private/apple/spm/vaporize@wrkstrm-core.cli` passed 77 executable tests across 14 CUJ-specific SwiftPM bundles. |
+| GATE-05 - CUJ-derived package tests pass | PASS | `release/v0.0.1/evidence/cuj-test-coverage.json` requires 64 Swift test obligations plus 4 release evidence checks across 15 active CUJs. `vaporize toolchain -- swift test --package-path private/apple/spm/vaporize@wrkstrm-core.cli` passed 81 executable tests across 15 CUJ-specific SwiftPM bundles. |
 | GATE-06 - Required toolchain owned by Vaporize | PASS-WITH-NOTE | Bare `swift test` used Swift 6.3.2 and failed because Package.swift requires tools 6.4. Vaporize `toolchain` now owns Xcode-selected Swift via internal `xcrun`. |
 | GATE-07 - CLI help reflects release surface | PASS | Vaporize help advertises `use`, `toolchain`, `validate-json`, `inspect-project-yml`, `compare-project-yml-pkl`, `import-project-yml`, `generate-project-yml`, `generate-xcodeproj`, and `--common-process-spec`. |
 | GATE-08 - CommonProcess use mode tested | PASS | `VaporizeUseCommonProcessTests.swift` decodes valid spec JSON, loads a spec from disk, and rejects invalid executable refs. |
 | GATE-09 - Vapor inventory tests pass | PASS | `VaporizeCUJ07VaporInventoryTests` covers scanner status classification, legacy key handling, malformed JSON, path errors, and text/JSON rendering. |
 | GATE-10 - JSON release packet validates | PASS | `vaporize validate-json --path release/v0.0.1/evidence/launch-review-packet.json` passed. |
-| GATE-11 - README matches release surface | BLOCKED | README still needs final audit for Swift tools version, `use` mode, and remaining legacy `craze` wording. Existing README was already modified before this release-prep slice, so this gate is tracked rather than silently edited. |
+| GATE-11 - README matches release surface | PASS | README names Swift tools 6.4, `use`, `toolchain`, `validate-json`, Apple project migration commands, and shared Xcode workspace product-cache flags. Historical `x-craze-collapse-path` remains documented only as read-only compatibility. |
 | GATE-12 - Open feature beads dispositioned | BLOCKED | Follow-ups are named in PRD and launch-review packet; the Pkl project-generation bead is a release blocker for internal v0.0.1. |
 | GATE-13 - Full repository cleanliness | BLOCKED-BY-EXISTING-TREE | Startup reported 511 diff-files. Release review must use scoped paths, not broad worktree cleanliness. |
 | GATE-14 - Pkl project generation for owned Apple surfaces | BLOCKED | Creative Selection v0.2 now proves first-slice Pkl-backed `.xcodeproj` world-state generation. Final internal release still waits for fleet build parity, scheme/resource/package feature coverage, and explicit quarantine disposition for any remaining XcodeGen-backed owned surfaces. |
@@ -50,6 +52,7 @@ disposition for any remaining XcodeGen surfaces.
 | GATE-20 - Schema-universal extraction | PASS-WITH-NOTE | Initial `vaporize-schemas v0.0.1` JSON schemas, fixtures, and fixture-backed Swift model package landed under `schema-universal/private/universal/domain/tooling/schema-families/vaporize-schemas/v0.0.1`. The schema files and fixtures validate as JSON through Vaporize, and `schema-tighten audit` reports 0 safe-to-migrate hits for the slice. |
 | GATE-21 - Legacy YAML to Pkl import | PASS-WITH-NOTE | `import-project-yml` generated `private/apple/apps/creative-selection-v0.2/project.pkl` from the v0.2 app's legacy `project.yml`; `creative-selection-v0.2-project-yml-pkl-import.receipt.json` records the import and `creative-selection-v0.2-project-yml-pkl-comparison.receipt.json` reports zero mismatches. The receipt explicitly says `.xcodeproj` world-state was not generated. |
 | GATE-22 - Pkl Xcode project generation first slice | PASS-WITH-NOTE | `generate-xcodeproj` generated `/tmp/vaporize-creative-selection-v02-generated.xcodeproj` from `private/apple/apps/creative-selection-v0.2/project.pkl`; `creative-selection-v0.2-pkl-xcodeproj-generation.receipt.json` records `buildableWorldStateGenerated=true`, `xcodeProjectGenerated=true`, 1 target, and 4 source files. This proves first-slice world-state generation, not fleet build parity. |
+| GATE-23 - Shared Xcode workspace product cache first slice | PASS-WITH-NOTE | CUJ-15 covers product-cache option parsing, paired option validation, cache-first app lookup before local DerivedData, and Xcode build invocation through the shared workspace/DerivedData pair. This proves the invocation/cache-order slice, not automatic workspace scheme discovery or fleet cache warmth. |
 
 ## Open Follow-Up Beads
 
@@ -60,6 +63,7 @@ disposition for any remaining XcodeGen surfaces.
 - `FR-VAPORIZE-TOOL-CALL-OBSERVABILITY`
 - `FR-VAPORIZE-DRIFT-CATCH-retire-craze-canonical-language`
 - `FR-VAPORIZE-PRODUCT-RELEASE-DIR-RENAME-MODE`
+- `FR-VAPORIZE-XCODE-WORKSPACE-PRODUCT-CACHE-DISCOVERY`
 
 ## Release Review Questions
 
@@ -80,3 +84,5 @@ disposition for any remaining XcodeGen surfaces.
   for quarantined XcodeGen projects?
 - Which project feature slice should follow the first `generate-xcodeproj`
   landing: schemes, resources, local Swift packages, or fleet build parity?
+- Should shared workspace cache discovery live under `list-targets`, or should
+  Vaporize grow a dedicated workspace product query mode?

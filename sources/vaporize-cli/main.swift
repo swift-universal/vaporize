@@ -132,6 +132,16 @@ struct VaporizeCLI: AsyncParsableCommand {
   var derivedDataPath: String?
 
   @Option(
+    name: .customLong("xcode-product-cache-workspace"),
+    help: "Shared .xcworkspace whose warm product cache should be queried before per-project app build outputs.")
+  var xcodeProductCacheWorkspace: String?
+
+  @Option(
+    name: .customLong("xcode-product-cache-derived-data-path"),
+    help: "DerivedData root for --xcode-product-cache-workspace; Vaporize searches Build/Products/<configuration>/<app>.app there first.")
+  var xcodeProductCacheDerivedDataPath: String?
+
+  @Option(
     name: .customLong("xcode-destination"),
     help: "Typed xcodebuild destination. Repeat for multiple destinations. Defaults to macOS arm64 when using xcodebuild.")
   var xcodeDestinations: [String] = []
@@ -343,6 +353,8 @@ struct VaporizeCLI: AsyncParsableCommand {
       xcodeWorkspace: xcodeWorkspace,
       xcodeScheme: xcodeScheme,
       derivedDataPath: derivedDataPath,
+      xcodeProductCacheWorkspace: xcodeProductCacheWorkspace,
+      xcodeProductCacheDerivedDataPath: xcodeProductCacheDerivedDataPath,
       xcodeDestinations: xcodeDestinations,
       xcodeSDK: xcodeSDK,
       xcodeResultBundlePath: xcodeResultBundlePath,
@@ -386,6 +398,8 @@ struct VaporizeCLI: AsyncParsableCommand {
       xcodeWorkspace: xcodeWorkspace,
       xcodeScheme: xcodeScheme,
       derivedDataPath: derivedDataPath,
+      xcodeProductCacheWorkspace: xcodeProductCacheWorkspace,
+      xcodeProductCacheDerivedDataPath: xcodeProductCacheDerivedDataPath,
       xcodeDestinations: xcodeDestinations,
       xcodeSDK: xcodeSDK,
       xcodeResultBundlePath: xcodeResultBundlePath,

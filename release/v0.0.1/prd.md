@@ -1,7 +1,7 @@
 # Vaporize v0.0.1 - PRD
 
-**Status:** release-prep draft; blocked pending Pkl-backed Xcode world-state generation
-**Updated:** 2026-06-13T08:18:07Z
+**Status:** release-prep draft; blocked pending fleet Pkl-backed Xcode world-state parity
+**Updated:** 2026-06-13T21:28:11Z
 **Component:** `vaporize@wrkstrm-core.cli`
 **Release target:** internal essential substrate CLI
 **Tool classification:** `internal-essential-tool`
@@ -41,6 +41,14 @@ the boundary that no `.xcodeproj` world-state was generated. Creative Selection
 v0.2 is the first newly generated specimen in addition to the hand-authored
 Concourse parity specimen.
 
+The current product-cache slice adds shared Xcode workspace cache reuse for app
+builds. When a large workspace is kept warm, callers can pass
+`--xcode-product-cache-workspace` with
+`--xcode-product-cache-derived-data-path`; Vaporize searches the shared
+`Build/Products/<Configuration>/<app>.app` cache before local DerivedData and
+builds through the shared workspace/DerivedData pair on cache miss. This is a
+cache-first workspace reuse slice, not automatic fleet scheme discovery.
+
 The release classification is `internal-essential-tool`: an internal-only tool
 whose absence blocks assistants from completing build, install, launch, release
 packet validation, and Apple toolchain proof workflows. This is not a public
@@ -78,6 +86,8 @@ explicitly quarantined as historical/external compatibility.
   treating YAML as the forward source of truth.
 - Provide `generate-xcodeproj` so an evaluated AppleProjectSpec Pkl specimen can
   emit first-slice `.xcodeproj` world-state with a receipt.
+- Provide shared Xcode workspace product-cache reuse so a warm large workspace
+  DerivedData product can satisfy app installs before local rebuilds.
 - Provide `status` and `warehouse` inventory modes for
   `x-vaporize-collapse-path` records, with legacy `x-craze-collapse-path`
   read-only fallback.
@@ -143,20 +153,23 @@ Supporting audiences:
 | FR-018 | Legacy YAML to Pkl import | `import-project-yml --path <project.yml> --output-path <project.pkl>` parses legacy XcodeGen YAML, renders an AppleProjectSpec Pkl specimen that amends `AppleProjectSpec.pkl`, and emits a `vaporize-apple-project-yml-pkl-import` receipt that explicitly marks `.xcodeproj` world-state generation as not performed. |
 | FR-019 | Schema-universal evidence extraction | Vaporize release evidence and durable receipts have initial JSON schemas in `schema-universal/private/universal/domain/tooling/schema-families/vaporize-schemas/v0.0.1`, with fixtures extracted from the v0.0.1 release packet. |
 | FR-020 | Pkl to Xcode project generation | `generate-xcodeproj --pkl-path <project.pkl> --output-path <generated.xcodeproj>` evaluates Pkl through PklSwift, writes first-slice `.xcodeproj` world-state, and emits a `vaporize-pkl-xcodeproj-generation` receipt that explicitly records project world-state generation. |
+| FR-021 | Shared Xcode workspace product cache | App install/build accepts paired `--xcode-product-cache-workspace` and `--xcode-product-cache-derived-data-path`, searches the shared DerivedData product path before local outputs, and uses the shared workspace/DerivedData pair for the Xcode build invocation on cache miss. |
 
 ## Release Criteria
 
 - Vaporize's package test suite passes with the Swift 6.4 toolchain:
   `vaporize toolchain -- swift test --package-path private/apple/spm/vaporize@wrkstrm-core.cli`.
-  Current proof: the CUJ-derived coverage floor requires 60 Swift test
+  Current proof: the CUJ-derived coverage floor requires 64 Swift test
   obligations plus 4 release evidence checks, all targetable by CUJ-specific
-  SwiftPM test bundles; the executable suite passes 77 tests across 14 CUJ
+  SwiftPM test bundles; the executable suite passes 81 tests across 15 CUJ
   targets.
 - CUJ test coverage is recorded in
   `release/v0.0.1/evidence/cuj-test-coverage.json`.
 - CLI help advertises `use`, `toolchain`, `validate-json`,
   `inspect-project-yml`, `compare-project-yml-pkl`, `import-project-yml`,
-  `generate-project-yml`, `generate-xcodeproj`, and `--common-process-spec`.
+  `generate-project-yml`, `generate-xcodeproj`, `--common-process-spec`,
+  `--xcode-product-cache-workspace`, and
+  `--xcode-product-cache-derived-data-path`.
 - Release packet JSON validates with
   `vaporize validate-json --path release/v0.0.1/evidence/launch-review-packet.json`.
 - Vaporize release evidence schemas validate as JSON under
@@ -193,3 +206,4 @@ Supporting audiences:
 - `FR-VAPORIZE-REALIZE-typed-vaporware-unit`
 - `FR-VAPORIZE-TOOL-CALL-OBSERVABILITY`
 - `FR-VAPORIZE-DRIFT-CATCH-retire-craze-canonical-language`
+- `FR-VAPORIZE-XCODE-WORKSPACE-PRODUCT-CACHE-DISCOVERY`

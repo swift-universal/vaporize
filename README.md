@@ -26,7 +26,7 @@ classify; the canonical write key is `x-vaporize-collapse-path`.
 ## Requirements
 
 - macOS 26.0+
-- Swift 6.2+
+- Swift 6.4+
 
 ## Canonical installed command
 
@@ -38,6 +38,14 @@ vaporize test --package-path <package> --configuration debug -- --filter <test-f
 vaporize run --artifact cli --package-path <package> --product <product> --configuration release -- <arguments>
 vaporize run --artifact app --package-path <package> --product <app-product> --configuration release --force
 vaporize pass -- swift --version
+vaporize use --common-process-spec <spec.json> --receipt-path <receipt.json>
+vaporize toolchain -- swift test
+vaporize validate-json --path <packet.json>
+vaporize inspect-project-yml --path <project.yml> --format json --receipt-path <receipt.json>
+vaporize compare-project-yml-pkl --path <project.yml> --pkl-path <project.pkl> --receipt-path <receipt.json>
+vaporize import-project-yml --path <project.yml> --output-path <project.pkl> --receipt-path <receipt.json>
+vaporize generate-project-yml --pkl-path <project.pkl> --output-path <generated.yml> --receipt-path <receipt.json>
+vaporize generate-xcodeproj --pkl-path <project.pkl> --output-path <generated.xcodeproj> --receipt-path <receipt.json>
 vaporize setup --xcode-component MetalToolchain
 vaporize status --path <records> --format text
 vaporize warehouse --path <records> --receipt-path <receipt.json>
@@ -122,6 +130,30 @@ vaporize install \
   --force \
   --launch
 ```
+
+Warm shared Xcode workspace cache:
+
+```bash
+vaporize install \
+  --artifact app \
+  --package-path /path/to/app/root \
+  --product MyApp \
+  --configuration debug \
+  --destination /Applications \
+  --xcode-project /path/to/app/MyApp.xcodeproj \
+  --scheme MyApp \
+  --derived-data-path /path/to/app/.derived-data \
+  --xcode-product-cache-workspace /path/to/Huge/Huge.xcworkspace \
+  --xcode-product-cache-derived-data-path /path/to/Huge/.derived-data \
+  --xcode-destination 'platform=macOS,arch=arm64' \
+  --force
+```
+
+When both product-cache options are present, Vaporize first looks for
+`Build/Products/<Configuration>/<product>.app` under the shared DerivedData
+path. If the product is not already warm, the app build uses the shared
+workspace and shared DerivedData path so all workspace projects resolve products
+from the same cache.
 
 When the built `.app` bundle name differs from the install product name, keep
 the install product stable and locate the built artifact with `--app-bundle-name`:
@@ -214,6 +246,52 @@ Receipt fields include the tool, executable, arguments, working directory,
 CommonProcess request id, runner kind, exit code or signal, process identifier,
 and stdout/stderr byte counts.
 
+## CommonProcess use
+
+Use mode is the typed invocation lane for a caller-supplied CommonProcess
+`CommandSpec` JSON file:
+
+```bash
+vaporize use \
+  --common-process-spec /tmp/command-spec.json \
+  --receipt-path /tmp/vaporize-use.receipt.json
+```
+
+The spec is decoded before execution, invalid executable refs are rejected, and
+receipts record the process result without serializing environment values.
+
+## Toolchain and JSON validation
+
+Toolchain mode is the owned route for Xcode-selected Swift. Assistants should
+use it instead of calling `xcrun` directly:
+
+```bash
+vaporize toolchain -- swift test
+```
+
+Release packet JSON validation also stays inside Vaporize:
+
+```bash
+vaporize validate-json --path release/v0.0.1/evidence/launch-review-packet.json
+```
+
+## Apple project migration
+
+The project migration modes support the XcodeGen-to-Pkl release path without
+treating legacy YAML as the forward source of truth:
+
+```bash
+vaporize inspect-project-yml --path private/apple/apps/concourse/project.yml --format json
+vaporize compare-project-yml-pkl --path private/apple/apps/concourse/project.yml --pkl-path private/apple/apps/concourse/project.pkl
+vaporize import-project-yml --path private/apple/apps/creative-selection-v0.2/project.yml --output-path private/apple/apps/creative-selection-v0.2/project.pkl
+vaporize generate-project-yml --pkl-path private/apple/apps/concourse/project.pkl --output-path /tmp/concourse.generated.yml
+vaporize generate-xcodeproj --pkl-path private/apple/apps/creative-selection-v0.2/project.pkl --output-path /tmp/creative-selection.generated.xcodeproj
+```
+
+`generate-project-yml` is transitional migration evidence. `generate-xcodeproj`
+is the owned world-state generation path, currently proven as a first slice
+rather than fleet parity.
+
 ## Xcode component setup
 
 Setup mode is the owned lane for Xcode component downloads required by Apple app
@@ -236,6 +314,9 @@ reports a missing Metal Toolchain.
   `swift package experimental-uninstall` under the hood.
 - App install uses `swift build` with the Xcode build system, or a typed
   `xcodebuild` invocation when Xcode project/workspace fields are provided.
+- Shared Xcode workspace product cache reuse requires both
+  `--xcode-product-cache-workspace` and
+  `--xcode-product-cache-derived-data-path`; providing only one is invalid.
 - Xcode build settings must be passed as repeatable `--xcode-build-setting`
   `KEY=VALUE` fields. Do not smuggle native-tool shell fragments into runbooks.
 - Pass-through mode currently defaults to Swift. It is for analyzable Swift

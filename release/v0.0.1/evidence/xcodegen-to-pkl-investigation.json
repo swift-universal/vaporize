@@ -229,10 +229,11 @@
         "private/apple/spm/vaporize@wrkstrm-core.cli/tests/cuj-11-pkl-yml-generation/VaporizeCUJ11PklYMLGenerationTests.swift",
         "private/apple/spm/vaporize@wrkstrm-core.cli/tests/cuj-12-package-graph/VaporizeCUJ12PackageGraphTests.swift",
         "private/apple/spm/vaporize@wrkstrm-core.cli/tests/cuj-13-yml-pkl-import/VaporizeCUJ13YMLPklImportTests.swift",
-        "private/apple/spm/vaporize@wrkstrm-core.cli/tests/cuj-14-pkl-xcodeproj-generation/VaporizeCUJ14PklXcodeProjectGenerationTests.swift"
+        "private/apple/spm/vaporize@wrkstrm-core.cli/tests/cuj-14-pkl-xcodeproj-generation/VaporizeCUJ14PklXcodeProjectGenerationTests.swift",
+        "private/apple/spm/vaporize@wrkstrm-core.cli/tests/cuj-15-xcode-product-cache/VaporizeCUJ15XcodeProductCacheTests.swift"
       ],
-      "result": "CUJ coverage contract requires 60 Swift test obligations plus 4 release evidence checks; vaporize toolchain -- swift test passed 77 executable Swift tests across 14 CUJ-specific SwiftPM bundles.",
-      "boundary": "This expands release proof across major Vaporize features and includes the first Pkl-backed .xcodeproj generation slice; it does not prove fleet build parity."
+      "result": "CUJ coverage contract requires 64 Swift test obligations plus 4 release evidence checks; vaporize toolchain -- swift test passed 81 executable Swift tests across 15 CUJ-specific SwiftPM bundles.",
+      "boundary": "This expands release proof across major Vaporize features and includes the first Pkl-backed .xcodeproj generation slice plus shared Xcode workspace product-cache reuse; it does not prove fleet build parity or automatic workspace product discovery."
     }
   ],
   "recommendedMigrationPlan": [

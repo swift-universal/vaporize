@@ -21,6 +21,8 @@ public struct SwiftAppInstaller: Sendable {
     public var xcodeWorkspace: String?
     public var xcodeScheme: String?
     public var derivedDataPath: String?
+    public var xcodeProductCacheWorkspace: String?
+    public var xcodeProductCacheDerivedDataPath: String?
     public var xcodeDestinations: [String]
     public var xcodeSDK: String?
     public var xcodeResultBundlePath: String?
@@ -39,6 +41,8 @@ public struct SwiftAppInstaller: Sendable {
       xcodeWorkspace: String? = nil,
       xcodeScheme: String? = nil,
       derivedDataPath: String? = nil,
+      xcodeProductCacheWorkspace: String? = nil,
+      xcodeProductCacheDerivedDataPath: String? = nil,
       xcodeDestinations: [String] = [],
       xcodeSDK: String? = nil,
       xcodeResultBundlePath: String? = nil,
@@ -56,6 +60,8 @@ public struct SwiftAppInstaller: Sendable {
       self.xcodeWorkspace = xcodeWorkspace
       self.xcodeScheme = xcodeScheme
       self.derivedDataPath = derivedDataPath
+      self.xcodeProductCacheWorkspace = xcodeProductCacheWorkspace
+      self.xcodeProductCacheDerivedDataPath = xcodeProductCacheDerivedDataPath
       self.xcodeDestinations = xcodeDestinations
       self.xcodeSDK = xcodeSDK
       self.xcodeResultBundlePath = xcodeResultBundlePath
@@ -93,6 +99,10 @@ public struct SwiftAppInstaller: Sendable {
   // MARK: - Build
 
   private func buildApp() async throws {
+    if try cachedBuiltApp() != nil {
+      return
+    }
+
     var localShell = shell
     localShell.logOptions = .init(
       exposure: .summary,
@@ -126,6 +136,7 @@ public struct SwiftAppInstaller: Sendable {
 
   func locateBuiltApp() throws -> URL {
     let fm = FileManager.default
+    try request.validateXcodeProductCacheConfiguration()
     let packageRoot = URL(fileURLWithPath: request.packagePath)
     let candidates = buildCandidates(
       for: packageRoot,
@@ -139,7 +150,19 @@ public struct SwiftAppInstaller: Sendable {
   }
 
   func buildCandidates(for root: URL, configuration: Configuration, product: String) -> [URL] {
-    var candidates: [URL] = [
+    var candidates: [URL] = []
+    if let cachedProduct = request.xcodeProductCacheAppCandidate(
+      configuration: configuration,
+      product: product
+    ) {
+      candidates.append(cachedProduct)
+    }
+    if let dd = request.derivedDataPath {
+      let ddRoot = URL(fileURLWithPath: dd)
+      candidates.append(
+        ddRoot.appendingPathComponent("Build/Products/\(configuration.rawValue.capitalized)/\(product).app"))
+    }
+    candidates += [
       root.appendingPathComponent(
         ".build/apple/Products/\(configuration.rawValue.capitalized)/\(product).app"),
       root.appendingPathComponent(
@@ -147,13 +170,18 @@ public struct SwiftAppInstaller: Sendable {
       root.appendingPathComponent(
         ".build/\(configuration.rawValue)/\(product).app"),
     ]
-    if let dd = request.derivedDataPath {
-      let ddRoot = URL(fileURLWithPath: dd)
-      candidates.insert(
-        ddRoot.appendingPathComponent("Build/Products/\(configuration.rawValue.capitalized)/\(product).app"),
-        at: 0)
-    }
     return candidates
+  }
+
+  func cachedBuiltApp() throws -> URL? {
+    try request.validateXcodeProductCacheConfiguration()
+    guard let candidate = request.xcodeProductCacheAppCandidate(
+      configuration: request.configuration,
+      product: request.locatedAppBundleName
+    ) else {
+      return nil
+    }
+    return FileManager.default.fileExists(atPath: candidate.path) ? candidate : nil
   }
 
   // MARK: - Install
@@ -210,6 +238,8 @@ extension SwiftAppInstaller.Request {
       || xcodeWorkspace != nil
       || xcodeScheme != nil
       || derivedDataPath != nil
+      || xcodeProductCacheWorkspace != nil
+      || xcodeProductCacheDerivedDataPath != nil
       || !xcodeDestinations.isEmpty
       || xcodeSDK != nil
       || xcodeResultBundlePath != nil
@@ -217,32 +247,37 @@ extension SwiftAppInstaller.Request {
   }
 
   func xcodeBuildInvocation() throws -> SwiftAppInstaller.XcodeBuildInvocation {
+    try validateXcodeProductCacheConfiguration()
+
     guard let scheme = xcodeScheme, !scheme.isEmpty else {
       throw InstallerError.invalidXcodeBuildConfiguration(
         "xcodebuild requires --scheme when any Xcode build option is provided."
       )
     }
 
-    switch (xcodeProject, xcodeWorkspace) {
-    case (.some, .some):
-      throw InstallerError.invalidXcodeBuildConfiguration(
-        "xcodebuild accepts exactly one of --xcode-project or --xcode-workspace."
-      )
-    case (.none, .none):
-      throw InstallerError.invalidXcodeBuildConfiguration(
-        "xcodebuild requires --xcode-project or --xcode-workspace."
-      )
-    case (.some, .none), (.none, .some):
-      break
+    if xcodeProductCacheWorkspace == nil {
+      switch (xcodeProject, xcodeWorkspace) {
+      case (.some, .some):
+        throw InstallerError.invalidXcodeBuildConfiguration(
+          "xcodebuild accepts exactly one of --xcode-project or --xcode-workspace."
+        )
+      case (.none, .none):
+        throw InstallerError.invalidXcodeBuildConfiguration(
+          "xcodebuild requires --xcode-project or --xcode-workspace."
+        )
+      case (.some, .none), (.none, .some):
+        break
+      }
     }
 
     try validateXcodeBuildSettings()
 
     var args: [String] = []
-    if let project = xcodeProject {
+    if let cacheWorkspace = xcodeProductCacheWorkspace {
+      args += ["-workspace", cacheWorkspace]
+    } else if let project = xcodeProject {
       args += ["-project", project]
-    }
-    if let workspace = xcodeWorkspace {
+    } else if let workspace = xcodeWorkspace {
       args += ["-workspace", workspace]
     }
 
@@ -261,7 +296,9 @@ extension SwiftAppInstaller.Request {
     if let sdk = xcodeSDK {
       args += ["-sdk", sdk]
     }
-    if let derivedDataPath {
+    if let cacheDerivedDataPath = xcodeProductCacheDerivedDataPath {
+      args += ["-derivedDataPath", cacheDerivedDataPath]
+    } else if let derivedDataPath {
       args += ["-derivedDataPath", derivedDataPath]
     }
     if let resultBundlePath = xcodeResultBundlePath {
@@ -280,6 +317,30 @@ extension SwiftAppInstaller.Request {
         throw InstallerError.invalidXcodeBuildSetting(setting)
       }
     }
+  }
+
+  func validateXcodeProductCacheConfiguration() throws {
+    switch (xcodeProductCacheWorkspace, xcodeProductCacheDerivedDataPath) {
+    case (.none, .none), (.some, .some):
+      return
+    case (.some, .none):
+      throw InstallerError.invalidXcodeBuildConfiguration(
+        "--xcode-product-cache-workspace requires --xcode-product-cache-derived-data-path."
+      )
+    case (.none, .some):
+      throw InstallerError.invalidXcodeBuildConfiguration(
+        "--xcode-product-cache-derived-data-path requires --xcode-product-cache-workspace."
+      )
+    }
+  }
+
+  func xcodeProductCacheAppCandidate(
+    configuration: SwiftAppInstaller.Configuration,
+    product: String
+  ) -> URL? {
+    guard let xcodeProductCacheDerivedDataPath else { return nil }
+    return URL(fileURLWithPath: xcodeProductCacheDerivedDataPath)
+      .appendingPathComponent("Build/Products/\(configuration.rawValue.capitalized)/\(product).app")
   }
 }
 

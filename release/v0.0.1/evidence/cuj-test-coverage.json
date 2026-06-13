@@ -7,7 +7,7 @@
   "coverageId": "vaporize-v0.0.1-cuj-test-coverage",
   "subjectAppSlug": "vaporize@wrkstrm-core.cli",
   "subjectReleaseSlug": "v0.0.1",
-  "generatedAt": "2026-06-13T08:18:07Z",
+  "generatedAt": "2026-06-13T21:28:11Z",
   "generatedBy": "codex-crisie",
   "status": "active-cuj-coverage-floor-defined",
   "sourceRule": "Required test count is derived from PRD requirements through active draft CUJs. Actual executable tests may exceed the required floor.",
@@ -17,12 +17,12 @@
     "releaseGates": "private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/release-gates.md"
   },
   "counts": {
-    "activeCUJCount": 14,
+    "activeCUJCount": 15,
     "deferredCUJCount": 2,
-    "requiredSwiftTestObligationCount": 60,
+    "requiredSwiftTestObligationCount": 64,
     "requiredReleaseEvidenceCheckCount": 4,
-    "requiredTargetableTestObligationCount": 64,
-    "currentExecutableSwiftTestCount": 77,
+    "requiredTargetableTestObligationCount": 68,
+    "currentExecutableSwiftTestCount": 81,
     "currentExecutableSwiftTestBreakdown": {
       "VaporizeCUJ01SwiftPMCLITests": 7,
       "VaporizeCUJ02MacAppTests": 14,
@@ -37,7 +37,8 @@
       "VaporizeCUJ11PklYMLGenerationTests": 3,
       "VaporizeCUJ12PackageGraphTests": 1,
       "VaporizeCUJ13YMLPklImportTests": 4,
-      "VaporizeCUJ14PklXcodeProjectGenerationTests": 3
+      "VaporizeCUJ14PklXcodeProjectGenerationTests": 3,
+      "VaporizeCUJ15XcodeProductCacheTests": 4
     }
   },
   "coverage": [
@@ -193,6 +194,16 @@
         "VaporizeCUJ14PklXcodeProjectGenerationTests.swift",
         "creative-selection-v0.2-pkl-xcodeproj-generation.receipt.json"
       ]
+    },
+    {
+      "cuj": "CUJ-15",
+      "title": "Assistant Reuses A Warm Xcode Workspace Product Cache",
+      "prdRefs": ["FR-003", "FR-021"],
+      "requiredSwiftTestObligations": 4,
+      "status": "covered-with-boundary",
+      "evidence": [
+        "VaporizeCUJ15XcodeProductCacheTests.swift"
+      ]
     }
   ],
   "deferredCoverage": [
@@ -210,6 +221,7 @@
   "boundaries": [
     "This artifact defines the active-CUJ coverage floor; it does not approve v0.0.1 release.",
     "First-slice Pkl-backed .xcodeproj world-state generation is covered; fleet build parity and quarantine disposition remain release-blocking.",
+    "Shared Xcode workspace product-cache reuse is covered as cache lookup and build invocation; automatic workspace scheme/product discovery remains deferred.",
     "Actual executable Swift tests may exceed the required count when extra regression coverage is useful."
   ]
 }
