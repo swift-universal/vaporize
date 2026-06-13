@@ -1,0 +1,201 @@
+# Why Vaporize
+
+**Status:** release-prep explainer
+**Updated:** 2026-06-13T21:39:03Z
+**Component:** `vaporize@wrkstrm-core.cli`
+**Release target:** internal essential substrate CLI
+
+## One Sentence Claim
+
+Vaporize is better when the job is not merely "run Swift," but "turn typed
+software intent into buildable, installable, reviewable world-state with a
+stable assistant-facing command, receipts, and policy boundaries."
+
+It is not a replacement for Swift, Xcode, or Xcode's build system. It is the
+substrate-owned gate around those engines.
+
+## Problems Vaporize Claims To Solve
+
+| Problem | Vaporize answer | Current proof |
+| --- | --- | --- |
+| Assistants improvise shell choreography | One canonical command surface for build, test, install, run, open, validate, inspect, import, generate, inventory, and toolchain selection | README, PRD FR-001 through FR-021, 15 CUJ bundles |
+| Direct native tools bypass policy | `xcodebuild`, `xcrun`, and JSON validation details live behind Vaporize modes | CUJ-05, CUJ-06, release gates |
+| Build/install output is hard to review | Receipts record what was requested and what happened | Pass/use/toolchain/validation/project receipts |
+| Xcode project migration needs proof | YAML, Pkl, generated YAML, and first-slice `.xcodeproj` generation are compared and receipted | CUJ-08, CUJ-10, CUJ-11, CUJ-13, CUJ-14 |
+| App artifact lookup is fragile | App bundle name, DerivedData, configuration, project/workspace, and install destination become explicit inputs | CUJ-02 |
+| Huge workspace products are rebuilt locally | Shared workspace product-cache flags search the warm workspace DerivedData product before local outputs and build through the shared workspace on cache miss | CUJ-15 |
+| Release review drifts into chat memory | PRD, CUJs, gates, launch packet, provenance, and schema fixtures name the evidence and counts | Release v0.0.1 packet |
+
+## Compared To Swift Alone
+
+Swift is the compiler, package manager, and test runner. It remains the engine
+for SwiftPM package work.
+
+Vaporize adds:
+
+- A stable CLI contract for assistants and runbooks.
+- Toolchain selection through `toolchain -- swift ...` when the Xcode-selected
+  Swift route is required.
+- Install/uninstall/run wrappers for CLI and app artifacts.
+- Receipt emission and release evidence integration.
+- JSON validation, inventory scanning, CommonProcess `use`, and Apple project
+  migration modes.
+- App build/install composition that Swift alone does not own.
+
+Current direct Swift comparison:
+
+- On this host at `2026-06-13T21:39:03Z`, bare `swift --version` and
+  `vaporize toolchain -- swift --version` both reported Apple Swift 6.4.
+- A warm focused CUJ-15 test run took `6.80s` through bare `swift test` and
+  `6.80s` through `vaporize toolchain -- swift test`.
+- Therefore the current claim is not that Vaporize is faster than Swift for
+  normal SwiftPM tests. The claim is that Vaporize makes the route stable,
+  reviewable, policy-compliant, and composable with app/install/release work.
+
+Swift alone is still fine for a human doing a local one-off package command.
+Vaporize is the preferred internal route when an assistant is producing durable
+evidence, installing artifacts, selecting Xcode Swift, touching app bundles, or
+moving release state.
+
+## Compared To Xcodebuild And Xcrun
+
+`xcodebuild` is the low-level Apple build driver. It is powerful, but the raw
+interface is too broad for assistant runbooks: small flag differences change
+DerivedData, signing, destinations, result bundles, artifact names, and install
+expectations.
+
+Vaporize adds:
+
+- Narrow typed inputs for project/workspace, scheme, configuration,
+  destination, SDK, result bundle, build settings, app bundle name, and
+  DerivedData.
+- Early validation for invalid Xcode configuration.
+- A consistent artifact lookup and install path after the build.
+- Shared workspace product-cache behavior as a named feature instead of a
+  hand-written `xcodebuild` convention.
+- A policy boundary: assistants use Vaporize; Vaporize may invoke `xcodebuild`
+  internally.
+
+`xcrun` is the low-level tool selector. Vaporize's `toolchain` mode keeps that
+tool selection inside the release surface and currently narrows it to Swift.
+That prevents `toolchain` from becoming a generic native-tool bypass.
+
+## Performance Benchmarks
+
+These are current local baseline numbers, not final fleet benchmarks.
+
+Environment:
+
+- Generated at: `2026-06-13T21:39:03Z`
+- Working tree: `/Users/sonoma/mono`
+- Timing command: `/usr/bin/time -p`
+- State: warm local SwiftPM build state, no clean build purge, no fleet
+  DerivedData purge
+
+| Benchmark | Command shape | Result |
+| --- | --- | ---: |
+| JSON validation | `vaporize validate-json --path launch-review-packet.json` | `0.03s real` |
+| Xcode-selected Swift version | `vaporize toolchain -- swift --version` | `0.25s real` |
+| Bare Swift version comparison | `swift --version` | `0.17s real` |
+| Focused CUJ-15 through bare Swift | `swift test --filter VaporizeCUJ15XcodeProductCacheTests` | `6.80s real` |
+| Focused CUJ-15 through Vaporize toolchain | `vaporize toolchain -- swift test --filter VaporizeCUJ15XcodeProductCacheTests` | `6.80s real` |
+| Full Vaporize suite through Vaporize toolchain | `vaporize toolchain -- swift test` | `9.14s real`, 81 tests |
+
+Interpretation:
+
+- Vaporize wrapper overhead is not visible at focused SwiftPM test scale in the
+  warm CUJ-15 comparison; both routes measured `6.80s`.
+- For a trivial version command, Vaporize's wrapper/toolchain route added about
+  `0.08s real` in this run.
+- The performance win Vaporize is positioned for is not raw compiler speed. It
+  is avoiding repeated local app rebuilds, avoiding wrong toolchain runs,
+  eliminating manual setup mistakes, and keeping evidence attached to the run.
+
+Benchmarks still required before final internal release:
+
+- Cold app build: direct old path vs Vaporize path.
+- Warm app build: cache hit vs cache miss.
+- Shared workspace product-cache hit: install from warm workspace product
+  without local rebuild.
+- Shared workspace product-cache miss: build through workspace DerivedData and
+  then install.
+- Disk usage before and after local-per-project DerivedData is replaced by the
+  shared workspace DerivedData product cache.
+- Fleet-level timing across the owned Apple app surfaces.
+
+## Build Space Savings
+
+The product-cache feature is designed to reduce duplicate build products and
+DerivedData growth when several projects already live in one large maintained
+workspace.
+
+Without the shared cache:
+
+- Each app runbook can point at its own local DerivedData path.
+- The same packages, modules, intermediates, and `.app` products can be rebuilt
+  or retained in multiple per-project caches.
+- Assistants have to guess which cache contains the product they need.
+
+With the shared cache:
+
+- The large workspace has one maintained DerivedData root.
+- Vaporize first checks
+  `Build/Products/<Configuration>/<product>.app` under that shared root.
+- If the product is already warm, Vaporize installs it without a local rebuild.
+- If the product is cold, Vaporize builds through the shared workspace and the
+  same shared DerivedData path, so future projects read from the same cache.
+
+The expected savings formula is:
+
+```text
+space_saved ~= sum(local per-project DerivedData products/intermediates retired)
+               - additional growth in the shared workspace DerivedData
+```
+
+Current proof:
+
+- CUJ-15 proves option parsing, paired option validation, cache-first lookup
+  before local DerivedData, and shared workspace build invocation.
+
+Not yet proven:
+
+- Actual disk savings across the fleet.
+- Which app products are already present in the large workspace.
+- Automatic workspace scheme/product discovery.
+
+## User Ergonomics
+
+Good ergonomics:
+
+- One command family instead of remembering `swift`, `xcodebuild`, `xcrun`,
+  `open`, install paths, JSON validation, and project migration utilities.
+- Commands read like user intent: `build`, `install`, `run`, `use`,
+  `toolchain`, `validate-json`, `inspect-project-yml`, `import-project-yml`,
+  `generate-xcodeproj`.
+- Failure modes are named early: missing scheme, ambiguous project/workspace,
+  malformed build setting, incomplete product-cache pair, missing app bundle.
+- The same flags carry into release evidence, tests, and receipts.
+- Cache behavior is explicit: callers name the shared workspace and the shared
+  DerivedData root instead of relying on ambient Xcode state.
+
+Tradeoffs:
+
+- Vaporize has more surface area than a one-line `swift test`.
+- It must stay ruthlessly documented, tested by CUJ, and honest about what is
+  first-slice versus fleet-proven.
+- If a task is purely local human experimentation, direct Swift can be simpler.
+  If the task is assistant-run, release-facing, app-facing, or needs receipts,
+  Vaporize is the better interface.
+
+## Bottom Line
+
+Vaporize is better because it turns a fragile collection of powerful native
+tools into one substrate-owned build and proof surface. It preserves Swift and
+Xcode as engines, but makes the assistant-facing path predictable, auditable,
+install-aware, migration-aware, and cache-aware.
+
+The current benchmark evidence supports a modest, honest claim: Vaporize adds
+little overhead for warm SwiftPM proof runs and creates room for much larger
+space/time wins through shared workspace product-cache reuse. The fleet
+performance and disk-space claims still need dedicated benchmark receipts before
+they can become final release claims.

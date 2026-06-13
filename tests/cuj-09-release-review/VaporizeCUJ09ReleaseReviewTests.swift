@@ -7,6 +7,7 @@ func releaseReviewArtifactsExist() {
     "release/v0.0.1/prd.md",
     "release/v0.0.1/cuj.md",
     "release/v0.0.1/release-gates.md",
+    "release/v0.0.1/why-vaporize.md",
     "release/v0.0.1/evidence/launch-review-packet.json",
   ] {
     #expect(FileManager.default.fileExists(atPath: packageRoot.appendingPathComponent(relativePath).path))
@@ -21,6 +22,8 @@ func launchReviewPacketIsValidJSONAndInternalEssential() throws {
   #expect(packet["subjectWareKindSlug"] as? String == "internal-essential-cli")
   let releaseTarget = try #require(packet["releaseTarget"] as? [String: Any])
   #expect(releaseTarget["toolClassification"] as? String == "internal-essential-tool")
+  let gateResults = try #require(packet["gateResults"] as? [[String: Any]])
+  #expect(gateResults.contains { $0["gateRef"] as? String == "GATE-24-positioning-and-benchmark-explainer" })
 }
 
 @Test("CUJ-09 CUJ coverage contract is valid JSON and names the floor")
@@ -43,6 +46,7 @@ func releaseGatesKeepPklGenerationBlocked() throws {
   #expect(gates.contains("BLOCKED-FOR-INTERNAL-ESSENTIAL-RELEASE"))
   #expect(gates.contains("Pkl project generation"))
   #expect(gates.contains("cuj-test-coverage.json"))
+  #expect(gates.contains("why-vaporize.md"))
 }
 
 private let packageRoot = URL(fileURLWithPath: #filePath)

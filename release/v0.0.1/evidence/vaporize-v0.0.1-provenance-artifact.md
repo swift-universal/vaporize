@@ -30,6 +30,9 @@ chat memory.
 - Shared Xcode workspace product-cache reuse has a first slice: cache-first app
   lookup, paired option validation, and shared workspace/DerivedData build
   invocation are covered by CUJ-15.
+- `why-vaporize.md` explains the value proposition, Swift/xcodebuild/xcrun
+  comparison, current local benchmark baselines, build-space savings theory,
+  user ergonomics, and benchmark gaps.
 - Initial schema-universal extraction exists as `vaporize-schemas v0.0.1` for
   CUJ coverage, provenance, launch-review specialization, and Apple project
   YAML/Pkl receipts.
@@ -42,6 +45,7 @@ chat memory.
   parity across the required fleet.
 - Vaporize automatically discovers the requested product or scheme from the
   shared Xcode workspace cache.
+- Fleet-wide performance or disk-space savings have been measured.
 - Remaining XcodeGen surfaces are migrated or quarantined.
 - Vaporize v0.0.1 is ready for final internal-essential release.
 
@@ -59,6 +63,7 @@ chat memory.
 | `creative-selection-v0.2-project-yml-pkl-comparison.receipt.json` | Imported Creative Selection v0.2 Pkl matches YAML | PASS |
 | `creative-selection-v0.2-pkl-xcodeproj-generation.receipt.json` | Creative Selection v0.2 Pkl emits first-slice `.xcodeproj` world-state | PASS-WITH-NOTE |
 | `VaporizeCUJ15XcodeProductCacheTests.swift` | Shared workspace product cache lookup and invocation slice is covered | PASS-WITH-NOTE |
+| `why-vaporize.md` | Positioning, tool comparison, benchmark baseline, and ergonomics are explained | PASS-WITH-NOTE |
 | `xcodegen-to-pkl-investigation.json` | Migration scope and blockers are captured | BLOCKS-INTERNAL-V0.0.1 |
 | `cuj-test-coverage.json` | PRD/CUJ-derived required test floor is captured | PASS |
 | `launch-review-packet.json` | Release-prep packet is gathered | VALID-JSON |
@@ -88,7 +93,10 @@ chat memory.
    Creative Selection v0.2 before claiming fleet parity.
 3. Promote shared workspace product-cache reuse into workspace product/scheme
    discovery once the maintained workspace fleet is known.
-4. Quarantine or migrate remaining substrate-owned XcodeGen surfaces.
+4. Create dedicated benchmark receipts for cold builds, warm cache hits, cache
+   misses, and disk usage before making fleet performance or space-saving
+   release claims.
+5. Quarantine or migrate remaining substrate-owned XcodeGen surfaces.
 
 The machine-readable companion is
 `vaporize-v0.0.1-provenance-artifact.json`.

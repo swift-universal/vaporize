@@ -35,8 +35,8 @@ disposition for any remaining XcodeGen surfaces.
 | GATE-03 - Release gates authored | PASS | This file |
 | GATE-04 - Launch-review packet authored | PASS | `release/v0.0.1/evidence/launch-review-packet.json` |
 | GATE-05 - CUJ-derived package tests pass | PASS | `release/v0.0.1/evidence/cuj-test-coverage.json` requires 64 Swift test obligations plus 4 release evidence checks across 15 active CUJs. `vaporize toolchain -- swift test --package-path private/apple/spm/vaporize@wrkstrm-core.cli` passed 81 executable tests across 15 CUJ-specific SwiftPM bundles. |
-| GATE-06 - Required toolchain owned by Vaporize | PASS-WITH-NOTE | Bare `swift test` used Swift 6.3.2 and failed because Package.swift requires tools 6.4. Vaporize `toolchain` now owns Xcode-selected Swift via internal `xcrun`. |
-| GATE-07 - CLI help reflects release surface | PASS | Vaporize help advertises `use`, `toolchain`, `validate-json`, `inspect-project-yml`, `compare-project-yml-pkl`, `import-project-yml`, `generate-project-yml`, `generate-xcodeproj`, and `--common-process-spec`. |
+| GATE-06 - Required toolchain owned by Vaporize | PASS-WITH-NOTE | Current host check at 2026-06-13T21:39:03Z found bare `swift` and `vaporize toolchain -- swift` both reporting Apple Swift 6.4, and focused CUJ-15 took `6.80s` through both routes once warm. Earlier release-prep runs observed bare Swift drift. Vaporize remains the owned route because it stabilizes toolchain policy and release evidence even when host PATH happens to be correct. |
+| GATE-07 - CLI help reflects release surface | PASS | Vaporize help advertises `use`, `toolchain`, `validate-json`, `inspect-project-yml`, `compare-project-yml-pkl`, `import-project-yml`, `generate-project-yml`, `generate-xcodeproj`, `--common-process-spec`, `--xcode-product-cache-workspace`, and `--xcode-product-cache-derived-data-path`. |
 | GATE-08 - CommonProcess use mode tested | PASS | `VaporizeUseCommonProcessTests.swift` decodes valid spec JSON, loads a spec from disk, and rejects invalid executable refs. |
 | GATE-09 - Vapor inventory tests pass | PASS | `VaporizeCUJ07VaporInventoryTests` covers scanner status classification, legacy key handling, malformed JSON, path errors, and text/JSON rendering. |
 | GATE-10 - JSON release packet validates | PASS | `vaporize validate-json --path release/v0.0.1/evidence/launch-review-packet.json` passed. |
@@ -53,6 +53,7 @@ disposition for any remaining XcodeGen surfaces.
 | GATE-21 - Legacy YAML to Pkl import | PASS-WITH-NOTE | `import-project-yml` generated `private/apple/apps/creative-selection-v0.2/project.pkl` from the v0.2 app's legacy `project.yml`; `creative-selection-v0.2-project-yml-pkl-import.receipt.json` records the import and `creative-selection-v0.2-project-yml-pkl-comparison.receipt.json` reports zero mismatches. The receipt explicitly says `.xcodeproj` world-state was not generated. |
 | GATE-22 - Pkl Xcode project generation first slice | PASS-WITH-NOTE | `generate-xcodeproj` generated `/tmp/vaporize-creative-selection-v02-generated.xcodeproj` from `private/apple/apps/creative-selection-v0.2/project.pkl`; `creative-selection-v0.2-pkl-xcodeproj-generation.receipt.json` records `buildableWorldStateGenerated=true`, `xcodeProjectGenerated=true`, 1 target, and 4 source files. This proves first-slice world-state generation, not fleet build parity. |
 | GATE-23 - Shared Xcode workspace product cache first slice | PASS-WITH-NOTE | CUJ-15 covers product-cache option parsing, paired option validation, cache-first app lookup before local DerivedData, and Xcode build invocation through the shared workspace/DerivedData pair. This proves the invocation/cache-order slice, not automatic workspace scheme discovery or fleet cache warmth. |
+| GATE-24 - Positioning and benchmark explainer | PASS-WITH-NOTE | `release/v0.0.1/why-vaporize.md` explains why Vaporize exists, what problems it solves, how it compares to Swift, xcodebuild, and xcrun, current local benchmark numbers, build-space savings theory, user ergonomics, and the benchmark evidence still required before final release claims. |
 
 ## Open Follow-Up Beads
 
@@ -86,3 +87,5 @@ disposition for any remaining XcodeGen surfaces.
   landing: schemes, resources, local Swift packages, or fleet build parity?
 - Should shared workspace cache discovery live under `list-targets`, or should
   Vaporize grow a dedicated workspace product query mode?
+- Which benchmark fixture should become the canonical release benchmark:
+  Concourse, Creative Selection v0.2, or the maintained huge workspace?

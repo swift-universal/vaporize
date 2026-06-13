@@ -24,6 +24,7 @@
       "Creative Selection v0.2 project.yml imports into a generated project.pkl parity specimen, evaluates through PklSwift, and compares back to YAML with zero mismatches.",
       "Creative Selection v0.2 project.pkl generates first-slice .xcodeproj world-state through Vaporize generate-xcodeproj.",
       "Shared Xcode workspace product-cache reuse has a first slice: cache-first app lookup, paired option validation, and shared workspace/DerivedData build invocation are covered by CUJ-15.",
+      "The release-facing why-vaporize explainer exists and records current Swift/xcodebuild/xcrun comparison, local benchmark baselines, build-space savings theory, user ergonomics, and unmeasured benchmark gaps.",
       "Initial schema-universal extraction exists as vaporize-schemas v0.0.1 for CUJ coverage, provenance, launch-review specialization, and Apple project YAML/Pkl receipts.",
       "JSON release evidence validates through Vaporize validate-json."
     ],
@@ -31,6 +32,7 @@
       "The full fleet builds through Vaporize.",
       "Pkl-backed .xcodeproj generation covers scheme/resource/package feature parity across the required fleet.",
       "Vaporize automatically discovers the requested product or scheme from the shared Xcode workspace cache.",
+      "Fleet-wide performance or disk-space savings have been measured.",
       "Remaining XcodeGen surfaces are migrated or quarantined.",
       "Vaporize v0.0.1 is ready for final internal-essential release."
     ]
@@ -47,6 +49,10 @@
     {
       "kind": "release-gates",
       "path": "private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/release-gates.md"
+    },
+    {
+      "kind": "positioning-and-benchmark-explainer",
+      "path": "private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/why-vaporize.md"
     },
     {
       "kind": "launch-review-packet",
@@ -131,6 +137,12 @@
       "result": "VALID-JSON"
     },
     {
+      "receiptKind": "positioning-and-benchmark-explainer",
+      "path": "private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/why-vaporize.md",
+      "claim": "Release review can explain why Vaporize exists, how it compares to Swift/xcodebuild/xcrun, current baseline performance, build-space savings theory, and ergonomics.",
+      "result": "PASS-WITH-NOTE: fleet performance and disk savings still require dedicated benchmark receipts"
+    },
+    {
       "receiptKind": "vaporize-schema-universal-extraction",
       "path": "private/universal/substrate/collectives/schema-universal/private/universal/domain/tooling/schema-families/vaporize-schemas/v0.0.1",
       "claim": "Schema-universal JSON schemas, canonical fixtures, and a Swift model package exist for durable Vaporize release evidence and receipts.",
@@ -200,7 +212,7 @@
     },
     {
       "path": "private/apple/spm/vaporize@wrkstrm-core.cli/tests/cuj-09-release-review/VaporizeCUJ09ReleaseReviewTests.swift",
-      "purpose": "Covers CUJ-09 release artifact presence, launch-review packet JSON, CUJ coverage counts, and release-gate blocker text."
+      "purpose": "Covers CUJ-09 release artifact presence, launch-review packet JSON, CUJ coverage counts, release-gate blocker text, and the why-vaporize positioning gate."
     },
     {
       "path": "private/apple/spm/vaporize@wrkstrm-core.cli/tests/cuj-10-yml-pkl-comparison/VaporizeCUJ10YMLPklComparisonTests.swift",
@@ -255,6 +267,10 @@
       "purpose": "Defines the PRD/CUJ-derived required test floor for active v0.0.1 journeys."
     },
     {
+      "path": "private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/why-vaporize.md",
+      "purpose": "Explains Vaporize positioning, problem claims, Swift/xcodebuild/xcrun comparison, local benchmark baselines, build-space savings theory, user ergonomics, and unmeasured benchmark gaps."
+    },
+    {
       "path": "private/universal/substrate/collectives/schema-universal/private/universal/domain/tooling/schema-families/vaporize-schemas/v0.0.1/json/vaporize-schemas-v000-000-001/schemas",
       "purpose": "Extracts initial JSON schemas for Vaporize CUJ coverage, provenance, launch-review specialization, and Apple project YAML/Pkl receipts."
     },
@@ -279,6 +295,10 @@
     {
       "command": "vaporize toolchain -- swift test --package-path private/apple/spm/vaporize@wrkstrm-core.cli --filter VaporizeCUJ15XcodeProductCacheTests",
       "result": "PASS: CUJ-15 product-cache option parsing, cache-first lookup, shared workspace invocation, and paired option validation"
+    },
+    {
+      "command": "local benchmark baseline captured with /usr/bin/time -p for Vaporize validate-json, Vaporize toolchain swift --version, bare swift --version, focused CUJ-15 through bare Swift, focused CUJ-15 through Vaporize toolchain, and full Vaporize suite",
+      "result": "PASS-WITH-NOTE: validate-json 0.03s, Vaporize swift --version 0.25s, bare swift --version 0.17s, focused CUJ-15 bare Swift 6.80s, focused CUJ-15 Vaporize 6.80s, full Vaporize suite 9.14s; not a fleet performance or disk-space benchmark"
     },
     {
       "command": "vaporize validate-json --path private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/concourse-project-yml-inspection.receipt.json",
@@ -397,6 +417,7 @@
     "Expand Pkl-backed .xcodeproj world-state generation beyond the first Creative Selection v0.2 slice.",
     "Run old tool / Vaporize / Pkl-generation comparisons beyond Concourse and Creative Selection v0.2 before claiming fleet parity.",
     "Promote shared workspace product-cache reuse into workspace product/scheme discovery once the maintained workspace fleet is known.",
+    "Create dedicated benchmark receipts for cold builds, warm cache hits, cache misses, and disk usage before making fleet performance or space-saving release claims.",
     "Quarantine or migrate remaining substrate-owned XcodeGen surfaces."
   ],
   "boundaries": [
@@ -406,6 +427,7 @@
     "Generated project.pkl import specimens are migration evidence, not .xcodeproj generators.",
     "Generated transitional AppleProjectSpec YAML is migration evidence, not a checked-in project.yml replacement or .xcodeproj generator.",
     "Shared Xcode workspace product-cache reuse is a cache lookup and build-invocation slice, not automatic workspace product discovery.",
+    "The why-vaporize benchmark baseline is local release-prep evidence and must not be presented as fleet performance proof.",
     "Concourse build comparison is one-specimen evidence and must not be generalized to the whole fleet without additional receipts."
   ]
 }

@@ -172,6 +172,10 @@ Supporting audiences:
   `--xcode-product-cache-derived-data-path`.
 - Release packet JSON validates with
   `vaporize validate-json --path release/v0.0.1/evidence/launch-review-packet.json`.
+- `release/v0.0.1/why-vaporize.md` explains the value proposition,
+  Swift/xcodebuild/xcrun comparison, current benchmark baseline, build-space
+  savings theory, ergonomics, and remaining benchmark gaps without claiming
+  unmeasured fleet performance.
 - Vaporize release evidence schemas validate as JSON under
   `schema-universal/private/universal/domain/tooling/schema-families/vaporize-schemas/v0.0.1`.
 - Concourse legacy project inspection receipt validates with
