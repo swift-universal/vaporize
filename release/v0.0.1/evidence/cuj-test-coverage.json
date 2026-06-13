@@ -7,7 +7,7 @@
   "coverageId": "vaporize-v0.0.1-cuj-test-coverage",
   "subjectAppSlug": "vaporize@wrkstrm-core.cli",
   "subjectReleaseSlug": "v0.0.1",
-  "generatedAt": "2026-06-12T23:24:02Z",
+  "generatedAt": "2026-06-13T08:18:07Z",
   "generatedBy": "codex-crisie",
   "status": "active-cuj-coverage-floor-defined",
   "sourceRule": "Required test count is derived from PRD requirements through active draft CUJs. Actual executable tests may exceed the required floor.",
@@ -17,12 +17,12 @@
     "releaseGates": "private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/release-gates.md"
   },
   "counts": {
-    "activeCUJCount": 12,
+    "activeCUJCount": 13,
     "deferredCUJCount": 2,
-    "requiredSwiftTestObligationCount": 53,
+    "requiredSwiftTestObligationCount": 57,
     "requiredReleaseEvidenceCheckCount": 4,
-    "requiredTargetableTestObligationCount": 57,
-    "currentExecutableSwiftTestCount": 70,
+    "requiredTargetableTestObligationCount": 61,
+    "currentExecutableSwiftTestCount": 74,
     "currentExecutableSwiftTestBreakdown": {
       "VaporizeCUJ01SwiftPMCLITests": 7,
       "VaporizeCUJ02MacAppTests": 14,
@@ -35,7 +35,8 @@
       "VaporizeCUJ09ReleaseReviewTests": 4,
       "VaporizeCUJ10YMLPklComparisonTests": 4,
       "VaporizeCUJ11PklYMLGenerationTests": 3,
-      "VaporizeCUJ12PackageGraphTests": 1
+      "VaporizeCUJ12PackageGraphTests": 1,
+      "VaporizeCUJ13YMLPklImportTests": 4
     }
   },
   "coverage": [
@@ -167,6 +168,18 @@
       "status": "covered",
       "evidence": [
         "VaporizeCUJ12PackageGraphTests.swift"
+      ]
+    },
+    {
+      "cuj": "CUJ-13",
+      "title": "Assistant Imports Legacy YAML Into Pkl",
+      "prdRefs": ["FR-018"],
+      "requiredSwiftTestObligations": 4,
+      "status": "covered",
+      "evidence": [
+        "VaporizeCUJ13YMLPklImportTests.swift",
+        "creative-selection-v0.2-project-yml-pkl-import.receipt.json",
+        "creative-selection-v0.2-project-yml-pkl-comparison.receipt.json"
       ]
     }
   ],

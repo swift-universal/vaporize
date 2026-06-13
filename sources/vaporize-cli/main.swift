@@ -24,8 +24,9 @@ struct VaporizeCLI: AsyncParsableCommand {
       convention. Project-generation bridge mode: inspect-project-yml reads \
       legacy XcodeGen YAML into an owned Swift model without rewriting it; \
       compare-project-yml-pkl compares that model with a Pkl parity specimen; \
+      import-project-yml emits a Pkl parity specimen from legacy YAML; \
       generate-project-yml emits transitional AppleProjectSpec YAML from Pkl \
-      with a generation receipt. \
+      with receipts. \
       Legacy `inventory` and `x-craze-collapse-path` remain compatibility \
       aliases during migration.
       """
@@ -48,6 +49,7 @@ struct VaporizeCLI: AsyncParsableCommand {
     case validateJSON = "validate-json"
     case inspectProjectYML = "inspect-project-yml"
     case compareProjectYMLPkl = "compare-project-yml-pkl"
+    case importProjectYML = "import-project-yml"
     case generateProjectYML = "generate-project-yml"
     case inventory
 
@@ -69,7 +71,7 @@ struct VaporizeCLI: AsyncParsableCommand {
     case app
   }
 
-  @Argument(help: "Mode: install, uninstall, build, test, run, pass, use, toolchain, setup, status, warehouse, validate-json, inspect-project-yml, compare-project-yml-pkl, generate-project-yml, inventory, or graph (forwards to package-graph@wrkstrm.cli).")
+  @Argument(help: "Mode: install, uninstall, build, test, run, pass, use, toolchain, setup, status, warehouse, validate-json, inspect-project-yml, compare-project-yml-pkl, import-project-yml, generate-project-yml, inventory, or graph (forwards to package-graph@wrkstrm.cli).")
   var mode: Mode
 
   @Option(name: .customLong("artifact"), help: "Artifact kind: cli or app.")
@@ -179,7 +181,7 @@ struct VaporizeCLI: AsyncParsableCommand {
 
   @Option(
     name: .customLong("path"),
-    help: "Path for status, warehouse, validate-json, inspect-project-yml, or compare-project-yml-pkl modes.")
+    help: "Path for status, warehouse, validate-json, inspect-project-yml, compare-project-yml-pkl, or import-project-yml modes.")
   var vaporScanPath: String?
 
   @Option(
@@ -188,13 +190,18 @@ struct VaporizeCLI: AsyncParsableCommand {
   var pklPath: String?
 
   @Option(
+    name: .customLong("pkl-schema-path"),
+    help: "Path to AppleProjectSpec.pkl for import-project-yml mode. Defaults to Vaporize's package schema when discoverable.")
+  var pklSchemaPath: String?
+
+  @Option(
     name: .customLong("output-path"),
-    help: "Output path for generate-project-yml mode.")
+    help: "Output path for import-project-yml or generate-project-yml mode.")
   var generatedOutputPath: String?
 
   @Option(
     name: .customLong("format"),
-    help: "Output format for status, inspect-project-yml, compare-project-yml-pkl, or generate-project-yml mode: text (default) or json.")
+    help: "Output format for status, inspect-project-yml, compare-project-yml-pkl, import-project-yml, or generate-project-yml mode: text (default) or json.")
   var vaporOutputFormat: VaporOutputFormatArgument = .text
 
   @Argument(parsing: .remaining, help: "Arguments forwarded to test, run, pass, or toolchain mode.")
@@ -230,6 +237,8 @@ struct VaporizeCLI: AsyncParsableCommand {
       try await inspectProjectYML()
     case .compareProjectYMLPkl:
       try await compareProjectYMLPkl()
+    case .importProjectYML:
+      try await importProjectYML()
     case .generateProjectYML:
       try await generateProjectYML()
     case .inventory:
@@ -868,6 +877,44 @@ struct VaporizeCLI: AsyncParsableCommand {
     }
   }
 
+  private func importProjectYML() async throws {
+    guard let vaporScanPath, !vaporScanPath.isEmpty else {
+      throw ValidationError("--path is required for import-project-yml mode.")
+    }
+    guard let generatedOutputPath, !generatedOutputPath.isEmpty else {
+      throw ValidationError("--output-path is required for import-project-yml mode.")
+    }
+
+    let outputURL = URL(fileURLWithPath: generatedOutputPath).standardizedFileURL
+    let schemaURL = try resolvedAppleProjectSpecSchemaURL()
+    let schemaAmendsPath = relativePath(
+      from: outputURL.deletingLastPathComponent(),
+      to: schemaURL
+    )
+    let requestId = "vaporize-import-project-yml-\(UUID().uuidString)"
+    let receipt = try AppleProjectSpecPklImporter.generate(
+      ymlURL: URL(fileURLWithPath: vaporScanPath).standardizedFileURL,
+      outputURL: outputURL,
+      schemaAmendsPath: schemaAmendsPath,
+      requestId: requestId
+    )
+    try emitReceiptIfRequested(receipt)
+
+    switch vaporOutputFormat {
+    case .text:
+      print(
+        "project.yml -> project.pkl: \(receipt.projectName) targets=\(receipt.targetCount) packages=\(receipt.packageCount) bytes=\(receipt.generatedByteCount)"
+      )
+      print(receipt.boundary)
+    case .json:
+      let encoder = JSONEncoder()
+      encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
+      let data = try encoder.encode(receipt)
+      FileHandle.standardOutput.write(data)
+      FileHandle.standardOutput.write(Data("\n".utf8))
+    }
+  }
+
   private func generateProjectYML() async throws {
     guard let pklPath, !pklPath.isEmpty else {
       throw ValidationError("--pkl-path is required for generate-project-yml mode.")
@@ -897,6 +944,69 @@ struct VaporizeCLI: AsyncParsableCommand {
       FileHandle.standardOutput.write(data)
       FileHandle.standardOutput.write(Data("\n".utf8))
     }
+  }
+
+  private func resolvedAppleProjectSpecSchemaURL() throws -> URL {
+    let fileManager = FileManager.default
+
+    if let pklSchemaPath, !pklSchemaPath.isEmpty {
+      let url = URL(fileURLWithPath: pklSchemaPath).standardizedFileURL
+      guard fileManager.fileExists(atPath: url.path) else {
+        throw ValidationError("--pkl-schema-path does not exist: \(pklSchemaPath)")
+      }
+      return url
+    }
+
+    var candidates: [URL] = []
+    if let packagePath, !packagePath.isEmpty {
+      candidates.append(
+        URL(fileURLWithPath: packagePath)
+          .appendingPathComponent("Pkl/AppleProjectSpec.pkl")
+          .standardizedFileURL
+      )
+    }
+
+    candidates.append(
+      URL(fileURLWithPath: #filePath)
+        .deletingLastPathComponent()
+        .deletingLastPathComponent()
+        .deletingLastPathComponent()
+        .appendingPathComponent("Pkl/AppleProjectSpec.pkl")
+        .standardizedFileURL
+    )
+
+    let currentDirectory = URL(fileURLWithPath: fileManager.currentDirectoryPath)
+    candidates.append(currentDirectory.appendingPathComponent("Pkl/AppleProjectSpec.pkl").standardizedFileURL)
+
+    for candidate in candidates where fileManager.fileExists(atPath: candidate.path) {
+      return candidate
+    }
+
+    throw ValidationError(
+      "--pkl-schema-path is required for import-project-yml mode when Vaporize cannot locate Pkl/AppleProjectSpec.pkl."
+    )
+  }
+
+  private func relativePath(from baseDirectory: URL, to target: URL) -> String {
+    let baseComponents = baseDirectory.standardizedFileURL.pathComponents
+    let targetComponents = target.standardizedFileURL.pathComponents
+
+    var commonPrefixCount = 0
+    while commonPrefixCount < baseComponents.count,
+      commonPrefixCount < targetComponents.count,
+      baseComponents[commonPrefixCount] == targetComponents[commonPrefixCount]
+    {
+      commonPrefixCount += 1
+    }
+
+    guard commonPrefixCount > 0 else {
+      return target.standardizedFileURL.path
+    }
+
+    let up = Array(repeating: "..", count: baseComponents.count - commonPrefixCount)
+    let down = Array(targetComponents.dropFirst(commonPrefixCount))
+    let components = up + down
+    return components.isEmpty ? "." : components.joined(separator: "/")
   }
 
   private func emitReceiptIfRequested(_ receipt: some Encodable) throws {

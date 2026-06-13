@@ -14,7 +14,7 @@
     {
       "bead": "FR-CRAZE-LIST-TARGETS-substrate-canonical-target-discovery",
       "relation": "sibling - list-targets is one mode this bead composes with",
-      "path": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/craze@wrkstrm-core.cli/agenda/beads/FR-CRAZE-LIST-TARGETS-substrate-canonical-target-discovery.issue.json"
+      "path": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/agenda/beads/FR-CRAZE-LIST-TARGETS-substrate-canonical-target-discovery.issue.json"
     },
     {
       "bead": "FR-VAPOR-COORDINATION-CUT-v0.0.1-COORDINATED-SCHEMA-UNIVERSAL-CRAZE-BUILDS-VAPORWARE",
@@ -29,7 +29,7 @@
         "New mode: `craze status --path <dir>` — walks the path, scans .json files for `\"x-craze-collapse-path\":` key, reports per-file: collapse-status (collapsed/collapse-pending/collapse-blocked/permanent-vapor/unannotated), pendingCapabilityRefs counts, collapseGateRefs counts.",
         "New mode: `craze inventory --path <dir>` — emits typed JSON vapor-inventory for the path (later: typed CrateInventoryReceiptModel; for now: untyped 0.0.1-untyped shape).",
         "Help-banner update: existing modes' help text names craze as the substrate-canonical vaporware-collapse gate.",
-        "Internal command-name fix: ArgumentParser command-name + help banner says 'savepoint@kura-org.cli' format (composes with FR-SAVEPOINT-CLI-RENAME naming-pattern catch — craze SHOULD already say craze@wrkstrm-core.cli internally; audit + fix if drifted)."
+        "Internal command-name fix: ArgumentParser command-name + help banner says 'savepoint@kura-org.cli' format (composes with FR-SAVEPOINT-CLI-RENAME naming-pattern catch — craze SHOULD already say vaporize@wrkstrm-core.cli internally; audit + fix if drifted)."
       ],
       "estimatedEffort": "4-6 agent-hours + 0.5 hour operator review",
       "blockingDependencies": "none - this is the smallest viable lift"
@@ -73,7 +73,7 @@
   "criticalUserJourney": {
     "actor": "Substrate agent (clia, common, cameron) OR operator (rismay) acting in collapse-budget allocation review",
     "phase0Journey": [
-      "Agent: `~/.local/bin/'craze@wrkstrm-core.cli' status --path private/universal/substrate/collectives/wrkstrm-core/private/apple/apps/concourse`",
+      "Agent: `~/.local/bin/'vaporize@wrkstrm-core.cli' status --path private/universal/substrate/collectives/wrkstrm-core/private/apple/apps/concourse`",
       "craze walks the dir, finds *.json files, scans for x-craze-collapse-path annotations.",
       "Output: per-file vapor classification + summary table (X collapsed, Y collapse-pending, Z permanent-vapor, W unannotated).",
       "Agent uses this to identify what to collapse next, without manually grep-ing 50 JSON files."
@@ -103,13 +103,13 @@
   "linkedTypedRecords": {
     "triggeringAxiom": "private/universal/substrate/collectives/spaces-universal/private/universal/kura-spaces/axioms/craze-builds-vaporware-typed-records-are-substrate-vapor-craze-is-the-collapse-gate.axiom.su.json",
     "schemaPrerequisite": "private/universal/substrate/collectives/schema-universal/private/universal/agenda/beads/FR-VAPOR-COORDINATION-CUT-v0.0.1-COORDINATED-SCHEMA-UNIVERSAL-CRAZE-BUILDS-VAPORWARE.issue.json",
-    "siblingDiscoveryBead": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/craze@wrkstrm-core.cli/agenda/beads/FR-CRAZE-LIST-TARGETS-substrate-canonical-target-discovery.issue.json",
+    "siblingDiscoveryBead": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/agenda/beads/FR-CRAZE-LIST-TARGETS-substrate-canonical-target-discovery.issue.json",
     "cameronDraftSwiftCodableSketches": "private/universal/substrate/collectives/spaces-universal/private/universal/kura-spaces/csuite-fan-in-requests/2026-06-10-craze-builds-vaporware-identity-reframe/first-pass-drafts/swift-engineer-cameron-draft.contribution.json",
     "cycle1VaporInventoryEvidence": "private/universal/substrate/collectives/spaces-universal/private/universal/kura-spaces/csuite-fan-in-requests/2026-06-11-vapor-identification-product-lines-and-families/cycle1-aggregation-packet.json"
   },
   "launchGateDiscipline": {
     "stages": [
-      "AUDIT — existing craze sources at craze@wrkstrm-core.cli/sources/ for current CrazeMode + CrazeArtifactKind + Request typed structs. cameron already did this in his architecture-reframe draft — lift his audit findings.",
+      "AUDIT — existing craze sources at vaporize@wrkstrm-core.cli/sources/ for current CrazeMode + CrazeArtifactKind + Request typed structs. cameron already did this in his architecture-reframe draft — lift his audit findings.",
       "TYPED FR — this bead is the umbrella; per-phase deliverables may file sub-beads",
       "DESIGN — Phase 0 design: Swift CommandParser subcommand + JSON file walker + ArgumentParser flags. Phase 1: Swift Codable internal types. Phase 2: SwiftPM dependency on schema-universal Codable packages. Phase 3: Cycle-integration command + receipt-emission pipeline.",
       "IMPLEMENTATION — Swift only. Tests per phase. DocC-first.",

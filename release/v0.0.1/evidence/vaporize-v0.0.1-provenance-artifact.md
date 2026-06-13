@@ -1,6 +1,6 @@
 # Vaporize v0.0.1 - Provenance Artifact
 
-**Generated:** 2026-06-12T23:24:02Z
+**Generated:** 2026-06-13T08:18:07Z
 **Status:** captured for forward Pkl migration
 **Subject:** `vaporize@wrkstrm-core.cli` v0.0.1 release prep
 
@@ -9,10 +9,10 @@ chat memory.
 
 ## Proven
 
-- CUJ-derived test coverage is explicit: 53 required Swift test obligations
-  plus 4 release evidence checks across 12 active CUJs.
-- Vaporize package tests pass through `vaporize toolchain`: 70 executable Swift
-  tests across 12 CUJ-specific SwiftPM test bundles.
+- CUJ-derived test coverage is explicit: 57 required Swift test obligations
+  plus 4 release evidence checks across 13 active CUJs.
+- Vaporize package tests pass through `vaporize toolchain`: 74 executable Swift
+  tests across 13 CUJ-specific SwiftPM test bundles.
 - Concourse `project.yml` parses into Swift `AppleProjectSpec`.
 - Fleet intake audit parsed 155/155 discovered `project.yml` files.
 - Old XcodeGen script build and Vaporize app build both pass for Concourse
@@ -21,6 +21,9 @@ chat memory.
   legacy YAML parity signature with zero mismatches.
 - Concourse `project.pkl` generates transitional `AppleProjectSpec` YAML
   through PklSwift, and the generated YAML compares back to Pkl with zero
+  mismatches.
+- Creative Selection v0.2 `project.yml` imports into a generated `project.pkl`
+  parity specimen, and the generated Pkl compares back to YAML with zero
   mismatches.
 - Initial schema-universal extraction exists as `vaporize-schemas v0.0.1` for
   CUJ coverage, provenance, launch-review specialization, and Apple project
@@ -44,6 +47,8 @@ chat memory.
 | `concourse-project-yml-pkl-comparison.receipt.json` | Concourse Pkl specimen matches legacy YAML | PASS |
 | `concourse-pkl-project-yml-generation.receipt.json` | Concourse Pkl emits transitional YAML | PASS-WITH-NOTE |
 | `concourse-generated-yml-pkl-comparison.receipt.json` | Generated YAML matches Concourse Pkl | PASS |
+| `creative-selection-v0.2-project-yml-pkl-import.receipt.json` | Creative Selection v0.2 YAML imports into Pkl | PASS-WITH-NOTE |
+| `creative-selection-v0.2-project-yml-pkl-comparison.receipt.json` | Imported Creative Selection v0.2 Pkl matches YAML | PASS |
 | `xcodegen-to-pkl-investigation.json` | Migration scope and blockers are captured | BLOCKS-INTERNAL-V0.0.1 |
 | `cuj-test-coverage.json` | PRD/CUJ-derived required test floor is captured | PASS |
 | `launch-review-packet.json` | Release-prep packet is gathered | VALID-JSON |
@@ -68,8 +73,8 @@ chat memory.
 ## Forward Path
 
 1. Add Pkl-backed `.xcodeproj` world-state generation.
-2. Repeat old tool / Vaporize / Pkl-generation comparisons across more
-   specimens before claiming fleet parity.
+2. Repeat old tool / Vaporize / Pkl-generation comparisons beyond Concourse and
+   Creative Selection v0.2 before claiming fleet parity.
 3. Quarantine or migrate remaining substrate-owned XcodeGen surfaces.
 
 The machine-readable companion is

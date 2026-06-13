@@ -1,7 +1,7 @@
 # Vaporize v0.0.1 - Release Gates
 
 **Status:** release-prep draft; blocked pending Pkl-backed Xcode world-state generation
-**Updated:** 2026-06-12T23:36:38Z
+**Updated:** 2026-06-13T08:18:07Z
 **Component:** `vaporize@wrkstrm-core.cli`
 **Tool classification:** `internal-essential-tool`
 
@@ -10,12 +10,13 @@
 **BLOCKED-FOR-INTERNAL-ESSENTIAL-RELEASE.**
 
 The CUJ-derived test coverage contract now defines the required floor:
-53 Swift test obligations plus 4 release evidence checks across 12 active CUJs.
-The Vaporize package tests pass 70 executable Swift tests across 12 targetable
+57 Swift test obligations plus 4 release evidence checks across 13 active CUJs.
+The Vaporize package tests pass 74 executable Swift tests across 13 targetable
 CUJ-specific SwiftPM bundles through Vaporize's owned Xcode-selected toolchain
 mode. The approved Swift YAML read bridge,
-PklSwift-backed Pkl parity specimen, transitional YAML generation slice, and
-major-feature test expansion are landed and receipted. The initial
+PklSwift-backed Pkl parity specimen, transitional YAML generation slice,
+legacy-YAML-to-Pkl import slice, and major-feature test expansion are landed
+and receipted. The initial
 schema-universal extraction for Vaporize evidence is also landed as
 `vaporize-schemas v0.0.1`. Final internal v0.0.1 release approval is still
 blocked because substrate-owned Apple project generation must move off XcodeGen
@@ -30,9 +31,9 @@ quarantined.
 | GATE-02 - CUJs authored | PASS | `release/v0.0.1/cuj.md` |
 | GATE-03 - Release gates authored | PASS | This file |
 | GATE-04 - Launch-review packet authored | PASS | `release/v0.0.1/evidence/launch-review-packet.json` |
-| GATE-05 - CUJ-derived package tests pass | PASS | `release/v0.0.1/evidence/cuj-test-coverage.json` requires 53 Swift test obligations plus 4 release evidence checks across 12 active CUJs. `vaporize toolchain -- swift test --package-path private/apple/spm/vaporize@wrkstrm-core.cli` passed 70 executable tests across 12 CUJ-specific SwiftPM bundles. |
+| GATE-05 - CUJ-derived package tests pass | PASS | `release/v0.0.1/evidence/cuj-test-coverage.json` requires 57 Swift test obligations plus 4 release evidence checks across 13 active CUJs. `vaporize toolchain -- swift test --package-path private/apple/spm/vaporize@wrkstrm-core.cli` passed 74 executable tests across 13 CUJ-specific SwiftPM bundles. |
 | GATE-06 - Required toolchain owned by Vaporize | PASS-WITH-NOTE | Bare `swift test` used Swift 6.3.2 and failed because Package.swift requires tools 6.4. Vaporize `toolchain` now owns Xcode-selected Swift via internal `xcrun`. |
-| GATE-07 - CLI help reflects release surface | PASS | Vaporize help advertises `use`, `toolchain`, `validate-json`, `inspect-project-yml`, `compare-project-yml-pkl`, `generate-project-yml`, and `--common-process-spec`. |
+| GATE-07 - CLI help reflects release surface | PASS | Vaporize help advertises `use`, `toolchain`, `validate-json`, `inspect-project-yml`, `compare-project-yml-pkl`, `import-project-yml`, `generate-project-yml`, and `--common-process-spec`. |
 | GATE-08 - CommonProcess use mode tested | PASS | `VaporizeUseCommonProcessTests.swift` decodes valid spec JSON, loads a spec from disk, and rejects invalid executable refs. |
 | GATE-09 - Vapor inventory tests pass | PASS | `VaporizeCUJ07VaporInventoryTests` covers scanner status classification, legacy key handling, malformed JSON, path errors, and text/JSON rendering. |
 | GATE-10 - JSON release packet validates | PASS | `vaporize validate-json --path release/v0.0.1/evidence/launch-review-packet.json` passed. |
@@ -45,7 +46,8 @@ quarantined.
 | GATE-17 - Provenance artifact captured | PASS | `release/v0.0.1/evidence/vaporize-v0.0.1-provenance-artifact.json` and `.md` collect the receipts, validation commands, savepoint events, proven claims, unproven claims, and forward path for the Pkl migration slice. |
 | GATE-18 - Concourse Pkl parity specimen | PASS | `private/apple/apps/concourse/project.pkl` amends `Pkl/AppleProjectSpec.pkl`; `compare-project-yml-pkl` uses PklSwift and reports zero mismatches in `release/v0.0.1/evidence/concourse-project-yml-pkl-comparison.receipt.json`. This proves one Pkl parity specimen, not buildable project generation. |
 | GATE-19 - Concourse Pkl transitional YAML generation | PASS-WITH-NOTE | `generate-project-yml` uses PklSwift to emit `release/v0.0.1/evidence/generated/concourse.apple-project-spec.generated.yml` plus `release/v0.0.1/evidence/concourse-pkl-project-yml-generation.receipt.json`; `release/v0.0.1/evidence/concourse-generated-yml-pkl-comparison.receipt.json` proves generated YAML still matches Pkl. The receipt explicitly says `.xcodeproj` world-state was not generated. |
-| GATE-20 - Schema-universal extraction | PASS-WITH-NOTE | Initial `vaporize-schemas v0.0.1` JSON schemas and fixtures landed under `schema-universal/private/universal/domain/tooling/schema-families/vaporize-schemas/v0.0.1`. The new schema files and fixtures validate as JSON through Vaporize, and `schema-tighten audit` reports 0 safe-to-migrate hits for the slice. Swift model package generation remains a follow-up. |
+| GATE-20 - Schema-universal extraction | PASS-WITH-NOTE | Initial `vaporize-schemas v0.0.1` JSON schemas, fixtures, and fixture-backed Swift model package landed under `schema-universal/private/universal/domain/tooling/schema-families/vaporize-schemas/v0.0.1`. The schema files and fixtures validate as JSON through Vaporize, and `schema-tighten audit` reports 0 safe-to-migrate hits for the slice. |
+| GATE-21 - Legacy YAML to Pkl import | PASS-WITH-NOTE | `import-project-yml` generated `private/apple/apps/creative-selection-v0.2/project.pkl` from the v0.2 app's legacy `project.yml`; `creative-selection-v0.2-project-yml-pkl-import.receipt.json` records the import and `creative-selection-v0.2-project-yml-pkl-comparison.receipt.json` reports zero mismatches. The receipt explicitly says `.xcodeproj` world-state was not generated. |
 
 ## Open Follow-Up Beads
 
@@ -68,6 +70,9 @@ quarantined.
 - Should the transitional `generate-project-yml` bridge remain as migration
   evidence after the owned `.xcodeproj` generator exists, or be quarantined as
   a temporary parity tool?
+- Should the transitional `import-project-yml` bridge remain available after
+  the owned `.xcodeproj` generator exists, or become an explicit legacy-only
+  migration utility?
 - Should Vaporize preserve this legacy `WRAPPER_NAME` compatibility only until
   Pkl generation lands, or should it remain as a permanent compatibility bridge
   for quarantined XcodeGen projects?

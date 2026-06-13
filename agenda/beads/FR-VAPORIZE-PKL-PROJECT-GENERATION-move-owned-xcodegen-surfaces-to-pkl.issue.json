@@ -123,6 +123,14 @@
       "generatedYML": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/generated/concourse.apple-project-spec.generated.yml",
       "generationReceipt": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/concourse-pkl-project-yml-generation.receipt.json",
       "comparisonReceipt": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/concourse-generated-yml-pkl-comparison.receipt.json"
+    },
+    {
+      "slice": "creative-selection-v0.2-yml-to-pkl-import",
+      "status": "complete-with-boundary",
+      "description": "Vaporize import-project-yml renders Creative Selection v0.2 project.yml into an evaluable project.pkl, and compare-project-yml-pkl reports zero mismatches. This does not generate .xcodeproj world-state.",
+      "generatedPkl": "private/universal/substrate/collectives/wrkstrm-core/private/apple/apps/creative-selection-v0.2/project.pkl",
+      "importReceipt": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/creative-selection-v0.2-project-yml-pkl-import.receipt.json",
+      "comparisonReceipt": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/creative-selection-v0.2-project-yml-pkl-comparison.receipt.json"
     }
   ],
   "linkedTypedRecords": {
@@ -137,6 +145,9 @@
     "concourseGeneratedProjectYML": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/generated/concourse.apple-project-spec.generated.yml",
     "concoursePklProjectYMLGenerationReceipt": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/concourse-pkl-project-yml-generation.receipt.json",
     "concourseGeneratedYMLPklComparisonReceipt": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/concourse-generated-yml-pkl-comparison.receipt.json",
+    "creativeSelectionV02GeneratedPkl": "private/universal/substrate/collectives/wrkstrm-core/private/apple/apps/creative-selection-v0.2/project.pkl",
+    "creativeSelectionV02ProjectYMLPklImportReceipt": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/creative-selection-v0.2-project-yml-pkl-import.receipt.json",
+    "creativeSelectionV02ProjectYMLPklComparisonReceipt": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/creative-selection-v0.2-project-yml-pkl-comparison.receipt.json",
     "provenanceArtifact": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/vaporize-v0.0.1-provenance-artifact.json",
     "priorXcodeGenBead": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/agenda/beads/FR-VAPORIZE-XCODEGEN-INTEGRATION-substrate-canonical-xcodegen-aware-build.issue.json"
   }

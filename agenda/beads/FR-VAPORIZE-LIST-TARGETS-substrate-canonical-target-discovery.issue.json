@@ -99,7 +99,7 @@
   },
   "launchGateDiscipline": {
     "stages": [
-      "AUDIT — read craze sources at `craze@wrkstrm-core.cli/sources/craze-cli` + `swift-app-installer` + `swift-cli-installer` for existing typed types (CrazeMode, CrazeArtifactKind, etc.) before authoring CrazeDiscoveryMode.",
+      "AUDIT — read craze sources at `vaporize@wrkstrm-core.cli/sources/craze-cli` + `swift-app-installer` + `swift-cli-installer` for existing typed types (CrazeMode, CrazeArtifactKind, etc.) before authoring CrazeDiscoveryMode.",
       "TYPED FEATURE-REQUEST CHAIN — this bead + blocked-surface at consumer (clia agent, agent-manual-process axiom) + CUJ inline + PRD inline + FeatureAnnouncementModel at wrkstrm/.../product-lines/craze/features/.",
       "DESIGN — typed CrazeDiscoveryMode struct + CrazeTargetDiscoveryReceiptModel Codable + draft typed-craze-target-discovery-receipt-schemas v0.0.1 schema family at schema-universal home.",
       "IMPLEMENTATION — Swift only (no Python per [[no-python-swift-over-python-for-all-automation-substrate-doctrine]]); typed tests; DocC; at least ONE real wired consumer (versioned-macos-app-install workflow's discovery state).",

@@ -4,20 +4,20 @@
   "subjectAppSlug": "vaporize@wrkstrm-core.cli",
   "subjectReleaseSlug": "v0.0.1",
   "generatedAt": "2026-06-12T20:58:02Z",
-  "updatedAt": "2026-06-12T23:06:11Z",
+  "updatedAt": "2026-06-13T08:18:07Z",
   "generatedBy": "codex-crisie",
-  "status": "release-blocker-investigation-with-pklswift-transitional-yaml-slice",
+  "status": "release-blocker-investigation-with-pklswift-transitional-yaml-and-import-slices",
   "toolClassification": "internal-essential-tool",
   "verdict": {
     "releaseImpact": "BLOCK_INTERNAL_V0_0_1",
-    "statement": "Vaporize v0.0.1 should remain in release prep until substrate-owned Apple project-generation truth moves from XcodeGen project.yml surfaces to a Pkl-backed owned .xcodeproj world-state path, with any remaining XcodeGen surfaces explicitly quarantined as compatibility or historical evidence. The Swift YAML read bridge, Pkl parity specimen, and PklSwift-backed transitional YAML generation slice are landed as migration evidence, not as release-unblocking world-state generation.",
+    "statement": "Vaporize v0.0.1 should remain in release prep until substrate-owned Apple project-generation truth moves from XcodeGen project.yml surfaces to a Pkl-backed owned .xcodeproj world-state path, with any remaining XcodeGen surfaces explicitly quarantined as compatibility or historical evidence. The Swift YAML read bridge, Pkl parity specimen, PklSwift-backed transitional YAML generation slice, and YAML-to-Pkl import slice are landed as migration evidence, not as release-unblocking world-state generation.",
     "why": "The tree has broad project.yml and checked-in pbxproj reliance plus direct XcodeGen runner code. Releasing Vaporize as an internal essential tool before owned Pkl-backed .xcodeproj generation or explicit quarantine would teach assistants the wrong project-generation boundary."
   },
   "inventory": {
     "projectYmlFileCount": 155,
     "checkedInXcodeProjectPbxprojFileCount": 185,
     "pklishFileCount": 9,
-    "pklCurrentState": "AppleProjectSpec.pkl and Concourse project.pkl now exist as the first Apple project Pkl parity model. Vaporize imports PklSwift and can emit transitional AppleProjectSpec YAML from that specimen, but it still does not generate .xcodeproj world-state.",
+    "pklCurrentState": "AppleProjectSpec.pkl, Concourse project.pkl, and generated Creative Selection v0.2 project.pkl now exist as Apple project Pkl parity models. Vaporize imports PklSwift, can emit transitional AppleProjectSpec YAML from Pkl, and can import legacy YAML into Pkl, but it still does not generate .xcodeproj world-state.",
     "swiftYMLReadBridgeState": "AppleProjectSpecCore reads legacy XcodeGen project.yml into Swift AppleProjectSpec data and inspect-project-yml emits read-only inspection receipts.",
     "xcodegenExecutablePresentOnOperatorMachine": true,
     "pklExecutablePresentOnOperatorMachine": true,
@@ -149,7 +149,8 @@
         "private/apple/spm/vaporize@wrkstrm-core.cli/tests/cuj-02-mac-app/VaporizeCUJ02MacAppTests.swift",
         "private/apple/spm/vaporize@wrkstrm-core.cli/tests/cuj-08-project-yml-inspection/VaporizeCUJ08ProjectYMLInspectionTests.swift",
         "private/apple/spm/vaporize@wrkstrm-core.cli/tests/cuj-10-yml-pkl-comparison/VaporizeCUJ10YMLPklComparisonTests.swift",
-        "private/apple/spm/vaporize@wrkstrm-core.cli/tests/cuj-11-pkl-yml-generation/VaporizeCUJ11PklYMLGenerationTests.swift"
+        "private/apple/spm/vaporize@wrkstrm-core.cli/tests/cuj-11-pkl-yml-generation/VaporizeCUJ11PklYMLGenerationTests.swift",
+        "private/apple/spm/vaporize@wrkstrm-core.cli/tests/cuj-13-yml-pkl-import/VaporizeCUJ13YMLPklImportTests.swift"
       ],
       "receipt": "private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/concourse-project-yml-inspection.receipt.json",
       "fleetAuditReceipt": "private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/project-yml-fleet-parse-audit.receipt.json",
@@ -197,6 +198,20 @@
       "boundary": "This generates transitional YAML only; it does not rewrite checked-in project.yml and does not generate .xcodeproj world-state."
     },
     {
+      "slice": "creative-selection-v0.2-yml-to-pkl-import",
+      "status": "complete-with-boundary",
+      "surface": "import-project-yml",
+      "dependency": "PklSwift 0.8.2",
+      "tests": [
+        "private/apple/spm/vaporize@wrkstrm-core.cli/tests/cuj-13-yml-pkl-import/VaporizeCUJ13YMLPklImportTests.swift"
+      ],
+      "generatedPkl": "private/apple/apps/creative-selection-v0.2/project.pkl",
+      "importReceipt": "private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/creative-selection-v0.2-project-yml-pkl-import.receipt.json",
+      "comparisonReceipt": "private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/creative-selection-v0.2-project-yml-pkl-comparison.receipt.json",
+      "result": "import-project-yml rendered Creative Selection v0.2 project.yml into an evaluable project.pkl and compare-project-yml-pkl reported zero mismatches.",
+      "boundary": "This generates a Pkl parity specimen only; it does not rewrite checked-in project.yml and does not generate .xcodeproj world-state."
+    },
+    {
       "slice": "vaporize-major-feature-test-expansion",
       "status": "complete",
       "surface": "vaporize package test suite",
@@ -212,9 +227,10 @@
         "private/apple/spm/vaporize@wrkstrm-core.cli/tests/cuj-09-release-review/VaporizeCUJ09ReleaseReviewTests.swift",
         "private/apple/spm/vaporize@wrkstrm-core.cli/tests/cuj-10-yml-pkl-comparison/VaporizeCUJ10YMLPklComparisonTests.swift",
         "private/apple/spm/vaporize@wrkstrm-core.cli/tests/cuj-11-pkl-yml-generation/VaporizeCUJ11PklYMLGenerationTests.swift",
-        "private/apple/spm/vaporize@wrkstrm-core.cli/tests/cuj-12-package-graph/VaporizeCUJ12PackageGraphTests.swift"
+        "private/apple/spm/vaporize@wrkstrm-core.cli/tests/cuj-12-package-graph/VaporizeCUJ12PackageGraphTests.swift",
+        "private/apple/spm/vaporize@wrkstrm-core.cli/tests/cuj-13-yml-pkl-import/VaporizeCUJ13YMLPklImportTests.swift"
       ],
-      "result": "CUJ coverage contract requires 53 Swift test obligations plus 4 release evidence checks; vaporize toolchain -- swift test passed 70 executable Swift tests across 12 CUJ-specific SwiftPM bundles.",
+      "result": "CUJ coverage contract requires 57 Swift test obligations plus 4 release evidence checks; vaporize toolchain -- swift test passed 74 executable Swift tests across 13 CUJ-specific SwiftPM bundles.",
       "boundary": "This expands release proof across major Vaporize features; it does not unblock the Pkl-backed .xcodeproj world-state generation gate."
     }
   ],
@@ -222,7 +238,7 @@
     "Freeze: do not add new substrate-owned project.yml surfaces unless they are explicitly marked legacy-compatibility.",
     "Read bridge: use Vaporize inspect-project-yml as the quarantined Swift intake surface for legacy project.yml parity evidence.",
     "Model: author an AppleProjectSpec Pkl module for the common project.yml shape: options, settings, packages, targets, sources, info, scripts, schemes, and configurations.",
-    "Shadow parity: for one wrkstrm-core app, express the existing project.yml as Pkl and prove that the rendered transitional YAML is semantically equivalent. This is now complete for Concourse as a parity harness only, not the final release path.",
+    "Shadow parity: for wrkstrm-core apps, express existing project.yml as Pkl and prove equivalence before project world-state generation. Concourse covers Pkl-to-YAML parity and Creative Selection v0.2 covers YAML-to-Pkl import parity; both remain parity harnesses only, not the final release path.",
     "Owned generator: add a Swift-owned generator path that consumes Pkl-evaluated project data and writes the .xcodeproj world-state with receipts.",
     "Vaporize integration: add a Vaporize generation mode that owns Pkl evaluation, project world-state generation, receipt emission, and app build/install composition.",
     "Cutover: migrate wrkstrm-core apps first, then generator/scaffold surfaces, then wrkstrm-app and wrkstrm-components fleet surfaces.",

@@ -28,9 +28,9 @@ func cujCoverageContractIsValidJSONAndNamesTheFloor() throws {
   let coverage = try readJSONObject(relativePath: "release/v0.0.1/evidence/cuj-test-coverage.json")
   let counts = try #require(coverage["counts"] as? [String: Any])
 
-  #expect(counts["activeCUJCount"] as? Int == 12)
+  #expect(counts["activeCUJCount"] as? Int == 13)
   #expect(counts["deferredCUJCount"] as? Int == 2)
-  #expect(counts["requiredTargetableTestObligationCount"] as? Int == 57)
+  #expect(counts["requiredTargetableTestObligationCount"] as? Int == 61)
 }
 
 @Test("CUJ-09 release gates keep Pkl generation blocked")

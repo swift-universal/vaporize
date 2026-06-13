@@ -1,7 +1,7 @@
 # Vaporize v0.0.1 - PRD
 
 **Status:** release-prep draft; blocked pending Pkl-backed Xcode world-state generation
-**Updated:** 2026-06-12T23:06:11Z
+**Updated:** 2026-06-13T08:18:07Z
 **Component:** `vaporize@wrkstrm-core.cli`
 **Release target:** internal essential substrate CLI
 **Tool classification:** `internal-essential-tool`
@@ -35,6 +35,12 @@ PklSwift, emits transitional `AppleProjectSpec` YAML, and receipts the
 generation boundary. This is useful migration evidence, but it is not the final
 owned `.xcodeproj` world-state generator.
 
+The current import slice adds `import-project-yml`. That mode reads legacy
+XcodeGen YAML, emits an evaluable `project.pkl` parity specimen, and receipts
+the boundary that no `.xcodeproj` world-state was generated. Creative Selection
+v0.2 is the first newly generated specimen in addition to the hand-authored
+Concourse parity specimen.
+
 The release classification is `internal-essential-tool`: an internal-only tool
 whose absence blocks assistants from completing build, install, launch, release
 packet validation, and Apple toolchain proof workflows. This is not a public
@@ -67,6 +73,9 @@ explicitly quarantined as historical/external compatibility.
 - Provide `generate-project-yml` so a Pkl specimen can emit transitional
   `AppleProjectSpec` YAML with a generation receipt, without rewriting checked
   in legacy YAML or generating `.xcodeproj` world-state.
+- Provide `import-project-yml` so a legacy XcodeGen `project.yml` can be
+  rendered into an evaluable Pkl parity specimen with a receipt, without
+  treating YAML as the forward source of truth.
 - Provide `status` and `warehouse` inventory modes for
   `x-vaporize-collapse-path` records, with legacy `x-craze-collapse-path`
   read-only fallback.
@@ -128,20 +137,22 @@ Supporting audiences:
 | FR-015 | Swift YAML read bridge | `inspect-project-yml --path <project.yml>` parses legacy XcodeGen project YAML into Swift `AppleProjectSpec` data and emits an inspection receipt without rewriting YAML, invoking XcodeGen, or generating an Xcode project. |
 | FR-016 | Pkl parity specimen comparison | `compare-project-yml-pkl --path <project.yml> --pkl-path <project.pkl>` evaluates Pkl through PklSwift, decodes both inputs into Swift `AppleProjectSpec`, compares parity signatures, and emits a comparison receipt. |
 | FR-017 | Pkl transitional YAML generation | `generate-project-yml --pkl-path <project.pkl> --output-path <generated.yml>` evaluates Pkl through PklSwift, writes transitional `AppleProjectSpec` YAML, and emits a `vaporize-pkl-project-yml-generation` receipt that explicitly marks `.xcodeproj` world-state generation as not performed. |
-| FR-018 | Schema-universal evidence extraction | Vaporize release evidence and durable receipts have initial JSON schemas in `schema-universal/private/universal/domain/tooling/schema-families/vaporize-schemas/v0.0.1`, with fixtures extracted from the v0.0.1 release packet. |
+| FR-018 | Legacy YAML to Pkl import | `import-project-yml --path <project.yml> --output-path <project.pkl>` parses legacy XcodeGen YAML, renders an AppleProjectSpec Pkl specimen that amends `AppleProjectSpec.pkl`, and emits a `vaporize-apple-project-yml-pkl-import` receipt that explicitly marks `.xcodeproj` world-state generation as not performed. |
+| FR-019 | Schema-universal evidence extraction | Vaporize release evidence and durable receipts have initial JSON schemas in `schema-universal/private/universal/domain/tooling/schema-families/vaporize-schemas/v0.0.1`, with fixtures extracted from the v0.0.1 release packet. |
 
 ## Release Criteria
 
 - Vaporize's package test suite passes with the Swift 6.4 toolchain:
   `vaporize toolchain -- swift test --package-path private/apple/spm/vaporize@wrkstrm-core.cli`.
-  Current proof: the CUJ-derived coverage floor requires 53 Swift test
+  Current proof: the CUJ-derived coverage floor requires 57 Swift test
   obligations plus 4 release evidence checks, all targetable by CUJ-specific
-  SwiftPM test bundles; the executable suite passes 70 tests across 12 CUJ
+  SwiftPM test bundles; the executable suite passes 74 tests across 13 CUJ
   targets.
 - CUJ test coverage is recorded in
   `release/v0.0.1/evidence/cuj-test-coverage.json`.
 - CLI help advertises `use`, `toolchain`, `validate-json`,
-  `inspect-project-yml`, and `--common-process-spec`.
+  `inspect-project-yml`, `compare-project-yml-pkl`, `import-project-yml`,
+  `generate-project-yml`, and `--common-process-spec`.
 - Release packet JSON validates with
   `vaporize validate-json --path release/v0.0.1/evidence/launch-review-packet.json`.
 - Vaporize release evidence schemas validate as JSON under
@@ -154,6 +165,10 @@ Supporting audiences:
   `vaporize validate-json --path release/v0.0.1/evidence/concourse-pkl-project-yml-generation.receipt.json`.
 - Concourse generated YAML/Pkl comparison receipt validates with
   `vaporize validate-json --path release/v0.0.1/evidence/concourse-generated-yml-pkl-comparison.receipt.json`.
+- Creative Selection v0.2 YAML-to-Pkl import receipt validates with
+  `vaporize validate-json --path release/v0.0.1/evidence/creative-selection-v0.2-project-yml-pkl-import.receipt.json`.
+- Creative Selection v0.2 YAML/Pkl comparison receipt validates with
+  `vaporize validate-json --path release/v0.0.1/evidence/creative-selection-v0.2-project-yml-pkl-comparison.receipt.json`.
 - Release evidence classifies Vaporize as an internal essential tool rather
   than a public release artifact.
 - Pkl-backed `.xcodeproj` world-state generation for substrate-owned Apple

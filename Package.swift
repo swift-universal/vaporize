@@ -168,6 +168,16 @@ let package = Package(
       path: "tests/cuj-11-pkl-yml-generation"
     ),
     .testTarget(
+      name: "VaporizeCUJ13YMLPklImportTests",
+      dependencies: [
+        "AppleProjectSpecCore",
+        "VaporizeCLI",
+        "VaporizeTestSupport",
+        .product(name: "ArgumentParser", package: "swift-argument-parser"),
+      ],
+      path: "tests/cuj-13-yml-pkl-import"
+    ),
+    .testTarget(
       name: "VaporizeCUJ12PackageGraphTests",
       dependencies: [
         "VaporizeCLI",

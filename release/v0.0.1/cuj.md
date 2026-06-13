@@ -1,7 +1,7 @@
 # Vaporize v0.0.1 - Critical User Journeys
 
 **Status:** release-prep draft; blocked pending Pkl project-generation migration
-**Updated:** 2026-06-12T23:06:11Z
+**Updated:** 2026-06-13T08:18:07Z
 **Component:** `vaporize@wrkstrm-core.cli`
 **Tool classification:** `internal-essential-tool`
 
@@ -235,6 +235,31 @@ Failure truth:
   resolution failure instead of silently falling back to a broad repository
   scan.
 
+## CUJ-13 - Assistant Imports Legacy YAML Into Pkl
+
+1. Assistant receives a legacy XcodeGen `project.yml` during the Pkl migration.
+2. Assistant runs
+   `vaporize import-project-yml --path <project.yml> --output-path <project.pkl> --receipt-path <receipt>`.
+3. Vaporize parses YAML into Swift `AppleProjectSpec` data.
+4. Vaporize renders an AppleProjectSpec Pkl specimen that amends
+   `AppleProjectSpec.pkl`.
+5. Vaporize emits a `vaporize-apple-project-yml-pkl-import` receipt.
+6. Assistant runs `compare-project-yml-pkl` to prove the imported Pkl still
+   matches the source YAML.
+
+Success:
+
+- The generated Pkl evaluates through PklSwift.
+- The generated Pkl compares back to the source YAML with zero mismatches.
+- The import receipt explicitly records that `.xcodeproj` world-state was not
+  generated.
+
+Failure truth:
+
+- This is a migration import bridge, not a claim that YAML remains canonical.
+- A successful import does not prove buildable project generation or fleet
+  migration readiness.
+
 ## Test Coverage Contract
 
 Test count is derived from PRD requirements through the active draft CUJs.
@@ -255,13 +280,14 @@ must know the required floor.
 | CUJ-10 | FR-016 | 4 |
 | CUJ-11 | FR-017 | 3 |
 | CUJ-12 | FR-009 | 1 |
+| CUJ-13 | FR-018 | 4 |
 
 Current active-CUJ requirement:
 
-- Required Swift test obligations: 53
+- Required Swift test obligations: 57
 - Required release evidence checks: 4
-- Required targetable test obligations: 57
-- Current executable Swift tests: 70 across 12 CUJ-specific SwiftPM bundles
+- Required targetable test obligations: 61
+- Current executable Swift tests: 74 across 13 CUJ-specific SwiftPM bundles
 - Coverage artifact:
   `release/v0.0.1/evidence/cuj-test-coverage.json`
 
@@ -284,6 +310,8 @@ Current status:
 - The Concourse Pkl specimen can now generate transitional `AppleProjectSpec`
   YAML through PklSwift, but Vaporize still does not generate `.xcodeproj`
   world-state from that Pkl truth.
+- Creative Selection v0.2 now has a generated `project.pkl` parity specimen,
+  but that still stops at import/comparison evidence.
 - Existing XcodeGen surfaces remain historical compatibility, not the forward
   release path for our own apps.
 

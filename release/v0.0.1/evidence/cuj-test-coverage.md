@@ -1,6 +1,6 @@
 # Vaporize v0.0.1 - CUJ Test Coverage
 
-**Generated:** 2026-06-12T23:24:02Z
+**Generated:** 2026-06-13T08:18:07Z
 **Status:** active CUJ coverage floor defined
 **Component:** `vaporize@wrkstrm-core.cli`
 **Schema:** `vaporize-schemas v0.0.1` / `VaporizeCUJTestCoverageModel`
@@ -16,12 +16,12 @@ than treating the current test count as self-justifying.
 
 | Metric | Count |
 | --- | ---: |
-| Active CUJs | 12 |
+| Active CUJs | 13 |
 | Deferred CUJs | 2 |
-| Required Swift test obligations | 53 |
+| Required Swift test obligations | 57 |
 | Required release evidence checks | 4 |
-| Required targetable test obligations | 57 |
-| Current executable Swift tests | 70 |
+| Required targetable test obligations | 61 |
+| Current executable Swift tests | 74 |
 
 ## Targetable Test Bundles
 
@@ -39,6 +39,7 @@ than treating the current test count as self-justifying.
 | CUJ-10 | `VaporizeCUJ10YMLPklComparisonTests` | 4 |
 | CUJ-11 | `VaporizeCUJ11PklYMLGenerationTests` | 3 |
 | CUJ-12 | `VaporizeCUJ12PackageGraphTests` | 1 |
+| CUJ-13 | `VaporizeCUJ13YMLPklImportTests` | 4 |
 
 ## Coverage By CUJ
 
@@ -56,6 +57,7 @@ than treating the current test count as self-justifying.
 | CUJ-10 | FR-016 | 4 | Pkl parity comparison, loader failure, mismatch reporting, script normalization |
 | CUJ-11 | FR-017 | 3 | Transitional YAML generation, renderer round-trip, generated YAML/Pkl comparison evidence |
 | CUJ-12 | FR-009 | 1 | Graph forwarded argument parsing |
+| CUJ-13 | FR-018 | 4 | Legacy YAML import parsing, generated Pkl evaluation, YAML/Pkl comparison, nested value rendering |
 
 ## Deferred Coverage
 

@@ -7,20 +7,21 @@
   "artifactId": "vaporize-v0.0.1-provenance-artifact",
   "subjectAppSlug": "vaporize@wrkstrm-core.cli",
   "subjectReleaseSlug": "v0.0.1",
-  "generatedAt": "2026-06-12T23:24:02Z",
+  "generatedAt": "2026-06-13T08:18:07Z",
   "generatedBy": "codex-crisie",
   "status": "captured-for-forward-pkl-migration",
   "purpose": "Collect the v0.0.1 release-prep receipts and provenance in one artifact so the next migration slice can proceed from durable evidence rather than chat memory.",
   "releaseVerdict": {
     "currentStatus": "blocked-pending-pkl-project-generation",
     "proven": [
-      "CUJ-derived test coverage is explicit: 53 required Swift test obligations plus 4 release evidence checks across 12 active CUJs.",
-      "Vaporize package tests pass through Vaporize toolchain mode: 70 executable Swift tests across 12 CUJ-specific SwiftPM test bundles.",
+      "CUJ-derived test coverage is explicit: 57 required Swift test obligations plus 4 release evidence checks across 13 active CUJs.",
+      "Vaporize package tests pass through Vaporize toolchain mode: 74 executable Swift tests across 13 CUJ-specific SwiftPM test bundles.",
       "Legacy XcodeGen project.yml files parse through the Swift YAML read bridge.",
       "All 155 discovered project.yml files under private/universal/substrate/collectives parsed through inspect-project-yml.",
       "Concourse old XcodeGen script build and Vaporize app build both pass after Vaporize derives legacy WRAPPER_NAME from project.yml.",
       "Concourse project.pkl evaluates through PklSwift and matches the Swift-read project.yml parity signature with zero mismatches.",
       "Concourse project.pkl generates transitional AppleProjectSpec YAML through PklSwift, and the generated YAML compares back to Pkl with zero mismatches.",
+      "Creative Selection v0.2 project.yml imports into a generated project.pkl parity specimen, evaluates through PklSwift, and compares back to YAML with zero mismatches.",
       "Initial schema-universal extraction exists as vaporize-schemas v0.0.1 for CUJ coverage, provenance, launch-review specialization, and Apple project YAML/Pkl receipts.",
       "JSON release evidence validates through Vaporize validate-json."
     ],
@@ -91,6 +92,18 @@
       "result": "PASS: matched=true, mismatchCount=0"
     },
     {
+      "receiptKind": "vaporize-apple-project-yml-pkl-import",
+      "path": "private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/creative-selection-v0.2-project-yml-pkl-import.receipt.json",
+      "claim": "Creative Selection v0.2 legacy project.yml imports into a generated AppleProjectSpec Pkl specimen.",
+      "result": "PASS-WITH-NOTE: .xcodeproj world-state not generated"
+    },
+    {
+      "receiptKind": "vaporize-apple-project-yml-pkl-comparison",
+      "path": "private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/creative-selection-v0.2-project-yml-pkl-comparison.receipt.json",
+      "claim": "Creative Selection v0.2 generated Pkl specimen matches the Swift-read legacy YAML signature.",
+      "result": "PASS: matched=true, mismatchCount=0"
+    },
+    {
       "receiptKind": "xcodegen-to-pkl-migration-investigation",
       "path": "private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/xcodegen-to-pkl-investigation.json",
       "claim": "XcodeGen-to-Pkl migration scope, risk tiers, completed slices, and next work are captured.",
@@ -100,7 +113,7 @@
       "receiptKind": "cuj-test-coverage",
       "path": "private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/cuj-test-coverage.json",
       "claim": "Required test count is derived from PRD requirements through active draft CUJs.",
-      "result": "PASS: 53 Swift test obligations, 4 release evidence checks, 57 targetable obligations, 70 executable Swift tests"
+      "result": "PASS: 57 Swift test obligations, 4 release evidence checks, 61 targetable obligations, 74 executable Swift tests"
     },
     {
       "receiptKind": "launch-review-packet",
@@ -126,11 +139,11 @@
     },
     {
       "path": "private/apple/spm/vaporize@wrkstrm-core.cli/sources/apple-project-spec-core/AppleProjectSpec.swift",
-      "purpose": "Defines Swift project model, PklSwift loader, transitional YAML generator, inspection/comparison/generation receipts, and legacy app bundle name resolver."
+      "purpose": "Defines Swift project model, PklSwift loader, legacy YAML-to-Pkl importer, transitional YAML generator, inspection/comparison/generation/import receipts, and legacy app bundle name resolver."
     },
     {
       "path": "private/apple/spm/vaporize@wrkstrm-core.cli/sources/vaporize-cli/main.swift",
-      "purpose": "Adds inspect-project-yml, compare-project-yml-pkl, and generate-project-yml modes, uses project.yml-derived app bundle name compatibility for Xcode app builds, and exposes pass-through request normalization for tests."
+      "purpose": "Adds inspect-project-yml, compare-project-yml-pkl, import-project-yml, and generate-project-yml modes, uses project.yml-derived app bundle name compatibility for Xcode app builds, and exposes pass-through request normalization for tests."
     },
     {
       "path": "private/apple/spm/vaporize@wrkstrm-core.cli/sources/swift-cli-installer/SwiftCLIInstaller.swift",
@@ -189,6 +202,10 @@
       "purpose": "Covers CUJ-12 package graph forwarded argument parsing."
     },
     {
+      "path": "private/apple/spm/vaporize@wrkstrm-core.cli/tests/cuj-13-yml-pkl-import/VaporizeCUJ13YMLPklImportTests.swift",
+      "purpose": "Covers CUJ-13 legacy YAML import parsing, generated Pkl evaluation, YAML/Pkl comparison, and nested value rendering."
+    },
+    {
       "path": "private/apple/apps/concourse/concourse.xcodeproj/project.pbxproj",
       "purpose": "Regenerated by the old XcodeGen reference path during the old/new build comparison."
     },
@@ -203,6 +220,10 @@
     {
       "path": "private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/generated/concourse.apple-project-spec.generated.yml",
       "purpose": "Generated transitional AppleProjectSpec YAML from Concourse project.pkl; migration evidence only, not checked-in project.yml replacement or .xcodeproj world-state."
+    },
+    {
+      "path": "private/apple/apps/creative-selection-v0.2/project.pkl",
+      "purpose": "Generated AppleProjectSpec Pkl parity specimen imported from Creative Selection v0.2 project.yml; migration evidence only, not .xcodeproj world-state."
     },
     {
       "path": "private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/cuj-test-coverage.json",
@@ -224,11 +245,11 @@
   "validationEvidence": [
     {
       "command": "vaporize toolchain -- swift test --package-path private/universal/substrate/collectives/schema-universal/private/universal/domain/tooling/schema-families/vaporize-schemas/v0.0.1/spm/vaporize-schemas-v000-000-001",
-      "result": "PASS: 7 Swift Testing tests decode and round-trip canonical Vaporize schema fixtures"
+      "result": "PASS: 8 Swift Testing tests decode and round-trip canonical Vaporize schema fixtures"
     },
     {
       "command": "vaporize toolchain -- swift test --package-path private/apple/spm/vaporize@wrkstrm-core.cli",
-      "result": "PASS: 70 tests across 12 CUJ-specific SwiftPM bundles"
+      "result": "PASS: 74 tests across 13 CUJ-specific SwiftPM bundles"
     },
     {
       "command": "vaporize validate-json --path private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/concourse-project-yml-inspection.receipt.json",
@@ -267,6 +288,22 @@
       "result": "PASS"
     },
     {
+      "command": "vaporize import-project-yml --path private/apple/apps/creative-selection-v0.2/project.yml --output-path private/apple/apps/creative-selection-v0.2/project.pkl --receipt-path private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/creative-selection-v0.2-project-yml-pkl-import.receipt.json",
+      "result": "PASS-WITH-NOTE: Pkl parity specimen generated, .xcodeproj world-state not generated"
+    },
+    {
+      "command": "vaporize compare-project-yml-pkl --path private/apple/apps/creative-selection-v0.2/project.yml --pkl-path private/apple/apps/creative-selection-v0.2/project.pkl --receipt-path private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/creative-selection-v0.2-project-yml-pkl-comparison.receipt.json",
+      "result": "PASS: matched=true, mismatchCount=0"
+    },
+    {
+      "command": "vaporize validate-json --path private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/creative-selection-v0.2-project-yml-pkl-import.receipt.json",
+      "result": "PASS"
+    },
+    {
+      "command": "vaporize validate-json --path private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/creative-selection-v0.2-project-yml-pkl-comparison.receipt.json",
+      "result": "PASS"
+    },
+    {
       "command": "vaporize validate-json --path private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/launch-review-packet.json",
       "result": "PASS"
     },
@@ -280,7 +317,7 @@
     },
     {
       "command": "vaporize validate-json over every source JSON file under private/universal/substrate/collectives/schema-universal/private/universal/domain/tooling/schema-families/vaporize-schemas/v0.0.1, excluding SwiftPM .build artifacts",
-      "result": "PASS: 18 source JSON files, including 6 schemas, 6 canonical fixtures, and 6 Swift test-resource fixture copies"
+      "result": "PASS: 21 source JSON files, including 7 schemas, 7 canonical fixtures, and 7 Swift test-resource fixture copies"
     },
     {
       "command": "schema-tighten@schema-universal.cli audit --repo-root private/universal/substrate/collectives/schema-universal/private/universal/domain/tooling/schema-families/vaporize-schemas/v0.0.1 --schema-universal-root private/universal/substrate/collectives/schema-universal",
@@ -325,13 +362,14 @@
   ],
   "forwardPath": [
     "Add Pkl-backed .xcodeproj world-state generation.",
-    "Run old tool / Vaporize / Pkl-generation comparisons on more than one specimen before claiming fleet parity.",
+    "Run old tool / Vaporize / Pkl-generation comparisons beyond Concourse and Creative Selection v0.2 before claiming fleet parity.",
     "Quarantine or migrate remaining substrate-owned XcodeGen surfaces."
   ],
   "boundaries": [
     "This artifact is provenance for release-prep work, not founder approval.",
     "This artifact does not mark Vaporize v0.0.1 internally releasable.",
     "Legacy project.yml read compatibility is a bridge for comparison and migration, not the forward source-of-truth claim.",
+    "Generated project.pkl import specimens are migration evidence, not .xcodeproj generators.",
     "Generated transitional AppleProjectSpec YAML is migration evidence, not a checked-in project.yml replacement or .xcodeproj generator.",
     "Concourse build comparison is one-specimen evidence and must not be generalized to the whole fleet without additional receipts."
   ]

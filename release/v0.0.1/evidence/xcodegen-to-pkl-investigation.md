@@ -2,7 +2,7 @@
 
 **Status:** release-blocker investigation complete
 **Generated:** 2026-06-12T20:58:02Z
-**Updated:** 2026-06-12T23:06:11Z
+**Updated:** 2026-06-13T08:18:07Z
 **Component:** `vaporize@wrkstrm-core.cli`
 **Tool classification:** `internal-essential-tool`
 
@@ -19,6 +19,8 @@ The important distinction:
 - Vaporize is the assistant-facing internal essential gate.
 - PklSwift-backed transitional YAML generation is migration evidence, not final
   buildable project generation.
+- PklSwift-backed YAML-to-Pkl import is migration evidence, not final buildable
+  project generation.
 - XcodeGen may remain as historical or external compatibility, but should not
   be the forward release horizon for our own apps.
 
@@ -61,9 +63,12 @@ The first approved migration-prep slice is now landed:
   boundary: transitional YAML was emitted; `.xcodeproj` world-state was not.
 - `concourse-generated-yml-pkl-comparison.receipt.json` records that generated
   YAML still matches Concourse Pkl with zero mismatches.
-- The CUJ-derived coverage floor now requires 53 Swift test obligations plus
+- `import-project-yml` renders legacy YAML into a Pkl parity specimen.
+- Creative Selection v0.2 now has a generated `project.pkl` with zero
+  mismatches against its source `project.yml`.
+- The CUJ-derived coverage floor now requires 57 Swift test obligations plus
   4 release evidence checks, all targetable by CUJ-specific SwiftPM bundles;
-  the full Vaporize package test suite passes 70 executable Swift tests through
+  the full Vaporize package test suite passes 74 executable Swift tests through
   `vaporize toolchain`.
 
 This does not unblock v0.0.1 by itself. It gives the Pkl migration a tested
@@ -92,10 +97,12 @@ Project specs by largest owner:
 | `clia-app-org` | 11 |
 | `wrkstrm-core` | 7 |
 
-Existing Pkl is now an Apple project parity lane for Concourse:
-`AppleProjectSpec.pkl` plus `private/apple/apps/concourse/project.pkl`.
-Vaporize imports PklSwift and can emit transitional YAML from that model. It is
-not yet a `.xcodeproj` world-state generation lane for Xcode targets,
+Existing Pkl is now an Apple project parity lane for Concourse and a generated
+import lane for Creative Selection v0.2:
+`AppleProjectSpec.pkl`, `private/apple/apps/concourse/project.pkl`, and
+`private/apple/apps/creative-selection-v0.2/project.pkl`. Vaporize imports
+PklSwift and can emit transitional YAML from Pkl or import legacy YAML into Pkl.
+It is not yet a `.xcodeproj` world-state generation lane for Xcode targets,
 packages, schemes, Info.plist, scripts, or pbxproj generation.
 
 ## Representative Shape
@@ -140,9 +147,9 @@ directly through `xcodegen generate`.
    parity evidence.
 3. Model the common project shape as `AppleProjectSpec.pkl`.
 4. Port Concourse first as a parity specimen.
-5. Use a shadow parity bridge only to prove equivalence; Concourse now has that
-   bridge through PklSwift-backed transitional YAML generation, but it is not
-   the final release path.
+5. Use shadow parity bridges only to prove equivalence; Concourse now has the
+   Pkl-to-YAML bridge and Creative Selection v0.2 now has the YAML-to-Pkl
+   import bridge, but neither is the final release path.
 6. Add a Swift-owned generator that consumes Pkl-evaluated project data and
    writes `.xcodeproj` world-state with receipts.
 7. Add Vaporize generation mode around Pkl evaluation, world-state generation,

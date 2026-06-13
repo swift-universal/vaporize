@@ -8,7 +8,7 @@
   "packetVersion": "v0.0.1",
   "reviewKind": "internal-essential-tool-release-prep",
   "packetStatus": "blocked-pending-pkl-backed-xcode-world-state-generation",
-  "emittedAt": "2026-06-12T23:06:11Z",
+  "emittedAt": "2026-06-13T08:18:07Z",
   "emittedBy": "codex-crisie",
   "lifecycleStage": "internal-cli-release-prep",
   "releaseTarget": {
@@ -23,6 +23,7 @@
       "xcode-selected-swift-toolchain-proof",
       "vaporware-collapse-inventory",
       "legacy-project-yml-inspection",
+      "legacy-project-yml-to-pkl-import",
       "pkl-project-migration-evidence"
     ],
     "blockingPrecondition": "substrate-owned Apple project generation moves off XcodeGen to a Pkl-backed owned path, or remaining XcodeGen surfaces are explicitly quarantined as historical/external compatibility",
@@ -232,14 +233,15 @@
       "VaporizeCUJ09ReleaseReviewTests": 4,
       "VaporizeCUJ10YMLPklComparisonTests": 4,
       "VaporizeCUJ11PklYMLGenerationTests": 3,
-      "VaporizeCUJ12PackageGraphTests": 1
+      "VaporizeCUJ12PackageGraphTests": 1,
+      "VaporizeCUJ13YMLPklImportTests": 4
     },
     "cujCoverageContract": "release/v0.0.1/evidence/cuj-test-coverage.json",
-    "activeCUJCount": 12,
+    "activeCUJCount": 13,
     "deferredCUJCount": 2,
-    "requiredSwiftTestObligationCount": 53,
+    "requiredSwiftTestObligationCount": 57,
     "requiredReleaseEvidenceCheckCount": 4,
-    "requiredTargetableTestObligationCount": 57,
+    "requiredTargetableTestObligationCount": 61,
     "bareSwiftToolchainResult": "BLOCKED: bare swift is 6.3.2; Package.swift requires Swift tools 6.4",
     "requiredToolchainResult": "PASS: Vaporize toolchain mode owns Xcode-selected Swift via internal xcrun",
     "jsonValidationCommand": "vaporize validate-json --path release/v0.0.1/evidence/launch-review-packet.json",
@@ -254,8 +256,12 @@
     "pklTransitionalYMLGenerationResult": "PASS-WITH-NOTE: PklSwift generated transitional AppleProjectSpec YAML; .xcodeproj world-state was not generated",
     "generatedYMLPklComparisonCommand": "vaporize compare-project-yml-pkl --path private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/generated/concourse.apple-project-spec.generated.yml --pkl-path private/apple/apps/concourse/project.pkl --format json --receipt-path private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/concourse-generated-yml-pkl-comparison.receipt.json",
     "generatedYMLPklComparisonResult": "PASS: matched=true, mismatchCount=0",
+    "ymlToPklImportCommand": "vaporize import-project-yml --path private/apple/apps/creative-selection-v0.2/project.yml --output-path private/apple/apps/creative-selection-v0.2/project.pkl --receipt-path private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/creative-selection-v0.2-project-yml-pkl-import.receipt.json",
+    "ymlToPklImportResult": "PASS-WITH-NOTE: Creative Selection v0.2 project.pkl generated; .xcodeproj world-state was not generated",
+    "importedPklComparisonCommand": "vaporize compare-project-yml-pkl --path private/apple/apps/creative-selection-v0.2/project.yml --pkl-path private/apple/apps/creative-selection-v0.2/project.pkl --receipt-path private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/creative-selection-v0.2-project-yml-pkl-comparison.receipt.json",
+    "importedPklComparisonResult": "PASS: matched=true, mismatchCount=0",
     "schemaUniversalExtractionPath": "private/universal/substrate/collectives/schema-universal/private/universal/domain/tooling/schema-families/vaporize-schemas/v0.0.1",
-    "schemaUniversalExtractionResult": "PASS-WITH-NOTE: initial JSON schema family extracted for durable Vaporize release evidence and Apple project YAML/Pkl receipts; Swift model package remains follow-up"
+    "schemaUniversalExtractionResult": "PASS-WITH-NOTE: JSON schema family and fixture-backed Swift model package extracted for durable Vaporize release evidence and Apple project YAML/Pkl receipts"
   },
   "gateResults": [
     {
@@ -271,12 +277,12 @@
     {
       "gateRef": "GATE-05-cuj-derived-package-tests",
       "status": "PASS",
-      "rationale": "CUJ coverage contract requires 53 Swift test obligations plus 4 release evidence checks; Vaporize package tests passed 70 executable tests across 12 CUJ-specific SwiftPM bundles through Vaporize toolchain mode"
+      "rationale": "CUJ coverage contract requires 57 Swift test obligations plus 4 release evidence checks; Vaporize package tests passed 74 executable tests across 13 CUJ-specific SwiftPM bundles through Vaporize toolchain mode"
     },
     {
       "gateRef": "GATE-07-cli-help",
       "status": "PASS",
-      "rationale": "Help surface advertises use, toolchain, validate-json, inspect-project-yml, and --common-process-spec"
+      "rationale": "Help surface advertises use, toolchain, validate-json, inspect-project-yml, compare-project-yml-pkl, import-project-yml, generate-project-yml, and --common-process-spec"
     },
     {
       "gateRef": "GATE-11-readme-release-docs",
@@ -327,6 +333,11 @@
       "gateRef": "GATE-20-schema-universal-extraction",
       "status": "PASS",
       "rationale": "vaporize-schemas v0.0.1 now includes JSON schemas, canonical fixtures, and a fixture-backed Swift model package for CUJ coverage, provenance, launch-review specialization, and Apple project YAML/Pkl receipts"
+    },
+    {
+      "gateRef": "GATE-21-yml-to-pkl-import",
+      "status": "PASS-WITH-NOTE",
+      "rationale": "import-project-yml generated Creative Selection v0.2 project.pkl and compare-project-yml-pkl reported zero mismatches, but .xcodeproj world-state is not generated"
     }
   ],
   "knownFollowUps": [
@@ -362,9 +373,10 @@
     "x-provenance-artifact": "vaporize-v0.0.1-provenance-artifact.json collects release-prep receipts, validation commands, savepoints, proven claims, unproven claims, and the forward Pkl migration path.",
     "x-pkl-parity-specimen": "Concourse now has project.pkl amending AppleProjectSpec.pkl. compare-project-yml-pkl evaluates Pkl through PklSwift, decodes YAML and Pkl into AppleProjectSpec, and emits a zero-mismatch comparison receipt.",
     "x-pkl-transitional-yaml-generation": "generate-project-yml evaluates Concourse project.pkl through PklSwift and emits transitional AppleProjectSpec YAML plus a generation receipt. The generated YAML compares back to Pkl with zero mismatches, but .xcodeproj world-state is not generated.",
+    "x-yml-to-pkl-import": "import-project-yml renders legacy XcodeGen YAML into an AppleProjectSpec Pkl parity specimen. Creative Selection v0.2 now has a generated project.pkl and a zero-mismatch comparison receipt, but .xcodeproj world-state is not generated.",
     "x-schema-universal-extraction": "vaporize-schemas v0.0.1 extracts JSON schemas, canonical fixtures, and a fixture-backed Swift model package for Vaporize CUJ coverage, provenance, launch-review specialization, and Apple project YAML/Pkl receipts under schema-universal.",
-    "x-cuj-test-coverage": "Required test count is derived from PRD requirements through active draft CUJs. Current floor: 53 Swift test obligations plus 4 release evidence checks, all targetable by CUJ-specific SwiftPM bundles. Current executable suite: 70 Swift tests.",
-    "x-major-feature-test-suite": "Vaporize package tests now cover major release features through 12 CUJ-specific SwiftPM bundles: command parsing, pass/use/toolchain receipts, JSON validation, inventory scanner/renderer, graph forwarding, Apple project YAML/Pkl migration paths, SwiftPM CLI installer arguments, and app installer Xcode invocation paths.",
+    "x-cuj-test-coverage": "Required test count is derived from PRD requirements through active draft CUJs. Current floor: 57 Swift test obligations plus 4 release evidence checks, all targetable by CUJ-specific SwiftPM bundles. Current executable suite: 74 Swift tests.",
+    "x-major-feature-test-suite": "Vaporize package tests now cover major release features through 13 CUJ-specific SwiftPM bundles: command parsing, pass/use/toolchain receipts, JSON validation, inventory scanner/renderer, graph forwarding, Apple project YAML/Pkl migration paths, SwiftPM CLI installer arguments, and app installer Xcode invocation paths.",
     "x-pkl-project-generation-gate": "Internal v0.0.1 release is blocked until our owned Apple project-generation path moves off XcodeGen and onto Pkl-backed .xcodeproj world-state generation, with any leftover XcodeGen surfaces quarantined as compatibility.",
     "x-xcodegen-to-pkl-investigation": "Investigation found 155 project.yml files, 185 checked-in .xcodeproj/project.pbxproj files, direct XcodeGen runner surfaces, and no existing Pkl Apple-project generation model. The first approved mitigation slice now reads legacy YAML through Swift and receipts Concourse inspection."
   }
