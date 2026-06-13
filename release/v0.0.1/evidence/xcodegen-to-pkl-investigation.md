@@ -66,16 +66,18 @@ The first approved migration-prep slice is now landed:
 - `import-project-yml` renders legacy YAML into a Pkl parity specimen.
 - Creative Selection v0.2 now has a generated `project.pkl` with zero
   mismatches against its source `project.yml`.
-- The CUJ-derived coverage floor now requires 57 Swift test obligations plus
+- `generate-xcodeproj` generates first-slice `.xcodeproj` world-state from
+  Creative Selection v0.2 `project.pkl`.
+- The CUJ-derived coverage floor now requires 60 Swift test obligations plus
   4 release evidence checks, all targetable by CUJ-specific SwiftPM bundles;
-  the full Vaporize package test suite passes 74 executable Swift tests through
+  the full Vaporize package test suite passes 77 executable Swift tests through
   `vaporize toolchain`.
 
 This does not unblock v0.0.1 by itself. It gives the Pkl migration a tested
-Swift intake surface so the next slice can compare Pkl-evaluated project data
-against the legacy YAML shape and emit transitional YAML before generating
-`.xcodeproj` world-state. The fleet audit proves read compatibility, and the
-Concourse build comparison proves one specimen, not that every project builds.
+Swift intake surface plus a first owned `.xcodeproj` generation slice. The
+fleet audit proves read compatibility, the Concourse build comparison proves
+one legacy-build specimen, and the Creative Selection v0.2 generation receipt
+proves one Pkl world-state specimen, not fleet build parity.
 
 ## Live Inventory
 

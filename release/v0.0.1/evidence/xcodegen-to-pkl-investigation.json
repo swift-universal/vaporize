@@ -6,18 +6,18 @@
   "generatedAt": "2026-06-12T20:58:02Z",
   "updatedAt": "2026-06-13T08:18:07Z",
   "generatedBy": "codex-crisie",
-  "status": "release-blocker-investigation-with-pklswift-transitional-yaml-and-import-slices",
+  "status": "release-blocker-investigation-with-first-pkl-xcodeproj-generation-slice",
   "toolClassification": "internal-essential-tool",
   "verdict": {
     "releaseImpact": "BLOCK_INTERNAL_V0_0_1",
-    "statement": "Vaporize v0.0.1 should remain in release prep until substrate-owned Apple project-generation truth moves from XcodeGen project.yml surfaces to a Pkl-backed owned .xcodeproj world-state path, with any remaining XcodeGen surfaces explicitly quarantined as compatibility or historical evidence. The Swift YAML read bridge, Pkl parity specimen, PklSwift-backed transitional YAML generation slice, and YAML-to-Pkl import slice are landed as migration evidence, not as release-unblocking world-state generation.",
+    "statement": "Vaporize v0.0.1 should remain in release prep until substrate-owned Apple project-generation truth moves from XcodeGen project.yml surfaces to a Pkl-backed owned .xcodeproj world-state path, with any remaining XcodeGen surfaces explicitly quarantined as compatibility or historical evidence. The Swift YAML read bridge, Pkl parity specimen, PklSwift-backed transitional YAML generation slice, YAML-to-Pkl import slice, and first Pkl-backed .xcodeproj generation slice are landed as migration evidence, not as final fleet build parity.",
     "why": "The tree has broad project.yml and checked-in pbxproj reliance plus direct XcodeGen runner code. Releasing Vaporize as an internal essential tool before owned Pkl-backed .xcodeproj generation or explicit quarantine would teach assistants the wrong project-generation boundary."
   },
   "inventory": {
     "projectYmlFileCount": 155,
     "checkedInXcodeProjectPbxprojFileCount": 185,
     "pklishFileCount": 9,
-    "pklCurrentState": "AppleProjectSpec.pkl, Concourse project.pkl, and generated Creative Selection v0.2 project.pkl now exist as Apple project Pkl parity models. Vaporize imports PklSwift, can emit transitional AppleProjectSpec YAML from Pkl, and can import legacy YAML into Pkl, but it still does not generate .xcodeproj world-state.",
+    "pklCurrentState": "AppleProjectSpec.pkl, Concourse project.pkl, and generated Creative Selection v0.2 project.pkl now exist as Apple project Pkl parity models. Vaporize imports PklSwift, can emit transitional AppleProjectSpec YAML from Pkl, can import legacy YAML into Pkl, and can generate first-slice .xcodeproj world-state from evaluated Pkl for Creative Selection v0.2.",
     "swiftYMLReadBridgeState": "AppleProjectSpecCore reads legacy XcodeGen project.yml into Swift AppleProjectSpec data and inspect-project-yml emits read-only inspection receipts.",
     "xcodegenExecutablePresentOnOperatorMachine": true,
     "pklExecutablePresentOnOperatorMachine": true,
@@ -228,19 +228,20 @@
         "private/apple/spm/vaporize@wrkstrm-core.cli/tests/cuj-10-yml-pkl-comparison/VaporizeCUJ10YMLPklComparisonTests.swift",
         "private/apple/spm/vaporize@wrkstrm-core.cli/tests/cuj-11-pkl-yml-generation/VaporizeCUJ11PklYMLGenerationTests.swift",
         "private/apple/spm/vaporize@wrkstrm-core.cli/tests/cuj-12-package-graph/VaporizeCUJ12PackageGraphTests.swift",
-        "private/apple/spm/vaporize@wrkstrm-core.cli/tests/cuj-13-yml-pkl-import/VaporizeCUJ13YMLPklImportTests.swift"
+        "private/apple/spm/vaporize@wrkstrm-core.cli/tests/cuj-13-yml-pkl-import/VaporizeCUJ13YMLPklImportTests.swift",
+        "private/apple/spm/vaporize@wrkstrm-core.cli/tests/cuj-14-pkl-xcodeproj-generation/VaporizeCUJ14PklXcodeProjectGenerationTests.swift"
       ],
-      "result": "CUJ coverage contract requires 57 Swift test obligations plus 4 release evidence checks; vaporize toolchain -- swift test passed 74 executable Swift tests across 13 CUJ-specific SwiftPM bundles.",
-      "boundary": "This expands release proof across major Vaporize features; it does not unblock the Pkl-backed .xcodeproj world-state generation gate."
+      "result": "CUJ coverage contract requires 60 Swift test obligations plus 4 release evidence checks; vaporize toolchain -- swift test passed 77 executable Swift tests across 14 CUJ-specific SwiftPM bundles.",
+      "boundary": "This expands release proof across major Vaporize features and includes the first Pkl-backed .xcodeproj generation slice; it does not prove fleet build parity."
     }
   ],
   "recommendedMigrationPlan": [
     "Freeze: do not add new substrate-owned project.yml surfaces unless they are explicitly marked legacy-compatibility.",
     "Read bridge: use Vaporize inspect-project-yml as the quarantined Swift intake surface for legacy project.yml parity evidence.",
     "Model: author an AppleProjectSpec Pkl module for the common project.yml shape: options, settings, packages, targets, sources, info, scripts, schemes, and configurations.",
-    "Shadow parity: for wrkstrm-core apps, express existing project.yml as Pkl and prove equivalence before project world-state generation. Concourse covers Pkl-to-YAML parity and Creative Selection v0.2 covers YAML-to-Pkl import parity; both remain parity harnesses only, not the final release path.",
-    "Owned generator: add a Swift-owned generator path that consumes Pkl-evaluated project data and writes the .xcodeproj world-state with receipts.",
-    "Vaporize integration: add a Vaporize generation mode that owns Pkl evaluation, project world-state generation, receipt emission, and app build/install composition.",
+    "Shadow parity: for wrkstrm-core apps, express existing project.yml as Pkl and prove equivalence before project world-state generation. Concourse covers Pkl-to-YAML parity and Creative Selection v0.2 covers YAML-to-Pkl import parity.",
+    "Owned generator: expand the Swift-owned generator path that consumes Pkl-evaluated project data and writes the .xcodeproj world-state with receipts.",
+    "Vaporize integration: extend generate-xcodeproj until it owns Pkl evaluation, project world-state generation, receipt emission, and app build/install composition.",
     "Cutover: migrate wrkstrm-core apps first, then generator/scaffold surfaces, then wrkstrm-app and wrkstrm-components fleet surfaces.",
     "Quarantine: tag any remaining XcodeGen path as historical, external, or compatibility-only; make release gates fail on unclassified substrate-owned XcodeGen use."
   ],
