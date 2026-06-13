@@ -706,6 +706,8 @@ public enum VaporizeAppleProjectReceiptSchema {
     "\(schemaRoot)/pkl-project-yml-generation-receipt/pkl-project-yml-generation-receipt.schema.json"
   public static let importSchemaRef =
     "\(schemaRoot)/apple-project-yml-pkl-import-receipt/apple-project-yml-pkl-import-receipt.schema.json"
+  public static let xcodeProjectGenerationSchemaRef =
+    "\(schemaRoot)/pkl-xcode-project-generation-receipt/pkl-xcode-project-generation-receipt.schema.json"
 }
 
 public struct AppleProjectSpecComparisonReceipt: Codable, Equatable, Sendable {

@@ -260,6 +260,35 @@ Failure truth:
 - A successful import does not prove buildable project generation or fleet
   migration readiness.
 
+## CUJ-14 - Assistant Generates First-Slice Xcode Project World-State From Pkl
+
+1. Assistant has an AppleProjectSpec Pkl specimen for a substrate-owned macOS
+   application target.
+2. Assistant runs
+   `vaporize generate-xcodeproj --pkl-path <project.pkl> --output-path <generated.xcodeproj> --receipt-path <receipt>`.
+3. Vaporize evaluates the Pkl record through PklSwift.
+4. Vaporize renders deterministic `.xcodeproj` package world-state, including
+   `project.pbxproj` and `project.xcworkspace/contents.xcworkspacedata`.
+5. Vaporize emits a `vaporize-pkl-xcodeproj-generation` receipt.
+
+Success:
+
+- The generated `.xcodeproj` exists on disk with project, target, source phase,
+  settings, product reference, and post-build script entries.
+- The receipt explicitly records that buildable world-state and Xcode project
+  generation were performed.
+- Source paths are resolved from the Pkl file's project home, not from the
+  chosen output directory.
+- The renderer is deterministic for the same evaluated spec and source tree.
+
+Failure truth:
+
+- Missing non-optional source paths fail the generation with the target name and
+  missing source path.
+- This first slice supports macOS application targets. It does not yet prove
+  fleet build parity, scheme generation, all XcodeGen feature parity, or final
+  internal release readiness.
+
 ## Test Coverage Contract
 
 Test count is derived from PRD requirements through the active draft CUJs.
@@ -281,17 +310,18 @@ must know the required floor.
 | CUJ-11 | FR-017 | 3 |
 | CUJ-12 | FR-009 | 1 |
 | CUJ-13 | FR-018 | 4 |
+| CUJ-14 | FR-020 | 3 |
 
 Current active-CUJ requirement:
 
-- Required Swift test obligations: 57
+- Required Swift test obligations: 60
 - Required release evidence checks: 4
-- Required targetable test obligations: 61
-- Current executable Swift tests: 74 across 13 CUJ-specific SwiftPM bundles
+- Required targetable test obligations: 64
+- Current executable Swift tests: 77 across 14 CUJ-specific SwiftPM bundles
 - Coverage artifact:
   `release/v0.0.1/evidence/cuj-test-coverage.json`
 
-## Deferred CUJ - Assistant Builds A Pkl-Backed Apple Project
+## Deferred CUJ - Assistant Proves Fleet Pkl-Backed Apple Project Build Parity
 
 This journey blocks final internal v0.0.1 release.
 
@@ -307,11 +337,11 @@ Current status:
 
 - Blocked by
   `FR-VAPORIZE-PKL-PROJECT-GENERATION-move-owned-xcodegen-surfaces-to-pkl`.
-- The Concourse Pkl specimen can now generate transitional `AppleProjectSpec`
-  YAML through PklSwift, but Vaporize still does not generate `.xcodeproj`
-  world-state from that Pkl truth.
-- Creative Selection v0.2 now has a generated `project.pkl` parity specimen,
-  but that still stops at import/comparison evidence.
+- Creative Selection v0.2 now has a generated `project.pkl` parity specimen and
+  Vaporize can generate first-slice `.xcodeproj` world-state from it.
+- This remains blocked for final internal release until fleet build parity,
+  scheme/resource/package feature coverage, and explicit XcodeGen quarantine
+  disposition are proven.
 - Existing XcodeGen surfaces remain historical compatibility, not the forward
   release path for our own apps.
 

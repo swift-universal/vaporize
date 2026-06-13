@@ -17,12 +17,12 @@
     "releaseGates": "private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/release-gates.md"
   },
   "counts": {
-    "activeCUJCount": 13,
+    "activeCUJCount": 14,
     "deferredCUJCount": 2,
-    "requiredSwiftTestObligationCount": 57,
+    "requiredSwiftTestObligationCount": 60,
     "requiredReleaseEvidenceCheckCount": 4,
-    "requiredTargetableTestObligationCount": 61,
-    "currentExecutableSwiftTestCount": 74,
+    "requiredTargetableTestObligationCount": 64,
+    "currentExecutableSwiftTestCount": 77,
     "currentExecutableSwiftTestBreakdown": {
       "VaporizeCUJ01SwiftPMCLITests": 7,
       "VaporizeCUJ02MacAppTests": 14,
@@ -36,7 +36,8 @@
       "VaporizeCUJ10YMLPklComparisonTests": 4,
       "VaporizeCUJ11PklYMLGenerationTests": 3,
       "VaporizeCUJ12PackageGraphTests": 1,
-      "VaporizeCUJ13YMLPklImportTests": 4
+      "VaporizeCUJ13YMLPklImportTests": 4,
+      "VaporizeCUJ14PklXcodeProjectGenerationTests": 3
     }
   },
   "coverage": [
@@ -181,11 +182,22 @@
         "creative-selection-v0.2-project-yml-pkl-import.receipt.json",
         "creative-selection-v0.2-project-yml-pkl-comparison.receipt.json"
       ]
+    },
+    {
+      "cuj": "CUJ-14",
+      "title": "Assistant Generates First-Slice Xcode Project World-State From Pkl",
+      "prdRefs": ["FR-020"],
+      "requiredSwiftTestObligations": 3,
+      "status": "covered-with-boundary",
+      "evidence": [
+        "VaporizeCUJ14PklXcodeProjectGenerationTests.swift",
+        "creative-selection-v0.2-pkl-xcodeproj-generation.receipt.json"
+      ]
     }
   ],
   "deferredCoverage": [
     {
-      "title": "Assistant Builds A Pkl-Backed Apple Project",
+      "title": "Assistant Proves Fleet Pkl-Backed Apple Project Build Parity",
       "blockingRef": "FR-VAPORIZE-PKL-PROJECT-GENERATION-move-owned-xcodegen-surfaces-to-pkl",
       "status": "deferred-release-blocking"
     },
@@ -197,7 +209,7 @@
   ],
   "boundaries": [
     "This artifact defines the active-CUJ coverage floor; it does not approve v0.0.1 release.",
-    "Pkl-backed .xcodeproj world-state generation remains release-blocking.",
+    "First-slice Pkl-backed .xcodeproj world-state generation is covered; fleet build parity and quarantine disposition remain release-blocking.",
     "Actual executable Swift tests may exceed the required count when extra regression coverage is useful."
   ]
 }

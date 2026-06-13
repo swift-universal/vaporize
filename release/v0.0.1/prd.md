@@ -76,12 +76,15 @@ explicitly quarantined as historical/external compatibility.
 - Provide `import-project-yml` so a legacy XcodeGen `project.yml` can be
   rendered into an evaluable Pkl parity specimen with a receipt, without
   treating YAML as the forward source of truth.
+- Provide `generate-xcodeproj` so an evaluated AppleProjectSpec Pkl specimen can
+  emit first-slice `.xcodeproj` world-state with a receipt.
 - Provide `status` and `warehouse` inventory modes for
   `x-vaporize-collapse-path` records, with legacy `x-craze-collapse-path`
   read-only fallback.
 - Preserve graph analysis through the `graph` forwarder.
 - Block final internal v0.0.1 release until substrate-owned XcodeGen project
-  generation is replaced by a Pkl-backed owned path.
+  generation is replaced by a Pkl-backed owned path across the required fleet
+  or remaining surfaces are explicitly quarantined.
 - Produce a release packet with PRD, CUJs, release gates, and launch-review
   evidence.
 
@@ -139,20 +142,21 @@ Supporting audiences:
 | FR-017 | Pkl transitional YAML generation | `generate-project-yml --pkl-path <project.pkl> --output-path <generated.yml>` evaluates Pkl through PklSwift, writes transitional `AppleProjectSpec` YAML, and emits a `vaporize-pkl-project-yml-generation` receipt that explicitly marks `.xcodeproj` world-state generation as not performed. |
 | FR-018 | Legacy YAML to Pkl import | `import-project-yml --path <project.yml> --output-path <project.pkl>` parses legacy XcodeGen YAML, renders an AppleProjectSpec Pkl specimen that amends `AppleProjectSpec.pkl`, and emits a `vaporize-apple-project-yml-pkl-import` receipt that explicitly marks `.xcodeproj` world-state generation as not performed. |
 | FR-019 | Schema-universal evidence extraction | Vaporize release evidence and durable receipts have initial JSON schemas in `schema-universal/private/universal/domain/tooling/schema-families/vaporize-schemas/v0.0.1`, with fixtures extracted from the v0.0.1 release packet. |
+| FR-020 | Pkl to Xcode project generation | `generate-xcodeproj --pkl-path <project.pkl> --output-path <generated.xcodeproj>` evaluates Pkl through PklSwift, writes first-slice `.xcodeproj` world-state, and emits a `vaporize-pkl-xcodeproj-generation` receipt that explicitly records project world-state generation. |
 
 ## Release Criteria
 
 - Vaporize's package test suite passes with the Swift 6.4 toolchain:
   `vaporize toolchain -- swift test --package-path private/apple/spm/vaporize@wrkstrm-core.cli`.
-  Current proof: the CUJ-derived coverage floor requires 57 Swift test
+  Current proof: the CUJ-derived coverage floor requires 60 Swift test
   obligations plus 4 release evidence checks, all targetable by CUJ-specific
-  SwiftPM test bundles; the executable suite passes 74 tests across 13 CUJ
+  SwiftPM test bundles; the executable suite passes 77 tests across 14 CUJ
   targets.
 - CUJ test coverage is recorded in
   `release/v0.0.1/evidence/cuj-test-coverage.json`.
 - CLI help advertises `use`, `toolchain`, `validate-json`,
   `inspect-project-yml`, `compare-project-yml-pkl`, `import-project-yml`,
-  `generate-project-yml`, and `--common-process-spec`.
+  `generate-project-yml`, `generate-xcodeproj`, and `--common-process-spec`.
 - Release packet JSON validates with
   `vaporize validate-json --path release/v0.0.1/evidence/launch-review-packet.json`.
 - Vaporize release evidence schemas validate as JSON under
@@ -169,10 +173,12 @@ Supporting audiences:
   `vaporize validate-json --path release/v0.0.1/evidence/creative-selection-v0.2-project-yml-pkl-import.receipt.json`.
 - Creative Selection v0.2 YAML/Pkl comparison receipt validates with
   `vaporize validate-json --path release/v0.0.1/evidence/creative-selection-v0.2-project-yml-pkl-comparison.receipt.json`.
+- Creative Selection v0.2 Pkl `.xcodeproj` generation receipt validates with
+  `vaporize validate-json --path release/v0.0.1/evidence/creative-selection-v0.2-pkl-xcodeproj-generation.receipt.json`.
 - Release evidence classifies Vaporize as an internal essential tool rather
   than a public release artifact.
-- Pkl-backed `.xcodeproj` world-state generation for substrate-owned Apple
-  surfaces is complete or remaining XcodeGen surfaces are explicitly
+- Pkl-backed `.xcodeproj` world-state generation has fleet build parity for
+  substrate-owned Apple surfaces or remaining XcodeGen surfaces are explicitly
   quarantined outside the v0.0.1 internal release path.
 - Release gates honestly mark open follow-ups and drift rather than smoothing
   them into a false green state.

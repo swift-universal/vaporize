@@ -16,12 +16,12 @@ than treating the current test count as self-justifying.
 
 | Metric | Count |
 | --- | ---: |
-| Active CUJs | 13 |
+| Active CUJs | 14 |
 | Deferred CUJs | 2 |
-| Required Swift test obligations | 57 |
+| Required Swift test obligations | 60 |
 | Required release evidence checks | 4 |
-| Required targetable test obligations | 61 |
-| Current executable Swift tests | 74 |
+| Required targetable test obligations | 64 |
+| Current executable Swift tests | 77 |
 
 ## Targetable Test Bundles
 
@@ -40,6 +40,7 @@ than treating the current test count as self-justifying.
 | CUJ-11 | `VaporizeCUJ11PklYMLGenerationTests` | 3 |
 | CUJ-12 | `VaporizeCUJ12PackageGraphTests` | 1 |
 | CUJ-13 | `VaporizeCUJ13YMLPklImportTests` | 4 |
+| CUJ-14 | `VaporizeCUJ14PklXcodeProjectGenerationTests` | 3 |
 
 ## Coverage By CUJ
 
@@ -58,11 +59,12 @@ than treating the current test count as self-justifying.
 | CUJ-11 | FR-017 | 3 | Transitional YAML generation, renderer round-trip, generated YAML/Pkl comparison evidence |
 | CUJ-12 | FR-009 | 1 | Graph forwarded argument parsing |
 | CUJ-13 | FR-018 | 4 | Legacy YAML import parsing, generated Pkl evaluation, YAML/Pkl comparison, nested value rendering |
+| CUJ-14 | FR-020 | 3 | generate-xcodeproj parsing, Pkl-backed .xcodeproj output, deterministic renderer proof |
 
 ## Deferred Coverage
 
-- Pkl-backed `.xcodeproj` world-state generation remains deferred and release
-  blocking.
+- Fleet Pkl-backed `.xcodeproj` build parity and XcodeGen quarantine
+  disposition remain deferred and release blocking.
 - `list-targets` target discovery remains deferred and outside the current
   v0.0.1 green path.
 

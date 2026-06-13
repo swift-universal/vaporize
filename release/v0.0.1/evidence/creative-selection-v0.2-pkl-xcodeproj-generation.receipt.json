@@ -1,0 +1,90 @@
+{
+  "boundary" : "Generates .xcodeproj world-state from evaluated AppleProjectSpec Pkl; first slice supports macOS application targets.",
+  "buildableWorldStateGenerated" : true,
+  "generatedByteCount" : 13825,
+  "generationPhase" : "pkl-to-xcodeproj-world-state",
+  "generatorStatus" : "xcodeproj-world-state-generated",
+  "outputPath" : "\/tmp\/vaporize-creative-selection-v02-generated.xcodeproj",
+  "packageCount" : 0,
+  "packageNames" : [
+
+  ],
+  "pbxprojPath" : "\/tmp\/vaporize-creative-selection-v02-generated.xcodeproj\/project.pbxproj",
+  "pklPath" : "\/Users\/sonoma\/mono\/private\/universal\/substrate\/collectives\/wrkstrm-core\/private\/apple\/apps\/creative-selection-v0.2\/project.pkl",
+  "pklSignature" : {
+    "options" : {
+      "createIntermediateGroups" : "true",
+      "minimumXcodeGenVersion" : "2.39.0",
+      "useBaseInternationalization" : "true"
+    },
+    "packages" : {
+
+    },
+    "projectName" : "creative-selection-v0.2",
+    "settingsBase" : {
+      "INSTALL_PATH" : "\/Applications\/categories\/developer-tools",
+      "MACOSX_DEPLOYMENT_TARGET" : "26.0",
+      "SUBSTRATE_APP_STORE_CATEGORY_PRIMARY" : "Developer Tools",
+      "SUBSTRATE_APP_STORE_CATEGORY_SECONDARY" : "Graphics & Design",
+      "SWIFT_VERSION" : "6.3"
+    },
+    "targets" : {
+      "creative-selection-v0.2" : {
+        "dependencies" : [
+
+        ],
+        "deploymentTarget" : "26.0",
+        "platform" : "macOS",
+        "postBuildScripts" : [
+          {
+            "basedOnDependencyAnalysis" : false,
+            "name" : "Deploy to Applications",
+            "normalizedScript" : "set -euo pipefail\nif [ \"${SKIP_APPLICATION_DEPLOY:-NO}\" = \"YES\" ]; then\necho \"Skipping \/Applications deploy because SKIP_APPLICATION_DEPLOY=YES\"\nexit 0\nfi\nDEST=\"\/Applications\/${FULL_PRODUCT_NAME}\"\nrm -rf \"$DEST\"\ncp -R \"${TARGET_BUILD_DIR}\/${FULL_PRODUCT_NAME}\" \"$DEST\""
+          }
+        ],
+        "preBuildScripts" : [
+
+        ],
+        "settingConfigs" : {
+          "Debug" : {
+            "WRAPPER_NAME" : "creative-selection-v0.2.debug.app"
+          },
+          "Release" : {
+            "WRAPPER_NAME" : "creative-selection-v0.2.testflight.app"
+          }
+        },
+        "settingsBase" : {
+          "CODE_SIGNING_ALLOWED" : "false",
+          "CODE_SIGNING_REQUIRED" : "false",
+          "CURRENT_PROJECT_VERSION" : "1",
+          "GENERATE_INFOPLIST_FILE" : "false",
+          "INFOPLIST_FILE" : "Sources\/mac-app\/Info.plist",
+          "MARKETING_VERSION" : "0.2.0",
+          "PRODUCT_BUNDLE_IDENTIFIER" : "me.rismay.creative-selection.v2.macos.release",
+          "PRODUCT_MODULE_NAME" : "creative_selection_v2",
+          "PRODUCT_NAME" : "creative-selection-v0.2"
+        },
+        "sourcePaths" : [
+          "Sources\/mac-app"
+        ],
+        "type" : "application"
+      }
+    }
+  },
+  "projectName" : "creative-selection-v0.2",
+  "receiptKind" : "vaporize-pkl-xcodeproj-generation",
+  "requestId" : "vaporize-generate-xcodeproj-DB55A820-E38A-4429-9558-F94AF2F2F96D",
+  "resourceFileCount" : 0,
+  "schemaFamilySlug" : "vaporize-schemas",
+  "schemaFamilyVersion" : "0.0.1",
+  "schemaRef" : "private\/universal\/domain\/tooling\/schema-families\/vaporize-schemas\/v0.0.1\/json\/vaporize-schemas-v000-000-001\/schemas\/pkl-xcode-project-generation-receipt\/pkl-xcode-project-generation-receipt.schema.json",
+  "schemaVersion" : "0.1.0",
+  "schemeCount" : 0,
+  "sourceFileCount" : 4,
+  "targetCount" : 1,
+  "targetNames" : [
+    "creative-selection-v0.2"
+  ],
+  "workspacePath" : "\/tmp\/vaporize-creative-selection-v02-generated.xcodeproj\/project.xcworkspace\/contents.xcworkspacedata",
+  "xcodeProjectGenerated" : true
+}
