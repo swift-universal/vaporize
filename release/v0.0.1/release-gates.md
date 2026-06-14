@@ -1,7 +1,7 @@
 # Vaporize v0.0.1 - Release Gates
 
 **Status:** release-prep draft; blocked pending fleet Pkl-backed Xcode world-state parity
-**Updated:** 2026-06-14T02:29:38Z
+**Updated:** 2026-06-14T07:21:25Z
 **Component:** `vaporize@wrkstrm-core.cli`
 **Tool classification:** `internal-essential-tool`
 
@@ -10,12 +10,13 @@
 **BLOCKED-FOR-INTERNAL-ESSENTIAL-RELEASE.**
 
 The CUJ-derived test coverage contract now defines the required floor:
-84 Swift test obligations plus 11 release evidence checks across 19 active CUJs.
-The Vaporize package tests pass 102 executable Swift tests across 19 implemented
+89 Swift test obligations plus 11 release evidence checks across 20 active CUJs.
+The Vaporize package tests pass 107 executable Swift tests across 20 implemented
 CUJ-specific SwiftPM bundles through Vaporize's owned Xcode-selected toolchain
 mode, including the CUJ-16 `inspect-target-features` first slice and CUJ-17
 `release-doctor` first slice, CUJ-18 `list-targets` first slice, and CUJ-19
-workspace product-cache discovery first slice. The approved
+workspace product-cache discovery first slice, plus the CUJ-20 `list-schemes`
+first slice. The approved
 Swift YAML read bridge,
 PklSwift-backed Pkl parity specimen, transitional YAML generation slice,
 legacy-YAML-to-Pkl import slice, and major-feature test expansion are landed
@@ -36,7 +37,10 @@ from Pkl or legacy YAML and emits a typed receipt naming buildable candidates,
 packages, schemes, and proof boundaries before build/cache routing work.
 `list-targets` now also maps those buildable target facts to shared DerivedData
 product-cache candidates and reports warm/missing status when the maintained
-workspace cache pair is provided. The
+workspace cache pair is provided. Vaporize now also has a workspace
+scheme-listing first slice: `list-schemes` delegates to
+`xcodebuild -list -json -workspace` and receipts the live scheme list boundary
+without claiming build/cache/fleet proof. The
 package-local `vaporize.engineering.docc` catalog now carries the durable
 engineering narrative for eventual `wrkstrm.com/engineering` publication,
 including a canonical feature catalog that lists each major feature, user
@@ -69,9 +73,9 @@ disposition for any remaining XcodeGen surfaces.
 | GATE-02 - CUJs authored | PASS | `release/v0.0.1/cuj.md` |
 | GATE-03 - Release gates authored | PASS | This file |
 | GATE-04 - Launch-review packet authored | PASS | `release/v0.0.1/evidence/launch-review-packet.json` |
-| GATE-05 - CUJ-derived package tests pass | PASS-WITH-NOTE | `release/v0.0.1/evidence/cuj-test-coverage.json` requires 84 Swift test obligations plus 11 release evidence checks across 19 active CUJs. `vaporize toolchain -- swift test --package-path private/apple/spm/vaporize@wrkstrm-core.cli` passed 102 executable tests across 19 implemented CUJ-specific SwiftPM bundles, including CUJ-16 target feature inspection, CUJ-17 release doctor, CUJ-18 project target discovery, and CUJ-19 workspace product-cache discovery. |
+| GATE-05 - CUJ-derived package tests pass | PASS-WITH-NOTE | `release/v0.0.1/evidence/cuj-test-coverage.json` requires 89 Swift test obligations plus 11 release evidence checks across 20 active CUJs. `vaporize toolchain -- swift test --package-path private/apple/spm/vaporize@wrkstrm-core.cli` passed 107 executable tests across 20 implemented CUJ-specific SwiftPM bundles, including CUJ-16 target feature inspection, CUJ-17 release doctor, CUJ-18 project target discovery, CUJ-19 workspace product-cache discovery, and CUJ-20 Xcode workspace scheme listing. |
 | GATE-06 - Required toolchain owned by Vaporize | PASS-WITH-NOTE | Current host check at 2026-06-13T21:39:03Z found bare `swift` and `vaporize toolchain -- swift` both reporting Apple Swift 6.4, and focused CUJ-15 took `6.80s` through both routes once warm. Earlier release-prep runs observed bare Swift drift. Vaporize remains the owned route because it stabilizes toolchain policy and release evidence even when host PATH happens to be correct. |
-| GATE-07 - CLI help reflects release surface | PASS | Vaporize help advertises `use`, `toolchain`, `validate-json`, `inspect-project-yml`, `inspect-target-features`, `compare-project-yml-pkl`, `import-project-yml`, `generate-project-yml`, `generate-xcodeproj`, `list-targets`, `release-doctor`, `--common-process-spec`, `--xcode-product-cache-workspace`, and `--xcode-product-cache-derived-data-path`. |
+| GATE-07 - CLI help reflects release surface | PASS | Vaporize help advertises `use`, `toolchain`, `validate-json`, `inspect-project-yml`, `inspect-target-features`, `compare-project-yml-pkl`, `import-project-yml`, `generate-project-yml`, `generate-xcodeproj`, `list-targets`, `list-schemes`, `release-doctor`, `--common-process-spec`, `--xcode-product-cache-workspace`, and `--xcode-product-cache-derived-data-path`. |
 | GATE-08 - CommonProcess use mode tested | PASS | `VaporizeUseCommonProcessTests.swift` decodes valid spec JSON, loads a spec from disk, and rejects invalid executable refs. |
 | GATE-09 - Vapor inventory tests pass | PASS | `VaporizeCUJ07VaporInventoryTests` covers scanner status classification, legacy key handling, malformed JSON, path errors, and text/JSON rendering. |
 | GATE-10 - JSON release packet validates | PASS | `vaporize validate-json --path release/v0.0.1/evidence/launch-review-packet.json` passed. |
@@ -100,6 +104,7 @@ disposition for any remaining XcodeGen surfaces.
 | GATE-33-release-doctor - Release doctor | PASS-WITH-NOTE | `release-doctor --path private/apple/spm/vaporize@wrkstrm-core.cli` emits `release/v0.0.1/evidence/vaporize-v0.0.1-release-doctor.receipt.json` and checks the release-spine agreement across required artifacts, JSON evidence, PRD/CUJ/gate/catalog tokens, launch-review references, provenance inventory, and CUJ coverage. A pass proves spine coherence, not final release approval. |
 | GATE-34-project-target-discovery - Project target discovery | PASS-WITH-NOTE | `list-targets --pkl-path private/apple/apps/creative-selection-v0.2/project.pkl --format json --receipt-path release/v0.0.1/evidence/creative-selection-v0.2-list-targets.receipt.json` emits a `vaporize-project-target-discovery` receipt with one buildable Creative Selection v0.2 target, candidate scheme names, package count, source paths, and boundaries. This proves target discovery from AppleProjectSpec, not build/install/generation, cache warming, or `.xcworkspace` graph membership discovery. |
 | GATE-35-workspace-product-cache-discovery - Workspace product-cache discovery | PASS-WITH-NOTE | `list-targets --pkl-path private/apple/apps/creative-selection-v0.2/project.pkl --xcode-product-cache-workspace /tmp/vaporize-maintained-workspace/Huge.xcworkspace --xcode-product-cache-derived-data-path /tmp/vaporize-maintained-workspace/DerivedData --format json --receipt-path release/v0.0.1/evidence/creative-selection-v0.2-workspace-cache-discovery.receipt.json` emits one expected shared DerivedData product candidate with missing status. This proves candidate-path and warm/missing discovery from target facts, not `.xcworkspace` graph parsing, cache warming, fleet cache coverage, or disk-savings measurement. |
+| GATE-36-xcode-workspace-scheme-listing - Xcode workspace scheme listing | PASS-WITH-NOTE | `list-schemes --xcode-workspace <workspace.xcworkspace>` routes `xcodebuild -list -json -workspace` through Vaporize/CommonProcess and the CUJ-20 bundle covers CLI parsing, xcodebuild arguments, JSON parsing, input validation, and receipt boundaries. The first live `rismay-substrate.xcworkspace` probe exceeded the interactive investigation window and was stopped without a receipt, so this proves the command/parser/receipt slice, not large-workspace runtime, cache warmth, product paths, or fleet coverage. |
 
 ## Open Follow-Up Beads
 
@@ -110,6 +115,7 @@ disposition for any remaining XcodeGen surfaces.
 - `FR-VAPORIZE-DRIFT-CATCH-retire-craze-canonical-language`
 - `FR-VAPORIZE-PRODUCT-RELEASE-DIR-RENAME-MODE`
 - `FR-VAPORIZE-XCODE-WORKSPACE-GRAPH-MEMBERSHIP-DISCOVERY`
+- `FR-VAPORIZE-XCODE-WORKSPACE-SCHEME-LISTING-RUNTIME-SAMPLES`
 - `FR-VAPORIZE-RUNTIME-SAMPLE-SERIES-APPLE-ARTIFACT-INGESTION`
 - `FR-VAPORIZE-WRKSTRM-CORE-BUILD-CONFIG-COMPOSITION`
 - `FR-VAPORIZE-WRKSTRM-APP-MINIMUMS-INSPECTION`
@@ -138,8 +144,8 @@ disposition for any remaining XcodeGen surfaces.
 - Which project feature slice should follow the first `generate-xcodeproj`
   landing: schemes, resources, local Swift packages, or fleet build parity?
 - Should automatic shared workspace cache discovery extend the facts emitted by
-  `list-targets`, or should Vaporize grow a dedicated workspace product query
-  mode?
+  `list-targets`, compose with `list-schemes`, or grow a dedicated workspace
+  product query mode?
 - Which benchmark fixture should become the canonical release benchmark:
   Concourse, Creative Selection v0.2, or the maintained huge workspace?
 - Which performance claim should get the first dedicated benchmark receipt:

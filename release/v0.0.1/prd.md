@@ -1,7 +1,7 @@
 # Vaporize v0.0.1 - PRD
 
 **Status:** release-prep draft; blocked pending fleet Pkl-backed Xcode world-state parity
-**Updated:** 2026-06-14T02:29:38Z
+**Updated:** 2026-06-14T07:21:25Z
 **Component:** `vaporize@wrkstrm-core.cli`
 **Release target:** internal essential substrate CLI
 **Tool classification:** `internal-essential-tool`
@@ -51,6 +51,14 @@ cache-first workspace reuse slice. The next discovery slice lets `list-targets`
 report expected product-cache candidate paths and warm/missing status from
 AppleProjectSpec target facts. That is still not full `.xcworkspace` graph
 membership proof.
+
+The current workspace scheme-listing slice adds `list-schemes`. That mode asks
+Xcode for the live scheme list of a maintained `.xcworkspace` through
+`xcodebuild -list -json -workspace`, parses the result, and can emit a
+`vaporize-xcode-workspace-scheme-list` receipt. This is the bridge between our
+owned XcodeGen/Pkl project-generation flow and Xcode's own workspace graph. It
+does not build, install, warm caches, prove fleet membership, or replace
+AppleProjectSpec target discovery.
 
 The release classification is `internal-essential-tool`: an internal-only tool
 whose absence blocks assistants from completing build, install, launch, release
@@ -139,6 +147,8 @@ future hardware or other material-domain request families.
 - Provide workspace product-cache discovery through `list-targets` so an
   assistant can see expected shared DerivedData `.app` product candidates and
   warm/missing status before attempting install/build routing.
+- Provide `list-schemes` so an assistant can ask Xcode for live schemes in a
+  maintained `.xcworkspace` before routing workspace build/cache work.
 - Provide shared Xcode workspace product-cache reuse so a warm large workspace
   DerivedData product can satisfy app installs before local rebuilds.
 - Define a Kura-queryable runtime sample series and Apple/Swift native artifact
@@ -230,17 +240,18 @@ Supporting audiences:
 | FR-027 | Release doctor spine audit | `release-doctor --path <package-or-release-root>` emits a `vaporize-release-doctor` receipt that verifies required release artifacts exist, evidence JSON parses, PRD/CUJ/gate/catalog surfaces name the release-doctor slice, launch-review references the gate and receipt, provenance inventories the receipt, and CUJ coverage counts CUJ-17. The command audits coherence; it does not approve final release. |
 | FR-028 | Project target discovery | `list-targets --pkl-path <project.pkl>` or `list-targets --package-path <project-dir>` emits a `vaporize-project-target-discovery` receipt that names target, package, scheme, and buildable-candidate facts from AppleProjectSpec. The command discovers routing facts; it does not build, install, generate `.xcodeproj` world-state, or prove fleet parity. |
 | FR-029 | Workspace product-cache discovery | `list-targets` accepts `--xcode-product-cache-workspace`, `--xcode-product-cache-derived-data-path`, and `--configuration`; when present, the target-discovery receipt includes expected shared DerivedData `.app` candidates and warm/missing status for buildable AppleProjectSpec targets. The command does not parse `.xcworkspace` membership, build, install, warm the cache, or prove fleet cache coverage. |
+| FR-030 | Xcode workspace scheme listing | `list-schemes --xcode-workspace <workspace.xcworkspace>` executes `xcodebuild -list -json -workspace` through Vaporize/CommonProcess, parses the workspace scheme list, and can emit a `vaporize-xcode-workspace-scheme-list` receipt. The command lists schemes only; it does not build, install, warm caches, prove product paths, or prove fleet-wide workspace membership. |
 
 ## Release Criteria
 
 - Vaporize's package test suite passes with the Swift 6.4 toolchain:
   `vaporize toolchain -- swift test --package-path private/apple/spm/vaporize@wrkstrm-core.cli`.
-  Current proof: the CUJ-derived coverage floor requires 84 Swift test
-  obligations plus 11 release evidence checks; the executable suite passes 102
-  tests across 19 implemented CUJ targets, including the CUJ-16
+  Current proof: the CUJ-derived coverage floor requires 89 Swift test
+  obligations plus 11 release evidence checks; the executable suite passes 107
+  tests across 20 implemented CUJ targets, including the CUJ-16
   `inspect-target-features` first slice, CUJ-17 `release-doctor` first slice,
-  CUJ-18 `list-targets` first slice, and CUJ-19 workspace cache discovery
-  first slice.
+  CUJ-18 `list-targets` first slice, CUJ-19 workspace cache discovery first
+  slice, and CUJ-20 `list-schemes` first slice.
 - `release/v0.0.1/product-definition.md` defines the product, primary users,
   product-level user journeys, choice argument, non-choice cases, and build
   implications before additional feature work is accepted.
@@ -257,7 +268,7 @@ Supporting audiences:
 - CLI help advertises `use`, `toolchain`, `validate-json`,
   `inspect-project-yml`, `compare-project-yml-pkl`, `import-project-yml`,
   `generate-project-yml`, `generate-xcodeproj`, `inspect-target-features`,
-  `list-targets`, `release-doctor`, `--common-process-spec`,
+  `list-targets`, `list-schemes`, `release-doctor`, `--common-process-spec`,
   `--xcode-product-cache-workspace`, and `--xcode-product-cache-derived-data-path`.
 - Release packet JSON validates with
   `vaporize validate-json --path release/v0.0.1/evidence/launch-review-packet.json`.

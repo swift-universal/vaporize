@@ -29,6 +29,7 @@ struct VaporizeCLI: AsyncParsableCommand {
       with receipts; generate-xcodeproj emits first-slice .xcodeproj \
       world-state from evaluated AppleProjectSpec Pkl; list-targets discovers \
       project targets, packages, and schemes for parity/build routing; \
+      list-schemes asks xcodebuild for live .xcworkspace schemes; \
       release-doctor audits the release spine before claims are trusted. \
       Legacy `inventory` and `x-craze-collapse-path` remain compatibility \
       aliases during migration.
@@ -60,6 +61,7 @@ struct VaporizeCLI: AsyncParsableCommand {
     case generateProjectYML = "generate-project-yml"
     case generateXcodeProject = "generate-xcodeproj"
     case listTargets = "list-targets"
+    case listSchemes = "list-schemes"
     case releaseDoctor = "release-doctor"
     case inventory
 
@@ -81,7 +83,7 @@ struct VaporizeCLI: AsyncParsableCommand {
     case app
   }
 
-  @Argument(help: "Mode: install, uninstall, build, test, run, pass, use, toolchain, setup, status, warehouse, validate-json, inspect-project-yml, inspect-target-features, compare-project-yml-pkl, import-project-yml, generate-project-yml, generate-xcodeproj, list-targets, release-doctor, inventory, or graph (forwards to package-graph@wrkstrm.cli).")
+  @Argument(help: "Mode: install, uninstall, build, test, run, pass, use, toolchain, setup, status, warehouse, validate-json, inspect-project-yml, inspect-target-features, compare-project-yml-pkl, import-project-yml, generate-project-yml, generate-xcodeproj, list-targets, list-schemes, release-doctor, inventory, or graph (forwards to package-graph@wrkstrm.cli).")
   var mode: Mode
 
   @Option(name: .customLong("artifact"), help: "Artifact kind: cli or app.")
@@ -126,7 +128,7 @@ struct VaporizeCLI: AsyncParsableCommand {
 
   @Option(
     name: .customLong("xcode-workspace"),
-    help: "Path to .xcworkspace when building with xcodebuild (app mode).")
+    help: "Path to .xcworkspace when building with xcodebuild (app mode) or listing workspace schemes.")
   var xcodeWorkspace: String?
 
   @Option(
@@ -226,7 +228,7 @@ struct VaporizeCLI: AsyncParsableCommand {
 
   @Option(
     name: .customLong("format"),
-    help: "Output format for status, inspect-project-yml, inspect-target-features, compare-project-yml-pkl, import-project-yml, generate-project-yml, generate-xcodeproj, list-targets, or release-doctor mode: text (default) or json.")
+    help: "Output format for status, inspect-project-yml, inspect-target-features, compare-project-yml-pkl, import-project-yml, generate-project-yml, generate-xcodeproj, list-targets, list-schemes, or release-doctor mode: text (default) or json.")
   var vaporOutputFormat: VaporOutputFormatArgument = .text
 
   @Argument(parsing: .remaining, help: "Arguments forwarded to test, run, pass, or toolchain mode.")
@@ -272,6 +274,8 @@ struct VaporizeCLI: AsyncParsableCommand {
       try await generateXcodeProject()
     case .listTargets:
       try await listTargets()
+    case .listSchemes:
+      try await listSchemes()
     case .releaseDoctor:
       try await releaseDoctor()
     case .inventory:
@@ -1096,6 +1100,95 @@ struct VaporizeCLI: AsyncParsableCommand {
         for candidate in receipt.productCacheCandidates {
           print("- cache \(candidate.status): \(candidate.targetName) -> \(candidate.appBundlePath)")
         }
+      }
+      print(receipt.boundaries[0])
+    case .json:
+      let encoder = JSONEncoder()
+      encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
+      let data = try encoder.encode(receipt)
+      FileHandle.standardOutput.write(data)
+      FileHandle.standardOutput.write(Data("\n".utf8))
+    }
+  }
+
+  private func listSchemes() async throws {
+    guard let xcodeWorkspace, !xcodeWorkspace.isEmpty else {
+      throw ValidationError("--xcode-workspace is required for list-schemes mode.")
+    }
+
+    let request = try XcodeWorkspaceSchemeListRequest(workspacePath: xcodeWorkspace)
+    let requestId = "vaporize-list-schemes-\(UUID().uuidString)"
+    let workingDirectory = passWorkingDirectory ?? FileManager.default.currentDirectoryPath
+    let environmentUpdates = developerDirectory.map { ["DEVELOPER_DIR": $0] }
+    let command = CommandSpec(
+      executable: .name("xcodebuild"),
+      args: request.xcodebuildArguments,
+      env: .inherit(updating: environmentUpdates),
+      workingDirectory: workingDirectory,
+      logOptions: .init(
+        exposure: .none,
+        tags: [
+          "source": "vaporize-list-schemes",
+          "canonicalSource": "vaporize-list-schemes",
+          "tool": "xcodebuild",
+        ]
+      ),
+      requestId: requestId,
+      runnerKind: .auto,
+      streamingMode: .buffered
+    )
+    try command.validateOrThrow()
+
+    let output = try await RunnerControllerFactory.run(command: command)
+    guard output.isSuccess else {
+      let receipt = XcodeWorkspaceSchemeListReceipt(
+        workspacePath: request.standardizedWorkspacePath,
+        workspaceName: nil,
+        schemes: [],
+        xcodebuildArguments: request.xcodebuildArguments,
+        workingDirectory: workingDirectory,
+        requestId: requestId,
+        runnerKind: "auto",
+        developerDirectorySet: developerDirectory != nil,
+        succeeded: false,
+        exitCode: output.exitStatus.exitCode,
+        signal: output.exitStatus.signal,
+        stdoutBytes: output.stdout.count,
+        stderrBytes: output.stderr.count,
+        processIdentifier: output.processIdentifier
+      )
+      try emitReceiptIfRequested(receipt)
+      FileHandle.standardError.write(output.stderr)
+      if let exitCode = output.exitStatus.exitCode {
+        throw ExitCode(Int32(exitCode))
+      }
+      throw ExitCode.failure
+    }
+
+    let parsed = try XcodeWorkspaceSchemeListParser.parse(data: output.stdout)
+    let receipt = XcodeWorkspaceSchemeListReceipt(
+      workspacePath: request.standardizedWorkspacePath,
+      workspaceName: parsed.workspaceName,
+      schemes: parsed.schemes,
+      xcodebuildArguments: request.xcodebuildArguments,
+      workingDirectory: workingDirectory,
+      requestId: requestId,
+      runnerKind: "auto",
+      developerDirectorySet: developerDirectory != nil,
+      succeeded: true,
+      exitCode: output.exitStatus.exitCode,
+      signal: output.exitStatus.signal,
+      stdoutBytes: output.stdout.count,
+      stderrBytes: output.stderr.count,
+      processIdentifier: output.processIdentifier
+    )
+    try emitReceiptIfRequested(receipt)
+
+    switch vaporOutputFormat {
+    case .text:
+      print("workspace schemes: \(receipt.workspaceName ?? "<unknown>") schemes=\(receipt.schemeCount)")
+      for scheme in receipt.schemes {
+        print("- \(scheme)")
       }
       print(receipt.boundaries[0])
     case .json:

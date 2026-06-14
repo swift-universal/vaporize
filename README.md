@@ -59,6 +59,7 @@ vaporize compare-project-yml-pkl --path <project.yml> --pkl-path <project.pkl> -
 vaporize import-project-yml --path <project.yml> --output-path <project.pkl> --receipt-path <receipt.json>
 vaporize generate-project-yml --pkl-path <project.pkl> --output-path <generated.yml> --receipt-path <receipt.json>
 vaporize generate-xcodeproj --pkl-path <project.pkl> --output-path <generated.xcodeproj> --receipt-path <receipt.json>
+vaporize list-schemes --xcode-workspace <workspace.xcworkspace> --format json --receipt-path <receipt.json>
 vaporize setup --xcode-component MetalToolchain
 vaporize status --path <records> --format text
 vaporize warehouse --path <records> --receipt-path <receipt.json>
@@ -167,6 +168,19 @@ When both product-cache options are present, Vaporize first looks for
 path. If the product is not already warm, the app build uses the shared
 workspace and shared DerivedData path so all workspace projects resolve products
 from the same cache.
+
+List maintained workspace schemes through Xcode:
+
+```bash
+vaporize list-schemes \
+  --xcode-workspace /path/to/Huge/Huge.xcworkspace \
+  --format json \
+  --receipt-path /tmp/huge-workspace-schemes.receipt.json
+```
+
+`list-schemes` delegates to `xcodebuild -list -json -workspace` through the
+Vaporize/CommonProcess boundary. It lists schemes only; it does not build, warm
+caches, inspect products, or prove fleet workspace coverage.
 
 When the built `.app` bundle name differs from the install product name, keep
 the install product stable and locate the built artifact with `--app-bundle-name`:

@@ -24,7 +24,7 @@ Current measured claims are limited:
 - Focused CUJ-15 SwiftPM tests measured the same through bare Swift and
   Vaporize's toolchain route once warm.
 - The full Vaporize test suite has passed through the Vaporize toolchain route
-  with 102 executable tests.
+  with 107 executable tests.
 
 The current product claim is not "Vaporize compiles faster than Swift." The
 claim is that Vaporize makes the route stable, reviewable, policy-compliant,
@@ -79,6 +79,7 @@ Until receipts exist, do not claim:
 - universal cache-hit rates
 - parity with every owned Apple project
 - automatic `.xcworkspace` graph membership discovery
+- large-workspace scheme-listing runtime behavior
 - replacement of Xcode or Swift
 
 The right next engineering step is to make Vaporize emit runtime samples as a

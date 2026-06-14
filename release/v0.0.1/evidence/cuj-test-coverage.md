@@ -1,6 +1,6 @@
 # Vaporize v0.0.1 - CUJ Test Coverage
 
-**Generated:** 2026-06-14T04:05:00Z
+**Generated:** 2026-06-14T07:21:25Z
 **Status:** active CUJ coverage floor defined
 **Component:** `vaporize@wrkstrm-core.cli`
 **Schema:** `vaporize-schemas v0.0.1` / `VaporizeCUJTestCoverageModel`
@@ -26,12 +26,12 @@ and CUJ count must already name the behavior being retired from the old location
 
 | Metric | Count |
 | --- | ---: |
-| Active CUJs | 19 |
+| Active CUJs | 20 |
 | Deferred CUJs | 1 |
-| Required Swift test obligations | 84 |
+| Required Swift test obligations | 89 |
 | Required release evidence checks | 11 |
-| Required targetable test obligations | 95 |
-| Current executable Swift tests | 102 |
+| Required targetable test obligations | 100 |
+| Current executable Swift tests | 107 |
 
 ## Targetable Test Bundles
 
@@ -56,6 +56,7 @@ and CUJ count must already name the behavior being retired from the old location
 | CUJ-17 | `VaporizeCUJ17ReleaseDoctorTests` | 5 |
 | CUJ-18 | `VaporizeCUJ18ListTargetsTests` | 5 |
 | CUJ-19 | `VaporizeCUJ19WorkspaceCacheDiscoveryTests` | 5 |
+| CUJ-20 | `VaporizeCUJ20XcodeWorkspaceSchemesTests` | 5 |
 
 ## Coverage By CUJ
 
@@ -80,6 +81,7 @@ and CUJ count must already name the behavior being retired from the old location
 | CUJ-17 | FR-027 | 5 Swift tests; 1 release evidence check | Release doctor parsing, live-spine pass, release-root resolution, missing-gate failure, unresolved-root rejection |
 | CUJ-18 | FR-028 | 5 Swift tests; 1 release evidence check | list-targets parsing, legacy YAML discovery, Pkl discovery, directory fallback, missing project-spec rejection |
 | CUJ-19 | FR-021, FR-029 | 5 Swift tests; 1 release evidence check | list-targets cache option parsing, missing candidate discovery, warm candidate discovery, non-buildable exclusion, incomplete cache-pair rejection |
+| CUJ-20 | FR-030 | 5 | list-schemes CLI parsing, xcodebuild argument construction, workspace scheme JSON parsing, non-workspace rejection, receipt boundary |
 
 ## Deferred Coverage
 
@@ -93,6 +95,10 @@ and CUJ count must already name the behavior being retired from the old location
   not build, install, generate `.xcodeproj` world-state, parse `.xcworkspace`
   graph membership, warm the cache, prove fleet cache coverage, or measure disk
   savings.
+- `list-schemes` Xcode workspace scheme listing is covered as a first slice; it
+  asks Xcode for workspace schemes through `xcodebuild -list -json -workspace`
+  and records the scheme-list receipt boundary, but it does not build, install,
+  warm caches, prove product paths, or measure large-workspace runtime.
 - wrkstrm app-minimums inspection has a target-level first slice; fleet
   registry-level inspection remains a follow-up.
 

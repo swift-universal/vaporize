@@ -234,6 +234,14 @@ let package = Package(
       path: "tests/cuj-19-workspace-cache-discovery"
     ),
     .testTarget(
+      name: "VaporizeCUJ20XcodeWorkspaceSchemesTests",
+      dependencies: [
+        "VaporizeCLI",
+        .product(name: "ArgumentParser", package: "swift-argument-parser"),
+      ],
+      path: "tests/cuj-20-xcode-workspace-schemes"
+    ),
+    .testTarget(
       name: "VaporizeCUJ12PackageGraphTests",
       dependencies: [
         "VaporizeCLI",

@@ -7,7 +7,7 @@
   "coverageId": "vaporize-v0.0.1-cuj-test-coverage",
   "subjectAppSlug": "vaporize@wrkstrm-core.cli",
   "subjectReleaseSlug": "v0.0.1",
-  "generatedAt": "2026-06-14T04:05:00Z",
+  "generatedAt": "2026-06-14T07:21:25Z",
   "generatedBy": "codex-crisie",
   "status": "active-cuj-coverage-floor-defined",
   "sourceRule": "Required test count is derived from PRD requirements through active draft CUJs. Actual executable tests may exceed the required floor.",
@@ -17,12 +17,12 @@
     "releaseGates": "private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/release-gates.md"
   },
   "counts": {
-    "activeCUJCount": 19,
+    "activeCUJCount": 20,
     "deferredCUJCount": 1,
-    "requiredSwiftTestObligationCount": 84,
+    "requiredSwiftTestObligationCount": 89,
     "requiredReleaseEvidenceCheckCount": 11,
-    "requiredTargetableTestObligationCount": 95,
-    "currentExecutableSwiftTestCount": 102,
+    "requiredTargetableTestObligationCount": 100,
+    "currentExecutableSwiftTestCount": 107,
     "currentExecutableSwiftTestBreakdown": {
       "VaporizeCUJ01SwiftPMCLITests": 7,
       "VaporizeCUJ02MacAppTests": 14,
@@ -42,7 +42,8 @@
       "VaporizeCUJ16TargetFeaturesTests": 5,
       "VaporizeCUJ17ReleaseDoctorTests": 5,
       "VaporizeCUJ18ListTargetsTests": 5,
-      "VaporizeCUJ19WorkspaceCacheDiscoveryTests": 5
+      "VaporizeCUJ19WorkspaceCacheDiscoveryTests": 5,
+      "VaporizeCUJ20XcodeWorkspaceSchemesTests": 5
     }
   },
   "coverage": [
@@ -322,6 +323,18 @@
         "release-gates.md",
         "launch-review-packet.json"
       ]
+    },
+    {
+      "cuj": "CUJ-20",
+      "title": "Assistant Lists Xcode Workspace Schemes Through Xcodebuild",
+      "prdRefs": [
+        "FR-030"
+      ],
+      "requiredSwiftTestObligations": 5,
+      "status": "covered-with-boundary",
+      "evidence": [
+        "VaporizeCUJ20XcodeWorkspaceSchemesTests.swift"
+      ]
     }
   ],
   "deferredCoverage": [
@@ -341,6 +354,7 @@
     "Actual executable Swift tests may exceed the required count when extra regression coverage is useful.",
     "Release doctor proves release-spine coherence; it does not approve final release or replace fleet build parity, runtime sampling, or periodic buddy health checks.",
     "Project target discovery is covered as a first slice; it does not build, install, generate .xcodeproj world-state, or prove .xcworkspace graph membership discovery.",
-    "Workspace product-cache discovery is covered as target-fact-derived candidate path and warm/missing inspection; .xcworkspace graph membership, cache warming, fleet coverage, and disk-savings measurement remain deferred."
+    "Workspace product-cache discovery is covered as target-fact-derived candidate path and warm/missing inspection; .xcworkspace graph membership, cache warming, fleet coverage, and disk-savings measurement remain deferred.",
+    "Xcode workspace scheme listing is covered as a first slice; it asks xcodebuild for live .xcworkspace schemes and records a receipt boundary, but it does not build, install, warm caches, prove product paths, prove fleet coverage, or measure large-workspace runtime."
   ]
 }

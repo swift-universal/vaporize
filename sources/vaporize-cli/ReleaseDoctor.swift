@@ -69,6 +69,15 @@ enum VaporizeReleaseDoctor {
       textContainsCheck(
         roots: roots,
         scope: .releaseRoot,
+        relativePath: "prd.md",
+        token: "FR-030",
+        name: "prd-xcode-workspace-scheme-listing-requirement"
+      )
+    )
+    checks.append(
+      textContainsCheck(
+        roots: roots,
+        scope: .releaseRoot,
         relativePath: "cuj.md",
         token: "CUJ-17",
         name: "cuj-release-doctor-journey"
@@ -90,6 +99,15 @@ enum VaporizeReleaseDoctor {
         relativePath: "cuj.md",
         token: "CUJ-19",
         name: "cuj-workspace-cache-discovery-journey"
+      )
+    )
+    checks.append(
+      textContainsCheck(
+        roots: roots,
+        scope: .releaseRoot,
+        relativePath: "cuj.md",
+        token: "CUJ-20",
+        name: "cuj-xcode-workspace-scheme-listing-journey"
       )
     )
     checks.append(
@@ -122,6 +140,15 @@ enum VaporizeReleaseDoctor {
     checks.append(
       textContainsCheck(
         roots: roots,
+        scope: .releaseRoot,
+        relativePath: "release-gates.md",
+        token: "GATE-36-xcode-workspace-scheme-listing",
+        name: "gate-xcode-workspace-scheme-listing"
+      )
+    )
+    checks.append(
+      textContainsCheck(
+        roots: roots,
         scope: .packageRoot,
         relativePath: "vaporize.engineering.docc/feature-catalog.md",
         token: "Release doctor",
@@ -144,6 +171,15 @@ enum VaporizeReleaseDoctor {
         relativePath: "vaporize.engineering.docc/feature-catalog.md",
         token: "Workspace product-cache discovery",
         name: "feature-catalog-workspace-cache-discovery"
+      )
+    )
+    checks.append(
+      textContainsCheck(
+        roots: roots,
+        scope: .packageRoot,
+        relativePath: "vaporize.engineering.docc/feature-catalog.md",
+        token: "Xcode workspace scheme listing",
+        name: "feature-catalog-xcode-workspace-scheme-listing"
       )
     )
     checks.append(
@@ -341,6 +377,13 @@ enum VaporizeReleaseDoctor {
         detail: "Launch-review packet must include the workspace product-cache discovery gate."
       ),
       check(
+        name: "launch-review-gate-36",
+        category: "launch-review",
+        path: url.path,
+        passed: gateResults.contains { $0["gateRef"] as? String == "GATE-36-xcode-workspace-scheme-listing" },
+        detail: "Launch-review packet must include the Xcode workspace scheme-listing gate."
+      ),
+      check(
         name: "launch-review-release-doctor-evidence-ref",
         category: "launch-review",
         path: url.path,
@@ -429,11 +472,11 @@ enum VaporizeReleaseDoctor {
 
     return [
       check(
-        name: "coverage-active-cuj-19",
+        name: "coverage-active-cuj-20",
         category: "cuj-coverage",
         path: url.path,
-        passed: (counts["activeCUJCount"] as? Int ?? 0) >= 19,
-        detail: "Coverage artifact must count CUJ-19 workspace product-cache discovery."
+        passed: (counts["activeCUJCount"] as? Int ?? 0) >= 20,
+        detail: "Coverage artifact must count CUJ-20 Xcode workspace scheme listing."
       ),
       check(
         name: "coverage-release-evidence-floor",
@@ -462,6 +505,13 @@ enum VaporizeReleaseDoctor {
         path: url.path,
         passed: (breakdown["VaporizeCUJ19WorkspaceCacheDiscoveryTests"] as? Int ?? 0) >= 5,
         detail: "Coverage artifact must name the CUJ-19 targetable test bundle."
+      ),
+      check(
+        name: "coverage-xcode-workspace-scheme-listing-test-bundle",
+        category: "cuj-coverage",
+        path: url.path,
+        passed: (breakdown["VaporizeCUJ20XcodeWorkspaceSchemesTests"] as? Int ?? 0) >= 5,
+        detail: "Coverage artifact must name the CUJ-20 targetable test bundle."
       ),
     ]
   }
@@ -516,7 +566,7 @@ struct VaporizeReleaseDoctorReceipt: Codable, Equatable {
   var boundaries = [
     "Release doctor audits release-spine coherence; it does not approve release.",
     "A pass can coexist with release gates that are honestly blocked.",
-    "First slice checks Vaporize v0.0.1 docs, JSON evidence, CUJ coverage, launch-review references, provenance inventory, project target discovery evidence, and workspace product-cache discovery evidence.",
+    "First slice checks Vaporize v0.0.1 docs, JSON evidence, CUJ coverage, launch-review references, provenance inventory, project target discovery evidence, workspace product-cache discovery evidence, and Xcode workspace scheme-listing evidence.",
     "Fleet project-generation parity, runtime sampling, build-size cohorts, and periodic buddy health remain separate follow-up checks.",
   ]
 }

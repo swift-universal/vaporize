@@ -2,7 +2,7 @@
 
 **Status:** release-blocker investigation complete
 **Generated:** 2026-06-12T20:58:02Z
-**Updated:** 2026-06-13T08:18:07Z
+**Updated:** 2026-06-14T07:21:25Z
 **Component:** `vaporize@wrkstrm-core.cli`
 **Tool classification:** `internal-essential-tool`
 
@@ -75,12 +75,16 @@ The first approved migration-prep slice is now landed:
   cache-first app lookup and shared workspace/DerivedData build invocation.
 - `list-targets` can also map Creative Selection v0.2 target facts to expected
   shared DerivedData product-cache candidates and report warm/missing status.
-- The CUJ-derived coverage floor now requires 84 Swift test obligations plus
-  11 release evidence checks across 19 active CUJs; the full Vaporize package
-  test suite passes 102 executable Swift tests across 19 implemented
+- `list-schemes` routes `xcodebuild -list -json -workspace` through
+  Vaporize/CommonProcess so Xcode remains the authority for maintained
+  workspace scheme discovery.
+- The CUJ-derived coverage floor now requires 89 Swift test obligations plus
+  11 release evidence checks across 20 active CUJs; the full Vaporize package
+  test suite passes 107 executable Swift tests across 20 implemented
   CUJ-specific SwiftPM bundles through `vaporize toolchain`, including CUJ-16
   target feature inspection, CUJ-17 release doctor, CUJ-18 project target
-  discovery, and CUJ-19 workspace product-cache discovery.
+  discovery, CUJ-19 workspace product-cache discovery, and CUJ-20 Xcode
+  workspace scheme listing.
 
 This does not unblock v0.0.1 by itself. It gives the Pkl migration a tested
 Swift intake surface plus a first owned `.xcodeproj` generation slice. The

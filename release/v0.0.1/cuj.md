@@ -1,7 +1,7 @@
 # Vaporize v0.0.1 - Critical User Journeys
 
 **Status:** release-prep draft; blocked pending fleet Pkl project-generation parity
-**Updated:** 2026-06-14T02:29:38Z
+**Updated:** 2026-06-14T07:21:25Z
 **Component:** `vaporize@wrkstrm-core.cli`
 **Tool classification:** `internal-essential-tool`
 
@@ -19,7 +19,7 @@ one product-level journey.
 | Assistant emits receipts for CommonProcess command execution | CUJ-03, CUJ-04 |
 | Assistant inventories vaporware state from substrate records | CUJ-07 |
 | Assistant migrates Apple project generation from legacy `project.yml` toward Pkl-backed truth with receipts at every boundary | CUJ-08, CUJ-10, CUJ-11, CUJ-13, CUJ-14 |
-| Assistant discovers Apple project targets, buildable candidates, packages, and schemes before routing build/cache/parity work | CUJ-18 |
+| Assistant discovers Apple project targets, buildable candidates, packages, and schemes before routing build/cache/parity work | CUJ-18, CUJ-20 |
 | Assistant reuses a warm Xcode workspace product cache instead of rebuilding locally when the shared product already exists | CUJ-15, CUJ-19 |
 | Release reviewer evaluates product definition, PRD review session, vaporware modification request discipline, user journeys, choice argument, evidence, gates, and blockers without relying on chat memory | CUJ-09 |
 | Assistant audits release-spine coherence before trusting a vaporware packet | CUJ-17 |
@@ -473,6 +473,39 @@ Failure truth:
   warm the cache, prove that the whole fleet is present, or measure disk
   savings.
 
+## CUJ-20 - Assistant Lists Xcode Workspace Schemes Through Xcodebuild
+
+1. Assistant receives the maintained Xcode workspace path.
+2. Assistant runs
+   `vaporize list-schemes --xcode-workspace <workspace.xcworkspace>`.
+3. Vaporize executes `xcodebuild -list -json -workspace <workspace>` through
+   the CommonProcess runner.
+4. Vaporize parses Xcode's workspace scheme list.
+5. Vaporize emits text or a `vaporize-xcode-workspace-scheme-list` receipt so
+   downstream build/cache routing can choose a real workspace scheme.
+
+Success:
+
+- The command validates that the input is a `.xcworkspace` path.
+- The request uses `xcodebuild -list -json -workspace` as the workspace graph
+  authority.
+- The parser extracts the workspace name and non-empty scheme list from Xcode's
+  JSON output.
+- The receipt records workspace path, scheme count, schemes, xcodebuild
+  arguments, working directory, request ID, runner kind, developer-directory
+  override status, process result, and proof boundaries.
+
+Failure truth:
+
+- This slice lists workspace schemes only.
+- It does not build, install, warm caches, inspect product paths, measure
+  runtime, prove fleet cache coverage, or replace AppleProjectSpec target
+  discovery.
+- The first live probe against the large `rismay-substrate.xcworkspace`
+  exceeded the interactive investigation window and was stopped without a
+  receipt; runtime/timeout behavior for the huge maintained workspace remains a
+  follow-up measurement target.
+
 ## Test Coverage Contract
 
 Test count is derived from PRD requirements through the active draft CUJs.
@@ -500,13 +533,14 @@ must know the required floor.
 | CUJ-17 | FR-027 | 5 Swift tests; 1 release evidence check |
 | CUJ-18 | FR-028 | 5 Swift tests; 1 release evidence check |
 | CUJ-19 | FR-021, FR-029 | 5 Swift tests; 1 release evidence check |
+| CUJ-20 | FR-030 | 5 |
 
 Current active-CUJ requirement:
 
-- Required Swift test obligations: 84
+- Required Swift test obligations: 89
 - Required release evidence checks: 11
-- Required targetable test obligations: 95
-- Current executable Swift tests: 102 across 19 implemented CUJ-specific SwiftPM
+- Required targetable test obligations: 100
+- Current executable Swift tests: 107 across 20 implemented CUJ-specific SwiftPM
   bundles
 - Coverage artifact:
   `release/v0.0.1/evidence/cuj-test-coverage.json`
