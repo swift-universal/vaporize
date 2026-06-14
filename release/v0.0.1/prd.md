@@ -1,7 +1,7 @@
 # Vaporize v0.0.1 - PRD
 
 **Status:** release-prep draft; blocked pending fleet Pkl-backed Xcode world-state parity
-**Updated:** 2026-06-14T00:34:28Z
+**Updated:** 2026-06-14T02:29:38Z
 **Component:** `vaporize@wrkstrm-core.cli`
 **Release target:** internal essential substrate CLI
 **Tool classification:** `internal-essential-tool`
@@ -78,6 +78,15 @@ v0.0.1 lane records the backfilled correction in
 `release/v0.0.1/prd-review-session.md`; future major Vaporize coding slices do
 not get a backfill exception.
 
+Vaporware modification requests are release work. A request that changes
+executable behavior, product behavior, build behavior, release behavior, or
+user-visible capability must create or attach to a feature flag, feature status
+record, or release-feature cohort; add or update targetable tests; and update
+release evidence when release claims, receipts, schema fixtures, launch review,
+or app/build output are affected. Feature requests are product input; vaporware
+modification requests are the controlled engineering execution unit that may be
+spawned from that input.
+
 ## Goals
 
 - Ship one canonical CLI name: `vaporize@wrkstrm-core.cli`.
@@ -85,6 +94,9 @@ not get a backfill exception.
   choose Vaporize before more build work is accepted.
 - Require an Engineering, QA, and Marketing PRD review session before major
   feature coding starts.
+- Require vaporware modification requests to carry a feature flag or
+  feature-status story, targetable tests, and release evidence before they are
+  treated as release-ready.
 - Classify Vaporize as an internal essential tool for assistant build,
   install, launch, and release-proof workflows.
 - Support SwiftPM CLI build, install, uninstall, and run flows.
@@ -195,13 +207,14 @@ Supporting audiences:
 | FR-023 | Existing wrkstrm-core app/build config composition | App-facing runtime samples and future feature-status inspection must consume existing wrkstrm-core build surfaces before inventing parallel records: `tool-registry@wrkstrm-core.cli discover-apps` / `xcode-project.tool.json` records for `project.yml` ownership, `identifier@wrkstrm-core.cli app describe` for app variant names/paths, and `app-artifacts@wrkstrm-core.cli` for bundle validation, install-path patching, Xcode build/export receipts, and flat application artifacts. |
 | FR-024 | wrkstrm app minimums inspection | `inspect-target-features --path <project.yml> --target <target>` reports target-level release-feature topology: project spec, declared build configurations, tier declarations, `Config/release-features.json`, generated `Config/xcconfigs/*.xcconfig`, project `configFiles` or Pkl equivalent wiring, generated `Sources/ReleaseFeatures.swift`, and `digikoma-release-features` provenance. Registry-backed fleet inspection remains a follow-up. Missing, stale, or unknown minimums block strong feature-cohort, launch-readiness, and per-feature-size claims. |
 | FR-025 | Pre-code PRD review session | Major feature work must record an Engineering, QA, and Marketing PRD review session before coding starts. The session must decide `GO`, `GO-WITH-NOTES`, or `NO-GO`, and must name approved scope, required tests, required release evidence, approved claims, prohibited claims, and blockers. |
+| FR-026 | Vaporware modification request release discipline | Behavior-changing vaporware modification requests create or attach to a feature flag, feature status record, or release-feature cohort; add or update targetable tests; run the smallest feature-scoped proof; update release evidence and schema fixtures when affected; and record any no-flag exception explicitly. |
 
 ## Release Criteria
 
 - Vaporize's package test suite passes with the Swift 6.4 toolchain:
   `vaporize toolchain -- swift test --package-path private/apple/spm/vaporize@wrkstrm-core.cli`.
   Current proof: the CUJ-derived coverage floor requires 69 Swift test
-  obligations plus 7 release evidence checks; the executable suite passes 87
+  obligations plus 8 release evidence checks; the executable suite passes 87
   tests across 16 implemented CUJ targets, including the CUJ-16
   `inspect-target-features` first slice.
 - `release/v0.0.1/product-definition.md` defines the product, primary users,
@@ -211,6 +224,10 @@ Supporting audiences:
   Marketing PRD review session requirement and the v0.0.1 backfilled
   `GO-WITH-NOTES` decision. Future major coding slices require this review
   before implementation begins.
+- `vaporize.engineering.docc/vaporware-modification-request-discipline.md`
+  records the vaporware modification request rule: behavior-changing slices need
+  a feature flag or feature-status story, targetable tests, and release evidence
+  before release-ready status.
 - CUJ test coverage is recorded in
   `release/v0.0.1/evidence/cuj-test-coverage.json`.
 - CLI help advertises `use`, `toolchain`, `validate-json`,

@@ -64,3 +64,5 @@ all of these anchors:
 - A command, artifact, or documentation surface.
 - A proof boundary in tests, receipts, release gates, or schema fixtures.
 - A correct ownership home per <doc:modularity-and-ownership-boundaries>.
+- A feature flag, feature status record, or explicit exception per
+  <doc:vaporware-modification-request-discipline>.

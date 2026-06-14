@@ -8,7 +8,7 @@
   "packetVersion": "v0.0.1",
   "reviewKind": "internal-essential-tool-release-prep",
   "packetStatus": "blocked-pending-pkl-backed-xcode-world-state-generation",
-  "emittedAt": "2026-06-14T02:21:54Z",
+  "emittedAt": "2026-06-14T02:29:38Z",
   "emittedBy": "codex-crisie",
   "lifecycleStage": "internal-cli-release-prep",
   "releaseTarget": {
@@ -90,6 +90,12 @@
       "s": ["vaporize", "v0.0.1", "modularity-ownership-boundaries"],
       "t": "Vaporize modularity and ownership boundaries",
       "tg": [{"k": "rp", "rt": "mono", "v": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/vaporize.engineering.docc/modularity-and-ownership-boundaries.md"}]
+    },
+    {
+      "LinkRefModel": "0.3.0",
+      "s": ["vaporize", "v0.0.1", "vaporware-modification-request-discipline"],
+      "t": "Vaporize vaporware modification request discipline",
+      "tg": [{"k": "rp", "rt": "mono", "v": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/vaporize.engineering.docc/vaporware-modification-request-discipline.md"}]
     },
     {
       "LinkRefModel": "0.3.0",
@@ -316,12 +322,13 @@
     "activeCUJCount": 16,
     "deferredCUJCount": 2,
     "requiredSwiftTestObligationCount": 69,
-    "requiredReleaseEvidenceCheckCount": 7,
-    "requiredTargetableTestObligationCount": 76,
+    "requiredReleaseEvidenceCheckCount": 8,
+    "requiredTargetableTestObligationCount": 77,
     "bareSwiftToolchainResult": "CURRENT-PASS-WITH-NOTE: at 2026-06-13T21:39:03Z bare swift reported Apple Swift 6.4 and a focused CUJ-15 test run passed in 6.80s; earlier release-prep runs observed bare Swift drift, so Vaporize remains the canonical assistant route.",
     "requiredToolchainResult": "PASS: Vaporize toolchain mode owns Xcode-selected Swift via internal xcrun; focused CUJ-15 also passed through Vaporize in 6.80s once warm.",
     "productDefinitionContract": "PASS: release/v0.0.1/product-definition.md defines the product, primary users, product-level journeys, choice argument, non-choice cases, and build implications before further build work is accepted.",
     "prdReviewSession": "PASS-WITH-NOTE: release/v0.0.1/prd-review-session.md defines the Engineering, QA, and Marketing PRD review session before major coding starts. v0.0.1 is backfilled because this release-prep lane was already in flight; future major Vaporize coding slices require the review before implementation begins.",
+    "vaporwareModificationRequestDiscipline": "PASS-WITH-NOTE: vaporize.engineering.docc/vaporware-modification-request-discipline.md distinguishes feature requests as product input from vaporware modification requests as controlled engineering execution, and defines behavior-changing vaporware modification requests as release work requiring a feature flag or feature-status story, targetable tests, release evidence, CUJ coverage updates when affected, and explicit no-flag exceptions.",
     "whyVaporizeExplainer": "PASS-WITH-NOTE: release/v0.0.1/why-vaporize.md explains value proposition, product choice argument, problems solved, Swift/xcodebuild/xcrun comparison, current baseline benchmarks, build-space savings theory, ergonomics, and benchmark gaps.",
     "performanceMarketingClaims": "PASS-WITH-NOTE: release/v0.0.1/performance-marketing-claims.md defines approved measured/behavioral/theoretical claims, safe copy examples, before/after examples, prohibited claims, benchmark receipts required before stronger claims, and the rule that claims trace to product-definition.md.",
     "engineeringDocCCatalog": "PASS-WITH-NOTE: vaporize.engineering.docc defines the human engineering narrative for future wrkstrm.com/engineering publication and links the narrative boundary to release receipts as the proof corpus.",
@@ -369,7 +376,7 @@
     {
       "gateRef": "GATE-05-cuj-derived-package-tests",
       "status": "PASS",
-      "rationale": "CUJ coverage contract requires 69 Swift test obligations plus 7 release evidence checks across 16 active CUJs; Vaporize package tests passed 87 executable tests across 16 implemented CUJ-specific SwiftPM bundles through Vaporize toolchain mode, including CUJ-16 target feature inspection"
+      "rationale": "CUJ coverage contract requires 69 Swift test obligations plus 8 release evidence checks across 16 active CUJs; Vaporize package tests passed 87 executable tests across 16 implemented CUJ-specific SwiftPM bundles through Vaporize toolchain mode, including CUJ-16 target feature inspection"
     },
     {
       "gateRef": "GATE-06-required-toolchain-owned-by-vaporize",
@@ -485,6 +492,11 @@
       "gateRef": "GATE-31-pre-code-prd-review-session",
       "status": "PASS-WITH-NOTE",
       "rationale": "prd-review-session.md records the mandatory Engineering, QA, and Marketing PRD review session before major coding starts. The current v0.0.1 lane is backfilled as GO-WITH-NOTES because implementation was already in flight; future major Vaporize coding slices must pass this gate before coding."
+    },
+    {
+      "gateRef": "GATE-32-vaporware-modification-request-discipline",
+      "status": "PASS-WITH-NOTE",
+      "rationale": "vaporware-modification-request-discipline.md distinguishes feature requests as product input from vaporware modification requests as controlled engineering execution. It defines behavior-changing vaporware modification requests as release work: they create or attach to a feature flag, feature status record, or release-feature cohort; add or update targetable tests; run the smallest feature-scoped proof; update release evidence and schema fixtures when affected; and record explicit no-flag exceptions."
     }
   ],
   "knownFollowUps": [
@@ -533,6 +545,7 @@
     "x-why-vaporize": "why-vaporize.md is the release-facing explanation for why Vaporize is better, what problems it solves, how it compares to Swift/xcodebuild/xcrun, what current benchmarks show, how shared cache reuse can save build space, and which performance claims remain unmeasured.",
     "x-product-definition-contract": "product-definition.md defines Vaporize, primary users, product-level user journeys, why users choose it, when not to choose it, and build implications; future feature work must trace to this contract before implementation and release claims are accepted.",
     "x-prd-review-session": "prd-review-session.md defines the required Engineering, QA, and Marketing review before major coding starts. Engineering owns buildability and proof surface, QA owns testability and acceptance, and Marketing owns claim language and prohibited promises. v0.0.1 is backfilled; future major slices require the session before implementation.",
+    "x-vaporware-modification-request-discipline": "vaporware-modification-request-discipline.md distinguishes feature requests as product input from vaporware modification requests as the controlled engineering execution unit. Vaporware modification requests are release work: behavior-changing changes must create or attach to a feature flag, feature status record, or release-feature cohort; add or update targetable tests; run the smallest feature-scoped proof; update release evidence and schema fixtures when affected; and record no-flag exceptions explicitly.",
     "x-performance-marketing-claims": "performance-marketing-claims.md provides approved copy examples and guardrails: do not say Vaporize is faster than Swift, do not claim 2x Xcode builds, and do not claim N GB disk savings until dedicated benchmark receipts exist; every claim must trace to product-definition.md.",
     "x-engineering-docc": "vaporize.engineering.docc is the package-local engineering documentation catalog intended for future wrkstrm.com/engineering publication. It is the human narrative; release/v0.0.1/evidence remains the proof corpus.",
     "x-feature-catalog": "vaporize.engineering.docc/feature-catalog.md is the canonical human-readable feature list and explanation surface for Vaporize. It names each major feature, user problem, current surface, and proof boundary; PRD, CUJs, tests, release gates, receipts, and schema fixtures remain the proof surfaces.",
@@ -542,7 +555,7 @@
     "x-wrkstrm-core-build-config-composition": "App-facing Vaporize samples should compose with existing wrkstrm-core build sources instead of inventing a second config registry: tool-registry@wrkstrm-core.cli discover-apps and xcode-project.tool.json records for app/project ownership, identifier@wrkstrm-core.cli app describe for canonical app variant names and paths, app-artifacts@wrkstrm-core.cli for bundle audits/install paths/Xcode build-export receipts, and release-features.json or generated xcconfig files when feature cohorts exist.",
     "x-wrkstrm-app-minimums": "inspect-target-features now knows whether a project.yml target satisfies the target-level release-feature topology: project configs, declared tiers, Config/release-features.json, generated Config/xcconfigs/*.xcconfig, project configFiles or Pkl wiring, generated Sources/ReleaseFeatures.swift, and digikoma-release-features provenance. Hello World Google is the reference specimen; registry-backed fleet inspection remains a follow-up.",
     "x-performance-baseline": "Local baseline at 2026-06-14T00:44:00Z: validate-json launch packet 0.03s real; vaporize toolchain swift --version 0.25s real; bare swift --version 0.17s real; focused CUJ-15 bare swift and Vaporize toolchain both 6.80s real; earlier full Vaporize suite 15.57s real with 82 tests. Latest full Vaporize suite verification passed 87 tests in 9.61s wall-clock via Codex command runner; focused CUJ-09 coverage run 29.38s real with SwiftPM codecov JSON/profile data and build-size metrics verified.",
-    "x-cuj-test-coverage": "Required test count is derived from PRD requirements through active draft CUJs. Current floor: 69 Swift test obligations plus 7 release evidence checks across 16 active CUJs. Current executable suite: 87 Swift tests across 16 implemented CUJ-specific SwiftPM bundles, including CUJ-16 target feature inspection.",
+    "x-cuj-test-coverage": "Required test count is derived from PRD requirements through active draft CUJs. Current floor: 69 Swift test obligations plus 8 release evidence checks across 16 active CUJs. Current executable suite: 87 Swift tests across 16 implemented CUJ-specific SwiftPM bundles, including CUJ-16 target feature inspection.",
     "x-major-feature-test-suite": "Vaporize package tests now cover major implemented release features through 16 CUJ-specific SwiftPM bundles: command parsing, pass/use/toolchain receipts, JSON validation, inventory scanner/renderer, graph forwarding, Apple project YAML/Pkl migration paths, first-slice Pkl .xcodeproj generation, shared Xcode workspace product-cache reuse, target feature inspection, SwiftPM CLI installer arguments, and app installer Xcode invocation paths.",
     "x-pkl-project-generation-gate": "Internal v0.0.1 release is blocked until our owned Apple project-generation path has fleet build parity from Pkl-backed .xcodeproj world-state generation, with any leftover XcodeGen surfaces quarantined as compatibility.",
     "x-xcodegen-to-pkl-investigation": "Investigation found 155 project.yml files, 185 checked-in .xcodeproj/project.pbxproj files, direct XcodeGen runner surfaces, and no existing Pkl Apple-project generation model. The first approved mitigation slice now reads legacy YAML through Swift and receipts Concourse inspection."

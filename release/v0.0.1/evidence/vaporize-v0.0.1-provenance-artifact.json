@@ -7,17 +7,18 @@
   "artifactId": "vaporize-v0.0.1-provenance-artifact",
   "subjectAppSlug": "vaporize@wrkstrm-core.cli",
   "subjectReleaseSlug": "v0.0.1",
-  "generatedAt": "2026-06-14T02:21:54Z",
+  "generatedAt": "2026-06-14T02:29:38Z",
   "generatedBy": "codex-crisie",
   "status": "captured-for-forward-pkl-migration",
   "purpose": "Collect the v0.0.1 release-prep receipts and provenance in one artifact so the next migration slice can proceed from durable evidence rather than chat memory.",
   "releaseVerdict": {
     "currentStatus": "blocked-pending-fleet-pkl-project-generation",
     "proven": [
-      "CUJ-derived test coverage is explicit: 69 required Swift test obligations plus 7 release evidence checks across 16 active CUJs.",
+      "CUJ-derived test coverage is explicit: 69 required Swift test obligations plus 8 release evidence checks across 16 active CUJs.",
       "Vaporize package tests pass through Vaporize toolchain mode: 87 executable Swift tests across 16 implemented CUJ-specific SwiftPM test bundles, including CUJ-16 target feature inspection.",
       "The product definition defines Vaporize, primary users, product-level user journeys, choice argument, non-choice cases, and build implications before further build work is accepted.",
       "The PRD review session gate is codified: Engineering, QA, and Marketing review the PRD before major coding starts; v0.0.1 records a backfilled GO-WITH-NOTES correction because implementation was already in flight.",
+      "The vaporware modification request discipline is codified: feature requests are product input, while vaporware modification requests are controlled engineering execution; behavior-changing changes require a feature flag or feature-status story, targetable tests, release evidence, and explicit no-flag exceptions.",
       "Legacy XcodeGen project.yml files parse through the Swift YAML read bridge.",
       "All 155 discovered project.yml files under private/universal/substrate/collectives parsed through inspect-project-yml.",
       "Concourse old XcodeGen script build and Vaporize app build both pass after Vaporize derives legacy WRAPPER_NAME from project.yml.",
@@ -87,6 +88,10 @@
     {
       "kind": "engineering-modularity-ownership-boundaries",
       "path": "private/apple/spm/vaporize@wrkstrm-core.cli/vaporize.engineering.docc/modularity-and-ownership-boundaries.md"
+    },
+    {
+      "kind": "engineering-vaporware-modification-request-discipline",
+      "path": "private/apple/spm/vaporize@wrkstrm-core.cli/vaporize.engineering.docc/vaporware-modification-request-discipline.md"
     },
     {
       "kind": "launch-review-packet",
@@ -172,7 +177,7 @@
       "receiptKind": "cuj-test-coverage",
       "path": "private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/cuj-test-coverage.json",
       "claim": "Required test count is derived from PRD requirements through active draft CUJs.",
-      "result": "PASS-WITH-NOTE: 69 Swift test obligations, 7 release evidence checks, 76 targetable obligations, 87 executable Swift tests across 16 implemented CUJ bundles"
+      "result": "PASS-WITH-NOTE: 69 Swift test obligations, 8 release evidence checks, 77 targetable obligations, 87 executable Swift tests across 16 implemented CUJ bundles"
     },
     {
       "receiptKind": "launch-review-packet",
@@ -191,6 +196,12 @@
       "path": "private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/prd-review-session.md",
       "claim": "Engineering, QA, and Marketing review the PRD before major coding starts.",
       "result": "PASS-WITH-NOTE: v0.0.1 is a backfilled GO-WITH-NOTES correction; future major coding slices require this session before implementation"
+    },
+    {
+      "receiptKind": "engineering-vaporware-modification-request-discipline",
+      "path": "private/apple/spm/vaporize@wrkstrm-core.cli/vaporize.engineering.docc/vaporware-modification-request-discipline.md",
+      "claim": "Feature requests are product input; behavior-changing vaporware modification requests are controlled engineering execution and require a feature flag or feature-status story, targetable tests, release evidence, and explicit no-flag exceptions.",
+      "result": "PASS-WITH-NOTE: CUJ-09 and launch review enforce the discipline as release evidence"
     },
     {
       "receiptKind": "positioning-and-benchmark-explainer",
@@ -259,6 +270,10 @@
       "purpose": "Adds the Swift Universal versus wrkstrm-core ownership rule and Vaporize modularity/consolidation backlog."
     },
     {
+      "path": "private/apple/spm/vaporize@wrkstrm-core.cli/vaporize.engineering.docc/vaporware-modification-request-discipline.md",
+      "purpose": "Adds the release discipline for vaporware modification requests: feature flag or feature-status story, targetable tests, release evidence, and explicit exceptions."
+    },
+    {
       "path": "private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/prd-review-session.md",
       "purpose": "Records the Engineering, QA, and Marketing pre-code PRD review session gate."
     },
@@ -320,7 +335,7 @@
     },
     {
       "path": "private/apple/spm/vaporize@wrkstrm-core.cli/tests/cuj-09-release-review/VaporizeCUJ09ReleaseReviewTests.swift",
-      "purpose": "Covers CUJ-09 release artifact presence, launch-review packet JSON, CUJ coverage counts, feature catalog presence, modularity boundary presence, release-gate blocker text, why-vaporize positioning, and performance marketing claim gates."
+      "purpose": "Covers CUJ-09 release artifact presence, launch-review packet JSON, CUJ coverage counts, feature catalog presence, modularity boundary presence, vaporware modification request discipline, release-gate blocker text, why-vaporize positioning, and performance marketing claim gates."
     },
     {
       "path": "private/apple/spm/vaporize@wrkstrm-core.cli/tests/cuj-10-yml-pkl-comparison/VaporizeCUJ10YMLPklComparisonTests.swift",

@@ -14,6 +14,7 @@ func releaseReviewArtifactsExist() {
     "vaporize.engineering.docc/index.md",
     "vaporize.engineering.docc/feature-catalog.md",
     "vaporize.engineering.docc/modularity-and-ownership-boundaries.md",
+    "vaporize.engineering.docc/vaporware-modification-request-discipline.md",
     "vaporize.engineering.docc/product-and-policy.md",
     "vaporize.engineering.docc/command-and-artifact-architecture.md",
     "vaporize.engineering.docc/project-generation-and-migration.md",
@@ -44,6 +45,7 @@ func launchReviewPacketIsValidJSONAndInternalEssential() throws {
   #expect(gateResults.contains { $0["gateRef"] as? String == "GATE-29-wrkstrm-app-minimums-inspection" })
   #expect(gateResults.contains { $0["gateRef"] as? String == "GATE-30-engineering-docc-catalog" })
   #expect(gateResults.contains { $0["gateRef"] as? String == "GATE-31-pre-code-prd-review-session" })
+  #expect(gateResults.contains { $0["gateRef"] as? String == "GATE-32-vaporware-modification-request-discipline" })
 }
 
 @Test("CUJ-09 CUJ coverage contract is valid JSON and names the floor")
@@ -54,8 +56,8 @@ func cujCoverageContractIsValidJSONAndNamesTheFloor() throws {
   #expect(counts["activeCUJCount"] as? Int == 16)
   #expect(counts["deferredCUJCount"] as? Int == 2)
   #expect(counts["requiredSwiftTestObligationCount"] as? Int == 69)
-  #expect(counts["requiredReleaseEvidenceCheckCount"] as? Int == 7)
-  #expect(counts["requiredTargetableTestObligationCount"] as? Int == 76)
+  #expect(counts["requiredReleaseEvidenceCheckCount"] as? Int == 8)
+  #expect(counts["requiredTargetableTestObligationCount"] as? Int == 77)
   #expect(counts["currentExecutableSwiftTestCount"] as? Int == 87)
 }
 
@@ -71,6 +73,7 @@ func productDefinitionContractPrecedesBuildWork() throws {
   let engineeringDocs = try readString(relativePath: "vaporize.engineering.docc/index.md")
   let featureCatalog = try readString(relativePath: "vaporize.engineering.docc/feature-catalog.md")
   let modularity = try readString(relativePath: "vaporize.engineering.docc/modularity-and-ownership-boundaries.md")
+  let modificationDiscipline = try readString(relativePath: "vaporize.engineering.docc/vaporware-modification-request-discipline.md")
 
   #expect(productDefinition.contains("## Product Definition"))
   #expect(productDefinition.contains("## Primary Users"))
@@ -84,6 +87,7 @@ func productDefinitionContractPrecedesBuildWork() throws {
   #expect(productDefinition.contains("Engineering, QA, and Marketing"))
   #expect(prd.contains("FR-022"))
   #expect(prd.contains("FR-025"))
+  #expect(prd.contains("FR-026"))
   #expect(prd.contains("FR-VAPORIZE-RUNTIME-SAMPLE-SERIES-APPLE-ARTIFACT-INGESTION"))
   #expect(prdReview.contains("Decision: `GO-WITH-NOTES`"))
   #expect(prdReview.contains("Engineering, QA, and Marketing"))
@@ -101,11 +105,13 @@ func productDefinitionContractPrecedesBuildWork() throws {
   #expect(gates.contains("GATE-27"))
   #expect(gates.contains("GATE-30"))
   #expect(gates.contains("GATE-31"))
+  #expect(gates.contains("GATE-32"))
   #expect(engineeringDocs.contains("wrkstrm.com/engineering"))
   #expect(engineeringDocs.contains("The package-local engineering catalog explains the system. The release packet"))
   #expect(engineeringDocs.contains("pre-code-prd-review"))
   #expect(engineeringDocs.contains("feature-catalog"))
   #expect(engineeringDocs.contains("modularity-and-ownership-boundaries"))
+  #expect(engineeringDocs.contains("vaporware-modification-request-discipline"))
   #expect(featureCatalog.contains("canonical human-readable feature list"))
   #expect(featureCatalog.contains("SwiftPM CLI lifecycle"))
   #expect(featureCatalog.contains("Apple app lifecycle"))
@@ -121,6 +127,12 @@ func productDefinitionContractPrecedesBuildWork() throws {
   #expect(modularity.contains("SwiftCLIInstaller"))
   #expect(modularity.contains("VaporizeCLI"))
   #expect(modularity.contains("Split `VaporizeCLI` command-family implementations out of `main.swift`"))
+  #expect(modificationDiscipline.contains("A vaporware modification request is release work"))
+  #expect(modificationDiscipline.contains("A feature request is product input"))
+  #expect(modificationDiscipline.contains("Vaporware modification requests are what assistants execute"))
+  #expect(modificationDiscipline.contains("Create or attach to a named feature flag"))
+  #expect(modificationDiscipline.contains("Add or update targetable tests"))
+  #expect(modificationDiscipline.contains("Update release evidence"))
 }
 
 @Test("CUJ-09 release gates keep Pkl generation blocked")

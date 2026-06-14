@@ -15,8 +15,10 @@ Durable engineering documentation lives in
 `vaporize.engineering.docc/feature-catalog.md` as the canonical human-readable
 feature list and explanation surface. The catalog also carries the modularity
 and ownership rule: genuinely Swift Universal primitives belong in
-`swift-universal`; Apple-bounded orchestration belongs in `wrkstrm-core`. Treat
-that catalog as the human engineering narrative for future
+`swift-universal`; Apple-bounded orchestration belongs in `wrkstrm-core`. A
+behavior-changing vaporware modification request is release work: it needs a
+feature flag or feature-status story, targetable tests, and release evidence.
+Treat that catalog as the human engineering narrative for future
 `wrkstrm.com/engineering` publication, and treat `release/v0.0.1/evidence/` as
 the linked proof corpus.
 

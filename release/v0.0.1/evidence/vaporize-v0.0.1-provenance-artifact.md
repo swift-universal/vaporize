@@ -1,6 +1,6 @@
 # Vaporize v0.0.1 - Provenance Artifact
 
-**Generated:** 2026-06-14T02:21:54Z
+**Generated:** 2026-06-14T02:29:38Z
 **Status:** captured for forward Pkl migration
 **Subject:** `vaporize@wrkstrm-core.cli` v0.0.1 release prep
 
@@ -10,7 +10,7 @@ chat memory.
 ## Proven
 
 - CUJ-derived test coverage is explicit: 69 required Swift test obligations
-  plus 7 release evidence checks across 16 active CUJs.
+  plus 8 release evidence checks across 16 active CUJs.
 - Vaporize package tests pass through `vaporize toolchain`: 87 executable Swift
   tests across 16 implemented CUJ-specific SwiftPM test bundles, including
   CUJ-16 target feature inspection.
@@ -20,6 +20,10 @@ chat memory.
 - `prd-review-session.md` codifies the Engineering, QA, and Marketing PRD
   review session before major coding starts. v0.0.1 is backfilled as
   `GO-WITH-NOTES` because the release-prep lane was already in flight.
+- `vaporware-modification-request-discipline.md` codifies that feature requests
+  are product input, while vaporware modification requests are the controlled
+  engineering execution unit that needs a feature flag or feature-status story,
+  targetable tests, release evidence, and explicit no-flag exceptions.
 - Concourse `project.yml` parses into Swift `AppleProjectSpec`.
 - Fleet intake audit parsed 155/155 discovered `project.yml` files.
 - Old XcodeGen script build and Vaporize app build both pass for Concourse
@@ -101,6 +105,7 @@ chat memory.
 | `vaporize.engineering.docc` | Human engineering docs exist for future `wrkstrm.com/engineering` projection | PASS-WITH-NOTE |
 | `feature-catalog.md` | Major Vaporize features are listed with user problem, current surface, and proof boundary | PASS-WITH-NOTE |
 | `modularity-and-ownership-boundaries.md` | Swift Universal versus wrkstrm-core ownership and Vaporize modularity boundaries are defined | PASS-WITH-NOTE |
+| `vaporware-modification-request-discipline.md` | Feature requests are distinguished from vaporware modification requests; release-discipline mechanics are defined | PASS-WITH-NOTE |
 | `hello-world-google-target-features-inspection.receipt.json` | Hello World Google target release-feature topology is inspectable by Vaporize | PASS-WITH-NOTE |
 | `wrkstrm-app-minimums.md` | wrkstrm app release-feature minimums are defined for target and future fleet inspection | PASS-WITH-NOTE |
 | `vaporize-runtime-samples.series.su.json` | Kura-queryable runtime sample series is seeded | PASS-WITH-NOTE |

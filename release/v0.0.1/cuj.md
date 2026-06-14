@@ -1,7 +1,7 @@
 # Vaporize v0.0.1 - Critical User Journeys
 
 **Status:** release-prep draft; blocked pending fleet Pkl project-generation parity
-**Updated:** 2026-06-14T00:34:28Z
+**Updated:** 2026-06-14T02:29:38Z
 **Component:** `vaporize@wrkstrm-core.cli`
 **Tool classification:** `internal-essential-tool`
 
@@ -20,7 +20,7 @@ one product-level journey.
 | Assistant inventories vaporware state from substrate records | CUJ-07 |
 | Assistant migrates Apple project generation from legacy `project.yml` toward Pkl-backed truth with receipts at every boundary | CUJ-08, CUJ-10, CUJ-11, CUJ-13, CUJ-14 |
 | Assistant reuses a warm Xcode workspace product cache instead of rebuilding locally when the shared product already exists | CUJ-15 |
-| Release reviewer evaluates product definition, PRD review session, user journeys, choice argument, evidence, gates, and blockers without relying on chat memory | CUJ-09 |
+| Release reviewer evaluates product definition, PRD review session, vaporware modification request discipline, user journeys, choice argument, evidence, gates, and blockers without relying on chat memory | CUJ-09 |
 
 ## CUJ-01 - Assistant Builds And Installs A SwiftPM CLI
 
@@ -177,19 +177,23 @@ Failure truth:
 4. Reviewer opens `release/v0.0.1/prd-review-session.md` and checks that the
    Engineering, QA, and Marketing PRD review requirement exists before future
    coding starts.
-5. Reviewer opens this CUJ file and checks that each critical journey has
+5. Reviewer opens
+   `vaporize.engineering.docc/vaporware-modification-request-discipline.md` and
+   checks that behavior-changing vaporware modification requests require a
+   feature flag or feature-status story, targetable tests, and release evidence.
+6. Reviewer opens this CUJ file and checks that each critical journey has
    success and failure truth.
-6. Reviewer opens `release/v0.0.1/release-gates.md`.
-7. Reviewer opens `release/v0.0.1/evidence/launch-review-packet.json`.
-8. Reviewer verifies that Vaporize is classified as an internal essential tool,
+7. Reviewer opens `release/v0.0.1/release-gates.md`.
+8. Reviewer opens `release/v0.0.1/evidence/launch-review-packet.json`.
+9. Reviewer verifies that Vaporize is classified as an internal essential tool,
    not a public release artifact.
-9. Reviewer decides whether v0.0.1 is approved, blocked, or conditionally ready.
+10. Reviewer decides whether v0.0.1 is approved, blocked, or conditionally ready.
 
 Success:
 
-- Release review is based on current product definition, PRD review status, user
-  journeys, choice argument, artifacts, tests, and known blockers, not chat
-  memory.
+- Release review is based on current product definition, PRD review status,
+  vaporware modification request discipline, user journeys, choice argument,
+  artifacts, tests, and known blockers, not chat memory.
 
 ## CUJ-10 - Assistant Compares Legacy YAML With Pkl Specimen
 
@@ -394,7 +398,7 @@ must know the required floor.
 | CUJ-06 | FR-011 | 2 |
 | CUJ-07 | FR-007, FR-008 | 10 |
 | CUJ-08 | FR-015 | 5 |
-| CUJ-09 | FR-012, FR-013, FR-014, FR-022 | 0 Swift tests; 5 release evidence checks |
+| CUJ-09 | FR-012, FR-013, FR-014, FR-022, FR-025, FR-026 | 0 Swift tests; 7 release evidence checks |
 | CUJ-10 | FR-016 | 4 |
 | CUJ-11 | FR-017 | 3 |
 | CUJ-12 | FR-009 | 1 |
@@ -406,8 +410,8 @@ must know the required floor.
 Current active-CUJ requirement:
 
 - Required Swift test obligations: 69
-- Required release evidence checks: 6
-- Required targetable test obligations: 75
+- Required release evidence checks: 8
+- Required targetable test obligations: 77
 - Current executable Swift tests: 87 across 16 implemented CUJ-specific SwiftPM
   bundles
 - Coverage artifact:

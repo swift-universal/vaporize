@@ -80,6 +80,8 @@ Each new major Vaporize feature should land with:
 
 - A feature-family home outside `main.swift` when implementation logic exceeds
   parser/dispatch glue.
+- A feature flag, feature status record, or explicit exception per
+  <doc:vaporware-modification-request-discipline>.
 - A CUJ-specific test bundle or an extension to the existing feature's CUJ
   bundle.
 - A receipt or evidence shape before release-ready status.

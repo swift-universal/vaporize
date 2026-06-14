@@ -33,6 +33,7 @@ and explicit disposition of remaining XcodeGen surfaces.
 - <doc:product-and-policy>
 - <doc:feature-catalog>
 - <doc:modularity-and-ownership-boundaries>
+- <doc:vaporware-modification-request-discipline>
 - <doc:command-and-artifact-architecture>
 - <doc:project-generation-and-migration>
 - <doc:release-evidence-and-gates>

@@ -1,7 +1,7 @@
 # Vaporize v0.0.1 - Release Gates
 
 **Status:** release-prep draft; blocked pending fleet Pkl-backed Xcode world-state parity
-**Updated:** 2026-06-14T02:21:54Z
+**Updated:** 2026-06-14T02:29:38Z
 **Component:** `vaporize@wrkstrm-core.cli`
 **Tool classification:** `internal-essential-tool`
 
@@ -10,7 +10,7 @@
 **BLOCKED-FOR-INTERNAL-ESSENTIAL-RELEASE.**
 
 The CUJ-derived test coverage contract now defines the required floor:
-69 Swift test obligations plus 7 release evidence checks across 16 active CUJs.
+69 Swift test obligations plus 8 release evidence checks across 16 active CUJs.
 The Vaporize package tests pass 87 executable Swift tests across 16 implemented
 CUJ-specific SwiftPM bundles through Vaporize's owned Xcode-selected toolchain
 mode, including the CUJ-16 `inspect-target-features` first slice. The approved
@@ -38,7 +38,11 @@ modularity and ownership rule: genuinely Swift Universal primitives belong in
 Vaporize should grow by feature module rather than by accumulating command
 logic in the CLI router. The release packet remains the linked proof corpus. The pre-code PRD review
 session is now a hard future coding gate: Engineering, QA, and Marketing must
-review the PRD before implementation starts. Final
+review the PRD before implementation starts. Vaporware modification request
+discipline is also now a release gate: behavior-changing changes need a feature
+flag or feature-status story, targetable tests, and release evidence before
+release-ready status. Feature requests are product input; vaporware modification
+requests are the controlled engineering execution unit. Final
 internal v0.0.1 release approval is still
 blocked because substrate-owned Apple project generation still needs fleet build
 parity, scheme/resource/package feature coverage, and explicit quarantine
@@ -52,7 +56,7 @@ disposition for any remaining XcodeGen surfaces.
 | GATE-02 - CUJs authored | PASS | `release/v0.0.1/cuj.md` |
 | GATE-03 - Release gates authored | PASS | This file |
 | GATE-04 - Launch-review packet authored | PASS | `release/v0.0.1/evidence/launch-review-packet.json` |
-| GATE-05 - CUJ-derived package tests pass | PASS-WITH-NOTE | `release/v0.0.1/evidence/cuj-test-coverage.json` requires 69 Swift test obligations plus 7 release evidence checks across 16 active CUJs. `vaporize toolchain -- swift test --package-path private/apple/spm/vaporize@wrkstrm-core.cli` passed 87 executable tests across 16 implemented CUJ-specific SwiftPM bundles, including CUJ-16 target feature inspection. |
+| GATE-05 - CUJ-derived package tests pass | PASS-WITH-NOTE | `release/v0.0.1/evidence/cuj-test-coverage.json` requires 69 Swift test obligations plus 8 release evidence checks across 16 active CUJs. `vaporize toolchain -- swift test --package-path private/apple/spm/vaporize@wrkstrm-core.cli` passed 87 executable tests across 16 implemented CUJ-specific SwiftPM bundles, including CUJ-16 target feature inspection. |
 | GATE-06 - Required toolchain owned by Vaporize | PASS-WITH-NOTE | Current host check at 2026-06-13T21:39:03Z found bare `swift` and `vaporize toolchain -- swift` both reporting Apple Swift 6.4, and focused CUJ-15 took `6.80s` through both routes once warm. Earlier release-prep runs observed bare Swift drift. Vaporize remains the owned route because it stabilizes toolchain policy and release evidence even when host PATH happens to be correct. |
 | GATE-07 - CLI help reflects release surface | PASS | Vaporize help advertises `use`, `toolchain`, `validate-json`, `inspect-project-yml`, `inspect-target-features`, `compare-project-yml-pkl`, `import-project-yml`, `generate-project-yml`, `generate-xcodeproj`, `--common-process-spec`, `--xcode-product-cache-workspace`, and `--xcode-product-cache-derived-data-path`. |
 | GATE-08 - CommonProcess use mode tested | PASS | `VaporizeUseCommonProcessTests.swift` decodes valid spec JSON, loads a spec from disk, and rejects invalid executable refs. |
@@ -79,6 +83,7 @@ disposition for any remaining XcodeGen surfaces.
 | GATE-29 - wrkstrm app minimums inspection | PASS-WITH-NOTE | `inspect-target-features` inspects the target-level release-feature topology for Hello World Google: project configs, `configFiles` wiring, `Config/release-features.json`, generated conditional-compilation xcconfigs, generated `ReleaseFeatures.swift`, and `digikoma-release-features` provenance. Evidence: `release/v0.0.1/evidence/hello-world-google-target-features-inspection.receipt.json` and `VaporizeCUJ16TargetFeaturesTests`. Registry-backed fleet inspection remains a follow-up. |
 | GATE-30 - Engineering DocC catalog | PASS-WITH-NOTE | `vaporize.engineering.docc/` defines the human engineering narrative for product policy, feature catalog, modularity and ownership boundaries, command/artifact architecture, project migration, release evidence, benchmark/size evidence, target-feature inspection, and feature-scoped test lifecycle. `feature-catalog.md` is the canonical human-readable feature list and explanation surface. `modularity-and-ownership-boundaries.md` requires genuinely Swift Universal primitives to live in `swift-universal`, Apple-bounded orchestration to live in `wrkstrm-core`, and Vaporize feature bodies to avoid accumulating in the CLI router. The future `wrkstrm.com/engineering` publication pipeline should project this catalog and link back to release receipts rather than inventing claims from prose. |
 | GATE-31 - Pre-code PRD review session | PASS-WITH-NOTE | `release/v0.0.1/prd-review-session.md` defines the mandatory Engineering, QA, and Marketing PRD review session before major coding starts. v0.0.1 records a backfilled `GO-WITH-NOTES` because this release-prep lane was already in flight; future major Vaporize coding slices do not get that exception. |
+| GATE-32 - Vaporware modification request discipline | PASS-WITH-NOTE | `vaporize.engineering.docc/vaporware-modification-request-discipline.md` distinguishes feature requests as product input from vaporware modification requests as the controlled engineering execution unit. It defines vaporware modification requests as release work: behavior-changing changes create or attach to a feature flag, feature status record, or release-feature cohort; add or update targetable tests; run the smallest feature-scoped proof; update release evidence and schema fixtures when affected; and record explicit no-flag exceptions. |
 
 ## Open Follow-Up Beads
 
