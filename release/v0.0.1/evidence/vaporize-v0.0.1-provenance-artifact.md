@@ -20,10 +20,12 @@ chat memory.
 - `prd-review-session.md` codifies the Engineering, QA, and Marketing PRD
   review session before major coding starts. v0.0.1 is backfilled as
   `GO-WITH-NOTES` because the release-prep lane was already in flight.
-- `vaporware-modification-request-discipline.md` codifies that feature requests
-  are product input, while vaporware modification requests are the controlled
-  engineering execution unit that needs a feature flag or feature-status story,
-  targetable tests, release evidence, and explicit no-flag exceptions.
+- `vaporware-modification-request-discipline.md` codifies that vaporware feature
+  requests are product input, while vaporware modification requests are the
+  controlled engineering execution unit that needs a feature flag or
+  feature-status story, targetable tests, release evidence, and explicit no-flag
+  exceptions. The domain-specific request name leaves room for future hardware
+  or other material-domain request families.
 - Concourse `project.yml` parses into Swift `AppleProjectSpec`.
 - Fleet intake audit parsed 155/155 discovered `project.yml` files.
 - Old XcodeGen script build and Vaporize app build both pass for Concourse
@@ -105,7 +107,7 @@ chat memory.
 | `vaporize.engineering.docc` | Human engineering docs exist for future `wrkstrm.com/engineering` projection | PASS-WITH-NOTE |
 | `feature-catalog.md` | Major Vaporize features are listed with user problem, current surface, and proof boundary | PASS-WITH-NOTE |
 | `modularity-and-ownership-boundaries.md` | Swift Universal versus wrkstrm-core ownership and Vaporize modularity boundaries are defined | PASS-WITH-NOTE |
-| `vaporware-modification-request-discipline.md` | Feature requests are distinguished from vaporware modification requests; release-discipline mechanics are defined | PASS-WITH-NOTE |
+| `vaporware-modification-request-discipline.md` | Vaporware feature requests are distinguished from vaporware modification requests; release-discipline mechanics are defined | PASS-WITH-NOTE |
 | `hello-world-google-target-features-inspection.receipt.json` | Hello World Google target release-feature topology is inspectable by Vaporize | PASS-WITH-NOTE |
 | `wrkstrm-app-minimums.md` | wrkstrm app release-feature minimums are defined for target and future fleet inspection | PASS-WITH-NOTE |
 | `vaporize-runtime-samples.series.su.json` | Kura-queryable runtime sample series is seeded | PASS-WITH-NOTE |

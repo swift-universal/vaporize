@@ -18,7 +18,7 @@
       "Vaporize package tests pass through Vaporize toolchain mode: 87 executable Swift tests across 16 implemented CUJ-specific SwiftPM test bundles, including CUJ-16 target feature inspection.",
       "The product definition defines Vaporize, primary users, product-level user journeys, choice argument, non-choice cases, and build implications before further build work is accepted.",
       "The PRD review session gate is codified: Engineering, QA, and Marketing review the PRD before major coding starts; v0.0.1 records a backfilled GO-WITH-NOTES correction because implementation was already in flight.",
-      "The vaporware modification request discipline is codified: feature requests are product input, while vaporware modification requests are controlled engineering execution; behavior-changing changes require a feature flag or feature-status story, targetable tests, release evidence, and explicit no-flag exceptions.",
+      "The vaporware modification request discipline is codified: vaporware feature requests are product input, while vaporware modification requests are controlled engineering execution; the domain-specific name leaves room for future hardware or other material-domain request families; behavior-changing changes require a feature flag or feature-status story, targetable tests, release evidence, and explicit no-flag exceptions.",
       "Legacy XcodeGen project.yml files parse through the Swift YAML read bridge.",
       "All 155 discovered project.yml files under private/universal/substrate/collectives parsed through inspect-project-yml.",
       "Concourse old XcodeGen script build and Vaporize app build both pass after Vaporize derives legacy WRAPPER_NAME from project.yml.",
@@ -200,7 +200,7 @@
     {
       "receiptKind": "engineering-vaporware-modification-request-discipline",
       "path": "private/apple/spm/vaporize@wrkstrm-core.cli/vaporize.engineering.docc/vaporware-modification-request-discipline.md",
-      "claim": "Feature requests are product input; behavior-changing vaporware modification requests are controlled engineering execution and require a feature flag or feature-status story, targetable tests, release evidence, and explicit no-flag exceptions.",
+      "claim": "Vaporware feature requests are product input; behavior-changing vaporware modification requests are controlled engineering execution and require a feature flag or feature-status story, targetable tests, release evidence, and explicit no-flag exceptions.",
       "result": "PASS-WITH-NOTE: CUJ-09 and launch review enforce the discipline as release evidence"
     },
     {

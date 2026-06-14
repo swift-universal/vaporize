@@ -9,19 +9,24 @@
 
 A vaporware modification request is release work.
 
-A feature request and a vaporware modification request are related, but they are
-not the same thing.
+A vaporware feature request and a vaporware modification request are related,
+but they are not the same thing.
 
-A feature request is product input: a user, reviewer, or operator wants a new
-capability, behavior, workflow, or claim. It belongs in product definition, PRD,
-CUJs, creative selection, competitor framing, and marketing claim work.
+A vaporware feature request is product input: a user, reviewer, or operator
+wants a new vaporware capability, behavior, workflow, or claim. It belongs in
+product definition, PRD, CUJs, creative selection, competitor framing, and
+marketing claim work.
 
 A vaporware modification request is engineering execution: the substrate agrees
 to modify a vaporware unit. It belongs in implementation, feature flags,
 feature-status records, tests, receipts, schema fixtures, release gates, and
 savepoints.
 
-Feature requests can justify or spawn vaporware modification requests. Vaporware modification requests are what assistants execute.
+Vaporware feature requests can justify or spawn vaporware modification requests. Vaporware modification requests are what assistants execute.
+
+The domain noun matters. Vaporware feature requests are the software/vaporware
+request family; future hardware or other material-domain request families should
+get their own typed names instead of reusing a generic feature-request bucket.
 
 ## Required Shape
 

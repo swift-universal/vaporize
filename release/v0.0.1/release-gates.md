@@ -41,8 +41,10 @@ session is now a hard future coding gate: Engineering, QA, and Marketing must
 review the PRD before implementation starts. Vaporware modification request
 discipline is also now a release gate: behavior-changing changes need a feature
 flag or feature-status story, targetable tests, and release evidence before
-release-ready status. Feature requests are product input; vaporware modification
-requests are the controlled engineering execution unit. Final
+release-ready status. Vaporware feature requests are product input; vaporware
+modification requests are the controlled engineering execution unit. The
+domain-specific name leaves room for future hardware or other material-domain
+request families. Final
 internal v0.0.1 release approval is still
 blocked because substrate-owned Apple project generation still needs fleet build
 parity, scheme/resource/package feature coverage, and explicit quarantine
@@ -83,7 +85,7 @@ disposition for any remaining XcodeGen surfaces.
 | GATE-29 - wrkstrm app minimums inspection | PASS-WITH-NOTE | `inspect-target-features` inspects the target-level release-feature topology for Hello World Google: project configs, `configFiles` wiring, `Config/release-features.json`, generated conditional-compilation xcconfigs, generated `ReleaseFeatures.swift`, and `digikoma-release-features` provenance. Evidence: `release/v0.0.1/evidence/hello-world-google-target-features-inspection.receipt.json` and `VaporizeCUJ16TargetFeaturesTests`. Registry-backed fleet inspection remains a follow-up. |
 | GATE-30 - Engineering DocC catalog | PASS-WITH-NOTE | `vaporize.engineering.docc/` defines the human engineering narrative for product policy, feature catalog, modularity and ownership boundaries, command/artifact architecture, project migration, release evidence, benchmark/size evidence, target-feature inspection, and feature-scoped test lifecycle. `feature-catalog.md` is the canonical human-readable feature list and explanation surface. `modularity-and-ownership-boundaries.md` requires genuinely Swift Universal primitives to live in `swift-universal`, Apple-bounded orchestration to live in `wrkstrm-core`, and Vaporize feature bodies to avoid accumulating in the CLI router. The future `wrkstrm.com/engineering` publication pipeline should project this catalog and link back to release receipts rather than inventing claims from prose. |
 | GATE-31 - Pre-code PRD review session | PASS-WITH-NOTE | `release/v0.0.1/prd-review-session.md` defines the mandatory Engineering, QA, and Marketing PRD review session before major coding starts. v0.0.1 records a backfilled `GO-WITH-NOTES` because this release-prep lane was already in flight; future major Vaporize coding slices do not get that exception. |
-| GATE-32 - Vaporware modification request discipline | PASS-WITH-NOTE | `vaporize.engineering.docc/vaporware-modification-request-discipline.md` distinguishes feature requests as product input from vaporware modification requests as the controlled engineering execution unit. It defines vaporware modification requests as release work: behavior-changing changes create or attach to a feature flag, feature status record, or release-feature cohort; add or update targetable tests; run the smallest feature-scoped proof; update release evidence and schema fixtures when affected; and record explicit no-flag exceptions. |
+| GATE-32 - Vaporware modification request discipline | PASS-WITH-NOTE | `vaporize.engineering.docc/vaporware-modification-request-discipline.md` distinguishes vaporware feature requests as product input from vaporware modification requests as the controlled engineering execution unit. It leaves room for future hardware or other material-domain request families, and defines vaporware modification requests as release work: behavior-changing changes create or attach to a feature flag, feature status record, or release-feature cohort; add or update targetable tests; run the smallest feature-scoped proof; update release evidence and schema fixtures when affected; and record explicit no-flag exceptions. |
 
 ## Open Follow-Up Beads
 

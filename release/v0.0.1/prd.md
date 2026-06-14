@@ -83,9 +83,10 @@ executable behavior, product behavior, build behavior, release behavior, or
 user-visible capability must create or attach to a feature flag, feature status
 record, or release-feature cohort; add or update targetable tests; and update
 release evidence when release claims, receipts, schema fixtures, launch review,
-or app/build output are affected. Feature requests are product input; vaporware
-modification requests are the controlled engineering execution unit that may be
-spawned from that input.
+or app/build output are affected. Vaporware feature requests are product input;
+vaporware modification requests are the controlled engineering execution unit
+that may be spawned from that input. The domain-specific name leaves room for
+future hardware or other material-domain request families.
 
 ## Goals
 
