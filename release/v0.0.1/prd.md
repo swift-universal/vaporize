@@ -106,6 +106,11 @@ slice.
 - Define a Kura-queryable runtime sample series and Apple/Swift native artifact
   ingestion follow-up so performance, coverage, and build-space claims are
   based on durable samples rather than manual terminal timing.
+- Compose app-facing build/config status with existing wrkstrm-core build
+  tools: `tool-registry@wrkstrm-core.cli` for `xcode-project` records such as
+  the Hello World demos, `identifier@wrkstrm-core.cli` for canonical app
+  variant names/paths, and `app-artifacts@wrkstrm-core.cli` for bundle audits,
+  install paths, Xcode build/export receipts, and flat application artifacts.
 - Provide `status` and `warehouse` inventory modes for
   `x-vaporize-collapse-path` records, with legacy `x-craze-collapse-path`
   read-only fallback.
@@ -173,6 +178,7 @@ Supporting audiences:
 | FR-020 | Pkl to Xcode project generation | `generate-xcodeproj --pkl-path <project.pkl> --output-path <generated.xcodeproj>` evaluates Pkl through PklSwift, writes first-slice `.xcodeproj` world-state, and emits a `vaporize-pkl-xcodeproj-generation` receipt that explicitly records project world-state generation. |
 | FR-021 | Shared Xcode workspace product cache | App install/build accepts paired `--xcode-product-cache-workspace` and `--xcode-product-cache-derived-data-path`, searches the shared DerivedData product path before local outputs, and uses the shared workspace/DerivedData pair for the Xcode build invocation on cache miss. |
 | FR-022 | Pre-development product definition and choice argument | `release/v0.0.1/product-definition.md` defines the product, primary users, product-level user journeys, why users choose Vaporize, when not to choose Vaporize, and build implications; PRD, CUJs, why explainer, release gates, launch-review packet, CUJ coverage, and release-review tests reference it. |
+| FR-023 | Existing wrkstrm-core app/build config composition | App-facing runtime samples and future feature-status inspection must consume existing wrkstrm-core build surfaces before inventing parallel records: `tool-registry@wrkstrm-core.cli discover-apps` / `xcode-project.tool.json` records for `project.yml` ownership, `identifier@wrkstrm-core.cli app describe` for app variant names/paths, and `app-artifacts@wrkstrm-core.cli` for bundle validation, install-path patching, Xcode build/export receipts, and flat application artifacts. |
 
 ## Release Criteria
 
@@ -211,6 +217,11 @@ Supporting audiences:
   build-output, coverage artifact, result-bundle, cache-delta, and
   per-feature-flag size metrics where applicable. Current series contract:
   `private/universal/substrate/collectives/wrkstrm/private/universal/kura-spaces/series/vaporize-runtime-samples/vaporize-runtime-samples.series.su.json`.
+- App-facing runtime samples and feature/config status claims must link the
+  sample back to the existing wrkstrm-core build source: the `xcode-project`
+  tool record, the identifier app description, the app-artifacts audit/export
+  receipt, and any release-feature manifest or generated `.xcconfig` files
+  present in the project.
 - Concourse legacy project inspection receipt validates with
   `vaporize validate-json --path release/v0.0.1/evidence/concourse-project-yml-inspection.receipt.json`.
 - Concourse YAML/Pkl comparison receipt validates with
@@ -245,3 +256,4 @@ Supporting audiences:
 - `FR-VAPORIZE-DRIFT-CATCH-retire-craze-canonical-language`
 - `FR-VAPORIZE-XCODE-WORKSPACE-PRODUCT-CACHE-DISCOVERY`
 - `FR-VAPORIZE-RUNTIME-SAMPLE-SERIES-APPLE-ARTIFACT-INGESTION`
+- `FR-VAPORIZE-WRKSTRM-CORE-BUILD-CONFIG-COMPOSITION`

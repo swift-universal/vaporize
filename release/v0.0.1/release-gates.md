@@ -21,7 +21,10 @@ also landed for Creative Selection v0.2. The shared Xcode workspace product
 cache first slice is landed for cache-first app lookup and shared workspace
 build invocation. The initial
 schema-universal extraction for Vaporize evidence is also landed as
-`vaporize-schemas v0.0.1`. Final internal v0.0.1 release approval is still
+`vaporize-schemas v0.0.1`. The app/build-config source-of-truth correction is
+now captured: app-facing Vaporize samples should compose with wrkstrm-core
+`tool-registry`, `identifier`, and `app-artifacts` instead of inventing a
+parallel config registry. Final internal v0.0.1 release approval is still
 blocked because substrate-owned Apple project generation still needs fleet build
 parity, scheme/resource/package feature coverage, and explicit quarantine
 disposition for any remaining XcodeGen surfaces.
@@ -57,6 +60,7 @@ disposition for any remaining XcodeGen surfaces.
 | GATE-25 - Performance marketing claims | PASS-WITH-NOTE | `release/v0.0.1/performance-marketing-claims.md` provides approved measured/behavioral/theoretical claim language, example copy, before/after examples, banned claims, and benchmark receipts required before stronger performance or disk-space claims are allowed. |
 | GATE-26 - Product definition, user journeys, and choice argument | PASS | `release/v0.0.1/product-definition.md` defines Vaporize, primary users, product-level user journeys, why users choose it, when not to choose it, and build implications; PRD, CUJs, why explainer, claims, launch packet, coverage, and CUJ-09 tests reference the contract. |
 | GATE-27 - Kura runtime sample series and Apple artifact ingestion | BLOCKED-FOR-STRONG-BENCHMARK-CLAIMS | `private/universal/substrate/collectives/wrkstrm/private/universal/kura-spaces/series/vaporize-runtime-samples/vaporize-runtime-samples.series.su.json` defines the queryable series. A backfilled CUJ-09 sample verifies SwiftPM coverage JSON, `.profraw`, `default.profdata`, build-output size, Debug product size, codecov artifact size, and Vaporize binary size through Vaporize's toolchain route. Vaporize does not yet emit samples automatically or retain `.xcresult`/coverage/build-size artifacts as durable release evidence. |
+| GATE-28 - wrkstrm-core app/build config composition | PASS-WITH-NOTE | Existing build-config sources are identified and referenced in the release contract: `tool-registry@wrkstrm-core.cli discover-apps` emits Hello World-style `xcode-project` records, `identifier@wrkstrm-core.cli app describe` owns app variant names/paths, and `app-artifacts@wrkstrm-core.cli` owns bundle audits, install paths, Xcode build/export receipts, and flat `.app` artifacts. Vaporize integration remains a follow-up. |
 
 ## Open Follow-Up Beads
 
@@ -69,6 +73,7 @@ disposition for any remaining XcodeGen surfaces.
 - `FR-VAPORIZE-PRODUCT-RELEASE-DIR-RENAME-MODE`
 - `FR-VAPORIZE-XCODE-WORKSPACE-PRODUCT-CACHE-DISCOVERY`
 - `FR-VAPORIZE-RUNTIME-SAMPLE-SERIES-APPLE-ARTIFACT-INGESTION`
+- `FR-VAPORIZE-WRKSTRM-CORE-BUILD-CONFIG-COMPOSITION`
 
 ## Release Review Questions
 
@@ -104,3 +109,7 @@ disposition for any remaining XcodeGen surfaces.
 - How should Vaporize encode per-feature-flag build-size cohorts so app teams
   can compare product, binary, bundle, and artifact deltas the way mature app
   teams track feature-flag cost?
+- Should the first app-facing runtime sample use Hello World Google as the
+  canonical fixture because it already has `xcode-project` registry records,
+  Debug/Dogfood/TestFlight/Release configs, generated xcconfig wiring, and
+  release-feature source material?

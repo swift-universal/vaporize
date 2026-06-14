@@ -100,6 +100,15 @@ result-bundle metadata, build logs, diagnostics, DerivedData/product paths,
 product/binary/bundle sizes, cache storage deltas, and per-feature-flag build
 size deltas should become Vaporize runtime samples in a Kura series.
 
+App-facing build/config status work must also leverage the wrkstrm-core build
+tools that already exist. Hello World-style `xcode-project.tool.json` records
+come from `tool-registry@wrkstrm-core.cli`; app variant names, bundle IDs,
+application paths, and DerivedData paths come from `identifier@wrkstrm-core.cli`;
+bundle audits, install-path patching, Xcode build/export receipts, and flat
+`.app` artifacts come from `app-artifacts@wrkstrm-core.cli`. Vaporize should
+orchestrate, sample, and receipt those sources instead of creating a second
+build-config truth surface.
+
 ## Release Proof Obligation
 
 For v0.0.1, the PRD, CUJs, release gates, launch-review packet, why explainer,

@@ -162,6 +162,9 @@ Allowed replacement wording:
 - "Build-size claims should include product, binary, bundle, coverage artifact,
   result bundle, cache-delta, and per-feature-flag size metrics where
   applicable."
+- "App-facing build/config claims should link to the wrkstrm-core
+  `xcode-project` registry record, identifier app description,
+  app-artifacts audit/export receipt, and release-feature or xcconfig source."
 - "Workspace product/scheme discovery remains a follow-up."
 - "Fleet parity remains a release blocker."
 
@@ -176,6 +179,7 @@ Allowed replacement wording:
 | "Workspace discovery removes manual scheme lookup" | Product/scheme discovery receipt from the maintained workspace |
 | "Vaporize coverage/performance samples are queryable" | Vaporize-emitted Kura runtime samples with retained SwiftPM coverage JSON/profile data and Xcode result artifacts where applicable |
 | "Feature flag X changes app size by N MB" | Paired runtime samples for each feature-flag cohort with product/binary/bundle size metrics and retained native build artifacts |
+| "Vaporize knows which app config and feature cohort it built" | Runtime sample joining a wrkstrm-core `xcode-project` record, identifier app description, app-artifacts receipt, and release-feature/xcconfig source |
 
 ## Reviewer Checklist
 
@@ -189,3 +193,6 @@ Allowed replacement wording:
   artifacts instead of manual timing alone?
 - Does every build-size or feature-flag size claim point at a Kura sample with
   explicit size metrics and the flag set used for that build?
+- For app-facing claims, does the sample prove which wrkstrm-core registry,
+  identifier, app-artifacts, and release-feature/xcconfig sources supplied the
+  build configuration?

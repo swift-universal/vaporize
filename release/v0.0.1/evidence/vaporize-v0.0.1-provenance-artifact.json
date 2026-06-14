@@ -474,6 +474,7 @@
     "Run old tool / Vaporize / Pkl-generation comparisons beyond Concourse and Creative Selection v0.2 before claiming fleet parity.",
     "Promote shared workspace product-cache reuse into workspace product/scheme discovery once the maintained workspace fleet is known.",
     "Implement Vaporize-emitted Kura runtime samples that can attach SwiftPM coverage JSON/profile data, xUnit output when available, Xcode .xcresult bundles, result metadata, build logs, diagnostics, DerivedData/product paths, product/binary/bundle sizes, coverage/result artifact sizes, cache deltas, and per-feature-flag size cohorts.",
+    "Compose app-facing runtime samples with existing wrkstrm-core build-config sources: tool-registry xcode-project records, identifier app descriptions, app-artifacts audit/export receipts, and release-feature or generated xcconfig references.",
     "Create dedicated benchmark receipts for cold builds, warm cache hits, cache misses, and disk usage before making fleet performance or space-saving release claims.",
     "Promote approved performance marketing claims only after attaching the relevant benchmark receipt.",
     "Quarantine or migrate remaining substrate-owned XcodeGen surfaces."
@@ -487,6 +488,7 @@
     "Shared Xcode workspace product-cache reuse is a cache lookup and build-invocation slice, not automatic workspace product discovery.",
     "The why-vaporize benchmark baseline is local release-prep evidence and must not be presented as fleet performance proof.",
     "The first runtime sample is backfilled and references ephemeral SwiftPM build artifacts; it proves the target shape, not automatic Vaporize emission, durable artifact retention, or per-feature-flag size comparison.",
+    "The wrkstrm-core build-config composition correction identifies existing sources of truth; Vaporize does not yet automatically join registry, identifier, app-artifacts, and release-feature records into app-facing samples.",
     "Concourse build comparison is one-specimen evidence and must not be generalized to the whole fleet without additional receipts."
   ]
 }

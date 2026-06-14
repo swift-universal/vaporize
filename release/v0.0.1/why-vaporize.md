@@ -142,6 +142,11 @@ Runtime sample boundary:
 - Build size is a key runtime metric: samples should track build output,
   product bundle, executable binary, coverage artifact, result bundle, cache
   delta, and per-feature-flag size changes when a product exposes flags.
+- App-facing samples should join the existing wrkstrm-core build-config stack:
+  `tool-registry@wrkstrm-core.cli` `xcode-project` records for project
+  ownership, `identifier@wrkstrm-core.cli` for app variant names/paths, and
+  `app-artifacts@wrkstrm-core.cli` for bundle audits, install paths, and Xcode
+  build/export receipts.
 
 Benchmarks still required before final internal release:
 
@@ -151,6 +156,9 @@ Benchmarks still required before final internal release:
   evidence.
 - Build-size baselines for app products, CLI binaries, coverage artifacts, and
   per-feature-flag cohorts.
+- App build/config status samples that prove the Hello World-style path:
+  registry `xcode-project` record -> identifier app description ->
+  app-artifacts audit/export receipt -> Vaporize runtime sample.
 - Cold app build: direct old path vs Vaporize path.
 - Warm app build: cache hit vs cache miss.
 - Shared workspace product-cache hit: install from warm workspace product
@@ -194,12 +202,19 @@ Current proof:
 
 - CUJ-15 proves option parsing, paired option validation, cache-first lookup
   before local DerivedData, and shared workspace build invocation.
+- wrkstrm-core already has complementary app/build config tools:
+  `tool-registry@wrkstrm-core.cli discover-apps` discovers `project.yml`
+  app records, `identifier@wrkstrm-core.cli app describe` resolves canonical
+  variant paths, and `app-artifacts@wrkstrm-core.cli` audits bundle IDs and
+  builds/exports `.app` artifacts.
 
 Not yet proven:
 
 - Actual disk savings across the fleet.
 - Which app products are already present in the large workspace.
 - Automatic workspace scheme/product discovery.
+- Automatic Vaporize composition of registry, identifier, app-artifacts, and
+  release-feature manifests into one app-facing runtime sample.
 
 ## User Ergonomics
 
@@ -215,6 +230,9 @@ Good ergonomics:
 - The same flags carry into release evidence, tests, and receipts.
 - Cache behavior is explicit: callers name the shared workspace and the shared
   DerivedData root instead of relying on ambient Xcode state.
+- App-facing config behavior is traceable: Vaporize can point back to the
+  `xcode-project` registry record, identifier description, app-artifacts
+  receipt, and release-feature/xcconfig source used for the build.
 
 Tradeoffs:
 
