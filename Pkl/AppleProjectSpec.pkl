@@ -63,6 +63,7 @@ class Target {
   sources: Listing<Source>?
   info: Info?
   settings: Settings?
+  configFiles: Mapping<String, String>?
   dependencies: Listing<Dependency>?
   preBuildScripts: Listing<BuildScript>?
   postBuildScripts: Listing<BuildScript>?
@@ -77,6 +78,7 @@ class Scheme {
 
 name: String
 options: Options?
+configs: Mapping<String, String>?
 settings: Settings?
 packages: Mapping<String, PackageDependency> = new {}
 targets: Mapping<String, Target> = new {}

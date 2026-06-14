@@ -19,10 +19,10 @@
   "counts": {
     "activeCUJCount": 16,
     "deferredCUJCount": 2,
-    "requiredSwiftTestObligationCount": 64,
+    "requiredSwiftTestObligationCount": 69,
     "requiredReleaseEvidenceCheckCount": 6,
-    "requiredTargetableTestObligationCount": 70,
-    "currentExecutableSwiftTestCount": 82,
+    "requiredTargetableTestObligationCount": 75,
+    "currentExecutableSwiftTestCount": 87,
     "currentExecutableSwiftTestBreakdown": {
       "VaporizeCUJ01SwiftPMCLITests": 7,
       "VaporizeCUJ02MacAppTests": 14,
@@ -38,7 +38,8 @@
       "VaporizeCUJ12PackageGraphTests": 1,
       "VaporizeCUJ13YMLPklImportTests": 4,
       "VaporizeCUJ14PklXcodeProjectGenerationTests": 3,
-      "VaporizeCUJ15XcodeProductCacheTests": 4
+      "VaporizeCUJ15XcodeProductCacheTests": 4,
+      "VaporizeCUJ16TargetFeaturesTests": 5
     }
   },
   "coverage": [
@@ -210,11 +211,12 @@
       "cuj": "CUJ-16",
       "title": "Assistant Audits wrkstrm App Minimums",
       "prdRefs": ["FR-023", "FR-024"],
-      "requiredSwiftTestObligations": 0,
+      "requiredSwiftTestObligations": 5,
       "requiredReleaseEvidenceChecks": 1,
-      "status": "blocked-for-implementation",
+      "status": "covered-with-boundary",
       "evidence": [
-        "wrkstrm-app-minimums.md",
+        "VaporizeCUJ16TargetFeaturesTests.swift",
+        "hello-world-google-target-features-inspection.receipt.json",
         "release-gates.md",
         "launch-review-packet.json"
       ]
@@ -236,7 +238,8 @@
     "This artifact defines the active-CUJ coverage floor; it does not approve v0.0.1 release.",
     "First-slice Pkl-backed .xcodeproj world-state generation is covered; fleet build parity and quarantine disposition remain release-blocking.",
     "Shared Xcode workspace product-cache reuse is covered as cache lookup and build invocation; automatic workspace scheme/product discovery remains deferred.",
-    "wrkstrm app-minimums inspection is defined as release evidence and remains blocked for implementation.",
+    "wrkstrm app-minimums inspection has a target-level first slice; registry-backed fleet inspection remains deferred.",
+    "Feature-scoped test migration is allowed only after a targetable feature bundle proves the behavior, the replacement evidence is named, and the coverage artifact is updated; duplicate older tests may then be deleted in the same change.",
     "Actual executable Swift tests may exceed the required count when extra regression coverage is useful."
   ]
 }

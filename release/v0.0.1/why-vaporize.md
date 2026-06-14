@@ -114,7 +114,7 @@ Environment:
 | Bare Swift version comparison | `swift --version` | `0.17s real` |
 | Focused CUJ-15 through bare Swift | `swift test --filter VaporizeCUJ15XcodeProductCacheTests` | `6.80s real` |
 | Focused CUJ-15 through Vaporize toolchain | `vaporize toolchain -- swift test --filter VaporizeCUJ15XcodeProductCacheTests` | `6.80s real` |
-| Full Vaporize suite through Vaporize toolchain | `vaporize toolchain -- swift test` | `15.57s real`, 82 tests |
+| Full Vaporize suite through Vaporize toolchain | `vaporize toolchain -- swift test` | Latest verification: `9.61s` wall-clock, 87 tests; earlier `/usr/bin/time` baseline: `15.57s real`, 82 tests |
 | Focused CUJ-09 with SwiftPM coverage enabled | `vaporize toolchain -- swift test --filter VaporizeCUJ09ReleaseReviewTests --enable-code-coverage` | `29.38s real`, 5 tests, SwiftPM codecov JSON verified |
 
 Interpretation:
@@ -224,7 +224,7 @@ Good ergonomics:
   `open`, install paths, JSON validation, and project migration utilities.
 - Commands read like user intent: `build`, `install`, `run`, `use`,
   `toolchain`, `validate-json`, `inspect-project-yml`, `import-project-yml`,
-  `generate-xcodeproj`.
+  `generate-xcodeproj`, `inspect-target-features`.
 - Failure modes are named early: missing scheme, ambiguous project/workspace,
   malformed build setting, incomplete product-cache pair, missing app bundle.
 - The same flags carry into release evidence, tests, and receipts.

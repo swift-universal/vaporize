@@ -366,8 +366,11 @@ Success:
 
 Failure truth:
 
-- This CUJ is release-evidence-gated in v0.0.1. Vaporize does not yet implement
-  fleet app-minimums inspection.
+- v0.0.1 implements target-level inspection for XcodeGen `project.yml`
+  `configFiles`, `release-features.json`, generated xcconfigs, generated
+  `ReleaseFeatures.swift`, and generated-file provenance.
+- Fleet registry-level inspection from `xcode-project.tool.json` records remains
+  a follow-up.
 - Hello World Google is the reference specimen, not proof that the fleet already
   meets the minimum.
 
@@ -394,14 +397,14 @@ must know the required floor.
 | CUJ-13 | FR-018 | 4 |
 | CUJ-14 | FR-020 | 3 |
 | CUJ-15 | FR-003, FR-021 | 4 |
-| CUJ-16 | FR-023, FR-024 | 0 Swift tests; 1 release evidence check |
+| CUJ-16 | FR-023, FR-024 | 5 Swift tests; 1 release evidence check |
 
 Current active-CUJ requirement:
 
-- Required Swift test obligations: 64
+- Required Swift test obligations: 69
 - Required release evidence checks: 6
-- Required targetable test obligations: 70
-- Current executable Swift tests: 82 across 15 implemented CUJ-specific SwiftPM
+- Required targetable test obligations: 75
+- Current executable Swift tests: 87 across 16 implemented CUJ-specific SwiftPM
   bundles
 - Coverage artifact:
   `release/v0.0.1/evidence/cuj-test-coverage.json`

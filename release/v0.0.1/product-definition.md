@@ -109,12 +109,13 @@ bundle audits, install-path patching, Xcode build/export receipts, and flat
 orchestrate, sample, and receipt those sources instead of creating a second
 build-config truth surface.
 
-Vaporize also needs a wrkstrm app-minimums lens. For app-facing work, it must
-know whether the app has the minimum release-feature topology: a registry record,
-project spec, declared release tiers, `Config/release-features.json`, generated
-`Config/xcconfigs/*.xcconfig`, project `configFiles` wiring, generated
-`Sources/ReleaseFeatures.swift`, and `digikoma-release-features` provenance.
-The release contract is captured in `release/v0.0.1/wrkstrm-app-minimums.md`.
+Vaporize also needs a wrkstrm app-minimums lens. The v0.0.1 target-level slice
+is `inspect-target-features --path <project.yml> --target <target>`, which
+knows whether a target has declared release tiers, `Config/release-features.json`,
+generated `Config/xcconfigs/*.xcconfig`, project `configFiles` wiring,
+generated `Sources/ReleaseFeatures.swift`, and `digikoma-release-features`
+provenance. Registry-backed fleet inspection remains a follow-up. The release
+contract is captured in `release/v0.0.1/wrkstrm-app-minimums.md`.
 
 ## Release Proof Obligation
 

@@ -12,16 +12,26 @@ CUJs. The executable Swift suite may exceed the required floor, but release
 review must compare actual tests against the CUJ-derived requirement rather
 than treating the current test count as self-justifying.
 
+## Feature-Scoped Test Lifecycle
+
+Each major Vaporize feature should have a targetable SwiftPM test bundle. New
+feature work first adds tests to the feature bundle, then runs that bundle
+directly with `vaporize toolchain -- swift test --filter <FeatureBundle>`.
+After the feature bundle proves the behavior and the coverage artifact is
+updated, duplicate older/general tests may be deleted in the same change. Test
+deletion is allowed only as coverage migration: the replacement bundle, receipt,
+and CUJ count must already name the behavior being retired from the old location.
+
 ## Counts
 
 | Metric | Count |
 | --- | ---: |
 | Active CUJs | 16 |
 | Deferred CUJs | 2 |
-| Required Swift test obligations | 64 |
+| Required Swift test obligations | 69 |
 | Required release evidence checks | 6 |
-| Required targetable test obligations | 70 |
-| Current executable Swift tests | 82 |
+| Required targetable test obligations | 75 |
+| Current executable Swift tests | 87 |
 
 ## Targetable Test Bundles
 
@@ -42,6 +52,7 @@ than treating the current test count as self-justifying.
 | CUJ-13 | `VaporizeCUJ13YMLPklImportTests` | 4 |
 | CUJ-14 | `VaporizeCUJ14PklXcodeProjectGenerationTests` | 3 |
 | CUJ-15 | `VaporizeCUJ15XcodeProductCacheTests` | 4 |
+| CUJ-16 | `VaporizeCUJ16TargetFeaturesTests` | 5 |
 
 ## Coverage By CUJ
 
@@ -62,7 +73,7 @@ than treating the current test count as self-justifying.
 | CUJ-13 | FR-018 | 4 | Legacy YAML import parsing, generated Pkl evaluation, YAML/Pkl comparison, nested value rendering |
 | CUJ-14 | FR-020 | 3 | generate-xcodeproj parsing, Pkl-backed .xcodeproj output, deterministic renderer proof |
 | CUJ-15 | FR-003, FR-021 | 4 | Product-cache option parsing, cache-first app lookup, shared workspace build invocation, paired option validation |
-| CUJ-16 | FR-023, FR-024 | 0 | wrkstrm app-minimums release evidence; implementation follow-up |
+| CUJ-16 | FR-023, FR-024 | 5 | Target feature inspection parsing, inferred target, stale xcconfig detection, generated Swift provenance, CLI parsing |
 
 ## Deferred Coverage
 
@@ -73,7 +84,7 @@ than treating the current test count as self-justifying.
   already known.
 - `list-targets` target discovery remains deferred and outside the current
   v0.0.1 green path.
-- wrkstrm app-minimums inspection is release-evidence-gated in this packet and
-  remains blocked for implementation.
+- wrkstrm app-minimums inspection has a target-level first slice; fleet
+  registry-level inspection remains a follow-up.
 
 The machine-readable companion is `cuj-test-coverage.json`.

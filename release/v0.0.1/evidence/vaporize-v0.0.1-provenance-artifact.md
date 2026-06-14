@@ -9,11 +9,11 @@ chat memory.
 
 ## Proven
 
-- CUJ-derived test coverage is explicit: 64 required Swift test obligations
+- CUJ-derived test coverage is explicit: 69 required Swift test obligations
   plus 6 release evidence checks across 16 active CUJs.
-- Vaporize package tests pass through `vaporize toolchain`: 82 executable Swift
-  tests across 15 implemented CUJ-specific SwiftPM test bundles; CUJ-16 is
-  evidence-gated and blocked for app-minimums implementation.
+- Vaporize package tests pass through `vaporize toolchain`: 87 executable Swift
+  tests across 16 implemented CUJ-specific SwiftPM test bundles, including
+  CUJ-16 target feature inspection.
 - `product-definition.md` defines Vaporize, primary users, product-level user
   journeys, why users choose it, when not to choose it, and build implications
   before more implementation is accepted.
@@ -34,6 +34,10 @@ chat memory.
 - Shared Xcode workspace product-cache reuse has a first slice: cache-first app
   lookup, paired option validation, and shared workspace/DerivedData build
   invocation are covered by CUJ-15.
+- Hello World Google target feature inspection passes through
+  `inspect-target-features`, proving project configs, release tiers,
+  `configFiles` wiring, generated xcconfigs, generated `ReleaseFeatures.swift`,
+  and `digikoma-release-features` provenance for the reference target.
 - `why-vaporize.md` explains the value proposition, Swift/xcodebuild/xcrun
   comparison, current local benchmark baselines, build-space savings theory,
   user ergonomics, and benchmark gaps.
@@ -60,9 +64,8 @@ chat memory.
 - Vaporize automatically emits Kura runtime samples, retains Apple/Swift native
   artifacts as durable release evidence, or compares per-feature-flag build-size
   cohorts.
-- Vaporize inspects wrkstrm app minimums across the fleet, including
-  `release-features.json`, generated xcconfigs, generated `ReleaseFeatures.swift`,
-  project wiring, and `digikoma-release-features` provenance.
+- Vaporize performs registry-backed app-minimums inspection across the full
+  wrkstrm app fleet.
 - Remaining XcodeGen surfaces are migrated or quarantined.
 - Vaporize v0.0.1 is ready for final internal-essential release.
 
@@ -83,7 +86,8 @@ chat memory.
 | `product-definition.md` | Product definition, primary users, journeys, choice argument, and build implications are defined | PASS |
 | `why-vaporize.md` | Positioning, tool comparison, benchmark baseline, and ergonomics are explained | PASS-WITH-NOTE |
 | `performance-marketing-claims.md` | Safe performance marketing copy and claim boundaries are defined | PASS-WITH-NOTE |
-| `wrkstrm-app-minimums.md` | wrkstrm app release-feature minimums are defined for future Vaporize inspection | BLOCKED-FOR-IMPLEMENTATION |
+| `hello-world-google-target-features-inspection.receipt.json` | Hello World Google target release-feature topology is inspectable by Vaporize | PASS-WITH-NOTE |
+| `wrkstrm-app-minimums.md` | wrkstrm app release-feature minimums are defined for target and future fleet inspection | PASS-WITH-NOTE |
 | `vaporize-runtime-samples.series.su.json` | Kura-queryable runtime sample series is seeded | PASS-WITH-NOTE |
 | `2026-06-14.vaporize-runtime-samples.jsonl` | Backfilled CUJ-09 coverage runtime sample records native SwiftPM coverage artifacts and build-size metrics | PASS-WITH-NOTE |
 | `xcodegen-to-pkl-investigation.json` | Migration scope and blockers are captured | BLOCKS-INTERNAL-V0.0.1 |
@@ -120,10 +124,10 @@ chat memory.
    result metadata, build logs, diagnostics, DerivedData/product paths,
    product/binary/bundle sizes, coverage/result artifact sizes, cache deltas,
    and per-feature-flag size cohorts.
-5. Implement wrkstrm app-minimums inspection so Vaporize can report whether
-   each app has release-feature manifest, generated xcconfigs, generated
-   `ReleaseFeatures.swift`, project wiring, and `digikoma-release-features`
-   provenance.
+5. Complete registry-backed wrkstrm app-minimums inspection so Vaporize can
+   report whether each app has release-feature manifest, generated xcconfigs,
+   generated `ReleaseFeatures.swift`, project wiring, and
+   `digikoma-release-features` provenance.
 6. Create dedicated benchmark receipts for cold builds, warm cache hits, cache
    misses, and disk usage before making fleet performance or space-saving
    release claims.

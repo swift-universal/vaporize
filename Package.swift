@@ -197,6 +197,15 @@ let package = Package(
       path: "tests/cuj-15-xcode-product-cache"
     ),
     .testTarget(
+      name: "VaporizeCUJ16TargetFeaturesTests",
+      dependencies: [
+        "AppleProjectSpecCore",
+        "VaporizeCLI",
+        .product(name: "ArgumentParser", package: "swift-argument-parser"),
+      ],
+      path: "tests/cuj-16-target-features"
+    ),
+    .testTarget(
       name: "VaporizeCUJ12PackageGraphTests",
       dependencies: [
         "VaporizeCLI",

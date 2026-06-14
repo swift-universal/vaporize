@@ -42,6 +42,7 @@ vaporize use --common-process-spec <spec.json> --receipt-path <receipt.json>
 vaporize toolchain -- swift test
 vaporize validate-json --path <packet.json>
 vaporize inspect-project-yml --path <project.yml> --format json --receipt-path <receipt.json>
+vaporize inspect-target-features --path <project.yml> --target <target> --format json --receipt-path <receipt.json>
 vaporize compare-project-yml-pkl --path <project.yml> --pkl-path <project.pkl> --receipt-path <receipt.json>
 vaporize import-project-yml --path <project.yml> --output-path <project.pkl> --receipt-path <receipt.json>
 vaporize generate-project-yml --pkl-path <project.pkl> --output-path <generated.yml> --receipt-path <receipt.json>
@@ -282,6 +283,7 @@ treating legacy YAML as the forward source of truth:
 
 ```bash
 vaporize inspect-project-yml --path private/apple/apps/concourse/project.yml --format json
+vaporize inspect-target-features --path private/universal/substrate/collectives/wrkstrm-components/private/hello-world-google/demo-apps/hello-world-google.demo/project.yml --target hello-world-google.demo --format json
 vaporize compare-project-yml-pkl --path private/apple/apps/concourse/project.yml --pkl-path private/apple/apps/concourse/project.pkl
 vaporize import-project-yml --path private/apple/apps/creative-selection-v0.2/project.yml --output-path private/apple/apps/creative-selection-v0.2/project.pkl
 vaporize generate-project-yml --pkl-path private/apple/apps/concourse/project.pkl --output-path /tmp/concourse.generated.yml
@@ -291,6 +293,10 @@ vaporize generate-xcodeproj --pkl-path private/apple/apps/creative-selection-v0.
 `generate-project-yml` is transitional migration evidence. `generate-xcodeproj`
 is the owned world-state generation path, currently proven as a first slice
 rather than fleet parity.
+`inspect-target-features` is the target-level release-feature topology inspector:
+it reads project configs, target `configFiles`, `release-features.json`,
+generated xcconfigs, generated `ReleaseFeatures.swift`, and
+`digikoma-release-features` provenance without mutating the project.
 
 ## Xcode component setup
 

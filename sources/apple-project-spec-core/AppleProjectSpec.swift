@@ -5,6 +5,7 @@ import Yams
 public struct AppleProjectSpec: Codable, Equatable, Sendable {
   public var name: String
   public var options: AppleProjectOptions?
+  public var configs: [String: String]?
   public var settings: AppleProjectSettings?
   public var packages: [String: AppleProjectPackage]
   public var targets: [String: AppleProjectTarget]
@@ -13,6 +14,7 @@ public struct AppleProjectSpec: Codable, Equatable, Sendable {
   public init(
     name: String,
     options: AppleProjectOptions? = nil,
+    configs: [String: String]? = nil,
     settings: AppleProjectSettings? = nil,
     packages: [String: AppleProjectPackage] = [:],
     targets: [String: AppleProjectTarget] = [:],
@@ -20,6 +22,7 @@ public struct AppleProjectSpec: Codable, Equatable, Sendable {
   ) {
     self.name = name
     self.options = options
+    self.configs = configs
     self.settings = settings
     self.packages = packages
     self.targets = targets
@@ -29,6 +32,7 @@ public struct AppleProjectSpec: Codable, Equatable, Sendable {
   enum CodingKeys: String, CodingKey {
     case name
     case options
+    case configs
     case settings
     case packages
     case targets
@@ -39,6 +43,7 @@ public struct AppleProjectSpec: Codable, Equatable, Sendable {
     let container = try decoder.container(keyedBy: CodingKeys.self)
     self.name = try container.decode(String.self, forKey: .name)
     self.options = try container.decodeIfPresent(AppleProjectOptions.self, forKey: .options)
+    self.configs = try container.decodeIfPresent([String: String].self, forKey: .configs)
     self.settings = try container.decodeIfPresent(AppleProjectSettings.self, forKey: .settings)
     self.packages = try container.decodeIfPresent([String: AppleProjectPackage].self, forKey: .packages) ?? [:]
     self.targets = try container.decodeIfPresent([String: AppleProjectTarget].self, forKey: .targets) ?? [:]
@@ -73,6 +78,7 @@ public struct AppleProjectTarget: Codable, Equatable, Sendable {
   public var sources: [AppleProjectSource]?
   public var info: AppleProjectInfo?
   public var settings: AppleProjectSettings?
+  public var configFiles: [String: String]?
   public var dependencies: [AppleProjectDependency]?
   public var preBuildScripts: [AppleProjectBuildScript]?
   public var postBuildScripts: [AppleProjectBuildScript]?
@@ -328,6 +334,11 @@ public enum AppleProjectPklRenderer {
       lines.append("}")
     }
 
+    if let configs = spec.configs, !configs.isEmpty {
+      lines.append("")
+      appendAssignment("configs", renderStringMapping(configs, indent: 0), indent: 0, to: &lines)
+    }
+
     if let settings = spec.settings {
       lines.append("")
       lines.append("settings = \(renderSettings(settings, indent: 0))")
@@ -392,6 +403,9 @@ public enum AppleProjectPklRenderer {
     }
     if let settings = target.settings {
       appendAssignment("settings", renderSettings(settings, indent: level + 2), indent: level + 2, to: &lines)
+    }
+    if let configFiles = target.configFiles, !configFiles.isEmpty {
+      appendAssignment("configFiles", renderStringMapping(configFiles, indent: level + 2), indent: level + 2, to: &lines)
     }
     if let dependencies = target.dependencies, !dependencies.isEmpty {
       appendAssignment("dependencies", renderListing(dependencies.map { renderDependency($0, indent: level + 4) }, indent: level + 2), indent: level + 2, to: &lines)
@@ -488,6 +502,20 @@ public enum AppleProjectPklRenderer {
     for key in values.keys.sorted() {
       guard let value = values[key] else { continue }
       lines.append("\(indent(level + 2))[\(renderString(key))] = \(renderValue(value, indent: level + 2))")
+    }
+    lines.append("\(indent(level))}")
+    return lines.joined(separator: "\n")
+  }
+
+  private static func renderStringMapping(
+    _ values: [String: String],
+    indent level: Int
+  ) -> String {
+    guard !values.isEmpty else { return "new {}" }
+    var lines = ["new {"]
+    for key in values.keys.sorted() {
+      guard let value = values[key] else { continue }
+      lines.append("\(indent(level + 2))[\(renderString(key))] = \(renderString(value))")
     }
     lines.append("\(indent(level))}")
     return lines.joined(separator: "\n")
@@ -673,6 +701,7 @@ public enum AppleProjectSpecComparator {
     var mismatches: [String] = []
     appendMismatch("projectName", yml.projectName, pkl.projectName, to: &mismatches)
     appendMismatch("options", yml.options, pkl.options, to: &mismatches)
+    appendMismatch("configs", yml.configs, pkl.configs, to: &mismatches)
     appendMismatch("settingsBase", yml.settingsBase, pkl.settingsBase, to: &mismatches)
     appendMismatch("packages", yml.packages, pkl.packages, to: &mismatches)
     appendMismatch("targets", yml.targets, pkl.targets, to: &mismatches)
@@ -708,6 +737,8 @@ public enum VaporizeAppleProjectReceiptSchema {
     "\(schemaRoot)/apple-project-yml-pkl-import-receipt/apple-project-yml-pkl-import-receipt.schema.json"
   public static let xcodeProjectGenerationSchemaRef =
     "\(schemaRoot)/pkl-xcode-project-generation-receipt/pkl-xcode-project-generation-receipt.schema.json"
+  public static let targetFeaturesInspectionSchemaRef =
+    "\(schemaRoot)/target-features-inspection-receipt/target-features-inspection-receipt.schema.json"
 }
 
 public struct AppleProjectSpecComparisonReceipt: Codable, Equatable, Sendable {
@@ -779,6 +810,7 @@ public struct AppleProjectYMLImportReceipt: Codable, Equatable, Sendable {
 public struct AppleProjectSpecParitySignature: Codable, Equatable, Sendable {
   public var projectName: String
   public var options: [String: String]
+  public var configs: [String: String]
   public var settingsBase: [String: String]
   public var packages: [String: AppleProjectPackageSignature]
   public var targets: [String: AppleProjectTargetSignature]
@@ -790,6 +822,7 @@ public struct AppleProjectSpecParitySignature: Codable, Equatable, Sendable {
       "useBaseInternationalization": spec.options?.useBaseInternationalization.map(String.init),
       "createIntermediateGroups": spec.options?.createIntermediateGroups.map(String.init),
     ].compactMapValues { $0 }
+    self.configs = spec.configs ?? [:]
     self.settingsBase = signatureMap(spec.settings?.base)
     self.packages = spec.packages.mapValues { AppleProjectPackageSignature(package: $0) }
     self.targets = spec.targets.mapValues { AppleProjectTargetSignature(target: $0) }
@@ -821,6 +854,7 @@ public struct AppleProjectTargetSignature: Codable, Equatable, Sendable {
   public var sourcePaths: [String]
   public var settingsBase: [String: String]
   public var settingConfigs: [String: [String: String]]
+  public var configFiles: [String: String]
   public var dependencies: [AppleProjectDependencySignature]
   public var preBuildScripts: [AppleProjectBuildScriptSignature]
   public var postBuildScripts: [AppleProjectBuildScriptSignature]
@@ -832,6 +866,7 @@ public struct AppleProjectTargetSignature: Codable, Equatable, Sendable {
     self.sourcePaths = (target.sources ?? []).map(\.path)
     self.settingsBase = signatureMap(target.settings?.base)
     self.settingConfigs = (target.settings?.configs ?? [:]).mapValues(signatureMap)
+    self.configFiles = target.configFiles ?? [:]
     self.dependencies = (target.dependencies ?? []).map(AppleProjectDependencySignature.init)
     self.preBuildScripts = (target.preBuildScripts ?? []).map(AppleProjectBuildScriptSignature.init)
     self.postBuildScripts = (target.postBuildScripts ?? []).map(AppleProjectBuildScriptSignature.init)

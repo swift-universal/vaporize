@@ -11,6 +11,7 @@ func releaseReviewArtifactsExist() {
     "release/v0.0.1/why-vaporize.md",
     "release/v0.0.1/performance-marketing-claims.md",
     "release/v0.0.1/evidence/launch-review-packet.json",
+    "release/v0.0.1/evidence/hello-world-google-target-features-inspection.receipt.json",
   ] {
     #expect(FileManager.default.fileExists(atPath: packageRoot.appendingPathComponent(relativePath).path))
   }
@@ -29,6 +30,7 @@ func launchReviewPacketIsValidJSONAndInternalEssential() throws {
   #expect(gateResults.contains { $0["gateRef"] as? String == "GATE-25-performance-marketing-claims" })
   #expect(gateResults.contains { $0["gateRef"] as? String == "GATE-26-product-definition-user-journeys-choice-argument" })
   #expect(gateResults.contains { $0["gateRef"] as? String == "GATE-27-runtime-sample-series-apple-artifact-ingestion" })
+  #expect(gateResults.contains { $0["gateRef"] as? String == "GATE-29-wrkstrm-app-minimums-inspection" })
 }
 
 @Test("CUJ-09 CUJ coverage contract is valid JSON and names the floor")
@@ -36,10 +38,12 @@ func cujCoverageContractIsValidJSONAndNamesTheFloor() throws {
   let coverage = try readJSONObject(relativePath: "release/v0.0.1/evidence/cuj-test-coverage.json")
   let counts = try #require(coverage["counts"] as? [String: Any])
 
-  #expect(counts["activeCUJCount"] as? Int == 15)
+  #expect(counts["activeCUJCount"] as? Int == 16)
   #expect(counts["deferredCUJCount"] as? Int == 2)
-  #expect(counts["requiredReleaseEvidenceCheckCount"] as? Int == 5)
-  #expect(counts["requiredTargetableTestObligationCount"] as? Int == 69)
+  #expect(counts["requiredSwiftTestObligationCount"] as? Int == 69)
+  #expect(counts["requiredReleaseEvidenceCheckCount"] as? Int == 6)
+  #expect(counts["requiredTargetableTestObligationCount"] as? Int == 75)
+  #expect(counts["currentExecutableSwiftTestCount"] as? Int == 87)
 }
 
 @Test("CUJ-09 product definition contract precedes build work")

@@ -30,6 +30,9 @@ struct VaporizeCLI: AsyncParsableCommand {
       world-state from evaluated AppleProjectSpec Pkl. \
       Legacy `inventory` and `x-craze-collapse-path` remain compatibility \
       aliases during migration.
+      Target feature inspection mode: inspect-target-features reads a project.yml \
+      target, its configFiles wiring, release-features.json, generated xcconfigs, \
+      and ReleaseFeatures.swift provenance.
       """
   )
 
@@ -49,6 +52,7 @@ struct VaporizeCLI: AsyncParsableCommand {
     case warehouse
     case validateJSON = "validate-json"
     case inspectProjectYML = "inspect-project-yml"
+    case inspectTargetFeatures = "inspect-target-features"
     case compareProjectYMLPkl = "compare-project-yml-pkl"
     case importProjectYML = "import-project-yml"
     case generateProjectYML = "generate-project-yml"
@@ -73,7 +77,7 @@ struct VaporizeCLI: AsyncParsableCommand {
     case app
   }
 
-  @Argument(help: "Mode: install, uninstall, build, test, run, pass, use, toolchain, setup, status, warehouse, validate-json, inspect-project-yml, compare-project-yml-pkl, import-project-yml, generate-project-yml, generate-xcodeproj, inventory, or graph (forwards to package-graph@wrkstrm.cli).")
+  @Argument(help: "Mode: install, uninstall, build, test, run, pass, use, toolchain, setup, status, warehouse, validate-json, inspect-project-yml, inspect-target-features, compare-project-yml-pkl, import-project-yml, generate-project-yml, generate-xcodeproj, inventory, or graph (forwards to package-graph@wrkstrm.cli).")
   var mode: Mode
 
   @Option(name: .customLong("artifact"), help: "Artifact kind: cli or app.")
@@ -125,6 +129,11 @@ struct VaporizeCLI: AsyncParsableCommand {
     name: .customLong("scheme"),
     help: "Scheme to build with xcodebuild (requires --xcode-project or --xcode-workspace).")
   var xcodeScheme: String?
+
+  @Option(
+    name: .customLong("target"),
+    help: "Target name for inspect-target-features mode.")
+  var targetName: String?
 
   @Option(
     name: .customLong("derived-data-path"),
@@ -193,7 +202,7 @@ struct VaporizeCLI: AsyncParsableCommand {
 
   @Option(
     name: .customLong("path"),
-    help: "Path for status, warehouse, validate-json, inspect-project-yml, compare-project-yml-pkl, or import-project-yml modes.")
+    help: "Path for status, warehouse, validate-json, inspect-project-yml, inspect-target-features, compare-project-yml-pkl, or import-project-yml modes.")
   var vaporScanPath: String?
 
   @Option(
@@ -213,7 +222,7 @@ struct VaporizeCLI: AsyncParsableCommand {
 
   @Option(
     name: .customLong("format"),
-    help: "Output format for status, inspect-project-yml, compare-project-yml-pkl, import-project-yml, generate-project-yml, or generate-xcodeproj mode: text (default) or json.")
+    help: "Output format for status, inspect-project-yml, inspect-target-features, compare-project-yml-pkl, import-project-yml, generate-project-yml, or generate-xcodeproj mode: text (default) or json.")
   var vaporOutputFormat: VaporOutputFormatArgument = .text
 
   @Argument(parsing: .remaining, help: "Arguments forwarded to test, run, pass, or toolchain mode.")
@@ -247,6 +256,8 @@ struct VaporizeCLI: AsyncParsableCommand {
       try await validateJSON()
     case .inspectProjectYML:
       try await inspectProjectYML()
+    case .inspectTargetFeatures:
+      try await inspectTargetFeatures()
     case .compareProjectYMLPkl:
       try await compareProjectYMLPkl()
     case .importProjectYML:
@@ -850,6 +861,41 @@ struct VaporizeCLI: AsyncParsableCommand {
       let data = try encoder.encode(receipt)
       FileHandle.standardOutput.write(data)
       FileHandle.standardOutput.write(Data("\n".utf8))
+    }
+  }
+
+  private func inspectTargetFeatures() async throws {
+    guard let vaporScanPath, !vaporScanPath.isEmpty else {
+      throw ValidationError("--path is required for inspect-target-features mode.")
+    }
+
+    let requestId = "vaporize-inspect-target-features-\(UUID().uuidString)"
+    let receipt = try VaporizeTargetFeaturesInspector.inspect(
+      projectYMLURL: URL(fileURLWithPath: vaporScanPath),
+      targetName: targetName,
+      requestId: requestId
+    )
+    try emitReceiptIfRequested(receipt)
+
+    switch vaporOutputFormat {
+    case .text:
+      let configs = receipt.declaredBuildConfigurations.map(\.name).joined(separator: ", ")
+      print(
+        "target features: \(receipt.targetName) status=\(receipt.overallStatus) configs=[\(configs)] tiers=\(receipt.releaseFeatureManifest.tierCount)"
+      )
+      for minimum in receipt.minimums where minimum.status != "pass" {
+        print("\(minimum.status): \(minimum.name) - \(minimum.detail)")
+      }
+    case .json:
+      let encoder = JSONEncoder()
+      encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
+      let data = try encoder.encode(receipt)
+      FileHandle.standardOutput.write(data)
+      FileHandle.standardOutput.write(Data("\n".utf8))
+    }
+
+    guard receipt.overallStatus == "pass" else {
+      throw ValidationError("target feature inspection failed for \(receipt.targetName).")
     }
   }
 

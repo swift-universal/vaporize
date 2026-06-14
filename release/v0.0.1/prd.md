@@ -183,16 +183,16 @@ Supporting audiences:
 | FR-021 | Shared Xcode workspace product cache | App install/build accepts paired `--xcode-product-cache-workspace` and `--xcode-product-cache-derived-data-path`, searches the shared DerivedData product path before local outputs, and uses the shared workspace/DerivedData pair for the Xcode build invocation on cache miss. |
 | FR-022 | Pre-development product definition and choice argument | `release/v0.0.1/product-definition.md` defines the product, primary users, product-level user journeys, why users choose Vaporize, when not to choose Vaporize, and build implications; PRD, CUJs, why explainer, release gates, launch-review packet, CUJ coverage, and release-review tests reference it. |
 | FR-023 | Existing wrkstrm-core app/build config composition | App-facing runtime samples and future feature-status inspection must consume existing wrkstrm-core build surfaces before inventing parallel records: `tool-registry@wrkstrm-core.cli discover-apps` / `xcode-project.tool.json` records for `project.yml` ownership, `identifier@wrkstrm-core.cli app describe` for app variant names/paths, and `app-artifacts@wrkstrm-core.cli` for bundle validation, install-path patching, Xcode build/export receipts, and flat application artifacts. |
-| FR-024 | wrkstrm app minimums inspection | Vaporize app-facing inspection must report whether each app has the wrkstrm minimum release-feature topology: registry record, project spec, tier declarations, `Config/release-features.json`, generated `Config/xcconfigs/*.xcconfig`, project `configFiles` or Pkl equivalent wiring, generated `Sources/ReleaseFeatures.swift`, and `digikoma-release-features` provenance. Missing, stale, or unknown minimums block strong feature-cohort, launch-readiness, and per-feature-size claims. |
+| FR-024 | wrkstrm app minimums inspection | `inspect-target-features --path <project.yml> --target <target>` reports target-level release-feature topology: project spec, declared build configurations, tier declarations, `Config/release-features.json`, generated `Config/xcconfigs/*.xcconfig`, project `configFiles` or Pkl equivalent wiring, generated `Sources/ReleaseFeatures.swift`, and `digikoma-release-features` provenance. Registry-backed fleet inspection remains a follow-up. Missing, stale, or unknown minimums block strong feature-cohort, launch-readiness, and per-feature-size claims. |
 
 ## Release Criteria
 
 - Vaporize's package test suite passes with the Swift 6.4 toolchain:
   `vaporize toolchain -- swift test --package-path private/apple/spm/vaporize@wrkstrm-core.cli`.
-  Current proof: the CUJ-derived coverage floor requires 64 Swift test
-  obligations plus 6 release evidence checks; the executable suite passes 82
-  tests across 15 implemented CUJ targets, while CUJ-16 is evidence-gated and
-  blocked for app-minimums implementation.
+  Current proof: the CUJ-derived coverage floor requires 69 Swift test
+  obligations plus 6 release evidence checks; the executable suite passes 87
+  tests across 16 implemented CUJ targets, including the CUJ-16
+  `inspect-target-features` first slice.
 - `release/v0.0.1/product-definition.md` defines the product, primary users,
   product-level user journeys, choice argument, non-choice cases, and build
   implications before additional feature work is accepted.
@@ -200,8 +200,8 @@ Supporting audiences:
   `release/v0.0.1/evidence/cuj-test-coverage.json`.
 - CLI help advertises `use`, `toolchain`, `validate-json`,
   `inspect-project-yml`, `compare-project-yml-pkl`, `import-project-yml`,
-  `generate-project-yml`, `generate-xcodeproj`, `--common-process-spec`,
-  `--xcode-product-cache-workspace`, and
+  `generate-project-yml`, `generate-xcodeproj`, `inspect-target-features`,
+  `--common-process-spec`, `--xcode-product-cache-workspace`, and
   `--xcode-product-cache-derived-data-path`.
 - Release packet JSON validates with
   `vaporize validate-json --path release/v0.0.1/evidence/launch-review-packet.json`.
@@ -228,8 +228,10 @@ Supporting audiences:
   receipt, and any release-feature manifest or generated `.xcconfig` files
   present in the project.
 - wrkstrm app minimums are defined in
-  `release/v0.0.1/wrkstrm-app-minimums.md`; implementation remains a blocking
-  follow-up before Vaporize can claim fleet-wide app-minimum awareness.
+  `release/v0.0.1/wrkstrm-app-minimums.md`; the target-level
+  `inspect-target-features` slice is implemented, while registry-backed fleet
+  awareness remains a blocking follow-up before Vaporize can claim fleet-wide
+  app-minimum awareness.
 - Concourse legacy project inspection receipt validates with
   `vaporize validate-json --path release/v0.0.1/evidence/concourse-project-yml-inspection.receipt.json`.
 - Concourse YAML/Pkl comparison receipt validates with

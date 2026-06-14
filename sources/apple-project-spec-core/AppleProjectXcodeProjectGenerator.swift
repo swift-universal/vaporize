@@ -652,6 +652,7 @@ private struct RenderContext {
 
   private var configurationNames: [String] {
     var names = Set(["Debug", "Release"])
+    if let configs = spec.configs { names.formUnion(configs.keys) }
     if let configs = spec.settings?.configs { names.formUnion(configs.keys) }
     for target in targetRecords {
       if let configs = target.target.settings?.configs { names.formUnion(configs.keys) }
