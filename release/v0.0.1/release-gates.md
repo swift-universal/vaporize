@@ -54,6 +54,7 @@ disposition for any remaining XcodeGen surfaces.
 | GATE-22 - Pkl Xcode project generation first slice | PASS-WITH-NOTE | `generate-xcodeproj` generated `/tmp/vaporize-creative-selection-v02-generated.xcodeproj` from `private/apple/apps/creative-selection-v0.2/project.pkl`; `creative-selection-v0.2-pkl-xcodeproj-generation.receipt.json` records `buildableWorldStateGenerated=true`, `xcodeProjectGenerated=true`, 1 target, and 4 source files. This proves first-slice world-state generation, not fleet build parity. |
 | GATE-23 - Shared Xcode workspace product cache first slice | PASS-WITH-NOTE | CUJ-15 covers product-cache option parsing, paired option validation, cache-first app lookup before local DerivedData, and Xcode build invocation through the shared workspace/DerivedData pair. This proves the invocation/cache-order slice, not automatic workspace scheme discovery or fleet cache warmth. |
 | GATE-24 - Positioning and benchmark explainer | PASS-WITH-NOTE | `release/v0.0.1/why-vaporize.md` explains why Vaporize exists, what problems it solves, how it compares to Swift, xcodebuild, and xcrun, current local benchmark numbers, build-space savings theory, user ergonomics, and the benchmark evidence still required before final release claims. |
+| GATE-25 - Performance marketing claims | PASS-WITH-NOTE | `release/v0.0.1/performance-marketing-claims.md` provides approved measured/behavioral/theoretical claim language, example copy, before/after examples, banned claims, and benchmark receipts required before stronger performance or disk-space claims are allowed. |
 
 ## Open Follow-Up Beads
 
@@ -89,3 +90,5 @@ disposition for any remaining XcodeGen surfaces.
   Vaporize grow a dedicated workspace product query mode?
 - Which benchmark fixture should become the canonical release benchmark:
   Concourse, Creative Selection v0.2, or the maintained huge workspace?
+- Which performance claim should get the first dedicated benchmark receipt:
+  warm cache install time, cold cache miss time, or DerivedData disk savings?

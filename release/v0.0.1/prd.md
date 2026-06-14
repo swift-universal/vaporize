@@ -176,6 +176,9 @@ Supporting audiences:
   Swift/xcodebuild/xcrun comparison, current benchmark baseline, build-space
   savings theory, ergonomics, and remaining benchmark gaps without claiming
   unmeasured fleet performance.
+- `release/v0.0.1/performance-marketing-claims.md` defines approved claim
+  language, example copy, prohibited claims, and the benchmark receipts required
+  before stronger speed or disk-space claims are allowed.
 - Vaporize release evidence schemas validate as JSON under
   `schema-universal/private/universal/domain/tooling/schema-families/vaporize-schemas/v0.0.1`.
 - Concourse legacy project inspection receipt validates with

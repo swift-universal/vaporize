@@ -57,6 +57,12 @@
     },
     {
       "LinkRefModel": "0.3.0",
+      "s": ["vaporize", "v0.0.1", "performance-marketing-claims"],
+      "t": "Vaporize performance marketing claims and examples",
+      "tg": [{"k": "rp", "rt": "mono", "v": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/performance-marketing-claims.md"}]
+    },
+    {
+      "LinkRefModel": "0.3.0",
       "s": ["vaporize", "v0.0.1", "xcodegen-to-pkl-investigation"],
       "t": "Vaporize v0.0.1 XcodeGen to Pkl migration investigation",
       "tg": [{"k": "rp", "rt": "mono", "v": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/xcodegen-to-pkl-investigation.json"}]
@@ -266,6 +272,7 @@
     "bareSwiftToolchainResult": "CURRENT-PASS-WITH-NOTE: at 2026-06-13T21:39:03Z bare swift reported Apple Swift 6.4 and a focused CUJ-15 test run passed in 6.80s; earlier release-prep runs observed bare Swift drift, so Vaporize remains the canonical assistant route.",
     "requiredToolchainResult": "PASS: Vaporize toolchain mode owns Xcode-selected Swift via internal xcrun; focused CUJ-15 also passed through Vaporize in 6.80s once warm.",
     "whyVaporizeExplainer": "PASS-WITH-NOTE: release/v0.0.1/why-vaporize.md explains value proposition, problems solved, Swift/xcodebuild/xcrun comparison, current baseline benchmarks, build-space savings theory, ergonomics, and benchmark gaps.",
+    "performanceMarketingClaims": "PASS-WITH-NOTE: release/v0.0.1/performance-marketing-claims.md defines approved measured/behavioral/theoretical claims, safe copy examples, before/after examples, prohibited claims, and benchmark receipts required before stronger claims.",
     "benchmarkBaselineGeneratedAt": "2026-06-13T21:39:03Z",
     "benchmarkBaselineSummary": "validate-json launch packet 0.03s real; vaporize toolchain swift --version 0.25s real; bare swift --version 0.17s real; focused CUJ-15 bare swift 6.80s real; focused CUJ-15 Vaporize toolchain 6.80s real; full Vaporize suite 9.14s real.",
     "jsonValidationCommand": "vaporize validate-json --path release/v0.0.1/evidence/launch-review-packet.json",
@@ -385,6 +392,11 @@
       "gateRef": "GATE-24-positioning-and-benchmark-explainer",
       "status": "PASS-WITH-NOTE",
       "rationale": "why-vaporize.md explains why Vaporize exists, what problems it solves, how it compares to Swift, xcodebuild, and xcrun, current benchmark baselines, build-space savings theory, ergonomics, and remaining benchmark gaps"
+    },
+    {
+      "gateRef": "GATE-25-performance-marketing-claims",
+      "status": "PASS-WITH-NOTE",
+      "rationale": "performance-marketing-claims.md defines safe performance claim language, examples, before/after copy, prohibited claims, and the benchmark receipts needed before stronger speed or disk-space claims are allowed"
     }
   ],
   "knownFollowUps": [
@@ -426,6 +438,7 @@
     "x-schema-universal-extraction": "vaporize-schemas v0.0.1 extracts JSON schemas, canonical fixtures, and a fixture-backed Swift model package for Vaporize CUJ coverage, provenance, launch-review specialization, and Apple project YAML/Pkl receipts under schema-universal.",
     "x-xcode-workspace-product-cache": "Shared Xcode workspace product-cache reuse lets app installs search a warm workspace DerivedData product before local outputs and build through the shared workspace/DerivedData pair on cache miss. CUJ-15 covers the first slice; automatic workspace scheme/product discovery remains deferred.",
     "x-why-vaporize": "why-vaporize.md is the release-facing explanation for why Vaporize is better, what problems it solves, how it compares to Swift/xcodebuild/xcrun, what current benchmarks show, how shared cache reuse can save build space, and which performance claims remain unmeasured.",
+    "x-performance-marketing-claims": "performance-marketing-claims.md provides approved copy examples and guardrails: do not say Vaporize is faster than Swift, do not claim 2x Xcode builds, and do not claim N GB disk savings until dedicated benchmark receipts exist.",
     "x-performance-baseline": "Current local baseline at 2026-06-13T21:39:03Z: validate-json launch packet 0.03s real; vaporize toolchain swift --version 0.25s real; bare swift --version 0.17s real; focused CUJ-15 bare swift and Vaporize toolchain both 6.80s real; full Vaporize suite 9.14s real.",
     "x-cuj-test-coverage": "Required test count is derived from PRD requirements through active draft CUJs. Current floor: 64 Swift test obligations plus 4 release evidence checks, all targetable by CUJ-specific SwiftPM bundles. Current executable suite: 81 Swift tests.",
     "x-major-feature-test-suite": "Vaporize package tests now cover major release features through 15 CUJ-specific SwiftPM bundles: command parsing, pass/use/toolchain receipts, JSON validation, inventory scanner/renderer, graph forwarding, Apple project YAML/Pkl migration paths, first-slice Pkl .xcodeproj generation, shared Xcode workspace product-cache reuse, SwiftPM CLI installer arguments, and app installer Xcode invocation paths.",

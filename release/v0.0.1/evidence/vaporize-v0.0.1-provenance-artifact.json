@@ -25,6 +25,7 @@
       "Creative Selection v0.2 project.pkl generates first-slice .xcodeproj world-state through Vaporize generate-xcodeproj.",
       "Shared Xcode workspace product-cache reuse has a first slice: cache-first app lookup, paired option validation, and shared workspace/DerivedData build invocation are covered by CUJ-15.",
       "The release-facing why-vaporize explainer exists and records current Swift/xcodebuild/xcrun comparison, local benchmark baselines, build-space savings theory, user ergonomics, and unmeasured benchmark gaps.",
+      "The performance marketing claims matrix exists and separates approved measured, behavioral, and theoretical claim language from prohibited speed and disk-space claims.",
       "Initial schema-universal extraction exists as vaporize-schemas v0.0.1 for CUJ coverage, provenance, launch-review specialization, and Apple project YAML/Pkl receipts.",
       "JSON release evidence validates through Vaporize validate-json."
     ],
@@ -53,6 +54,10 @@
     {
       "kind": "positioning-and-benchmark-explainer",
       "path": "private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/why-vaporize.md"
+    },
+    {
+      "kind": "performance-marketing-claims",
+      "path": "private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/performance-marketing-claims.md"
     },
     {
       "kind": "launch-review-packet",
@@ -143,6 +148,12 @@
       "result": "PASS-WITH-NOTE: fleet performance and disk savings still require dedicated benchmark receipts"
     },
     {
+      "receiptKind": "performance-marketing-claims",
+      "path": "private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/performance-marketing-claims.md",
+      "claim": "Release review has approved performance marketing copy examples and explicit claim boundaries.",
+      "result": "PASS-WITH-NOTE: stronger speed and disk-space claims still require dedicated benchmark receipts"
+    },
+    {
       "receiptKind": "vaporize-schema-universal-extraction",
       "path": "private/universal/substrate/collectives/schema-universal/private/universal/domain/tooling/schema-families/vaporize-schemas/v0.0.1",
       "claim": "Schema-universal JSON schemas, canonical fixtures, and a Swift model package exist for durable Vaporize release evidence and receipts.",
@@ -212,7 +223,7 @@
     },
     {
       "path": "private/apple/spm/vaporize@wrkstrm-core.cli/tests/cuj-09-release-review/VaporizeCUJ09ReleaseReviewTests.swift",
-      "purpose": "Covers CUJ-09 release artifact presence, launch-review packet JSON, CUJ coverage counts, release-gate blocker text, and the why-vaporize positioning gate."
+      "purpose": "Covers CUJ-09 release artifact presence, launch-review packet JSON, CUJ coverage counts, release-gate blocker text, why-vaporize positioning, and performance marketing claim gates."
     },
     {
       "path": "private/apple/spm/vaporize@wrkstrm-core.cli/tests/cuj-10-yml-pkl-comparison/VaporizeCUJ10YMLPklComparisonTests.swift",
@@ -269,6 +280,10 @@
     {
       "path": "private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/why-vaporize.md",
       "purpose": "Explains Vaporize positioning, problem claims, Swift/xcodebuild/xcrun comparison, local benchmark baselines, build-space savings theory, user ergonomics, and unmeasured benchmark gaps."
+    },
+    {
+      "path": "private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/performance-marketing-claims.md",
+      "purpose": "Defines approved measured/behavioral/theoretical performance claims, example copy, prohibited claims, before/after examples, and benchmark receipts required before stronger claims."
     },
     {
       "path": "private/universal/substrate/collectives/schema-universal/private/universal/domain/tooling/schema-families/vaporize-schemas/v0.0.1/json/vaporize-schemas-v000-000-001/schemas",
@@ -418,6 +433,7 @@
     "Run old tool / Vaporize / Pkl-generation comparisons beyond Concourse and Creative Selection v0.2 before claiming fleet parity.",
     "Promote shared workspace product-cache reuse into workspace product/scheme discovery once the maintained workspace fleet is known.",
     "Create dedicated benchmark receipts for cold builds, warm cache hits, cache misses, and disk usage before making fleet performance or space-saving release claims.",
+    "Promote approved performance marketing claims only after attaching the relevant benchmark receipt.",
     "Quarantine or migrate remaining substrate-owned XcodeGen surfaces."
   ],
   "boundaries": [

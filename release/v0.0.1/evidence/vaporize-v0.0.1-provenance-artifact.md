@@ -33,6 +33,9 @@ chat memory.
 - `why-vaporize.md` explains the value proposition, Swift/xcodebuild/xcrun
   comparison, current local benchmark baselines, build-space savings theory,
   user ergonomics, and benchmark gaps.
+- `performance-marketing-claims.md` defines approved measured, behavioral, and
+  theoretical performance claim language, example copy, prohibited claims, and
+  required future benchmark receipts.
 - Initial schema-universal extraction exists as `vaporize-schemas v0.0.1` for
   CUJ coverage, provenance, launch-review specialization, and Apple project
   YAML/Pkl receipts.
@@ -64,6 +67,7 @@ chat memory.
 | `creative-selection-v0.2-pkl-xcodeproj-generation.receipt.json` | Creative Selection v0.2 Pkl emits first-slice `.xcodeproj` world-state | PASS-WITH-NOTE |
 | `VaporizeCUJ15XcodeProductCacheTests.swift` | Shared workspace product cache lookup and invocation slice is covered | PASS-WITH-NOTE |
 | `why-vaporize.md` | Positioning, tool comparison, benchmark baseline, and ergonomics are explained | PASS-WITH-NOTE |
+| `performance-marketing-claims.md` | Safe performance marketing copy and claim boundaries are defined | PASS-WITH-NOTE |
 | `xcodegen-to-pkl-investigation.json` | Migration scope and blockers are captured | BLOCKS-INTERNAL-V0.0.1 |
 | `cuj-test-coverage.json` | PRD/CUJ-derived required test floor is captured | PASS |
 | `launch-review-packet.json` | Release-prep packet is gathered | VALID-JSON |
@@ -96,7 +100,9 @@ chat memory.
 4. Create dedicated benchmark receipts for cold builds, warm cache hits, cache
    misses, and disk usage before making fleet performance or space-saving
    release claims.
-5. Quarantine or migrate remaining substrate-owned XcodeGen surfaces.
+5. Promote approved performance marketing claims only after attaching the
+   relevant benchmark receipt.
+6. Quarantine or migrate remaining substrate-owned XcodeGen surfaces.
 
 The machine-readable companion is
 `vaporize-v0.0.1-provenance-artifact.json`.
