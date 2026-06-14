@@ -1,6 +1,6 @@
 # Vaporize v0.0.1 - Provenance Artifact
 
-**Generated:** 2026-06-14T02:29:38Z
+**Generated:** 2026-06-14T03:20:00Z
 **Status:** captured for forward Pkl migration
 **Subject:** `vaporize@wrkstrm-core.cli` v0.0.1 release prep
 
@@ -9,11 +9,12 @@ chat memory.
 
 ## Proven
 
-- CUJ-derived test coverage is explicit: 74 required Swift test obligations
-  plus 9 release evidence checks across 17 active CUJs.
-- Vaporize package tests pass through `vaporize toolchain`: 92 executable Swift
-  tests across 17 implemented CUJ-specific SwiftPM test bundles, including
-  CUJ-16 target feature inspection and CUJ-17 release doctor.
+- CUJ-derived test coverage is explicit: 79 required Swift test obligations
+  plus 10 release evidence checks across 18 active CUJs.
+- Vaporize package tests pass through `vaporize toolchain`: 97 executable Swift
+  tests across 18 implemented CUJ-specific SwiftPM test bundles, including
+  CUJ-16 target feature inspection, CUJ-17 release doctor, and CUJ-18 project
+  target discovery.
 - `product-definition.md` defines Vaporize, primary users, product-level user
   journeys, why users choose it, when not to choose it, and build implications
   before more implementation is accepted.
@@ -40,6 +41,9 @@ chat memory.
   mismatches.
 - Creative Selection v0.2 `project.pkl` generates first-slice `.xcodeproj`
   world-state through `generate-xcodeproj`.
+- Creative Selection v0.2 `project.pkl` is discoverable through `list-targets`
+  with a `vaporize-project-target-discovery` receipt that names target,
+  package, scheme, and buildable-candidate facts.
 - Shared Xcode workspace product-cache reuse has a first slice: cache-first app
   lookup, paired option validation, and shared workspace/DerivedData build
   invocation are covered by CUJ-15.
@@ -103,6 +107,7 @@ chat memory.
 | `creative-selection-v0.2-project-yml-pkl-import.receipt.json` | Creative Selection v0.2 YAML imports into Pkl | PASS-WITH-NOTE |
 | `creative-selection-v0.2-project-yml-pkl-comparison.receipt.json` | Imported Creative Selection v0.2 Pkl matches YAML | PASS |
 | `creative-selection-v0.2-pkl-xcodeproj-generation.receipt.json` | Creative Selection v0.2 Pkl emits first-slice `.xcodeproj` world-state | PASS-WITH-NOTE |
+| `creative-selection-v0.2-list-targets.receipt.json` | Creative Selection v0.2 Pkl target, package, scheme, and buildable-candidate facts are discoverable | PASS-WITH-NOTE |
 | `VaporizeCUJ15XcodeProductCacheTests.swift` | Shared workspace product cache lookup and invocation slice is covered | PASS-WITH-NOTE |
 | `product-definition.md` | Product definition, primary users, journeys, choice argument, and build implications are defined | PASS |
 | `why-vaporize.md` | Positioning, tool comparison, benchmark baseline, and ergonomics are explained | PASS-WITH-NOTE |
@@ -144,28 +149,30 @@ chat memory.
    Creative Selection v0.2 slice.
 2. Repeat old tool / Vaporize / Pkl-generation comparisons beyond Concourse and
    Creative Selection v0.2 before claiming fleet parity.
-3. Promote shared workspace product-cache reuse into workspace product/scheme
+3. Use project target discovery receipts to route the next build/cache/parity
+   step before attempting automatic workspace product-cache discovery.
+4. Promote shared workspace product-cache reuse into workspace product/scheme
    discovery once the maintained workspace fleet is known.
-4. Implement Vaporize-emitted Kura runtime samples that attach SwiftPM coverage
+5. Implement Vaporize-emitted Kura runtime samples that attach SwiftPM coverage
    JSON/profile data, xUnit output when available, Xcode `.xcresult` bundles,
    result metadata, build logs, diagnostics, DerivedData/product paths,
    product/binary/bundle sizes, coverage/result artifact sizes, cache deltas,
    and per-feature-flag size cohorts.
-5. Complete registry-backed wrkstrm app-minimums inspection so Vaporize can
+6. Complete registry-backed wrkstrm app-minimums inspection so Vaporize can
    report whether each app has release-feature manifest, generated xcconfigs,
    generated `ReleaseFeatures.swift`, project wiring, and
    `digikoma-release-features` provenance.
-6. Create dedicated benchmark receipts for cold builds, warm cache hits, cache
+7. Create dedicated benchmark receipts for cold builds, warm cache hits, cache
    misses, and disk usage before making fleet performance or space-saving
    release claims.
-7. Project `vaporize.engineering.docc` through the future
+8. Project `vaporize.engineering.docc` through the future
    `wrkstrm.com/engineering` pipeline without deriving new claims from prose.
-8. Hold the Engineering, QA, and Marketing PRD review session before the next
+9. Hold the Engineering, QA, and Marketing PRD review session before the next
    major Vaporize coding slice begins.
-9. Promote approved performance marketing claims only after attaching the
+10. Promote approved performance marketing claims only after attaching the
    relevant benchmark receipt.
-10. Quarantine or migrate remaining substrate-owned XcodeGen surfaces.
-11. Add periodic vaporware buddy heartbeat and build-watch checks so Vaporize
+11. Quarantine or migrate remaining substrate-owned XcodeGen surfaces.
+12. Add periodic vaporware buddy heartbeat and build-watch checks so Vaporize
     can report health and route failing buddies into modification requests.
 
 The machine-readable companion is

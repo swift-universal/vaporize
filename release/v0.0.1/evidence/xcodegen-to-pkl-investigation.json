@@ -4,13 +4,13 @@
   "subjectAppSlug": "vaporize@wrkstrm-core.cli",
   "subjectReleaseSlug": "v0.0.1",
   "generatedAt": "2026-06-12T20:58:02Z",
-  "updatedAt": "2026-06-13T08:18:07Z",
+  "updatedAt": "2026-06-14T03:20:00Z",
   "generatedBy": "codex-crisie",
-  "status": "release-blocker-investigation-with-first-pkl-xcodeproj-generation-slice",
+  "status": "release-blocker-investigation-with-first-pkl-xcodeproj-and-target-discovery-slices",
   "toolClassification": "internal-essential-tool",
   "verdict": {
     "releaseImpact": "BLOCK_INTERNAL_V0_0_1",
-    "statement": "Vaporize v0.0.1 should remain in release prep until substrate-owned Apple project-generation truth moves from XcodeGen project.yml surfaces to a Pkl-backed owned .xcodeproj world-state path, with any remaining XcodeGen surfaces explicitly quarantined as compatibility or historical evidence. The Swift YAML read bridge, Pkl parity specimen, PklSwift-backed transitional YAML generation slice, YAML-to-Pkl import slice, and first Pkl-backed .xcodeproj generation slice are landed as migration evidence, not as final fleet build parity.",
+    "statement": "Vaporize v0.0.1 should remain in release prep until substrate-owned Apple project-generation truth moves from XcodeGen project.yml surfaces to a Pkl-backed owned .xcodeproj world-state path, with any remaining XcodeGen surfaces explicitly quarantined as compatibility or historical evidence. The Swift YAML read bridge, Pkl parity specimen, PklSwift-backed transitional YAML generation slice, YAML-to-Pkl import slice, and first Pkl-backed .xcodeproj generation slice and target discovery slice are landed as migration evidence, not as final fleet build parity.",
     "why": "The tree has broad project.yml and checked-in pbxproj reliance plus direct XcodeGen runner code. Releasing Vaporize as an internal essential tool before owned Pkl-backed .xcodeproj generation or explicit quarantine would teach assistants the wrong project-generation boundary."
   },
   "inventory": {
@@ -24,48 +24,168 @@
     "pklVersionEvidence": "Pkl 0.31.1 evidence exists under takumi-org digikoma-pkl interface."
   },
   "projectYmlByCollective": [
-    {"collective": "wrkstrm-components", "count": 45},
-    {"collective": "wrkstrm-app", "count": 45},
-    {"collective": "wrkstrm-research", "count": 18},
-    {"collective": "clia-app-org", "count": 11},
-    {"collective": "wrkstrm-core", "count": 7},
-    {"collective": "todo3", "count": 5},
-    {"collective": "takumi-org", "count": 4},
-    {"collective": "slate-org", "count": 4},
-    {"collective": "kura-org", "count": 3},
-    {"collective": "tau-app", "count": 2},
-    {"collective": "laussat-studio", "count": 2},
-    {"collective": "clia-org", "count": 2},
-    {"collective": "wrkstrm-finance", "count": 1},
-    {"collective": "wrkstrm", "count": 1},
-    {"collective": "vapor-wares-org", "count": 1},
-    {"collective": "switch-on-day", "count": 1},
-    {"collective": "swift-irc", "count": 1},
-    {"collective": "service-universal", "count": 1},
-    {"collective": "codeswiftly", "count": 1}
+    {
+      "collective": "wrkstrm-components",
+      "count": 45
+    },
+    {
+      "collective": "wrkstrm-app",
+      "count": 45
+    },
+    {
+      "collective": "wrkstrm-research",
+      "count": 18
+    },
+    {
+      "collective": "clia-app-org",
+      "count": 11
+    },
+    {
+      "collective": "wrkstrm-core",
+      "count": 7
+    },
+    {
+      "collective": "todo3",
+      "count": 5
+    },
+    {
+      "collective": "takumi-org",
+      "count": 4
+    },
+    {
+      "collective": "slate-org",
+      "count": 4
+    },
+    {
+      "collective": "kura-org",
+      "count": 3
+    },
+    {
+      "collective": "tau-app",
+      "count": 2
+    },
+    {
+      "collective": "laussat-studio",
+      "count": 2
+    },
+    {
+      "collective": "clia-org",
+      "count": 2
+    },
+    {
+      "collective": "wrkstrm-finance",
+      "count": 1
+    },
+    {
+      "collective": "wrkstrm",
+      "count": 1
+    },
+    {
+      "collective": "vapor-wares-org",
+      "count": 1
+    },
+    {
+      "collective": "switch-on-day",
+      "count": 1
+    },
+    {
+      "collective": "swift-irc",
+      "count": 1
+    },
+    {
+      "collective": "service-universal",
+      "count": 1
+    },
+    {
+      "collective": "codeswiftly",
+      "count": 1
+    }
   ],
   "pbxprojByCollective": [
-    {"collective": "wrkstrm-app", "count": 51},
-    {"collective": "wrkstrm-components", "count": 44},
-    {"collective": "wrkstrm-research", "count": 19},
-    {"collective": "kura-org", "count": 15},
-    {"collective": "clia-app-org", "count": 12},
-    {"collective": "todo3", "count": 9},
-    {"collective": "wrkstrm-core", "count": 6},
-    {"collective": "slate-org", "count": 4},
-    {"collective": "wrkstrm-games", "count": 3},
-    {"collective": "tau-app", "count": 3},
-    {"collective": "takumi-org", "count": 3},
-    {"collective": "codeswiftly", "count": 3},
-    {"collective": "wrkstrm", "count": 2},
-    {"collective": "switch-on-day", "count": 2},
-    {"collective": "laussat-studio", "count": 2},
-    {"collective": "clia-org", "count": 2},
-    {"collective": "wrkstrm-finance", "count": 1},
-    {"collective": "vapor-wares-org", "count": 1},
-    {"collective": "swift-ui-universal", "count": 1},
-    {"collective": "swift-irc", "count": 1},
-    {"collective": "service-universal", "count": 1}
+    {
+      "collective": "wrkstrm-app",
+      "count": 51
+    },
+    {
+      "collective": "wrkstrm-components",
+      "count": 44
+    },
+    {
+      "collective": "wrkstrm-research",
+      "count": 19
+    },
+    {
+      "collective": "kura-org",
+      "count": 15
+    },
+    {
+      "collective": "clia-app-org",
+      "count": 12
+    },
+    {
+      "collective": "todo3",
+      "count": 9
+    },
+    {
+      "collective": "wrkstrm-core",
+      "count": 6
+    },
+    {
+      "collective": "slate-org",
+      "count": 4
+    },
+    {
+      "collective": "wrkstrm-games",
+      "count": 3
+    },
+    {
+      "collective": "tau-app",
+      "count": 3
+    },
+    {
+      "collective": "takumi-org",
+      "count": 3
+    },
+    {
+      "collective": "codeswiftly",
+      "count": 3
+    },
+    {
+      "collective": "wrkstrm",
+      "count": 2
+    },
+    {
+      "collective": "switch-on-day",
+      "count": 2
+    },
+    {
+      "collective": "laussat-studio",
+      "count": 2
+    },
+    {
+      "collective": "clia-org",
+      "count": 2
+    },
+    {
+      "collective": "wrkstrm-finance",
+      "count": 1
+    },
+    {
+      "collective": "vapor-wares-org",
+      "count": 1
+    },
+    {
+      "collective": "swift-ui-universal",
+      "count": 1
+    },
+    {
+      "collective": "swift-irc",
+      "count": 1
+    },
+    {
+      "collective": "service-universal",
+      "count": 1
+    }
   ],
   "representativeSpecFeatures": [
     "XcodeGen options with minimumXcodeGenVersion 2.38.0 or 2.39.0",
@@ -232,10 +352,22 @@
         "private/apple/spm/vaporize@wrkstrm-core.cli/tests/cuj-14-pkl-xcodeproj-generation/VaporizeCUJ14PklXcodeProjectGenerationTests.swift",
         "private/apple/spm/vaporize@wrkstrm-core.cli/tests/cuj-15-xcode-product-cache/VaporizeCUJ15XcodeProductCacheTests.swift",
         "private/apple/spm/vaporize@wrkstrm-core.cli/tests/cuj-16-target-features/VaporizeCUJ16TargetFeaturesTests.swift",
-        "private/apple/spm/vaporize@wrkstrm-core.cli/tests/cuj-17-release-doctor/VaporizeCUJ17ReleaseDoctorTests.swift"
+        "private/apple/spm/vaporize@wrkstrm-core.cli/tests/cuj-17-release-doctor/VaporizeCUJ17ReleaseDoctorTests.swift",
+        "private/apple/spm/vaporize@wrkstrm-core.cli/tests/cuj-18-list-targets/VaporizeCUJ18ListTargetsTests.swift"
       ],
-      "result": "CUJ coverage contract now requires 74 Swift test obligations plus 9 release evidence checks across 17 active CUJs; vaporize toolchain -- swift test passed 92 executable Swift tests across 17 implemented CUJ-specific SwiftPM bundles, including CUJ-16 target feature inspection and CUJ-17 release doctor.",
-      "boundary": "This expands release proof across major Vaporize features and includes the first Pkl-backed .xcodeproj generation slice plus shared Xcode workspace product-cache reuse; it does not prove fleet build parity or automatic workspace product discovery."
+      "result": "CUJ coverage contract now requires 79 Swift test obligations plus 10 release evidence checks across 18 active CUJs; vaporize toolchain -- swift test passed 97 executable Swift tests across 18 implemented CUJ-specific SwiftPM bundles, including CUJ-16 target feature inspection, CUJ-17 release doctor, and CUJ-18 project target discovery.",
+      "boundary": "This expands release proof across major Vaporize features and includes the first Pkl-backed .xcodeproj generation slice, project target discovery, and shared Xcode workspace product-cache reuse; it does not prove fleet build parity or automatic workspace product discovery."
+    },
+    {
+      "slice": "creative-selection-v0.2-project-target-discovery",
+      "status": "complete-with-boundary",
+      "surface": "list-targets",
+      "tests": [
+        "private/apple/spm/vaporize@wrkstrm-core.cli/tests/cuj-18-list-targets/VaporizeCUJ18ListTargetsTests.swift"
+      ],
+      "receipt": "private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/creative-selection-v0.2-list-targets.receipt.json",
+      "result": "list-targets discovered one buildable Creative Selection v0.2 target plus candidate scheme names, package count, source paths, and receipt boundaries from AppleProjectSpec Pkl.",
+      "boundary": "This discovers AppleProjectSpec routing facts only; it does not build, install, generate .xcodeproj world-state, discover the maintained workspace cache, or prove fleet parity."
     }
   ],
   "recommendedMigrationPlan": [
@@ -244,6 +376,7 @@
     "Model: author an AppleProjectSpec Pkl module for the common project.yml shape: options, settings, packages, targets, sources, info, scripts, schemes, and configurations.",
     "Shadow parity: for wrkstrm-core apps, express existing project.yml as Pkl and prove equivalence before project world-state generation. Concourse covers Pkl-to-YAML parity and Creative Selection v0.2 covers YAML-to-Pkl import parity.",
     "Owned generator: expand the Swift-owned generator path that consumes Pkl-evaluated project data and writes the .xcodeproj world-state with receipts.",
+    "Target discovery: use list-targets receipts to choose the next build, cache, parity, or migration route before claiming automatic workspace product discovery.",
     "Vaporize integration: extend generate-xcodeproj until it owns Pkl evaluation, project world-state generation, receipt emission, and app build/install composition.",
     "Cutover: migrate wrkstrm-core apps first, then generator/scaffold surfaces, then wrkstrm-app and wrkstrm-components fleet surfaces.",
     "Quarantine: tag any remaining XcodeGen path as historical, external, or compatibility-only; make release gates fail on unclassified substrate-owned XcodeGen use."
@@ -255,7 +388,7 @@
     "Do not claim v0.0.1 is internally releasable while Pkl project-generation evidence is missing."
   ],
   "nextConcreteWork": [
-    "Add a Pkl-backed .xcodeproj world-state generator and receipt.",
+    "Expand Pkl-backed .xcodeproj world-state generation and target discovery beyond Creative Selection v0.2.",
     "Add a Vaporize bead for release-gate enforcement that scans for unclassified substrate-owned XcodeGen invocations.",
     "Update versioned-macos-app-install workflow tool refs from xcodegen to Vaporize/Pkl generation once the owned mode exists."
   ]

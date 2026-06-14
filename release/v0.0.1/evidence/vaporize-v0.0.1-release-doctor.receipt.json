@@ -2,10 +2,10 @@
   "boundaries" : [
     "Release doctor audits release-spine coherence; it does not approve release.",
     "A pass can coexist with release gates that are honestly blocked.",
-    "First slice checks Vaporize v0.0.1 docs, JSON evidence, CUJ coverage, launch-review references, and provenance inventory.",
+    "First slice checks Vaporize v0.0.1 docs, JSON evidence, CUJ coverage, launch-review references, provenance inventory, and project target discovery evidence.",
     "Fleet project-generation parity, runtime sampling, build-size cohorts, and periodic buddy health remain separate follow-up checks."
   ],
-  "checkCount" : 33,
+  "checkCount" : 43,
   "checks" : [
     {
       "category" : "required-artifact",
@@ -97,6 +97,14 @@
     },
     {
       "category" : "required-artifact",
+      "detail" : "Required release-root artifact exists.",
+      "name" : "artifact:evidence\/creative-selection-v0.2-list-targets.receipt.json",
+      "path" : "\/Users\/sonoma\/mono\/private\/universal\/substrate\/collectives\/wrkstrm-core\/private\/apple\/spm\/vaporize@wrkstrm-core.cli\/release\/v0.0.1\/evidence\/creative-selection-v0.2-list-targets.receipt.json",
+      "severity" : "blocking",
+      "status" : "pass"
+    },
+    {
+      "category" : "required-artifact",
       "detail" : "Required package-root artifact exists.",
       "name" : "artifact:vaporize.engineering.docc\/index.md",
       "path" : "\/Users\/sonoma\/mono\/private\/universal\/substrate\/collectives\/wrkstrm-core\/private\/apple\/spm\/vaporize@wrkstrm-core.cli\/vaporize.engineering.docc\/index.md",
@@ -168,6 +176,14 @@
       "status" : "pass"
     },
     {
+      "category" : "json-validation",
+      "detail" : "JSON parses with Foundation JSONSerialization.",
+      "name" : "json:evidence\/creative-selection-v0.2-list-targets.receipt.json",
+      "path" : "\/Users\/sonoma\/mono\/private\/universal\/substrate\/collectives\/wrkstrm-core\/private\/apple\/spm\/vaporize@wrkstrm-core.cli\/release\/v0.0.1\/evidence\/creative-selection-v0.2-list-targets.receipt.json",
+      "severity" : "blocking",
+      "status" : "pass"
+    },
+    {
       "category" : "release-spine-text",
       "detail" : "Expected token `engineering pedigree` in product-definition.md.",
       "name" : "product-definition-engineering-pedigree",
@@ -185,8 +201,24 @@
     },
     {
       "category" : "release-spine-text",
+      "detail" : "Expected token `FR-028` in prd.md.",
+      "name" : "prd-project-target-discovery-requirement",
+      "path" : "\/Users\/sonoma\/mono\/private\/universal\/substrate\/collectives\/wrkstrm-core\/private\/apple\/spm\/vaporize@wrkstrm-core.cli\/release\/v0.0.1\/prd.md",
+      "severity" : "blocking",
+      "status" : "pass"
+    },
+    {
+      "category" : "release-spine-text",
       "detail" : "Expected token `CUJ-17` in cuj.md.",
       "name" : "cuj-release-doctor-journey",
+      "path" : "\/Users\/sonoma\/mono\/private\/universal\/substrate\/collectives\/wrkstrm-core\/private\/apple\/spm\/vaporize@wrkstrm-core.cli\/release\/v0.0.1\/cuj.md",
+      "severity" : "blocking",
+      "status" : "pass"
+    },
+    {
+      "category" : "release-spine-text",
+      "detail" : "Expected token `CUJ-18` in cuj.md.",
+      "name" : "cuj-project-target-discovery-journey",
       "path" : "\/Users\/sonoma\/mono\/private\/universal\/substrate\/collectives\/wrkstrm-core\/private\/apple\/spm\/vaporize@wrkstrm-core.cli\/release\/v0.0.1\/cuj.md",
       "severity" : "blocking",
       "status" : "pass"
@@ -201,8 +233,24 @@
     },
     {
       "category" : "release-spine-text",
+      "detail" : "Expected token `GATE-34-project-target-discovery` in release-gates.md.",
+      "name" : "gate-project-target-discovery",
+      "path" : "\/Users\/sonoma\/mono\/private\/universal\/substrate\/collectives\/wrkstrm-core\/private\/apple\/spm\/vaporize@wrkstrm-core.cli\/release\/v0.0.1\/release-gates.md",
+      "severity" : "blocking",
+      "status" : "pass"
+    },
+    {
+      "category" : "release-spine-text",
       "detail" : "Expected token `Release doctor` in vaporize.engineering.docc\/feature-catalog.md.",
       "name" : "feature-catalog-release-doctor",
+      "path" : "\/Users\/sonoma\/mono\/private\/universal\/substrate\/collectives\/wrkstrm-core\/private\/apple\/spm\/vaporize@wrkstrm-core.cli\/vaporize.engineering.docc\/feature-catalog.md",
+      "severity" : "blocking",
+      "status" : "pass"
+    },
+    {
+      "category" : "release-spine-text",
+      "detail" : "Expected token `Project target discovery` in vaporize.engineering.docc\/feature-catalog.md.",
+      "name" : "feature-catalog-project-target-discovery",
       "path" : "\/Users\/sonoma\/mono\/private\/universal\/substrate\/collectives\/wrkstrm-core\/private\/apple\/spm\/vaporize@wrkstrm-core.cli\/vaporize.engineering.docc\/feature-catalog.md",
       "severity" : "blocking",
       "status" : "pass"
@@ -233,8 +281,24 @@
     },
     {
       "category" : "launch-review",
+      "detail" : "Launch-review packet must include the project target discovery gate.",
+      "name" : "launch-review-gate-34",
+      "path" : "\/Users\/sonoma\/mono\/private\/universal\/substrate\/collectives\/wrkstrm-core\/private\/apple\/spm\/vaporize@wrkstrm-core.cli\/release\/v0.0.1\/evidence\/launch-review-packet.json",
+      "severity" : "blocking",
+      "status" : "pass"
+    },
+    {
+      "category" : "launch-review",
       "detail" : "Launch-review packet must reference the release-doctor receipt.",
       "name" : "launch-review-release-doctor-evidence-ref",
+      "path" : "\/Users\/sonoma\/mono\/private\/universal\/substrate\/collectives\/wrkstrm-core\/private\/apple\/spm\/vaporize@wrkstrm-core.cli\/release\/v0.0.1\/evidence\/launch-review-packet.json",
+      "severity" : "blocking",
+      "status" : "pass"
+    },
+    {
+      "category" : "launch-review",
+      "detail" : "Launch-review packet must reference the project target discovery receipt.",
+      "name" : "launch-review-project-target-discovery-evidence-ref",
       "path" : "\/Users\/sonoma\/mono\/private\/universal\/substrate\/collectives\/wrkstrm-core\/private\/apple\/spm\/vaporize@wrkstrm-core.cli\/release\/v0.0.1\/evidence\/launch-review-packet.json",
       "severity" : "blocking",
       "status" : "pass"
@@ -248,16 +312,24 @@
       "status" : "pass"
     },
     {
+      "category" : "provenance",
+      "detail" : "Provenance must inventory the project target discovery receipt.",
+      "name" : "provenance-project-target-discovery-receipt",
+      "path" : "\/Users\/sonoma\/mono\/private\/universal\/substrate\/collectives\/wrkstrm-core\/private\/apple\/spm\/vaporize@wrkstrm-core.cli\/release\/v0.0.1\/evidence\/vaporize-v0.0.1-provenance-artifact.json",
+      "severity" : "blocking",
+      "status" : "pass"
+    },
+    {
       "category" : "cuj-coverage",
-      "detail" : "Coverage artifact must count CUJ-17 release doctor.",
-      "name" : "coverage-active-cuj-17",
+      "detail" : "Coverage artifact must count CUJ-18 project target discovery.",
+      "name" : "coverage-active-cuj-18",
       "path" : "\/Users\/sonoma\/mono\/private\/universal\/substrate\/collectives\/wrkstrm-core\/private\/apple\/spm\/vaporize@wrkstrm-core.cli\/release\/v0.0.1\/evidence\/cuj-test-coverage.json",
       "severity" : "blocking",
       "status" : "pass"
     },
     {
       "category" : "cuj-coverage",
-      "detail" : "Coverage artifact must include the release-doctor evidence obligation.",
+      "detail" : "Coverage artifact must include the release-doctor and target discovery evidence obligations.",
       "name" : "coverage-release-evidence-floor",
       "path" : "\/Users\/sonoma\/mono\/private\/universal\/substrate\/collectives\/wrkstrm-core\/private\/apple\/spm\/vaporize@wrkstrm-core.cli\/release\/v0.0.1\/evidence\/cuj-test-coverage.json",
       "severity" : "blocking",
@@ -270,6 +342,14 @@
       "path" : "\/Users\/sonoma\/mono\/private\/universal\/substrate\/collectives\/wrkstrm-core\/private\/apple\/spm\/vaporize@wrkstrm-core.cli\/release\/v0.0.1\/evidence\/cuj-test-coverage.json",
       "severity" : "blocking",
       "status" : "pass"
+    },
+    {
+      "category" : "cuj-coverage",
+      "detail" : "Coverage artifact must name the CUJ-18 targetable test bundle.",
+      "name" : "coverage-project-target-discovery-test-bundle",
+      "path" : "\/Users\/sonoma\/mono\/private\/universal\/substrate\/collectives\/wrkstrm-core\/private\/apple\/spm\/vaporize@wrkstrm-core.cli\/release\/v0.0.1\/evidence\/cuj-test-coverage.json",
+      "severity" : "blocking",
+      "status" : "pass"
     }
   ],
   "doctorPhase" : "release-spine-first-slice",
@@ -277,11 +357,11 @@
   "inspectedPath" : "\/Users\/sonoma\/mono\/private\/universal\/substrate\/collectives\/wrkstrm-core\/private\/apple\/spm\/vaporize@wrkstrm-core.cli",
   "overallStatus" : "pass",
   "packageRootPath" : "\/Users\/sonoma\/mono\/private\/universal\/substrate\/collectives\/wrkstrm-core\/private\/apple\/spm\/vaporize@wrkstrm-core.cli",
-  "passedCheckCount" : 33,
+  "passedCheckCount" : 43,
   "receiptKind" : "vaporize-release-doctor",
   "releaseRootPath" : "\/Users\/sonoma\/mono\/private\/universal\/substrate\/collectives\/wrkstrm-core\/private\/apple\/spm\/vaporize@wrkstrm-core.cli\/release\/v0.0.1",
-  "requestId" : "vaporize-release-doctor-A69A73D9-5AC2-4668-BF22-BD4FF95FB853",
-  "requiredArtifactCount" : 17,
+  "requestId" : "vaporize-release-doctor-33C7C369-3889-4DE5-AAF1-A67D1698DE93",
+  "requiredArtifactCount" : 18,
   "schemaFamilySlug" : "vaporize-schemas",
   "schemaFamilyVersion" : "0.0.1",
   "schemaRef" : "private\/universal\/domain\/tooling\/schema-families\/vaporize-schemas\/v0.0.1\/json\/vaporize-schemas-v000-000-001\/schemas\/vaporize-release-doctor-receipt\/vaporize-release-doctor-receipt.schema.json",

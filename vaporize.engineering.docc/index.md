@@ -60,6 +60,7 @@ Primary release surfaces:
 - `release/v0.0.1/evidence/cuj-test-coverage.json`
 - `release/v0.0.1/evidence/vaporize-v0.0.1-provenance-artifact.json`
 - `release/v0.0.1/evidence/vaporize-v0.0.1-release-doctor.receipt.json`
+- `release/v0.0.1/evidence/creative-selection-v0.2-list-targets.receipt.json`
 
 Primary schema surface:
 

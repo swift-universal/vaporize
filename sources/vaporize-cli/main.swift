@@ -27,8 +27,9 @@ struct VaporizeCLI: AsyncParsableCommand {
       import-project-yml emits a Pkl parity specimen from legacy YAML; \
       generate-project-yml emits transitional AppleProjectSpec YAML from Pkl \
       with receipts; generate-xcodeproj emits first-slice .xcodeproj \
-      world-state from evaluated AppleProjectSpec Pkl; release-doctor audits \
-      the release spine before claims are trusted. \
+      world-state from evaluated AppleProjectSpec Pkl; list-targets discovers \
+      project targets, packages, and schemes for parity/build routing; \
+      release-doctor audits the release spine before claims are trusted. \
       Legacy `inventory` and `x-craze-collapse-path` remain compatibility \
       aliases during migration.
       Target feature inspection mode: inspect-target-features reads a project.yml \
@@ -58,6 +59,7 @@ struct VaporizeCLI: AsyncParsableCommand {
     case importProjectYML = "import-project-yml"
     case generateProjectYML = "generate-project-yml"
     case generateXcodeProject = "generate-xcodeproj"
+    case listTargets = "list-targets"
     case releaseDoctor = "release-doctor"
     case inventory
 
@@ -79,7 +81,7 @@ struct VaporizeCLI: AsyncParsableCommand {
     case app
   }
 
-  @Argument(help: "Mode: install, uninstall, build, test, run, pass, use, toolchain, setup, status, warehouse, validate-json, inspect-project-yml, inspect-target-features, compare-project-yml-pkl, import-project-yml, generate-project-yml, generate-xcodeproj, release-doctor, inventory, or graph (forwards to package-graph@wrkstrm.cli).")
+  @Argument(help: "Mode: install, uninstall, build, test, run, pass, use, toolchain, setup, status, warehouse, validate-json, inspect-project-yml, inspect-target-features, compare-project-yml-pkl, import-project-yml, generate-project-yml, generate-xcodeproj, list-targets, release-doctor, inventory, or graph (forwards to package-graph@wrkstrm.cli).")
   var mode: Mode
 
   @Option(name: .customLong("artifact"), help: "Artifact kind: cli or app.")
@@ -204,12 +206,12 @@ struct VaporizeCLI: AsyncParsableCommand {
 
   @Option(
     name: .customLong("path"),
-    help: "Path for status, warehouse, validate-json, inspect-project-yml, inspect-target-features, compare-project-yml-pkl, or import-project-yml modes.")
+    help: "Path for status, warehouse, validate-json, inspect-project-yml, inspect-target-features, compare-project-yml-pkl, import-project-yml, or list-targets modes.")
   var vaporScanPath: String?
 
   @Option(
     name: .customLong("pkl-path"),
-    help: "Path to an AppleProjectSpec Pkl record for compare-project-yml-pkl, generate-project-yml, or generate-xcodeproj mode.")
+    help: "Path to an AppleProjectSpec Pkl record for compare-project-yml-pkl, generate-project-yml, generate-xcodeproj, or list-targets mode.")
   var pklPath: String?
 
   @Option(
@@ -224,7 +226,7 @@ struct VaporizeCLI: AsyncParsableCommand {
 
   @Option(
     name: .customLong("format"),
-    help: "Output format for status, inspect-project-yml, inspect-target-features, compare-project-yml-pkl, import-project-yml, generate-project-yml, or generate-xcodeproj mode: text (default) or json.")
+    help: "Output format for status, inspect-project-yml, inspect-target-features, compare-project-yml-pkl, import-project-yml, generate-project-yml, generate-xcodeproj, list-targets, or release-doctor mode: text (default) or json.")
   var vaporOutputFormat: VaporOutputFormatArgument = .text
 
   @Argument(parsing: .remaining, help: "Arguments forwarded to test, run, pass, or toolchain mode.")
@@ -268,6 +270,8 @@ struct VaporizeCLI: AsyncParsableCommand {
       try await generateProjectYML()
     case .generateXcodeProject:
       try await generateXcodeProject()
+    case .listTargets:
+      try await listTargets()
     case .releaseDoctor:
       try await releaseDoctor()
     case .inventory:
@@ -1036,6 +1040,48 @@ struct VaporizeCLI: AsyncParsableCommand {
         "project.pkl -> xcodeproj: \(receipt.projectName) targets=\(receipt.targetCount) sources=\(receipt.sourceFileCount) resources=\(receipt.resourceFileCount) bytes=\(receipt.generatedByteCount)"
       )
       print(receipt.boundary)
+    case .json:
+      let encoder = JSONEncoder()
+      encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
+      let data = try encoder.encode(receipt)
+      FileHandle.standardOutput.write(data)
+      FileHandle.standardOutput.write(Data("\n".utf8))
+    }
+  }
+
+  private func listTargets() async throws {
+    let requestId = "vaporize-list-targets-\(UUID().uuidString)"
+    let receipt: AppleProjectTargetDiscoveryReceipt
+    if let pklPath, !pklPath.isEmpty {
+      receipt = try await AppleProjectTargetDiscovery.discover(
+        pklURL: URL(fileURLWithPath: pklPath),
+        requestId: requestId
+      )
+    } else if let vaporScanPath, !vaporScanPath.isEmpty {
+      receipt = try await AppleProjectTargetDiscovery.discover(
+        path: vaporScanPath,
+        requestId: requestId
+      )
+    } else if let packagePath, !packagePath.isEmpty {
+      receipt = try await AppleProjectTargetDiscovery.discover(
+        projectDirectoryURL: URL(fileURLWithPath: packagePath),
+        requestId: requestId
+      )
+    } else {
+      throw ValidationError("--path, --pkl-path, or --package-path is required for list-targets mode.")
+    }
+    try emitReceiptIfRequested(receipt)
+
+    switch vaporOutputFormat {
+    case .text:
+      print(
+        "targets: \(receipt.projectName) input=\(receipt.inputKind) targets=\(receipt.targetCount) buildable=\(receipt.buildableTargetNames.count) schemes=\(receipt.schemeCount) packages=\(receipt.packageCount)"
+      )
+      for target in receipt.targets {
+        let buildable = target.isBuildableCandidate ? " buildable" : ""
+        print("- \(target.name): type=\(target.type ?? "<nil>") platform=\(target.platform ?? "<nil>") product=\(target.productName)\(buildable)")
+      }
+      print(receipt.boundaries[0])
     case .json:
       let encoder = JSONEncoder()
       encoder.outputFormatting = [.prettyPrinted, .sortedKeys]

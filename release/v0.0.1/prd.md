@@ -130,6 +130,9 @@ future hardware or other material-domain request families.
   treating YAML as the forward source of truth.
 - Provide `generate-xcodeproj` so an evaluated AppleProjectSpec Pkl specimen can
   emit first-slice `.xcodeproj` world-state with a receipt.
+- Provide `list-targets` so an assistant can discover Apple project targets,
+  buildable candidates, packages, and schemes from AppleProjectSpec Pkl or
+  legacy `project.yml` before routing Pkl parity, build, install, or cache work.
 - Provide shared Xcode workspace product-cache reuse so a warm large workspace
   DerivedData product can satisfy app installs before local rebuilds.
 - Define a Kura-queryable runtime sample series and Apple/Swift native artifact
@@ -167,9 +170,8 @@ future hardware or other material-domain request families.
 - Do not make XcodeGen integration the forward canonical path for
   substrate-owned apps. XcodeGen may remain as legacy compatibility, but the
   internal release path moves our owned generation surfaces to Pkl.
-- Do not block this release on `list-targets`, `realize`, auto-incremented
-  build numbers, or full tool-call observability; those remain tracked release
-  follow-ups.
+- Do not block this release on `realize`, auto-incremented build numbers, or
+  full tool-call observability; those remain tracked release follow-ups.
 - Do not remove historical compatibility understanding for legacy `craze`
   records; this release can classify legacy annotation keys while naming
   Vaporize as the forward canonical surface.
@@ -220,16 +222,17 @@ Supporting audiences:
 | FR-025 | Pre-code PRD review session | Major feature work must record an Engineering, QA, and Marketing PRD review session before coding starts. The session must decide `GO`, `GO-WITH-NOTES`, or `NO-GO`, and must name approved scope, required tests, required release evidence, approved claims, prohibited claims, and blockers. |
 | FR-026 | Vaporware modification request release discipline | Behavior-changing vaporware modification requests create or attach to a feature flag, feature status record, or release-feature cohort; add or update targetable tests; run the smallest feature-scoped proof; update release evidence and schema fixtures when affected; and record any no-flag exception explicitly. |
 | FR-027 | Release doctor spine audit | `release-doctor --path <package-or-release-root>` emits a `vaporize-release-doctor` receipt that verifies required release artifacts exist, evidence JSON parses, PRD/CUJ/gate/catalog surfaces name the release-doctor slice, launch-review references the gate and receipt, provenance inventories the receipt, and CUJ coverage counts CUJ-17. The command audits coherence; it does not approve final release. |
+| FR-028 | Project target discovery | `list-targets --pkl-path <project.pkl>` or `list-targets --package-path <project-dir>` emits a `vaporize-project-target-discovery` receipt that names target, package, scheme, and buildable-candidate facts from AppleProjectSpec. The command discovers routing facts; it does not build, install, generate `.xcodeproj` world-state, or prove fleet parity. |
 
 ## Release Criteria
 
 - Vaporize's package test suite passes with the Swift 6.4 toolchain:
   `vaporize toolchain -- swift test --package-path private/apple/spm/vaporize@wrkstrm-core.cli`.
-  Current proof: the CUJ-derived coverage floor requires 74 Swift test
-  obligations plus 9 release evidence checks; the executable suite passes 92
-  tests across 17 implemented CUJ targets, including the CUJ-16
-  `inspect-target-features` first slice and CUJ-17 `release-doctor` first
-  slice.
+  Current proof: the CUJ-derived coverage floor requires 79 Swift test
+  obligations plus 10 release evidence checks; the executable suite passes 97
+  tests across 18 implemented CUJ targets, including the CUJ-16
+  `inspect-target-features` first slice, CUJ-17 `release-doctor` first slice,
+  and CUJ-18 `list-targets` first slice.
 - `release/v0.0.1/product-definition.md` defines the product, primary users,
   product-level user journeys, choice argument, non-choice cases, and build
   implications before additional feature work is accepted.
@@ -246,7 +249,7 @@ Supporting audiences:
 - CLI help advertises `use`, `toolchain`, `validate-json`,
   `inspect-project-yml`, `compare-project-yml-pkl`, `import-project-yml`,
   `generate-project-yml`, `generate-xcodeproj`, `inspect-target-features`,
-  `release-doctor`, `--common-process-spec`,
+  `list-targets`, `release-doctor`, `--common-process-spec`,
   `--xcode-product-cache-workspace`, and `--xcode-product-cache-derived-data-path`.
 - Release packet JSON validates with
   `vaporize validate-json --path release/v0.0.1/evidence/launch-review-packet.json`.
@@ -294,6 +297,8 @@ Supporting audiences:
   `vaporize validate-json --path release/v0.0.1/evidence/creative-selection-v0.2-project-yml-pkl-comparison.receipt.json`.
 - Creative Selection v0.2 Pkl `.xcodeproj` generation receipt validates with
   `vaporize validate-json --path release/v0.0.1/evidence/creative-selection-v0.2-pkl-xcodeproj-generation.receipt.json`.
+- Creative Selection v0.2 target discovery receipt validates with
+  `vaporize validate-json --path release/v0.0.1/evidence/creative-selection-v0.2-list-targets.receipt.json`.
 - Release evidence classifies Vaporize as an internal essential tool rather
   than a public release artifact.
 - Pkl-backed `.xcodeproj` world-state generation has fleet build parity for
@@ -306,7 +311,6 @@ Supporting audiences:
 
 ## Known Release Follow-Ups
 
-- `FR-VAPORIZE-LIST-TARGETS-substrate-canonical-target-discovery`
 - `FR-VAPORIZE-PKL-PROJECT-GENERATION-move-owned-xcodegen-surfaces-to-pkl`
 - `FR-VAPORIZE-AUTO-INCREMENT-BUILD-NUMBERS`
 - `FR-VAPORIZE-REALIZE-typed-vaporware-unit`

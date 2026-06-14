@@ -23,10 +23,12 @@ The current stages are:
 3. Import legacy YAML into Pkl.
 4. Generate transitional YAML from Pkl.
 5. Generate first-slice `.xcodeproj` world-state from Pkl.
-6. Prove build parity across owned Apple surfaces.
-7. Quarantine or retire remaining XcodeGen surfaces.
+6. Discover target, package, scheme, and buildable-candidate facts from
+   AppleProjectSpec.
+7. Prove build parity across owned Apple surfaces.
+8. Quarantine or retire remaining XcodeGen surfaces.
 
-Stages 1 through 5 have first-slice evidence. Stage 6 and the final disposition
+Stages 1 through 6 have first-slice evidence. Stage 7 and the final disposition
 of remaining XcodeGen surfaces are still release blockers.
 
 ## Why Pkl
@@ -53,6 +55,7 @@ Important specimens include:
 - `creative-selection-v0.2-project-yml-pkl-import.receipt.json`
 - `creative-selection-v0.2-project-yml-pkl-comparison.receipt.json`
 - `creative-selection-v0.2-pkl-xcodeproj-generation.receipt.json`
+- `creative-selection-v0.2-list-targets.receipt.json`
 
 These receipts prove slices. They do not by themselves prove fleet build parity.
 

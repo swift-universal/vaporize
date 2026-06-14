@@ -35,7 +35,9 @@ func releaseDoctorPassesLiveReleaseSpine() throws {
   #expect(receipt.overallStatus == "pass")
   #expect(receipt.failedCheckCount == 0)
   #expect(receipt.checks.contains { $0.name == "launch-review-gate-33" && $0.status == "pass" })
+  #expect(receipt.checks.contains { $0.name == "launch-review-gate-34" && $0.status == "pass" })
   #expect(receipt.checks.contains { $0.name == "coverage-release-doctor-test-bundle" && $0.status == "pass" })
+  #expect(receipt.checks.contains { $0.name == "coverage-project-target-discovery-test-bundle" && $0.status == "pass" })
 }
 
 @Test("CUJ-17 release doctor can inspect from the release root")
@@ -112,13 +114,13 @@ private func makeReleaseDoctorFixture(includeGate33: Bool) throws -> URL {
     case "release/v0.0.1/product-definition.md":
       contents = "engineering pedigree"
     case "release/v0.0.1/prd.md":
-      contents = "FR-027"
+      contents = "FR-027 FR-028"
     case "release/v0.0.1/cuj.md":
-      contents = "CUJ-17"
+      contents = "CUJ-17 CUJ-18"
     case "release/v0.0.1/release-gates.md":
-      contents = includeGate33 ? "GATE-33-release-doctor" : "GATE-32"
+      contents = includeGate33 ? "GATE-33-release-doctor GATE-34-project-target-discovery" : "GATE-32 GATE-34-project-target-discovery"
     case "vaporize.engineering.docc/feature-catalog.md":
-      contents = "Release doctor"
+      contents = "Release doctor Project target discovery"
     case "vaporize.engineering.docc/vaporware-modification-request-discipline.md":
       contents = "vaporware scaffold feature-request"
     default:
@@ -135,10 +137,12 @@ private func makeReleaseDoctorFixture(includeGate33: Bool) throws -> URL {
     {
       "subjectAppSlug": "vaporize@wrkstrm-core.cli",
       "evidenceRefs": [
-        { "t": "Release doctor receipt" }
+        { "t": "Release doctor receipt" },
+        { "t": "Creative Selection v0.2 target discovery receipt" }
       ],
       "gateResults": [
-        \(gateResults)
+        \(gateResults),
+        { "gateRef": "GATE-34-project-target-discovery", "status": "pass", "rationale": "fixture" }
       ]
     }
     """,
@@ -149,7 +153,8 @@ private func makeReleaseDoctorFixture(includeGate33: Bool) throws -> URL {
     """
     {
       "receiptInventory": [
-        { "receiptKind": "vaporize-release-doctor" }
+        { "receiptKind": "vaporize-release-doctor" },
+        { "receiptKind": "vaporize-project-target-discovery" }
       ]
     }
     """,
@@ -160,15 +165,21 @@ private func makeReleaseDoctorFixture(includeGate33: Bool) throws -> URL {
     """
     {
       "counts": {
-        "activeCUJCount": 17,
-        "requiredReleaseEvidenceCheckCount": 9,
+        "activeCUJCount": 18,
+        "requiredReleaseEvidenceCheckCount": 10,
         "currentExecutableSwiftTestBreakdown": {
-          "VaporizeCUJ17ReleaseDoctorTests": 5
+          "VaporizeCUJ17ReleaseDoctorTests": 5,
+          "VaporizeCUJ18ListTargetsTests": 5
         }
       }
     }
     """,
     to: releaseRoot.appendingPathComponent("evidence/cuj-test-coverage.json")
+  )
+
+  try write(
+    #"{"receiptKind":"vaporize-project-target-discovery"}"#,
+    to: releaseRoot.appendingPathComponent("evidence/creative-selection-v0.2-list-targets.receipt.json")
   )
 
   return packageRoot

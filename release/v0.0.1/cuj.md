@@ -19,6 +19,7 @@ one product-level journey.
 | Assistant emits receipts for CommonProcess command execution | CUJ-03, CUJ-04 |
 | Assistant inventories vaporware state from substrate records | CUJ-07 |
 | Assistant migrates Apple project generation from legacy `project.yml` toward Pkl-backed truth with receipts at every boundary | CUJ-08, CUJ-10, CUJ-11, CUJ-13, CUJ-14 |
+| Assistant discovers Apple project targets, buildable candidates, packages, and schemes before routing build/cache/parity work | CUJ-18 |
 | Assistant reuses a warm Xcode workspace product cache instead of rebuilding locally when the shared product already exists | CUJ-15 |
 | Release reviewer evaluates product definition, PRD review session, vaporware modification request discipline, user journeys, choice argument, evidence, gates, and blockers without relying on chat memory | CUJ-09 |
 | Assistant audits release-spine coherence before trusting a vaporware packet | CUJ-17 |
@@ -412,6 +413,35 @@ Failure truth:
 - Periodic vaporware buddy health, automatic runtime samples, and build-watch
   repair loops are follow-up features.
 
+## CUJ-18 - Assistant Discovers Project Targets Through Vaporize
+
+1. Assistant receives an Apple project directory, legacy `project.yml`, or
+   AppleProjectSpec Pkl specimen.
+2. Assistant runs `vaporize list-targets --package-path <project-dir>` or
+   `vaporize list-targets --pkl-path <project.pkl>`.
+3. Vaporize reads the selected AppleProjectSpec source.
+4. Vaporize emits a `vaporize-project-target-discovery` receipt that names
+   target, package, scheme, and buildable-candidate facts.
+5. Assistant uses the receipt to choose the next parity, build, install, cache,
+   or migration route.
+
+Success:
+
+- Directory input prefers `project.pkl` and falls back to `project.yml`.
+- The receipt names target kinds, source paths, configuration names,
+  post-build-script presence, package names, scheme names, and buildable target
+  candidates.
+- Creative Selection v0.2 proves target discovery from the forward Pkl
+  specimen before deeper workspace-cache discovery is attempted.
+
+Failure truth:
+
+- A directory without `project.pkl` or `project.yml` fails at the project-spec
+  boundary.
+- This first slice discovers routing facts. It does not build, install,
+  generate `.xcodeproj` world-state, infer the whole workspace product cache, or
+  prove fleet parity.
+
 ## Test Coverage Contract
 
 Test count is derived from PRD requirements through the active draft CUJs.
@@ -437,13 +467,14 @@ must know the required floor.
 | CUJ-15 | FR-003, FR-021 | 4 |
 | CUJ-16 | FR-023, FR-024 | 5 Swift tests; 1 release evidence check |
 | CUJ-17 | FR-027 | 5 Swift tests; 1 release evidence check |
+| CUJ-18 | FR-028 | 5 Swift tests; 1 release evidence check |
 
 Current active-CUJ requirement:
 
-- Required Swift test obligations: 74
-- Required release evidence checks: 9
-- Required targetable test obligations: 83
-- Current executable Swift tests: 92 across 17 implemented CUJ-specific SwiftPM
+- Required Swift test obligations: 79
+- Required release evidence checks: 10
+- Required targetable test obligations: 89
+- Current executable Swift tests: 97 across 18 implemented CUJ-specific SwiftPM
   bundles
 - Coverage artifact:
   `release/v0.0.1/evidence/cuj-test-coverage.json`
@@ -474,17 +505,3 @@ Current status:
 - Shared workspace product-cache reuse may speed this journey once the fleet is
   known to be present in the maintained workspace, but CUJ-15 does not replace
   fleet parity proof.
-
-## Deferred CUJ - Assistant Discovers Targets Through Vaporize
-
-This journey is important but not v0.0.1-green yet.
-
-1. Assistant receives a directory and desired artifact.
-2. Assistant runs `vaporize list-targets --package-path <dir>`.
-3. Vaporize emits a typed target discovery receipt.
-4. Assistant builds or installs from that receipt.
-
-Current status:
-
-- Deferred to
-  `FR-VAPORIZE-LIST-TARGETS-substrate-canonical-target-discovery`.

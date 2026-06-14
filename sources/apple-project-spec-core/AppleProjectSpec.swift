@@ -739,6 +739,8 @@ public enum VaporizeAppleProjectReceiptSchema {
     "\(schemaRoot)/pkl-xcode-project-generation-receipt/pkl-xcode-project-generation-receipt.schema.json"
   public static let targetFeaturesInspectionSchemaRef =
     "\(schemaRoot)/target-features-inspection-receipt/target-features-inspection-receipt.schema.json"
+  public static let targetDiscoverySchemaRef =
+    "\(schemaRoot)/project-target-discovery-receipt/project-target-discovery-receipt.schema.json"
 }
 
 public struct AppleProjectSpecComparisonReceipt: Codable, Equatable, Sendable {

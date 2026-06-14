@@ -26,6 +26,7 @@ func releaseReviewArtifactsExist() {
     "release/v0.0.1/evidence/launch-review-packet.json",
     "release/v0.0.1/evidence/hello-world-google-target-features-inspection.receipt.json",
     "release/v0.0.1/evidence/vaporize-v0.0.1-release-doctor.receipt.json",
+    "release/v0.0.1/evidence/creative-selection-v0.2-list-targets.receipt.json",
   ] {
     #expect(FileManager.default.fileExists(atPath: packageRoot.appendingPathComponent(relativePath).path))
   }
@@ -49,6 +50,7 @@ func launchReviewPacketIsValidJSONAndInternalEssential() throws {
   #expect(gateResults.contains { $0["gateRef"] as? String == "GATE-31-pre-code-prd-review-session" })
   #expect(gateResults.contains { $0["gateRef"] as? String == "GATE-32-vaporware-modification-request-discipline" })
   #expect(gateResults.contains { $0["gateRef"] as? String == "GATE-33-release-doctor" })
+  #expect(gateResults.contains { $0["gateRef"] as? String == "GATE-34-project-target-discovery" })
 }
 
 @Test("CUJ-09 CUJ coverage contract is valid JSON and names the floor")
@@ -56,12 +58,12 @@ func cujCoverageContractIsValidJSONAndNamesTheFloor() throws {
   let coverage = try readJSONObject(relativePath: "release/v0.0.1/evidence/cuj-test-coverage.json")
   let counts = try #require(coverage["counts"] as? [String: Any])
 
-  #expect(counts["activeCUJCount"] as? Int == 17)
-  #expect(counts["deferredCUJCount"] as? Int == 2)
-  #expect(counts["requiredSwiftTestObligationCount"] as? Int == 74)
-  #expect(counts["requiredReleaseEvidenceCheckCount"] as? Int == 9)
-  #expect(counts["requiredTargetableTestObligationCount"] as? Int == 83)
-  #expect(counts["currentExecutableSwiftTestCount"] as? Int == 92)
+  #expect(counts["activeCUJCount"] as? Int == 18)
+  #expect(counts["deferredCUJCount"] as? Int == 1)
+  #expect(counts["requiredSwiftTestObligationCount"] as? Int == 79)
+  #expect(counts["requiredReleaseEvidenceCheckCount"] as? Int == 10)
+  #expect(counts["requiredTargetableTestObligationCount"] as? Int == 89)
+  #expect(counts["currentExecutableSwiftTestCount"] as? Int == 97)
 }
 
 @Test("CUJ-09 product definition contract precedes build work")
@@ -93,11 +95,13 @@ func productDefinitionContractPrecedesBuildWork() throws {
   #expect(prd.contains("FR-025"))
   #expect(prd.contains("FR-026"))
   #expect(prd.contains("FR-027"))
+  #expect(prd.contains("FR-028"))
   #expect(prd.contains("FR-VAPORIZE-RUNTIME-SAMPLE-SERIES-APPLE-ARTIFACT-INGESTION"))
   #expect(prdReview.contains("Decision: `GO-WITH-NOTES`"))
   #expect(prdReview.contains("Engineering, QA, and Marketing"))
   #expect(cuj.contains("Product-Level User Journey Map"))
   #expect(cuj.contains("CUJ-17"))
+  #expect(cuj.contains("CUJ-18"))
   #expect(why.contains("product-definition.md"))
   #expect(why.contains("engineering pedigree"))
   #expect(why.contains("vaporize-runtime-samples"))
@@ -113,6 +117,7 @@ func productDefinitionContractPrecedesBuildWork() throws {
   #expect(gates.contains("GATE-31"))
   #expect(gates.contains("GATE-32"))
   #expect(gates.contains("GATE-33"))
+  #expect(gates.contains("GATE-34"))
   #expect(engineeringDocs.contains("wrkstrm.com/engineering"))
   #expect(engineeringDocs.contains("The package-local engineering catalog explains the system. The release packet"))
   #expect(engineeringDocs.contains("pre-code-prd-review"))
@@ -130,6 +135,7 @@ func productDefinitionContractPrecedesBuildWork() throws {
   #expect(featureCatalog.contains("Feature-scoped test lifecycle"))
   #expect(featureCatalog.contains("Pre-code PRD review"))
   #expect(featureCatalog.contains("Release doctor"))
+  #expect(featureCatalog.contains("Project target discovery"))
   #expect(featureCatalog.contains("correct ownership home"))
   #expect(releaseDoctor.contains("release-spine self-audit command"))
   #expect(releaseDoctor.contains("vaporware scaffold"))

@@ -214,6 +214,16 @@ let package = Package(
       path: "tests/cuj-17-release-doctor"
     ),
     .testTarget(
+      name: "VaporizeCUJ18ListTargetsTests",
+      dependencies: [
+        "AppleProjectSpecCore",
+        "VaporizeCLI",
+        "VaporizeTestSupport",
+        .product(name: "ArgumentParser", package: "swift-argument-parser"),
+      ],
+      path: "tests/cuj-18-list-targets"
+    ),
+    .testTarget(
       name: "VaporizeCUJ12PackageGraphTests",
       dependencies: [
         "VaporizeCLI",

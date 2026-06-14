@@ -7,7 +7,7 @@
   "coverageId": "vaporize-v0.0.1-cuj-test-coverage",
   "subjectAppSlug": "vaporize@wrkstrm-core.cli",
   "subjectReleaseSlug": "v0.0.1",
-  "generatedAt": "2026-06-14T02:29:38Z",
+  "generatedAt": "2026-06-14T03:20:00Z",
   "generatedBy": "codex-crisie",
   "status": "active-cuj-coverage-floor-defined",
   "sourceRule": "Required test count is derived from PRD requirements through active draft CUJs. Actual executable tests may exceed the required floor.",
@@ -17,12 +17,12 @@
     "releaseGates": "private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/release-gates.md"
   },
   "counts": {
-    "activeCUJCount": 17,
-    "deferredCUJCount": 2,
-    "requiredSwiftTestObligationCount": 74,
-    "requiredReleaseEvidenceCheckCount": 9,
-    "requiredTargetableTestObligationCount": 83,
-    "currentExecutableSwiftTestCount": 92,
+    "activeCUJCount": 18,
+    "deferredCUJCount": 1,
+    "requiredSwiftTestObligationCount": 79,
+    "requiredReleaseEvidenceCheckCount": 10,
+    "requiredTargetableTestObligationCount": 89,
+    "currentExecutableSwiftTestCount": 97,
     "currentExecutableSwiftTestBreakdown": {
       "VaporizeCUJ01SwiftPMCLITests": 7,
       "VaporizeCUJ02MacAppTests": 14,
@@ -40,7 +40,8 @@
       "VaporizeCUJ14PklXcodeProjectGenerationTests": 3,
       "VaporizeCUJ15XcodeProductCacheTests": 4,
       "VaporizeCUJ16TargetFeaturesTests": 5,
-      "VaporizeCUJ17ReleaseDoctorTests": 5
+      "VaporizeCUJ17ReleaseDoctorTests": 5,
+      "VaporizeCUJ18ListTargetsTests": 5
     }
   },
   "coverage": [
@@ -239,6 +240,21 @@
         "release-gates.md",
         "launch-review-packet.json"
       ]
+    },
+    {
+      "cuj": "CUJ-18",
+      "title": "Assistant Discovers Project Targets Through Vaporize",
+      "prdRefs": ["FR-028"],
+      "requiredSwiftTestObligations": 5,
+      "requiredReleaseEvidenceChecks": 1,
+      "status": "covered-with-boundary",
+      "evidence": [
+        "VaporizeCUJ18ListTargetsTests.swift",
+        "creative-selection-v0.2-list-targets.receipt.json",
+        "project-target-discovery-receipt.schema.json",
+        "release-gates.md",
+        "launch-review-packet.json"
+      ]
     }
   ],
   "deferredCoverage": [
@@ -246,11 +262,6 @@
       "title": "Assistant Proves Fleet Pkl-Backed Apple Project Build Parity",
       "blockingRef": "FR-VAPORIZE-PKL-PROJECT-GENERATION-move-owned-xcodegen-surfaces-to-pkl",
       "status": "deferred-release-blocking"
-    },
-    {
-      "title": "Assistant Discovers Targets Through Vaporize",
-      "blockingRef": "FR-VAPORIZE-LIST-TARGETS-substrate-canonical-target-discovery",
-      "status": "deferred"
     }
   ],
   "boundaries": [
@@ -262,6 +273,7 @@
     "wrkstrm app-minimums inspection has a target-level first slice; registry-backed fleet inspection remains deferred.",
     "Feature-scoped test migration is allowed only after a targetable feature bundle proves the behavior, the replacement evidence is named, and the coverage artifact is updated; duplicate older tests may then be deleted in the same change.",
     "Actual executable Swift tests may exceed the required count when extra regression coverage is useful.",
-    "Release doctor proves release-spine coherence; it does not approve final release or replace fleet build parity, runtime sampling, or periodic buddy health checks."
+    "Release doctor proves release-spine coherence; it does not approve final release or replace fleet build parity, runtime sampling, or periodic buddy health checks.",
+    "Project target discovery is covered as a first slice; it does not build, install, generate .xcodeproj world-state, or prove automatic workspace product discovery."
   ]
 }

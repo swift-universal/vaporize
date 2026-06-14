@@ -1,0 +1,66 @@
+{
+  "boundaries" : [
+    "Reads AppleProjectSpec from project.pkl or legacy project.yml; does not build, install, or generate .xcodeproj world-state.",
+    "Directory input prefers project.pkl as forward truth and falls back to project.yml for migration discovery.",
+    "First slice discovers project targets, packages, schemes, and buildable candidates for later Pkl parity, workspace-cache, and build-watch lanes."
+  ],
+  "buildableTargetNames" : [
+    "creative-selection-v0.2"
+  ],
+  "candidateSchemeNames" : [
+    "creative-selection-v0.2"
+  ],
+  "discoveryPhase" : "apple-project-target-discovery-first-slice",
+  "inputKind" : "project-pkl",
+  "inputPath" : "\/Users\/sonoma\/mono\/private\/universal\/substrate\/collectives\/wrkstrm-core\/private\/apple\/apps\/creative-selection-v0.2\/project.pkl",
+  "packageCount" : 0,
+  "packageNames" : [
+
+  ],
+  "packages" : [
+
+  ],
+  "projectName" : "creative-selection-v0.2",
+  "projectRootPath" : "\/Users\/sonoma\/mono\/private\/universal\/substrate\/collectives\/wrkstrm-core\/private\/apple\/apps\/creative-selection-v0.2",
+  "receiptKind" : "vaporize-project-target-discovery",
+  "requestId" : "vaporize-list-targets-751CAACC-2080-4779-8F04-67186A3CB1B0",
+  "schemaFamilySlug" : "vaporize-schemas",
+  "schemaFamilyVersion" : "0.0.1",
+  "schemaRef" : "private\/universal\/domain\/tooling\/schema-families\/vaporize-schemas\/v0.0.1\/json\/vaporize-schemas-v000-000-001\/schemas\/project-target-discovery-receipt\/project-target-discovery-receipt.schema.json",
+  "schemaVersion" : "0.1.0",
+  "schemeCount" : 0,
+  "schemeNames" : [
+
+  ],
+  "schemes" : [
+
+  ],
+  "selectedProjectSpecPath" : "\/Users\/sonoma\/mono\/private\/universal\/substrate\/collectives\/wrkstrm-core\/private\/apple\/apps\/creative-selection-v0.2\/project.pkl",
+  "targetCount" : 1,
+  "targetNames" : [
+    "creative-selection-v0.2"
+  ],
+  "targets" : [
+    {
+      "buildConfigurationNames" : [
+
+      ],
+      "configFileCount" : 0,
+      "dependencyCount" : 0,
+      "hasPostBuildScripts" : true,
+      "hasPreBuildScripts" : false,
+      "isApplication" : true,
+      "isBuildableCandidate" : true,
+      "name" : "creative-selection-v0.2",
+      "packageDependencyCount" : 0,
+      "platform" : "macOS",
+      "productName" : "creative-selection-v0.2",
+      "sourcePathCount" : 1,
+      "sourcePaths" : [
+        "Sources\/mac-app"
+      ],
+      "targetDependencyCount" : 0,
+      "type" : "application"
+    }
+  ]
+}

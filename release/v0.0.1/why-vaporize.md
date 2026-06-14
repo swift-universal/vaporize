@@ -33,10 +33,11 @@ world-state.
 | Problem | Vaporize answer | Current proof |
 | --- | --- | --- |
 | Engineering standards drift into ad hoc proof | Vaporize makes the owned route prefer native artifacts, typed samples, receipts, and gates | Product definition, runtime sample series, release gates |
-| Assistants improvise shell choreography | One canonical command surface for build, test, install, run, open, validate, inspect, import, generate, inventory, and toolchain selection | README, PRD FR-001 through FR-022, 15 CUJ bundles |
+| Assistants improvise shell choreography | One canonical command surface for build, test, install, run, open, validate, inspect, import, generate, list targets, inventory, and toolchain selection | README, PRD FR-001 through FR-028, 18 CUJ bundles |
 | Direct native tools bypass policy | `xcodebuild`, `xcrun`, and JSON validation details live behind Vaporize modes | CUJ-05, CUJ-06, release gates |
 | Build/install output is hard to review | Receipts record what was requested and what happened | Pass/use/toolchain/validation/project receipts |
 | Xcode project migration needs proof | YAML, Pkl, generated YAML, and first-slice `.xcodeproj` generation are compared and receipted | CUJ-08, CUJ-10, CUJ-11, CUJ-13, CUJ-14 |
+| Apple project routing facts are guessed | `list-targets` emits target, package, scheme, and buildable-candidate facts from AppleProjectSpec before build/cache/parity routing | CUJ-18 |
 | App artifact lookup is fragile | App bundle name, DerivedData, configuration, project/workspace, and install destination become explicit inputs | CUJ-02 |
 | Huge workspace products are rebuilt locally | Shared workspace product-cache flags search the warm workspace DerivedData product before local outputs and build through the shared workspace on cache miss | CUJ-15 |
 | Release review drifts into chat memory | PRD, CUJs, gates, launch packet, provenance, and schema fixtures name the evidence and counts | Release v0.0.1 packet |
@@ -114,7 +115,7 @@ Environment:
 | Bare Swift version comparison | `swift --version` | `0.17s real` |
 | Focused CUJ-15 through bare Swift | `swift test --filter VaporizeCUJ15XcodeProductCacheTests` | `6.80s real` |
 | Focused CUJ-15 through Vaporize toolchain | `vaporize toolchain -- swift test --filter VaporizeCUJ15XcodeProductCacheTests` | `6.80s real` |
-| Full Vaporize suite through Vaporize toolchain | `vaporize toolchain -- swift test` | Latest verification: 92 tests across 17 CUJ bundles; earlier `/usr/bin/time` baseline: `15.57s real`, 82 tests |
+| Full Vaporize suite through Vaporize toolchain | `vaporize toolchain -- swift test` | Latest verification: 97 tests across 18 CUJ bundles; earlier `/usr/bin/time` baseline: `15.57s real`, 82 tests |
 | Focused CUJ-09 with SwiftPM coverage enabled | `vaporize toolchain -- swift test --filter VaporizeCUJ09ReleaseReviewTests --enable-code-coverage` | `29.38s real`, 5 tests, SwiftPM codecov JSON verified |
 
 Interpretation:
@@ -212,7 +213,8 @@ Not yet proven:
 
 - Actual disk savings across the fleet.
 - Which app products are already present in the large workspace.
-- Automatic workspace scheme/product discovery.
+- Automatic workspace scheme/product discovery beyond AppleProjectSpec target
+  facts.
 - Automatic Vaporize composition of registry, identifier, app-artifacts, and
   release-feature manifests into one app-facing runtime sample.
 
@@ -224,7 +226,7 @@ Good ergonomics:
   `open`, install paths, JSON validation, and project migration utilities.
 - Commands read like user intent: `build`, `install`, `run`, `use`,
   `toolchain`, `validate-json`, `inspect-project-yml`, `import-project-yml`,
-  `generate-xcodeproj`, `inspect-target-features`.
+  `generate-xcodeproj`, `list-targets`, `inspect-target-features`.
 - Failure modes are named early: missing scheme, ambiguous project/workspace,
   malformed build setting, incomplete product-cache pair, missing app bundle.
 - The same flags carry into release evidence, tests, and receipts.
