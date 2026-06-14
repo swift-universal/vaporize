@@ -1,7 +1,7 @@
 # Vaporize v0.0.1 - Release Gates
 
 **Status:** release-prep draft; blocked pending fleet Pkl-backed Xcode world-state parity
-**Updated:** 2026-06-14T00:34:28Z
+**Updated:** 2026-06-14T02:13:38Z
 **Component:** `vaporize@wrkstrm-core.cli`
 **Tool classification:** `internal-essential-tool`
 
@@ -30,8 +30,10 @@ target-level first slice too: Vaporize inspects release-feature manifests,
 generated xcconfigs, generated `ReleaseFeatures.swift`, and project wiring for
 a given `project.yml` target before strong app claims are allowed. The
 package-local `vaporize.engineering.docc` catalog now carries the durable
-engineering narrative for eventual `wrkstrm.com/engineering` publication while
-the release packet remains the linked proof corpus. The pre-code PRD review
+engineering narrative for eventual `wrkstrm.com/engineering` publication,
+including a canonical feature catalog that lists each major feature, user
+problem, current surface, and proof boundary while the release packet remains
+the linked proof corpus. The pre-code PRD review
 session is now a hard future coding gate: Engineering, QA, and Marketing must
 review the PRD before implementation starts. Final
 internal v0.0.1 release approval is still
@@ -72,7 +74,7 @@ disposition for any remaining XcodeGen surfaces.
 | GATE-27 - Kura runtime sample series and Apple artifact ingestion | BLOCKED-FOR-STRONG-BENCHMARK-CLAIMS | `private/universal/substrate/collectives/wrkstrm/private/universal/kura-spaces/series/vaporize-runtime-samples/vaporize-runtime-samples.series.su.json` defines the queryable series. A backfilled CUJ-09 sample verifies SwiftPM coverage JSON, `.profraw`, `default.profdata`, build-output size, Debug product size, codecov artifact size, and Vaporize binary size through Vaporize's toolchain route. Vaporize does not yet emit samples automatically or retain `.xcresult`/coverage/build-size artifacts as durable release evidence. |
 | GATE-28 - wrkstrm-core app/build config composition | PASS-WITH-NOTE | Existing build-config sources are identified and referenced in the release contract: `tool-registry@wrkstrm-core.cli discover-apps` emits Hello World-style `xcode-project` records, `identifier@wrkstrm-core.cli app describe` owns app variant names/paths, and `app-artifacts@wrkstrm-core.cli` owns bundle audits, install paths, Xcode build/export receipts, and flat `.app` artifacts. Vaporize integration remains a follow-up. |
 | GATE-29 - wrkstrm app minimums inspection | PASS-WITH-NOTE | `inspect-target-features` inspects the target-level release-feature topology for Hello World Google: project configs, `configFiles` wiring, `Config/release-features.json`, generated conditional-compilation xcconfigs, generated `ReleaseFeatures.swift`, and `digikoma-release-features` provenance. Evidence: `release/v0.0.1/evidence/hello-world-google-target-features-inspection.receipt.json` and `VaporizeCUJ16TargetFeaturesTests`. Registry-backed fleet inspection remains a follow-up. |
-| GATE-30 - Engineering DocC catalog | PASS-WITH-NOTE | `vaporize.engineering.docc/` defines the human engineering narrative for product policy, command/artifact architecture, project migration, release evidence, benchmark/size evidence, target-feature inspection, and feature-scoped test lifecycle. The future `wrkstrm.com/engineering` publication pipeline should project this catalog and link back to release receipts rather than inventing claims from prose. |
+| GATE-30 - Engineering DocC catalog | PASS-WITH-NOTE | `vaporize.engineering.docc/` defines the human engineering narrative for product policy, feature catalog, command/artifact architecture, project migration, release evidence, benchmark/size evidence, target-feature inspection, and feature-scoped test lifecycle. `feature-catalog.md` is the canonical human-readable feature list and explanation surface. The future `wrkstrm.com/engineering` publication pipeline should project this catalog and link back to release receipts rather than inventing claims from prose. |
 | GATE-31 - Pre-code PRD review session | PASS-WITH-NOTE | `release/v0.0.1/prd-review-session.md` defines the mandatory Engineering, QA, and Marketing PRD review session before major coding starts. v0.0.1 records a backfilled `GO-WITH-NOTES` because this release-prep lane was already in flight; future major Vaporize coding slices do not get that exception. |
 
 ## Open Follow-Up Beads

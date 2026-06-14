@@ -12,6 +12,7 @@ func releaseReviewArtifactsExist() {
     "release/v0.0.1/why-vaporize.md",
     "release/v0.0.1/performance-marketing-claims.md",
     "vaporize.engineering.docc/index.md",
+    "vaporize.engineering.docc/feature-catalog.md",
     "vaporize.engineering.docc/product-and-policy.md",
     "vaporize.engineering.docc/command-and-artifact-architecture.md",
     "vaporize.engineering.docc/project-generation-and-migration.md",
@@ -67,6 +68,7 @@ func productDefinitionContractPrecedesBuildWork() throws {
   let claims = try readString(relativePath: "release/v0.0.1/performance-marketing-claims.md")
   let gates = try readString(relativePath: "release/v0.0.1/release-gates.md")
   let engineeringDocs = try readString(relativePath: "vaporize.engineering.docc/index.md")
+  let featureCatalog = try readString(relativePath: "vaporize.engineering.docc/feature-catalog.md")
 
   #expect(productDefinition.contains("## Product Definition"))
   #expect(productDefinition.contains("## Primary Users"))
@@ -100,6 +102,16 @@ func productDefinitionContractPrecedesBuildWork() throws {
   #expect(engineeringDocs.contains("wrkstrm.com/engineering"))
   #expect(engineeringDocs.contains("The package-local engineering catalog explains the system. The release packet"))
   #expect(engineeringDocs.contains("pre-code-prd-review"))
+  #expect(engineeringDocs.contains("feature-catalog"))
+  #expect(featureCatalog.contains("canonical human-readable feature list"))
+  #expect(featureCatalog.contains("SwiftPM CLI lifecycle"))
+  #expect(featureCatalog.contains("Apple app lifecycle"))
+  #expect(featureCatalog.contains("CommonProcess invocation"))
+  #expect(featureCatalog.contains("Xcode-selected Swift toolchain"))
+  #expect(featureCatalog.contains("Shared Xcode workspace product cache"))
+  #expect(featureCatalog.contains("Target feature inspection"))
+  #expect(featureCatalog.contains("Feature-scoped test lifecycle"))
+  #expect(featureCatalog.contains("Pre-code PRD review"))
 }
 
 @Test("CUJ-09 release gates keep Pkl generation blocked")

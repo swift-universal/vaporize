@@ -11,9 +11,11 @@ choreography, and use warehouse mode to store or emit vaporware inventory
 receipts.
 
 Durable engineering documentation lives in
-`vaporize.engineering.docc/`. Treat that catalog as the human engineering
-narrative for future `wrkstrm.com/engineering` publication, and treat
-`release/v0.0.1/evidence/` as the linked proof corpus.
+`vaporize.engineering.docc/`, with
+`vaporize.engineering.docc/feature-catalog.md` as the canonical human-readable
+feature list and explanation surface. Treat that catalog as the human
+engineering narrative for future `wrkstrm.com/engineering` publication, and
+treat `release/v0.0.1/evidence/` as the linked proof corpus.
 
 Vaporize is intentionally not a swift-universal tool. The Xcode project/workspace
 surface is Apple product infrastructure, and the restricted native-tool route is

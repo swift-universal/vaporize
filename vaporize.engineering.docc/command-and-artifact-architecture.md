@@ -32,6 +32,10 @@ Each family narrows a lower-level tool into a product-owned lane. That narrowing
 is the engineering value: fewer ambient assumptions, more typed inputs, and
 better receipts.
 
+For the canonical feature-by-feature explanation, see <doc:feature-catalog>.
+This page explains the architecture; the feature catalog names the user problem,
+current surface, and proof boundary for each major Vaporize feature.
+
 ## Artifact Flow
 
 For SwiftPM CLI products, Vaporize builds the product and installs executable

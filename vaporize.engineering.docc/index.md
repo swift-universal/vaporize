@@ -31,6 +31,7 @@ and explicit disposition of remaining XcodeGen surfaces.
 ## Engineering Topics
 
 - <doc:product-and-policy>
+- <doc:feature-catalog>
 - <doc:command-and-artifact-architecture>
 - <doc:project-generation-and-migration>
 - <doc:release-evidence-and-gates>
