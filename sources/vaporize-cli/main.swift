@@ -1051,21 +1051,29 @@ struct VaporizeCLI: AsyncParsableCommand {
 
   private func listTargets() async throws {
     let requestId = "vaporize-list-targets-\(UUID().uuidString)"
+    let productCacheOptions = AppleProjectProductCacheDiscoveryOptions(
+      workspacePath: xcodeProductCacheWorkspace,
+      derivedDataPath: xcodeProductCacheDerivedDataPath,
+      configurationName: configuration.rawValue.capitalized
+    )
     let receipt: AppleProjectTargetDiscoveryReceipt
     if let pklPath, !pklPath.isEmpty {
       receipt = try await AppleProjectTargetDiscovery.discover(
         pklURL: URL(fileURLWithPath: pklPath),
-        requestId: requestId
+        requestId: requestId,
+        productCacheOptions: productCacheOptions
       )
     } else if let vaporScanPath, !vaporScanPath.isEmpty {
       receipt = try await AppleProjectTargetDiscovery.discover(
         path: vaporScanPath,
-        requestId: requestId
+        requestId: requestId,
+        productCacheOptions: productCacheOptions
       )
     } else if let packagePath, !packagePath.isEmpty {
       receipt = try await AppleProjectTargetDiscovery.discover(
         projectDirectoryURL: URL(fileURLWithPath: packagePath),
-        requestId: requestId
+        requestId: requestId,
+        productCacheOptions: productCacheOptions
       )
     } else {
       throw ValidationError("--path, --pkl-path, or --package-path is required for list-targets mode.")
@@ -1080,6 +1088,14 @@ struct VaporizeCLI: AsyncParsableCommand {
       for target in receipt.targets {
         let buildable = target.isBuildableCandidate ? " buildable" : ""
         print("- \(target.name): type=\(target.type ?? "<nil>") platform=\(target.platform ?? "<nil>") product=\(target.productName)\(buildable)")
+      }
+      if receipt.productCacheCandidateCount > 0 {
+        print(
+          "product-cache: candidates=\(receipt.productCacheCandidateCount) warm=\(receipt.warmProductCacheCandidateCount) configuration=\(receipt.productCacheConfigurationName ?? "<nil>")"
+        )
+        for candidate in receipt.productCacheCandidates {
+          print("- cache \(candidate.status): \(candidate.targetName) -> \(candidate.appBundlePath)")
+        }
       }
       print(receipt.boundaries[0])
     case .json:

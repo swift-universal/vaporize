@@ -3,6 +3,7 @@ import Foundation
 public enum AppleProjectTargetDiscoveryError: Error, CustomStringConvertible, Sendable {
   case missingProjectSpec(path: String)
   case unsupportedProjectSpec(path: String)
+  case incompleteProductCacheDiscovery(String)
 
   public var description: String {
     switch self {
@@ -10,6 +11,43 @@ public enum AppleProjectTargetDiscoveryError: Error, CustomStringConvertible, Se
       return "No project.pkl or project.yml found at \(path)."
     case .unsupportedProjectSpec(let path):
       return "Unsupported project discovery input: \(path). Expected a project directory, project.pkl, or project.yml."
+    case .incompleteProductCacheDiscovery(let reason):
+      return reason
+    }
+  }
+}
+
+public struct AppleProjectProductCacheDiscoveryOptions: Equatable, Sendable {
+  public var workspacePath: String?
+  public var derivedDataPath: String?
+  public var configurationName: String
+
+  public init(
+    workspacePath: String? = nil,
+    derivedDataPath: String? = nil,
+    configurationName: String = "Release"
+  ) {
+    self.workspacePath = workspacePath
+    self.derivedDataPath = derivedDataPath
+    self.configurationName = configurationName
+  }
+
+  var isEnabled: Bool {
+    workspacePath != nil || derivedDataPath != nil
+  }
+
+  func validate() throws {
+    switch (workspacePath, derivedDataPath) {
+    case (.none, .none), (.some, .some):
+      return
+    case (.some, .none):
+      throw AppleProjectTargetDiscoveryError.incompleteProductCacheDiscovery(
+        "--xcode-product-cache-workspace requires --xcode-product-cache-derived-data-path for list-targets cache discovery."
+      )
+    case (.none, .some):
+      throw AppleProjectTargetDiscoveryError.incompleteProductCacheDiscovery(
+        "--xcode-product-cache-derived-data-path requires --xcode-product-cache-workspace for list-targets cache discovery."
+      )
     }
   }
 }
@@ -17,37 +55,61 @@ public enum AppleProjectTargetDiscoveryError: Error, CustomStringConvertible, Se
 public enum AppleProjectTargetDiscovery {
   public static func discover(
     path: String,
-    requestId: String
+    requestId: String,
+    productCacheOptions: AppleProjectProductCacheDiscoveryOptions = .init()
   ) async throws -> AppleProjectTargetDiscoveryReceipt {
     let url = URL(fileURLWithPath: path).standardizedFileURL
     var isDirectory: ObjCBool = false
     let exists = FileManager.default.fileExists(atPath: url.path, isDirectory: &isDirectory)
 
     if exists && isDirectory.boolValue {
-      return try await discover(projectDirectoryURL: url, requestId: requestId)
+      return try await discover(
+        projectDirectoryURL: url,
+        requestId: requestId,
+        productCacheOptions: productCacheOptions
+      )
     }
     if url.lastPathComponent == "project.pkl" || url.pathExtension == "pkl" {
-      return try await discover(pklURL: url, requestId: requestId)
+      return try await discover(
+        pklURL: url,
+        requestId: requestId,
+        productCacheOptions: productCacheOptions
+      )
     }
     if url.lastPathComponent == "project.yml" || url.pathExtension == "yml" || url.pathExtension == "yaml" {
-      return try discover(projectYMLURL: url, requestId: requestId)
+      return try discover(
+        projectYMLURL: url,
+        requestId: requestId,
+        productCacheOptions: productCacheOptions
+      )
     }
     throw AppleProjectTargetDiscoveryError.unsupportedProjectSpec(path: url.path)
   }
 
   public static func discover(
     projectDirectoryURL: URL,
-    requestId: String
+    requestId: String,
+    productCacheOptions: AppleProjectProductCacheDiscoveryOptions = .init()
   ) async throws -> AppleProjectTargetDiscoveryReceipt {
     let projectDirectoryURL = projectDirectoryURL.standardizedFileURL
     let pklURL = projectDirectoryURL.appendingPathComponent("project.pkl")
     let ymlURL = projectDirectoryURL.appendingPathComponent("project.yml")
 
     if FileManager.default.fileExists(atPath: pklURL.path) {
-      return try await discover(pklURL: pklURL, inputPath: projectDirectoryURL.path, requestId: requestId)
+      return try await discover(
+        pklURL: pklURL,
+        inputPath: projectDirectoryURL.path,
+        requestId: requestId,
+        productCacheOptions: productCacheOptions
+      )
     }
     if FileManager.default.fileExists(atPath: ymlURL.path) {
-      return try discover(projectYMLURL: ymlURL, inputPath: projectDirectoryURL.path, requestId: requestId)
+      return try discover(
+        projectYMLURL: ymlURL,
+        inputPath: projectDirectoryURL.path,
+        requestId: requestId,
+        productCacheOptions: productCacheOptions
+      )
     }
     throw AppleProjectTargetDiscoveryError.missingProjectSpec(path: projectDirectoryURL.path)
   }
@@ -55,8 +117,10 @@ public enum AppleProjectTargetDiscovery {
   public static func discover(
     projectYMLURL: URL,
     inputPath: String? = nil,
-    requestId: String
+    requestId: String,
+    productCacheOptions: AppleProjectProductCacheDiscoveryOptions = .init()
   ) throws -> AppleProjectTargetDiscoveryReceipt {
+    try productCacheOptions.validate()
     let projectYMLURL = projectYMLURL.standardizedFileURL
     let spec = try AppleProjectYMLReader.load(url: projectYMLURL)
     return receipt(
@@ -65,15 +129,18 @@ public enum AppleProjectTargetDiscovery {
       inputPath: inputPath ?? projectYMLURL.path,
       selectedProjectSpecPath: projectYMLURL.path,
       projectRootURL: projectYMLURL.deletingLastPathComponent(),
-      requestId: requestId
+      requestId: requestId,
+      productCacheOptions: productCacheOptions
     )
   }
 
   public static func discover(
     pklURL: URL,
     inputPath: String? = nil,
-    requestId: String
+    requestId: String,
+    productCacheOptions: AppleProjectProductCacheDiscoveryOptions = .init()
   ) async throws -> AppleProjectTargetDiscoveryReceipt {
+    try productCacheOptions.validate()
     let pklURL = pklURL.standardizedFileURL
     let spec = try await AppleProjectPklLoader.load(url: pklURL)
     return receipt(
@@ -82,7 +149,8 @@ public enum AppleProjectTargetDiscovery {
       inputPath: inputPath ?? pklURL.path,
       selectedProjectSpecPath: pklURL.path,
       projectRootURL: pklURL.deletingLastPathComponent(),
-      requestId: requestId
+      requestId: requestId,
+      productCacheOptions: productCacheOptions
     )
   }
 
@@ -92,7 +160,8 @@ public enum AppleProjectTargetDiscovery {
     inputPath: String,
     selectedProjectSpecPath: String,
     projectRootURL: URL,
-    requestId: String
+    requestId: String,
+    productCacheOptions: AppleProjectProductCacheDiscoveryOptions
   ) -> AppleProjectTargetDiscoveryReceipt {
     let targets = spec.targets
       .map { name, target in
@@ -113,6 +182,10 @@ public enum AppleProjectTargetDiscovery {
       .filter(\.isBuildableCandidate)
       .map(\.name)
     let candidateSchemeNames = Array(Set(schemes.map(\.name) + buildableTargetNames)).sorted()
+    let productCacheCandidates = productCacheCandidates(
+      targets: targets,
+      options: productCacheOptions
+    )
 
     return AppleProjectTargetDiscoveryReceipt(
       inputKind: inputKind,
@@ -129,10 +202,42 @@ public enum AppleProjectTargetDiscovery {
       candidateSchemeNames: candidateSchemeNames,
       packageNames: spec.packages.keys.sorted(),
       schemeNames: spec.schemes.keys.sorted(),
+      productCacheWorkspacePath: productCacheOptions.workspacePath.map {
+        URL(fileURLWithPath: $0).standardizedFileURL.path
+      },
+      productCacheDerivedDataPath: productCacheOptions.derivedDataPath.map {
+        URL(fileURLWithPath: $0).standardizedFileURL.path
+      },
+      productCacheConfigurationName: productCacheOptions.isEnabled ? productCacheOptions.configurationName : nil,
+      productCacheCandidateCount: productCacheCandidates.count,
+      warmProductCacheCandidateCount: productCacheCandidates.filter(\.isWarm).count,
       targets: targets,
       packages: packages,
-      schemes: schemes
+      schemes: schemes,
+      productCacheCandidates: productCacheCandidates
     )
+  }
+
+  private static func productCacheCandidates(
+    targets: [AppleProjectDiscoveredTarget],
+    options: AppleProjectProductCacheDiscoveryOptions
+  ) -> [AppleProjectProductCacheCandidate] {
+    guard let workspacePath = options.workspacePath,
+      let derivedDataPath = options.derivedDataPath
+    else {
+      return []
+    }
+    return targets
+      .filter(\.isBuildableCandidate)
+      .map { target in
+        AppleProjectProductCacheCandidate(
+          targetName: target.name,
+          productName: target.productName,
+          configurationName: options.configurationName,
+          workspacePath: workspacePath,
+          derivedDataPath: derivedDataPath
+        )
+      }
   }
 }
 
@@ -157,13 +262,20 @@ public struct AppleProjectTargetDiscoveryReceipt: Codable, Equatable, Sendable {
   public var candidateSchemeNames: [String]
   public var packageNames: [String]
   public var schemeNames: [String]
+  public var productCacheWorkspacePath: String?
+  public var productCacheDerivedDataPath: String?
+  public var productCacheConfigurationName: String?
+  public var productCacheCandidateCount: Int
+  public var warmProductCacheCandidateCount: Int
   public var targets: [AppleProjectDiscoveredTarget]
   public var packages: [AppleProjectDiscoveredPackage]
   public var schemes: [AppleProjectDiscoveredScheme]
+  public var productCacheCandidates: [AppleProjectProductCacheCandidate]
   public var boundaries = [
     "Reads AppleProjectSpec from project.pkl or legacy project.yml; does not build, install, or generate .xcodeproj world-state.",
     "Directory input prefers project.pkl as forward truth and falls back to project.yml for migration discovery.",
     "First slice discovers project targets, packages, schemes, and buildable candidates for later Pkl parity, workspace-cache, and build-watch lanes.",
+    "Product-cache discovery checks expected DerivedData product paths from discovered target facts; it does not parse the .xcworkspace graph or prove fleet membership.",
   ]
 }
 
@@ -237,5 +349,36 @@ public struct AppleProjectDiscoveredScheme: Codable, Equatable, Sendable {
     self.hasBuildAction = scheme.build != nil
     self.hasRunAction = scheme.run != nil
     self.hasTestAction = scheme.test != nil
+  }
+}
+
+public struct AppleProjectProductCacheCandidate: Codable, Equatable, Sendable {
+  public var targetName: String
+  public var productName: String
+  public var configurationName: String
+  public var workspacePath: String
+  public var derivedDataPath: String
+  public var appBundlePath: String
+  public var isWarm: Bool
+  public var status: String
+
+  init(
+    targetName: String,
+    productName: String,
+    configurationName: String,
+    workspacePath: String,
+    derivedDataPath: String
+  ) {
+    self.targetName = targetName
+    self.productName = productName
+    self.configurationName = configurationName
+    self.workspacePath = URL(fileURLWithPath: workspacePath).standardizedFileURL.path
+    self.derivedDataPath = URL(fileURLWithPath: derivedDataPath).standardizedFileURL.path
+    self.appBundlePath = URL(fileURLWithPath: derivedDataPath)
+      .standardizedFileURL
+      .appendingPathComponent("Build/Products/\(configurationName)/\(productName).app")
+      .path
+    self.isWarm = FileManager.default.fileExists(atPath: appBundlePath)
+    self.status = isWarm ? "warm" : "missing"
   }
 }

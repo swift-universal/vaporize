@@ -60,6 +60,15 @@ enum VaporizeReleaseDoctor {
       textContainsCheck(
         roots: roots,
         scope: .releaseRoot,
+        relativePath: "prd.md",
+        token: "FR-029",
+        name: "prd-workspace-cache-discovery-requirement"
+      )
+    )
+    checks.append(
+      textContainsCheck(
+        roots: roots,
+        scope: .releaseRoot,
         relativePath: "cuj.md",
         token: "CUJ-17",
         name: "cuj-release-doctor-journey"
@@ -72,6 +81,15 @@ enum VaporizeReleaseDoctor {
         relativePath: "cuj.md",
         token: "CUJ-18",
         name: "cuj-project-target-discovery-journey"
+      )
+    )
+    checks.append(
+      textContainsCheck(
+        roots: roots,
+        scope: .releaseRoot,
+        relativePath: "cuj.md",
+        token: "CUJ-19",
+        name: "cuj-workspace-cache-discovery-journey"
       )
     )
     checks.append(
@@ -95,6 +113,15 @@ enum VaporizeReleaseDoctor {
     checks.append(
       textContainsCheck(
         roots: roots,
+        scope: .releaseRoot,
+        relativePath: "release-gates.md",
+        token: "GATE-35-workspace-product-cache-discovery",
+        name: "gate-workspace-cache-discovery"
+      )
+    )
+    checks.append(
+      textContainsCheck(
+        roots: roots,
         scope: .packageRoot,
         relativePath: "vaporize.engineering.docc/feature-catalog.md",
         token: "Release doctor",
@@ -108,6 +135,15 @@ enum VaporizeReleaseDoctor {
         relativePath: "vaporize.engineering.docc/feature-catalog.md",
         token: "Project target discovery",
         name: "feature-catalog-project-target-discovery"
+      )
+    )
+    checks.append(
+      textContainsCheck(
+        roots: roots,
+        scope: .packageRoot,
+        relativePath: "vaporize.engineering.docc/feature-catalog.md",
+        token: "Workspace product-cache discovery",
+        name: "feature-catalog-workspace-cache-discovery"
       )
     )
     checks.append(
@@ -158,6 +194,7 @@ enum VaporizeReleaseDoctor {
     .release("evidence/launch-review-packet.json"),
     .release("evidence/vaporize-v0.0.1-provenance-artifact.json"),
     .release("evidence/creative-selection-v0.2-list-targets.receipt.json"),
+    .release("evidence/creative-selection-v0.2-workspace-cache-discovery.receipt.json"),
     .package("vaporize.engineering.docc/index.md"),
     .package("vaporize.engineering.docc/feature-catalog.md"),
     .package("vaporize.engineering.docc/release-doctor.md"),
@@ -171,6 +208,7 @@ enum VaporizeReleaseDoctor {
     .release("evidence/launch-review-packet.json"),
     .release("evidence/vaporize-v0.0.1-provenance-artifact.json"),
     .release("evidence/creative-selection-v0.2-list-targets.receipt.json"),
+    .release("evidence/creative-selection-v0.2-workspace-cache-discovery.receipt.json"),
   ]
 
   private static func resolveRoots(path: String) throws -> ReleaseDoctorRoots {
@@ -296,6 +334,13 @@ enum VaporizeReleaseDoctor {
         detail: "Launch-review packet must include the project target discovery gate."
       ),
       check(
+        name: "launch-review-gate-35",
+        category: "launch-review",
+        path: url.path,
+        passed: gateResults.contains { $0["gateRef"] as? String == "GATE-35-workspace-product-cache-discovery" },
+        detail: "Launch-review packet must include the workspace product-cache discovery gate."
+      ),
+      check(
         name: "launch-review-release-doctor-evidence-ref",
         category: "launch-review",
         path: url.path,
@@ -308,6 +353,13 @@ enum VaporizeReleaseDoctor {
         path: url.path,
         passed: evidenceRefs.contains { $0["t"] as? String == "Creative Selection v0.2 target discovery receipt" },
         detail: "Launch-review packet must reference the project target discovery receipt."
+      ),
+      check(
+        name: "launch-review-workspace-cache-discovery-evidence-ref",
+        category: "launch-review",
+        path: url.path,
+        passed: evidenceRefs.contains { $0["t"] as? String == "Creative Selection v0.2 workspace cache discovery receipt" },
+        detail: "Launch-review packet must reference the workspace product-cache discovery receipt."
       ),
     ]
   }
@@ -342,6 +394,16 @@ enum VaporizeReleaseDoctor {
         path: url.path,
         passed: receiptInventory.contains { $0["receiptKind"] as? String == "vaporize-project-target-discovery" },
         detail: "Provenance must inventory the project target discovery receipt."
+      ),
+      check(
+        name: "provenance-workspace-cache-discovery-receipt",
+        category: "provenance",
+        path: url.path,
+        passed: receiptInventory.contains {
+          $0["receiptKind"] as? String == "vaporize-project-target-discovery"
+            && (($0["claim"] as? String)?.contains("workspace product-cache") ?? false)
+        },
+        detail: "Provenance must inventory the workspace product-cache discovery receipt."
       )
     ]
   }
@@ -367,18 +429,18 @@ enum VaporizeReleaseDoctor {
 
     return [
       check(
-        name: "coverage-active-cuj-18",
+        name: "coverage-active-cuj-19",
         category: "cuj-coverage",
         path: url.path,
-        passed: (counts["activeCUJCount"] as? Int ?? 0) >= 18,
-        detail: "Coverage artifact must count CUJ-18 project target discovery."
+        passed: (counts["activeCUJCount"] as? Int ?? 0) >= 19,
+        detail: "Coverage artifact must count CUJ-19 workspace product-cache discovery."
       ),
       check(
         name: "coverage-release-evidence-floor",
         category: "cuj-coverage",
         path: url.path,
-        passed: (counts["requiredReleaseEvidenceCheckCount"] as? Int ?? 0) >= 10,
-        detail: "Coverage artifact must include the release-doctor and target discovery evidence obligations."
+        passed: (counts["requiredReleaseEvidenceCheckCount"] as? Int ?? 0) >= 11,
+        detail: "Coverage artifact must include release-doctor, target discovery, and workspace cache discovery evidence obligations."
       ),
       check(
         name: "coverage-release-doctor-test-bundle",
@@ -393,6 +455,13 @@ enum VaporizeReleaseDoctor {
         path: url.path,
         passed: (breakdown["VaporizeCUJ18ListTargetsTests"] as? Int ?? 0) >= 5,
         detail: "Coverage artifact must name the CUJ-18 targetable test bundle."
+      ),
+      check(
+        name: "coverage-workspace-cache-discovery-test-bundle",
+        category: "cuj-coverage",
+        path: url.path,
+        passed: (breakdown["VaporizeCUJ19WorkspaceCacheDiscoveryTests"] as? Int ?? 0) >= 5,
+        detail: "Coverage artifact must name the CUJ-19 targetable test bundle."
       ),
     ]
   }
@@ -447,7 +516,7 @@ struct VaporizeReleaseDoctorReceipt: Codable, Equatable {
   var boundaries = [
     "Release doctor audits release-spine coherence; it does not approve release.",
     "A pass can coexist with release gates that are honestly blocked.",
-    "First slice checks Vaporize v0.0.1 docs, JSON evidence, CUJ coverage, launch-review references, provenance inventory, and project target discovery evidence.",
+    "First slice checks Vaporize v0.0.1 docs, JSON evidence, CUJ coverage, launch-review references, provenance inventory, project target discovery evidence, and workspace product-cache discovery evidence.",
     "Fleet project-generation parity, runtime sampling, build-size cohorts, and periodic buddy health remain separate follow-up checks.",
   ]
 }

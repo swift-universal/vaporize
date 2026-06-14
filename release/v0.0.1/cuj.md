@@ -20,7 +20,7 @@ one product-level journey.
 | Assistant inventories vaporware state from substrate records | CUJ-07 |
 | Assistant migrates Apple project generation from legacy `project.yml` toward Pkl-backed truth with receipts at every boundary | CUJ-08, CUJ-10, CUJ-11, CUJ-13, CUJ-14 |
 | Assistant discovers Apple project targets, buildable candidates, packages, and schemes before routing build/cache/parity work | CUJ-18 |
-| Assistant reuses a warm Xcode workspace product cache instead of rebuilding locally when the shared product already exists | CUJ-15 |
+| Assistant reuses a warm Xcode workspace product cache instead of rebuilding locally when the shared product already exists | CUJ-15, CUJ-19 |
 | Release reviewer evaluates product definition, PRD review session, vaporware modification request discipline, user journeys, choice argument, evidence, gates, and blockers without relying on chat memory | CUJ-09 |
 | Assistant audits release-spine coherence before trusting a vaporware packet | CUJ-17 |
 
@@ -442,6 +442,37 @@ Failure truth:
   generate `.xcodeproj` world-state, infer the whole workspace product cache, or
   prove fleet parity.
 
+## CUJ-19 - Assistant Discovers Workspace Product Cache Candidates
+
+1. Assistant receives an AppleProjectSpec source and a maintained workspace
+   cache pair.
+2. Assistant runs `vaporize list-targets` with
+   `--xcode-product-cache-workspace`, `--xcode-product-cache-derived-data-path`,
+   and `--configuration`.
+3. Vaporize discovers buildable AppleProjectSpec targets.
+4. Vaporize maps each buildable target's product name to the expected shared
+   DerivedData `.app` product path.
+5. Vaporize emits warm/missing status for each cache candidate in the
+   `vaporize-project-target-discovery` receipt.
+
+Success:
+
+- The receipt names the shared workspace path, DerivedData root,
+  configuration, candidate count, warm count, app bundle path, target name,
+  product name, and status.
+- Warm products are reported when the expected `.app` path exists.
+- Missing products are reported without falling back to direct build commands.
+- Non-buildable targets do not create app product-cache candidates.
+- Incomplete workspace/DerivedData option pairs fail before discovery.
+
+Failure truth:
+
+- This slice derives candidate paths from AppleProjectSpec target facts and the
+  shared DerivedData layout.
+- It does not parse `.xcworkspace` membership, run `xcodebuild`, install apps,
+  warm the cache, prove that the whole fleet is present, or measure disk
+  savings.
+
 ## Test Coverage Contract
 
 Test count is derived from PRD requirements through the active draft CUJs.
@@ -468,13 +499,14 @@ must know the required floor.
 | CUJ-16 | FR-023, FR-024 | 5 Swift tests; 1 release evidence check |
 | CUJ-17 | FR-027 | 5 Swift tests; 1 release evidence check |
 | CUJ-18 | FR-028 | 5 Swift tests; 1 release evidence check |
+| CUJ-19 | FR-021, FR-029 | 5 Swift tests; 1 release evidence check |
 
 Current active-CUJ requirement:
 
-- Required Swift test obligations: 79
-- Required release evidence checks: 10
-- Required targetable test obligations: 89
-- Current executable Swift tests: 97 across 18 implemented CUJ-specific SwiftPM
+- Required Swift test obligations: 84
+- Required release evidence checks: 11
+- Required targetable test obligations: 95
+- Current executable Swift tests: 102 across 19 implemented CUJ-specific SwiftPM
   bundles
 - Coverage artifact:
   `release/v0.0.1/evidence/cuj-test-coverage.json`

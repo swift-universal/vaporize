@@ -35,11 +35,11 @@ exists, and which claims are still prohibited.
 
 The current CUJ-derived floor is:
 
-- 18 active CUJs
-- 79 required Swift test obligations
-- 10 release evidence checks
-- 89 required targetable obligations
-- 97 executable Swift tests across 18 CUJ-specific bundles
+- 19 active CUJs
+- 84 required Swift test obligations
+- 11 release evidence checks
+- 95 required targetable obligations
+- 102 executable Swift tests across 19 CUJ-specific bundles
 
 The executable suite may exceed the floor, but the floor comes from PRD and CUJ
 obligations. Test count alone is not a product argument.
@@ -49,8 +49,8 @@ obligations. Test count alone is not a product argument.
 The current release verdict is blocked for internal essential release. Passing
 gates already cover command surface, JSON validation, release packet shape,
 schema extraction, project migration first slices, project target discovery
-first slice, shared workspace cache first slice, target feature inspection
-first slice, release-doctor spine audit,
+first slice, workspace product-cache discovery first slice, shared workspace
+cache first slice, target feature inspection first slice, release-doctor spine audit,
 pre-code PRD review policy, and
 package test execution through Vaporize's owned toolchain route.
 

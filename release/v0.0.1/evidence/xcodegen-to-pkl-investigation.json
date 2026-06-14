@@ -353,10 +353,11 @@
         "private/apple/spm/vaporize@wrkstrm-core.cli/tests/cuj-15-xcode-product-cache/VaporizeCUJ15XcodeProductCacheTests.swift",
         "private/apple/spm/vaporize@wrkstrm-core.cli/tests/cuj-16-target-features/VaporizeCUJ16TargetFeaturesTests.swift",
         "private/apple/spm/vaporize@wrkstrm-core.cli/tests/cuj-17-release-doctor/VaporizeCUJ17ReleaseDoctorTests.swift",
-        "private/apple/spm/vaporize@wrkstrm-core.cli/tests/cuj-18-list-targets/VaporizeCUJ18ListTargetsTests.swift"
+        "private/apple/spm/vaporize@wrkstrm-core.cli/tests/cuj-18-list-targets/VaporizeCUJ18ListTargetsTests.swift",
+        "private/apple/spm/vaporize@wrkstrm-core.cli/tests/cuj-19-workspace-cache-discovery/VaporizeCUJ19WorkspaceCacheDiscoveryTests.swift"
       ],
-      "result": "CUJ coverage contract now requires 79 Swift test obligations plus 10 release evidence checks across 18 active CUJs; vaporize toolchain -- swift test passed 97 executable Swift tests across 18 implemented CUJ-specific SwiftPM bundles, including CUJ-16 target feature inspection, CUJ-17 release doctor, and CUJ-18 project target discovery.",
-      "boundary": "This expands release proof across major Vaporize features and includes the first Pkl-backed .xcodeproj generation slice, project target discovery, and shared Xcode workspace product-cache reuse; it does not prove fleet build parity or automatic workspace product discovery."
+      "result": "CUJ coverage contract now requires 84 Swift test obligations plus 11 release evidence checks across 19 active CUJs; vaporize toolchain -- swift test passed 102 executable Swift tests across 19 implemented CUJ-specific SwiftPM bundles, including CUJ-16 target feature inspection, CUJ-17 release doctor, CUJ-18 project target discovery, and CUJ-19 workspace product-cache discovery.",
+      "boundary": "This expands release proof across major Vaporize features and includes the first Pkl-backed .xcodeproj generation slice, project target discovery, workspace product-cache candidate discovery, and shared Xcode workspace product-cache reuse; it does not prove fleet build parity or automatic .xcworkspace graph membership discovery."
     },
     {
       "slice": "creative-selection-v0.2-project-target-discovery",
@@ -368,6 +369,17 @@
       "receipt": "private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/creative-selection-v0.2-list-targets.receipt.json",
       "result": "list-targets discovered one buildable Creative Selection v0.2 target plus candidate scheme names, package count, source paths, and receipt boundaries from AppleProjectSpec Pkl.",
       "boundary": "This discovers AppleProjectSpec routing facts only; it does not build, install, generate .xcodeproj world-state, discover the maintained workspace cache, or prove fleet parity."
+    },
+    {
+      "slice": "creative-selection-v0.2-workspace-cache-discovery",
+      "status": "complete-with-boundary",
+      "surface": "list-targets --xcode-product-cache-workspace --xcode-product-cache-derived-data-path",
+      "tests": [
+        "private/apple/spm/vaporize@wrkstrm-core.cli/tests/cuj-19-workspace-cache-discovery/VaporizeCUJ19WorkspaceCacheDiscoveryTests.swift"
+      ],
+      "receipt": "private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/creative-selection-v0.2-workspace-cache-discovery.receipt.json",
+      "result": "list-targets mapped one Creative Selection v0.2 buildable target to an expected shared DerivedData product-cache candidate and reported missing status.",
+      "boundary": "This discovers target-fact-derived cache candidate paths and warm/missing status only; it does not parse .xcworkspace graph membership, warm caches, prove fleet cache coverage, or measure disk savings."
     }
   ],
   "recommendedMigrationPlan": [
@@ -376,7 +388,7 @@
     "Model: author an AppleProjectSpec Pkl module for the common project.yml shape: options, settings, packages, targets, sources, info, scripts, schemes, and configurations.",
     "Shadow parity: for wrkstrm-core apps, express existing project.yml as Pkl and prove equivalence before project world-state generation. Concourse covers Pkl-to-YAML parity and Creative Selection v0.2 covers YAML-to-Pkl import parity.",
     "Owned generator: expand the Swift-owned generator path that consumes Pkl-evaluated project data and writes the .xcodeproj world-state with receipts.",
-    "Target discovery: use list-targets receipts to choose the next build, cache, parity, or migration route before claiming automatic workspace product discovery.",
+    "Target and cache-candidate discovery: use list-targets receipts to choose the next build, cache, parity, or migration route before claiming automatic .xcworkspace graph membership discovery.",
     "Vaporize integration: extend generate-xcodeproj until it owns Pkl evaluation, project world-state generation, receipt emission, and app build/install composition.",
     "Cutover: migrate wrkstrm-core apps first, then generator/scaffold surfaces, then wrkstrm-app and wrkstrm-components fleet surfaces.",
     "Quarantine: tag any remaining XcodeGen path as historical, external, or compatibility-only; make release gates fail on unclassified substrate-owned XcodeGen use."

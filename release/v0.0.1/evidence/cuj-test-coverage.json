@@ -7,7 +7,7 @@
   "coverageId": "vaporize-v0.0.1-cuj-test-coverage",
   "subjectAppSlug": "vaporize@wrkstrm-core.cli",
   "subjectReleaseSlug": "v0.0.1",
-  "generatedAt": "2026-06-14T03:20:00Z",
+  "generatedAt": "2026-06-14T04:05:00Z",
   "generatedBy": "codex-crisie",
   "status": "active-cuj-coverage-floor-defined",
   "sourceRule": "Required test count is derived from PRD requirements through active draft CUJs. Actual executable tests may exceed the required floor.",
@@ -17,12 +17,12 @@
     "releaseGates": "private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/release-gates.md"
   },
   "counts": {
-    "activeCUJCount": 18,
+    "activeCUJCount": 19,
     "deferredCUJCount": 1,
-    "requiredSwiftTestObligationCount": 79,
-    "requiredReleaseEvidenceCheckCount": 10,
-    "requiredTargetableTestObligationCount": 89,
-    "currentExecutableSwiftTestCount": 97,
+    "requiredSwiftTestObligationCount": 84,
+    "requiredReleaseEvidenceCheckCount": 11,
+    "requiredTargetableTestObligationCount": 95,
+    "currentExecutableSwiftTestCount": 102,
     "currentExecutableSwiftTestBreakdown": {
       "VaporizeCUJ01SwiftPMCLITests": 7,
       "VaporizeCUJ02MacAppTests": 14,
@@ -41,14 +41,19 @@
       "VaporizeCUJ15XcodeProductCacheTests": 4,
       "VaporizeCUJ16TargetFeaturesTests": 5,
       "VaporizeCUJ17ReleaseDoctorTests": 5,
-      "VaporizeCUJ18ListTargetsTests": 5
+      "VaporizeCUJ18ListTargetsTests": 5,
+      "VaporizeCUJ19WorkspaceCacheDiscoveryTests": 5
     }
   },
   "coverage": [
     {
       "cuj": "CUJ-01",
       "title": "Assistant Builds And Installs A SwiftPM CLI",
-      "prdRefs": ["FR-001", "FR-002", "FR-004"],
+      "prdRefs": [
+        "FR-001",
+        "FR-002",
+        "FR-004"
+      ],
       "requiredSwiftTestObligations": 5,
       "status": "covered",
       "evidence": [
@@ -58,7 +63,11 @@
     {
       "cuj": "CUJ-02",
       "title": "Assistant Builds And Launches A Mac App",
-      "prdRefs": ["FR-003", "FR-004", "FR-015"],
+      "prdRefs": [
+        "FR-003",
+        "FR-004",
+        "FR-015"
+      ],
       "requiredSwiftTestObligations": 9,
       "status": "covered",
       "evidence": [
@@ -68,7 +77,9 @@
     {
       "cuj": "CUJ-03",
       "title": "Assistant Runs A Swift Proof Command With A Receipt",
-      "prdRefs": ["FR-005"],
+      "prdRefs": [
+        "FR-005"
+      ],
       "requiredSwiftTestObligations": 4,
       "status": "covered",
       "evidence": [
@@ -78,7 +89,9 @@
     {
       "cuj": "CUJ-04",
       "title": "Assistant Uses A CommonProcess Invocation Directly",
-      "prdRefs": ["FR-006"],
+      "prdRefs": [
+        "FR-006"
+      ],
       "requiredSwiftTestObligations": 4,
       "status": "covered",
       "evidence": [
@@ -88,7 +101,9 @@
     {
       "cuj": "CUJ-05",
       "title": "Assistant Uses Xcode-Selected Swift Without Direct xcrun",
-      "prdRefs": ["FR-010"],
+      "prdRefs": [
+        "FR-010"
+      ],
       "requiredSwiftTestObligations": 6,
       "status": "covered",
       "evidence": [
@@ -98,7 +113,9 @@
     {
       "cuj": "CUJ-06",
       "title": "Assistant Validates Release Packet JSON Without jq",
-      "prdRefs": ["FR-011"],
+      "prdRefs": [
+        "FR-011"
+      ],
       "requiredSwiftTestObligations": 2,
       "status": "covered",
       "evidence": [
@@ -108,7 +125,10 @@
     {
       "cuj": "CUJ-07",
       "title": "Assistant Inventories Vaporware State",
-      "prdRefs": ["FR-007", "FR-008"],
+      "prdRefs": [
+        "FR-007",
+        "FR-008"
+      ],
       "requiredSwiftTestObligations": 10,
       "status": "covered",
       "evidence": [
@@ -118,7 +138,9 @@
     {
       "cuj": "CUJ-08",
       "title": "Assistant Inspects Legacy XcodeGen Project YAML",
-      "prdRefs": ["FR-015"],
+      "prdRefs": [
+        "FR-015"
+      ],
       "requiredSwiftTestObligations": 5,
       "status": "covered",
       "evidence": [
@@ -130,7 +152,14 @@
     {
       "cuj": "CUJ-09",
       "title": "Release Reviewer Reads The Packet",
-      "prdRefs": ["FR-012", "FR-013", "FR-014", "FR-022", "FR-025", "FR-026"],
+      "prdRefs": [
+        "FR-012",
+        "FR-013",
+        "FR-014",
+        "FR-022",
+        "FR-025",
+        "FR-026"
+      ],
       "requiredSwiftTestObligations": 0,
       "requiredReleaseEvidenceChecks": 7,
       "status": "covered-with-release-evidence",
@@ -149,7 +178,9 @@
     {
       "cuj": "CUJ-10",
       "title": "Assistant Compares Legacy YAML With Pkl Specimen",
-      "prdRefs": ["FR-016"],
+      "prdRefs": [
+        "FR-016"
+      ],
       "requiredSwiftTestObligations": 4,
       "status": "covered",
       "evidence": [
@@ -160,7 +191,9 @@
     {
       "cuj": "CUJ-11",
       "title": "Assistant Generates Transitional YAML From Pkl",
-      "prdRefs": ["FR-017"],
+      "prdRefs": [
+        "FR-017"
+      ],
       "requiredSwiftTestObligations": 3,
       "status": "covered",
       "evidence": [
@@ -172,7 +205,9 @@
     {
       "cuj": "CUJ-12",
       "title": "Assistant Runs Package Graph Analysis Through Vaporize",
-      "prdRefs": ["FR-009"],
+      "prdRefs": [
+        "FR-009"
+      ],
       "requiredSwiftTestObligations": 1,
       "status": "covered",
       "evidence": [
@@ -182,7 +217,9 @@
     {
       "cuj": "CUJ-13",
       "title": "Assistant Imports Legacy YAML Into Pkl",
-      "prdRefs": ["FR-018"],
+      "prdRefs": [
+        "FR-018"
+      ],
       "requiredSwiftTestObligations": 4,
       "status": "covered",
       "evidence": [
@@ -194,7 +231,9 @@
     {
       "cuj": "CUJ-14",
       "title": "Assistant Generates First-Slice Xcode Project World-State From Pkl",
-      "prdRefs": ["FR-020"],
+      "prdRefs": [
+        "FR-020"
+      ],
       "requiredSwiftTestObligations": 3,
       "status": "covered-with-boundary",
       "evidence": [
@@ -205,7 +244,10 @@
     {
       "cuj": "CUJ-15",
       "title": "Assistant Reuses A Warm Xcode Workspace Product Cache",
-      "prdRefs": ["FR-003", "FR-021"],
+      "prdRefs": [
+        "FR-003",
+        "FR-021"
+      ],
       "requiredSwiftTestObligations": 4,
       "status": "covered-with-boundary",
       "evidence": [
@@ -215,7 +257,10 @@
     {
       "cuj": "CUJ-16",
       "title": "Assistant Audits wrkstrm App Minimums",
-      "prdRefs": ["FR-023", "FR-024"],
+      "prdRefs": [
+        "FR-023",
+        "FR-024"
+      ],
       "requiredSwiftTestObligations": 5,
       "requiredReleaseEvidenceChecks": 1,
       "status": "covered-with-boundary",
@@ -229,7 +274,9 @@
     {
       "cuj": "CUJ-17",
       "title": "Assistant Runs Release Doctor Before Trusting The Packet",
-      "prdRefs": ["FR-027"],
+      "prdRefs": [
+        "FR-027"
+      ],
       "requiredSwiftTestObligations": 5,
       "requiredReleaseEvidenceChecks": 1,
       "status": "covered-with-boundary",
@@ -244,13 +291,33 @@
     {
       "cuj": "CUJ-18",
       "title": "Assistant Discovers Project Targets Through Vaporize",
-      "prdRefs": ["FR-028"],
+      "prdRefs": [
+        "FR-028"
+      ],
       "requiredSwiftTestObligations": 5,
       "requiredReleaseEvidenceChecks": 1,
       "status": "covered-with-boundary",
       "evidence": [
         "VaporizeCUJ18ListTargetsTests.swift",
         "creative-selection-v0.2-list-targets.receipt.json",
+        "project-target-discovery-receipt.schema.json",
+        "release-gates.md",
+        "launch-review-packet.json"
+      ]
+    },
+    {
+      "cuj": "CUJ-19",
+      "title": "Assistant Discovers Workspace Product Cache Candidates",
+      "prdRefs": [
+        "FR-021",
+        "FR-029"
+      ],
+      "requiredSwiftTestObligations": 5,
+      "requiredReleaseEvidenceChecks": 1,
+      "status": "covered-with-boundary",
+      "evidence": [
+        "VaporizeCUJ19WorkspaceCacheDiscoveryTests.swift",
+        "creative-selection-v0.2-workspace-cache-discovery.receipt.json",
         "project-target-discovery-receipt.schema.json",
         "release-gates.md",
         "launch-review-packet.json"
@@ -269,11 +336,11 @@
     "Major feature coding requires an Engineering, QA, and Marketing PRD review session before implementation; v0.0.1 records a backfilled GO-WITH-NOTES correction because the release-prep lane was already in flight.",
     "Behavior-changing vaporware modification requests require a feature flag or feature-status story, targetable tests, and release evidence before release-ready status.",
     "First-slice Pkl-backed .xcodeproj world-state generation is covered; fleet build parity and quarantine disposition remain release-blocking.",
-    "Shared Xcode workspace product-cache reuse is covered as cache lookup and build invocation; automatic workspace scheme/product discovery remains deferred.",
     "wrkstrm app-minimums inspection has a target-level first slice; registry-backed fleet inspection remains deferred.",
     "Feature-scoped test migration is allowed only after a targetable feature bundle proves the behavior, the replacement evidence is named, and the coverage artifact is updated; duplicate older tests may then be deleted in the same change.",
     "Actual executable Swift tests may exceed the required count when extra regression coverage is useful.",
     "Release doctor proves release-spine coherence; it does not approve final release or replace fleet build parity, runtime sampling, or periodic buddy health checks.",
-    "Project target discovery is covered as a first slice; it does not build, install, generate .xcodeproj world-state, or prove automatic workspace product discovery."
+    "Project target discovery is covered as a first slice; it does not build, install, generate .xcodeproj world-state, or prove .xcworkspace graph membership discovery.",
+    "Workspace product-cache discovery is covered as target-fact-derived candidate path and warm/missing inspection; .xcworkspace graph membership, cache warming, fleet coverage, and disk-savings measurement remain deferred."
   ]
 }

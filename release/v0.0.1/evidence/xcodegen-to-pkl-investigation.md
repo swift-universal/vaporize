@@ -73,11 +73,14 @@ The first approved migration-prep slice is now landed:
   routing work.
 - Shared Xcode workspace product-cache reuse now has a CUJ-15 first slice for
   cache-first app lookup and shared workspace/DerivedData build invocation.
-- The CUJ-derived coverage floor now requires 79 Swift test obligations plus
-  10 release evidence checks across 18 active CUJs; the full Vaporize package
-  test suite passes 97 executable Swift tests across 18 implemented CUJ-specific
-  SwiftPM bundles through `vaporize toolchain`, including CUJ-16 target feature
-  inspection, CUJ-17 release doctor, and CUJ-18 project target discovery.
+- `list-targets` can also map Creative Selection v0.2 target facts to expected
+  shared DerivedData product-cache candidates and report warm/missing status.
+- The CUJ-derived coverage floor now requires 84 Swift test obligations plus
+  11 release evidence checks across 19 active CUJs; the full Vaporize package
+  test suite passes 102 executable Swift tests across 19 implemented
+  CUJ-specific SwiftPM bundles through `vaporize toolchain`, including CUJ-16
+  target feature inspection, CUJ-17 release doctor, CUJ-18 project target
+  discovery, and CUJ-19 workspace product-cache discovery.
 
 This does not unblock v0.0.1 by itself. It gives the Pkl migration a tested
 Swift intake surface plus a first owned `.xcodeproj` generation slice. The

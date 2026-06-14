@@ -21,14 +21,26 @@
   "packages" : [
 
   ],
-  "productCacheCandidateCount" : 0,
+  "productCacheCandidateCount" : 1,
   "productCacheCandidates" : [
-
+    {
+      "appBundlePath" : "\/tmp\/vaporize-maintained-workspace\/DerivedData\/Build\/Products\/Release\/creative-selection-v0.2.app",
+      "configurationName" : "Release",
+      "derivedDataPath" : "\/tmp\/vaporize-maintained-workspace\/DerivedData",
+      "isWarm" : false,
+      "productName" : "creative-selection-v0.2",
+      "status" : "missing",
+      "targetName" : "creative-selection-v0.2",
+      "workspacePath" : "\/tmp\/vaporize-maintained-workspace\/Huge.xcworkspace"
+    }
   ],
+  "productCacheConfigurationName" : "Release",
+  "productCacheDerivedDataPath" : "\/tmp\/vaporize-maintained-workspace\/DerivedData",
+  "productCacheWorkspacePath" : "\/tmp\/vaporize-maintained-workspace\/Huge.xcworkspace",
   "projectName" : "creative-selection-v0.2",
   "projectRootPath" : "\/Users\/sonoma\/mono\/private\/universal\/substrate\/collectives\/wrkstrm-core\/private\/apple\/apps\/creative-selection-v0.2",
   "receiptKind" : "vaporize-project-target-discovery",
-  "requestId" : "vaporize-list-targets-E2E1D470-7DAD-4AFE-BD5F-632E332CAB9A",
+  "requestId" : "vaporize-list-targets-5203015E-8AD2-4362-8CD9-A64CB7FA193E",
   "schemaFamilySlug" : "vaporize-schemas",
   "schemaFamilyVersion" : "0.0.1",
   "schemaRef" : "private\/universal\/domain\/tooling\/schema-families\/vaporize-schemas\/v0.0.1\/json\/vaporize-schemas-v000-000-001\/schemas\/project-target-discovery-receipt\/project-target-discovery-receipt.schema.json",

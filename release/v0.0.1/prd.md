@@ -47,7 +47,10 @@ builds. When a large workspace is kept warm, callers can pass
 `--xcode-product-cache-derived-data-path`; Vaporize searches the shared
 `Build/Products/<Configuration>/<app>.app` cache before local DerivedData and
 builds through the shared workspace/DerivedData pair on cache miss. This is a
-cache-first workspace reuse slice, not automatic fleet scheme discovery.
+cache-first workspace reuse slice. The next discovery slice lets `list-targets`
+report expected product-cache candidate paths and warm/missing status from
+AppleProjectSpec target facts. That is still not full `.xcworkspace` graph
+membership proof.
 
 The release classification is `internal-essential-tool`: an internal-only tool
 whose absence blocks assistants from completing build, install, launch, release
@@ -133,6 +136,9 @@ future hardware or other material-domain request families.
 - Provide `list-targets` so an assistant can discover Apple project targets,
   buildable candidates, packages, and schemes from AppleProjectSpec Pkl or
   legacy `project.yml` before routing Pkl parity, build, install, or cache work.
+- Provide workspace product-cache discovery through `list-targets` so an
+  assistant can see expected shared DerivedData `.app` product candidates and
+  warm/missing status before attempting install/build routing.
 - Provide shared Xcode workspace product-cache reuse so a warm large workspace
   DerivedData product can satisfy app installs before local rebuilds.
 - Define a Kura-queryable runtime sample series and Apple/Swift native artifact
@@ -223,16 +229,18 @@ Supporting audiences:
 | FR-026 | Vaporware modification request release discipline | Behavior-changing vaporware modification requests create or attach to a feature flag, feature status record, or release-feature cohort; add or update targetable tests; run the smallest feature-scoped proof; update release evidence and schema fixtures when affected; and record any no-flag exception explicitly. |
 | FR-027 | Release doctor spine audit | `release-doctor --path <package-or-release-root>` emits a `vaporize-release-doctor` receipt that verifies required release artifacts exist, evidence JSON parses, PRD/CUJ/gate/catalog surfaces name the release-doctor slice, launch-review references the gate and receipt, provenance inventories the receipt, and CUJ coverage counts CUJ-17. The command audits coherence; it does not approve final release. |
 | FR-028 | Project target discovery | `list-targets --pkl-path <project.pkl>` or `list-targets --package-path <project-dir>` emits a `vaporize-project-target-discovery` receipt that names target, package, scheme, and buildable-candidate facts from AppleProjectSpec. The command discovers routing facts; it does not build, install, generate `.xcodeproj` world-state, or prove fleet parity. |
+| FR-029 | Workspace product-cache discovery | `list-targets` accepts `--xcode-product-cache-workspace`, `--xcode-product-cache-derived-data-path`, and `--configuration`; when present, the target-discovery receipt includes expected shared DerivedData `.app` candidates and warm/missing status for buildable AppleProjectSpec targets. The command does not parse `.xcworkspace` membership, build, install, warm the cache, or prove fleet cache coverage. |
 
 ## Release Criteria
 
 - Vaporize's package test suite passes with the Swift 6.4 toolchain:
   `vaporize toolchain -- swift test --package-path private/apple/spm/vaporize@wrkstrm-core.cli`.
-  Current proof: the CUJ-derived coverage floor requires 79 Swift test
-  obligations plus 10 release evidence checks; the executable suite passes 97
-  tests across 18 implemented CUJ targets, including the CUJ-16
+  Current proof: the CUJ-derived coverage floor requires 84 Swift test
+  obligations plus 11 release evidence checks; the executable suite passes 102
+  tests across 19 implemented CUJ targets, including the CUJ-16
   `inspect-target-features` first slice, CUJ-17 `release-doctor` first slice,
-  and CUJ-18 `list-targets` first slice.
+  CUJ-18 `list-targets` first slice, and CUJ-19 workspace cache discovery
+  first slice.
 - `release/v0.0.1/product-definition.md` defines the product, primary users,
   product-level user journeys, choice argument, non-choice cases, and build
   implications before additional feature work is accepted.
@@ -316,7 +324,7 @@ Supporting audiences:
 - `FR-VAPORIZE-REALIZE-typed-vaporware-unit`
 - `FR-VAPORIZE-TOOL-CALL-OBSERVABILITY`
 - `FR-VAPORIZE-DRIFT-CATCH-retire-craze-canonical-language`
-- `FR-VAPORIZE-XCODE-WORKSPACE-PRODUCT-CACHE-DISCOVERY`
+- `FR-VAPORIZE-XCODE-WORKSPACE-GRAPH-MEMBERSHIP-DISCOVERY`
 - `FR-VAPORIZE-RUNTIME-SAMPLE-SERIES-APPLE-ARTIFACT-INGESTION`
 - `FR-VAPORIZE-WRKSTRM-CORE-BUILD-CONFIG-COMPOSITION`
 - `FR-VAPORIZE-WRKSTRM-APP-MINIMUMS-INSPECTION`

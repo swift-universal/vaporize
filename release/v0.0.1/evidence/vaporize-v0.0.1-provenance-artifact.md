@@ -1,6 +1,6 @@
 # Vaporize v0.0.1 - Provenance Artifact
 
-**Generated:** 2026-06-14T03:20:00Z
+**Generated:** 2026-06-14T04:05:00Z
 **Status:** captured for forward Pkl migration
 **Subject:** `vaporize@wrkstrm-core.cli` v0.0.1 release prep
 
@@ -9,12 +9,12 @@ chat memory.
 
 ## Proven
 
-- CUJ-derived test coverage is explicit: 79 required Swift test obligations
-  plus 10 release evidence checks across 18 active CUJs.
-- Vaporize package tests pass through `vaporize toolchain`: 97 executable Swift
-  tests across 18 implemented CUJ-specific SwiftPM test bundles, including
-  CUJ-16 target feature inspection, CUJ-17 release doctor, and CUJ-18 project
-  target discovery.
+- CUJ-derived test coverage is explicit: 84 required Swift test obligations
+  plus 11 release evidence checks across 19 active CUJs.
+- Vaporize package tests pass through `vaporize toolchain`: 102 executable Swift
+  tests across 19 implemented CUJ-specific SwiftPM test bundles, including
+  CUJ-16 target feature inspection, CUJ-17 release doctor, CUJ-18 project
+  target discovery, and CUJ-19 workspace product-cache discovery.
 - `product-definition.md` defines Vaporize, primary users, product-level user
   journeys, why users choose it, when not to choose it, and build implications
   before more implementation is accepted.
@@ -47,6 +47,9 @@ chat memory.
 - Shared Xcode workspace product-cache reuse has a first slice: cache-first app
   lookup, paired option validation, and shared workspace/DerivedData build
   invocation are covered by CUJ-15.
+- Workspace product-cache discovery has a first slice: Creative Selection v0.2
+  target facts map to one expected shared DerivedData `.app` candidate with
+  warm/missing status through CUJ-19.
 - Hello World Google target feature inspection passes through
   `inspect-target-features`, proving project configs, release tiers,
   `configFiles` wiring, generated xcconfigs, generated `ReleaseFeatures.swift`,
@@ -83,8 +86,8 @@ chat memory.
 - The full fleet builds through Vaporize.
 - Pkl-backed `.xcodeproj` generation covers scheme/resource/package feature
   parity across the required fleet.
-- Vaporize automatically discovers the requested product or scheme from the
-  shared Xcode workspace cache.
+- Vaporize automatically discovers `.xcworkspace` graph membership for the
+  requested product or scheme.
 - Fleet-wide performance or disk-space savings have been measured.
 - Vaporize automatically emits Kura runtime samples, retains Apple/Swift native
   artifacts as durable release evidence, or compares per-feature-flag build-size
@@ -108,7 +111,9 @@ chat memory.
 | `creative-selection-v0.2-project-yml-pkl-comparison.receipt.json` | Imported Creative Selection v0.2 Pkl matches YAML | PASS |
 | `creative-selection-v0.2-pkl-xcodeproj-generation.receipt.json` | Creative Selection v0.2 Pkl emits first-slice `.xcodeproj` world-state | PASS-WITH-NOTE |
 | `creative-selection-v0.2-list-targets.receipt.json` | Creative Selection v0.2 Pkl target, package, scheme, and buildable-candidate facts are discoverable | PASS-WITH-NOTE |
+| `creative-selection-v0.2-workspace-cache-discovery.receipt.json` | Creative Selection v0.2 workspace product-cache candidate path and warm/missing state are discoverable | PASS-WITH-NOTE |
 | `VaporizeCUJ15XcodeProductCacheTests.swift` | Shared workspace product cache lookup and invocation slice is covered | PASS-WITH-NOTE |
+| `VaporizeCUJ19WorkspaceCacheDiscoveryTests.swift` | Workspace product-cache candidate discovery is covered | PASS-WITH-NOTE |
 | `product-definition.md` | Product definition, primary users, journeys, choice argument, and build implications are defined | PASS |
 | `why-vaporize.md` | Positioning, tool comparison, benchmark baseline, and ergonomics are explained | PASS-WITH-NOTE |
 | `performance-marketing-claims.md` | Safe performance marketing copy and claim boundaries are defined | PASS-WITH-NOTE |
@@ -149,10 +154,12 @@ chat memory.
    Creative Selection v0.2 slice.
 2. Repeat old tool / Vaporize / Pkl-generation comparisons beyond Concourse and
    Creative Selection v0.2 before claiming fleet parity.
-3. Use project target discovery receipts to route the next build/cache/parity
-   step before attempting automatic workspace product-cache discovery.
-4. Promote shared workspace product-cache reuse into workspace product/scheme
-   discovery once the maintained workspace fleet is known.
+3. Use project target discovery and workspace cache candidate receipts to route
+   the next build/cache/parity step before attempting automatic `.xcworkspace`
+   graph membership discovery.
+4. Promote target-fact-derived workspace product-cache candidate discovery into
+   `.xcworkspace` graph membership and product/scheme discovery once the
+   maintained workspace fleet is known.
 5. Implement Vaporize-emitted Kura runtime samples that attach SwiftPM coverage
    JSON/profile data, xUnit output when available, Xcode `.xcresult` bundles,
    result metadata, build logs, diagnostics, DerivedData/product paths,

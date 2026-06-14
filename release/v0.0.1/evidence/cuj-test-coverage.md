@@ -1,6 +1,6 @@
 # Vaporize v0.0.1 - CUJ Test Coverage
 
-**Generated:** 2026-06-14T03:20:00Z
+**Generated:** 2026-06-14T04:05:00Z
 **Status:** active CUJ coverage floor defined
 **Component:** `vaporize@wrkstrm-core.cli`
 **Schema:** `vaporize-schemas v0.0.1` / `VaporizeCUJTestCoverageModel`
@@ -26,12 +26,12 @@ and CUJ count must already name the behavior being retired from the old location
 
 | Metric | Count |
 | --- | ---: |
-| Active CUJs | 18 |
+| Active CUJs | 19 |
 | Deferred CUJs | 1 |
-| Required Swift test obligations | 79 |
-| Required release evidence checks | 10 |
-| Required targetable test obligations | 89 |
-| Current executable Swift tests | 97 |
+| Required Swift test obligations | 84 |
+| Required release evidence checks | 11 |
+| Required targetable test obligations | 95 |
+| Current executable Swift tests | 102 |
 
 ## Targetable Test Bundles
 
@@ -55,6 +55,7 @@ and CUJ count must already name the behavior being retired from the old location
 | CUJ-16 | `VaporizeCUJ16TargetFeaturesTests` | 5 |
 | CUJ-17 | `VaporizeCUJ17ReleaseDoctorTests` | 5 |
 | CUJ-18 | `VaporizeCUJ18ListTargetsTests` | 5 |
+| CUJ-19 | `VaporizeCUJ19WorkspaceCacheDiscoveryTests` | 5 |
 
 ## Coverage By CUJ
 
@@ -78,18 +79,20 @@ and CUJ count must already name the behavior being retired from the old location
 | CUJ-16 | FR-023, FR-024 | 5 | Target feature inspection parsing, inferred target, stale xcconfig detection, generated Swift provenance, CLI parsing |
 | CUJ-17 | FR-027 | 5 Swift tests; 1 release evidence check | Release doctor parsing, live-spine pass, release-root resolution, missing-gate failure, unresolved-root rejection |
 | CUJ-18 | FR-028 | 5 Swift tests; 1 release evidence check | list-targets parsing, legacy YAML discovery, Pkl discovery, directory fallback, missing project-spec rejection |
+| CUJ-19 | FR-021, FR-029 | 5 Swift tests; 1 release evidence check | list-targets cache option parsing, missing candidate discovery, warm candidate discovery, non-buildable exclusion, incomplete cache-pair rejection |
 
 ## Deferred Coverage
 
 - Fleet Pkl-backed `.xcodeproj` build parity and XcodeGen quarantine
   disposition remain deferred and release blocking.
-- Automatic shared-workspace product-cache discovery remains deferred; CUJ-15
+- Workspace product-cache candidate discovery is covered as a first slice; CUJ-15
   covers cache-first lookup and shared workspace invocation when the scheme is
-  already known, and CUJ-18 now supplies target/scheme discovery facts from
-  AppleProjectSpec inputs.
+  already known, CUJ-18 supplies target/scheme discovery facts, and CUJ-19 maps
+  buildable target facts to warm/missing shared DerivedData product candidates.
 - `list-targets` project target discovery is covered as a first slice; it does
-  not build, install, generate `.xcodeproj` world-state, or prove automatic
-  workspace product discovery.
+  not build, install, generate `.xcodeproj` world-state, parse `.xcworkspace`
+  graph membership, warm the cache, prove fleet cache coverage, or measure disk
+  savings.
 - wrkstrm app-minimums inspection has a target-level first slice; fleet
   registry-level inspection remains a follow-up.
 

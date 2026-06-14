@@ -44,21 +44,24 @@ understandable.
 
 ## Current Bundle Map
 
-The v0.0.1 release packet currently names 18 active CUJ-specific bundles.
+The v0.0.1 release packet currently names 19 active CUJ-specific bundles.
 CUJ-16 is the target-feature inspection bundle, CUJ-17 is the release-doctor
-bundle, and CUJ-18 is the project target discovery bundle:
+bundle, CUJ-18 is the project target discovery bundle, and CUJ-19 is the
+workspace product-cache discovery bundle:
 
 ```text
 VaporizeCUJ16TargetFeaturesTests
 VaporizeCUJ17ReleaseDoctorTests
 VaporizeCUJ18ListTargetsTests
+VaporizeCUJ19WorkspaceCacheDiscoveryTests
 ```
 
 Those bundles prove target-feature receipt shape, target inference, stale
 xcconfig detection, generated Swift provenance detection, release-spine
 coherence, missing-gate failure, unresolved-root rejection, target discovery
 from YAML and Pkl, directory fallback, missing project-spec rejection, and CLI
-parsing.
+parsing. CUJ-19 adds cache option parsing, warm/missing product candidate
+inspection, non-buildable target exclusion, and incomplete cache-pair rejection.
 
 ## Release Review
 
