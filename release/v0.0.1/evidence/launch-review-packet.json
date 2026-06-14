@@ -285,8 +285,8 @@
     "activeCUJCount": 15,
     "deferredCUJCount": 2,
     "requiredSwiftTestObligationCount": 64,
-    "requiredReleaseEvidenceCheckCount": 5,
-    "requiredTargetableTestObligationCount": 69,
+    "requiredReleaseEvidenceCheckCount": 6,
+    "requiredTargetableTestObligationCount": 70,
     "bareSwiftToolchainResult": "CURRENT-PASS-WITH-NOTE: at 2026-06-13T21:39:03Z bare swift reported Apple Swift 6.4 and a focused CUJ-15 test run passed in 6.80s; earlier release-prep runs observed bare Swift drift, so Vaporize remains the canonical assistant route.",
     "requiredToolchainResult": "PASS: Vaporize toolchain mode owns Xcode-selected Swift via internal xcrun; focused CUJ-15 also passed through Vaporize in 6.80s once warm.",
     "productDefinitionContract": "PASS: release/v0.0.1/product-definition.md defines the product, primary users, product-level journeys, choice argument, non-choice cases, and build implications before further build work is accepted.",
@@ -332,7 +332,7 @@
     {
       "gateRef": "GATE-05-cuj-derived-package-tests",
       "status": "PASS",
-      "rationale": "CUJ coverage contract requires 64 Swift test obligations plus 5 release evidence checks; Vaporize package tests passed 82 executable tests across 15 CUJ-specific SwiftPM bundles through Vaporize toolchain mode"
+      "rationale": "CUJ coverage contract requires 64 Swift test obligations plus 6 release evidence checks across 16 active CUJs; Vaporize package tests passed 82 executable tests across 15 implemented CUJ-specific SwiftPM bundles through Vaporize toolchain mode, while CUJ-16 is evidence-gated and blocked for app-minimums implementation"
     },
     {
       "gateRef": "GATE-06-required-toolchain-owned-by-vaporize",
@@ -433,6 +433,11 @@
       "gateRef": "GATE-28-wrkstrm-core-app-build-config-composition",
       "status": "PASS-WITH-NOTE",
       "rationale": "Existing wrkstrm-core app/build config sources are identified: tool-registry discover-apps and xcode-project tool records for app project ownership, identifier app describe for canonical app variant names and paths, and app-artifacts for bundle audits, install paths, Xcode build/export receipts, and flat .app artifacts. Vaporize integration remains a follow-up."
+    },
+    {
+      "gateRef": "GATE-29-wrkstrm-app-minimums-inspection",
+      "status": "BLOCKED",
+      "rationale": "wrkstrm-app-minimums.md defines the minimum release-feature topology Vaporize must know per wrkstrm app: registry record, project spec, tier declarations, Config/release-features.json, generated conditional-compilation xcconfigs, project wiring, generated ReleaseFeatures.swift, and digikoma-release-features provenance. Vaporize does not yet inspect these minimums across the app fleet."
     }
   ],
   "knownFollowUps": [
@@ -445,7 +450,8 @@
     "FR-VAPORIZE-PRODUCT-RELEASE-DIR-RENAME-MODE",
     "FR-VAPORIZE-XCODE-WORKSPACE-PRODUCT-CACHE-DISCOVERY",
     "FR-VAPORIZE-RUNTIME-SAMPLE-SERIES-APPLE-ARTIFACT-INGESTION",
-    "FR-VAPORIZE-WRKSTRM-CORE-BUILD-CONFIG-COMPOSITION"
+    "FR-VAPORIZE-WRKSTRM-CORE-BUILD-CONFIG-COMPOSITION",
+    "FR-VAPORIZE-WRKSTRM-APP-MINIMUMS-INSPECTION"
   ],
   "signoffs": {
     "audienceApproverSignoffRef": null,
@@ -481,9 +487,10 @@
     "x-runtime-sample-series": "Kura series seeded at private/universal/substrate/collectives/wrkstrm/private/universal/kura-spaces/series/vaporize-runtime-samples. Backfilled CUJ-09 sample records a Vaporize toolchain SwiftPM coverage run, verified codecov JSON/profile data, build-output size, Debug product size, codecov artifact size, and Vaporize binary size. Automatic sample emission and durable artifact retention remain follow-ups.",
     "x-apple-native-artifacts": "Runtime evidence should leverage SwiftPM code coverage JSON, raw .profraw/default.profdata, xUnit output when available, Xcode .xcresult bundles, result metadata, build logs, diagnostics, DerivedData/product paths, product/binary/bundle sizes, coverage artifact size, result bundle size, cache deltas, and per-feature-flag size cohorts before inventing parallel measurement formats.",
     "x-wrkstrm-core-build-config-composition": "App-facing Vaporize samples should compose with existing wrkstrm-core build sources instead of inventing a second config registry: tool-registry@wrkstrm-core.cli discover-apps and xcode-project.tool.json records for app/project ownership, identifier@wrkstrm-core.cli app describe for canonical app variant names and paths, app-artifacts@wrkstrm-core.cli for bundle audits/install paths/Xcode build-export receipts, and release-features.json or generated xcconfig files when feature cohorts exist.",
+    "x-wrkstrm-app-minimums": "Vaporize must know whether wrkstrm-owned apps satisfy minimum release-feature topology before strong app-facing claims are allowed: registry record, project spec, declared tiers, Config/release-features.json, generated Config/xcconfigs/*.xcconfig, project configFiles or Pkl wiring, generated Sources/ReleaseFeatures.swift, and digikoma-release-features provenance. Hello World Google is the reference specimen.",
     "x-performance-baseline": "Current local baseline at 2026-06-14T00:44:00Z: validate-json launch packet 0.03s real; vaporize toolchain swift --version 0.25s real; bare swift --version 0.17s real; focused CUJ-15 bare swift and Vaporize toolchain both 6.80s real; full Vaporize suite 15.57s real with 82 tests; focused CUJ-09 coverage run 29.38s real with SwiftPM codecov JSON/profile data and build-size metrics verified.",
-    "x-cuj-test-coverage": "Required test count is derived from PRD requirements through active draft CUJs. Current floor: 64 Swift test obligations plus 5 release evidence checks, all targetable by CUJ-specific SwiftPM bundles. Current executable suite: 82 Swift tests.",
-    "x-major-feature-test-suite": "Vaporize package tests now cover major release features through 15 CUJ-specific SwiftPM bundles: command parsing, pass/use/toolchain receipts, JSON validation, inventory scanner/renderer, graph forwarding, Apple project YAML/Pkl migration paths, first-slice Pkl .xcodeproj generation, shared Xcode workspace product-cache reuse, SwiftPM CLI installer arguments, and app installer Xcode invocation paths.",
+    "x-cuj-test-coverage": "Required test count is derived from PRD requirements through active draft CUJs. Current floor: 64 Swift test obligations plus 6 release evidence checks across 16 active CUJs. Current executable suite: 82 Swift tests across 15 implemented CUJ-specific SwiftPM bundles; CUJ-16 is evidence-gated and blocked for app-minimums implementation.",
+    "x-major-feature-test-suite": "Vaporize package tests now cover major implemented release features through 15 CUJ-specific SwiftPM bundles: command parsing, pass/use/toolchain receipts, JSON validation, inventory scanner/renderer, graph forwarding, Apple project YAML/Pkl migration paths, first-slice Pkl .xcodeproj generation, shared Xcode workspace product-cache reuse, SwiftPM CLI installer arguments, and app installer Xcode invocation paths. CUJ-16 app-minimums inspection is evidence-gated and blocked for implementation.",
     "x-pkl-project-generation-gate": "Internal v0.0.1 release is blocked until our owned Apple project-generation path has fleet build parity from Pkl-backed .xcodeproj world-state generation, with any leftover XcodeGen surfaces quarantined as compatibility.",
     "x-xcodegen-to-pkl-investigation": "Investigation found 155 project.yml files, 185 checked-in .xcodeproj/project.pbxproj files, direct XcodeGen runner surfaces, and no existing Pkl Apple-project generation model. The first approved mitigation slice now reads legacy YAML through Swift and receipts Concourse inspection."
   }

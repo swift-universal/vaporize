@@ -71,9 +71,10 @@ The first approved migration-prep slice is now landed:
 - Shared Xcode workspace product-cache reuse now has a CUJ-15 first slice for
   cache-first app lookup and shared workspace/DerivedData build invocation.
 - The CUJ-derived coverage floor now requires 64 Swift test obligations plus
-  5 release evidence checks, all targetable by CUJ-specific SwiftPM bundles;
-  the full Vaporize package test suite passes 82 executable Swift tests through
-  `vaporize toolchain`.
+  6 release evidence checks across 16 active CUJs; the full Vaporize package
+  test suite passes 82 executable Swift tests across 15 implemented CUJ-specific
+  SwiftPM bundles through `vaporize toolchain`, with CUJ-16 evidence-gated for
+  app-minimums implementation.
 
 This does not unblock v0.0.1 by itself. It gives the Pkl migration a tested
 Swift intake surface plus a first owned `.xcodeproj` generation slice. The

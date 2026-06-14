@@ -16,11 +16,11 @@ than treating the current test count as self-justifying.
 
 | Metric | Count |
 | --- | ---: |
-| Active CUJs | 15 |
+| Active CUJs | 16 |
 | Deferred CUJs | 2 |
 | Required Swift test obligations | 64 |
-| Required release evidence checks | 5 |
-| Required targetable test obligations | 69 |
+| Required release evidence checks | 6 |
+| Required targetable test obligations | 70 |
 | Current executable Swift tests | 82 |
 
 ## Targetable Test Bundles
@@ -62,6 +62,7 @@ than treating the current test count as self-justifying.
 | CUJ-13 | FR-018 | 4 | Legacy YAML import parsing, generated Pkl evaluation, YAML/Pkl comparison, nested value rendering |
 | CUJ-14 | FR-020 | 3 | generate-xcodeproj parsing, Pkl-backed .xcodeproj output, deterministic renderer proof |
 | CUJ-15 | FR-003, FR-021 | 4 | Product-cache option parsing, cache-first app lookup, shared workspace build invocation, paired option validation |
+| CUJ-16 | FR-023, FR-024 | 0 | wrkstrm app-minimums release evidence; implementation follow-up |
 
 ## Deferred Coverage
 
@@ -72,5 +73,7 @@ than treating the current test count as self-justifying.
   already known.
 - `list-targets` target discovery remains deferred and outside the current
   v0.0.1 green path.
+- wrkstrm app-minimums inspection is release-evidence-gated in this packet and
+  remains blocked for implementation.
 
 The machine-readable companion is `cuj-test-coverage.json`.

@@ -111,6 +111,10 @@ slice.
   the Hello World demos, `identifier@wrkstrm-core.cli` for canonical app
   variant names/paths, and `app-artifacts@wrkstrm-core.cli` for bundle audits,
   install paths, Xcode build/export receipts, and flat application artifacts.
+- Define wrkstrm app minimums so Vaporize can tell whether an app has the
+  release-feature manifest, generated conditional-compilation xcconfigs,
+  generated `ReleaseFeatures.swift`, and project wiring required before strong
+  app-facing claims are allowed.
 - Provide `status` and `warehouse` inventory modes for
   `x-vaporize-collapse-path` records, with legacy `x-craze-collapse-path`
   read-only fallback.
@@ -179,15 +183,16 @@ Supporting audiences:
 | FR-021 | Shared Xcode workspace product cache | App install/build accepts paired `--xcode-product-cache-workspace` and `--xcode-product-cache-derived-data-path`, searches the shared DerivedData product path before local outputs, and uses the shared workspace/DerivedData pair for the Xcode build invocation on cache miss. |
 | FR-022 | Pre-development product definition and choice argument | `release/v0.0.1/product-definition.md` defines the product, primary users, product-level user journeys, why users choose Vaporize, when not to choose Vaporize, and build implications; PRD, CUJs, why explainer, release gates, launch-review packet, CUJ coverage, and release-review tests reference it. |
 | FR-023 | Existing wrkstrm-core app/build config composition | App-facing runtime samples and future feature-status inspection must consume existing wrkstrm-core build surfaces before inventing parallel records: `tool-registry@wrkstrm-core.cli discover-apps` / `xcode-project.tool.json` records for `project.yml` ownership, `identifier@wrkstrm-core.cli app describe` for app variant names/paths, and `app-artifacts@wrkstrm-core.cli` for bundle validation, install-path patching, Xcode build/export receipts, and flat application artifacts. |
+| FR-024 | wrkstrm app minimums inspection | Vaporize app-facing inspection must report whether each app has the wrkstrm minimum release-feature topology: registry record, project spec, tier declarations, `Config/release-features.json`, generated `Config/xcconfigs/*.xcconfig`, project `configFiles` or Pkl equivalent wiring, generated `Sources/ReleaseFeatures.swift`, and `digikoma-release-features` provenance. Missing, stale, or unknown minimums block strong feature-cohort, launch-readiness, and per-feature-size claims. |
 
 ## Release Criteria
 
 - Vaporize's package test suite passes with the Swift 6.4 toolchain:
   `vaporize toolchain -- swift test --package-path private/apple/spm/vaporize@wrkstrm-core.cli`.
   Current proof: the CUJ-derived coverage floor requires 64 Swift test
-  obligations plus 5 release evidence checks, all targetable by CUJ-specific
-  SwiftPM test bundles; the executable suite passes 82 tests across 15 CUJ
-  targets.
+  obligations plus 6 release evidence checks; the executable suite passes 82
+  tests across 15 implemented CUJ targets, while CUJ-16 is evidence-gated and
+  blocked for app-minimums implementation.
 - `release/v0.0.1/product-definition.md` defines the product, primary users,
   product-level user journeys, choice argument, non-choice cases, and build
   implications before additional feature work is accepted.
@@ -222,6 +227,9 @@ Supporting audiences:
   tool record, the identifier app description, the app-artifacts audit/export
   receipt, and any release-feature manifest or generated `.xcconfig` files
   present in the project.
+- wrkstrm app minimums are defined in
+  `release/v0.0.1/wrkstrm-app-minimums.md`; implementation remains a blocking
+  follow-up before Vaporize can claim fleet-wide app-minimum awareness.
 - Concourse legacy project inspection receipt validates with
   `vaporize validate-json --path release/v0.0.1/evidence/concourse-project-yml-inspection.receipt.json`.
 - Concourse YAML/Pkl comparison receipt validates with
@@ -257,3 +265,4 @@ Supporting audiences:
 - `FR-VAPORIZE-XCODE-WORKSPACE-PRODUCT-CACHE-DISCOVERY`
 - `FR-VAPORIZE-RUNTIME-SAMPLE-SERIES-APPLE-ARTIFACT-INGESTION`
 - `FR-VAPORIZE-WRKSTRM-CORE-BUILD-CONFIG-COMPOSITION`
+- `FR-VAPORIZE-WRKSTRM-APP-MINIMUMS-INSPECTION`

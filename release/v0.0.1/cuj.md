@@ -340,6 +340,37 @@ Failure truth:
 - A cold or stale cache falls back to the shared workspace build path, not to
   an untyped direct `xcodebuild` run.
 
+## CUJ-16 - Assistant Audits wrkstrm App Minimums
+
+1. Assistant receives a wrkstrm-owned app path or an `xcode-project.tool.json`
+   record.
+2. Assistant asks Vaporize to inspect wrkstrm app minimums for that app.
+3. Vaporize resolves the app registry record, project spec, build
+   configurations, release-feature manifest, generated xcconfigs, project
+   config wiring, generated `ReleaseFeatures.swift`, and
+   `digikoma-release-features` provenance.
+4. Vaporize emits a machine-readable app-minimums receipt and a concise human
+   status report.
+
+Success:
+
+- Vaporize reports whether the app has `Config/release-features.json`.
+- Vaporize reports whether every declared tier has a generated
+  `Config/xcconfigs/<XcodeConfig>.xcconfig`.
+- Vaporize reports whether project `configFiles` or Pkl equivalent wiring
+  points at those generated xcconfigs.
+- Vaporize reports whether generated `Sources/ReleaseFeatures.swift` exists.
+- Vaporize reports generator provenance from receipts or generated headers.
+- Missing, stale, or unknown minimums block strong app-facing claims about
+  release tiers, feature cohorts, launch readiness, and per-feature size.
+
+Failure truth:
+
+- This CUJ is release-evidence-gated in v0.0.1. Vaporize does not yet implement
+  fleet app-minimums inspection.
+- Hello World Google is the reference specimen, not proof that the fleet already
+  meets the minimum.
+
 ## Test Coverage Contract
 
 Test count is derived from PRD requirements through the active draft CUJs.
@@ -363,13 +394,15 @@ must know the required floor.
 | CUJ-13 | FR-018 | 4 |
 | CUJ-14 | FR-020 | 3 |
 | CUJ-15 | FR-003, FR-021 | 4 |
+| CUJ-16 | FR-023, FR-024 | 0 Swift tests; 1 release evidence check |
 
 Current active-CUJ requirement:
 
 - Required Swift test obligations: 64
-- Required release evidence checks: 5
-- Required targetable test obligations: 69
-- Current executable Swift tests: 82 across 15 CUJ-specific SwiftPM bundles
+- Required release evidence checks: 6
+- Required targetable test obligations: 70
+- Current executable Swift tests: 82 across 15 implemented CUJ-specific SwiftPM
+  bundles
 - Coverage artifact:
   `release/v0.0.1/evidence/cuj-test-coverage.json`
 

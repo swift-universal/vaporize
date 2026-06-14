@@ -17,11 +17,11 @@
     "releaseGates": "private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/release-gates.md"
   },
   "counts": {
-    "activeCUJCount": 15,
+    "activeCUJCount": 16,
     "deferredCUJCount": 2,
     "requiredSwiftTestObligationCount": 64,
-    "requiredReleaseEvidenceCheckCount": 5,
-    "requiredTargetableTestObligationCount": 69,
+    "requiredReleaseEvidenceCheckCount": 6,
+    "requiredTargetableTestObligationCount": 70,
     "currentExecutableSwiftTestCount": 82,
     "currentExecutableSwiftTestBreakdown": {
       "VaporizeCUJ01SwiftPMCLITests": 7,
@@ -205,6 +205,19 @@
       "evidence": [
         "VaporizeCUJ15XcodeProductCacheTests.swift"
       ]
+    },
+    {
+      "cuj": "CUJ-16",
+      "title": "Assistant Audits wrkstrm App Minimums",
+      "prdRefs": ["FR-023", "FR-024"],
+      "requiredSwiftTestObligations": 0,
+      "requiredReleaseEvidenceChecks": 1,
+      "status": "blocked-for-implementation",
+      "evidence": [
+        "wrkstrm-app-minimums.md",
+        "release-gates.md",
+        "launch-review-packet.json"
+      ]
     }
   ],
   "deferredCoverage": [
@@ -223,6 +236,7 @@
     "This artifact defines the active-CUJ coverage floor; it does not approve v0.0.1 release.",
     "First-slice Pkl-backed .xcodeproj world-state generation is covered; fleet build parity and quarantine disposition remain release-blocking.",
     "Shared Xcode workspace product-cache reuse is covered as cache lookup and build invocation; automatic workspace scheme/product discovery remains deferred.",
+    "wrkstrm app-minimums inspection is defined as release evidence and remains blocked for implementation.",
     "Actual executable Swift tests may exceed the required count when extra regression coverage is useful."
   ]
 }

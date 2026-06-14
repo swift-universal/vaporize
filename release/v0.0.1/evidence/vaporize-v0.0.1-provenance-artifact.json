@@ -14,8 +14,8 @@
   "releaseVerdict": {
     "currentStatus": "blocked-pending-fleet-pkl-project-generation",
     "proven": [
-      "CUJ-derived test coverage is explicit: 64 required Swift test obligations plus 5 release evidence checks across 15 active CUJs.",
-      "Vaporize package tests pass through Vaporize toolchain mode: 82 executable Swift tests across 15 CUJ-specific SwiftPM test bundles.",
+      "CUJ-derived test coverage is explicit: 64 required Swift test obligations plus 6 release evidence checks across 16 active CUJs.",
+      "Vaporize package tests pass through Vaporize toolchain mode: 82 executable Swift tests across 15 implemented CUJ-specific SwiftPM test bundles; CUJ-16 is evidence-gated and blocked for app-minimums implementation.",
       "The product definition defines Vaporize, primary users, product-level user journeys, choice argument, non-choice cases, and build implications before further build work is accepted.",
       "Legacy XcodeGen project.yml files parse through the Swift YAML read bridge.",
       "All 155 discovered project.yml files under private/universal/substrate/collectives parsed through inspect-project-yml.",
@@ -144,7 +144,7 @@
       "receiptKind": "cuj-test-coverage",
       "path": "private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/cuj-test-coverage.json",
       "claim": "Required test count is derived from PRD requirements through active draft CUJs.",
-      "result": "PASS: 64 Swift test obligations, 5 release evidence checks, 69 targetable obligations, 82 executable Swift tests"
+      "result": "PASS-WITH-NOTE: 64 Swift test obligations, 6 release evidence checks, 70 targetable obligations, 82 executable Swift tests across 15 implemented CUJ bundles; CUJ-16 app-minimums inspection remains blocked for implementation"
     },
     {
       "receiptKind": "launch-review-packet",
@@ -319,6 +319,10 @@
       "purpose": "Defines approved measured/behavioral/theoretical performance claims, example copy, prohibited claims, before/after examples, and benchmark receipts required before stronger claims."
     },
     {
+      "path": "private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/wrkstrm-app-minimums.md",
+      "purpose": "Defines the minimum wrkstrm app release-feature topology Vaporize must inspect before making strong app-facing claims."
+    },
+    {
       "path": "private/universal/substrate/collectives/wrkstrm/private/universal/kura-spaces/series/vaporize-runtime-samples",
       "purpose": "Seeds the Kura runtime sample series for Vaporize and a backfilled CUJ-09 SwiftPM coverage sample with native artifact references, build-size metrics, and feature-flag size dimensions."
     },
@@ -342,7 +346,7 @@
     },
     {
       "command": "vaporize toolchain -- swift test --package-path private/apple/spm/vaporize@wrkstrm-core.cli",
-      "result": "PASS: 82 tests across 15 CUJ-specific SwiftPM bundles"
+      "result": "PASS: 82 tests across 15 implemented CUJ-specific SwiftPM bundles; CUJ-16 is evidence-gated and blocked for app-minimums implementation"
     },
     {
       "command": "vaporize toolchain -- swift test --package-path private/apple/spm/vaporize@wrkstrm-core.cli --filter VaporizeCUJ15XcodeProductCacheTests",
@@ -475,6 +479,7 @@
     "Promote shared workspace product-cache reuse into workspace product/scheme discovery once the maintained workspace fleet is known.",
     "Implement Vaporize-emitted Kura runtime samples that can attach SwiftPM coverage JSON/profile data, xUnit output when available, Xcode .xcresult bundles, result metadata, build logs, diagnostics, DerivedData/product paths, product/binary/bundle sizes, coverage/result artifact sizes, cache deltas, and per-feature-flag size cohorts.",
     "Compose app-facing runtime samples with existing wrkstrm-core build-config sources: tool-registry xcode-project records, identifier app descriptions, app-artifacts audit/export receipts, and release-feature or generated xcconfig references.",
+    "Implement wrkstrm app-minimums inspection so Vaporize can report whether each app has release-features.json, generated xcconfigs, generated ReleaseFeatures.swift, project wiring, and digikoma-release-features provenance.",
     "Create dedicated benchmark receipts for cold builds, warm cache hits, cache misses, and disk usage before making fleet performance or space-saving release claims.",
     "Promote approved performance marketing claims only after attaching the relevant benchmark receipt.",
     "Quarantine or migrate remaining substrate-owned XcodeGen surfaces."
@@ -489,6 +494,7 @@
     "The why-vaporize benchmark baseline is local release-prep evidence and must not be presented as fleet performance proof.",
     "The first runtime sample is backfilled and references ephemeral SwiftPM build artifacts; it proves the target shape, not automatic Vaporize emission, durable artifact retention, or per-feature-flag size comparison.",
     "The wrkstrm-core build-config composition correction identifies existing sources of truth; Vaporize does not yet automatically join registry, identifier, app-artifacts, and release-feature records into app-facing samples.",
+    "The wrkstrm app-minimums correction defines the required release-feature topology; Vaporize does not yet inspect that topology across the fleet.",
     "Concourse build comparison is one-specimen evidence and must not be generalized to the whole fleet without additional receipts."
   ]
 }
