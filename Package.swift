@@ -17,6 +17,14 @@ let commonProcessDependency = localOrRemote(
   url: "https://github.com/swift-universal/common-process.git",
   from: "0.3.5"
 )
+// swift-cli-installer LIFTED 2026-06-14 from sources/swift-cli-installer to
+// swift-universal/private/universal/domain/tooling/spm/swift-cli-installer/
+// per CEO decision + [[no-code-gets-left-behind]] doctrine.
+let swiftCLIInstallerDependency = localOrRemote(
+  path: "../../../../../swift-universal/private/universal/domain/tooling/spm/swift-cli-installer",
+  url: "https://github.com/swift-universal/swift-cli-installer.git",
+  from: "0.0.1"
+)
 let pklSwiftDependency = Package.Dependency.package(
   url: "https://github.com/apple/pkl-swift",
   from: "0.8.2"
@@ -29,13 +37,15 @@ let package = Package(
   ],
   products: [
     .library(name: "AppleProjectSpecCore", targets: ["AppleProjectSpecCore"]),
-    .library(name: "SwiftCLIInstaller", targets: ["SwiftCLIInstaller"]),
+    // SwiftCLIInstaller library LIFTED to swift-universal/.../tooling/spm/swift-cli-installer/
+    // (CEO decision 2026-06-14). Consumers now import via swiftCLIInstallerDependency.
     .library(name: "SwiftAppInstaller", targets: ["SwiftAppInstaller"]),
     .executable(name: "vaporize@wrkstrm-core.cli", targets: ["VaporizeCLI"]),
   ],
   dependencies: [
     commonProcessDependency,
     commonShellDependency,
+    swiftCLIInstallerDependency,
     pklSwiftDependency,
     .package(url: "https://github.com/apple/swift-argument-parser", from: "1.6.0"),
     .package(url: "https://github.com/jpsim/Yams", from: "5.1.0"),
@@ -51,15 +61,9 @@ let package = Package(
       ],
       path: "sources/apple-project-spec-core"
     ),
-    .target(
-      name: "SwiftCLIInstaller",
-      dependencies: [
-        .product(name: "CommonShell", package: "common-shell"),
-        .product(name: "CommonProcess", package: "common-process"),
-        .product(name: "ArgumentParser", package: "swift-argument-parser"),
-      ],
-      path: "sources/swift-cli-installer"
-    ),
+    // SwiftCLIInstaller target REMOVED 2026-06-14 — LIFTED to swift-universal
+    // package "swift-cli-installer". Consumers below import via
+    // .product(name: "SwiftCLIInstaller", package: "swift-cli-installer").
     .target(
       name: "SwiftAppInstaller",
       dependencies: [
@@ -73,7 +77,7 @@ let package = Package(
       name: "VaporizeCLI",
       dependencies: [
         "AppleProjectSpecCore",
-        "SwiftCLIInstaller",
+        .product(name: "SwiftCLIInstaller", package: "swift-cli-installer"),
         "SwiftAppInstaller",
         .product(name: "CommonShell", package: "common-shell"),
         .product(name: "CommonProcess", package: "common-process"),
@@ -90,7 +94,7 @@ let package = Package(
     .testTarget(
       name: "VaporizeCUJ01SwiftPMCLITests",
       dependencies: [
-        "SwiftCLIInstaller",
+        .product(name: "SwiftCLIInstaller", package: "swift-cli-installer"),
         "VaporizeCLI",
         .product(name: "ArgumentParser", package: "swift-argument-parser"),
       ],
