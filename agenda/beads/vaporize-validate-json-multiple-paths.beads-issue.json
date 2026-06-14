@@ -1,0 +1,44 @@
+{
+  "BeadsIssue": "0.1.0",
+  "schemaVersion": "0.1.0",
+  "id": "VAPORIZE-VALIDATE-JSON-MULTIPLE-PATHS",
+  "title": "Make vaporize validate-json validate every repeated --path argument",
+  "status": "open",
+  "priority": 3,
+  "issueType": "bug",
+  "labels": [
+    "vaporize",
+    "validate-json",
+    "cli-ergonomics",
+    "release-evidence"
+  ],
+  "createdAt": "2026-06-14T07:45:14Z",
+  "createdBy": "wd capture after 2026-06-14 capture validation",
+  "historicalContent": {
+    "slug": "vaporize-validate-json-multiple-paths",
+    "kind": "bead-bug",
+    "createdAt": "2026-06-14T07:45:14Z",
+    "createdBy": "wd capture after 2026-06-14 capture validation",
+    "assignee": "wrkstrm-core",
+    "severity": "low",
+    "sourceType": "winddown-cli-ergonomics-bug",
+    "sourceLocation": "2026-06-14 capture validation command: vaporize validate-json --path <workflow> --path <instance> --path <role-manifest>",
+    "description": "During capture validation, a single vaporize validate-json invocation with three repeated --path arguments only printed validation for the final role manifest path. The files were validated successfully only after rerunning validate-json one path at a time. The command should either validate every repeated path or reject repeated --path with an actionable error.",
+    "acceptanceCriteria": [
+      "Add a focused test that invokes validate-json with at least two repeated --path arguments.",
+      "Choose and document the intended CLI contract: validate every path or reject repeated --path.",
+      "If validating every path, print one validation line or structured receipt item per path and fail the command if any path is invalid.",
+      "If rejecting repeated --path, emit an actionable usage error before validating any path.",
+      "Update release-doctor or CUJ coverage if validate-json becomes a multi-path release-evidence gate."
+    ],
+    "linkedTypedRecords": {
+      "workflowInstance": "private/universal/substrate/collectives/spaces-universal/private/universal/kura-spaces/workflows/xcode-workspace-authority-through-vaporize/v0.0.1/xcode-workspace-authority-through-vaporize-2026-06-14-vaporize-list-schemes.workflow-instance.su.json",
+      "releaseDoctor": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/vaporize-v0.0.1-release-doctor.receipt.json"
+    }
+  },
+  "composesWith": [
+    "[[vaporize-builds-vaporware-warehouse-stores-vaporware]]",
+    "[[beads-only-for-unresolved-concrete-work]]",
+    "[[do-not-invent-work]]"
+  ]
+}

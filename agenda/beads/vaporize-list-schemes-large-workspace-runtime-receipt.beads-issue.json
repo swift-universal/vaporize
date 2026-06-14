@@ -1,0 +1,51 @@
+{
+  "BeadsIssue": "0.1.0",
+  "schemaVersion": "0.1.0",
+  "id": "VAPORIZE-LIST-SCHEMES-LARGE-WORKSPACE-RUNTIME-RECEIPT",
+  "title": "Collect a live large-workspace runtime receipt for vaporize list-schemes",
+  "status": "open",
+  "priority": 2,
+  "issueType": "task",
+  "labels": [
+    "vaporize",
+    "xcode-workspace",
+    "release-evidence",
+    "runtime-receipt",
+    "cuj-20"
+  ],
+  "createdAt": "2026-06-14T07:45:14Z",
+  "createdBy": "wd capture after 2026-06-14 Vaporize CUJ-20 list-schemes implementation",
+  "historicalContent": {
+    "slug": "vaporize-list-schemes-large-workspace-runtime-receipt",
+    "kind": "bead-task",
+    "createdAt": "2026-06-14T07:45:14Z",
+    "createdBy": "wd capture after 2026-06-14 Vaporize CUJ-20 list-schemes implementation",
+    "assignee": "wrkstrm-core",
+    "severity": "medium",
+    "sourceType": "winddown-open-proof-gap",
+    "sourceLocation": "private/universal/substrate/collectives/spaces-universal/private/universal/kura-spaces/workflows/xcode-workspace-authority-through-vaporize/v0.0.1/xcode-workspace-authority-through-vaporize-2026-06-14-vaporize-list-schemes.workflow-instance.su.json",
+    "description": "CUJ-20 has focused tests and release evidence, but the live rismay-substrate.xcworkspace probe exceeded the interactive window and produced no receipt. Before marketing or release language claims large-workspace runtime behavior, Vaporize needs a persisted receipt from a real large workspace list-schemes invocation.",
+    "acceptanceCriteria": [
+      "Run vaporize list-schemes against the live rismay-substrate.xcworkspace or the current canonical substrate warehouse workspace.",
+      "Persist stdout/stderr and the typed list-schemes receipt under the Vaporize v0.0.1 evidence directory.",
+      "Record duration, exit status, scheme count, workspace path, and whether the command used xcodebuild through CommonProcess.",
+      "Update CUJ-20 evidence, release-doctor inputs, and benchmark/size documentation only after the receipt exists.",
+      "If the command times out or fails, preserve the failure receipt and classify the release gate as pending instead of passing."
+    ],
+    "linkedTypedRecords": {
+      "workflowFormula": "private/universal/substrate/collectives/spaces-universal/private/universal/kura-spaces/workflows/xcode-workspace-authority-through-vaporize/v0.0.1/xcode-workspace-authority-through-vaporize.workflow.su.json",
+      "workflowInstance": "private/universal/substrate/collectives/spaces-universal/private/universal/kura-spaces/workflows/xcode-workspace-authority-through-vaporize/v0.0.1/xcode-workspace-authority-through-vaporize-2026-06-14-vaporize-list-schemes.workflow-instance.su.json",
+      "cuj": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/cuj.md",
+      "releaseGate": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/release-gates.md"
+    },
+    "operatorQuotes": [
+      "basically we use the workspace to build and list all the available schemes - vaporize passes through to those commands.",
+      "exactly! we map our custom xcodegen flow to create the projects just like we need, then leverage xcoudebuild!"
+    ]
+  },
+  "composesWith": [
+    "[[vaporize-builds-vaporware-warehouse-stores-vaporware]]",
+    "[[do-not-invent-work]]",
+    "[[winddown-incomplete-until-committed]]"
+  ]
+}
