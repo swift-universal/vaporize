@@ -13,6 +13,7 @@ func releaseReviewArtifactsExist() {
     "release/v0.0.1/performance-marketing-claims.md",
     "vaporize.engineering.docc/index.md",
     "vaporize.engineering.docc/feature-catalog.md",
+    "vaporize.engineering.docc/modularity-and-ownership-boundaries.md",
     "vaporize.engineering.docc/product-and-policy.md",
     "vaporize.engineering.docc/command-and-artifact-architecture.md",
     "vaporize.engineering.docc/project-generation-and-migration.md",
@@ -69,6 +70,7 @@ func productDefinitionContractPrecedesBuildWork() throws {
   let gates = try readString(relativePath: "release/v0.0.1/release-gates.md")
   let engineeringDocs = try readString(relativePath: "vaporize.engineering.docc/index.md")
   let featureCatalog = try readString(relativePath: "vaporize.engineering.docc/feature-catalog.md")
+  let modularity = try readString(relativePath: "vaporize.engineering.docc/modularity-and-ownership-boundaries.md")
 
   #expect(productDefinition.contains("## Product Definition"))
   #expect(productDefinition.contains("## Primary Users"))
@@ -103,6 +105,7 @@ func productDefinitionContractPrecedesBuildWork() throws {
   #expect(engineeringDocs.contains("The package-local engineering catalog explains the system. The release packet"))
   #expect(engineeringDocs.contains("pre-code-prd-review"))
   #expect(engineeringDocs.contains("feature-catalog"))
+  #expect(engineeringDocs.contains("modularity-and-ownership-boundaries"))
   #expect(featureCatalog.contains("canonical human-readable feature list"))
   #expect(featureCatalog.contains("SwiftPM CLI lifecycle"))
   #expect(featureCatalog.contains("Apple app lifecycle"))
@@ -112,6 +115,12 @@ func productDefinitionContractPrecedesBuildWork() throws {
   #expect(featureCatalog.contains("Target feature inspection"))
   #expect(featureCatalog.contains("Feature-scoped test lifecycle"))
   #expect(featureCatalog.contains("Pre-code PRD review"))
+  #expect(featureCatalog.contains("correct ownership home"))
+  #expect(modularity.contains("Capabilities that are genuinely Swift Universal belong in `swift-universal`"))
+  #expect(modularity.contains("Apple-bounded, Xcode-bounded, app-bounded"))
+  #expect(modularity.contains("SwiftCLIInstaller"))
+  #expect(modularity.contains("VaporizeCLI"))
+  #expect(modularity.contains("Split `VaporizeCLI` command-family implementations out of `main.swift`"))
 }
 
 @Test("CUJ-09 release gates keep Pkl generation blocked")

@@ -63,3 +63,4 @@ all of these anchors:
 - A user-facing journey in `cuj.md`.
 - A command, artifact, or documentation surface.
 - A proof boundary in tests, receipts, release gates, or schema fixtures.
+- A correct ownership home per <doc:modularity-and-ownership-boundaries>.

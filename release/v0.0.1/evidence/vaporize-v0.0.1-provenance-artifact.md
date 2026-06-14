@@ -1,6 +1,6 @@
 # Vaporize v0.0.1 - Provenance Artifact
 
-**Generated:** 2026-06-14T02:13:38Z
+**Generated:** 2026-06-14T02:21:54Z
 **Status:** captured for forward Pkl migration
 **Subject:** `vaporize@wrkstrm-core.cli` v0.0.1 release prep
 
@@ -52,6 +52,10 @@ chat memory.
   remains the proof corpus.
 - `vaporize.engineering.docc/feature-catalog.md` exists as the canonical
   human-readable feature list and explanation surface for Vaporize.
+- `vaporize.engineering.docc/modularity-and-ownership-boundaries.md` exists as
+  the ownership and modularity rule: Swift Universal primitives belong in
+  `swift-universal`, Apple-bounded orchestration belongs in `wrkstrm-core`, and
+  Vaporize should not accumulate feature bodies in the CLI router.
 - `vaporize-runtime-samples` Kura series is seeded, with a backfilled CUJ-09
   coverage sample that verifies SwiftPM code coverage JSON, raw `.profraw`
   files, merged `default.profdata`, build-output size, product size, codecov
@@ -96,6 +100,7 @@ chat memory.
 | `performance-marketing-claims.md` | Safe performance marketing copy and claim boundaries are defined | PASS-WITH-NOTE |
 | `vaporize.engineering.docc` | Human engineering docs exist for future `wrkstrm.com/engineering` projection | PASS-WITH-NOTE |
 | `feature-catalog.md` | Major Vaporize features are listed with user problem, current surface, and proof boundary | PASS-WITH-NOTE |
+| `modularity-and-ownership-boundaries.md` | Swift Universal versus wrkstrm-core ownership and Vaporize modularity boundaries are defined | PASS-WITH-NOTE |
 | `hello-world-google-target-features-inspection.receipt.json` | Hello World Google target release-feature topology is inspectable by Vaporize | PASS-WITH-NOTE |
 | `wrkstrm-app-minimums.md` | wrkstrm app release-feature minimums are defined for target and future fleet inspection | PASS-WITH-NOTE |
 | `vaporize-runtime-samples.series.su.json` | Kura-queryable runtime sample series is seeded | PASS-WITH-NOTE |

@@ -13,9 +13,12 @@ receipts.
 Durable engineering documentation lives in
 `vaporize.engineering.docc/`, with
 `vaporize.engineering.docc/feature-catalog.md` as the canonical human-readable
-feature list and explanation surface. Treat that catalog as the human
-engineering narrative for future `wrkstrm.com/engineering` publication, and
-treat `release/v0.0.1/evidence/` as the linked proof corpus.
+feature list and explanation surface. The catalog also carries the modularity
+and ownership rule: genuinely Swift Universal primitives belong in
+`swift-universal`; Apple-bounded orchestration belongs in `wrkstrm-core`. Treat
+that catalog as the human engineering narrative for future
+`wrkstrm.com/engineering` publication, and treat `release/v0.0.1/evidence/` as
+the linked proof corpus.
 
 Vaporize is intentionally not a swift-universal tool. The Xcode project/workspace
 surface is Apple product infrastructure, and the restricted native-tool route is
