@@ -28,6 +28,7 @@
       "Hello World Google target feature inspection passes through inspect-target-features, proving project configs, release tiers, configFiles wiring, generated xcconfigs, generated ReleaseFeatures.swift, and digikoma-release-features provenance for the reference target.",
       "The release-facing why-vaporize explainer exists and records current Swift/xcodebuild/xcrun comparison, local benchmark baselines, build-space savings theory, user ergonomics, and unmeasured benchmark gaps.",
       "The performance marketing claims matrix exists and separates approved measured, behavioral, and theoretical claim language from prohibited speed and disk-space claims.",
+      "The package-local vaporize.engineering.docc catalog exists as the human engineering narrative for future wrkstrm.com/engineering publication, with release evidence remaining the proof corpus.",
       "A Kura runtime sample series is seeded for Vaporize, with a backfilled CUJ-09 coverage sample that verifies SwiftPM code coverage JSON, raw profile data, merged profile data, build-output size, product size, codecov artifact size, and binary size from a Vaporize toolchain run.",
       "Initial schema-universal extraction exists as vaporize-schemas v0.0.1 for CUJ coverage, provenance, launch-review specialization, and Apple project YAML/Pkl receipts.",
       "JSON release evidence validates through Vaporize validate-json."
@@ -67,6 +68,10 @@
     {
       "kind": "performance-marketing-claims",
       "path": "private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/performance-marketing-claims.md"
+    },
+    {
+      "kind": "engineering-docc-catalog",
+      "path": "private/apple/spm/vaporize@wrkstrm-core.cli/vaporize.engineering.docc"
     },
     {
       "kind": "launch-review-packet",
@@ -179,6 +184,12 @@
       "result": "PASS-WITH-NOTE: stronger speed and disk-space claims still require dedicated benchmark receipts"
     },
     {
+      "receiptKind": "engineering-docc-catalog",
+      "path": "private/apple/spm/vaporize@wrkstrm-core.cli/vaporize.engineering.docc",
+      "claim": "Vaporize has package-local human engineering documentation ready for future wrkstrm.com/engineering projection.",
+      "result": "PASS-WITH-NOTE: publication pipeline remains follow-up; release receipts remain the proof corpus"
+    },
+    {
       "receiptKind": "vaporize-runtime-sample-series",
       "path": "private/universal/substrate/collectives/wrkstrm/private/universal/kura-spaces/series/vaporize-runtime-samples/vaporize-runtime-samples.series.su.json",
       "claim": "Runtime, coverage, performance, build-space, and cache samples have a Kura-queryable series contract.",
@@ -201,6 +212,10 @@
     {
       "path": "private/apple/spm/vaporize@wrkstrm-core.cli/Package.swift",
       "purpose": "Adds AppleProjectSpecCore plus PklSwift and Yams dependency wiring."
+    },
+    {
+      "path": "private/apple/spm/vaporize@wrkstrm-core.cli/vaporize.engineering.docc",
+      "purpose": "Adds the package-local engineering documentation catalog for future wrkstrm.com/engineering projection."
     },
     {
       "path": "private/apple/spm/vaporize@wrkstrm-core.cli/Package.resolved",

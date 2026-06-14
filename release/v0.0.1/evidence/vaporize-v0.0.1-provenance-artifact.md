@@ -44,6 +44,9 @@ chat memory.
 - `performance-marketing-claims.md` defines approved measured, behavioral, and
   theoretical performance claim language, example copy, prohibited claims, and
   required future benchmark receipts.
+- `vaporize.engineering.docc` exists as the package-local human engineering
+  narrative for future `wrkstrm.com/engineering` publication; release evidence
+  remains the proof corpus.
 - `vaporize-runtime-samples` Kura series is seeded, with a backfilled CUJ-09
   coverage sample that verifies SwiftPM code coverage JSON, raw `.profraw`
   files, merged `default.profdata`, build-output size, product size, codecov
@@ -86,6 +89,7 @@ chat memory.
 | `product-definition.md` | Product definition, primary users, journeys, choice argument, and build implications are defined | PASS |
 | `why-vaporize.md` | Positioning, tool comparison, benchmark baseline, and ergonomics are explained | PASS-WITH-NOTE |
 | `performance-marketing-claims.md` | Safe performance marketing copy and claim boundaries are defined | PASS-WITH-NOTE |
+| `vaporize.engineering.docc` | Human engineering docs exist for future `wrkstrm.com/engineering` projection | PASS-WITH-NOTE |
 | `hello-world-google-target-features-inspection.receipt.json` | Hello World Google target release-feature topology is inspectable by Vaporize | PASS-WITH-NOTE |
 | `wrkstrm-app-minimums.md` | wrkstrm app release-feature minimums are defined for target and future fleet inspection | PASS-WITH-NOTE |
 | `vaporize-runtime-samples.series.su.json` | Kura-queryable runtime sample series is seeded | PASS-WITH-NOTE |
@@ -131,9 +135,11 @@ chat memory.
 6. Create dedicated benchmark receipts for cold builds, warm cache hits, cache
    misses, and disk usage before making fleet performance or space-saving
    release claims.
-7. Promote approved performance marketing claims only after attaching the
+7. Project `vaporize.engineering.docc` through the future
+   `wrkstrm.com/engineering` pipeline without deriving new claims from prose.
+8. Promote approved performance marketing claims only after attaching the
    relevant benchmark receipt.
-8. Quarantine or migrate remaining substrate-owned XcodeGen surfaces.
+9. Quarantine or migrate remaining substrate-owned XcodeGen surfaces.
 
 The machine-readable companion is
 `vaporize-v0.0.1-provenance-artifact.json`.

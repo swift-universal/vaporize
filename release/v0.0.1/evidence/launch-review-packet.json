@@ -69,6 +69,12 @@
     },
     {
       "LinkRefModel": "0.3.0",
+      "s": ["vaporize", "v0.0.1", "engineering-docc"],
+      "t": "Vaporize engineering DocC catalog",
+      "tg": [{"k": "rp", "rt": "mono", "v": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/vaporize.engineering.docc/index.md"}]
+    },
+    {
+      "LinkRefModel": "0.3.0",
       "s": ["vaporize", "v0.0.1", "xcodegen-to-pkl-investigation"],
       "t": "Vaporize v0.0.1 XcodeGen to Pkl migration investigation",
       "tg": [{"k": "rp", "rt": "mono", "v": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/xcodegen-to-pkl-investigation.json"}]
@@ -299,6 +305,7 @@
     "productDefinitionContract": "PASS: release/v0.0.1/product-definition.md defines the product, primary users, product-level journeys, choice argument, non-choice cases, and build implications before further build work is accepted.",
     "whyVaporizeExplainer": "PASS-WITH-NOTE: release/v0.0.1/why-vaporize.md explains value proposition, product choice argument, problems solved, Swift/xcodebuild/xcrun comparison, current baseline benchmarks, build-space savings theory, ergonomics, and benchmark gaps.",
     "performanceMarketingClaims": "PASS-WITH-NOTE: release/v0.0.1/performance-marketing-claims.md defines approved measured/behavioral/theoretical claims, safe copy examples, before/after examples, prohibited claims, benchmark receipts required before stronger claims, and the rule that claims trace to product-definition.md.",
+    "engineeringDocCCatalog": "PASS-WITH-NOTE: vaporize.engineering.docc defines the human engineering narrative for future wrkstrm.com/engineering publication and links the narrative boundary to release receipts as the proof corpus.",
     "benchmarkBaselineGeneratedAt": "2026-06-14T00:44:00Z",
     "benchmarkBaselineSummary": "validate-json launch packet 0.03s real; vaporize toolchain swift --version 0.25s real; bare swift --version 0.17s real; focused CUJ-15 bare swift 6.80s real; focused CUJ-15 Vaporize toolchain 6.80s real; earlier full Vaporize suite baseline 15.57s real with 82 tests; latest full Vaporize suite verification passed 87 tests in 9.61s wall-clock via Codex command runner; focused CUJ-09 coverage run 29.38s real with SwiftPM codecov JSON/profile data verified.",
     "runtimeSampleSeries": "PASS-WITH-NOTE: Kura series seeded at private/universal/substrate/collectives/wrkstrm/private/universal/kura-spaces/series/vaporize-runtime-samples; automatic Vaporize emission remains a follow-up.",
@@ -447,6 +454,11 @@
       "gateRef": "GATE-29-wrkstrm-app-minimums-inspection",
       "status": "PASS-WITH-NOTE",
       "rationale": "inspect-target-features now inspects the target-level release-feature topology for Hello World Google: project configs, configFiles wiring, Config/release-features.json, generated conditional-compilation xcconfigs, generated ReleaseFeatures.swift, and digikoma-release-features provenance. Registry-backed fleet inspection remains a follow-up."
+    },
+    {
+      "gateRef": "GATE-30-engineering-docc-catalog",
+      "status": "PASS-WITH-NOTE",
+      "rationale": "vaporize.engineering.docc provides package-local engineering documentation for product policy, command/artifact architecture, project migration, release evidence, benchmark/size evidence, target-feature inspection, and feature-scoped test lifecycle. Publication to wrkstrm.com/engineering remains a pipeline follow-up."
     }
   ],
   "knownFollowUps": [
@@ -460,7 +472,8 @@
     "FR-VAPORIZE-XCODE-WORKSPACE-PRODUCT-CACHE-DISCOVERY",
     "FR-VAPORIZE-RUNTIME-SAMPLE-SERIES-APPLE-ARTIFACT-INGESTION",
     "FR-VAPORIZE-WRKSTRM-CORE-BUILD-CONFIG-COMPOSITION",
-    "FR-VAPORIZE-WRKSTRM-APP-MINIMUMS-INSPECTION"
+    "FR-VAPORIZE-WRKSTRM-APP-MINIMUMS-INSPECTION",
+    "FR-VAPORIZE-ENGINEERING-DOCC-PUBLICATION-PIPELINE"
   ],
   "signoffs": {
     "audienceApproverSignoffRef": null,
@@ -493,6 +506,7 @@
     "x-why-vaporize": "why-vaporize.md is the release-facing explanation for why Vaporize is better, what problems it solves, how it compares to Swift/xcodebuild/xcrun, what current benchmarks show, how shared cache reuse can save build space, and which performance claims remain unmeasured.",
     "x-product-definition-contract": "product-definition.md defines Vaporize, primary users, product-level user journeys, why users choose it, when not to choose it, and build implications; future feature work must trace to this contract before implementation and release claims are accepted.",
     "x-performance-marketing-claims": "performance-marketing-claims.md provides approved copy examples and guardrails: do not say Vaporize is faster than Swift, do not claim 2x Xcode builds, and do not claim N GB disk savings until dedicated benchmark receipts exist; every claim must trace to product-definition.md.",
+    "x-engineering-docc": "vaporize.engineering.docc is the package-local engineering documentation catalog intended for future wrkstrm.com/engineering publication. It is the human narrative; release/v0.0.1/evidence remains the proof corpus.",
     "x-runtime-sample-series": "Kura series seeded at private/universal/substrate/collectives/wrkstrm/private/universal/kura-spaces/series/vaporize-runtime-samples. Backfilled CUJ-09 sample records a Vaporize toolchain SwiftPM coverage run, verified codecov JSON/profile data, build-output size, Debug product size, codecov artifact size, and Vaporize binary size. Automatic sample emission and durable artifact retention remain follow-ups.",
     "x-apple-native-artifacts": "Runtime evidence should leverage SwiftPM code coverage JSON, raw .profraw/default.profdata, xUnit output when available, Xcode .xcresult bundles, result metadata, build logs, diagnostics, DerivedData/product paths, product/binary/bundle sizes, coverage artifact size, result bundle size, cache deltas, and per-feature-flag size cohorts before inventing parallel measurement formats.",
     "x-wrkstrm-core-build-config-composition": "App-facing Vaporize samples should compose with existing wrkstrm-core build sources instead of inventing a second config registry: tool-registry@wrkstrm-core.cli discover-apps and xcode-project.tool.json records for app/project ownership, identifier@wrkstrm-core.cli app describe for canonical app variant names and paths, app-artifacts@wrkstrm-core.cli for bundle audits/install paths/Xcode build-export receipts, and release-features.json or generated xcconfig files when feature cohorts exist.",

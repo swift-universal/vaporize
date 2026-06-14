@@ -28,7 +28,10 @@ now captured: app-facing Vaporize samples should compose with wrkstrm-core
 parallel config registry. The wrkstrm app-minimums requirement now has a
 target-level first slice too: Vaporize inspects release-feature manifests,
 generated xcconfigs, generated `ReleaseFeatures.swift`, and project wiring for
-a given `project.yml` target before strong app claims are allowed. Final
+a given `project.yml` target before strong app claims are allowed. The
+package-local `vaporize.engineering.docc` catalog now carries the durable
+engineering narrative for eventual `wrkstrm.com/engineering` publication while
+the release packet remains the linked proof corpus. Final
 internal v0.0.1 release approval is still
 blocked because substrate-owned Apple project generation still needs fleet build
 parity, scheme/resource/package feature coverage, and explicit quarantine
@@ -67,6 +70,7 @@ disposition for any remaining XcodeGen surfaces.
 | GATE-27 - Kura runtime sample series and Apple artifact ingestion | BLOCKED-FOR-STRONG-BENCHMARK-CLAIMS | `private/universal/substrate/collectives/wrkstrm/private/universal/kura-spaces/series/vaporize-runtime-samples/vaporize-runtime-samples.series.su.json` defines the queryable series. A backfilled CUJ-09 sample verifies SwiftPM coverage JSON, `.profraw`, `default.profdata`, build-output size, Debug product size, codecov artifact size, and Vaporize binary size through Vaporize's toolchain route. Vaporize does not yet emit samples automatically or retain `.xcresult`/coverage/build-size artifacts as durable release evidence. |
 | GATE-28 - wrkstrm-core app/build config composition | PASS-WITH-NOTE | Existing build-config sources are identified and referenced in the release contract: `tool-registry@wrkstrm-core.cli discover-apps` emits Hello World-style `xcode-project` records, `identifier@wrkstrm-core.cli app describe` owns app variant names/paths, and `app-artifacts@wrkstrm-core.cli` owns bundle audits, install paths, Xcode build/export receipts, and flat `.app` artifacts. Vaporize integration remains a follow-up. |
 | GATE-29 - wrkstrm app minimums inspection | PASS-WITH-NOTE | `inspect-target-features` inspects the target-level release-feature topology for Hello World Google: project configs, `configFiles` wiring, `Config/release-features.json`, generated conditional-compilation xcconfigs, generated `ReleaseFeatures.swift`, and `digikoma-release-features` provenance. Evidence: `release/v0.0.1/evidence/hello-world-google-target-features-inspection.receipt.json` and `VaporizeCUJ16TargetFeaturesTests`. Registry-backed fleet inspection remains a follow-up. |
+| GATE-30 - Engineering DocC catalog | PASS-WITH-NOTE | `vaporize.engineering.docc/` defines the human engineering narrative for product policy, command/artifact architecture, project migration, release evidence, benchmark/size evidence, target-feature inspection, and feature-scoped test lifecycle. The future `wrkstrm.com/engineering` publication pipeline should project this catalog and link back to release receipts rather than inventing claims from prose. |
 
 ## Open Follow-Up Beads
 
@@ -81,6 +85,7 @@ disposition for any remaining XcodeGen surfaces.
 - `FR-VAPORIZE-RUNTIME-SAMPLE-SERIES-APPLE-ARTIFACT-INGESTION`
 - `FR-VAPORIZE-WRKSTRM-CORE-BUILD-CONFIG-COMPOSITION`
 - `FR-VAPORIZE-WRKSTRM-APP-MINIMUMS-INSPECTION`
+- `FR-VAPORIZE-ENGINEERING-DOCC-PUBLICATION-PIPELINE`
 
 ## Release Review Questions
 

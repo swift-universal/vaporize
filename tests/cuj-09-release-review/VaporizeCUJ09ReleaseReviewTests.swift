@@ -10,6 +10,14 @@ func releaseReviewArtifactsExist() {
     "release/v0.0.1/release-gates.md",
     "release/v0.0.1/why-vaporize.md",
     "release/v0.0.1/performance-marketing-claims.md",
+    "vaporize.engineering.docc/index.md",
+    "vaporize.engineering.docc/product-and-policy.md",
+    "vaporize.engineering.docc/command-and-artifact-architecture.md",
+    "vaporize.engineering.docc/project-generation-and-migration.md",
+    "vaporize.engineering.docc/release-evidence-and-gates.md",
+    "vaporize.engineering.docc/benchmark-and-size-evidence.md",
+    "vaporize.engineering.docc/target-feature-inspection.md",
+    "vaporize.engineering.docc/feature-test-lifecycle.md",
     "release/v0.0.1/evidence/launch-review-packet.json",
     "release/v0.0.1/evidence/hello-world-google-target-features-inspection.receipt.json",
   ] {
@@ -31,6 +39,7 @@ func launchReviewPacketIsValidJSONAndInternalEssential() throws {
   #expect(gateResults.contains { $0["gateRef"] as? String == "GATE-26-product-definition-user-journeys-choice-argument" })
   #expect(gateResults.contains { $0["gateRef"] as? String == "GATE-27-runtime-sample-series-apple-artifact-ingestion" })
   #expect(gateResults.contains { $0["gateRef"] as? String == "GATE-29-wrkstrm-app-minimums-inspection" })
+  #expect(gateResults.contains { $0["gateRef"] as? String == "GATE-30-engineering-docc-catalog" })
 }
 
 @Test("CUJ-09 CUJ coverage contract is valid JSON and names the floor")
@@ -54,6 +63,7 @@ func productDefinitionContractPrecedesBuildWork() throws {
   let why = try readString(relativePath: "release/v0.0.1/why-vaporize.md")
   let claims = try readString(relativePath: "release/v0.0.1/performance-marketing-claims.md")
   let gates = try readString(relativePath: "release/v0.0.1/release-gates.md")
+  let engineeringDocs = try readString(relativePath: "vaporize.engineering.docc/index.md")
 
   #expect(productDefinition.contains("## Product Definition"))
   #expect(productDefinition.contains("## Primary Users"))
@@ -77,6 +87,9 @@ func productDefinitionContractPrecedesBuildWork() throws {
   #expect(claims.contains("feature-flag size"))
   #expect(gates.contains("GATE-26"))
   #expect(gates.contains("GATE-27"))
+  #expect(gates.contains("GATE-30"))
+  #expect(engineeringDocs.contains("wrkstrm.com/engineering"))
+  #expect(engineeringDocs.contains("The package-local engineering catalog explains the system. The release packet"))
 }
 
 @Test("CUJ-09 release gates keep Pkl generation blocked")
