@@ -17,12 +17,12 @@
     "releaseGates": "private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/release-gates.md"
   },
   "counts": {
-    "activeCUJCount": 16,
+    "activeCUJCount": 17,
     "deferredCUJCount": 2,
-    "requiredSwiftTestObligationCount": 69,
-    "requiredReleaseEvidenceCheckCount": 8,
-    "requiredTargetableTestObligationCount": 77,
-    "currentExecutableSwiftTestCount": 87,
+    "requiredSwiftTestObligationCount": 74,
+    "requiredReleaseEvidenceCheckCount": 9,
+    "requiredTargetableTestObligationCount": 83,
+    "currentExecutableSwiftTestCount": 92,
     "currentExecutableSwiftTestBreakdown": {
       "VaporizeCUJ01SwiftPMCLITests": 7,
       "VaporizeCUJ02MacAppTests": 14,
@@ -39,7 +39,8 @@
       "VaporizeCUJ13YMLPklImportTests": 4,
       "VaporizeCUJ14PklXcodeProjectGenerationTests": 3,
       "VaporizeCUJ15XcodeProductCacheTests": 4,
-      "VaporizeCUJ16TargetFeaturesTests": 5
+      "VaporizeCUJ16TargetFeaturesTests": 5,
+      "VaporizeCUJ17ReleaseDoctorTests": 5
     }
   },
   "coverage": [
@@ -223,6 +224,21 @@
         "release-gates.md",
         "launch-review-packet.json"
       ]
+    },
+    {
+      "cuj": "CUJ-17",
+      "title": "Assistant Runs Release Doctor Before Trusting The Packet",
+      "prdRefs": ["FR-027"],
+      "requiredSwiftTestObligations": 5,
+      "requiredReleaseEvidenceChecks": 1,
+      "status": "covered-with-boundary",
+      "evidence": [
+        "VaporizeCUJ17ReleaseDoctorTests.swift",
+        "release-doctor.md",
+        "vaporize-v0.0.1-release-doctor.receipt.json",
+        "release-gates.md",
+        "launch-review-packet.json"
+      ]
     }
   ],
   "deferredCoverage": [
@@ -245,6 +261,7 @@
     "Shared Xcode workspace product-cache reuse is covered as cache lookup and build invocation; automatic workspace scheme/product discovery remains deferred.",
     "wrkstrm app-minimums inspection has a target-level first slice; registry-backed fleet inspection remains deferred.",
     "Feature-scoped test migration is allowed only after a targetable feature bundle proves the behavior, the replacement evidence is named, and the coverage artifact is updated; duplicate older tests may then be deleted in the same change.",
-    "Actual executable Swift tests may exceed the required count when extra regression coverage is useful."
+    "Actual executable Swift tests may exceed the required count when extra regression coverage is useful.",
+    "Release doctor proves release-spine coherence; it does not approve final release or replace fleet build parity, runtime sampling, or periodic buddy health checks."
   ]
 }

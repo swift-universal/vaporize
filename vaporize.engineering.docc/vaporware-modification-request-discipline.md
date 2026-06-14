@@ -28,6 +28,26 @@ The domain noun matters. Vaporware feature requests are the software/vaporware
 request family; future hardware or other material-domain request families should
 get their own typed names instead of reusing a generic feature-request bucket.
 
+## Scaffold Vocabulary
+
+The future creation surface should be `vaporware scaffold`, with
+`feature-request` as one scaffold kind underneath it. The umbrella is not
+`feature-request` because Vaporware needs room to scaffold product definitions,
+CUJs, release packets, buddy health checks, build-watch records, modification
+requests, and later non-feature work without stuffing every packet into one
+generic request noun.
+
+Practical shape:
+
+- `vaporware scaffold feature-request` creates product input.
+- `vaporware scaffold modification-request` creates controlled engineering
+  execution input when a feature request has enough product shape.
+- `vaporize release-doctor` verifies the release spine after implementation and
+  evidence updates.
+
+Engineering/QA/Marketing review and competitor reports are related scaffold or
+review lanes, but they are not owned by the Vaporize release-doctor command.
+
 ## Required Shape
 
 Every Vaporize vaporware modification request must do the following before it is

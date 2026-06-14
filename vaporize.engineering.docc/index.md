@@ -41,6 +41,7 @@ and explicit disposition of remaining XcodeGen surfaces.
 - <doc:benchmark-and-size-evidence>
 - <doc:target-feature-inspection>
 - <doc:feature-test-lifecycle>
+- <doc:release-doctor>
 
 ## Source Of Truth
 
@@ -58,6 +59,7 @@ Primary release surfaces:
 - `release/v0.0.1/evidence/launch-review-packet.json`
 - `release/v0.0.1/evidence/cuj-test-coverage.json`
 - `release/v0.0.1/evidence/vaporize-v0.0.1-provenance-artifact.json`
+- `release/v0.0.1/evidence/vaporize-v0.0.1-release-doctor.receipt.json`
 
 Primary schema surface:
 

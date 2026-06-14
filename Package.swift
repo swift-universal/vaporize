@@ -206,6 +206,14 @@ let package = Package(
       path: "tests/cuj-16-target-features"
     ),
     .testTarget(
+      name: "VaporizeCUJ17ReleaseDoctorTests",
+      dependencies: [
+        "VaporizeCLI",
+        .product(name: "ArgumentParser", package: "swift-argument-parser"),
+      ],
+      path: "tests/cuj-17-release-doctor"
+    ),
+    .testTarget(
       name: "VaporizeCUJ12PackageGraphTests",
       dependencies: [
         "VaporizeCLI",

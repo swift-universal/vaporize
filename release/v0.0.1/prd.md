@@ -57,6 +57,12 @@ substrate-owned Apple project generation moves off XcodeGen and onto a
 Pkl-backed owned generation path, or any remaining XcodeGen surfaces are
 explicitly quarantined as historical/external compatibility.
 
+The current release-doctor slice adds a self-audit mode for the release packet.
+`release-doctor` checks that the release spine is coherent across documents,
+JSON evidence, launch-review references, provenance, and CUJ coverage before
+assistants trust the packet. It is a consistency gate, not a release approval
+gate.
+
 ## Product Definition, User Journeys, And Choice Argument
 
 `release/v0.0.1/product-definition.md` is the release-prep product contract for
@@ -138,6 +144,10 @@ future hardware or other material-domain request families.
   release-feature manifest, generated conditional-compilation xcconfigs,
   generated `ReleaseFeatures.swift`, and project wiring required before strong
   app-facing claims are allowed.
+- Provide `release-doctor` so Vaporize can audit its own release spine for
+  agreement across product definition, PRD, CUJs, gates, launch-review packet,
+  provenance, CUJ coverage, feature catalog, and engineering DocC before
+  assistants trust the packet.
 - Provide `status` and `warehouse` inventory modes for
   `x-vaporize-collapse-path` records, with legacy `x-craze-collapse-path`
   read-only fallback.
@@ -209,15 +219,17 @@ Supporting audiences:
 | FR-024 | wrkstrm app minimums inspection | `inspect-target-features --path <project.yml> --target <target>` reports target-level release-feature topology: project spec, declared build configurations, tier declarations, `Config/release-features.json`, generated `Config/xcconfigs/*.xcconfig`, project `configFiles` or Pkl equivalent wiring, generated `Sources/ReleaseFeatures.swift`, and `digikoma-release-features` provenance. Registry-backed fleet inspection remains a follow-up. Missing, stale, or unknown minimums block strong feature-cohort, launch-readiness, and per-feature-size claims. |
 | FR-025 | Pre-code PRD review session | Major feature work must record an Engineering, QA, and Marketing PRD review session before coding starts. The session must decide `GO`, `GO-WITH-NOTES`, or `NO-GO`, and must name approved scope, required tests, required release evidence, approved claims, prohibited claims, and blockers. |
 | FR-026 | Vaporware modification request release discipline | Behavior-changing vaporware modification requests create or attach to a feature flag, feature status record, or release-feature cohort; add or update targetable tests; run the smallest feature-scoped proof; update release evidence and schema fixtures when affected; and record any no-flag exception explicitly. |
+| FR-027 | Release doctor spine audit | `release-doctor --path <package-or-release-root>` emits a `vaporize-release-doctor` receipt that verifies required release artifacts exist, evidence JSON parses, PRD/CUJ/gate/catalog surfaces name the release-doctor slice, launch-review references the gate and receipt, provenance inventories the receipt, and CUJ coverage counts CUJ-17. The command audits coherence; it does not approve final release. |
 
 ## Release Criteria
 
 - Vaporize's package test suite passes with the Swift 6.4 toolchain:
   `vaporize toolchain -- swift test --package-path private/apple/spm/vaporize@wrkstrm-core.cli`.
-  Current proof: the CUJ-derived coverage floor requires 69 Swift test
-  obligations plus 8 release evidence checks; the executable suite passes 87
-  tests across 16 implemented CUJ targets, including the CUJ-16
-  `inspect-target-features` first slice.
+  Current proof: the CUJ-derived coverage floor requires 74 Swift test
+  obligations plus 9 release evidence checks; the executable suite passes 92
+  tests across 17 implemented CUJ targets, including the CUJ-16
+  `inspect-target-features` first slice and CUJ-17 `release-doctor` first
+  slice.
 - `release/v0.0.1/product-definition.md` defines the product, primary users,
   product-level user journeys, choice argument, non-choice cases, and build
   implications before additional feature work is accepted.
@@ -234,8 +246,8 @@ Supporting audiences:
 - CLI help advertises `use`, `toolchain`, `validate-json`,
   `inspect-project-yml`, `compare-project-yml-pkl`, `import-project-yml`,
   `generate-project-yml`, `generate-xcodeproj`, `inspect-target-features`,
-  `--common-process-spec`, `--xcode-product-cache-workspace`, and
-  `--xcode-product-cache-derived-data-path`.
+  `release-doctor`, `--common-process-spec`,
+  `--xcode-product-cache-workspace`, and `--xcode-product-cache-derived-data-path`.
 - Release packet JSON validates with
   `vaporize validate-json --path release/v0.0.1/evidence/launch-review-packet.json`.
 - `release/v0.0.1/why-vaporize.md` explains the value proposition,
@@ -247,6 +259,9 @@ Supporting audiences:
   before stronger speed or disk-space claims are allowed.
 - Vaporize release evidence schemas validate as JSON under
   `schema-universal/private/universal/domain/tooling/schema-families/vaporize-schemas/v0.0.1`.
+- `release-doctor --path private/apple/spm/vaporize@wrkstrm-core.cli` emits
+  `release/v0.0.1/evidence/vaporize-v0.0.1-release-doctor.receipt.json` and
+  passes while preserving the final release blocker truth.
 - Runtime benchmark claims beyond provisional release-prep baselines require
   Vaporize-emitted Kura runtime samples that retain or reference Swift/Apple
   native artifacts such as code coverage JSON, profile data, xUnit output when

@@ -24,7 +24,7 @@ Current measured claims are limited:
 - Focused CUJ-15 SwiftPM tests measured the same through bare Swift and
   Vaporize's toolchain route once warm.
 - The full Vaporize test suite has passed through the Vaporize toolchain route
-  with 87 executable tests.
+  with 92 executable tests.
 
 The current product claim is not "Vaporize compiles faster than Swift." The
 claim is that Vaporize makes the route stable, reviewable, policy-compliant,

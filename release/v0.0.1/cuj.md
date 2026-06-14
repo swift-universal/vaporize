@@ -21,6 +21,7 @@ one product-level journey.
 | Assistant migrates Apple project generation from legacy `project.yml` toward Pkl-backed truth with receipts at every boundary | CUJ-08, CUJ-10, CUJ-11, CUJ-13, CUJ-14 |
 | Assistant reuses a warm Xcode workspace product cache instead of rebuilding locally when the shared product already exists | CUJ-15 |
 | Release reviewer evaluates product definition, PRD review session, vaporware modification request discipline, user journeys, choice argument, evidence, gates, and blockers without relying on chat memory | CUJ-09 |
+| Assistant audits release-spine coherence before trusting a vaporware packet | CUJ-17 |
 
 ## CUJ-01 - Assistant Builds And Installs A SwiftPM CLI
 
@@ -382,6 +383,35 @@ Failure truth:
 - Hello World Google is the reference specimen, not proof that the fleet already
   meets the minimum.
 
+## CUJ-17 - Assistant Runs Release Doctor Before Trusting The Packet
+
+1. Assistant receives a Vaporize package root or `release/v0.0.1` root.
+2. Assistant runs `release-doctor --path <package-or-release-root>`.
+3. Vaporize resolves the release spine and checks required artifacts, evidence
+   JSON, PRD/CUJ/gate/catalog alignment, launch-review references, provenance,
+   and CUJ coverage.
+4. Vaporize emits a `vaporize-release-doctor` receipt and concise status.
+5. Assistant treats a passing receipt as release-spine coherence evidence, not
+   final release approval.
+
+Success:
+
+- Required product, PRD, CUJ, gate, launch-review, provenance, CUJ coverage,
+  feature catalog, and engineering DocC artifacts exist.
+- Release evidence JSON parses without direct `jq`.
+- Launch-review packet includes `GATE-33-release-doctor` and a release-doctor
+  receipt evidence ref.
+- Provenance inventories the release-doctor receipt.
+- CUJ coverage counts CUJ-17 and the `VaporizeCUJ17ReleaseDoctorTests` bundle.
+
+Failure truth:
+
+- A release-doctor pass can coexist with final release blockers.
+- The command audits spine coherence; it does not run every build, benchmark,
+  or fleet parity proof.
+- Periodic vaporware buddy health, automatic runtime samples, and build-watch
+  repair loops are follow-up features.
+
 ## Test Coverage Contract
 
 Test count is derived from PRD requirements through the active draft CUJs.
@@ -406,13 +436,14 @@ must know the required floor.
 | CUJ-14 | FR-020 | 3 |
 | CUJ-15 | FR-003, FR-021 | 4 |
 | CUJ-16 | FR-023, FR-024 | 5 Swift tests; 1 release evidence check |
+| CUJ-17 | FR-027 | 5 Swift tests; 1 release evidence check |
 
 Current active-CUJ requirement:
 
-- Required Swift test obligations: 69
-- Required release evidence checks: 8
-- Required targetable test obligations: 77
-- Current executable Swift tests: 87 across 16 implemented CUJ-specific SwiftPM
+- Required Swift test obligations: 74
+- Required release evidence checks: 9
+- Required targetable test obligations: 83
+- Current executable Swift tests: 92 across 17 implemented CUJ-specific SwiftPM
   bundles
 - Coverage artifact:
   `release/v0.0.1/evidence/cuj-test-coverage.json`

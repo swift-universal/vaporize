@@ -27,7 +27,8 @@ struct VaporizeCLI: AsyncParsableCommand {
       import-project-yml emits a Pkl parity specimen from legacy YAML; \
       generate-project-yml emits transitional AppleProjectSpec YAML from Pkl \
       with receipts; generate-xcodeproj emits first-slice .xcodeproj \
-      world-state from evaluated AppleProjectSpec Pkl. \
+      world-state from evaluated AppleProjectSpec Pkl; release-doctor audits \
+      the release spine before claims are trusted. \
       Legacy `inventory` and `x-craze-collapse-path` remain compatibility \
       aliases during migration.
       Target feature inspection mode: inspect-target-features reads a project.yml \
@@ -57,6 +58,7 @@ struct VaporizeCLI: AsyncParsableCommand {
     case importProjectYML = "import-project-yml"
     case generateProjectYML = "generate-project-yml"
     case generateXcodeProject = "generate-xcodeproj"
+    case releaseDoctor = "release-doctor"
     case inventory
 
     /// Substrate package-graph subfunction. Forwards remaining arguments to
@@ -77,7 +79,7 @@ struct VaporizeCLI: AsyncParsableCommand {
     case app
   }
 
-  @Argument(help: "Mode: install, uninstall, build, test, run, pass, use, toolchain, setup, status, warehouse, validate-json, inspect-project-yml, inspect-target-features, compare-project-yml-pkl, import-project-yml, generate-project-yml, generate-xcodeproj, inventory, or graph (forwards to package-graph@wrkstrm.cli).")
+  @Argument(help: "Mode: install, uninstall, build, test, run, pass, use, toolchain, setup, status, warehouse, validate-json, inspect-project-yml, inspect-target-features, compare-project-yml-pkl, import-project-yml, generate-project-yml, generate-xcodeproj, release-doctor, inventory, or graph (forwards to package-graph@wrkstrm.cli).")
   var mode: Mode
 
   @Option(name: .customLong("artifact"), help: "Artifact kind: cli or app.")
@@ -266,6 +268,8 @@ struct VaporizeCLI: AsyncParsableCommand {
       try await generateProjectYML()
     case .generateXcodeProject:
       try await generateXcodeProject()
+    case .releaseDoctor:
+      try await releaseDoctor()
     case .inventory:
       try await runVaporWarehouse()
     case .graph:
@@ -1038,6 +1042,36 @@ struct VaporizeCLI: AsyncParsableCommand {
       let data = try encoder.encode(receipt)
       FileHandle.standardOutput.write(data)
       FileHandle.standardOutput.write(Data("\n".utf8))
+    }
+  }
+
+  private func releaseDoctor() async throws {
+    let inspectedPath = vaporScanPath ?? FileManager.default.currentDirectoryPath
+    let requestId = "vaporize-release-doctor-\(UUID().uuidString)"
+    let receipt = try VaporizeReleaseDoctor.inspect(
+      path: inspectedPath,
+      requestId: requestId
+    )
+    try emitReceiptIfRequested(receipt)
+
+    switch vaporOutputFormat {
+    case .text:
+      print(
+        "release doctor: \(receipt.subjectAppSlug) \(receipt.subjectReleaseSlug) status=\(receipt.overallStatus) checks=\(receipt.passedCheckCount)/\(receipt.checkCount)"
+      )
+      for check in receipt.checks where check.status != "pass" {
+        print("\(check.status): \(check.name) - \(check.detail)")
+      }
+    case .json:
+      let encoder = JSONEncoder()
+      encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
+      let data = try encoder.encode(receipt)
+      FileHandle.standardOutput.write(data)
+      FileHandle.standardOutput.write(Data("\n".utf8))
+    }
+
+    guard receipt.overallStatus == "pass" else {
+      throw ValidationError("release doctor failed with \(receipt.failedCheckCount) failing checks.")
     }
   }
 

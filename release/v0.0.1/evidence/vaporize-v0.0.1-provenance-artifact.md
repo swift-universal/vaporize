@@ -9,11 +9,11 @@ chat memory.
 
 ## Proven
 
-- CUJ-derived test coverage is explicit: 69 required Swift test obligations
-  plus 8 release evidence checks across 16 active CUJs.
-- Vaporize package tests pass through `vaporize toolchain`: 87 executable Swift
-  tests across 16 implemented CUJ-specific SwiftPM test bundles, including
-  CUJ-16 target feature inspection.
+- CUJ-derived test coverage is explicit: 74 required Swift test obligations
+  plus 9 release evidence checks across 17 active CUJs.
+- Vaporize package tests pass through `vaporize toolchain`: 92 executable Swift
+  tests across 17 implemented CUJ-specific SwiftPM test bundles, including
+  CUJ-16 target feature inspection and CUJ-17 release doctor.
 - `product-definition.md` defines Vaporize, primary users, product-level user
   journeys, why users choose it, when not to choose it, and build implications
   before more implementation is accepted.
@@ -58,6 +58,9 @@ chat memory.
   remains the proof corpus.
 - `vaporize.engineering.docc/feature-catalog.md` exists as the canonical
   human-readable feature list and explanation surface for Vaporize.
+- `vaporize.engineering.docc/release-doctor.md` exists, and
+  `release-doctor` emits a `vaporize-release-doctor` receipt that verifies
+  release-spine coherence before assistants trust the packet.
 - `vaporize.engineering.docc/modularity-and-ownership-boundaries.md` exists as
   the ownership and modularity rule: Swift Universal primitives belong in
   `swift-universal`, Apple-bounded orchestration belongs in `wrkstrm-core`, and
@@ -108,6 +111,7 @@ chat memory.
 | `feature-catalog.md` | Major Vaporize features are listed with user problem, current surface, and proof boundary | PASS-WITH-NOTE |
 | `modularity-and-ownership-boundaries.md` | Swift Universal versus wrkstrm-core ownership and Vaporize modularity boundaries are defined | PASS-WITH-NOTE |
 | `vaporware-modification-request-discipline.md` | Vaporware feature requests are distinguished from vaporware modification requests; release-discipline mechanics are defined | PASS-WITH-NOTE |
+| `vaporize-v0.0.1-release-doctor.receipt.json` | Release doctor verifies release-spine agreement before assistants trust the packet | PASS-WITH-NOTE |
 | `hello-world-google-target-features-inspection.receipt.json` | Hello World Google target release-feature topology is inspectable by Vaporize | PASS-WITH-NOTE |
 | `wrkstrm-app-minimums.md` | wrkstrm app release-feature minimums are defined for target and future fleet inspection | PASS-WITH-NOTE |
 | `vaporize-runtime-samples.series.su.json` | Kura-queryable runtime sample series is seeded | PASS-WITH-NOTE |
@@ -161,6 +165,8 @@ chat memory.
 9. Promote approved performance marketing claims only after attaching the
    relevant benchmark receipt.
 10. Quarantine or migrate remaining substrate-owned XcodeGen surfaces.
+11. Add periodic vaporware buddy heartbeat and build-watch checks so Vaporize
+    can report health and route failing buddies into modification requests.
 
 The machine-readable companion is
 `vaporize-v0.0.1-provenance-artifact.json`.
