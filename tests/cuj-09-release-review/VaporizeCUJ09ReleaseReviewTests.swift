@@ -4,6 +4,7 @@ import Testing
 @Test("CUJ-09 release review artifacts exist")
 func releaseReviewArtifactsExist() {
   for relativePath in [
+    "release/v0.0.1/product-definition.md",
     "release/v0.0.1/prd.md",
     "release/v0.0.1/cuj.md",
     "release/v0.0.1/release-gates.md",
@@ -26,6 +27,8 @@ func launchReviewPacketIsValidJSONAndInternalEssential() throws {
   let gateResults = try #require(packet["gateResults"] as? [[String: Any]])
   #expect(gateResults.contains { $0["gateRef"] as? String == "GATE-24-positioning-and-benchmark-explainer" })
   #expect(gateResults.contains { $0["gateRef"] as? String == "GATE-25-performance-marketing-claims" })
+  #expect(gateResults.contains { $0["gateRef"] as? String == "GATE-26-product-definition-user-journeys-choice-argument" })
+  #expect(gateResults.contains { $0["gateRef"] as? String == "GATE-27-runtime-sample-series-apple-artifact-ingestion" })
 }
 
 @Test("CUJ-09 CUJ coverage contract is valid JSON and names the floor")
@@ -35,7 +38,41 @@ func cujCoverageContractIsValidJSONAndNamesTheFloor() throws {
 
   #expect(counts["activeCUJCount"] as? Int == 15)
   #expect(counts["deferredCUJCount"] as? Int == 2)
-  #expect(counts["requiredTargetableTestObligationCount"] as? Int == 68)
+  #expect(counts["requiredReleaseEvidenceCheckCount"] as? Int == 5)
+  #expect(counts["requiredTargetableTestObligationCount"] as? Int == 69)
+}
+
+@Test("CUJ-09 product definition contract precedes build work")
+func productDefinitionContractPrecedesBuildWork() throws {
+  let productDefinition = try readString(relativePath: "release/v0.0.1/product-definition.md")
+  let prd = try readString(relativePath: "release/v0.0.1/prd.md")
+  let cuj = try readString(relativePath: "release/v0.0.1/cuj.md")
+  let why = try readString(relativePath: "release/v0.0.1/why-vaporize.md")
+  let claims = try readString(relativePath: "release/v0.0.1/performance-marketing-claims.md")
+  let gates = try readString(relativePath: "release/v0.0.1/release-gates.md")
+
+  #expect(productDefinition.contains("## Product Definition"))
+  #expect(productDefinition.contains("## Primary Users"))
+  #expect(productDefinition.contains("## Product-Level User Journeys"))
+  #expect(productDefinition.contains("## Why Users Choose Vaporize"))
+  #expect(productDefinition.contains("## When Not To Choose Vaporize"))
+  #expect(productDefinition.contains("## Build Implications"))
+  #expect(productDefinition.contains("engineering pedigree"))
+  #expect(productDefinition.contains("Future Vaporize features must trace to this product definition"))
+  #expect(prd.contains("FR-022"))
+  #expect(prd.contains("FR-VAPORIZE-RUNTIME-SAMPLE-SERIES-APPLE-ARTIFACT-INGESTION"))
+  #expect(cuj.contains("Product-Level User Journey Map"))
+  #expect(why.contains("product-definition.md"))
+  #expect(why.contains("engineering pedigree"))
+  #expect(why.contains("vaporize-runtime-samples"))
+  #expect(why.contains("SwiftPM coverage JSON/profile data"))
+  #expect(why.contains("per-feature-flag size"))
+  #expect(claims.contains("trace to `product-definition.md`"))
+  #expect(claims.contains("Kura runtime sample"))
+  #expect(claims.contains("Engineering pedigree"))
+  #expect(claims.contains("feature-flag size"))
+  #expect(gates.contains("GATE-26"))
+  #expect(gates.contains("GATE-27"))
 }
 
 @Test("CUJ-09 release gates keep Pkl generation blocked")
@@ -61,4 +98,11 @@ private func readJSONObject(relativePath: String) throws -> [String: Any] {
   let data = try Data(contentsOf: packageRoot.appendingPathComponent(relativePath))
   let object = try JSONSerialization.jsonObject(with: data)
   return try #require(object as? [String: Any])
+}
+
+private func readString(relativePath: String) throws -> String {
+  try String(
+    contentsOf: packageRoot.appendingPathComponent(relativePath),
+    encoding: .utf8
+  )
 }

@@ -1,7 +1,7 @@
 # Vaporize v0.0.1 - PRD
 
 **Status:** release-prep draft; blocked pending fleet Pkl-backed Xcode world-state parity
-**Updated:** 2026-06-13T21:28:11Z
+**Updated:** 2026-06-14T00:34:28Z
 **Component:** `vaporize@wrkstrm-core.cli`
 **Release target:** internal essential substrate CLI
 **Tool classification:** `internal-essential-tool`
@@ -57,9 +57,24 @@ substrate-owned Apple project generation moves off XcodeGen and onto a
 Pkl-backed owned generation path, or any remaining XcodeGen surfaces are
 explicitly quarantined as historical/external compatibility.
 
+## Product Definition, User Journeys, And Choice Argument
+
+`release/v0.0.1/product-definition.md` is the release-prep product contract for
+Vaporize. It defines the product, primary users, product-level journeys, why
+users choose Vaporize, when not to choose Vaporize, and the build implication
+that new feature work must trace back to user value before implementation is
+accepted.
+
+This PRD consumes that contract rather than replacing it. Requirements below
+must stay aligned with the product definition and CUJ map, so release review can
+answer "why should a user choose Vaporize?" before accepting another feature
+slice.
+
 ## Goals
 
 - Ship one canonical CLI name: `vaporize@wrkstrm-core.cli`.
+- Define the product, primary users, product-level user journeys, and why users
+  choose Vaporize before more build work is accepted.
 - Classify Vaporize as an internal essential tool for assistant build,
   install, launch, and release-proof workflows.
 - Support SwiftPM CLI build, install, uninstall, and run flows.
@@ -88,6 +103,9 @@ explicitly quarantined as historical/external compatibility.
   emit first-slice `.xcodeproj` world-state with a receipt.
 - Provide shared Xcode workspace product-cache reuse so a warm large workspace
   DerivedData product can satisfy app installs before local rebuilds.
+- Define a Kura-queryable runtime sample series and Apple/Swift native artifact
+  ingestion follow-up so performance, coverage, and build-space claims are
+  based on durable samples rather than manual terminal timing.
 - Provide `status` and `warehouse` inventory modes for
   `x-vaporize-collapse-path` records, with legacy `x-craze-collapse-path`
   read-only fallback.
@@ -154,15 +172,19 @@ Supporting audiences:
 | FR-019 | Schema-universal evidence extraction | Vaporize release evidence and durable receipts have initial JSON schemas in `schema-universal/private/universal/domain/tooling/schema-families/vaporize-schemas/v0.0.1`, with fixtures extracted from the v0.0.1 release packet. |
 | FR-020 | Pkl to Xcode project generation | `generate-xcodeproj --pkl-path <project.pkl> --output-path <generated.xcodeproj>` evaluates Pkl through PklSwift, writes first-slice `.xcodeproj` world-state, and emits a `vaporize-pkl-xcodeproj-generation` receipt that explicitly records project world-state generation. |
 | FR-021 | Shared Xcode workspace product cache | App install/build accepts paired `--xcode-product-cache-workspace` and `--xcode-product-cache-derived-data-path`, searches the shared DerivedData product path before local outputs, and uses the shared workspace/DerivedData pair for the Xcode build invocation on cache miss. |
+| FR-022 | Pre-development product definition and choice argument | `release/v0.0.1/product-definition.md` defines the product, primary users, product-level user journeys, why users choose Vaporize, when not to choose Vaporize, and build implications; PRD, CUJs, why explainer, release gates, launch-review packet, CUJ coverage, and release-review tests reference it. |
 
 ## Release Criteria
 
 - Vaporize's package test suite passes with the Swift 6.4 toolchain:
   `vaporize toolchain -- swift test --package-path private/apple/spm/vaporize@wrkstrm-core.cli`.
   Current proof: the CUJ-derived coverage floor requires 64 Swift test
-  obligations plus 4 release evidence checks, all targetable by CUJ-specific
-  SwiftPM test bundles; the executable suite passes 81 tests across 15 CUJ
+  obligations plus 5 release evidence checks, all targetable by CUJ-specific
+  SwiftPM test bundles; the executable suite passes 82 tests across 15 CUJ
   targets.
+- `release/v0.0.1/product-definition.md` defines the product, primary users,
+  product-level user journeys, choice argument, non-choice cases, and build
+  implications before additional feature work is accepted.
 - CUJ test coverage is recorded in
   `release/v0.0.1/evidence/cuj-test-coverage.json`.
 - CLI help advertises `use`, `toolchain`, `validate-json`,
@@ -181,6 +203,14 @@ Supporting audiences:
   before stronger speed or disk-space claims are allowed.
 - Vaporize release evidence schemas validate as JSON under
   `schema-universal/private/universal/domain/tooling/schema-families/vaporize-schemas/v0.0.1`.
+- Runtime benchmark claims beyond provisional release-prep baselines require
+  Vaporize-emitted Kura runtime samples that retain or reference Swift/Apple
+  native artifacts such as code coverage JSON, profile data, xUnit output when
+  available, `.xcresult` bundles, result metadata, build logs, diagnostics, and
+  DerivedData/product paths. Build-size claims require product, binary, bundle,
+  build-output, coverage artifact, result-bundle, cache-delta, and
+  per-feature-flag size metrics where applicable. Current series contract:
+  `private/universal/substrate/collectives/wrkstrm/private/universal/kura-spaces/series/vaporize-runtime-samples/vaporize-runtime-samples.series.su.json`.
 - Concourse legacy project inspection receipt validates with
   `vaporize validate-json --path release/v0.0.1/evidence/concourse-project-yml-inspection.receipt.json`.
 - Concourse YAML/Pkl comparison receipt validates with
@@ -214,3 +244,4 @@ Supporting audiences:
 - `FR-VAPORIZE-TOOL-CALL-OBSERVABILITY`
 - `FR-VAPORIZE-DRIFT-CATCH-retire-craze-canonical-language`
 - `FR-VAPORIZE-XCODE-WORKSPACE-PRODUCT-CACHE-DISCOVERY`
+- `FR-VAPORIZE-RUNTIME-SAMPLE-SERIES-APPLE-ARTIFACT-INGESTION`

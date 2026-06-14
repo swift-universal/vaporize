@@ -1,7 +1,7 @@
 # Vaporize v0.0.1 - Release Gates
 
 **Status:** release-prep draft; blocked pending fleet Pkl-backed Xcode world-state parity
-**Updated:** 2026-06-13T21:28:11Z
+**Updated:** 2026-06-14T00:34:28Z
 **Component:** `vaporize@wrkstrm-core.cli`
 **Tool classification:** `internal-essential-tool`
 
@@ -10,8 +10,8 @@
 **BLOCKED-FOR-INTERNAL-ESSENTIAL-RELEASE.**
 
 The CUJ-derived test coverage contract now defines the required floor:
-64 Swift test obligations plus 4 release evidence checks across 15 active CUJs.
-The Vaporize package tests pass 81 executable Swift tests across 15 targetable
+64 Swift test obligations plus 5 release evidence checks across 15 active CUJs.
+The Vaporize package tests pass 82 executable Swift tests across 15 targetable
 CUJ-specific SwiftPM bundles through Vaporize's owned Xcode-selected toolchain
 mode. The approved Swift YAML read bridge,
 PklSwift-backed Pkl parity specimen, transitional YAML generation slice,
@@ -34,7 +34,7 @@ disposition for any remaining XcodeGen surfaces.
 | GATE-02 - CUJs authored | PASS | `release/v0.0.1/cuj.md` |
 | GATE-03 - Release gates authored | PASS | This file |
 | GATE-04 - Launch-review packet authored | PASS | `release/v0.0.1/evidence/launch-review-packet.json` |
-| GATE-05 - CUJ-derived package tests pass | PASS | `release/v0.0.1/evidence/cuj-test-coverage.json` requires 64 Swift test obligations plus 4 release evidence checks across 15 active CUJs. `vaporize toolchain -- swift test --package-path private/apple/spm/vaporize@wrkstrm-core.cli` passed 81 executable tests across 15 CUJ-specific SwiftPM bundles. |
+| GATE-05 - CUJ-derived package tests pass | PASS | `release/v0.0.1/evidence/cuj-test-coverage.json` requires 64 Swift test obligations plus 5 release evidence checks across 15 active CUJs. `vaporize toolchain -- swift test --package-path private/apple/spm/vaporize@wrkstrm-core.cli` passed 82 executable tests across 15 CUJ-specific SwiftPM bundles. |
 | GATE-06 - Required toolchain owned by Vaporize | PASS-WITH-NOTE | Current host check at 2026-06-13T21:39:03Z found bare `swift` and `vaporize toolchain -- swift` both reporting Apple Swift 6.4, and focused CUJ-15 took `6.80s` through both routes once warm. Earlier release-prep runs observed bare Swift drift. Vaporize remains the owned route because it stabilizes toolchain policy and release evidence even when host PATH happens to be correct. |
 | GATE-07 - CLI help reflects release surface | PASS | Vaporize help advertises `use`, `toolchain`, `validate-json`, `inspect-project-yml`, `compare-project-yml-pkl`, `import-project-yml`, `generate-project-yml`, `generate-xcodeproj`, `--common-process-spec`, `--xcode-product-cache-workspace`, and `--xcode-product-cache-derived-data-path`. |
 | GATE-08 - CommonProcess use mode tested | PASS | `VaporizeUseCommonProcessTests.swift` decodes valid spec JSON, loads a spec from disk, and rejects invalid executable refs. |
@@ -55,6 +55,8 @@ disposition for any remaining XcodeGen surfaces.
 | GATE-23 - Shared Xcode workspace product cache first slice | PASS-WITH-NOTE | CUJ-15 covers product-cache option parsing, paired option validation, cache-first app lookup before local DerivedData, and Xcode build invocation through the shared workspace/DerivedData pair. This proves the invocation/cache-order slice, not automatic workspace scheme discovery or fleet cache warmth. |
 | GATE-24 - Positioning and benchmark explainer | PASS-WITH-NOTE | `release/v0.0.1/why-vaporize.md` explains why Vaporize exists, what problems it solves, how it compares to Swift, xcodebuild, and xcrun, current local benchmark numbers, build-space savings theory, user ergonomics, and the benchmark evidence still required before final release claims. |
 | GATE-25 - Performance marketing claims | PASS-WITH-NOTE | `release/v0.0.1/performance-marketing-claims.md` provides approved measured/behavioral/theoretical claim language, example copy, before/after examples, banned claims, and benchmark receipts required before stronger performance or disk-space claims are allowed. |
+| GATE-26 - Product definition, user journeys, and choice argument | PASS | `release/v0.0.1/product-definition.md` defines Vaporize, primary users, product-level user journeys, why users choose it, when not to choose it, and build implications; PRD, CUJs, why explainer, claims, launch packet, coverage, and CUJ-09 tests reference the contract. |
+| GATE-27 - Kura runtime sample series and Apple artifact ingestion | BLOCKED-FOR-STRONG-BENCHMARK-CLAIMS | `private/universal/substrate/collectives/wrkstrm/private/universal/kura-spaces/series/vaporize-runtime-samples/vaporize-runtime-samples.series.su.json` defines the queryable series. A backfilled CUJ-09 sample verifies SwiftPM coverage JSON, `.profraw`, `default.profdata`, build-output size, Debug product size, codecov artifact size, and Vaporize binary size through Vaporize's toolchain route. Vaporize does not yet emit samples automatically or retain `.xcresult`/coverage/build-size artifacts as durable release evidence. |
 
 ## Open Follow-Up Beads
 
@@ -66,6 +68,7 @@ disposition for any remaining XcodeGen surfaces.
 - `FR-VAPORIZE-DRIFT-CATCH-retire-craze-canonical-language`
 - `FR-VAPORIZE-PRODUCT-RELEASE-DIR-RENAME-MODE`
 - `FR-VAPORIZE-XCODE-WORKSPACE-PRODUCT-CACHE-DISCOVERY`
+- `FR-VAPORIZE-RUNTIME-SAMPLE-SERIES-APPLE-ARTIFACT-INGESTION`
 
 ## Release Review Questions
 
@@ -92,3 +95,12 @@ disposition for any remaining XcodeGen surfaces.
   Concourse, Creative Selection v0.2, or the maintained huge workspace?
 - Which performance claim should get the first dedicated benchmark receipt:
   warm cache install time, cold cache miss time, or DerivedData disk savings?
+- Does each new Vaporize feature trace to `product-definition.md` before
+  implementation, tests, and release claims are accepted?
+- Should `vaporize toolchain`, app build/install, and shared-cache modes grow a
+  `--runtime-sample-series` flag that writes Kura JSONL samples and copies or
+  references SwiftPM coverage, xUnit, `.xcresult`, build log, diagnostic, and
+  DerivedData/product artifacts?
+- How should Vaporize encode per-feature-flag build-size cohorts so app teams
+  can compare product, binary, bundle, and artifact deltas the way mature app
+  teams track feature-flag cost?

@@ -1,9 +1,9 @@
 # Vaporize Performance Marketing Claims
 
 **Status:** release-prep claim matrix
-**Updated:** 2026-06-13T21:50:00Z
+**Updated:** 2026-06-14T00:34:28Z
 **Component:** `vaporize@wrkstrm-core.cli`
-**Companion:** `why-vaporize.md`
+**Companions:** `product-definition.md`, `why-vaporize.md`
 
 ## Claim Rule
 
@@ -17,13 +17,29 @@ Every performance claim must say which kind of proof backs it:
 
 Do not market theoretical claims as measured outcomes.
 
+Every claim must also trace to `product-definition.md`: a primary user,
+product-level journey, or reason users choose Vaporize. If a claim cannot be
+tied to that product contract, it is not release-ready copy.
+
+For runtime claims, "measured" should mean "captured as a Vaporize runtime
+sample in the Kura series with Swift/Apple native artifacts and size metrics
+attached or referenced." Manual terminal timings may seed provisional
+release-prep baselines, but they are not enough for strong performance,
+coverage, build-size, or disk-space claims.
+
+Internal positioning: Vaporize provides engineering pedigree. The tool should
+make assistants fight over the best engineering standards by default: native
+artifacts, typed records, queryable samples, and gates before claims.
+
 ## Approved Claims
 
 | Claim | Type | Safe wording | Evidence |
 | --- | --- | --- | --- |
+| Vaporize provides engineering pedigree for assistant-run build work | Behavioral | "Engineering pedigree for assistant-run builds." | `product-definition.md`; runtime sample series; release gates |
 | Vaporize does not replace Swift; it wraps the same engine with policy and evidence | Measured/behavioral | "Same Swift engine, owned proof surface." | `why-vaporize.md`; focused CUJ-15 bare Swift and Vaporize both measured `6.80s` warm |
 | Vaporize wrapper overhead was not visible at focused SwiftPM test scale in the current warm baseline | Measured | "In our warm CUJ-15 baseline, Vaporize matched direct Swift at second-level timing." | `why-vaporize.md` benchmark table |
 | Vaporize keeps performance proof inside release evidence | Behavioral | "Build proof you can review later." | PRD, CUJ-09, launch-review packet, provenance artifact |
+| Vaporize can run SwiftPM coverage on the owned toolchain route | Provisional measured | "Coverage stays on the owned route." | Backfilled Kura runtime sample; SwiftPM code coverage JSON/profile data and build-size metrics verified |
 | Vaporize avoids direct `xcodebuild` and `xcrun` choreography for assistants | Behavioral | "One command surface instead of native-tool choreography." | CUJ-02, CUJ-05, CUJ-15 |
 | Shared workspace product-cache reuse can skip a local rebuild when the requested `.app` already exists in the warm workspace DerivedData | Behavioral | "Install from the warm workspace product when it already exists." | CUJ-15 cache-first lookup test |
 | Shared workspace DerivedData is designed to reduce duplicate per-project build caches | Theoretical | "Designed to consolidate build products into the maintained workspace cache." | CUJ-15; disk-savings formula in `why-vaporize.md` |
@@ -36,6 +52,11 @@ Short internal positioning:
 > Vaporize is not a faster compiler. It is the owned build lane that lets
 > assistants use Swift and Xcode without losing policy, receipts, install
 > semantics, or cache discipline.
+
+Engineering-pedigree version:
+
+> Vaporize gives assistant-run builds engineering pedigree: native artifacts,
+> typed records, queryable samples, and release gates before claims.
 
 Performance-safe headline:
 
@@ -135,6 +156,12 @@ Allowed replacement wording:
   product already exists."
 - "Disk-space savings are expected from cache consolidation, but need a
   dedicated disk benchmark receipt."
+- "Runtime samples should attach Swift/Apple native artifacts such as SwiftPM
+  coverage JSON/profile data, xUnit output when available, `.xcresult` bundles,
+  result metadata, build logs, diagnostics, and DerivedData/product paths."
+- "Build-size claims should include product, binary, bundle, coverage artifact,
+  result bundle, cache-delta, and per-feature-flag size metrics where
+  applicable."
 - "Workspace product/scheme discovery remains a follow-up."
 - "Fleet parity remains a release blocker."
 
@@ -147,6 +174,8 @@ Allowed replacement wording:
 | "Vaporize reduces DerivedData footprint" | Disk usage of per-project DerivedData roots before and after consolidation |
 | "Vaporize improves fleet build throughput" | Repeated fleet run across owned Apple app surfaces with old path, local Vaporize path, and shared-cache Vaporize path |
 | "Workspace discovery removes manual scheme lookup" | Product/scheme discovery receipt from the maintained workspace |
+| "Vaporize coverage/performance samples are queryable" | Vaporize-emitted Kura runtime samples with retained SwiftPM coverage JSON/profile data and Xcode result artifacts where applicable |
+| "Feature flag X changes app size by N MB" | Paired runtime samples for each feature-flag cohort with product/binary/bundle size metrics and retained native build artifacts |
 
 ## Reviewer Checklist
 
@@ -156,3 +185,7 @@ Allowed replacement wording:
   already existing or being built through the shared workspace?
 - Does the copy keep fleet parity and disk savings marked unproven unless a
   benchmark receipt is attached?
+- Does every runtime claim point at a Kura runtime sample and native Swift/Apple
+  artifacts instead of manual timing alone?
+- Does every build-size or feature-flag size claim point at a Kura sample with
+  explicit size metrics and the flag set used for that build?

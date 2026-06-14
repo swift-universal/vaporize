@@ -7,15 +7,16 @@
   "artifactId": "vaporize-v0.0.1-provenance-artifact",
   "subjectAppSlug": "vaporize@wrkstrm-core.cli",
   "subjectReleaseSlug": "v0.0.1",
-  "generatedAt": "2026-06-13T21:28:11Z",
+  "generatedAt": "2026-06-14T00:34:28Z",
   "generatedBy": "codex-crisie",
   "status": "captured-for-forward-pkl-migration",
   "purpose": "Collect the v0.0.1 release-prep receipts and provenance in one artifact so the next migration slice can proceed from durable evidence rather than chat memory.",
   "releaseVerdict": {
     "currentStatus": "blocked-pending-fleet-pkl-project-generation",
     "proven": [
-      "CUJ-derived test coverage is explicit: 64 required Swift test obligations plus 4 release evidence checks across 15 active CUJs.",
-      "Vaporize package tests pass through Vaporize toolchain mode: 81 executable Swift tests across 15 CUJ-specific SwiftPM test bundles.",
+      "CUJ-derived test coverage is explicit: 64 required Swift test obligations plus 5 release evidence checks across 15 active CUJs.",
+      "Vaporize package tests pass through Vaporize toolchain mode: 82 executable Swift tests across 15 CUJ-specific SwiftPM test bundles.",
+      "The product definition defines Vaporize, primary users, product-level user journeys, choice argument, non-choice cases, and build implications before further build work is accepted.",
       "Legacy XcodeGen project.yml files parse through the Swift YAML read bridge.",
       "All 155 discovered project.yml files under private/universal/substrate/collectives parsed through inspect-project-yml.",
       "Concourse old XcodeGen script build and Vaporize app build both pass after Vaporize derives legacy WRAPPER_NAME from project.yml.",
@@ -26,6 +27,7 @@
       "Shared Xcode workspace product-cache reuse has a first slice: cache-first app lookup, paired option validation, and shared workspace/DerivedData build invocation are covered by CUJ-15.",
       "The release-facing why-vaporize explainer exists and records current Swift/xcodebuild/xcrun comparison, local benchmark baselines, build-space savings theory, user ergonomics, and unmeasured benchmark gaps.",
       "The performance marketing claims matrix exists and separates approved measured, behavioral, and theoretical claim language from prohibited speed and disk-space claims.",
+      "A Kura runtime sample series is seeded for Vaporize, with a backfilled CUJ-09 coverage sample that verifies SwiftPM code coverage JSON, raw profile data, merged profile data, build-output size, product size, codecov artifact size, and binary size from a Vaporize toolchain run.",
       "Initial schema-universal extraction exists as vaporize-schemas v0.0.1 for CUJ coverage, provenance, launch-review specialization, and Apple project YAML/Pkl receipts.",
       "JSON release evidence validates through Vaporize validate-json."
     ],
@@ -34,11 +36,16 @@
       "Pkl-backed .xcodeproj generation covers scheme/resource/package feature parity across the required fleet.",
       "Vaporize automatically discovers the requested product or scheme from the shared Xcode workspace cache.",
       "Fleet-wide performance or disk-space savings have been measured.",
+      "Vaporize automatically emits Kura runtime samples, retains Apple/Swift native artifacts as durable release evidence, or compares per-feature-flag build-size cohorts.",
       "Remaining XcodeGen surfaces are migrated or quarantined.",
       "Vaporize v0.0.1 is ready for final internal-essential release."
     ]
   },
   "primaryReleaseSurfaces": [
+    {
+      "kind": "product-definition",
+      "path": "private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/product-definition.md"
+    },
     {
       "kind": "prd",
       "path": "private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/prd.md"
@@ -62,6 +69,10 @@
     {
       "kind": "launch-review-packet",
       "path": "private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/launch-review-packet.json"
+    },
+    {
+      "kind": "runtime-sample-series",
+      "path": "private/universal/substrate/collectives/wrkstrm/private/universal/kura-spaces/series/vaporize-runtime-samples/vaporize-runtime-samples.series.su.json"
     },
     {
       "kind": "schema-universal-family",
@@ -133,13 +144,19 @@
       "receiptKind": "cuj-test-coverage",
       "path": "private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/cuj-test-coverage.json",
       "claim": "Required test count is derived from PRD requirements through active draft CUJs.",
-      "result": "PASS: 64 Swift test obligations, 4 release evidence checks, 68 targetable obligations, 81 executable Swift tests"
+      "result": "PASS: 64 Swift test obligations, 5 release evidence checks, 69 targetable obligations, 82 executable Swift tests"
     },
     {
       "receiptKind": "launch-review-packet",
       "path": "private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/launch-review-packet.json",
       "claim": "Release-prep packet gathers release target, QA evidence, gate results, and follow-ups.",
       "result": "VALID-JSON"
+    },
+    {
+      "receiptKind": "product-definition-contract",
+      "path": "private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/product-definition.md",
+      "claim": "Release review can inspect what Vaporize is, who it serves, why users choose it, and which product-level journeys justify further build work.",
+      "result": "PASS: CUJ-09 tests enforce the product-before-build contract"
     },
     {
       "receiptKind": "positioning-and-benchmark-explainer",
@@ -152,6 +169,18 @@
       "path": "private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/performance-marketing-claims.md",
       "claim": "Release review has approved performance marketing copy examples and explicit claim boundaries.",
       "result": "PASS-WITH-NOTE: stronger speed and disk-space claims still require dedicated benchmark receipts"
+    },
+    {
+      "receiptKind": "vaporize-runtime-sample-series",
+      "path": "private/universal/substrate/collectives/wrkstrm/private/universal/kura-spaces/series/vaporize-runtime-samples/vaporize-runtime-samples.series.su.json",
+      "claim": "Runtime, coverage, performance, build-space, and cache samples have a Kura-queryable series contract.",
+      "result": "PASS-WITH-NOTE: automatic Vaporize emission remains a follow-up"
+    },
+    {
+      "receiptKind": "vaporize-runtime-sample-backfill",
+      "path": "private/universal/substrate/collectives/wrkstrm/private/universal/kura-spaces/series/vaporize-runtime-samples/samples/2026-06-14.vaporize-runtime-samples.jsonl",
+      "claim": "A Vaporize toolchain SwiftPM coverage run can be captured as a Kura runtime sample with native coverage artifact references.",
+      "result": "PASS-WITH-NOTE: SwiftPM codecov JSON/profile data and build-size metrics verified; xUnit was not materialized for this Swift Testing sample"
     },
     {
       "receiptKind": "vaporize-schema-universal-extraction",
@@ -278,12 +307,20 @@
       "purpose": "Defines the PRD/CUJ-derived required test floor for active v0.0.1 journeys."
     },
     {
+      "path": "private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/product-definition.md",
+      "purpose": "Defines Vaporize, primary users, product-level user journeys, why users choose it, when not to choose it, and build implications before more implementation is accepted."
+    },
+    {
       "path": "private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/why-vaporize.md",
       "purpose": "Explains Vaporize positioning, problem claims, Swift/xcodebuild/xcrun comparison, local benchmark baselines, build-space savings theory, user ergonomics, and unmeasured benchmark gaps."
     },
     {
       "path": "private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/performance-marketing-claims.md",
       "purpose": "Defines approved measured/behavioral/theoretical performance claims, example copy, prohibited claims, before/after examples, and benchmark receipts required before stronger claims."
+    },
+    {
+      "path": "private/universal/substrate/collectives/wrkstrm/private/universal/kura-spaces/series/vaporize-runtime-samples",
+      "purpose": "Seeds the Kura runtime sample series for Vaporize and a backfilled CUJ-09 SwiftPM coverage sample with native artifact references, build-size metrics, and feature-flag size dimensions."
     },
     {
       "path": "private/universal/substrate/collectives/schema-universal/private/universal/domain/tooling/schema-families/vaporize-schemas/v0.0.1/json/vaporize-schemas-v000-000-001/schemas",
@@ -305,7 +342,7 @@
     },
     {
       "command": "vaporize toolchain -- swift test --package-path private/apple/spm/vaporize@wrkstrm-core.cli",
-      "result": "PASS: 81 tests across 15 CUJ-specific SwiftPM bundles"
+      "result": "PASS: 82 tests across 15 CUJ-specific SwiftPM bundles"
     },
     {
       "command": "vaporize toolchain -- swift test --package-path private/apple/spm/vaporize@wrkstrm-core.cli --filter VaporizeCUJ15XcodeProductCacheTests",
@@ -313,7 +350,11 @@
     },
     {
       "command": "local benchmark baseline captured with /usr/bin/time -p for Vaporize validate-json, Vaporize toolchain swift --version, bare swift --version, focused CUJ-15 through bare Swift, focused CUJ-15 through Vaporize toolchain, and full Vaporize suite",
-      "result": "PASS-WITH-NOTE: validate-json 0.03s, Vaporize swift --version 0.25s, bare swift --version 0.17s, focused CUJ-15 bare Swift 6.80s, focused CUJ-15 Vaporize 6.80s, full Vaporize suite 9.14s; not a fleet performance or disk-space benchmark"
+      "result": "PASS-WITH-NOTE: validate-json 0.03s, Vaporize swift --version 0.25s, bare swift --version 0.17s, focused CUJ-15 bare Swift 6.80s, focused CUJ-15 Vaporize 6.80s, full Vaporize suite 15.57s with 82 tests; not a fleet performance or disk-space benchmark"
+    },
+    {
+      "command": "vaporize toolchain -- swift test --package-path private/apple/spm/vaporize@wrkstrm-core.cli --filter VaporizeCUJ09ReleaseReviewTests --enable-code-coverage",
+      "result": "PASS-WITH-NOTE: 5 tests passed in 29.38s real with SwiftPM code coverage enabled; codecov JSON validated through Vaporize and coverage/build-size metrics summarized into the Kura runtime sample backfill"
     },
     {
       "command": "vaporize validate-json --path private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/concourse-project-yml-inspection.receipt.json",
@@ -432,6 +473,7 @@
     "Expand Pkl-backed .xcodeproj world-state generation beyond the first Creative Selection v0.2 slice.",
     "Run old tool / Vaporize / Pkl-generation comparisons beyond Concourse and Creative Selection v0.2 before claiming fleet parity.",
     "Promote shared workspace product-cache reuse into workspace product/scheme discovery once the maintained workspace fleet is known.",
+    "Implement Vaporize-emitted Kura runtime samples that can attach SwiftPM coverage JSON/profile data, xUnit output when available, Xcode .xcresult bundles, result metadata, build logs, diagnostics, DerivedData/product paths, product/binary/bundle sizes, coverage/result artifact sizes, cache deltas, and per-feature-flag size cohorts.",
     "Create dedicated benchmark receipts for cold builds, warm cache hits, cache misses, and disk usage before making fleet performance or space-saving release claims.",
     "Promote approved performance marketing claims only after attaching the relevant benchmark receipt.",
     "Quarantine or migrate remaining substrate-owned XcodeGen surfaces."
@@ -444,6 +486,7 @@
     "Generated transitional AppleProjectSpec YAML is migration evidence, not a checked-in project.yml replacement or .xcodeproj generator.",
     "Shared Xcode workspace product-cache reuse is a cache lookup and build-invocation slice, not automatic workspace product discovery.",
     "The why-vaporize benchmark baseline is local release-prep evidence and must not be presented as fleet performance proof.",
+    "The first runtime sample is backfilled and references ephemeral SwiftPM build artifacts; it proves the target shape, not automatic Vaporize emission, durable artifact retention, or per-feature-flag size comparison.",
     "Concourse build comparison is one-specimen evidence and must not be generalized to the whole fleet without additional receipts."
   ]
 }

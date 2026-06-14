@@ -1,7 +1,7 @@
 # Why Vaporize
 
 **Status:** release-prep explainer
-**Updated:** 2026-06-13T21:39:03Z
+**Updated:** 2026-06-14T00:34:28Z
 **Component:** `vaporize@wrkstrm-core.cli`
 **Release target:** internal essential substrate CLI
 
@@ -14,11 +14,26 @@ stable assistant-facing command, receipts, and policy boundaries."
 It is not a replacement for Swift, Xcode, or Xcode's build system. It is the
 substrate-owned gate around those engines.
 
+Internally, Vaporize provides engineering pedigree: it makes assistants fight
+for the strongest available proof surface, from native Apple/Swift artifacts to
+typed Kura records and release gates.
+
+## Product Definition And Choice Argument
+
+The product contract lives in `release/v0.0.1/product-definition.md`.
+
+Choose Vaporize when the work is assistant-run, release-facing, app-facing,
+receipt-bearing, toolchain-sensitive, project-migration, or shared-cache work.
+Direct Swift remains reasonable for a human one-off local command, but Vaporize
+is the better internal interface when the result must become reviewable
+world-state.
+
 ## Problems Vaporize Claims To Solve
 
 | Problem | Vaporize answer | Current proof |
 | --- | --- | --- |
-| Assistants improvise shell choreography | One canonical command surface for build, test, install, run, open, validate, inspect, import, generate, inventory, and toolchain selection | README, PRD FR-001 through FR-021, 15 CUJ bundles |
+| Engineering standards drift into ad hoc proof | Vaporize makes the owned route prefer native artifacts, typed samples, receipts, and gates | Product definition, runtime sample series, release gates |
+| Assistants improvise shell choreography | One canonical command surface for build, test, install, run, open, validate, inspect, import, generate, inventory, and toolchain selection | README, PRD FR-001 through FR-022, 15 CUJ bundles |
 | Direct native tools bypass policy | `xcodebuild`, `xcrun`, and JSON validation details live behind Vaporize modes | CUJ-05, CUJ-06, release gates |
 | Build/install output is hard to review | Receipts record what was requested and what happened | Pass/use/toolchain/validation/project receipts |
 | Xcode project migration needs proof | YAML, Pkl, generated YAML, and first-slice `.xcodeproj` generation are compared and receipted | CUJ-08, CUJ-10, CUJ-11, CUJ-13, CUJ-14 |
@@ -99,7 +114,8 @@ Environment:
 | Bare Swift version comparison | `swift --version` | `0.17s real` |
 | Focused CUJ-15 through bare Swift | `swift test --filter VaporizeCUJ15XcodeProductCacheTests` | `6.80s real` |
 | Focused CUJ-15 through Vaporize toolchain | `vaporize toolchain -- swift test --filter VaporizeCUJ15XcodeProductCacheTests` | `6.80s real` |
-| Full Vaporize suite through Vaporize toolchain | `vaporize toolchain -- swift test` | `9.14s real`, 81 tests |
+| Full Vaporize suite through Vaporize toolchain | `vaporize toolchain -- swift test` | `15.57s real`, 82 tests |
+| Focused CUJ-09 with SwiftPM coverage enabled | `vaporize toolchain -- swift test --filter VaporizeCUJ09ReleaseReviewTests --enable-code-coverage` | `29.38s real`, 5 tests, SwiftPM codecov JSON verified |
 
 Interpretation:
 
@@ -110,9 +126,31 @@ Interpretation:
 - The performance win Vaporize is positioned for is not raw compiler speed. It
   is avoiding repeated local app rebuilds, avoiding wrong toolchain runs,
   eliminating manual setup mistakes, and keeping evidence attached to the run.
+- The CUJ-09 coverage run proves that Vaporize can stay on its owned toolchain
+  route while SwiftPM emits native coverage artifacts: code coverage JSON,
+  raw `.profraw` files, and merged `default.profdata`.
+
+Runtime sample boundary:
+
+- Manual `/usr/bin/time` output is provisional release-prep evidence.
+- Queryable benchmark evidence belongs in the Kura series
+  `private/universal/substrate/collectives/wrkstrm/private/universal/kura-spaces/series/vaporize-runtime-samples/`.
+- Future measured claims should come from Vaporize-emitted runtime samples that
+  attach Swift/Apple native artifacts: SwiftPM coverage JSON/profile data,
+  xUnit output when available, `.xcresult` bundles, result metadata, build logs,
+  diagnostics, DerivedData/product paths, and build-size metrics.
+- Build size is a key runtime metric: samples should track build output,
+  product bundle, executable binary, coverage artifact, result bundle, cache
+  delta, and per-feature-flag size changes when a product exposes flags.
 
 Benchmarks still required before final internal release:
 
+- First-class Vaporize runtime sample emission into the Kura series.
+- Durable artifact-retention policy for SwiftPM coverage data, xUnit output
+  when available, Xcode `.xcresult` bundles, and DerivedData/product-cache
+  evidence.
+- Build-size baselines for app products, CLI binaries, coverage artifacts, and
+  per-feature-flag cohorts.
 - Cold app build: direct old path vs Vaporize path.
 - Warm app build: cache hit vs cache miss.
 - Shared workspace product-cache hit: install from warm workspace product
@@ -184,8 +222,9 @@ Tradeoffs:
 - It must stay ruthlessly documented, tested by CUJ, and honest about what is
   first-slice versus fleet-proven.
 - If a task is purely local human experimentation, direct Swift can be simpler.
-  If the task is assistant-run, release-facing, app-facing, or needs receipts,
-  Vaporize is the better interface.
+  If the task is assistant-run, release-facing, app-facing, receipt-bearing,
+  toolchain-sensitive, project-migration, or shared-cache work, Vaporize is the
+  better interface.
 
 ## Bottom Line
 
