@@ -1,0 +1,162 @@
+{
+  "BeadsIssue": "0.1.0",
+  "schemaVersion": "0.1.0",
+  "id": "FR-VAPORIZE-XCODEGEN-INTEGRATION-substrate-canonical-xcodegen-aware-build",
+  "title": "vaporize xcodegen integration: substrate-canonical pbxproj generate-if-stale before xcodebuild",
+  "status": "open",
+  "priority": 2,
+  "issueType": "feature",
+  "labels": [
+    "substrate-relocated-2026-06-13-bulk-typed-canonical-retype"
+  ],
+  "createdAt": "2026-06-12T09:05:00Z",
+  "createdBy": "operator-named 2026-06-12 ('xcodegen - please add a bead that we are going to integrate that into vaporize') in same turn that vaporize-build of concourse failed because pbxproj was stale relative to project.yml + Sources/mac-app/",
+  "historicalContent": {
+    "slug": "FR-VAPORIZE-XCODEGEN-INTEGRATION-substrate-canonical-xcodegen-aware-build",
+    "kind": "bead-feature-request",
+    "severity": "high",
+    "createdAt": "2026-06-12T09:05:00Z",
+    "createdBy": "operator-named 2026-06-12 ('xcodegen - please add a bead that we are going to integrate that into vaporize') in same turn that vaporize-build of concourse failed because pbxproj was stale relative to project.yml + Sources/mac-app/",
+    "category": "substrate-canonical-tooling-coverage",
+    "identityReframe": {
+      "from": "vaporize is the substrate-canonical install/build/run/pass/setup gate for SwiftPM packages and xcodeproj apps; xcodegen is an out-of-band project-file generator the operator invokes by hand before vaporize.",
+      "to": "vaporize is the substrate-canonical VAPORWARE-COLLAPSE GATE for ALL Apple-platform artifacts — including the project-file shape itself. project.yml is typed substrate-vapor; concourse.xcodeproj/project.pbxproj is the world-state collapse. vaporize must own that collapse, not delegate it implicitly to a parallel CLI.",
+      "triggeringAxiomRef": "private/universal/substrate/collectives/spaces-universal/private/universal/kura-spaces/axioms/craze-builds-vaporware-typed-records-are-substrate-vapor-craze-is-the-collapse-gate.axiom.su.json",
+      "implications": [
+        "vaporize build --artifact app --xcode-project <p> --scheme <s> must detect when project.yml is newer than project.pbxproj OR when Sources/<target>/ contains .swift files not referenced in pbxproj, and regenerate via xcodegen BEFORE shelling to xcodebuild.",
+        "The typed receipt is XcodeProjectGenerateReceiptModel — substrate-vapor (project.yml) → world-state (pbxproj) with provenance: file count delta, target source list delta, xcodegen version, project.yml mtime, pbxproj mtime.",
+        "Future vaporize mode `generate --xcode-project <p> --spec <s>` exposes the explicit form; the `build` mode wraps it as a pre-condition step.",
+        "Pairs with the existing `graph` subfunction pattern (main.swift:494) where vaporize forwards to package-graph@wrkstrm.cli — same model for forwarding to xcodegen."
+      ]
+    },
+    "operatorDirectionRefs": [
+      "operator://rismay/2026-06-12/integrate-xcodegen-into-vaporize"
+    ],
+    "axiomCitations": [
+      "[[vaporize-is-the-substrate-canonical-tool-for-modification]] — when vaporize doesn't have the mode, EXTEND vaporize, never spawn a parallel one-off CLI. xcodegen is the parallel CLI vaporize must absorb-by-forwarding.",
+      "[[lift-existing-patterns-not-reimplement]] — do NOT re-author xcodegen's project-spec parser inside vaporize; forward to xcodegen binary the same way the `graph` mode forwards to package-graph.",
+      "[[shortcuts-cause-state-divergence]] — pbxproj going stale relative to project.yml IS the state-divergence class this bead exists to immunize against.",
+      "[[shared-components-pass-every-launch-gate-audit-feature-request-launch-review-no-shortcuts]] — full discipline: audit + CUJ + PRD + FeatureAnnouncementModel + design + impl + launch review.",
+      "[[component-request-files-first-before-consumer-implementation-no-one-off-builds]] — this bead at vaporize home is the substrate-canonical request before consumer apps reach for `xcodegen generate` directly."
+    ],
+    "problem": {
+      "statement": "vaporize build --artifact app trusts the pbxproj that xcodebuild reads, but the pbxproj is a derived artifact downstream of project.yml + the on-disk source tree. When project.yml or Sources/<target>/ drift ahead of pbxproj (new .swift files authored, target sources updated, build settings tweaked), xcodebuild compiles the STALE source list and fails with 'cannot find Type in scope' for types that exist on disk but aren't in the target. Today, agents resolve this by invoking xcodegen out-of-band before vaporize, which breaks the 'vaporize is the single canonical gate' contract and leaves the regeneration step un-typed (no receipt, no provenance, no axiom-citation).",
+      "evidence": [
+        "2026-06-12 concourse rebuild via vaporize: SPM dep cascade fix landed (common-process-schemas v0.3.0→v0.0.3 + 3 import sweeps in common-terminal-view), but xcodebuild still failed with 'cannot find ConcourseSettingsViewModel in scope' + 'NSNotification.Name has no member concourseNavigateToRouteRequested' — both symbols ARE declared in Sources/mac-app/ (ConcourseSettingsViewModel.swift, ConcourseRoute.swift, ConcourseSettingsScene.swift) but the pbxproj's source list didn't include those 3 new files because xcodegen hadn't been re-run since they were authored.",
+        "Operator caught the pattern mid-turn 2026-06-12 after watching agent invoke `/opt/homebrew/bin/xcodegen generate --spec project.yml --project <dir>` by absolute path as a workaround. xcodegen succeeded (+19/-7 lines in pbxproj, all 3 new files included), but the workaround itself is the substrate-doctrine violation: vaporize was supposed to be the only gate.",
+        "The same divergence class will reappear every time a substrate engineer adds a .swift file under an xcodegen-managed target — currently 7+ such targets across wrkstrm-core (concourse, launch-review, dub-dub, ...)."
+      ],
+      "consequence": "Agents continue invoking xcodegen as a parallel CLI; pbxproj regenerations leave no typed receipt; the [[vaporize-is-the-substrate-canonical-tool-for-modification]] axiom degrades from substrate-doctrine to documentation-aspiration; xcodebuild failures masquerade as 'symbol not found' errors when the real cause is 'pbxproj is stale relative to project.yml'."
+    },
+    "criticalUserJourney": {
+      "actor": "Agent or operator invoking `vaporize@wrkstrm-core.cli build --artifact app` against any xcodegen-managed app (concourse, launch-review, dub-dub, ...)",
+      "goal": "Build the .app from current source without manually running xcodegen out-of-band when source files have been added/moved since the last pbxproj write.",
+      "journey": [
+        "Agent runs `vaporize build --artifact app --package-path <dir> --xcode-project <p> --scheme <s>` against an app whose Sources/<target>/ has new .swift files since pbxproj was written.",
+        "vaporize detects project.yml exists alongside the xcodeproj.",
+        "vaporize stat-compares project.yml mtime + Sources/<target>/ contents against pbxproj's PBXSourcesBuildPhase. If stale, vaporize forwards to xcodegen binary with explicit --spec/--project flags (same pattern as the existing `graph` subfunction forwards to package-graph).",
+        "vaporize emits XcodeProjectGenerateReceiptModel { specPath, projectPath, xcodegenVersion, filesAdded, filesRemoved, specMtimeBefore, pbxprojMtimeBefore, pbxprojMtimeAfter, regenerationReason } before invoking xcodebuild.",
+        "xcodebuild compiles against the fresh pbxproj — types declared in newly-authored .swift files resolve."
+      ],
+      "successSignals": [
+        "Zero standalone `xcodegen generate` invocations across substrate workflow instances for app builds.",
+        "Substrate-typed receipts cite vaporize as the gate for both project regeneration AND build.",
+        "The `--no-generate` flag exists for the rare case where the agent wants to test the current pbxproj exactly as-is (substrate-default is generate-if-stale; opt-out is explicit)."
+      ],
+      "failureSignals": [
+        "Any `/opt/homebrew/bin/xcodegen` shelled directly from agent/operator transcripts (search-grep for it after this bead lands).",
+        "Agent claims vaporize regenerated incorrectly and falls back to xcodegen directly instead of filing a typed bug at this bead's home.",
+        "pbxproj diff shows file additions WITHOUT a matching XcodeProjectGenerateReceiptModel in the workflow instance receiptRefs."
+      ]
+    },
+    "productRequirementsDocument": {
+      "summary": "Add a `generate` subfunction to vaporize that forwards to xcodegen (binary at /opt/homebrew/bin/xcodegen or resolved via VAPORIZE_XCODEGEN_PATH env), AND make `build --artifact app` auto-run `generate` as a pre-condition when project.yml is detected at the package-path. Emit XcodeProjectGenerateReceiptModel typed receipt per invocation. Mirrors the existing `graph` mode pattern (main.swift:494) that forwards to package-graph@wrkstrm.cli.",
+      "scope": {
+        "in": [
+          "New mode: `vaporize generate --spec <project.yml> --project <dir>` (explicit form; matches xcodegen's CLI signature).",
+          "Auto-invocation from `build --artifact app` when project.yml is found alongside --xcode-project. Opt-out flag: `--no-generate`.",
+          "Staleness detection: compare project.yml mtime + Sources/<target>/ directory content hash against the PBXSourcesBuildPhase's file list. Regenerate only when stale (idempotent fast-path when pbxproj is current).",
+          "Emit XcodeProjectGenerateReceiptModel typed receipt to a substrate-canonical receipt path (parallel to existing pass-through receipt).",
+          "Resolution order for xcodegen binary path: 1) `--xcodegen-path` flag, 2) `VAPORIZE_XCODEGEN_PATH` env, 3) `/opt/homebrew/bin/xcodegen` substrate-default, 4) PATH lookup as last resort."
+        ],
+        "out": [
+          "Re-authoring xcodegen's project-spec parser inside vaporize — forward to the xcodegen binary, lift the existing pattern.",
+          "Modifying project.yml content (vaporize is read-only on project.yml; xcodegen is the spec-to-pbxproj transformer).",
+          "Non-xcodegen-managed xcodeprojs (hand-authored or Tuist-generated) — those bypass the generate step automatically because no project.yml exists at the package-path."
+        ]
+      },
+      "typedReceiptShape": {
+        "schemaFamily": "typed-xcode-project-generate-receipt-schemas v0.0.1 (substrate-pending — schema-universal gap)",
+        "topLevelKey": "XcodeProjectGenerateReceiptModel",
+        "fields": [
+          "specPath (string) — absolute path to project.yml",
+          "projectPath (string) — absolute path to .xcodeproj dir",
+          "xcodegenVersion (string) — captured from `xcodegen --version`",
+          "vaporizeVersion (string)",
+          "regenerationReason (enum: 'stale-mtime' | 'source-tree-drift' | 'forced' | 'first-build')",
+          "filesAdded (array of relative paths added to pbxproj)",
+          "filesRemoved (array of relative paths removed from pbxproj)",
+          "specMtimeBefore (timestamp)",
+          "pbxprojMtimeBefore (timestamp)",
+          "pbxprojMtimeAfter (timestamp)",
+          "skipped (bool — true when staleness check passed and no regeneration happened)",
+          "warnings (array of xcodegen stderr lines)"
+        ]
+      },
+      "compositionWithExistingVaporizeModes": [
+        "Mirror the `graph` subfunction (main.swift:494-533): vaporize already has a precedent for forwarding to a sibling CLI with resolution-order fallback (--package-path > env > substrate-default). xcodegen integration follows the same pattern.",
+        "`build --artifact app` becomes generate-first when project.yml is present. The substrate-default flips from 'trust whatever pbxproj exists' to 'ensure pbxproj is current before xcodebuild'.",
+        "Add `--no-generate` flag (parallel to existing `--skip-install`) so opt-out is symmetric with other vaporize control-flow flags."
+      ],
+      "successCriteria": [
+        "After landing: zero standalone `xcodegen generate` shells in substrate transcripts for app builds. Search-grep `xcodegen generate` across recent workflow-instances → 0 hits.",
+        "Substrate-typed workflow `versioned-macos-app-install` instance's state-log shows XcodeProjectGenerateReceiptModel emission as a pre-condition step inside vaporize, not as an out-of-band step.",
+        "Re-running this turn's concourse build with the new vaporize would land the .app in one invocation (no manual xcodegen workaround between vaporize calls 4 and 5).",
+        "AxiomModel `[[vaporize-is-the-substrate-canonical-tool-for-modification]]` clears another instance of the 3x-rule via real consumer use after this bead lands."
+      ]
+    },
+    "launchGateDiscipline": {
+      "stages": [
+        "AUDIT — read vaporize sources at `vaporize@wrkstrm-core.cli/sources/vaporize-cli/main.swift` (esp. the `graph` subfunction at main.swift:494-549 and SwiftAppInstaller wiring at main.swift:261-326) before authoring VaporizeMode.generate. Also audit xcodegen's CLI surface to confirm --spec/--project flag stability.",
+        "TYPED FEATURE-REQUEST CHAIN — this bead + blocked-surface at consumer (every xcodegen-managed app home: concourse/launch-review/dub-dub agenda dirs) + CUJ inline + PRD inline + FeatureAnnouncementModel at wrkstrm/.../product-lines/vaporize/features/.",
+        "DESIGN — typed VaporizeGenerateMode struct + XcodeProjectGenerateReceiptModel Codable + draft typed-xcode-project-generate-receipt-schemas v0.0.1 schema family at schema-universal home.",
+        "IMPLEMENTATION — Swift only (no Python per [[no-python-swift-over-python-for-all-automation-substrate-doctrine]]); Swift Testing tests per [[substrate-swift-testing-only-no-xctest]]; DocC; at least ONE real wired consumer (concourse 0.1.0-debug rebuild via vaporize, single invocation, no manual xcodegen).",
+        "LAUNCH REVIEW — operator OD-N + typed FeatureAnnouncementModel for release notes + paired stack.route-bundle for Today.app per [[launch-review-required-for-every-vaporware-modification]].",
+        "EVERY GATE — typed-record validation (Step 3.5) + receipt emission + axiom-citation density + audience review (agent + operator audiences)."
+      ],
+      "pendingGatePrimitives": [
+        "[[missing-typed-record-validator-cli]] — Step 3.5 manual until lands; design accommodates retrofit.",
+        "[[missing-executable-workflow-harness]] — /capture authoring manual until lands; design accommodates retrofit."
+      ]
+    },
+    "schemaGaps": {
+      "newSchemaFamiliesNeeded": [
+        "typed-xcode-project-generate-receipt-schemas v0.0.1 — typed XcodeProjectGenerateReceiptModel; composes with existing receipt-schemas family at schema-universal."
+      ],
+      "existingSchemaUniversalGapsTouched": [
+        "receipt-schemas — typed receipt records for project-file regeneration.",
+        "typed-record-validator-cli — needed to validate the new receipt model.",
+        "executable-workflow-harness — needed to mechanize generate-then-build composition inside vaporize."
+      ]
+    },
+    "blockedSurfaces": [
+      "Every xcodegen-managed app home (concourse, launch-review, dub-dub, and any future app) continues to rely on out-of-band xcodegen invocations until this lands.",
+      "Substrate-typed workflow `versioned-macos-app-install` cannot cite a single canonical gate for app rebuilds; it has to document the xcodegen step separately, which atrophies the [[vaporize-is-the-substrate-canonical-tool-for-modification]] axiom.",
+      "Future agents reading this bead's blockedSurfaces will see xcodegen-direct invocations as a substrate-doctrine violation; today, the violation is the only way forward."
+    ],
+    "linkedTypedRecords": {
+      "memoryPointer": "~/.claude/memory/.docc/feedback_vaporize-is-the-substrate-canonical-tool-for-modification.md",
+      "siblingBead_listTargets": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/agenda/beads/FR-VAPORIZE-LIST-TARGETS-substrate-canonical-target-discovery.issue.json",
+      "siblingBead_productReleaseRename": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/agenda/beads/FR-VAPORIZE-PRODUCT-RELEASE-DIR-RENAME-MODE.issue.json",
+      "triggeringWorkflowEvidence": "2026-06-12 concourse rebuild session — multi-step vaporize invocations 4/5 blocked at xcodebuild compile until /opt/homebrew/bin/xcodegen was invoked out-of-band."
+    },
+    "operatorQuotes": [
+      "2026-06-12: 'xcodegen - please add a bead that we are going to integrate that into vaporize' — operator-direction moment immediately after agent invoked xcodegen out-of-band to unblock concourse build."
+    ]
+  },
+  "composesWith": [
+    "[[link-ref-is-substrate-canonical-http-and-bead-short-form-is-its-url-projection]]",
+    "[[bead-relocation-personal-vs-shared-canonical-home-cycle]]",
+    "[[substrate-wide-bead-relocation-sweep-per-personal-vs-shared-doctrine]]"
+  ]
+}

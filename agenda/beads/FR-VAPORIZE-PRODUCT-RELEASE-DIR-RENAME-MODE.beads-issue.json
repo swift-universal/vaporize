@@ -1,0 +1,82 @@
+{
+  "BeadsIssue": "0.1.0",
+  "schemaVersion": "0.1.0",
+  "id": "FR-VAPORIZE-PRODUCT-RELEASE-DIR-RENAME-MODE",
+  "title": "vaporize@wrkstrm-core.cli — add PRODUCT-RELEASE-DIR-RENAME mode for release/v0.1.0/ → release/v0.0.1/ structural shifts at property component homes",
+  "status": "open",
+  "priority": 1,
+  "issueType": "feature",
+  "labels": [
+    "substrate-relocated-2026-06-13-bulk-typed-canonical-retype"
+  ],
+  "createdAt": "2026-06-12",
+  "createdBy": "Claude/Opus 4.7 (1M context) per operator OD-N 2026-06-12 — substrate-version-shift-down-one cascade preparation",
+  "historicalContent": {
+    "kind": "bead-feature-request-cli-mode-extension",
+    "createdAt": "2026-06-12",
+    "createdBy": "Claude/Opus 4.7 (1M context) per operator OD-N 2026-06-12 — substrate-version-shift-down-one cascade preparation",
+    "operatorQuotes": [
+      "2026-06-12: 'everything is just shifted down 1 and this is going to a pretty simple fix. write down the beads necessary so we can pickup later.'"
+    ],
+    "context": "Per [[vaporize-is-the-substrate-canonical-tool-for-modification]] — all substrate structural moves (renames, relocations, installs, app deploys, schema changes) route through vaporize. The substrate-version-shift-down-one cascade includes PRODUCT-RELEASE directory renames at property component homes (release/v0.1.0/ → release/v0.0.1/) that schema-bump (sibling bead) does not cover because schema-bump is scoped to schema-family-version dirs, not property-product-release dirs. This bead names the vaporize extension needed.",
+    "scope": {
+      "newCapabilityNeeded": [
+        "PRODUCT-RELEASE-DIR-RENAME mode: rename release/vX.Y.Z/ → release/v0.0.W/ at named property component home + update all substrate-wide path-deps in lockstep",
+        "Path-dep coverage required:",
+        "  (a) Swift source code: SiteRenderer + per-property renderers reference release/v0.1.0/ paths",
+        "  (b) Cloudflare Pages deploy configs at property webroots: wrangler.toml + deploy-target.json + deploy-receipts",
+        "  (c) Audience-packet + voice-source-corpus LinkRef relative paths",
+        "  (d) Launch-review-packets + stack.route-bundles + workflow-instance records that cite release/vX.Y.Z/ paths",
+        "  (e) gh-pages docc projection paths",
+        "Per-property opt-in: vaporize prompts for OD-N per property (NOT mechanical assume) because some properties may have first-public-released as v0.1.0 (correct, NOT to be shifted)",
+        "Dry-run mode: report all path-deps that WOULD change before any writes",
+        "Atomic commit cascade: per-property + cross-submodule commits land in lockstep per [[shortcuts-cause-state-divergence-typed-record-state-must-stay-in-lockstep-with-world-state]]"
+      ],
+      "candidatePropertiesIdentified": [
+        "todo3 public/site/rismay-me/release/v0.1.0/ → release/v0.0.1/ (operator-attested rismay.me is shipping but per substrate-version doctrine v0.1.0 = FIRST PUBLIC RELEASE; need operator OD-N — is rismay.me at first-public-release or still substrate-pending?)",
+        "laussat-studio public/site/laussat-studio/release/v0.1.0/ → release/v0.0.1/ (same question)",
+        "wrkstrm-research private/universal/domain/<area>/v0.1.0/ — 10+ dirs (audit-pending per umbrella bead)",
+        "collaborators/{vivian,gnecyd}/welcome-packet/v0.1.0/",
+        "any other release/v0.1.0/ directories surfaced by full audit"
+      ],
+      "designConsiderations": [
+        "Mechanism — extend vaporize's existing rename + relocate capabilities with release-aware mode",
+        "Per-property RenameRequestModel input: typed record naming old path + new path + per-property rationale + operator OD-N attestation",
+        "Substrate-wide path-dep scanner BEFORE write: package-graph@wrkstrm.cli style reverse-cross-ref so all consumers updated in same commit cascade",
+        "Cloudflare Pages re-deploy: post-rename trigger automatic re-deploy with new path; emit deploy-receipt"
+      ]
+    },
+    "executionContractSurface": {
+      "subcommand": "vaporize product-release-rename --property <slug> --from <vX.Y.Z> --to <v0.0.W> [--dry-run] [--include-cloudflare-redeploy] [--receipt-dir <path>]",
+      "produces": [
+        "ProductReleaseRenameReceiptModel record at property component home",
+        "Cross-substrate LinkRef update receipts",
+        "Cloudflare Pages re-deploy receipt (if --include-cloudflare-redeploy)",
+        "paired launch-review-packet + stack.route-bundle per [[every-vaporware-modification-dual-routes]]"
+      ]
+    },
+    "axiomCitations": [
+      "[[vaporize-is-the-substrate-canonical-tool-for-modification]] (substrate-canonical tool extension)",
+      "[[every-vaporware-modification-dual-routes]] (rename = vaporware modification; packet + bundle required)",
+      "[[shortcuts-cause-state-divergence-typed-record-state-must-stay-in-lockstep-with-world-state]]",
+      "[[treat-operator-as-founder-finished-products-only]] (only operator-attested-public-release earns v0.1.0; agent default = v0.0.1)",
+      "[[lift-existing-patterns-not-reimplement]] (extend vaporize; do not author parallel structural-rename tool)"
+    ],
+    "composesWith": [
+      "umbrella migration bead: schema-universal/private/universal/agenda/beads/MIGRATION-substrate-version-shift-down-one-cascade.issue.json",
+      "sibling: schema-bump@schema-universal.cli/agenda/beads/FR-SCHEMA-BUMP-CONSUMER-RECORD-SWEEP-MODE.issue.json (handles record-level + family-dir renames)",
+      "sibling: schema-universal/.../agenda/beads/FR-SUBSTRATE-VERSION-DOCTRINE-LINTER-CLI.issue.json"
+    ],
+    "openQuestions": [
+      "Per-property OD-N protocol: operator confirmation per property before rename, OR batched OD-N over a candidate list?",
+      "Cloudflare Pages deploy strategy: re-deploy from new path immediately, or hold-deploy for operator manual approval?",
+      "ProductReleaseRenameReceiptModel schema family location: schema-universal/.../release-operations-schemas/?"
+    ],
+    "estimatedScope": "1 turn for implementation; per-property execution ~1 turn each"
+  },
+  "composesWith": [
+    "[[link-ref-is-substrate-canonical-http-and-bead-short-form-is-its-url-projection]]",
+    "[[bead-relocation-personal-vs-shared-canonical-home-cycle]]",
+    "[[substrate-wide-bead-relocation-sweep-per-personal-vs-shared-doctrine]]"
+  ]
+}

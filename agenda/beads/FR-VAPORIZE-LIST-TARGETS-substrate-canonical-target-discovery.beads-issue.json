@@ -1,0 +1,155 @@
+{
+  "BeadsIssue": "0.1.0",
+  "schemaVersion": "0.1.0",
+  "id": "FR-CRAZE-LIST-TARGETS-substrate-canonical-target-discovery",
+  "title": "craze list-targets: substrate-canonical typed target discovery (find AND build through one gate)",
+  "status": "open",
+  "priority": 2,
+  "issueType": "feature",
+  "labels": [
+    "substrate-relocated-2026-06-13-bulk-typed-canonical-retype"
+  ],
+  "createdAt": "2026-06-10T23:59:30Z",
+  "createdBy": "operator-named 2026-06-10 ('you should be using craze to find and build available targets in a directory') + operator-confirmed 2026-06-10 ('thank you. we have to build this into craze') + operator-axiom-naming 2026-06-10 ('craze builds vaporware')",
+  "historicalContent": {
+    "slug": "FR-CRAZE-LIST-TARGETS-substrate-canonical-target-discovery",
+    "kind": "bead-feature-request",
+    "severity": "high",
+    "createdAt": "2026-06-10T23:59:30Z",
+    "createdBy": "operator-named 2026-06-10 ('you should be using craze to find and build available targets in a directory') + operator-confirmed 2026-06-10 ('thank you. we have to build this into craze') + operator-axiom-naming 2026-06-10 ('craze builds vaporware')",
+    "category": "substrate-canonical-tooling-coverage",
+    "identityReframe": {
+      "from": "craze is the substrate-canonical typed install/build/run/pass/setup gate (build-tool framing)",
+      "to": "craze is the substrate-canonical VAPORWARE-COLLAPSE GATE — the typed primitive that transmutes substrate-vapor (typed declarations) into world-state (binaries, processes, receipts)",
+      "triggeringAxiomRef": "private/universal/substrate/collectives/spaces-universal/private/universal/kura-spaces/axioms/craze-builds-vaporware-typed-records-are-substrate-vapor-craze-is-the-collapse-gate.axiom.su.json",
+      "implications": [
+        "list-targets enumerates vapor units at the directory (typed Crate declarations), not just buildable targets.",
+        "The typed receipt is CrateDiscoveryReceiptModel — substrate-vapor inventory at a path.",
+        "Future craze mode `realize <typed-record-path>` generalizes install/build/run/pass/setup to ANY typed record with a craze-collapse path.",
+        "Rust's `crate` lifted INTO craze's typed vocabulary: CrateModel is the substrate-typed VAPOR UNIT genus; rust-cargo-crate is one species kind."
+      ]
+    },
+    "operatorDirectionRefs": [
+      "operator://rismay/2026-06-10/use-craze-for-target-discovery-and-build",
+      "operator://rismay/2026-06-10/build-target-discovery-into-craze"
+    ],
+    "axiomCitations": [
+      "[[lift-existing-patterns-not-reimplement]] — craze is the substrate-canonical install/build/run/pass/setup gate; target discovery belongs there.",
+      "[[source-investigation-required-before-creating-new-app-or-pattern-existing-substrate-canonical-must-be-lifted]] — agents must investigate substrate before improvising find/grep.",
+      "[[component-request-files-first-before-consumer-implementation-no-one-off-builds]] — file at component home (here) before consumer (e.g. clia, agents reaching for find).",
+      "[[shared-components-pass-every-launch-gate-audit-feature-request-launch-review-no-shortcuts]] — full discipline: audit + CUJ + PRD + FeatureAnnouncementModel + design + impl + launch review."
+    ],
+    "problem": {
+      "statement": "Agents asked to install/build/run a substrate artifact roll their own discovery via `find . -iname`, `grep name: Package.swift`, `ls xcodeproj/xcshareddata/xcschemes/`, and hand-composed `xcodebuild` invocations. craze owns the typed install/build/run/pass/setup gate but does NOT yet expose a typed discovery surface — so agents bypass craze for the discovery step and only reach for craze at the build step. The bypass route leaves substrate blind to what the agent actually inspected and bakes ad-hoc shell into agent muscle memory.",
+      "evidence": [
+        "2026-06-10 Concourse 0.1.0 Release install: agent ran `find . -iname concourse*`, `grep -A2 name: Package.swift`, `ls concourse.xcodeproj/xcshareddata/xcschemes/`, and read project.yml by hand before invoking craze install — operator caught and named the gap mid-task.",
+        "Typed workflow instance `find-and-build-targets-via-craze-2026-06-10.workflow-instance.su.json` documents the violation + correction at spaces-universal/.../workflows/find-and-build-targets-via-craze/v0.0.1/."
+      ],
+      "consequence": "Agents stay improvisational at the discovery step; substrate-typed receipts only cover the build step; ad-hoc shell discovery doesn't compose with typed substrate-canonical receipts, validation, or downstream automation."
+    },
+    "criticalUserJourney": {
+      "actor": "Agent (any substrate-commissioned agent or operator-driven session)",
+      "goal": "Install, build, or run a named substrate artifact at a known directory without rolling own discovery shell.",
+      "journey": [
+        "Agent receives a build/install/run ask + an artifact home directory (operator-named OR resolved via commissioned-home doctrine).",
+        "Agent runs `craze list-targets --package-path <dir>` to enumerate available SPM products + Xcode schemes + scripts at the artifact home.",
+        "Agent reads the typed `find-targets-receipt.json` craze emits (or stdout JSON via `--format json`) for product slugs, scheme names, wrapper names, install paths, and channel/configuration variants.",
+        "Agent picks the named product/scheme and runs `craze install / build / run` with typed flags directly — no grep, no ls, no Package.swift parse."
+      ],
+      "successSignals": [
+        "Zero `find . -iname`, `grep Package.swift`, `ls xcshareddata`, or `cat project.yml` invocations in the typed workflow instance.",
+        "Discovery + build cite the same typed `craze` invocation chain in typed receipts.",
+        "Substrate-typed `find-targets-receipt.json` is a canonical record that downstream tools (clia agenda, launch-review, build verifier) can read without re-parsing Package.swift."
+      ],
+      "failureSignals": [
+        "Any ad-hoc `find` / `grep` / `ls` in the workflow instance's stateLog for the discovery step.",
+        "Agent claims `craze list-targets` returned wrong data and falls back to raw Package.swift parse instead of filing a typed bug at this bead's home."
+      ]
+    },
+    "productRequirementsDocument": {
+      "summary": "Add `craze list-targets --package-path <dir>` (and aliases `--xcode-project`/`--xcode-workspace`) that enumerates buildable artifacts at the path and emits a typed `find-targets-receipt.json` payload + a human stdout summary. Make discovery a first-class craze mode alongside install/build/run/pass/setup.",
+      "scope": {
+        "in": [
+          "Enumerate Swift package executable + library products from Package.swift via the Swift Package Manager API (not text grep).",
+          "Enumerate Xcode schemes from `.xcodeproj/xcshareddata/xcschemes/` (and `.xcworkspace/xcshareddata/xcschemes/`) via the typed Xcode workspace reader (NOT ad-hoc directory walk in user code — use the typed reader already wrapped inside craze for build).",
+          "When a project.yml exists at the path, surface the XcodeGen-declared targets, configurations, WRAPPER_NAME (per configuration), PRODUCT_BUNDLE_IDENTIFIER, INSTALL_PATH, and SUBSTRATE_APP_DISPLAY_NAME so agents know the bundle name without `.app` suffix (the gotcha that tripped Concourse install twice).",
+          "Emit a typed `find-targets-receipt.json` payload conforming to a new substrate `typed-craze-target-discovery-receipt-schemas v0.0.1` (substrate-pending; see schemaGaps below).",
+          "Human stdout summary for interactive use (text mode) + machine-readable JSON for typed-agent consumption (--format json)."
+        ],
+        "out": [
+          "Cross-repo product enumeration (this command operates on ONE artifact home named by the operator).",
+          "Network resolution of Swift dependencies (read what's already resolved/checked in; don't fetch).",
+          "Build-actually triggering — that's `craze build/install/run`. This is discovery only."
+        ]
+      },
+      "typedReceiptShape": {
+        "schemaFamily": "typed-craze-target-discovery-receipt-schemas v0.0.1",
+        "topLevelKey": "CrazeTargetDiscoveryReceiptModel",
+        "fields": [
+          "packagePath (string)",
+          "swiftPackage (optional, { products: [{ name, kind: 'executable'|'library', targets }] })",
+          "xcodeProject (optional, { path, schemes: [{ name, sharedDataPath, configurations: [{ name, productBundleIdentifier, wrapperName, wrapperNameWithoutAppSuffix, installPath, substrateAppDisplayName, productName }] }] })",
+          "xcodeWorkspace (optional, same shape with workspace path)",
+          "xcodeGenProjectSpec (optional, { path, targets: [{ name, type, configurations: [...] }] })",
+          "warnings (array, substrate-typed warnings about missing schemes / non-shared schemes / etc.)",
+          "discoveredAt (timestamp)",
+          "crazeVersion (string)"
+        ]
+      },
+      "compositionWithExistingCrazeModes": [
+        "When `craze install --artifact app --package-path <dir>` runs WITHOUT explicit --scheme/--product/--app-bundle-name, craze should optionally invoke its own list-targets discovery to RESOLVE the missing arguments rather than fail with 'missing flag' errors. This is the substrate-typed `discover-then-install` shortcut — the same Pokémon ball that catches both the discovery moment AND the install moment in one throw.",
+        "Add `--receipt-path` to list-targets (parallel to existing `pass --receipt-path`) so typed receipts can be persisted to substrate workflow-instance receiptRefs."
+      ],
+      "successCriteria": [
+        "After landing: zero ad-hoc `find`/`grep Package.swift`/`ls xcschemes` invocations across substrate workflow instances that touch macOS app or SPM CLI install/build/run.",
+        "Substrate-typed workflow `[[find-and-build-targets-via-craze]]` instance's `inspect-install-topology-via-craze` state-transition moves from `partial` (current) to `completed` because discovery now flows through craze, not around it.",
+        "Existing `[[versioned-macos-app-install]]` workflow's discovery state transitions can cite `craze list-targets` receipts.",
+        "AxiomModel `[[use-substrate-canonical-tool-for-target-discovery-not-ad-hoc-find]]` clears the 3x-rule (this bead lands → first consumer use → second consumer use)."
+      ]
+    },
+    "launchGateDiscipline": {
+      "stages": [
+        "AUDIT — read craze sources at `vaporize@wrkstrm-core.cli/sources/craze-cli` + `swift-app-installer` + `swift-cli-installer` for existing typed types (CrazeMode, CrazeArtifactKind, etc.) before authoring CrazeDiscoveryMode.",
+        "TYPED FEATURE-REQUEST CHAIN — this bead + blocked-surface at consumer (clia agent, agent-manual-process axiom) + CUJ inline + PRD inline + FeatureAnnouncementModel at wrkstrm/.../product-lines/craze/features/.",
+        "DESIGN — typed CrazeDiscoveryMode struct + CrazeTargetDiscoveryReceiptModel Codable + draft typed-craze-target-discovery-receipt-schemas v0.0.1 schema family at schema-universal home.",
+        "IMPLEMENTATION — Swift only (no Python per [[no-python-swift-over-python-for-all-automation-substrate-doctrine]]); typed tests; DocC; at least ONE real wired consumer (versioned-macos-app-install workflow's discovery state).",
+        "LAUNCH REVIEW — operator OD-N + typed FeatureAnnouncementModel for release notes.",
+        "EVERY GATE — typed-record validation (Step 3.5) + receipt emission + axiom-citation density + audience review (agent + operator audiences)."
+      ],
+      "pendingGatePrimitives": [
+        "[[missing-typed-record-validator-cli]] — Step 3.5 manual until lands; design accommodates retrofit.",
+        "[[missing-executable-workflow-harness]] — /capture authoring manual until lands; design accommodates retrofit."
+      ]
+    },
+    "schemaGaps": {
+      "newSchemaFamiliesNeeded": [
+        "typed-craze-target-discovery-receipt-schemas v0.0.1 — typed CrazeTargetDiscoveryReceiptModel; depends on PM spin-up to confirm composition with existing receipt-schemas (gap #4 in /capture SKILL.md schema-universal-gap-list)."
+      ],
+      "existingSchemaUniversalGapsTouched": [
+        "receipt-schemas (gap #4) — typed receipt records first-class.",
+        "typed-record-validator-cli (gap #10) — needed to validate the new receipt model.",
+        "executable-workflow-harness (gap #11) — needed to mechanize discover-then-install composition."
+      ]
+    },
+    "blockedSurfaces": [
+      "Agents continuing to roll ad-hoc find/grep for target discovery (until craze list-targets ships).",
+      "Substrate-typed workflow `find-and-build-targets-via-craze`'s `inspect-install-topology-via-craze` state cannot transition from `partial` to `completed` until craze list-targets exists.",
+      "Substrate-typed AxiomModel `[[use-substrate-canonical-tool-for-target-discovery-not-ad-hoc-find]]` cannot promote to typed AxiomModel until 3x-rule clears — 2/3 instances confirmed (operator-direction 2026-06-10 + operator-confirmation 2026-06-10); third confirming instance gated on consumer use after this bead lands."
+    ],
+    "linkedTypedRecords": {
+      "workflowFormula": "private/universal/substrate/collectives/spaces-universal/private/universal/kura-spaces/workflows/find-and-build-targets-via-craze/v0.0.1/find-and-build-targets-via-craze.workflow.su.json",
+      "workflowInstance": "private/universal/substrate/collectives/spaces-universal/private/universal/kura-spaces/workflows/find-and-build-targets-via-craze/v0.0.1/find-and-build-targets-via-craze-2026-06-10.workflow-instance.su.json",
+      "memoryPointer": "~/.claude/memory/.docc/feedback_use-craze-for-target-discovery-not-ad-hoc-find.md",
+      "siblingWorkflowFormula": "private/universal/substrate/collectives/spaces-universal/private/universal/kura-spaces/workflows/versioned-macos-app-install/v0.0.1/versioned-macos-app-install.workflow.su.json"
+    },
+    "operatorQuotes": [
+      "2026-06-10: 'you should be using craze to find and build available targets in a directory. /capture'",
+      "2026-06-10: 'thank you. we have to build this into craze' — operator-confirmation moment immediately after typed workflow + memory landed; this bead is the typed substrate-architecture-evolution response."
+    ]
+  },
+  "composesWith": [
+    "[[link-ref-is-substrate-canonical-http-and-bead-short-form-is-its-url-projection]]",
+    "[[bead-relocation-personal-vs-shared-canonical-home-cycle]]",
+    "[[substrate-wide-bead-relocation-sweep-per-personal-vs-shared-doctrine]]"
+  ]
+}

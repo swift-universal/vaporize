@@ -1,0 +1,145 @@
+{
+  "BeadsIssue": "0.1.0",
+  "schemaVersion": "0.1.0",
+  "id": "FR-CRAZE-VAPORWARE-AWARENESS-make-craze-the-substrate-canonical-vaporware-collapse-gate-in-code",
+  "title": "Make craze vaporware-aware in code — read CrateModel + x-craze-collapse-path annotations, emit craze-collapse-receipts, become the substrate-canonical vaporware-collapse gate in IMPLEMENTATION not just doctrine",
+  "status": "open",
+  "priority": 2,
+  "issueType": "feature",
+  "labels": [
+    "substrate-relocated-2026-06-13-bulk-typed-canonical-retype"
+  ],
+  "createdAt": "2026-06-11T10:10:00Z",
+  "createdBy": "Chief of Staff (clia) per operator-direction 2026-06-11 'we need to make craze vaporware aware'",
+  "historicalContent": {
+    "slug": "FR-CRAZE-VAPORWARE-AWARENESS-make-craze-the-substrate-canonical-vaporware-collapse-gate-in-code",
+    "kind": "bead-feature-request-substrate-architecture-evolution",
+    "severity": "high",
+    "createdAt": "2026-06-11T10:10:00Z",
+    "createdBy": "Chief of Staff (clia) per operator-direction 2026-06-11 'we need to make craze vaporware aware'",
+    "triggeringAxiomRef": "private/universal/substrate/collectives/spaces-universal/private/universal/kura-spaces/axioms/craze-builds-vaporware-typed-records-are-substrate-vapor-craze-is-the-collapse-gate.axiom.su.json",
+    "operatorQuote": "2026-06-11: 'we need to make craze vaporware aware'",
+    "problemStatement": "craze TODAY is install/build/run/pass/setup — it has NO awareness of substrate-vapor concept in code. The axiom names craze as the substrate-canonical vaporware-collapse gate, but the CLI doesn't read typed records, doesn't honor x-craze-collapse-path annotations, doesn't emit collapse-receipts, doesn't refuse permanent-vapor invocation, doesn't enumerate vapor at a path. The axiom is doctrine-only until craze gains code-side awareness. This bead bridges the doctrine layer (typed records authored across 2 fan-in cycles) to the implementation layer (craze CLI behavior).",
+    "dependsOn": [
+      {
+        "bead": "FR-CRAZE-LIST-TARGETS-substrate-canonical-target-discovery",
+        "relation": "sibling - list-targets is one mode this bead composes with",
+        "path": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/agenda/beads/FR-CRAZE-LIST-TARGETS-substrate-canonical-target-discovery.issue.json"
+      },
+      {
+        "bead": "FR-VAPOR-COORDINATION-CUT-v0.0.1-COORDINATED-SCHEMA-UNIVERSAL-CRAZE-BUILDS-VAPORWARE",
+        "relation": "schema-prerequisite - the 11 typed primitives this bead's Phase 2+ consumes",
+        "path": "private/universal/substrate/collectives/schema-universal/private/universal/agenda/beads/FR-VAPOR-COORDINATION-CUT-v0.0.1-COORDINATED-SCHEMA-UNIVERSAL-CRAZE-BUILDS-VAPORWARE.issue.json"
+      }
+    ],
+    "phasedImplementationPlan": {
+      "phase0_textBasedVaporAwareness": {
+        "scope": "Text-based recognition of vapor annotations in JSON files. No schema dependency. Smallest viable lift — ships in a single craze release without waiting for the coordinated cut v0.0.1.",
+        "deliverables": [
+          "New mode: `craze status --path <dir>` — walks the path, scans .json files for `\"x-craze-collapse-path\":` key, reports per-file: collapse-status (collapsed/collapse-pending/collapse-blocked/permanent-vapor/unannotated), pendingCapabilityRefs counts, collapseGateRefs counts.",
+          "New mode: `craze inventory --path <dir>` — emits typed JSON vapor-inventory for the path (later: typed CrateInventoryReceiptModel; for now: untyped 0.0.1-untyped shape).",
+          "Help-banner update: existing modes' help text names craze as the substrate-canonical vaporware-collapse gate.",
+          "Internal command-name fix: ArgumentParser command-name + help banner says 'savepoint@kura-org.cli' format (composes with FR-SAVEPOINT-CLI-RENAME naming-pattern catch — craze SHOULD already say vaporize@wrkstrm-core.cli internally; audit + fix if drifted)."
+        ],
+        "estimatedEffort": "4-6 agent-hours + 0.5 hour operator review",
+        "blockingDependencies": "none - this is the smallest viable lift"
+      },
+      "phase1_typedInternalTypes": {
+        "scope": "Add craze-INTERNAL Swift typed structs for CrateModel + CrazeCollapsePath + CrazeCollapseReceipt. Per cameron's Phase-1-internal-then-Phase-2-schema-family argument (which operator OVERRULED for schema-universal — but craze-internal types can ship NOW without schema dependency). Composes with cameron's draftSwiftCodableSketches from the architecture-reframe fan-in.",
+        "deliverables": [
+          "Swift Codable internal types in craze sources: CrateModel (kind discriminator + per-kind detail), CrazeCollapsePath (status enum + collapseGateRefs + pendingCapabilityRefs), CrazeCollapseReceipt (success/partial/failed + observed world-state-delta).",
+          "Internal CrazeMode -> CrateKind discriminator mapping (e.g., --artifact app + --xcode-project = xcode-scheme-app kind).",
+          "New mode: `craze realize <typed-record-path>` — reads a typed JSON record, derives CrateModel + CrazeCollapsePath, dispatches to existing install/build/run based on the CollapsePath.collapseGateRefs[].",
+          "Behind-flag: `--vapor-aware` opt-in for existing modes to read + honor x-craze-collapse-path on the named artifact's typed declaration."
+        ],
+        "estimatedEffort": "8-12 agent-hours + 1 hour operator review",
+        "blockingDependencies": "Phase 0 must ship first"
+      },
+      "phase2_schemaUniversalIntegration": {
+        "scope": "Switch craze-internal types to consume the typed schema-universal primitives once the coordinated cut v0.0.1 lands. Schema-family conformance via Swift codegen from JSON Schemas.",
+        "deliverables": [
+          "Replace craze-internal CrateModel struct with the typed crate-schemas v0.0.1 CrateModel Swift package.",
+          "Replace craze-internal CrazeCollapsePath struct with the typed craze-collapse-path-annotation-convention envelope.",
+          "Replace craze-internal CrazeCollapseReceipt struct with the typed craze-collapse-receipt-schemas v0.0.1 Swift package.",
+          "Update `craze status` + `craze inventory` to emit fully-typed receipts conforming to the schema family.",
+          "Update `craze realize` to dispatch based on typed CrateKind enum."
+        ],
+        "estimatedEffort": "6-10 agent-hours + 1 hour operator review",
+        "blockingDependencies": "FR-VAPOR-COORDINATION-CUT-v0.0.1 must ship first; Phase 1 must ship first"
+      },
+      "phase3_fullVaporCollapseGate": {
+        "scope": "Full vaporware-collapse gate behavior: refuse invocations against permanent-vapor declarations (without --override), emit typed collapse-receipt on every successful install/build/run, integrate with Creative Selection v0.0.5 cycle output (read CollapseBudgetReceiptModel to know which vapor has board-approved budget).",
+        "deliverables": [
+          "Vapor-refusal: `craze install --crate <slug>` refuses if CrateModel.collapsePath.status == 'permanent-vapor' (override via --force-collapse-permanent-vapor).",
+          "Vapor-warning: `craze install` warns if no x-craze-collapse-path annotation found on a typed-record-like input.",
+          "Collapse-receipt emission: every successful install/build/run emits typed CrazeCollapseReceipt.json next to the installed artifact + at the cited typed record's receiptRefs[].",
+          "Creative Selection v0.0.5 cycle integration: `craze cycle <cycle-id>` reads the CollapseBudgetReceiptModel for the cycle + executes approved collapse-budget allocations in priority order.",
+          "Cadence-mark update: every collapse updates the typed record's x-cadence-mark.collapsedAt field per coordinated cut v0.0.1 primitive #9."
+        ],
+        "estimatedEffort": "12-20 agent-hours + 2 hours operator review",
+        "blockingDependencies": "Phase 2 must ship first; coordinated cut v0.0.1 must include cadence-mark fields + risk-classification annotation"
+      }
+    },
+    "criticalUserJourney": {
+      "actor": "Substrate agent (clia, common, cameron) OR operator (rismay) acting in collapse-budget allocation review",
+      "phase0Journey": [
+        "Agent: `~/.local/bin/'vaporize@wrkstrm-core.cli' status --path private/universal/substrate/collectives/wrkstrm-core/private/apple/apps/concourse`",
+        "craze walks the dir, finds *.json files, scans for x-craze-collapse-path annotations.",
+        "Output: per-file vapor classification + summary table (X collapsed, Y collapse-pending, Z permanent-vapor, W unannotated).",
+        "Agent uses this to identify what to collapse next, without manually grep-ing 50 JSON files."
+      ],
+      "phase3Journey": [
+        "Operator OD-N's a Creative Selection v0.0.5 CollapseBudgetReceiptModel approving Launch Control collapse-priority #1.",
+        "Operator/Agent: `craze cycle creative-selection-v0.0.5-cycle-1 --execute-allocation-rank 1`.",
+        "craze reads the CollapseBudgetReceiptModel, finds the rank-1 allocation (Launch Control), reads the linked CrateModel records, dispatches build/install per priority order.",
+        "On success: craze emits typed CrazeCollapseReceipt at each collapsed CrateModel's receiptRefs[] + updates the cycle receipt with completion status."
+      ]
+    },
+    "successCriteria": [
+      "After Phase 0: `craze status --path <dir>` works on any substrate dir + emits useful vapor classification.",
+      "After Phase 1: `craze realize <typed-record-path>` collapses a typed record without requiring operator to manually compose --product/--scheme/--artifact flags.",
+      "After Phase 2: craze receipts conform to the typed schema family + are validatable via typed-record-validator-cli (when it ships).",
+      "After Phase 3: craze refuses permanent-vapor invocations; Creative Selection cycles execute via `craze cycle` not manual per-artifact craze install loops."
+    ],
+    "axiomCitations": [
+      "[[craze-builds-vaporware-typed-records-are-substrate-vapor-craze-is-the-collapse-gate]] — parent axiom; this bead operationalizes obligations #1 + #2 in code",
+      "[[shortcuts-cause-state-divergence-typed-record-state-must-stay-in-lockstep-with-world-state]] — vapor-awareness is the substrate-canonical state-sync primitive in craze code",
+      "[[lift-existing-patterns-not-reimplement]] — Phase 1 lifts cameron's draftSwiftCodableSketches; Phase 2 lifts the schema-universal typed primitives",
+      "[[scope-discipline-on-operator-od-n-defaults-to-smallest-viable-lift-bead-track-the-rest]] — Phase 0 is the smallest viable lift; Phase 1-3 bead-tracked",
+      "[[shared-components-pass-every-launch-gate-audit-feature-request-launch-review-no-shortcuts]] — Terra-FR discipline applies; this bead IS the launch-review-passable feature request",
+      "[[no-fucking-python]] — Swift only for impl",
+      "[[component-request-files-first-before-consumer-implementation-no-one-off-builds]] — bead filed at craze's component home"
+    ],
+    "linkedTypedRecords": {
+      "triggeringAxiom": "private/universal/substrate/collectives/spaces-universal/private/universal/kura-spaces/axioms/craze-builds-vaporware-typed-records-are-substrate-vapor-craze-is-the-collapse-gate.axiom.su.json",
+      "schemaPrerequisite": "private/universal/substrate/collectives/schema-universal/private/universal/agenda/beads/FR-VAPOR-COORDINATION-CUT-v0.0.1-COORDINATED-SCHEMA-UNIVERSAL-CRAZE-BUILDS-VAPORWARE.issue.json",
+      "siblingDiscoveryBead": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/agenda/beads/FR-CRAZE-LIST-TARGETS-substrate-canonical-target-discovery.issue.json",
+      "cameronDraftSwiftCodableSketches": "private/universal/substrate/collectives/spaces-universal/private/universal/kura-spaces/csuite-fan-in-requests/2026-06-10-craze-builds-vaporware-identity-reframe/first-pass-drafts/swift-engineer-cameron-draft.contribution.json",
+      "cycle1VaporInventoryEvidence": "private/universal/substrate/collectives/spaces-universal/private/universal/kura-spaces/csuite-fan-in-requests/2026-06-11-vapor-identification-product-lines-and-families/cycle1-aggregation-packet.json"
+    },
+    "launchGateDiscipline": {
+      "stages": [
+        "AUDIT — existing craze sources at vaporize@wrkstrm-core.cli/sources/ for current CrazeMode + CrazeArtifactKind + Request typed structs. cameron already did this in his architecture-reframe draft — lift his audit findings.",
+        "TYPED FR — this bead is the umbrella; per-phase deliverables may file sub-beads",
+        "DESIGN — Phase 0 design: Swift CommandParser subcommand + JSON file walker + ArgumentParser flags. Phase 1: Swift Codable internal types. Phase 2: SwiftPM dependency on schema-universal Codable packages. Phase 3: Cycle-integration command + receipt-emission pipeline.",
+        "IMPLEMENTATION — Swift only. Tests per phase. DocC-first.",
+        "LAUNCH REVIEW — operator OD-N per phase landing",
+        "EVERY GATE — typed-record validation + receipt emission + axiom-citation density"
+      ],
+      "pendingGatePrimitives": [
+        "[[missing-typed-record-validator-cli]] — Phase 2 typed-receipt validation manual until lands",
+        "[[missing-executable-workflow-harness]] — Phase 3 cycle-integration manual until lands"
+      ]
+    },
+    "owner": "TBD per Swift Engineer baseline (cameron) primary + CTO (common) co-OD + Creative Director (hermes) consult on Phase 3 cycle-integration",
+    "operatorQuotes": [
+      "2026-06-11 axiom-naming: 'craze builds vaporware. that means creative selection is trying to discover those. spawn-software becomes vaporware. software-modification becomes vaporware modification.'",
+      "2026-06-11 implementation-direction: 'we need to make craze vaporware aware'"
+    ]
+  },
+  "composesWith": [
+    "[[link-ref-is-substrate-canonical-http-and-bead-short-form-is-its-url-projection]]",
+    "[[bead-relocation-personal-vs-shared-canonical-home-cycle]]",
+    "[[substrate-wide-bead-relocation-sweep-per-personal-vs-shared-doctrine]]"
+  ]
+}

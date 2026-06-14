@@ -1,0 +1,61 @@
+{
+  "BeadsIssue": "0.1.0",
+  "schemaVersion": "0.1.0",
+  "id": "FR-VAPORIZE-TOOL-CALL-OBSERVABILITY",
+  "title": "Teach Vaporize to emit observable tool-call receipts",
+  "status": "open",
+  "priority": 1,
+  "issueType": "task",
+  "labels": [
+    "vaporize",
+    "tool-calling",
+    "observability",
+    "receipt",
+    "warehouse",
+    "common-log",
+    "verbose-logging",
+    "analytics",
+    "substrate-relocated-2026-06-13-bulk-typed-canonical-retype"
+  ],
+  "createdAt": "2026-06-11T00:00:00Z",
+  "createdBy": "mono per operator cascade: Vaporize gives insight into tool calling",
+  "historicalContent": {
+    "slug": "FR-VAPORIZE-TOOL-CALL-OBSERVABILITY",
+    "kind": "bead-feature-request",
+    "createdAt": "2026-06-11T00:00:00Z",
+    "createdBy": "mono per operator cascade: Vaporize gives insight into tool calling",
+    "assignee": "wrkstrm-core",
+    "severity": "critical",
+    "sourceType": "tool-call-observability-cascade",
+    "sourceLocation": "private/universal/substrate/collectives/spaces-universal/private/universal/kura-spaces/csuite-fan-in-requests/2026-06-11-vaporize-warehouse-integration-csuite-fanout/board-prep-2026-06-12/tool-call-observability-cascade.json",
+    "description": "Extend Vaporize so build/install/open/run/pass/realize routes can emit ToolCallReceiptModel-compatible evidence. This makes assistant tool calling observable and lets Warehouse aggregate repeated failures, shortcuts, and missing-tool vapor.",
+    "acceptanceCriteria": [
+      "Vaporize can emit a tool-call receipt for pass/build/install/open/run/realize routes.",
+      "Tool-call receipts link to VaporwareUnit or WarehouseEntry when present.",
+      "Dry-run routes emit planned tool-call receipts without executing destructive work.",
+      "Failed calls emit blocked/failed receipts with failureMode instead of disappearing into terminal output.",
+      "Receipts preserve compatibility with existing Vaporize pass-through receipts while moving forward to ToolCallReceiptModel v0.0.1.",
+      "Vaporize emits CommonLog structured events for tool-call start, allowed-tool dispatch, command/process execution, receipt write, Warehouse write, and failure handling.",
+      "Vaporize exposes a shared verbose logging control, preferably through CommonShellArguments, that expands diagnostics without changing receipt truth.",
+      "Tool-call receipts include traceId, parentTraceId, logLevel, verboseEnabled, analyticsEventName, analyticsDimensions, durationMs, attemptNumber, and redactionSummary.",
+      "Verbose output never becomes the canonical source of truth; typed receipts and Warehouse entries do.",
+      "Analytics rollups can be derived from Vaporize receipts without replaying raw command output."
+    ],
+    "blockedOn": [
+      "FR-TOOL-CALL-RECEIPT-SCHEMA-v0.0.1"
+    ],
+    "reuseSources": [
+      "swift-universal/CommonProcess",
+      "swift-universal/CommonShell",
+      "schema-universal/ToolCallReceiptModel v0.0.1",
+      "swift-universal/CommonLog",
+      "service-universal/common-analytics",
+      "swift-universal/CommonShellArguments"
+    ]
+  },
+  "composesWith": [
+    "[[link-ref-is-substrate-canonical-http-and-bead-short-form-is-its-url-projection]]",
+    "[[bead-relocation-personal-vs-shared-canonical-home-cycle]]",
+    "[[substrate-wide-bead-relocation-sweep-per-personal-vs-shared-doctrine]]"
+  ]
+}
