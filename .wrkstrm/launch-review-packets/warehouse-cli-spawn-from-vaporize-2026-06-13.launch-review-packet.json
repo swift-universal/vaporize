@@ -1,0 +1,225 @@
+{
+  "LaunchReviewPacketModel": "0.1.0",
+  "schemaVersion": "0.1.0",
+  "packetId": "warehouse-cli-spawn-from-vaporize-2026-06-13",
+  "subjectAppSlug": "warehouse-cli-spawn",
+  "subjectReleaseSlug": "warehouse-cli-spawn-to-vaporize-parity",
+  "subjectWareKindSlug": "cli-tool-spawn",
+  "packetVersion": "0.0.1",
+  "reviewKind": "spawn-with-parity",
+  "packetStatus": "open",
+  "emittedAt": "2026-06-13T00:00:00Z",
+  "emittedBy": "chatgpt-on-hulk-attesting-rismay-directive",
+  "lifecycleStage": "review-pending",
+  "releaseTarget": "warehouse@wrkstrm-core.cli-v0.0.1-spawn-from-vaporize-warehouse-sub-mode",
+  "operatorAttestation": {
+    "date": "2026-06-13",
+    "quotes": [
+      "do you think warehouse should be it's own CLI since a lot of foundry things would make sense better?",
+      "right now: vaporize has a lot of tooling and has gone through a proper modernization. so we want to make sure that foundry and warehouse have parity around the launch review process."
+    ]
+  },
+  "evidenceRefs": [
+    {
+      "LinkRefModel": "0.3.0",
+      "s": [
+        "launch-review-packet",
+        "reference-baseline"
+      ],
+      "t": "vaporize v0.0.1 launch-review-packet (the reference baseline warehouse must match)",
+      "tg": [
+        {
+          "k": "rp",
+          "rt": "mono",
+          "v": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/launch-review-packet.json"
+        }
+      ]
+    },
+    {
+      "LinkRefModel": "0.3.0",
+      "s": [
+        "axiom",
+        "canonical"
+      ],
+      "t": "Canonical axiom naming warehouse as separate concept",
+      "tg": [
+        {
+          "k": "rp",
+          "rt": "mono",
+          "v": "private/universal/substrate/collectives/spaces-universal/private/universal/kura-spaces/axioms/vaporize-builds-vaporware-warehouse-stores-vaporware.axiom.su.json"
+        }
+      ]
+    },
+    {
+      "LinkRefModel": "0.3.0",
+      "s": [
+        "existing-sub-mode",
+        "lift-target"
+      ],
+      "t": "vaporize warehouse sub-mode (lift target \u2014 promote to own CLI per lift-existing-patterns)",
+      "tg": [
+        {
+          "k": "rp",
+          "rt": "mono",
+          "v": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/"
+        }
+      ]
+    },
+    {
+      "LinkRefModel": "0.3.0",
+      "s": [
+        "product-line",
+        "foundry"
+      ],
+      "t": "foundry product-line PRD \u2014 warehouse-cli to be added as 11th product (CLI-side pair to foundry-macos-app for STATE reads)",
+      "tg": [
+        {
+          "k": "rp",
+          "rt": "mono",
+          "v": "private/universal/substrate/collectives/wrkstrm/private/universal/kura-spaces/product-lines/foundry/prds/foundry.prd.su.json"
+        }
+      ]
+    },
+    {
+      "LinkRefModel": "0.3.0",
+      "s": [
+        "csuite-fan-in",
+        "2026-06-11"
+      ],
+      "t": "2026-06-11 CSuite fan-in on vaporize/warehouse/VaporwareUnit integration (DL-001 through DL-005)",
+      "tg": [
+        {
+          "k": "rp",
+          "rt": "mono",
+          "v": "private/universal/substrate/collectives/spaces-universal/private/universal/kura-spaces/csuite-fan-in-requests/2026-06-11-vaporize-warehouse-integration-csuite-fanout/live-subagent-responses/clia-board-aggregation.collective-response.json"
+        }
+      ]
+    }
+  ],
+  "qaEvidence": {
+    "modernizationBaseline": "vaporize@wrkstrm-core.cli v0.0.1 \u2014 typed schema family + launch-review-packet + canonical fixture + SPM + release/v0.0.1/evidence",
+    "warehouseCurrentState": "warehouse exists ONLY as a sub-mode of vaporize (vaporize warehouse + vaporize status) \u2014 no separate CLI, no separate schema family, no separate component home, no separate launch-review-packets",
+    "spawnRationale": "Canonical axiom literally names two concepts: 'vaporize builds vaporware; warehouse stores vaporware'. Foundry's 5 Kura-collection products (foundry-collective-status, foundry-tool-demand, foundry-tool-armory, tool-loadout-mapper, tool-request-ingress) are state-queries that want a thin warehouse CLI underneath rather than reaching into vaporize's 12-mode collapse executor. Multi-CLI product-lines are canonical pattern (xcrun + xcodebuild + xcodes; brew + brew bundle; ffmpeg + ffprobe + ffplay).",
+    "parityChecklist": [
+      {
+        "item": "warehouse@wrkstrm-core.cli SPM package at wrkstrm-core/private/apple/spm/",
+        "status": "MISSING",
+        "blockingPriority": "critical (gates everything else)",
+        "referenceTarget": "mirror vaporize@wrkstrm-core.cli structure"
+      },
+      {
+        "item": "Typed warehouse-schemas v0.0.1 family at schema-universal",
+        "status": "MISSING",
+        "blockingPriority": "high",
+        "referenceTarget": "mirror vaporize-schemas v0.0.1 shape"
+      },
+      {
+        "item": "Typed WarehouseLaunchReviewPacketModel schema",
+        "status": "MISSING",
+        "blockingPriority": "high",
+        "referenceTarget": "mirror vaporize-launch-review-packet.schema.json"
+      },
+      {
+        "item": "Canonical fixture canonical.warehouse-v0.0.1-launch-review-packet.json",
+        "status": "MISSING",
+        "blockingPriority": "high",
+        "referenceTarget": "mirror vaporize canonical fixture"
+      },
+      {
+        "item": "Warehouse's own launch-review-packet at warehouse@wrkstrm-core.cli/release/v0.0.1/evidence/launch-review-packet.json",
+        "status": "MISSING (gated on CLI spawn)",
+        "blockingPriority": "medium",
+        "referenceTarget": "vaporize's release/v0.0.1/evidence/launch-review-packet.json"
+      },
+      {
+        "item": "Migration: vaporize warehouse sub-mode \u2192 warehouse@wrkstrm-core.cli (forward-only-time per substrate-doctrine; vaporize warehouse drops same-cycle, no compat-shim)",
+        "status": "PENDING design decision",
+        "blockingPriority": "high",
+        "referenceTarget": "[[substrate-is-a-simulation-of-mind-reference-rewrite-and-forward-only-time]]"
+      },
+      {
+        "item": "Update foundry product-line PRD products[] to add warehouse-cli as 11th product (CLI-side state-pair)",
+        "status": "PENDING (after CLI spawn lands)",
+        "blockingPriority": "low",
+        "referenceTarget": "current foundry.prd.su.json"
+      }
+    ]
+  },
+  "gateResults": [
+    {
+      "gate": "cli-spm-package-exists",
+      "status": "fail",
+      "evidence": "no warehouse@wrkstrm-core.cli package"
+    },
+    {
+      "gate": "typed-schema-family-exists",
+      "status": "fail",
+      "evidence": "no warehouse-schemas family"
+    },
+    {
+      "gate": "launch-review-packet-schema-exists",
+      "status": "fail",
+      "evidence": "no WarehouseLaunchReviewPacketModel"
+    },
+    {
+      "gate": "own-launch-review-packet-emitted",
+      "status": "fail",
+      "evidence": "no release evidence directory"
+    },
+    {
+      "gate": "canonical-fixture-authored",
+      "status": "fail",
+      "evidence": "no canonical fixture"
+    },
+    {
+      "gate": "spawn-decision-attested",
+      "status": "operator-attested-2026-06-13",
+      "evidence": "operator-attested 'foundry and warehouse have parity around the launch review process' + 'do you think warehouse should be it's own CLI'"
+    },
+    {
+      "gate": "axiom-cited-for-spawn-rationale",
+      "status": "pass",
+      "evidence": "vaporize-builds-vaporware-warehouse-stores-vaporware canonical axiom names two concepts"
+    }
+  ],
+  "knownFollowUps": [
+    "Author warehouse@wrkstrm-core.cli SPM package at wrkstrm-core/private/apple/spm/ \u2014 minimum-viable: status mode + ingest/query modes",
+    "Author warehouse-schemas v0.0.1 family at schema-universal",
+    "Author WarehouseLaunchReviewPacketModel typed schema + canonical fixture",
+    "Run warehouse-cli through its own launch-review and emit release/v0.0.1/evidence/launch-review-packet.json",
+    "Migration: drop warehouse sub-mode from vaporize same-cycle (forward-only-time); vaporize status mode stays as that's a different concern",
+    "Update foundry product-line PRD products[] to add warehouse-cli as 11th product (CLI-side state-pair)",
+    "Substrate-pending: C-suite fan-in if migration is non-trivial \u2014 may want to re-engage CTO Common + CFO Tau for endorsement"
+  ],
+  "signoffs": [],
+  "directorVerdict": {
+    "verdict": "pending",
+    "notes": "Warehouse-CLI spawn doctrine captured. Operator-attested spawn intent + axiom-cited rationale. Substantial implementation work enumerated. Awaiting director review + execution capacity + C-suite endorsement of migration approach."
+  },
+  "axiomCitations": [
+    {
+      "axiomSlug": "launch-review-required-for-every-vaporware-modification",
+      "applies": "Warehouse-cli spawn IS a vaporware-modification; launch-review-packet IS the typed gate"
+    },
+    {
+      "axiomSlug": "vaporize-builds-vaporware-warehouse-stores-vaporware",
+      "applies": "The canonical axiom literally names two concepts; warehouse-cli spawn matches the doctrine to code"
+    },
+    {
+      "axiomSlug": "lift-existing-patterns-not-reimplement",
+      "applies": "Warehouse sub-mode in vaporize is the lift-target; spawn promotes it to own CLI rather than reinventing"
+    },
+    {
+      "axiomSlug": "substrate-is-a-simulation-of-mind-reference-rewrite-and-forward-only-time",
+      "applies": "Spawn is forward-only-time: vaporize warehouse sub-mode goes away when warehouse-cli lands; no compat-shim"
+    },
+    {
+      "axiomSlug": "vaporize-is-the-substrate-canonical-tool-for-modification",
+      "applies": "Vaporize remains the canonical modification tool; warehouse-cli is the canonical storage/state tool \u2014 separate concerns"
+    },
+    {
+      "axiomSlug": "typed-records-have-receptors-not-discriminators-substrate-prefers-biological-neurological-vocabulary",
+      "applies": "All warehouse-schemas typed records use receptor-key JSON convention"
+    }
+  ]
+}
