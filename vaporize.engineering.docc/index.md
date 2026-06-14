@@ -34,6 +34,7 @@ and explicit disposition of remaining XcodeGen surfaces.
 - <doc:command-and-artifact-architecture>
 - <doc:project-generation-and-migration>
 - <doc:release-evidence-and-gates>
+- <doc:pre-code-prd-review>
 - <doc:benchmark-and-size-evidence>
 - <doc:target-feature-inspection>
 - <doc:feature-test-lifecycle>

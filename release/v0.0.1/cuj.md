@@ -20,7 +20,7 @@ one product-level journey.
 | Assistant inventories vaporware state from substrate records | CUJ-07 |
 | Assistant migrates Apple project generation from legacy `project.yml` toward Pkl-backed truth with receipts at every boundary | CUJ-08, CUJ-10, CUJ-11, CUJ-13, CUJ-14 |
 | Assistant reuses a warm Xcode workspace product cache instead of rebuilding locally when the shared product already exists | CUJ-15 |
-| Release reviewer evaluates product definition, user journeys, choice argument, evidence, gates, and blockers without relying on chat memory | CUJ-09 |
+| Release reviewer evaluates product definition, PRD review session, user journeys, choice argument, evidence, gates, and blockers without relying on chat memory | CUJ-09 |
 
 ## CUJ-01 - Assistant Builds And Installs A SwiftPM CLI
 
@@ -174,18 +174,22 @@ Failure truth:
    journeys, why users choose Vaporize, when not to choose Vaporize, and build
    implications.
 3. Reviewer opens `release/v0.0.1/prd.md`.
-4. Reviewer opens this CUJ file and checks that each critical journey has
+4. Reviewer opens `release/v0.0.1/prd-review-session.md` and checks that the
+   Engineering, QA, and Marketing PRD review requirement exists before future
+   coding starts.
+5. Reviewer opens this CUJ file and checks that each critical journey has
    success and failure truth.
-5. Reviewer opens `release/v0.0.1/release-gates.md`.
-6. Reviewer opens `release/v0.0.1/evidence/launch-review-packet.json`.
-7. Reviewer verifies that Vaporize is classified as an internal essential tool,
+6. Reviewer opens `release/v0.0.1/release-gates.md`.
+7. Reviewer opens `release/v0.0.1/evidence/launch-review-packet.json`.
+8. Reviewer verifies that Vaporize is classified as an internal essential tool,
    not a public release artifact.
-8. Reviewer decides whether v0.0.1 is approved, blocked, or conditionally ready.
+9. Reviewer decides whether v0.0.1 is approved, blocked, or conditionally ready.
 
 Success:
 
-- Release review is based on current product definition, user journeys, choice
-  argument, artifacts, tests, and known blockers, not chat memory.
+- Release review is based on current product definition, PRD review status, user
+  journeys, choice argument, artifacts, tests, and known blockers, not chat
+  memory.
 
 ## CUJ-10 - Assistant Compares Legacy YAML With Pkl Specimen
 

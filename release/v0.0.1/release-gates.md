@@ -10,7 +10,7 @@
 **BLOCKED-FOR-INTERNAL-ESSENTIAL-RELEASE.**
 
 The CUJ-derived test coverage contract now defines the required floor:
-69 Swift test obligations plus 6 release evidence checks across 16 active CUJs.
+69 Swift test obligations plus 7 release evidence checks across 16 active CUJs.
 The Vaporize package tests pass 87 executable Swift tests across 16 implemented
 CUJ-specific SwiftPM bundles through Vaporize's owned Xcode-selected toolchain
 mode, including the CUJ-16 `inspect-target-features` first slice. The approved
@@ -31,7 +31,9 @@ generated xcconfigs, generated `ReleaseFeatures.swift`, and project wiring for
 a given `project.yml` target before strong app claims are allowed. The
 package-local `vaporize.engineering.docc` catalog now carries the durable
 engineering narrative for eventual `wrkstrm.com/engineering` publication while
-the release packet remains the linked proof corpus. Final
+the release packet remains the linked proof corpus. The pre-code PRD review
+session is now a hard future coding gate: Engineering, QA, and Marketing must
+review the PRD before implementation starts. Final
 internal v0.0.1 release approval is still
 blocked because substrate-owned Apple project generation still needs fleet build
 parity, scheme/resource/package feature coverage, and explicit quarantine
@@ -45,7 +47,7 @@ disposition for any remaining XcodeGen surfaces.
 | GATE-02 - CUJs authored | PASS | `release/v0.0.1/cuj.md` |
 | GATE-03 - Release gates authored | PASS | This file |
 | GATE-04 - Launch-review packet authored | PASS | `release/v0.0.1/evidence/launch-review-packet.json` |
-| GATE-05 - CUJ-derived package tests pass | PASS-WITH-NOTE | `release/v0.0.1/evidence/cuj-test-coverage.json` requires 69 Swift test obligations plus 6 release evidence checks across 16 active CUJs. `vaporize toolchain -- swift test --package-path private/apple/spm/vaporize@wrkstrm-core.cli` passed 87 executable tests across 16 implemented CUJ-specific SwiftPM bundles, including CUJ-16 target feature inspection. |
+| GATE-05 - CUJ-derived package tests pass | PASS-WITH-NOTE | `release/v0.0.1/evidence/cuj-test-coverage.json` requires 69 Swift test obligations plus 7 release evidence checks across 16 active CUJs. `vaporize toolchain -- swift test --package-path private/apple/spm/vaporize@wrkstrm-core.cli` passed 87 executable tests across 16 implemented CUJ-specific SwiftPM bundles, including CUJ-16 target feature inspection. |
 | GATE-06 - Required toolchain owned by Vaporize | PASS-WITH-NOTE | Current host check at 2026-06-13T21:39:03Z found bare `swift` and `vaporize toolchain -- swift` both reporting Apple Swift 6.4, and focused CUJ-15 took `6.80s` through both routes once warm. Earlier release-prep runs observed bare Swift drift. Vaporize remains the owned route because it stabilizes toolchain policy and release evidence even when host PATH happens to be correct. |
 | GATE-07 - CLI help reflects release surface | PASS | Vaporize help advertises `use`, `toolchain`, `validate-json`, `inspect-project-yml`, `inspect-target-features`, `compare-project-yml-pkl`, `import-project-yml`, `generate-project-yml`, `generate-xcodeproj`, `--common-process-spec`, `--xcode-product-cache-workspace`, and `--xcode-product-cache-derived-data-path`. |
 | GATE-08 - CommonProcess use mode tested | PASS | `VaporizeUseCommonProcessTests.swift` decodes valid spec JSON, loads a spec from disk, and rejects invalid executable refs. |
@@ -71,6 +73,7 @@ disposition for any remaining XcodeGen surfaces.
 | GATE-28 - wrkstrm-core app/build config composition | PASS-WITH-NOTE | Existing build-config sources are identified and referenced in the release contract: `tool-registry@wrkstrm-core.cli discover-apps` emits Hello World-style `xcode-project` records, `identifier@wrkstrm-core.cli app describe` owns app variant names/paths, and `app-artifacts@wrkstrm-core.cli` owns bundle audits, install paths, Xcode build/export receipts, and flat `.app` artifacts. Vaporize integration remains a follow-up. |
 | GATE-29 - wrkstrm app minimums inspection | PASS-WITH-NOTE | `inspect-target-features` inspects the target-level release-feature topology for Hello World Google: project configs, `configFiles` wiring, `Config/release-features.json`, generated conditional-compilation xcconfigs, generated `ReleaseFeatures.swift`, and `digikoma-release-features` provenance. Evidence: `release/v0.0.1/evidence/hello-world-google-target-features-inspection.receipt.json` and `VaporizeCUJ16TargetFeaturesTests`. Registry-backed fleet inspection remains a follow-up. |
 | GATE-30 - Engineering DocC catalog | PASS-WITH-NOTE | `vaporize.engineering.docc/` defines the human engineering narrative for product policy, command/artifact architecture, project migration, release evidence, benchmark/size evidence, target-feature inspection, and feature-scoped test lifecycle. The future `wrkstrm.com/engineering` publication pipeline should project this catalog and link back to release receipts rather than inventing claims from prose. |
+| GATE-31 - Pre-code PRD review session | PASS-WITH-NOTE | `release/v0.0.1/prd-review-session.md` defines the mandatory Engineering, QA, and Marketing PRD review session before major coding starts. v0.0.1 records a backfilled `GO-WITH-NOTES` because this release-prep lane was already in flight; future major Vaporize coding slices do not get that exception. |
 
 ## Open Follow-Up Beads
 
@@ -86,6 +89,7 @@ disposition for any remaining XcodeGen surfaces.
 - `FR-VAPORIZE-WRKSTRM-CORE-BUILD-CONFIG-COMPOSITION`
 - `FR-VAPORIZE-WRKSTRM-APP-MINIMUMS-INSPECTION`
 - `FR-VAPORIZE-ENGINEERING-DOCC-PUBLICATION-PIPELINE`
+- `FR-VAPORIZE-PRD-REVIEW-SESSION-BEFORE-CODING`
 
 ## Release Review Questions
 

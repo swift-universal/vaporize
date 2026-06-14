@@ -10,13 +10,16 @@ chat memory.
 ## Proven
 
 - CUJ-derived test coverage is explicit: 69 required Swift test obligations
-  plus 6 release evidence checks across 16 active CUJs.
+  plus 7 release evidence checks across 16 active CUJs.
 - Vaporize package tests pass through `vaporize toolchain`: 87 executable Swift
   tests across 16 implemented CUJ-specific SwiftPM test bundles, including
   CUJ-16 target feature inspection.
 - `product-definition.md` defines Vaporize, primary users, product-level user
   journeys, why users choose it, when not to choose it, and build implications
   before more implementation is accepted.
+- `prd-review-session.md` codifies the Engineering, QA, and Marketing PRD
+  review session before major coding starts. v0.0.1 is backfilled as
+  `GO-WITH-NOTES` because the release-prep lane was already in flight.
 - Concourse `project.yml` parses into Swift `AppleProjectSpec`.
 - Fleet intake audit parsed 155/155 discovered `project.yml` files.
 - Old XcodeGen script build and Vaporize app build both pass for Concourse
@@ -97,6 +100,7 @@ chat memory.
 | `xcodegen-to-pkl-investigation.json` | Migration scope and blockers are captured | BLOCKS-INTERNAL-V0.0.1 |
 | `cuj-test-coverage.json` | PRD/CUJ-derived required test floor is captured | PASS |
 | `launch-review-packet.json` | Release-prep packet is gathered | VALID-JSON |
+| `prd-review-session.md` | Engineering, QA, and Marketing PRD review is required before major coding starts | PASS-WITH-NOTE |
 | `vaporize-schemas v0.0.1` | Initial schema-universal extraction is captured | PASS-WITH-NOTE |
 
 ## Savepoints
@@ -137,9 +141,11 @@ chat memory.
    release claims.
 7. Project `vaporize.engineering.docc` through the future
    `wrkstrm.com/engineering` pipeline without deriving new claims from prose.
-8. Promote approved performance marketing claims only after attaching the
+8. Hold the Engineering, QA, and Marketing PRD review session before the next
+   major Vaporize coding slice begins.
+9. Promote approved performance marketing claims only after attaching the
    relevant benchmark receipt.
-9. Quarantine or migrate remaining substrate-owned XcodeGen surfaces.
+10. Quarantine or migrate remaining substrate-owned XcodeGen surfaces.
 
 The machine-readable companion is
 `vaporize-v0.0.1-provenance-artifact.json`.

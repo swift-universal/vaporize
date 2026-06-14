@@ -6,6 +6,7 @@ func releaseReviewArtifactsExist() {
   for relativePath in [
     "release/v0.0.1/product-definition.md",
     "release/v0.0.1/prd.md",
+    "release/v0.0.1/prd-review-session.md",
     "release/v0.0.1/cuj.md",
     "release/v0.0.1/release-gates.md",
     "release/v0.0.1/why-vaporize.md",
@@ -40,6 +41,7 @@ func launchReviewPacketIsValidJSONAndInternalEssential() throws {
   #expect(gateResults.contains { $0["gateRef"] as? String == "GATE-27-runtime-sample-series-apple-artifact-ingestion" })
   #expect(gateResults.contains { $0["gateRef"] as? String == "GATE-29-wrkstrm-app-minimums-inspection" })
   #expect(gateResults.contains { $0["gateRef"] as? String == "GATE-30-engineering-docc-catalog" })
+  #expect(gateResults.contains { $0["gateRef"] as? String == "GATE-31-pre-code-prd-review-session" })
 }
 
 @Test("CUJ-09 CUJ coverage contract is valid JSON and names the floor")
@@ -50,8 +52,8 @@ func cujCoverageContractIsValidJSONAndNamesTheFloor() throws {
   #expect(counts["activeCUJCount"] as? Int == 16)
   #expect(counts["deferredCUJCount"] as? Int == 2)
   #expect(counts["requiredSwiftTestObligationCount"] as? Int == 69)
-  #expect(counts["requiredReleaseEvidenceCheckCount"] as? Int == 6)
-  #expect(counts["requiredTargetableTestObligationCount"] as? Int == 75)
+  #expect(counts["requiredReleaseEvidenceCheckCount"] as? Int == 7)
+  #expect(counts["requiredTargetableTestObligationCount"] as? Int == 76)
   #expect(counts["currentExecutableSwiftTestCount"] as? Int == 87)
 }
 
@@ -59,6 +61,7 @@ func cujCoverageContractIsValidJSONAndNamesTheFloor() throws {
 func productDefinitionContractPrecedesBuildWork() throws {
   let productDefinition = try readString(relativePath: "release/v0.0.1/product-definition.md")
   let prd = try readString(relativePath: "release/v0.0.1/prd.md")
+  let prdReview = try readString(relativePath: "release/v0.0.1/prd-review-session.md")
   let cuj = try readString(relativePath: "release/v0.0.1/cuj.md")
   let why = try readString(relativePath: "release/v0.0.1/why-vaporize.md")
   let claims = try readString(relativePath: "release/v0.0.1/performance-marketing-claims.md")
@@ -73,8 +76,13 @@ func productDefinitionContractPrecedesBuildWork() throws {
   #expect(productDefinition.contains("## Build Implications"))
   #expect(productDefinition.contains("engineering pedigree"))
   #expect(productDefinition.contains("Future Vaporize features must trace to this product definition"))
+  #expect(productDefinition.contains("PRD review session"))
+  #expect(productDefinition.contains("Engineering, QA, and Marketing"))
   #expect(prd.contains("FR-022"))
+  #expect(prd.contains("FR-025"))
   #expect(prd.contains("FR-VAPORIZE-RUNTIME-SAMPLE-SERIES-APPLE-ARTIFACT-INGESTION"))
+  #expect(prdReview.contains("Decision: `GO-WITH-NOTES`"))
+  #expect(prdReview.contains("Engineering, QA, and Marketing"))
   #expect(cuj.contains("Product-Level User Journey Map"))
   #expect(why.contains("product-definition.md"))
   #expect(why.contains("engineering pedigree"))
@@ -88,8 +96,10 @@ func productDefinitionContractPrecedesBuildWork() throws {
   #expect(gates.contains("GATE-26"))
   #expect(gates.contains("GATE-27"))
   #expect(gates.contains("GATE-30"))
+  #expect(gates.contains("GATE-31"))
   #expect(engineeringDocs.contains("wrkstrm.com/engineering"))
   #expect(engineeringDocs.contains("The package-local engineering catalog explains the system. The release packet"))
+  #expect(engineeringDocs.contains("pre-code-prd-review"))
 }
 
 @Test("CUJ-09 release gates keep Pkl generation blocked")

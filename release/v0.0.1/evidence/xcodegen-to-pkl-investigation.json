@@ -233,7 +233,7 @@
         "private/apple/spm/vaporize@wrkstrm-core.cli/tests/cuj-15-xcode-product-cache/VaporizeCUJ15XcodeProductCacheTests.swift",
         "private/apple/spm/vaporize@wrkstrm-core.cli/tests/cuj-16-target-features/VaporizeCUJ16TargetFeaturesTests.swift"
       ],
-      "result": "CUJ coverage contract now requires 69 Swift test obligations plus 6 release evidence checks across 16 active CUJs; vaporize toolchain -- swift test passed 87 executable Swift tests across 16 implemented CUJ-specific SwiftPM bundles, including CUJ-16 target feature inspection.",
+      "result": "CUJ coverage contract now requires 69 Swift test obligations plus 7 release evidence checks across 16 active CUJs; vaporize toolchain -- swift test passed 87 executable Swift tests across 16 implemented CUJ-specific SwiftPM bundles, including CUJ-16 target feature inspection.",
       "boundary": "This expands release proof across major Vaporize features and includes the first Pkl-backed .xcodeproj generation slice plus shared Xcode workspace product-cache reuse; it does not prove fleet build parity or automatic workspace product discovery."
     }
   ],

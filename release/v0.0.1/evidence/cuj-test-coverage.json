@@ -20,8 +20,8 @@
     "activeCUJCount": 16,
     "deferredCUJCount": 2,
     "requiredSwiftTestObligationCount": 69,
-    "requiredReleaseEvidenceCheckCount": 6,
-    "requiredTargetableTestObligationCount": 75,
+    "requiredReleaseEvidenceCheckCount": 7,
+    "requiredTargetableTestObligationCount": 76,
     "currentExecutableSwiftTestCount": 87,
     "currentExecutableSwiftTestBreakdown": {
       "VaporizeCUJ01SwiftPMCLITests": 7,
@@ -128,14 +128,15 @@
     {
       "cuj": "CUJ-09",
       "title": "Release Reviewer Reads The Packet",
-      "prdRefs": ["FR-012", "FR-013", "FR-014", "FR-022"],
+      "prdRefs": ["FR-012", "FR-013", "FR-014", "FR-022", "FR-025"],
       "requiredSwiftTestObligations": 0,
-      "requiredReleaseEvidenceChecks": 5,
+      "requiredReleaseEvidenceChecks": 6,
       "status": "covered-with-release-evidence",
       "evidence": [
         "VaporizeCUJ09ReleaseReviewTests.swift",
         "product-definition.md",
         "prd.md",
+        "prd-review-session.md",
         "cuj.md",
         "release-gates.md",
         "vaporize.engineering.docc",
@@ -237,6 +238,7 @@
   ],
   "boundaries": [
     "This artifact defines the active-CUJ coverage floor; it does not approve v0.0.1 release.",
+    "Major feature coding requires an Engineering, QA, and Marketing PRD review session before implementation; v0.0.1 records a backfilled GO-WITH-NOTES correction because the release-prep lane was already in flight.",
     "First-slice Pkl-backed .xcodeproj world-state generation is covered; fleet build parity and quarantine disposition remain release-blocking.",
     "Shared Xcode workspace product-cache reuse is covered as cache lookup and build invocation; automatic workspace scheme/product discovery remains deferred.",
     "wrkstrm app-minimums inspection has a target-level first slice; registry-backed fleet inspection remains deferred.",

@@ -17,12 +17,14 @@ coverage, and keep release review tied to CUJs rather than raw test count.
 
 For a major feature:
 
-1. Add or update the CUJ.
-2. Add a targetable SwiftPM test bundle for that feature.
-3. Add tests to the feature bundle before changing or deleting older coverage.
-4. Run the feature bundle directly through Vaporize's toolchain route.
-5. Update the CUJ coverage artifact and release packet counts.
-6. Delete or retire older duplicate tests only after the replacement bundle,
+1. Draft or update the product definition, PRD, and CUJ.
+2. Hold the Engineering, QA, and Marketing PRD review session and record a
+   `GO`, `GO-WITH-NOTES`, or `NO-GO` decision.
+3. Add a targetable SwiftPM test bundle for that feature.
+4. Add tests to the feature bundle before changing or deleting older coverage.
+5. Run the feature bundle directly through Vaporize's toolchain route.
+6. Update the CUJ coverage artifact and release packet counts.
+7. Delete or retire older duplicate tests only after the replacement bundle,
    receipt, and CUJ count name the behavior being migrated.
 
 The replacement proof must exist before deletion. Test deletion is allowed as

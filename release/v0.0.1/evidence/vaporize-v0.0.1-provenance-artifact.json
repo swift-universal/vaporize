@@ -14,9 +14,10 @@
   "releaseVerdict": {
     "currentStatus": "blocked-pending-fleet-pkl-project-generation",
     "proven": [
-      "CUJ-derived test coverage is explicit: 69 required Swift test obligations plus 6 release evidence checks across 16 active CUJs.",
+      "CUJ-derived test coverage is explicit: 69 required Swift test obligations plus 7 release evidence checks across 16 active CUJs.",
       "Vaporize package tests pass through Vaporize toolchain mode: 87 executable Swift tests across 16 implemented CUJ-specific SwiftPM test bundles, including CUJ-16 target feature inspection.",
       "The product definition defines Vaporize, primary users, product-level user journeys, choice argument, non-choice cases, and build implications before further build work is accepted.",
+      "The PRD review session gate is codified: Engineering, QA, and Marketing review the PRD before major coding starts; v0.0.1 records a backfilled GO-WITH-NOTES correction because implementation was already in flight.",
       "Legacy XcodeGen project.yml files parse through the Swift YAML read bridge.",
       "All 155 discovered project.yml files under private/universal/substrate/collectives parsed through inspect-project-yml.",
       "Concourse old XcodeGen script build and Vaporize app build both pass after Vaporize derives legacy WRAPPER_NAME from project.yml.",
@@ -52,6 +53,10 @@
     {
       "kind": "prd",
       "path": "private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/prd.md"
+    },
+    {
+      "kind": "prd-review-session",
+      "path": "private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/prd-review-session.md"
     },
     {
       "kind": "critical-user-journeys",
@@ -157,7 +162,7 @@
       "receiptKind": "cuj-test-coverage",
       "path": "private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/cuj-test-coverage.json",
       "claim": "Required test count is derived from PRD requirements through active draft CUJs.",
-      "result": "PASS-WITH-NOTE: 69 Swift test obligations, 6 release evidence checks, 75 targetable obligations, 87 executable Swift tests across 16 implemented CUJ bundles"
+      "result": "PASS-WITH-NOTE: 69 Swift test obligations, 7 release evidence checks, 76 targetable obligations, 87 executable Swift tests across 16 implemented CUJ bundles"
     },
     {
       "receiptKind": "launch-review-packet",
@@ -170,6 +175,12 @@
       "path": "private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/product-definition.md",
       "claim": "Release review can inspect what Vaporize is, who it serves, why users choose it, and which product-level journeys justify further build work.",
       "result": "PASS: CUJ-09 tests enforce the product-before-build contract"
+    },
+    {
+      "receiptKind": "prd-review-session",
+      "path": "private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/prd-review-session.md",
+      "claim": "Engineering, QA, and Marketing review the PRD before major coding starts.",
+      "result": "PASS-WITH-NOTE: v0.0.1 is a backfilled GO-WITH-NOTES correction; future major coding slices require this session before implementation"
     },
     {
       "receiptKind": "positioning-and-benchmark-explainer",
@@ -216,6 +227,10 @@
     {
       "path": "private/apple/spm/vaporize@wrkstrm-core.cli/vaporize.engineering.docc",
       "purpose": "Adds the package-local engineering documentation catalog for future wrkstrm.com/engineering projection."
+    },
+    {
+      "path": "private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/prd-review-session.md",
+      "purpose": "Records the Engineering, QA, and Marketing pre-code PRD review session gate."
     },
     {
       "path": "private/apple/spm/vaporize@wrkstrm-core.cli/Package.resolved",

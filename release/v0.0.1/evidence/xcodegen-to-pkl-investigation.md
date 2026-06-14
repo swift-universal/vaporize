@@ -71,7 +71,7 @@ The first approved migration-prep slice is now landed:
 - Shared Xcode workspace product-cache reuse now has a CUJ-15 first slice for
   cache-first app lookup and shared workspace/DerivedData build invocation.
 - The CUJ-derived coverage floor now requires 69 Swift test obligations plus
-  6 release evidence checks across 16 active CUJs; the full Vaporize package
+  7 release evidence checks across 16 active CUJs; the full Vaporize package
   test suite passes 87 executable Swift tests across 16 implemented CUJ-specific
   SwiftPM bundles through `vaporize toolchain`, including CUJ-16 target feature
   inspection.

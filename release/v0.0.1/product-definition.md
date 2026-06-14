@@ -93,6 +93,13 @@ Release review must reject feature work that only adds implementation surface
 without updating the product definition, PRD, CUJs, evidence, and tests that
 make the user value and choice argument inspectable.
 
+Before coding starts, major feature work must pass a PRD review session with
+Engineering, QA, and Marketing. Engineering reviews buildability and proof
+surface, QA reviews testability and acceptance criteria, and Marketing reviews
+claim language and prohibited promises. The durable session record for this
+release lane is `release/v0.0.1/prd-review-session.md`; future major coding
+slices must record that review before implementation begins.
+
 Runtime, performance, and build-size work must leverage the evidence Apple and
 Swift already provide before inventing parallel measurement formats. Code
 coverage JSON, profile data, xUnit output when available, `.xcresult` bundles,
@@ -119,6 +126,7 @@ contract is captured in `release/v0.0.1/wrkstrm-app-minimums.md`.
 
 ## Release Proof Obligation
 
-For v0.0.1, the PRD, CUJs, release gates, launch-review packet, why explainer,
-performance claim matrix, CUJ coverage artifact, and CUJ-09 release-review
-tests must all acknowledge this product definition.
+For v0.0.1, the PRD, CUJs, PRD review session, release gates,
+launch-review packet, why explainer, performance claim matrix, CUJ coverage
+artifact, engineering DocC catalog, and CUJ-09 release-review tests must all
+acknowledge this product definition.

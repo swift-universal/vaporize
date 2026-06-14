@@ -70,11 +70,21 @@ must stay aligned with the product definition and CUJ map, so release review can
 answer "why should a user choose Vaporize?" before accepting another feature
 slice.
 
+Major feature coding also requires a pre-code PRD review session with
+Engineering, QA, and Marketing. Engineering reviews buildability and proof
+surface, QA reviews testability and acceptance criteria, and Marketing reviews
+claim language and prohibited promises before implementation starts. The current
+v0.0.1 lane records the backfilled correction in
+`release/v0.0.1/prd-review-session.md`; future major Vaporize coding slices do
+not get a backfill exception.
+
 ## Goals
 
 - Ship one canonical CLI name: `vaporize@wrkstrm-core.cli`.
 - Define the product, primary users, product-level user journeys, and why users
   choose Vaporize before more build work is accepted.
+- Require an Engineering, QA, and Marketing PRD review session before major
+  feature coding starts.
 - Classify Vaporize as an internal essential tool for assistant build,
   install, launch, and release-proof workflows.
 - Support SwiftPM CLI build, install, uninstall, and run flows.
@@ -184,18 +194,23 @@ Supporting audiences:
 | FR-022 | Pre-development product definition and choice argument | `release/v0.0.1/product-definition.md` defines the product, primary users, product-level user journeys, why users choose Vaporize, when not to choose Vaporize, and build implications; PRD, CUJs, why explainer, release gates, launch-review packet, CUJ coverage, and release-review tests reference it. |
 | FR-023 | Existing wrkstrm-core app/build config composition | App-facing runtime samples and future feature-status inspection must consume existing wrkstrm-core build surfaces before inventing parallel records: `tool-registry@wrkstrm-core.cli discover-apps` / `xcode-project.tool.json` records for `project.yml` ownership, `identifier@wrkstrm-core.cli app describe` for app variant names/paths, and `app-artifacts@wrkstrm-core.cli` for bundle validation, install-path patching, Xcode build/export receipts, and flat application artifacts. |
 | FR-024 | wrkstrm app minimums inspection | `inspect-target-features --path <project.yml> --target <target>` reports target-level release-feature topology: project spec, declared build configurations, tier declarations, `Config/release-features.json`, generated `Config/xcconfigs/*.xcconfig`, project `configFiles` or Pkl equivalent wiring, generated `Sources/ReleaseFeatures.swift`, and `digikoma-release-features` provenance. Registry-backed fleet inspection remains a follow-up. Missing, stale, or unknown minimums block strong feature-cohort, launch-readiness, and per-feature-size claims. |
+| FR-025 | Pre-code PRD review session | Major feature work must record an Engineering, QA, and Marketing PRD review session before coding starts. The session must decide `GO`, `GO-WITH-NOTES`, or `NO-GO`, and must name approved scope, required tests, required release evidence, approved claims, prohibited claims, and blockers. |
 
 ## Release Criteria
 
 - Vaporize's package test suite passes with the Swift 6.4 toolchain:
   `vaporize toolchain -- swift test --package-path private/apple/spm/vaporize@wrkstrm-core.cli`.
   Current proof: the CUJ-derived coverage floor requires 69 Swift test
-  obligations plus 6 release evidence checks; the executable suite passes 87
+  obligations plus 7 release evidence checks; the executable suite passes 87
   tests across 16 implemented CUJ targets, including the CUJ-16
   `inspect-target-features` first slice.
 - `release/v0.0.1/product-definition.md` defines the product, primary users,
   product-level user journeys, choice argument, non-choice cases, and build
   implications before additional feature work is accepted.
+- `release/v0.0.1/prd-review-session.md` records the Engineering, QA, and
+  Marketing PRD review session requirement and the v0.0.1 backfilled
+  `GO-WITH-NOTES` decision. Future major coding slices require this review
+  before implementation begins.
 - CUJ test coverage is recorded in
   `release/v0.0.1/evidence/cuj-test-coverage.json`.
 - CLI help advertises `use`, `toolchain`, `validate-json`,
@@ -268,3 +283,4 @@ Supporting audiences:
 - `FR-VAPORIZE-RUNTIME-SAMPLE-SERIES-APPLE-ARTIFACT-INGESTION`
 - `FR-VAPORIZE-WRKSTRM-CORE-BUILD-CONFIG-COMPOSITION`
 - `FR-VAPORIZE-WRKSTRM-APP-MINIMUMS-INSPECTION`
+- `FR-VAPORIZE-PRD-REVIEW-SESSION-BEFORE-CODING`
