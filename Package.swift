@@ -13,7 +13,7 @@ let commonShellDependency = localOrRemote(
   from: "0.0.1"
 )
 let commonProcessDependency = localOrRemote(
-  path: "../../../../../swift-universal/private/universal/domain/build/spm/common-process",
+  path: "../../../../../swift-universal/private/universal/domain/dispatch/spm/common-process",
   url: "https://github.com/swift-universal/common-process.git",
   from: "0.3.5"
 )
