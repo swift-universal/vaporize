@@ -1045,11 +1045,15 @@ private func stableID(_ key: String) -> String {
 }
 
 private func pbxValue(_ value: String) -> String {
-  let barePattern = #"^[A-Za-z0-9_./$()+:-]+$"#
+  let barePattern = #"^[A-Za-z0-9_]+$"#
+  let numericPattern = #"^[0-9]+(\.[0-9]+)*$"#
   if value.range(of: barePattern, options: .regularExpression) != nil,
     !value.isEmpty,
     !["YES", "NO"].contains(value)
   {
+    return value
+  }
+  if value.range(of: numericPattern, options: .regularExpression) != nil {
     return value
   }
   var rendered = "\""

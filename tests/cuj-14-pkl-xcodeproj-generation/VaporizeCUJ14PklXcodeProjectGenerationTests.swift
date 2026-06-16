@@ -60,7 +60,7 @@ func generatesXcodeProjectWorldStateFromPkl() async throws {
   #expect(pbxproj.contains("Assets.xcassets in Resources"))
   #expect(pbxproj.contains("Info.plist"))
   #expect(pbxproj.contains("Deploy to Temp"))
-  #expect(pbxproj.contains("PRODUCT_BUNDLE_IDENTIFIER = com.wrkstrm.tiny-pkl-app;"))
+  #expect(pbxproj.contains("PRODUCT_BUNDLE_IDENTIFIER = \"com.wrkstrm.tiny-pkl-app\";"))
   #expect(pbxproj.contains("tiny-pkl-app.app"))
 }
 

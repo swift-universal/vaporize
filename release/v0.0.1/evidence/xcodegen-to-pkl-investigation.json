@@ -227,7 +227,7 @@
       "evidence": "Runs xcodegen generate --spec when project.yml is stale relative to pbxproj."
     },
     {
-      "path": "private/universal/substrate/collectives/slate-org/private/apple/apps/shared/scripts/build_and_run_xcode_app.sh",
+      "path": "private/universal/substrate/collectives/laussat-studio/private/universal/slate-org/private/apple/apps/shared/scripts/build_and_run_xcode_app.sh",
       "kind": "shell-runner",
       "evidence": "Runs xcodegen generate --spec when project.yml is stale relative to pbxproj."
     },

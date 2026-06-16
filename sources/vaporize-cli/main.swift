@@ -12,6 +12,11 @@ struct VaporizeCLI: AsyncParsableCommand {
   /// Hard-coded for Phase 0 - see ``FR-CRAZE-VAPORWARE-AWARENESS`` Phase 0 scope.
   /// Phase 1+ will derive this from Package.swift via a build-time plugin.
   static let vaporizeVersion = "0.1.0"
+  static let buildIdentifier = ProcessInfo.processInfo.environment["VAPORIZE_BUILD_NUMBER"]
+    ?? ProcessInfo.processInfo.environment["VAPORIZE_BUILD_ID"]
+    ?? "local"
+  static let buildSha = ProcessInfo.processInfo.environment["VAPORIZE_BUILD_SHA"]
+  static let buildDate = ProcessInfo.processInfo.environment["VAPORIZE_BUILD_DATE"]
 
   static let configuration = CommandConfiguration(
     commandName: "vaporize@wrkstrm-core.cli",
@@ -31,6 +36,7 @@ struct VaporizeCLI: AsyncParsableCommand {
       project targets, packages, and schemes for parity/build routing; \
       list-schemes asks xcodebuild for live .xcworkspace schemes; \
       release-doctor audits the release spine before claims are trusted. \
+      `domains` lists available tool domains from the tools collection. \
       Legacy `inventory` and `x-craze-collapse-path` remain compatibility \
       aliases during migration.
       Target feature inspection mode: inspect-target-features reads a project.yml \
@@ -76,6 +82,10 @@ struct VaporizeCLI: AsyncParsableCommand {
     // Deprecated compatibility spellings from the original installer shape.
     case cli
     case app
+    case domains
+
+    /// Self-maintenance.
+    case selfUpdate = "self-update"
   }
 
   enum ArtifactKind: String, ExpressibleByArgument {
@@ -83,8 +93,11 @@ struct VaporizeCLI: AsyncParsableCommand {
     case app
   }
 
-  @Argument(help: "Mode: install, uninstall, build, test, run, pass, use, toolchain, setup, status, warehouse, validate-json, inspect-project-yml, inspect-target-features, compare-project-yml-pkl, import-project-yml, generate-project-yml, generate-xcodeproj, list-targets, list-schemes, release-doctor, inventory, or graph (forwards to package-graph@wrkstrm.cli).")
-  var mode: Mode
+  @Argument(help: "Mode: install, uninstall, build, test, run, pass, use, toolchain, setup, status, warehouse, validate-json, inspect-project-yml, inspect-target-features, compare-project-yml-pkl, import-project-yml, generate-project-yml, generate-xcodeproj, list-targets, list-schemes, release-doctor, inventory, domains, self-update, or graph (forwards to package-graph@wrkstrm.cli).")
+  var mode: Mode?
+
+  @Flag(help: "Prints the tool name, version, and build metadata and exits.")
+  var version: Bool = false
 
   @Option(name: .customLong("artifact"), help: "Artifact kind: cli or app.")
   var artifact: ArtifactKind = .cli
@@ -228,13 +241,30 @@ struct VaporizeCLI: AsyncParsableCommand {
 
   @Option(
     name: .customLong("format"),
-    help: "Output format for status, inspect-project-yml, inspect-target-features, compare-project-yml-pkl, import-project-yml, generate-project-yml, generate-xcodeproj, list-targets, list-schemes, or release-doctor mode: text (default) or json.")
+    help: "Output format for status, domains, inspect-project-yml, inspect-target-features, compare-project-yml-pkl, import-project-yml, generate-project-yml, generate-xcodeproj, list-targets, list-schemes, or release-doctor mode: text (default) or json.")
   var vaporOutputFormat: VaporOutputFormatArgument = .text
+
+  @Option(name: .customLong("domain"), help: "Tool domain for install/uninstall/run and domain path shaping (for example build).")
+  var toolDomain: String?
+
+  @Option(name: .customLong("tools-collection"), help: "Kura tools collection directory for domains mode.")
+  var toolsCollectionPath: String?
 
   @Argument(parsing: .remaining, help: "Arguments forwarded to test, run, pass, or toolchain mode.")
   var forwardedArguments: [String] = []
 
   mutating func run() async throws {
+    if version {
+      printVersionMetadata()
+      return
+    }
+
+    guard let mode else {
+      throw ValidationError(
+        "missing expected argument <mode>. Run with --help for valid modes, or --version to print build metadata."
+      )
+    }
+
     switch mode {
     case .install:
       try await installArtifact(launchApp: launch)
@@ -280,6 +310,10 @@ struct VaporizeCLI: AsyncParsableCommand {
       try await releaseDoctor()
     case .inventory:
       try await runVaporWarehouse()
+    case .domains:
+      try await runDomains()
+    case .selfUpdate:
+      try await selfUpdate()
     case .graph:
       try await runGraph()
     case .cli:
@@ -305,6 +339,20 @@ struct VaporizeCLI: AsyncParsableCommand {
     case .app:
       try uninstallApp()
     }
+  }
+
+  private func selfUpdate() async throws {
+    let packagePath = try requireSelfUpdatePackagePath()
+    let product = "vaporize@wrkstrm-core.cli"
+    let updateDomain = inferredDomain(for: product, packagePath: packagePath)
+    let request = SwiftCLIInstaller.Request(
+      packagePath: packagePath,
+      product: product,
+      configuration: .init(rawValue: configuration.rawValue) ?? .release,
+      forceReinstall: true
+    )
+    try await SwiftCLIInstaller(request: request).run()
+    try publishInstalledCLI(toDomain: updateDomain, product: product)
   }
 
   private func buildArtifact() async throws {
@@ -351,6 +399,7 @@ struct VaporizeCLI: AsyncParsableCommand {
   private func installCLI() async throws {
     let packagePath = try requirePackagePath()
     let product = try requireProduct()
+    let installDomain = inferredDomain(for: product, packagePath: packagePath)
     let request = SwiftCLIInstaller.Request(
       packagePath: packagePath,
       product: product,
@@ -358,6 +407,7 @@ struct VaporizeCLI: AsyncParsableCommand {
       forceReinstall: forceReinstall
     )
     try await SwiftCLIInstaller(request: request).run()
+    try publishInstalledCLI(toDomain: installDomain, product: product)
   }
 
   private func installApp(launchApp: Bool) async throws {
@@ -389,12 +439,14 @@ struct VaporizeCLI: AsyncParsableCommand {
   private func uninstallCLI() async throws {
     let packagePath = try requirePackagePath()
     let product = try requireProduct()
+    let uninstallDomain = inferredDomain(for: product, packagePath: packagePath)
     try await runSwiftPackage(arguments: [
       "package",
       "--package-path", packagePath,
       "experimental-uninstall",
       product,
     ])
+    try removePublishedCLI(fromDomain: uninstallDomain, product: product)
   }
 
   private func uninstallApp() throws {
@@ -433,8 +485,9 @@ struct VaporizeCLI: AsyncParsableCommand {
 
   private func runInstalledCLI() async throws {
     let product = try requireProduct()
+    let executablePath = try installedCLIExecutablePath(product: product)
     try await runExecutable(
-      executable: .path(installedCLIPath(product: product)),
+      executable: .path(executablePath),
       arguments: forwardedArguments,
       sourceTag: "vaporize-run-cli"
     )
@@ -509,11 +562,138 @@ struct VaporizeCLI: AsyncParsableCommand {
       .standardizedFileURL
   }
 
+  private func installedCLIBinDirectory() -> URL {
+    FileManager.default.homeDirectoryForCurrentUser.appendingPathComponent(".swiftpm/bin")
+  }
+
   private func installedCLIPath(product: String) -> String {
-    FileManager.default.homeDirectoryForCurrentUser
-      .appendingPathComponent(".swiftpm/bin")
-      .appendingPathComponent(product)
-      .path
+    installedCLIBinDirectory().appendingPathComponent(product).path
+  }
+
+  private func installedCLIExecutablePath(product: String) throws -> String {
+    if let packagePath,
+       let domain = inferredDomain(for: product, packagePath: packagePath),
+       let domainPath = domainSpecificCLIPath(product: product, domain: domain),
+       FileManager.default.fileExists(atPath: domainPath)
+    {
+      return domainPath
+    }
+    if let domain = inferredDomainValue(),
+       let domainPath = domainSpecificCLIPath(product: product, domain: domain),
+       FileManager.default.fileExists(atPath: domainPath)
+    {
+      return domainPath
+    }
+    return installedCLIPath(product: product)
+  }
+
+  private func inferredDomain(for product: String, packagePath: String) -> String? {
+    if let explicitDomain = inferredDomainValue(), !explicitDomain.isEmpty {
+      return explicitDomain
+    }
+    if let inferredDomain = domainFromPackagePath(packagePath) {
+      return inferredDomain
+    }
+    return nil
+  }
+
+  private func inferredDomainValue() -> String? {
+    let trimmed = toolDomain?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+    return trimmed.isEmpty ? nil : trimmed
+  }
+
+  private func domainFromPackagePath(_ packagePath: String) -> String? {
+    let normalized = absoluteURL(for: packagePath).path
+    let components = normalized.split(separator: "/").map(String.init)
+    guard let index = components.firstIndex(of: "domain"), index + 1 < components.count else {
+      return nil
+    }
+    let domain = components[index + 1]
+    let trimmed = domain.trimmingCharacters(in: .whitespacesAndNewlines)
+    return trimmed.isEmpty ? nil : trimmed
+  }
+
+  private func domainSpecificCLIPath(product: String, domain: String) -> String? {
+    let components = safeDomainPathComponents(domain)
+    guard !components.isEmpty else { return nil }
+    return domainPath(forComponents: components).appendingPathComponent(product).path
+  }
+
+  private func domainPath(forComponents components: [String]) -> URL {
+    components.reduce(installedCLIBinDirectory().appendingPathComponent("domain")) { path, component in
+      path.appendingPathComponent(sanitizePathComponent(component), isDirectory: true)
+    }
+  }
+
+  private func sanitizePathComponent(_ value: String) -> String {
+    let allowed = CharacterSet.alphanumerics.union(CharacterSet(charactersIn: "._-"))
+    let sanitized = value.unicodeScalars.map { scalar in
+      allowed.contains(scalar) ? Character(scalar) : "_"
+    }
+    return String(sanitized)
+  }
+
+  private func safeDomainPathComponents(_ domain: String) -> [String] {
+    domain
+      .split(separator: "/")
+      .map(String.init)
+      .compactMap { sanitizePathComponent($0).isEmpty ? nil : sanitizePathComponent($0) }
+  }
+
+  private func publishInstalledCLI(toDomain domain: String?, product: String) throws {
+    guard let domain, !domain.isEmpty else { return }
+    let domainComponents = safeDomainPathComponents(domain)
+    guard !domainComponents.isEmpty else { return }
+
+    let fileManager = FileManager.default
+    let target = URL(fileURLWithPath: installedCLIPath(product: product))
+    let link = domainPath(forComponents: domainComponents).appendingPathComponent(product)
+
+    if fileManager.fileExists(atPath: link.path) {
+      try fileManager.removeItem(at: link)
+    }
+    try fileManager.createDirectory(
+      at: link.deletingLastPathComponent(),
+      withIntermediateDirectories: true
+    )
+    try fileManager.createSymbolicLink(at: link, withDestinationURL: target)
+  }
+
+  private func removePublishedCLI(fromDomain domain: String?, product: String) throws {
+    if let domain {
+      try removeDomainCLI(product: product, domain: domain)
+      return
+    }
+
+    let base = installedCLIBinDirectory().appendingPathComponent("domain")
+    let fileManager = FileManager.default
+    guard fileManager.fileExists(atPath: base.path) else { return }
+    guard let enumerator = fileManager.enumerator(at: base, includingPropertiesForKeys: [.isRegularFileKey]) else {
+      return
+    }
+    for case let url as URL in enumerator {
+      guard url.lastPathComponent == product else { continue }
+      do {
+        try removeDomainCLI(at: url)
+      } catch {
+        continue
+      }
+    }
+  }
+
+  private func removeDomainCLI(product: String, domain: String) throws {
+    guard let domainPath = domainSpecificCLIPath(product: product, domain: domain) else {
+      return
+    }
+    let link = URL(fileURLWithPath: domainPath)
+    guard FileManager.default.fileExists(atPath: link.path) else {
+      return
+    }
+    try removeDomainCLI(at: link)
+  }
+
+  private func removeDomainCLI(at url: URL) throws {
+    try FileManager.default.removeItem(at: url)
   }
 
   private func installedAppURL(product: String) -> URL {
@@ -544,14 +724,32 @@ struct VaporizeCLI: AsyncParsableCommand {
 
   private func requirePackagePath() throws -> String {
     guard let packagePath, !packagePath.isEmpty else {
-      throw ValidationError("--package-path is required for \(mode.rawValue) mode.")
+      throw ValidationError("--package-path is required for operation mode.")
     }
     return packagePath
   }
 
+  private func requireSelfUpdatePackagePath() throws -> String {
+    if let packagePath, !packagePath.isEmpty {
+      return packagePath
+    }
+
+    let currentDirectory = FileManager.default.currentDirectoryPath
+    let manifestPath = URL(fileURLWithPath: currentDirectory)
+      .appendingPathComponent("Package.swift")
+      .path
+    guard FileManager.default.fileExists(atPath: manifestPath) else {
+      throw ValidationError(
+        "--package-path is required for self-update unless run from a package root."
+      )
+    }
+
+    return currentDirectory
+  }
+
   private func requireProduct() throws -> String {
     guard let product, !product.isEmpty else {
-      throw ValidationError("--product is required for \(mode.rawValue) mode.")
+      throw ValidationError("--product is required for operation mode.")
     }
     return product
   }
@@ -604,6 +802,16 @@ struct VaporizeCLI: AsyncParsableCommand {
         throw ExitCode(Int32(exitCode))
       }
       throw ExitCode.failure
+    }
+  }
+
+  private func printVersionMetadata() {
+    print("vaporize@wrkstrm-core.cli \(Self.vaporizeVersion) (build \(Self.buildIdentifier))")
+    if let buildSha = Self.buildSha {
+      print("build-sha: \(buildSha)")
+    }
+    if let buildDate = Self.buildDate {
+      print("build-date: \(buildDate)")
     }
   }
 
@@ -741,6 +949,77 @@ struct VaporizeCLI: AsyncParsableCommand {
     }
   }
 
+  private func runDomains() async throws {
+    let collectionPath = try resolveToolsCollectionPath()
+    let manifests = try loadToolManifests(from: collectionPath)
+    let domains = Set(
+      manifests.compactMap(\.domain)
+    )
+    let sortedDomains = domains.sorted { lhs, rhs in
+      lhs.localizedStandardCompare(rhs) == .orderedAscending
+    }
+    switch vaporOutputFormat {
+    case .text:
+      for domain in sortedDomains {
+        print(domain)
+      }
+    case .json:
+      let payload = DomainsPayload(
+        collectionPath: collectionPath.path,
+        domains: sortedDomains,
+        count: sortedDomains.count
+      )
+      let encoder = JSONEncoder()
+      encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
+      let data = try encoder.encode(payload)
+      FileHandle.standardOutput.write(data)
+      FileHandle.standardOutput.write(Data("\n".utf8))
+    }
+  }
+
+  private func resolveToolsCollectionPath() throws -> URL {
+    if let toolsCollectionPath, !toolsCollectionPath.isEmpty {
+      return absoluteURL(for: toolsCollectionPath)
+    }
+    if let envPath = ProcessInfo.processInfo.environment["VAPORIZE_TOOLS_COLLECTION_PATH"],
+      !envPath.isEmpty
+    {
+      return absoluteURL(for: envPath)
+    }
+
+    let defaultCollection = monoRootFromCurrentDirectory().appendingPathComponent(
+      "private/universal/substrate/collectives/wrkstrm-core/private/universal/kura-spaces/collections/tools"
+    )
+    guard FileManager.default.fileExists(atPath: defaultCollection.path) else {
+      throw ValidationError(
+        "could not resolve tool collection path for domains mode. Pass --tools-collection or run from a mono root."
+      )
+    }
+    return defaultCollection
+  }
+
+  private func loadToolManifests(from collectionPath: URL) throws -> [ToolManifestRecord] {
+    let fileManager = FileManager.default
+    guard let enumerator = fileManager.enumerator(
+      at: collectionPath,
+      includingPropertiesForKeys: [.isRegularFileKey],
+      options: [.skipsHiddenFiles]
+    ) else {
+      return []
+    }
+    return enumerator.compactMap { item in
+      guard let url = item as? URL, url.path.hasSuffix(".cli.tool.json") else {
+        return nil
+      }
+      do {
+        let data = try Data(contentsOf: url)
+        return try JSONDecoder().decode(ToolManifestRecord.self, from: data)
+      } catch {
+        return nil
+      }
+    }
+  }
+
   // MARK: - Package-graph subfunction
 
   /// Forwards remaining arguments to the substrate-canonical
@@ -814,7 +1093,7 @@ struct VaporizeCLI: AsyncParsableCommand {
 
   private func scanForVapor() throws -> VaporScanResult {
     guard let vaporScanPath, !vaporScanPath.isEmpty else {
-      throw ValidationError("--path is required for \(mode.rawValue) mode.")
+      throw ValidationError("--path is required for this operation.")
     }
     let scanner = VaporInventoryScanner()
     return try scanner.scan(path: vaporScanPath)
@@ -1291,6 +1570,16 @@ struct VaporizeCLI: AsyncParsableCommand {
     let down = Array(targetComponents.dropFirst(commonPrefixCount))
     let components = up + down
     return components.isEmpty ? "." : components.joined(separator: "/")
+  }
+
+  private struct ToolManifestRecord: Decodable {
+    let domain: String?
+  }
+
+  private struct DomainsPayload: Encodable {
+    let collectionPath: String
+    let domains: [String]
+    let count: Int
   }
 
   private func emitReceiptIfRequested(_ receipt: some Encodable) throws {

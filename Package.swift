@@ -40,7 +40,7 @@ let package = Package(
     // SwiftCLIInstaller library LIFTED to swift-universal/.../tooling/spm/swift-cli-installer/
     // (CEO decision 2026-06-14). Consumers now import via swiftCLIInstallerDependency.
     .library(name: "SwiftAppInstaller", targets: ["SwiftAppInstaller"]),
-    .executable(name: "vaporize@wrkstrm-core.cli", targets: ["VaporizeCLI"]),
+    .executable(name: "vaporize@wrkstrm-core.clia.sh", targets: ["VaporizeCLI"]),
   ],
   dependencies: [
     commonProcessDependency,

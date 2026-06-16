@@ -32,6 +32,51 @@ func parsesSwiftPMCLIBuildMode() throws {
   #expect(command.skipInstall)
 }
 
+@Test("CUJ-01 parses domains mode")
+func parsesSwiftPMCLIDomainsMode() throws {
+  let command = try VaporizeCLI.parse(["domains", "--tools-collection", "/tmp/tools", "--format", "json"])
+  #expect(command.mode == .domains)
+  #expect(command.toolsCollectionPath == "/tmp/tools")
+  #expect(command.vaporOutputFormat == .json)
+}
+
+@Test("CUJ-01 parses domain flag")
+func parsesDomainFlagForInstallMode() throws {
+  let command = try VaporizeCLI.parse([
+    "install",
+    "--package-path",
+    "/workspace/domain/build/spm/tool",
+    "--product",
+    "build-tool@domain.cli",
+    "--domain",
+    "build",
+  ])
+  #expect(command.mode == .install)
+  #expect(command.toolDomain == "build")
+  #expect(command.packagePath == "/workspace/domain/build/spm/tool")
+  #expect(command.product == "build-tool@domain.cli")
+}
+
+@Test("CUJ-01 parses self-update mode")
+func parsesSelfUpdateMode() throws {
+  let command = try VaporizeCLI.parse([
+    "self-update",
+    "--package-path",
+    "/workspace/vaporize",
+  ])
+
+  #expect(command.mode == .selfUpdate)
+  #expect(command.packagePath == "/workspace/vaporize")
+}
+
+@Test("CUJ-01 parses version flag")
+func parsesVersionFlag() throws {
+  let command = try VaporizeCLI.parse(["--version"])
+
+  #expect(command.version)
+  #expect(command.mode == nil)
+}
+
 @Test("CUJ-01 builds SwiftPM package test arguments")
 func buildsSwiftPMPackageTestArguments() throws {
   let command = try VaporizeCLI.parse([
