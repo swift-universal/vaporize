@@ -1,0 +1,78 @@
+{
+  "BeadsIssue": "0.1.0",
+  "schemaVersion": "0.1.0",
+  "id": "vaporize-inventory-use-directory-tools-discovery",
+  "title": "Vaporize inventory/status/warehouse must use DirectoryTools discovery",
+  "status": "open",
+  "priority": 0,
+  "issueType": "bug",
+  "labels": [
+    "bug",
+    "vaporize",
+    "directory-tools",
+    "shared-code",
+    "filesystem-discovery",
+    "inventory",
+    "warehouse",
+    "status",
+    "no-bespoke-walkers"
+  ],
+  "componentTags": [
+    {
+      "component": "vaporize@wrkstrm-core.cli",
+      "role": "owner",
+      "path": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli"
+    },
+    {
+      "component": "directory-tools@swift-universal.cli",
+      "role": "required-shared-dependency",
+      "path": "private/universal/substrate/collectives/swift-universal/private/universal/domain/tooling/spm/directory-tools@swift-universal.cli"
+    },
+    {
+      "component": "vaporware@swift-universal.cli",
+      "role": "downstream-pressure",
+      "path": "private/universal/substrate/collectives/swift-universal/private/universal/domain/tooling/spm/vaporware@swift-universal.cli"
+    }
+  ],
+  "createdAt": "2026-06-16T00:00:00Z",
+  "createdBy": "codex loom harness per operator correction: vaporize-owned errors belong in vaporize",
+  "historicalContent": {
+    "kind": "bead-bug",
+    "severity": "high",
+    "ownerCollective": "wrkstrm-core",
+    "ownerSurface": "vaporize@wrkstrm-core.cli",
+    "problem": "Vaporize mode status/warehouse/inventory currently owns a private recursive JSON filesystem walk in Sources/vaporize-cli/VaporInventory.swift. This duplicates DirectoryTools traversal policy and risks inconsistent pruning, long scans, and future drift from shared discovery behavior.",
+    "observedEvidence": [
+      "Sources/vaporize-cli/VaporInventory.swift uses FileManager.enumerator directly to scan every .json file.",
+      "directory-tools@swift-universal.cli already owns shared traversal services and documents the naive-walk anti-pattern.",
+      "A related vaporware local --all discovery attempt exposed the same class of bug: consumer tools should not invent filesystem walkers when shared DirectoryTools primitives exist."
+    ],
+    "requiredFix": [
+      "Add directory-tools@swift-universal.cli as a Vaporize dependency where needed.",
+      "Replace VaporInventoryScanner's private recursive JSON enumeration with DirectoryTools DirectoryFileDiscoveryService or a successor shared API.",
+      "Preserve VaporInventoryScanner classification behavior and receipt shape.",
+      "Add/keep tests proving recursive JSON discovery, ignored/generated-directory pruning, missing-path errors, file-path errors, and receipt totals.",
+      "Do not change list-targets project-root behavior; list-targets remains Vaporize's app target truth once a project root is supplied."
+    ],
+    "acceptanceCriteria": [
+      "Vaporize has no direct recursive FileManager.enumerator path for inventory/status/warehouse JSON discovery.",
+      "Vaporize CUJ-07 inventory tests pass against DirectoryTools-backed discovery.",
+      "The scanner still resolves relative paths to absolute standardized paths.",
+      "The warehouse receipt remains machine-readable and schema-compatible.",
+      "The bug cross-references the shared DirectoryTools consumer bead."
+    ],
+    "relatedBeads": [
+      "private/universal/substrate/collectives/swift-universal/private/universal/domain/tooling/spm/directory-tools@swift-universal.cli/agenda/beads/shared-directory-discovery-consumers-vaporware-vaporize.beads-issue.json"
+    ],
+    "componentTags": [
+      "vaporize@wrkstrm-core.cli",
+      "directory-tools@swift-universal.cli",
+      "vaporware@swift-universal.cli"
+    ]
+  },
+  "composesWith": [
+    "[[lift-existing-patterns-not-reimplement]]",
+    "[[component-request-files-first-before-consumer-implementation-no-one-off-builds]]",
+    "[[shared-components-pass-every-launch-gate-audit-feature-request-launch-review-no-shortcuts]]"
+  ]
+}

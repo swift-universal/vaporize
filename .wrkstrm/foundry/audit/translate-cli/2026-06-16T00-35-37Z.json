@@ -1,0 +1,173 @@
+{
+  "advisory" : {
+    "passed" : 1,
+    "total" : 12
+  },
+  "base" : {
+    "max" : 0,
+    "score" : 0
+  },
+  "blocking" : {
+    "passed" : 1,
+    "total" : 8
+  },
+  "checks" : [
+    {
+      "base" : 0,
+      "id" : "package-swift",
+      "level" : "blocking",
+      "message" : "Missing",
+      "penalty" : 0,
+      "status" : "fail",
+      "title" : "Package.swift present"
+    },
+    {
+      "id" : "swift-tools-version-header",
+      "level" : "advisory",
+      "message" : "Package.swift not readable",
+      "status" : "fail",
+      "title" : "Swift tools version header spacing"
+    },
+    {
+      "id" : "readme-present",
+      "level" : "advisory",
+      "message" : "Missing README at package root",
+      "status" : "warn",
+      "title" : "README present"
+    },
+    {
+      "id" : "license-present",
+      "level" : "blocking",
+      "message" : "Missing LICENSE (repo or package root)",
+      "status" : "fail",
+      "title" : "LICENSE present"
+    },
+    {
+      "id" : "docc-bundle",
+      "level" : "advisory",
+      "message" : "No .docc bundles detected",
+      "status" : "warn",
+      "title" : "DocC bundle present"
+    },
+    {
+      "id" : "docc-placeholder",
+      "level" : "blocking",
+      "message" : "No .docc bundles found",
+      "penalty" : 0,
+      "status" : "skip",
+      "title" : "DocC contains placeholder marker"
+    },
+    {
+      "id" : "docc-minimum-layout",
+      "level" : "advisory",
+      "message" : "No .docc bundles found",
+      "status" : "skip",
+      "title" : "DocC minimum layout pages"
+    },
+    {
+      "base" : 0,
+      "id" : "tests",
+      "level" : "blocking",
+      "message" : "No .swift tests; penalty: 0",
+      "penalty" : 0,
+      "status" : "fail",
+      "title" : "Tests exist (Swift Testing only)"
+    },
+    {
+      "id" : "kebab-case",
+      "level" : "advisory",
+      "message" : "Root path not found: /Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/translate-cli",
+      "status" : "fail",
+      "title" : "Kebab-case names"
+    },
+    {
+      "id" : "swift-format",
+      "level" : "advisory",
+      "message" : "No .swift-format found; skipping",
+      "status" : "skip",
+      "title" : "Swift format config present"
+    },
+    {
+      "id" : "ci-linux-test",
+      "level" : "advisory",
+      "message" : "Add a Linux job with swift test",
+      "status" : "fail",
+      "title" : "Linux test job present"
+    },
+    {
+      "id" : "github-actions",
+      "level" : "advisory",
+      "message" : "No workflows found",
+      "status" : "warn",
+      "title" : "GitHub Actions workflows present"
+    },
+    {
+      "id" : "release-tag",
+      "level" : "blocking",
+      "message" : "Package root is not a git repository; skipping release tag check",
+      "status" : "skip",
+      "title" : "Semantic version release tag present"
+    },
+    {
+      "id" : "platforms-min",
+      "level" : "blocking",
+      "message" : "Package.swift not readable",
+      "status" : "fail",
+      "title" : "Minimum platforms (policy: sla, macOS >= 15)"
+    },
+    {
+      "id" : "library-cli",
+      "level" : "blocking",
+      "message" : "Package.swift not readable",
+      "status" : "fail",
+      "title" : "Library provides CLI target"
+    },
+    {
+      "id" : "common-cli-usage",
+      "level" : "advisory",
+      "message" : "No executable targets found",
+      "status" : "skip",
+      "title" : "CommonCLI usage in CLI targets"
+    },
+    {
+      "id" : "common-shell-usage",
+      "level" : "advisory",
+      "message" : "No executable targets found",
+      "status" : "skip",
+      "title" : "CommonShell/CommonProcess usage in CLI targets"
+    },
+    {
+      "id" : "network-foundationnetworking",
+      "level" : "advisory",
+      "message" : "No URLSession usage detected",
+      "status" : "pass",
+      "title" : "FoundationNetworking guard present"
+    },
+    {
+      "base" : 1,
+      "id" : "process-blacklist",
+      "level" : "blocking",
+      "message" : "score: 0 (no direct Process usages)",
+      "penalty" : 0,
+      "status" : "pass",
+      "title" : "No direct Foundation.Process usage"
+    },
+    {
+      "id" : "docc-build",
+      "level" : "advisory",
+      "message" : "No .docc bundles found",
+      "status" : "skip",
+      "title" : "DocC builds"
+    }
+  ],
+  "package" : {
+    "mode" : "library",
+    "name" : "translate-cli",
+    "path" : "/Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/translate-cli"
+  },
+  "penaltyPoints" : 0,
+  "root" : "/Users/sonoma/mono/private/universal/substrate/collectives/i18n-universal/private/universal/tools",
+  "runID" : "2026-06-16T00-35-37Z",
+  "schemaVersion" : 1,
+  "timestamp" : "2026-06-16T00-35-37Z"
+}

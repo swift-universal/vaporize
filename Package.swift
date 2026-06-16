@@ -8,7 +8,7 @@ func localOrRemote(path: String, url: String, from version: Version) -> Package.
 }
 
 let commonShellDependency = localOrRemote(
-  path: "../../../../../swift-universal/private/universal/domain/build/spm/common-shell",
+  path: "../../../../../swift-universal/private/universal/domain/dispatch/spm/common-shell",
   url: "https://github.com/swift-universal/common-shell.git",
   from: "0.0.1"
 )
