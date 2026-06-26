@@ -3,7 +3,7 @@
   "schemaVersion": "0.1.0",
   "id": "BUG-VAPORIZE-TEST-MODE-USES-SWIFTLY-INSTEAD-OF-XCODE-SELECTED-SWIFT-2026-06-26",
   "title": "vaporize test mode resolved bare swift through Swiftly 6.3.2 instead of Xcode-selected Swift 6.4",
-  "status": "fix-implemented-verification-passed-savepoint-pending",
+  "status": "fix-landed-savepointed",
   "priority": 1,
   "issueType": "bug",
   "labels": [
@@ -12,7 +12,8 @@
     "swiftpm",
     "test-lane",
     "xcode-selected-swift",
-    "fix-verified-2026-06-26"
+    "fix-verified-2026-06-26",
+    "fix-landed-savepointed"
   ],
   "createdAt": "2026-06-26T10:55:00Z",
   "createdBy": "chatgpt loom harness after operator correction to test via vaporize",
@@ -27,6 +28,24 @@
       "Savepoint package canonical proof passed through Vaporize: `/Users/sonoma/.swiftpm/bin/vaporize.cli@wrkstrm-core.clia.sh --package-path private/universal/domain/scm/digikoma/savepoint-commit.digikoma.clia test -- --disable-automatic-resolution`; Vaporize printed `$ /usr/bin/xcrun swift test ...` and the suite passed 15 tests in 2 suites."
     ]
   },
+  "savepointRefs": [
+    {
+      "LinkRefModel": "0.3.0",
+      "t": "wrkstrm-core savepoint fixing Vaporize SwiftPM package test/build toolchain selection",
+      "tg": [
+        {
+          "k": "go",
+          "v": "16855d77f3a20771e2b72327abd2b28c694ea68a",
+          "gr": "wrkstrm-core",
+          "gt": "commit"
+        },
+        {
+          "k": "ap",
+          "v": "/Users/sonoma/mono/.git/modules/private/universal/substrate/collectives/wrkstrm-core/digikoma-queue/applied/20260626-110218070-95A9EC8D-4242-4B3D-8B9D-DE964BD614F9.artifact.json"
+        }
+      ]
+    }
+  ],
   "composesWith": [
     "FR-VAPORIZE-WORKSTREAM-PROCESS-MODERNIZATION-2026-06-26",
     "[[vaporware-modernization-workstream]]",
