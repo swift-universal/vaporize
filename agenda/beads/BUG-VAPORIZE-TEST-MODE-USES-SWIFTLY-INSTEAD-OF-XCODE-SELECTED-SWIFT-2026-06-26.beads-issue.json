@@ -68,6 +68,48 @@
           "v": "/Users/sonoma/mono/.git/modules/private/universal/substrate/collectives/wrkstrm-core/digikoma-queue/applied/20260626-110218070-95A9EC8D-4242-4B3D-8B9D-DE964BD614F9.artifact.json"
         }
       ]
+    },
+    {
+      "LinkRefModel": "0.3.0",
+      "t": "wrkstrm-core savepoint adding Swift 6.4 preflight and app installer Xcode-selected Swift routing",
+      "tg": [
+        {
+          "k": "go",
+          "v": "565c4ae7a96faec652e5230f3b7049e82fc5ad8b",
+          "gr": "wrkstrm-core",
+          "gt": "commit"
+        },
+        {
+          "k": "ap",
+          "v": "/Users/sonoma/mono/.git/modules/private/universal/substrate/collectives/wrkstrm-core/digikoma-queue/applied/20260626-112427485-707D9E88-B4A8-4ADB-8E2D-A9DFCA577540.artifact.json"
+        }
+      ]
+    },
+    {
+      "LinkRefModel": "0.3.0",
+      "t": "swift-universal savepoints updating SwiftCLIInstaller to use Xcode-selected Swift package invocations",
+      "tg": [
+        {
+          "k": "go",
+          "v": "0772dc86f36cfe037130c137f856734104c4d07d",
+          "gr": "swift-universal",
+          "gt": "commit"
+        },
+        {
+          "k": "go",
+          "v": "00abce4f17c3891703098206bafbec10e6dc6307",
+          "gr": "swift-universal",
+          "gt": "commit"
+        },
+        {
+          "k": "ap",
+          "v": "/Users/sonoma/mono/.git/modules/private/universal/substrate/collectives/swift-universal/digikoma-queue/applied/20260626-112318300-4D5B4157-B860-4944-ADFA-93403ACC37D2.artifact.json"
+        },
+        {
+          "k": "ap",
+          "v": "/Users/sonoma/mono/.git/modules/private/universal/substrate/collectives/swift-universal/digikoma-queue/applied/20260626-112402403-64900258-14B4-4AEC-ABD6-6FC7837139F2.artifact.json"
+        }
+      ]
     }
   ],
   "composesWith": [
