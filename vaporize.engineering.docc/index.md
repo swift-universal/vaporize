@@ -41,6 +41,7 @@ and explicit disposition of remaining XcodeGen surfaces.
 - <doc:benchmark-and-size-evidence>
 - <doc:target-feature-inspection>
 - <doc:feature-test-lifecycle>
+- <doc:cuj-state-testing-methodology>
 - <doc:release-doctor>
 
 ## Source Of Truth

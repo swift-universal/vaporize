@@ -22,6 +22,7 @@ func releaseReviewArtifactsExist() {
     "vaporize.engineering.docc/benchmark-and-size-evidence.md",
     "vaporize.engineering.docc/target-feature-inspection.md",
     "vaporize.engineering.docc/feature-test-lifecycle.md",
+    "vaporize.engineering.docc/cuj-state-testing-methodology.md",
     "vaporize.engineering.docc/release-doctor.md",
     "release/v0.0.1/evidence/launch-review-packet.json",
     "release/v0.0.1/evidence/hello-world-google-target-features-inspection.receipt.json",
@@ -134,6 +135,7 @@ func productDefinitionContractPrecedesBuildWork() throws {
   #expect(engineeringDocs.contains("feature-catalog"))
   #expect(engineeringDocs.contains("modularity-and-ownership-boundaries"))
   #expect(engineeringDocs.contains("vaporware-modification-request-discipline"))
+  #expect(engineeringDocs.contains("cuj-state-testing-methodology"))
   #expect(engineeringDocs.contains("release-doctor"))
   #expect(featureCatalog.contains("canonical human-readable feature list"))
   #expect(featureCatalog.contains("SwiftPM CLI lifecycle"))

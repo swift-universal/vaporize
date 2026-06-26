@@ -1,0 +1,51 @@
+{
+  "BeadsIssue": "0.1.0",
+  "schemaVersion": "0.1.0",
+  "id": "FR-VAPORIZE-CUJ-STATE-TESTING-METHODOLOGY-DOCS-2026-06-26",
+  "title": "Document CUJ-state testing methodology architecture for Vaporize",
+  "status": "open",
+  "priority": 1,
+  "issueType": "feature",
+  "labels": [
+    "vaporize",
+    "engineering-docs",
+    "cuj-state",
+    "testing-methodology",
+    "architecture"
+  ],
+  "createdAt": "2026-06-26T12:20:00Z",
+  "createdBy": "codex after operator requested engineering documentation for the testing methodology",
+  "historicalContent": {
+    "slug": "FR-VAPORIZE-CUJ-STATE-TESTING-METHODOLOGY-DOCS-2026-06-26",
+    "kind": "bead-feature-request",
+    "createdAt": "2026-06-26T12:20:00Z",
+    "createdBy": "codex",
+    "assignee": "wrkstrm-core",
+    "severity": "medium",
+    "sourceType": "operator-requested-engineering-documentation",
+    "sourceLocation": "Codex session 2026-06-26: operator asked for an essay and engineering documentation on the architecture of this testing methodology.",
+    "description": "Add package-local engineering documentation explaining CUJ-state testing methodology: why Vaporize starts from critical user journeys, how CUJ state is materialized, how receipts and focused tests prove the slice, and where Kura/database concerns belong.",
+    "implementedFirstSlice": {
+      "engineeringDoc": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/vaporize.engineering.docc/cuj-state-testing-methodology.md",
+      "docIndex": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/vaporize.engineering.docc/index.md",
+      "releaseReviewTest": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/tests/cuj-09-release-review/VaporizeCUJ09ReleaseReviewTests.swift",
+      "releaseGate": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/release-gates.md"
+    },
+    "acceptanceCriteria": [
+      "Engineering DocC has a CUJ-state testing methodology page.",
+      "The engineering catalog index links the page.",
+      "Release review artifacts include the new page.",
+      "The essay distinguishes CUJ state from database-first or Kura-world fixtures.",
+      "The essay names the Vaporize proof lane, receipt boundary, and follow-up architecture."
+    ],
+    "linkedTypedRecords": {
+      "cujStateWorkflow": "private/universal/substrate/collectives/spaces-universal/private/universal/kura-spaces/workflows/vaporware-cuj-state-workstream/v0.1.0/vaporware-cuj-state-workstream.workflow.su.json",
+      "cujStateHarnessBead": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/agenda/beads/FR-VAPORIZE-CUJ-STATE-HARNESS-2026-06-26.beads-issue.json"
+    }
+  },
+  "composesWith": [
+    "[[vaporware-cuj-state-workstream]]",
+    "[[typed-receipts-over-ad-hoc-terminal-proof]]",
+    "[[vaporize-builds-vaporware-warehouse-stores-vaporware]]"
+  ]
+}
