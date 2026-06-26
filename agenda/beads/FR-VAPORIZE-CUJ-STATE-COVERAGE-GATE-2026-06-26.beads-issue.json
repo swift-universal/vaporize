@@ -1,0 +1,59 @@
+{
+  "BeadsIssue": "0.1.0",
+  "schemaVersion": "0.1.0",
+  "id": "FR-VAPORIZE-CUJ-STATE-COVERAGE-GATE-2026-06-26",
+  "title": "Gate every CUJ-state record with explicit proof coverage",
+  "status": "open",
+  "priority": 1,
+  "issueType": "feature",
+  "labels": [
+    "vaporize",
+    "cuj-state",
+    "coverage-gate",
+    "release-doctor",
+    "test-support",
+    "release-evidence"
+  ],
+  "createdAt": "2026-06-26T13:05:00Z",
+  "createdBy": "codex after chairman requested a system for testing every CUJ state",
+  "historicalContent": {
+    "slug": "FR-VAPORIZE-CUJ-STATE-COVERAGE-GATE-2026-06-26",
+    "kind": "bead-feature-request",
+    "createdAt": "2026-06-26T13:05:00Z",
+    "createdBy": "codex",
+    "assignee": "wrkstrm-core",
+    "severity": "high",
+    "componentHome": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli",
+    "sourceType": "operator-requested-system",
+    "sourceLocation": "Codex session 2026-06-26: operator asked how to make sure every CUJ state is tested.",
+    "description": "Create an enforceable CUJ-state coverage gate. Each required CUJ-state id must have a proof entry, missing and unknown state ids must fail, release evidence must carry the coverage manifest, and release doctor must block a release spine that lacks complete CUJ-state proof coverage.",
+    "implementedSlice": {
+      "testSupport": "tests/vaporize-test-support/CUJStateTestSupport.swift",
+      "testTarget": "tests/cuj-21-cuj-state/VaporizeCUJ21CUJStateTests.swift",
+      "releaseDoctor": "sources/vaporize-cli/ReleaseDoctor.swift",
+      "releaseDoctorTests": "tests/cuj-17-release-doctor/VaporizeCUJ17ReleaseDoctorTests.swift",
+      "releaseReviewTests": "tests/cuj-09-release-review/VaporizeCUJ09ReleaseReviewTests.swift",
+      "releaseEvidence": "release/v0.0.1/evidence/cuj-state-coverage.json",
+      "engineeringDoc": "vaporize.engineering.docc/cuj-state-testing-methodology.md"
+    },
+    "acceptanceCriteria": [
+      "VaporizeTestSupport can build a CUJ-state coverage manifest from a CUJ-state document and proof entries.",
+      "The manifest records required, covered, uncovered, unknown, and duplicate proof state ids.",
+      "The focused CUJ-21 tests prove passing coverage, missing-state failure, and unknown-state failure.",
+      "Release review requires release/v0.0.1/evidence/cuj-state-coverage.json.",
+      "Release doctor requires the CUJ-state coverage artifact, validates JSON, and blocks uncovered, unknown, or duplicate proof ids.",
+      "Release PRD, CUJ map, gates, launch-review packet, engineering docs, and feature catalog all name the CUJ-state coverage gate.",
+      "The gate remains scoped to CUJ-state coverage and does not claim Kura, Turso, libSQL, sync, migration, or public release readiness."
+    ],
+    "linkedTypedRecords": {
+      "cujStateWorkflow": "private/universal/substrate/collectives/spaces-universal/private/universal/kura-spaces/workflows/vaporware-cuj-state-workstream/v0.1.0/vaporware-cuj-state-workstream.workflow.su.json",
+      "cujStateHarnessBead": "agenda/beads/FR-VAPORIZE-CUJ-STATE-HARNESS-2026-06-26.beads-issue.json",
+      "cujStateDocsBead": "agenda/beads/FR-VAPORIZE-CUJ-STATE-TESTING-METHODOLOGY-DOCS-2026-06-26.beads-issue.json"
+    }
+  },
+  "composesWith": [
+    "[[vaporware-cuj-state-workstream]]",
+    "[[typed-receipts-over-ad-hoc-terminal-proof]]",
+    "[[release-doctor-spine-audit]]"
+  ]
+}

@@ -11,8 +11,8 @@
 
 It does not approve a release. It checks whether the product definition, PRD,
 CUJs, release gates, launch-review packet, provenance artifact, CUJ coverage,
-feature catalog, and engineering DocC surface agree with each other before
-assistants trust the packet.
+CUJ-state coverage, feature catalog, and engineering DocC surface agree with
+each other before assistants trust the packet.
 
 ## Command
 
@@ -37,6 +37,8 @@ The v0.0.1 first slice checks:
 - launch-review packet references the release-doctor gate and receipt
 - provenance inventory names the release-doctor receipt
 - CUJ coverage counts CUJ-17 and its targetable test bundle
+- CUJ-state coverage names every required state id, proves each id, and leaves
+  uncovered, unknown, and duplicate proof lists empty
 
 ## Boundaries
 

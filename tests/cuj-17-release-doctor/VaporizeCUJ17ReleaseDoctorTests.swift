@@ -38,10 +38,16 @@ func releaseDoctorPassesLiveReleaseSpine() throws {
   #expect(receipt.checks.contains { $0.name == "launch-review-gate-34" && $0.status == "pass" })
   #expect(receipt.checks.contains { $0.name == "launch-review-gate-35" && $0.status == "pass" })
   #expect(receipt.checks.contains { $0.name == "launch-review-gate-36" && $0.status == "pass" })
+  #expect(receipt.checks.contains { $0.name == "launch-review-gate-37" && $0.status == "pass" })
   #expect(receipt.checks.contains { $0.name == "coverage-release-doctor-test-bundle" && $0.status == "pass" })
   #expect(receipt.checks.contains { $0.name == "coverage-project-target-discovery-test-bundle" && $0.status == "pass" })
   #expect(receipt.checks.contains { $0.name == "coverage-workspace-cache-discovery-test-bundle" && $0.status == "pass" })
   #expect(receipt.checks.contains { $0.name == "coverage-xcode-workspace-scheme-listing-test-bundle" && $0.status == "pass" })
+  #expect(receipt.checks.contains { $0.name == "coverage-cuj-state-test-bundle" && $0.status == "pass" })
+  #expect(receipt.checks.contains { $0.name == "cuj-state-coverage-status" && $0.status == "pass" })
+  #expect(receipt.checks.contains { $0.name == "cuj-state-proof-floor" && $0.status == "pass" })
+  #expect(receipt.checks.contains { $0.name == "cuj-state-uncovered-empty" && $0.status == "pass" })
+  #expect(receipt.checks.contains { $0.name == "cuj-state-unknown-empty" && $0.status == "pass" })
 }
 
 @Test("CUJ-17 release doctor can inspect from the release root")
@@ -118,13 +124,13 @@ private func makeReleaseDoctorFixture(includeGate33: Bool) throws -> URL {
     case "release/v0.0.1/product-definition.md":
       contents = "engineering pedigree"
     case "release/v0.0.1/prd.md":
-      contents = "FR-027 FR-028 FR-029 FR-030"
+      contents = "FR-027 FR-028 FR-029 FR-030 FR-031"
     case "release/v0.0.1/cuj.md":
-      contents = "CUJ-17 CUJ-18 CUJ-19 CUJ-20"
+      contents = "CUJ-17 CUJ-18 CUJ-19 CUJ-20 CUJ-21"
     case "release/v0.0.1/release-gates.md":
       contents = includeGate33
-        ? "GATE-33-release-doctor GATE-34-project-target-discovery GATE-35-workspace-product-cache-discovery GATE-36-xcode-workspace-scheme-listing"
-        : "GATE-32 GATE-34-project-target-discovery GATE-35-workspace-product-cache-discovery GATE-36-xcode-workspace-scheme-listing"
+        ? "GATE-33-release-doctor GATE-34-project-target-discovery GATE-35-workspace-product-cache-discovery GATE-36-xcode-workspace-scheme-listing GATE-37-cuj-state-coverage"
+        : "GATE-32 GATE-34-project-target-discovery GATE-35-workspace-product-cache-discovery GATE-36-xcode-workspace-scheme-listing GATE-37-cuj-state-coverage"
     case "vaporize.engineering.docc/feature-catalog.md":
       contents = "Release doctor Project target discovery Workspace product-cache discovery Xcode workspace scheme listing"
     case "vaporize.engineering.docc/vaporware-modification-request-discipline.md":
@@ -151,7 +157,8 @@ private func makeReleaseDoctorFixture(includeGate33: Bool) throws -> URL {
         \(gateResults),
         { "gateRef": "GATE-34-project-target-discovery", "status": "pass", "rationale": "fixture" },
         { "gateRef": "GATE-35-workspace-product-cache-discovery", "status": "pass", "rationale": "fixture" },
-        { "gateRef": "GATE-36-xcode-workspace-scheme-listing", "status": "pass", "rationale": "fixture" }
+        { "gateRef": "GATE-36-xcode-workspace-scheme-listing", "status": "pass", "rationale": "fixture" },
+        { "gateRef": "GATE-37-cuj-state-coverage", "status": "pass", "rationale": "fixture" }
       ]
     }
     """,
@@ -178,18 +185,52 @@ private func makeReleaseDoctorFixture(includeGate33: Bool) throws -> URL {
     """
     {
       "counts": {
-        "activeCUJCount": 20,
-        "requiredReleaseEvidenceCheckCount": 11,
+        "activeCUJCount": 21,
+        "requiredReleaseEvidenceCheckCount": 12,
         "currentExecutableSwiftTestBreakdown": {
           "VaporizeCUJ17ReleaseDoctorTests": 5,
           "VaporizeCUJ18ListTargetsTests": 5,
           "VaporizeCUJ19WorkspaceCacheDiscoveryTests": 5,
-          "VaporizeCUJ20XcodeWorkspaceSchemesTests": 5
+          "VaporizeCUJ20XcodeWorkspaceSchemesTests": 5,
+          "VaporizeCUJ21CUJStateTests": 6
         }
       }
     }
     """,
     to: releaseRoot.appendingPathComponent("evidence/cuj-test-coverage.json")
+  )
+
+  try write(
+    """
+    {
+      "schemaVersion": "0.1.0",
+      "documentKind": "cuj-state-coverage",
+      "stateFamily": "cuj-state",
+      "stateSlug": "scm-product-suite",
+      "statePath": "release/v0.0.1/evidence/cuj-state.json",
+      "requiredStateIDs": [
+        "scm-product-suite.cuj.savepoint-emits-boundary-aware-commit"
+      ],
+      "proofs": [
+        {
+          "stateID": "scm-product-suite.cuj.savepoint-emits-boundary-aware-commit",
+          "proofKind": "behavior-proof",
+          "testTarget": "VaporizeCUJ21CUJStateTests",
+          "testName": "cujStateCoverageGateRequiresEveryStateID",
+          "receiptRef": "command-receipt://vaporize/cuj21-cuj-state/coverage-gate"
+        }
+      ],
+      "coveredStateIDs": [
+        "scm-product-suite.cuj.savepoint-emits-boundary-aware-commit"
+      ],
+      "uncoveredStateIDs": [],
+      "unknownStateIDs": [],
+      "duplicateProofStateIDs": [],
+      "coverageStatus": "pass",
+      "createdAt": "1970-01-01T00:00:00Z"
+    }
+    """,
+    to: releaseRoot.appendingPathComponent("evidence/cuj-state-coverage.json")
   )
 
   try write(

@@ -144,3 +144,148 @@ func cujStateReceiptRoundTrips() throws {
 
   #expect(decoded == receipt)
 }
+
+@Test("CUJ-21 coverage gate passes only when every CUJ state has proof")
+func cujStateCoverageGateRequiresEveryStateID() throws {
+  let fixture = try makeCoverageFixture()
+  defer { try? FileManager.default.removeItem(at: fixture.root) }
+
+  let proofs = fixture.document.records.map { record in
+    VaporizeCUJStateProof(
+      stateID: record.id,
+      proofKind: "behavior-proof",
+      testTarget: "VaporizeCUJ21CUJStateTests",
+      testName: "cujStateCoverageGateRequiresEveryStateID",
+      receiptRef: "command-receipt://vaporize/cuj21-cuj-state/coverage-gate"
+    )
+  }
+  let manifest = VaporizeCUJStateCoverageGate.manifest(
+    document: fixture.document,
+    statePath: fixture.receipt.statePath,
+    proofs: proofs,
+    createdAt: Date(timeIntervalSince1970: 0)
+  )
+
+  #expect(manifest.documentKind == "cuj-state-coverage")
+  #expect(manifest.coverageStatus == "pass")
+  #expect(manifest.requiredStateIDs == fixture.document.records.map(\.id).sorted())
+  #expect(manifest.coveredStateIDs == manifest.requiredStateIDs)
+  #expect(manifest.uncoveredStateIDs.isEmpty)
+  #expect(manifest.unknownStateIDs.isEmpty)
+  #expect(manifest.createdAt == "1970-01-01T00:00:00Z")
+
+  let coverageURL = try fixture.harness.writeCoverageManifest(
+    document: fixture.document,
+    statePath: fixture.receipt.statePath,
+    proofs: proofs,
+    createdAt: Date(timeIntervalSince1970: 0)
+  )
+  let coverageData = try Data(contentsOf: coverageURL)
+  let decoded = try JSONDecoder().decode(VaporizeCUJStateCoverageManifest.self, from: coverageData)
+
+  #expect(decoded == manifest)
+  #expect(coverageURL.lastPathComponent == "cuj-state.coverage.json")
+}
+
+@Test("CUJ-21 coverage gate fails when a CUJ state is uncovered")
+func cujStateCoverageGateFailsMissingStateID() throws {
+  let fixture = try makeCoverageFixture()
+  defer { try? FileManager.default.removeItem(at: fixture.root) }
+  let firstRecord = try #require(fixture.document.records.first)
+  let lastRecord = try #require(fixture.document.records.last)
+  let manifest = VaporizeCUJStateCoverageGate.manifest(
+    document: fixture.document,
+    statePath: fixture.receipt.statePath,
+    proofs: [
+      VaporizeCUJStateProof(
+        stateID: firstRecord.id,
+        proofKind: "behavior-proof",
+        testTarget: "VaporizeCUJ21CUJStateTests",
+        testName: "cujStateCoverageGateFailsMissingStateID",
+        receiptRef: "command-receipt://vaporize/cuj21-cuj-state/missing-state"
+      )
+    ],
+    createdAt: Date(timeIntervalSince1970: 0)
+  )
+
+  #expect(manifest.coverageStatus == "fail")
+  #expect(manifest.coveredStateIDs == [firstRecord.id])
+  #expect(manifest.uncoveredStateIDs == [lastRecord.id])
+  #expect(manifest.unknownStateIDs.isEmpty)
+}
+
+@Test("CUJ-21 coverage gate fails when proof claims an unknown CUJ state")
+func cujStateCoverageGateFailsUnknownStateID() throws {
+  let fixture = try makeCoverageFixture()
+  defer { try? FileManager.default.removeItem(at: fixture.root) }
+  let proofs = fixture.document.records.map { record in
+    VaporizeCUJStateProof(
+      stateID: record.id,
+      proofKind: "behavior-proof",
+      testTarget: "VaporizeCUJ21CUJStateTests",
+      testName: "cujStateCoverageGateFailsUnknownStateID",
+      receiptRef: "command-receipt://vaporize/cuj21-cuj-state/unknown-state"
+    )
+  } + [
+    VaporizeCUJStateProof(
+      stateID: "scm-product-suite.cuj.unknown-state",
+      proofKind: "behavior-proof",
+      testTarget: "VaporizeCUJ21CUJStateTests",
+      testName: "cujStateCoverageGateFailsUnknownStateID",
+      receiptRef: "command-receipt://vaporize/cuj21-cuj-state/unknown-state"
+    )
+  ]
+
+  let manifest = VaporizeCUJStateCoverageGate.manifest(
+    document: fixture.document,
+    statePath: fixture.receipt.statePath,
+    proofs: proofs,
+    createdAt: Date(timeIntervalSince1970: 0)
+  )
+
+  #expect(manifest.coverageStatus == "fail")
+  #expect(manifest.uncoveredStateIDs.isEmpty)
+  #expect(manifest.unknownStateIDs == ["scm-product-suite.cuj.unknown-state"])
+}
+
+private struct CUJStateCoverageFixture {
+  var root: URL
+  var harness: VaporizeCUJStateHarness
+  var receipt: VaporizeCUJStateReceipt
+  var document: VaporizeCUJStateDocument
+}
+
+private func makeCoverageFixture() throws -> CUJStateCoverageFixture {
+  let root = FileManager.default.temporaryDirectory
+    .appendingPathComponent("vaporize-cuj-21-coverage-\(UUID().uuidString)")
+  let harness = VaporizeCUJStateHarness(rootDirectory: root, storehouseFamily: "kura-org")
+  let receipt = try harness.prepare(
+    VaporizeCUJStateSpec(
+      stateSlug: "SCM Product Suite",
+      stateTitle: "SCM product suite CUJ state",
+      cujs: [
+        VaporizeCriticalUserJourney(
+          slug: "savepoint emits boundary aware commit",
+          title: "Savepoint emits a boundary-aware commit",
+          actor: "software modification steward",
+          intent: "persist a change without crossing git ownership boundaries"
+        ),
+        VaporizeCriticalUserJourney(
+          slug: "vaporize verifies package lane",
+          title: "Vaporize verifies a package lane",
+          actor: "proof gate engineer",
+          intent: "prove a Swift package through the canonical Vaporize lane"
+        ),
+      ],
+      metadata: [
+        "collective": "kura-org",
+        "productLine": "scm",
+      ]
+    ),
+    createdAt: Date(timeIntervalSince1970: 0)
+  )
+
+  let stateData = try Data(contentsOf: URL(fileURLWithPath: receipt.statePath))
+  let document = try JSONDecoder().decode(VaporizeCUJStateDocument.self, from: stateData)
+  return CUJStateCoverageFixture(root: root, harness: harness, receipt: receipt, document: document)
+}

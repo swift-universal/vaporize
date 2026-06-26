@@ -78,6 +78,15 @@ enum VaporizeReleaseDoctor {
       textContainsCheck(
         roots: roots,
         scope: .releaseRoot,
+        relativePath: "prd.md",
+        token: "FR-031",
+        name: "prd-cuj-state-coverage-requirement"
+      )
+    )
+    checks.append(
+      textContainsCheck(
+        roots: roots,
+        scope: .releaseRoot,
         relativePath: "cuj.md",
         token: "CUJ-17",
         name: "cuj-release-doctor-journey"
@@ -114,6 +123,15 @@ enum VaporizeReleaseDoctor {
       textContainsCheck(
         roots: roots,
         scope: .releaseRoot,
+        relativePath: "cuj.md",
+        token: "CUJ-21",
+        name: "cuj-cuj-state-coverage-journey"
+      )
+    )
+    checks.append(
+      textContainsCheck(
+        roots: roots,
+        scope: .releaseRoot,
         relativePath: "release-gates.md",
         token: "GATE-33-release-doctor",
         name: "gate-release-doctor"
@@ -144,6 +162,15 @@ enum VaporizeReleaseDoctor {
         relativePath: "release-gates.md",
         token: "GATE-36-xcode-workspace-scheme-listing",
         name: "gate-xcode-workspace-scheme-listing"
+      )
+    )
+    checks.append(
+      textContainsCheck(
+        roots: roots,
+        scope: .releaseRoot,
+        relativePath: "release-gates.md",
+        token: "GATE-37-cuj-state-coverage",
+        name: "gate-cuj-state-coverage"
       )
     )
     checks.append(
@@ -195,6 +222,7 @@ enum VaporizeReleaseDoctor {
     checks.append(contentsOf: launchReviewChecks(roots: roots))
     checks.append(contentsOf: provenanceChecks(roots: roots))
     checks.append(contentsOf: coverageChecks(roots: roots))
+    checks.append(contentsOf: cujStateCoverageChecks(roots: roots))
 
     let failedCheckCount = checks.filter { $0.status == "fail" }.count
     let warningCheckCount = checks.filter { $0.status == "warn" }.count
@@ -227,6 +255,7 @@ enum VaporizeReleaseDoctor {
     .release("performance-marketing-claims.md"),
     .release("wrkstrm-app-minimums.md"),
     .release("evidence/cuj-test-coverage.json"),
+    .release("evidence/cuj-state-coverage.json"),
     .release("evidence/launch-review-packet.json"),
     .release("evidence/vaporize-v0.0.1-provenance-artifact.json"),
     .release("evidence/creative-selection-v0.2-list-targets.receipt.json"),
@@ -241,6 +270,7 @@ enum VaporizeReleaseDoctor {
 
   private static let jsonArtifacts: [ReleaseDoctorArtifact] = [
     .release("evidence/cuj-test-coverage.json"),
+    .release("evidence/cuj-state-coverage.json"),
     .release("evidence/launch-review-packet.json"),
     .release("evidence/vaporize-v0.0.1-provenance-artifact.json"),
     .release("evidence/creative-selection-v0.2-list-targets.receipt.json"),
@@ -384,6 +414,13 @@ enum VaporizeReleaseDoctor {
         detail: "Launch-review packet must include the Xcode workspace scheme-listing gate."
       ),
       check(
+        name: "launch-review-gate-37",
+        category: "launch-review",
+        path: url.path,
+        passed: gateResults.contains { $0["gateRef"] as? String == "GATE-37-cuj-state-coverage" },
+        detail: "Launch-review packet must include the CUJ-state coverage gate."
+      ),
+      check(
         name: "launch-review-release-doctor-evidence-ref",
         category: "launch-review",
         path: url.path,
@@ -472,18 +509,18 @@ enum VaporizeReleaseDoctor {
 
     return [
       check(
-        name: "coverage-active-cuj-20",
+        name: "coverage-active-cuj-21",
         category: "cuj-coverage",
         path: url.path,
-        passed: (counts["activeCUJCount"] as? Int ?? 0) >= 20,
-        detail: "Coverage artifact must count CUJ-20 Xcode workspace scheme listing."
+        passed: (counts["activeCUJCount"] as? Int ?? 0) >= 21,
+        detail: "Coverage artifact must count CUJ-21 CUJ-state coverage."
       ),
       check(
         name: "coverage-release-evidence-floor",
         category: "cuj-coverage",
         path: url.path,
-        passed: (counts["requiredReleaseEvidenceCheckCount"] as? Int ?? 0) >= 11,
-        detail: "Coverage artifact must include release-doctor, target discovery, and workspace cache discovery evidence obligations."
+        passed: (counts["requiredReleaseEvidenceCheckCount"] as? Int ?? 0) >= 12,
+        detail: "Coverage artifact must include release-doctor, target discovery, workspace cache discovery, and CUJ-state coverage evidence obligations."
       ),
       check(
         name: "coverage-release-doctor-test-bundle",
@@ -512,6 +549,95 @@ enum VaporizeReleaseDoctor {
         path: url.path,
         passed: (breakdown["VaporizeCUJ20XcodeWorkspaceSchemesTests"] as? Int ?? 0) >= 5,
         detail: "Coverage artifact must name the CUJ-20 targetable test bundle."
+      ),
+      check(
+        name: "coverage-cuj-state-test-bundle",
+        category: "cuj-coverage",
+        path: url.path,
+        passed: (breakdown["VaporizeCUJ21CUJStateTests"] as? Int ?? 0) >= 6,
+        detail: "Coverage artifact must name the CUJ-21 targetable test bundle."
+      ),
+    ]
+  }
+
+  private static func cujStateCoverageChecks(roots: ReleaseDoctorRoots) -> [VaporizeReleaseDoctorCheck] {
+    let relativePath = "evidence/cuj-state-coverage.json"
+    let url = roots.url(for: .releaseRoot, relativePath: relativePath)
+    guard let object = jsonObject(url: url) else {
+      return [
+        check(
+          name: "cuj-state-coverage-readable",
+          category: "cuj-state-coverage",
+          path: url.path,
+          passed: false,
+          detail: "Could not decode CUJ-state coverage as a JSON object."
+        )
+      ]
+    }
+
+    let requiredStateIDs = object["requiredStateIDs"] as? [String] ?? []
+    let uncoveredStateIDs = object["uncoveredStateIDs"] as? [String] ?? []
+    let unknownStateIDs = object["unknownStateIDs"] as? [String] ?? []
+    let duplicateProofStateIDs = object["duplicateProofStateIDs"] as? [String] ?? []
+    let proofs = object["proofs"] as? [[String: Any]] ?? []
+    let proofStateIDs = Set(proofs.compactMap { $0["stateID"] as? String })
+
+    return [
+      check(
+        name: "cuj-state-coverage-document-kind",
+        category: "cuj-state-coverage",
+        path: url.path,
+        passed: object["documentKind"] as? String == "cuj-state-coverage",
+        detail: "CUJ-state coverage evidence must be a cuj-state-coverage document."
+      ),
+      check(
+        name: "cuj-state-coverage-state-family",
+        category: "cuj-state-coverage",
+        path: url.path,
+        passed: object["stateFamily"] as? String == "cuj-state",
+        detail: "CUJ-state coverage evidence must name stateFamily cuj-state."
+      ),
+      check(
+        name: "cuj-state-coverage-status",
+        category: "cuj-state-coverage",
+        path: url.path,
+        passed: object["coverageStatus"] as? String == "pass",
+        detail: "CUJ-state coverage evidence must report coverageStatus pass."
+      ),
+      check(
+        name: "cuj-state-required-records",
+        category: "cuj-state-coverage",
+        path: url.path,
+        passed: !requiredStateIDs.isEmpty,
+        detail: "CUJ-state coverage evidence must name every required CUJ-state id."
+      ),
+      check(
+        name: "cuj-state-proof-floor",
+        category: "cuj-state-coverage",
+        path: url.path,
+        passed: proofs.count >= requiredStateIDs.count && requiredStateIDs.allSatisfy { proofStateIDs.contains($0) },
+        detail: "Each required CUJ-state id must have at least one proof entry."
+      ),
+      check(
+        name: "cuj-state-uncovered-empty",
+        category: "cuj-state-coverage",
+        path: url.path,
+        passed: uncoveredStateIDs.isEmpty,
+        detail: "CUJ-state coverage evidence must not list uncovered state ids."
+      ),
+      check(
+        name: "cuj-state-unknown-empty",
+        category: "cuj-state-coverage",
+        path: url.path,
+        passed: unknownStateIDs.isEmpty,
+        detail: "CUJ-state coverage evidence must not claim unknown state ids."
+      ),
+      check(
+        name: "cuj-state-duplicate-proof-empty",
+        category: "cuj-state-coverage",
+        path: url.path,
+        passed: duplicateProofStateIDs.isEmpty,
+        detail: "CUJ-state coverage evidence must not duplicate proof state ids."
       ),
     ]
   }
@@ -566,7 +692,7 @@ struct VaporizeReleaseDoctorReceipt: Codable, Equatable {
   var boundaries = [
     "Release doctor audits release-spine coherence; it does not approve release.",
     "A pass can coexist with release gates that are honestly blocked.",
-    "First slice checks Vaporize v0.0.1 docs, JSON evidence, CUJ coverage, launch-review references, provenance inventory, project target discovery evidence, workspace product-cache discovery evidence, and Xcode workspace scheme-listing evidence.",
+    "First slice checks Vaporize v0.0.1 docs, JSON evidence, CUJ coverage, CUJ-state coverage, launch-review references, provenance inventory, project target discovery evidence, workspace product-cache discovery evidence, and Xcode workspace scheme-listing evidence.",
     "Fleet project-generation parity, runtime sampling, build-size cohorts, and periodic buddy health remain separate follow-up checks.",
   ]
 }

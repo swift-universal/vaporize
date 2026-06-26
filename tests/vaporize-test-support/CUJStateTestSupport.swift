@@ -127,6 +127,104 @@ public struct VaporizeCUJStateReceipt: Codable, Equatable, Sendable {
   }
 }
 
+public struct VaporizeCUJStateProof: Codable, Equatable, Sendable {
+  public var stateID: String
+  public var proofKind: String
+  public var testTarget: String
+  public var testName: String
+  public var receiptRef: String
+
+  public init(
+    stateID: String,
+    proofKind: String,
+    testTarget: String,
+    testName: String,
+    receiptRef: String
+  ) {
+    self.stateID = stateID
+    self.proofKind = proofKind
+    self.testTarget = testTarget
+    self.testName = testName
+    self.receiptRef = receiptRef
+  }
+}
+
+public struct VaporizeCUJStateCoverageAudit: Codable, Equatable, Sendable {
+  public var requiredStateIDs: [String]
+  public var coveredStateIDs: [String]
+  public var uncoveredStateIDs: [String]
+  public var unknownStateIDs: [String]
+  public var duplicateProofStateIDs: [String]
+
+  public var isPassing: Bool {
+    uncoveredStateIDs.isEmpty && unknownStateIDs.isEmpty
+  }
+}
+
+public struct VaporizeCUJStateCoverageManifest: Codable, Equatable, Sendable {
+  public var schemaVersion: String
+  public var documentKind: String
+  public var stateFamily: String
+  public var stateSlug: String
+  public var statePath: String
+  public var requiredStateIDs: [String]
+  public var proofs: [VaporizeCUJStateProof]
+  public var coveredStateIDs: [String]
+  public var uncoveredStateIDs: [String]
+  public var unknownStateIDs: [String]
+  public var duplicateProofStateIDs: [String]
+  public var coverageStatus: String
+  public var createdAt: String
+}
+
+public enum VaporizeCUJStateCoverageGate {
+  public static func audit(
+    document: VaporizeCUJStateDocument,
+    proofs: [VaporizeCUJStateProof]
+  ) -> VaporizeCUJStateCoverageAudit {
+    let required = document.records.map(\.id).sorted()
+    let requiredSet = Set(required)
+    let proofIDs = proofs.map(\.stateID)
+    let proofSet = Set(proofIDs)
+    let duplicates = Dictionary(grouping: proofIDs, by: { $0 })
+      .filter { $0.value.count > 1 }
+      .map(\.key)
+      .sorted()
+
+    return VaporizeCUJStateCoverageAudit(
+      requiredStateIDs: required,
+      coveredStateIDs: required.filter { proofSet.contains($0) },
+      uncoveredStateIDs: required.filter { !proofSet.contains($0) },
+      unknownStateIDs: proofSet.filter { !requiredSet.contains($0) }.sorted(),
+      duplicateProofStateIDs: duplicates
+    )
+  }
+
+  public static func manifest(
+    document: VaporizeCUJStateDocument,
+    statePath: String,
+    proofs: [VaporizeCUJStateProof],
+    createdAt: Date = Date()
+  ) -> VaporizeCUJStateCoverageManifest {
+    let audit = audit(document: document, proofs: proofs)
+    return VaporizeCUJStateCoverageManifest(
+      schemaVersion: "0.1.0",
+      documentKind: "cuj-state-coverage",
+      stateFamily: "cuj-state",
+      stateSlug: document.stateSlug,
+      statePath: statePath,
+      requiredStateIDs: audit.requiredStateIDs,
+      proofs: proofs,
+      coveredStateIDs: audit.coveredStateIDs,
+      uncoveredStateIDs: audit.uncoveredStateIDs,
+      unknownStateIDs: audit.unknownStateIDs,
+      duplicateProofStateIDs: audit.duplicateProofStateIDs,
+      coverageStatus: audit.isPassing ? "pass" : "fail",
+      createdAt: timestampString(from: createdAt)
+    )
+  }
+}
+
 public struct VaporizeCUJStateHarness {
   public var rootDirectory: URL
   public var storehouseFamily: String?
@@ -194,6 +292,27 @@ public struct VaporizeCUJStateHarness {
     return receipt
   }
 
+  public func writeCoverageManifest(
+    document: VaporizeCUJStateDocument,
+    statePath: String,
+    proofs: [VaporizeCUJStateProof],
+    createdAt: Date = Date()
+  ) throws -> URL {
+    let stateURL = URL(fileURLWithPath: statePath)
+    let coverageURL = stateURL.deletingLastPathComponent().appendingPathComponent("cuj-state.coverage.json")
+    let manifest = VaporizeCUJStateCoverageGate.manifest(
+      document: document,
+      statePath: statePath,
+      proofs: proofs,
+      createdAt: createdAt
+    )
+
+    let encoder = JSONEncoder()
+    encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
+    try encoder.encode(manifest).write(to: coverageURL)
+    return coverageURL
+  }
+
   private func stateRecord(
     for cuj: VaporizeCriticalUserJourney,
     stateSlug: String
@@ -232,4 +351,10 @@ public struct VaporizeCUJStateHarness {
     formatter.formatOptions = [.withInternetDateTime]
     return formatter.string(from: date)
   }
+}
+
+private func timestampString(from date: Date) -> String {
+  let formatter = ISO8601DateFormatter()
+  formatter.formatOptions = [.withInternetDateTime]
+  return formatter.string(from: date)
 }

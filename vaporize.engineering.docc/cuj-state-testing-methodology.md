@@ -21,10 +21,13 @@ format.
 The immediate CUJ-21 slice proves the first form of this architecture. It adds
 `VaporizeCUJStateHarness`, `VaporizeCUJStateSpec`,
 `VaporizeCUJStateDocument`, `VaporizeCUJStateRecord`, and
-`VaporizeCUJStateReceipt` in `VaporizeTestSupport`. The harness writes
-`cujs.json`, `cuj-state.json`, and `cuj-state.receipt.json`, then the focused
-`VaporizeCUJ21CUJStateTests` bundle proves derivation, receipt independence
-from database engines, and Codable round-tripping.
+`VaporizeCUJStateReceipt` in `VaporizeTestSupport`. It also adds
+`VaporizeCUJStateProof`, `VaporizeCUJStateCoverageManifest`, and
+`VaporizeCUJStateCoverageGate`. The harness writes `cujs.json`,
+`cuj-state.json`, `cuj-state.receipt.json`, and `cuj-state.coverage.json`.
+The focused `VaporizeCUJ21CUJStateTests` bundle proves derivation, receipt
+independence from database engines, Codable round-tripping, and coverage-gate
+failure for missing or unknown CUJ-state ids.
 
 ## Why This Exists
 
@@ -49,7 +52,7 @@ make true?
 
 ## Architectural Layers
 
-CUJ-state testing has five layers.
+CUJ-state testing has six layers.
 
 The first layer is the source CUJ. It is not a loose test title. It carries the
 actor, intent, preconditions, actions, outcomes, tags, and metadata that define
@@ -77,6 +80,13 @@ library detail. It is bound to `vaporware-cuj-state-workstream`, the steward
 role, the component-home bead, and the board milestone packet. Those records
 make the testing methodology durable as process, not just code.
 
+The sixth layer is release governance. The release packet carries
+`release/v0.0.1/evidence/cuj-state-coverage.json`, and release doctor now checks
+that the evidence is a `cuj-state-coverage` document, names
+`stateFamily: cuj-state`, reports `coverageStatus: pass`, has a non-empty required-state list,
+has proof for every required state id, and has empty uncovered, unknown, and
+duplicate proof lists.
+
 ## Test Flow
 
 The flow is intentionally small:
@@ -86,10 +96,12 @@ The flow is intentionally small:
    metadata.
 3. Prepare the state with `VaporizeCUJStateHarness`.
 4. Read back the generated files and assert the state document and receipt.
-5. Keep database-engine, network, and storehouse-specific claims out of the
+5. Attach `VaporizeCUJStateProof` entries for every generated state id and write
+   `cuj-state.coverage.json`.
+6. Keep database-engine, network, and storehouse-specific claims out of the
    receipt unless the test is explicitly proving that integration layer.
-6. Run the focused target through `vaporize.cli@wrkstrm-core.clia.sh test`.
-7. Link the command receipt to the relevant workflow instance, bead, board
+7. Run the focused target through `vaporize.cli@wrkstrm-core.clia.sh test`.
+8. Link the command receipt to the relevant workflow instance, bead, board
    packet, or release packet.
 
 The current proof command is:
@@ -125,6 +137,12 @@ primary abstraction.
 The third test proves receipt portability. `VaporizeCUJStateReceipt` round-trips
 through Codable so receipts can be persisted, linked, and read later by release
 or workflow tooling.
+
+The coverage-gate tests prove release readiness of the simulated world. A
+passing manifest requires proof for every required CUJ-state id. A missing proof
+causes `coverageStatus: fail` and lists the uncovered id. A proof for an unknown
+state also fails and lists the unknown id. Release doctor consumes the same
+contract from `release/v0.0.1/evidence/cuj-state-coverage.json`.
 
 ## How This Supports Spawn And Modification
 
@@ -211,24 +229,25 @@ capability. The expected evidence is:
 - the generated `cujs.json`
 - the generated `cuj-state.json`
 - the generated `cuj-state.receipt.json`
+- the generated or release-packet `cuj-state.coverage.json`
 - the Vaporize command receipt
 - the workflow, bead, board packet, or release packet that consumes the proof
 
 When those surfaces agree, the methodology is healthy. When any surface drifts,
-the review should fail the slice or mark it blocked. The engineering document
-is the narrative, but the receipt and tests are the proof.
+the review should fail the slice or mark it blocked. Release doctor performs the
+first automated version of that check by requiring the CUJ-state coverage
+evidence and blocking on uncovered, unknown, or duplicate state proof ids. The
+engineering document is the narrative, but the receipt, coverage manifest, and
+tests are the proof.
 
 ## Future Work
 
 The next useful step is typed receipt standardization. Today the CUJ-state
-receipt is a Swift Codable shape in test support. A future Vaporize receipt
-schema should make this portable outside the test bundle.
+receipt and coverage manifest are Swift Codable shapes in test support plus a
+release evidence JSON document. A future Vaporize receipt schema should make
+this portable outside the test bundle and shareable with schema-universal.
 
-The second step is release-doctor awareness. Release doctor should eventually
-know that CUJ-state architecture exists and should check that active docs,
-board packets, receipts, and tests do not regress to database-first wording.
-
-The third step is Kura adapter proof. Once a product slice truly needs Kura
+The second step is Kura adapter proof. Once a product slice truly needs Kura
 storage or sync, a separate integration harness should consume CUJ state and
 prove the Kura adapter boundary. That harness should not replace CUJ state. It
 should depend on it.

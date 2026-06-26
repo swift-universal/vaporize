@@ -5,7 +5,7 @@
   "schemaFamilyVersion": "0.0.1",
   "schemaRef": "private/universal/domain/tooling/schema-families/vaporize-schemas/v0.0.1/json/vaporize-schemas-v000-000-001/schemas/vaporize-cuj-test-coverage/vaporize-cuj-test-coverage.schema.json",
   "coverageId": "vaporize-v0.0.1-cuj-test-coverage",
-  "subjectAppSlug": "vaporize@wrkstrm-core.cli",
+  "subjectAppSlug": "vaporize.cli@wrkstrm-core.clia.sh",
   "subjectReleaseSlug": "v0.0.1",
   "generatedAt": "2026-06-14T07:21:25Z",
   "generatedBy": "codex-crisie",
@@ -17,12 +17,12 @@
     "releaseGates": "private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/release-gates.md"
   },
   "counts": {
-    "activeCUJCount": 20,
+    "activeCUJCount": 21,
     "deferredCUJCount": 1,
-    "requiredSwiftTestObligationCount": 89,
-    "requiredReleaseEvidenceCheckCount": 11,
-    "requiredTargetableTestObligationCount": 100,
-    "currentExecutableSwiftTestCount": 107,
+    "requiredSwiftTestObligationCount": 95,
+    "requiredReleaseEvidenceCheckCount": 12,
+    "requiredTargetableTestObligationCount": 107,
+    "currentExecutableSwiftTestCount": 113,
     "currentExecutableSwiftTestBreakdown": {
       "VaporizeCUJ01SwiftPMCLITests": 7,
       "VaporizeCUJ02MacAppTests": 14,
@@ -43,7 +43,8 @@
       "VaporizeCUJ17ReleaseDoctorTests": 5,
       "VaporizeCUJ18ListTargetsTests": 5,
       "VaporizeCUJ19WorkspaceCacheDiscoveryTests": 5,
-      "VaporizeCUJ20XcodeWorkspaceSchemesTests": 5
+      "VaporizeCUJ20XcodeWorkspaceSchemesTests": 5,
+      "VaporizeCUJ21CUJStateTests": 6
     }
   },
   "coverage": [
@@ -335,6 +336,21 @@
       "evidence": [
         "VaporizeCUJ20XcodeWorkspaceSchemesTests.swift"
       ]
+    },
+    {
+      "cuj": "CUJ-21",
+      "title": "Assistant Gates Every CUJ State Record With Proof",
+      "prdRefs": [
+        "FR-031"
+      ],
+      "requiredSwiftTestObligations": 6,
+      "requiredReleaseEvidenceChecks": 1,
+      "status": "covered-with-release-evidence",
+      "evidence": [
+        "VaporizeCUJ21CUJStateTests.swift",
+        "cuj-state-coverage.json",
+        "cuj-state-testing-methodology.md"
+      ]
     }
   ],
   "deferredCoverage": [
@@ -355,6 +371,7 @@
     "Release doctor proves release-spine coherence; it does not approve final release or replace fleet build parity, runtime sampling, or periodic buddy health checks.",
     "Project target discovery is covered as a first slice; it does not build, install, generate .xcodeproj world-state, or prove .xcworkspace graph membership discovery.",
     "Workspace product-cache discovery is covered as target-fact-derived candidate path and warm/missing inspection; .xcworkspace graph membership, cache warming, fleet coverage, and disk-savings measurement remain deferred.",
-    "Xcode workspace scheme listing is covered as a first slice; it asks xcodebuild for live .xcworkspace schemes and records a receipt boundary, but it does not build, install, warm caches, prove product paths, prove fleet coverage, or measure large-workspace runtime."
+    "Xcode workspace scheme listing is covered as a first slice; it asks xcodebuild for live .xcworkspace schemes and records a receipt boundary, but it does not build, install, warm caches, prove product paths, prove fleet coverage, or measure large-workspace runtime.",
+    "CUJ-state coverage proves that each required CUJ-state record has a named proof; it does not prove production Kura storage, database adapter behavior, or public release readiness."
   ]
 }

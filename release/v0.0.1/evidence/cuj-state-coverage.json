@@ -1,0 +1,36 @@
+{
+  "schemaVersion": "0.1.0",
+  "documentKind": "cuj-state-coverage",
+  "stateFamily": "cuj-state",
+  "stateSlug": "scm-product-suite",
+  "statePath": "command-receipt://vaporize/cuj21-cuj-state/derived-fixture",
+  "requiredStateIDs": [
+    "scm-product-suite.cuj.savepoint-emits-boundary-aware-commit",
+    "scm-product-suite.cuj.vaporize-verifies-package-lane"
+  ],
+  "proofs": [
+    {
+      "stateID": "scm-product-suite.cuj.savepoint-emits-boundary-aware-commit",
+      "proofKind": "behavior-proof",
+      "testTarget": "VaporizeCUJ21CUJStateTests",
+      "testName": "cujStateCoverageGateRequiresEveryStateID",
+      "receiptRef": "command-receipt://vaporize/cuj21-cuj-state/coverage-gate"
+    },
+    {
+      "stateID": "scm-product-suite.cuj.vaporize-verifies-package-lane",
+      "proofKind": "behavior-proof",
+      "testTarget": "VaporizeCUJ21CUJStateTests",
+      "testName": "cujStateCoverageGateRequiresEveryStateID",
+      "receiptRef": "command-receipt://vaporize/cuj21-cuj-state/coverage-gate"
+    }
+  ],
+  "coveredStateIDs": [
+    "scm-product-suite.cuj.savepoint-emits-boundary-aware-commit",
+    "scm-product-suite.cuj.vaporize-verifies-package-lane"
+  ],
+  "uncoveredStateIDs": [],
+  "unknownStateIDs": [],
+  "duplicateProofStateIDs": [],
+  "coverageStatus": "pass",
+  "createdAt": "2026-06-26T00:00:00Z"
+}

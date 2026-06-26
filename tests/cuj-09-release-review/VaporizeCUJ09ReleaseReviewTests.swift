@@ -25,6 +25,7 @@ func releaseReviewArtifactsExist() {
     "vaporize.engineering.docc/cuj-state-testing-methodology.md",
     "vaporize.engineering.docc/release-doctor.md",
     "release/v0.0.1/evidence/launch-review-packet.json",
+    "release/v0.0.1/evidence/cuj-state-coverage.json",
     "release/v0.0.1/evidence/hello-world-google-target-features-inspection.receipt.json",
     "release/v0.0.1/evidence/vaporize-v0.0.1-release-doctor.receipt.json",
     "release/v0.0.1/evidence/creative-selection-v0.2-list-targets.receipt.json",
@@ -55,6 +56,7 @@ func launchReviewPacketIsValidJSONAndInternalEssential() throws {
   #expect(gateResults.contains { $0["gateRef"] as? String == "GATE-34-project-target-discovery" })
   #expect(gateResults.contains { $0["gateRef"] as? String == "GATE-35-workspace-product-cache-discovery" })
   #expect(gateResults.contains { $0["gateRef"] as? String == "GATE-36-xcode-workspace-scheme-listing" })
+  #expect(gateResults.contains { $0["gateRef"] as? String == "GATE-37-cuj-state-coverage" })
 }
 
 @Test("CUJ-09 CUJ coverage contract is valid JSON and names the floor")
@@ -62,12 +64,36 @@ func cujCoverageContractIsValidJSONAndNamesTheFloor() throws {
   let coverage = try readJSONObject(relativePath: "release/v0.0.1/evidence/cuj-test-coverage.json")
   let counts = try #require(coverage["counts"] as? [String: Any])
 
-  #expect(counts["activeCUJCount"] as? Int == 20)
+  #expect(counts["activeCUJCount"] as? Int == 21)
   #expect(counts["deferredCUJCount"] as? Int == 1)
-  #expect(counts["requiredSwiftTestObligationCount"] as? Int == 89)
-  #expect(counts["requiredReleaseEvidenceCheckCount"] as? Int == 11)
-  #expect(counts["requiredTargetableTestObligationCount"] as? Int == 100)
-  #expect(counts["currentExecutableSwiftTestCount"] as? Int == 107)
+  #expect(counts["requiredSwiftTestObligationCount"] as? Int == 95)
+  #expect(counts["requiredReleaseEvidenceCheckCount"] as? Int == 12)
+  #expect(counts["requiredTargetableTestObligationCount"] as? Int == 107)
+  #expect(counts["currentExecutableSwiftTestCount"] as? Int == 113)
+  let breakdown = try #require(counts["currentExecutableSwiftTestBreakdown"] as? [String: Any])
+  #expect(breakdown["VaporizeCUJ21CUJStateTests"] as? Int == 6)
+}
+
+@Test("CUJ-09 CUJ-state coverage contract is valid JSON and complete")
+func cujStateCoverageContractIsValidJSONAndComplete() throws {
+  let coverage = try readJSONObject(relativePath: "release/v0.0.1/evidence/cuj-state-coverage.json")
+  let requiredStateIDs = try #require(coverage["requiredStateIDs"] as? [String])
+  let coveredStateIDs = try #require(coverage["coveredStateIDs"] as? [String])
+  let uncoveredStateIDs = try #require(coverage["uncoveredStateIDs"] as? [String])
+  let unknownStateIDs = try #require(coverage["unknownStateIDs"] as? [String])
+  let duplicateProofStateIDs = try #require(coverage["duplicateProofStateIDs"] as? [String])
+  let proofs = try #require(coverage["proofs"] as? [[String: Any]])
+  let proofStateIDs = Set(proofs.compactMap { $0["stateID"] as? String })
+
+  #expect(coverage["documentKind"] as? String == "cuj-state-coverage")
+  #expect(coverage["stateFamily"] as? String == "cuj-state")
+  #expect(coverage["coverageStatus"] as? String == "pass")
+  #expect(requiredStateIDs.count == 2)
+  #expect(coveredStateIDs == requiredStateIDs)
+  #expect(uncoveredStateIDs.isEmpty)
+  #expect(unknownStateIDs.isEmpty)
+  #expect(duplicateProofStateIDs.isEmpty)
+  #expect(requiredStateIDs.allSatisfy { proofStateIDs.contains($0) })
 }
 
 @Test("CUJ-09 product definition contract precedes build work")
@@ -102,6 +128,7 @@ func productDefinitionContractPrecedesBuildWork() throws {
   #expect(prd.contains("FR-028"))
   #expect(prd.contains("FR-029"))
   #expect(prd.contains("FR-030"))
+  #expect(prd.contains("FR-031"))
   #expect(prd.contains("FR-VAPORIZE-RUNTIME-SAMPLE-SERIES-APPLE-ARTIFACT-INGESTION"))
   #expect(prdReview.contains("Decision: `GO-WITH-NOTES`"))
   #expect(prdReview.contains("Engineering, QA, and Marketing"))
@@ -110,6 +137,7 @@ func productDefinitionContractPrecedesBuildWork() throws {
   #expect(cuj.contains("CUJ-18"))
   #expect(cuj.contains("CUJ-19"))
   #expect(cuj.contains("CUJ-20"))
+  #expect(cuj.contains("CUJ-21"))
   #expect(why.contains("product-definition.md"))
   #expect(why.contains("engineering pedigree"))
   #expect(why.contains("vaporize-runtime-samples"))
@@ -129,6 +157,7 @@ func productDefinitionContractPrecedesBuildWork() throws {
   #expect(gates.contains("GATE-34"))
   #expect(gates.contains("GATE-35"))
   #expect(gates.contains("GATE-36"))
+  #expect(gates.contains("GATE-37"))
   #expect(engineeringDocs.contains("wrkstrm.com/engineering"))
   #expect(engineeringDocs.contains("The package-local engineering catalog explains the system. The release packet"))
   #expect(engineeringDocs.contains("pre-code-prd-review"))
@@ -150,9 +179,11 @@ func productDefinitionContractPrecedesBuildWork() throws {
   #expect(featureCatalog.contains("Project target discovery"))
   #expect(featureCatalog.contains("Workspace product-cache discovery"))
   #expect(featureCatalog.contains("Xcode workspace scheme listing"))
+  #expect(featureCatalog.contains("CUJ-state coverage"))
   #expect(featureCatalog.contains("correct ownership home"))
   #expect(releaseDoctor.contains("release-spine self-audit command"))
   #expect(releaseDoctor.contains("vaporware scaffold"))
+  #expect(releaseDoctor.contains("CUJ-state coverage"))
   #expect(releaseDoctor.contains("not a release approval"))
   #expect(modularity.contains("Capabilities that are genuinely Swift Universal belong in `swift-universal`"))
   #expect(modularity.contains("Apple-bounded, Xcode-bounded, app-bounded"))
@@ -180,6 +211,7 @@ func releaseGatesKeepPklGenerationBlocked() throws {
   #expect(gates.contains("BLOCKED-FOR-INTERNAL-ESSENTIAL-RELEASE"))
   #expect(gates.contains("Pkl project generation"))
   #expect(gates.contains("cuj-test-coverage.json"))
+  #expect(gates.contains("cuj-state-coverage.json"))
   #expect(gates.contains("why-vaporize.md"))
   #expect(gates.contains("performance-marketing-claims.md"))
 }

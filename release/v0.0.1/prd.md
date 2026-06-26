@@ -241,17 +241,18 @@ Supporting audiences:
 | FR-028 | Project target discovery | `list-targets --pkl-path <project.pkl>` or `list-targets --package-path <project-dir>` emits a `vaporize-project-target-discovery` receipt that names target, package, scheme, and buildable-candidate facts from AppleProjectSpec. The command discovers routing facts; it does not build, install, generate `.xcodeproj` world-state, or prove fleet parity. |
 | FR-029 | Workspace product-cache discovery | `list-targets` accepts `--xcode-product-cache-workspace`, `--xcode-product-cache-derived-data-path`, and `--configuration`; when present, the target-discovery receipt includes expected shared DerivedData `.app` candidates and warm/missing status for buildable AppleProjectSpec targets. The command does not parse `.xcworkspace` membership, build, install, warm the cache, or prove fleet cache coverage. |
 | FR-030 | Xcode workspace scheme listing | `list-schemes --xcode-workspace <workspace.xcworkspace>` executes `xcodebuild -list -json -workspace` through Vaporize/CommonProcess, parses the workspace scheme list, and can emit a `vaporize-xcode-workspace-scheme-list` receipt. The command lists schemes only; it does not build, install, warm caches, prove product paths, or prove fleet-wide workspace membership. |
+| FR-031 | CUJ-state coverage gate | CUJ-state coverage evidence names every required journey-derived CUJ-state id, attaches a proof entry for each id, records empty uncovered/unknown/duplicate lists, and is checked by release doctor before release review trusts simulated world state. This proves CUJ-state coverage only; it does not prove Kura, Turso, libSQL, sync, migration, or public release readiness. |
 
 ## Release Criteria
 
 - Vaporize's package test suite passes with the Swift 6.4 toolchain:
   `vaporize toolchain -- swift test --package-path private/apple/spm/vaporize@wrkstrm-core.cli`.
-  Current proof: the CUJ-derived coverage floor requires 89 Swift test
-  obligations plus 11 release evidence checks; the executable suite passes 107
-  tests across 20 implemented CUJ targets, including the CUJ-16
+  Current proof: the CUJ-derived coverage floor requires 95 Swift test
+  obligations plus 12 release evidence checks; the executable suite passes 113
+  tests across 21 implemented CUJ targets, including the CUJ-16
   `inspect-target-features` first slice, CUJ-17 `release-doctor` first slice,
   CUJ-18 `list-targets` first slice, CUJ-19 workspace cache discovery first
-  slice, and CUJ-20 `list-schemes` first slice.
+  slice, CUJ-20 `list-schemes` first slice, and CUJ-21 CUJ-state coverage gate.
 - `release/v0.0.1/product-definition.md` defines the product, primary users,
   product-level user journeys, choice argument, non-choice cases, and build
   implications before additional feature work is accepted.
@@ -318,6 +319,8 @@ Supporting audiences:
   `vaporize validate-json --path release/v0.0.1/evidence/creative-selection-v0.2-pkl-xcodeproj-generation.receipt.json`.
 - Creative Selection v0.2 target discovery receipt validates with
   `vaporize validate-json --path release/v0.0.1/evidence/creative-selection-v0.2-list-targets.receipt.json`.
+- CUJ-state coverage evidence validates with
+  `vaporize validate-json --path release/v0.0.1/evidence/cuj-state-coverage.json`.
 - Release evidence classifies Vaporize as an internal essential tool rather
   than a public release artifact.
 - Pkl-backed `.xcodeproj` world-state generation has fleet build parity for

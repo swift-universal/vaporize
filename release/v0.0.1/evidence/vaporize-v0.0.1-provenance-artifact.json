@@ -5,7 +5,7 @@
   "schemaFamilyVersion": "0.0.1",
   "schemaRef": "private/universal/domain/tooling/schema-families/vaporize-schemas/v0.0.1/json/vaporize-schemas-v000-000-001/schemas/vaporize-provenance-artifact/vaporize-provenance-artifact.schema.json",
   "artifactId": "vaporize-v0.0.1-provenance-artifact",
-  "subjectAppSlug": "vaporize@wrkstrm-core.cli",
+  "subjectAppSlug": "vaporize.cli@wrkstrm-core.clia.sh",
   "subjectReleaseSlug": "v0.0.1",
   "generatedAt": "2026-06-14T07:21:25Z",
   "generatedBy": "codex-crisie",
@@ -14,8 +14,8 @@
   "releaseVerdict": {
     "currentStatus": "blocked-pending-fleet-pkl-project-generation",
     "proven": [
-      "CUJ-derived test coverage is explicit: 89 required Swift test obligations plus 11 release evidence checks across 20 active CUJs.",
-      "Vaporize package tests pass through Vaporize toolchain mode: 107 executable Swift tests across 20 implemented CUJ-specific SwiftPM test bundles, including CUJ-16 target feature inspection, CUJ-17 release doctor, CUJ-18 project target discovery, CUJ-19 workspace product-cache discovery, and CUJ-20 Xcode workspace scheme listing.",
+      "CUJ-derived test coverage is explicit: 95 required Swift test obligations plus 12 release evidence checks across 21 active CUJs.",
+      "Vaporize package tests cover 113 executable Swift tests across 21 implemented CUJ-specific SwiftPM test bundles, including CUJ-16 target feature inspection, CUJ-17 release doctor, CUJ-18 project target discovery, CUJ-19 workspace product-cache discovery, CUJ-20 Xcode workspace scheme listing, and CUJ-21 CUJ-state coverage.",
       "The product definition defines Vaporize, primary users, product-level user journeys, choice argument, non-choice cases, and build implications before further build work is accepted.",
       "The PRD review session gate is codified: Engineering, QA, and Marketing review the PRD before major coding starts; v0.0.1 records a backfilled GO-WITH-NOTES correction because implementation was already in flight.",
       "The vaporware modification request discipline is codified: vaporware feature requests are product input, while vaporware modification requests are controlled engineering execution; the domain-specific name leaves room for future hardware or other material-domain request families; behavior-changing changes require a feature flag or feature-status story, targetable tests, release evidence, and explicit no-flag exceptions.",
@@ -198,7 +198,13 @@
       "receiptKind": "cuj-test-coverage",
       "path": "private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/cuj-test-coverage.json",
       "claim": "Required test count is derived from PRD requirements through active draft CUJs.",
-      "result": "PASS-WITH-NOTE: 89 Swift test obligations, 11 release evidence checks, 100 targetable obligations, 107 executable Swift tests across 20 implemented CUJ bundles"
+      "result": "PASS-WITH-NOTE: 95 Swift test obligations, 12 release evidence checks, 107 targetable obligations, 113 executable Swift tests across 21 implemented CUJ bundles"
+    },
+    {
+      "receiptKind": "cuj-state-coverage",
+      "path": "private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/cuj-state-coverage.json",
+      "claim": "Every required journey-derived CUJ-state id has proof coverage.",
+      "result": "PASS-WITH-NOTE: required state ids are covered; uncovered, unknown, and duplicate proof lists are empty"
     },
     {
       "receiptKind": "vaporize-release-doctor",
@@ -500,7 +506,7 @@
     },
     {
       "command": "vaporize toolchain -- swift test --package-path private/apple/spm/vaporize@wrkstrm-core.cli",
-      "result": "PASS: 107 tests across 20 implemented CUJ-specific SwiftPM bundles, including CUJ-16 target feature inspection, CUJ-17 release doctor, CUJ-18 project target discovery, CUJ-19 workspace product-cache discovery, and CUJ-20 Xcode workspace scheme listing"
+      "result": "PASS-WITH-NOTE: coverage model now names 113 tests across 21 implemented CUJ-specific SwiftPM bundles, including CUJ-21 CUJ-state coverage; latest targeted Vaporize runs proved CUJ-09, CUJ-17, and CUJ-21"
     },
     {
       "command": "vaporize toolchain -- swift test --package-path private/apple/spm/vaporize@wrkstrm-core.cli --filter VaporizeCUJ16TargetFeaturesTests",
@@ -516,7 +522,7 @@
     },
     {
       "command": "local benchmark baseline captured with /usr/bin/time -p for Vaporize validate-json, Vaporize toolchain swift --version, bare swift --version, focused CUJ-15 through bare Swift, focused CUJ-15 through Vaporize toolchain, and full Vaporize suite",
-      "result": "PASS-WITH-NOTE: validate-json 0.03s, Vaporize swift --version 0.25s, bare swift --version 0.17s, focused CUJ-15 bare Swift 6.80s, focused CUJ-15 Vaporize 6.80s, earlier full Vaporize suite baseline 15.57s with 82 tests, latest full suite verification 107 tests across 20 CUJ bundles; not a fleet performance or disk-space benchmark"
+      "result": "PASS-WITH-NOTE: validate-json 0.03s, Vaporize swift --version 0.25s, bare swift --version 0.17s, focused CUJ-15 bare Swift 6.80s, focused CUJ-15 Vaporize 6.80s, earlier full Vaporize suite baseline 15.57s with 82 tests, latest coverage model names 113 tests across 21 CUJ bundles; not a fleet performance or disk-space benchmark"
     },
     {
       "command": "vaporize toolchain -- swift test --package-path private/apple/spm/vaporize@wrkstrm-core.cli --filter VaporizeCUJ09ReleaseReviewTests --enable-code-coverage",
@@ -591,6 +597,10 @@
       "result": "PASS"
     },
     {
+      "command": "vaporize validate-json --path private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/cuj-state-coverage.json",
+      "result": "PASS"
+    },
+    {
       "command": "vaporize validate-json over every source JSON file under private/universal/substrate/collectives/schema-universal/private/universal/domain/tooling/schema-families/vaporize-schemas/v0.0.1, excluding SwiftPM .build artifacts",
       "result": "PASS: 35 source JSON files, including 11 schemas, 12 canonical fixtures, and 12 Swift test-resource fixture copies"
     },
@@ -613,6 +623,10 @@
     {
       "command": "vaporize toolchain -- swift test --package-path private/apple/spm/vaporize@wrkstrm-core.cli --filter VaporizeCUJ20XcodeWorkspaceSchemesTests",
       "result": "PASS: 5 tests cover list-schemes CLI parsing, xcodebuild workspace scheme-list arguments, Xcode JSON parsing, non-workspace input rejection, and receipt boundaries"
+    },
+    {
+      "command": "vaporize.cli@wrkstrm-core.clia.sh test --package-path private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli --configuration debug -- --filter VaporizeCUJ21CUJStateTests",
+      "result": "PASS: 6 tests cover CUJ-state derivation, database-boundary hygiene, receipt round-trip, complete coverage, missing-state failure, and unknown-state failure"
     },
     {
       "command": "vaporize validate-json --path private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/creative-selection-v0.2-list-targets.receipt.json",

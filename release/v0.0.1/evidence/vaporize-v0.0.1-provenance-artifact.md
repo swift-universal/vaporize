@@ -2,20 +2,20 @@
 
 **Generated:** 2026-06-14T07:21:25Z
 **Status:** captured for forward Pkl migration
-**Subject:** `vaporize@wrkstrm-core.cli` v0.0.1 release prep
+**Subject:** `vaporize.cli@wrkstrm-core.clia.sh` v0.0.1 release prep
 
 This artifact gathers the receipts needed to move forward without relying on
 chat memory.
 
 ## Proven
 
-- CUJ-derived test coverage is explicit: 89 required Swift test obligations
-  plus 11 release evidence checks across 20 active CUJs.
-- Vaporize package tests pass through `vaporize toolchain`: 107 executable Swift
-  tests across 20 implemented CUJ-specific SwiftPM test bundles, including
+- CUJ-derived test coverage is explicit: 95 required Swift test obligations
+  plus 12 release evidence checks across 21 active CUJs.
+- Vaporize package tests cover 113 executable Swift
+  tests across 21 implemented CUJ-specific SwiftPM test bundles, including
   CUJ-16 target feature inspection, CUJ-17 release doctor, CUJ-18 project
   target discovery, CUJ-19 workspace product-cache discovery, and CUJ-20 Xcode
-  workspace scheme listing.
+  workspace scheme listing, plus CUJ-21 CUJ-state coverage.
 - `product-definition.md` defines Vaporize, primary users, product-level user
   journeys, why users choose it, when not to choose it, and build implications
   before more implementation is accepted.

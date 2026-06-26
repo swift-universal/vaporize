@@ -22,6 +22,7 @@ The v0.0.1 evidence stack is:
 - PRD requirements.
 - CUJs derived from the PRD.
 - CUJ-specific SwiftPM test bundles.
+- CUJ-state coverage evidence for journey-derived simulated-world state.
 - Release gates that name each proof and blocker.
 - Launch-review packet JSON.
 - Provenance artifact JSON and Markdown.
@@ -35,11 +36,11 @@ exists, and which claims are still prohibited.
 
 The current CUJ-derived floor is:
 
-- 20 active CUJs
-- 89 required Swift test obligations
-- 11 release evidence checks
-- 100 required targetable obligations
-- 107 executable Swift tests across 20 CUJ-specific bundles
+- 21 active CUJs
+- 95 required Swift test obligations
+- 12 release evidence checks
+- 107 required targetable obligations
+- 113 executable Swift tests across 21 CUJ-specific bundles
 
 The executable suite may exceed the floor, but the floor comes from PRD and CUJ
 obligations. Test count alone is not a product argument.
@@ -51,8 +52,8 @@ gates already cover command surface, JSON validation, release packet shape,
 schema extraction, project migration first slices, project target discovery
 first slice, workspace product-cache discovery first slice, Xcode workspace
 scheme-listing first slice, shared workspace cache first slice, target feature
-inspection first slice, release-doctor spine audit, pre-code PRD review policy, and
-package test execution through Vaporize's owned toolchain route.
+inspection first slice, CUJ-state coverage, release-doctor spine audit, pre-code
+PRD review policy, and package test execution through Vaporize's owned toolchain route.
 
 The blocking gates remain focused on full Apple project generation parity and
 strong benchmark/runtime sample evidence.

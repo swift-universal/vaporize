@@ -23,6 +23,7 @@ one product-level journey.
 | Assistant reuses a warm Xcode workspace product cache instead of rebuilding locally when the shared product already exists | CUJ-15, CUJ-19 |
 | Release reviewer evaluates product definition, PRD review session, vaporware modification request discipline, user journeys, choice argument, evidence, gates, and blockers without relying on chat memory | CUJ-09 |
 | Assistant audits release-spine coherence before trusting a vaporware packet | CUJ-17 |
+| Assistant gates every journey-derived CUJ state record with proof before release review trusts the simulated world | CUJ-21 |
 
 ## CUJ-01 - Assistant Builds And Installs A SwiftPM CLI
 
@@ -506,6 +507,29 @@ Failure truth:
   receipt; runtime/timeout behavior for the huge maintained workspace remains a
   follow-up measurement target.
 
+## CUJ-21 - Assistant Gates Every CUJ State Record With Proof
+
+1. Assistant derives CUJ-state records from complete critical user journeys.
+2. Assistant attaches a proof entry to every required CUJ-state id.
+3. Vaporize writes or reviews a `cuj-state-coverage` evidence document.
+4. Release doctor audits the coverage status, required state ids, proof floor,
+   uncovered ids, unknown ids, and duplicate proof ids.
+5. Release review fails the slice if any CUJ-state record lacks proof.
+
+Success:
+
+- The coverage document names `stateFamily: cuj-state`.
+- `requiredStateIDs` is non-empty.
+- Every required state id appears in the proof set.
+- `uncoveredStateIDs`, `unknownStateIDs`, and `duplicateProofStateIDs` are empty.
+- The release packet includes `release/v0.0.1/evidence/cuj-state-coverage.json`.
+
+Failure truth:
+
+- This proves journey-derived state coverage, not database adapter readiness.
+- Kura, Turso, libSQL, sync, production migrations, and public availability remain
+  separate integration or release claims.
+
 ## Test Coverage Contract
 
 Test count is derived from PRD requirements through the active draft CUJs.
@@ -534,16 +558,19 @@ must know the required floor.
 | CUJ-18 | FR-028 | 5 Swift tests; 1 release evidence check |
 | CUJ-19 | FR-021, FR-029 | 5 Swift tests; 1 release evidence check |
 | CUJ-20 | FR-030 | 5 |
+| CUJ-21 | FR-031 | 6 Swift tests; 1 release evidence check |
 
 Current active-CUJ requirement:
 
-- Required Swift test obligations: 89
-- Required release evidence checks: 11
-- Required targetable test obligations: 100
-- Current executable Swift tests: 107 across 20 implemented CUJ-specific SwiftPM
+- Required Swift test obligations: 95
+- Required release evidence checks: 12
+- Required targetable test obligations: 107
+- Current executable Swift tests: 113 across 21 implemented CUJ-specific SwiftPM
   bundles
 - Coverage artifact:
   `release/v0.0.1/evidence/cuj-test-coverage.json`
+- CUJ-state coverage artifact:
+  `release/v0.0.1/evidence/cuj-state-coverage.json`
 
 ## Deferred CUJ - Assistant Proves Fleet Pkl-Backed Apple Project Build Parity
 
