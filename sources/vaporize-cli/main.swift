@@ -19,7 +19,7 @@ struct VaporizeCLI: AsyncParsableCommand {
   static let buildDate = ProcessInfo.processInfo.environment["VAPORIZE_BUILD_DATE"]
 
   static let configuration = CommandConfiguration(
-    commandName: "vaporize@wrkstrm-core.cli",
+    commandName: "vaporize.cli@wrkstrm-core.clia.sh",
     abstract: """
       Substrate-canonical vaporware-collapse gate. vaporize transmutes typed \
       substrate-vaporware into world-state: binaries land, .app installs, \
@@ -36,9 +36,11 @@ struct VaporizeCLI: AsyncParsableCommand {
       project targets, packages, and schemes for parity/build routing; \
       list-schemes asks xcodebuild for live .xcworkspace schemes; \
       release-doctor audits the release spine before claims are trusted. \
+      `inventory` discovers Package.swift, .xcodeproj, .xcworkspace, \
+      project.yml, and project.pkl surfaces by domain, product line, and \
+      ownership scope. \
       `domains` lists available tool domains from the tools collection. \
-      Legacy `inventory` and `x-craze-collapse-path` remain compatibility \
-      aliases during migration.
+      Legacy `x-craze-collapse-path` remains a compatibility alias during migration.
       Target feature inspection mode: inspect-target-features reads a project.yml \
       target, its configFiles wiring, release-features.json, generated xcconfigs, \
       and ReleaseFeatures.swift provenance.
@@ -221,7 +223,7 @@ struct VaporizeCLI: AsyncParsableCommand {
 
   @Option(
     name: .customLong("path"),
-    help: "Path for status, warehouse, validate-json, inspect-project-yml, inspect-target-features, compare-project-yml-pkl, import-project-yml, or list-targets modes.")
+    help: "Path for status, warehouse, inventory, validate-json, inspect-project-yml, inspect-target-features, compare-project-yml-pkl, import-project-yml, or list-targets modes.")
   var vaporScanPath: String?
 
   @Option(
@@ -241,7 +243,7 @@ struct VaporizeCLI: AsyncParsableCommand {
 
   @Option(
     name: .customLong("format"),
-    help: "Output format for status, domains, inspect-project-yml, inspect-target-features, compare-project-yml-pkl, import-project-yml, generate-project-yml, generate-xcodeproj, list-targets, list-schemes, or release-doctor mode: text (default) or json.")
+    help: "Output format for status, inventory, domains, inspect-project-yml, inspect-target-features, compare-project-yml-pkl, import-project-yml, generate-project-yml, generate-xcodeproj, list-targets, list-schemes, or release-doctor mode: text (default) or json.")
   var vaporOutputFormat: VaporOutputFormatArgument = .text
 
   @Option(name: .customLong("domain"), help: "Tool domain for install/uninstall/run and domain path shaping (for example build).")
@@ -309,7 +311,7 @@ struct VaporizeCLI: AsyncParsableCommand {
     case .releaseDoctor:
       try await releaseDoctor()
     case .inventory:
-      try await runVaporWarehouse()
+      try await runOwnedSurfaceInventory()
     case .domains:
       try await runDomains()
     case .selfUpdate:
@@ -343,7 +345,7 @@ struct VaporizeCLI: AsyncParsableCommand {
 
   private func selfUpdate() async throws {
     let packagePath = try requireSelfUpdatePackagePath()
-    let product = "vaporize@wrkstrm-core.cli"
+    let product = "vaporize.cli@wrkstrm-core.clia.sh"
     let updateDomain = inferredDomain(for: product, packagePath: packagePath)
     let request = SwiftCLIInstaller.Request(
       packagePath: packagePath,
@@ -398,7 +400,7 @@ struct VaporizeCLI: AsyncParsableCommand {
 
   private func installCLI() async throws {
     let packagePath = try requirePackagePath()
-    let product = try requireProduct()
+    let product = try requireCLIProduct()
     let installDomain = inferredDomain(for: product, packagePath: packagePath)
     let request = SwiftCLIInstaller.Request(
       packagePath: packagePath,
@@ -438,7 +440,7 @@ struct VaporizeCLI: AsyncParsableCommand {
 
   private func uninstallCLI() async throws {
     let packagePath = try requirePackagePath()
-    let product = try requireProduct()
+    let product = try requireCLIProduct()
     let uninstallDomain = inferredDomain(for: product, packagePath: packagePath)
     try await runSwiftPackage(arguments: [
       "package",
@@ -484,7 +486,7 @@ struct VaporizeCLI: AsyncParsableCommand {
   }
 
   private func runInstalledCLI() async throws {
-    let product = try requireProduct()
+    let product = try requireCLIProduct()
     let executablePath = try installedCLIExecutablePath(product: product)
     try await runExecutable(
       executable: .path(executablePath),
@@ -700,9 +702,9 @@ struct VaporizeCLI: AsyncParsableCommand {
     URL(fileURLWithPath: destination).appendingPathComponent("\(product).app")
   }
 
-  private func swiftBuildArguments() throws -> [String] {
+  func swiftBuildArguments() throws -> [String] {
     let packagePath = try requirePackagePath()
-    let product = try requireProduct()
+    let product = try requireCLIProduct()
     return [
       "build",
       "--package-path", packagePath,
@@ -750,6 +752,16 @@ struct VaporizeCLI: AsyncParsableCommand {
   private func requireProduct() throws -> String {
     guard let product, !product.isEmpty else {
       throw ValidationError("--product is required for operation mode.")
+    }
+    return product
+  }
+
+  private func requireCLIProduct() throws -> String {
+    let product = try requireProduct()
+    do {
+      try SwiftCLIProductName.validate(product)
+    } catch let error as SwiftCLIProductNameError {
+      throw ValidationError(error.description)
     }
     return product
   }
@@ -806,7 +818,7 @@ struct VaporizeCLI: AsyncParsableCommand {
   }
 
   private func printVersionMetadata() {
-    print("vaporize@wrkstrm-core.cli \(Self.vaporizeVersion) (build \(Self.buildIdentifier))")
+    print("vaporize.cli@wrkstrm-core.clia.sh \(Self.vaporizeVersion) (build \(Self.buildIdentifier))")
     if let buildSha = Self.buildSha {
       print("build-sha: \(buildSha)")
     }
@@ -947,6 +959,48 @@ struct VaporizeCLI: AsyncParsableCommand {
       FileHandle.standardOutput.write(data)
       FileHandle.standardOutput.write(Data("\n".utf8))
     }
+  }
+
+  private func runOwnedSurfaceInventory() async throws {
+    let scanPath = try ownedSurfaceInventoryPath()
+    let result = try OwnedSurfaceInventoryScanner().scan(path: scanPath)
+    let data = try OwnedSurfaceInventoryRenderer.renderJSON(
+      result,
+      vaporizeVersion: Self.vaporizeVersion
+    )
+
+    if let receiptPath {
+      let url = URL(fileURLWithPath: receiptPath)
+      try FileManager.default.createDirectory(
+        at: url.deletingLastPathComponent(),
+        withIntermediateDirectories: true
+      )
+      try data.write(to: url)
+    }
+
+    switch vaporOutputFormat {
+    case .text:
+      print(OwnedSurfaceInventoryRenderer.renderText(result))
+    case .json:
+      FileHandle.standardOutput.write(data)
+      FileHandle.standardOutput.write(Data("\n".utf8))
+    }
+  }
+
+  private func ownedSurfaceInventoryPath() throws -> String {
+    if let vaporScanPath, !vaporScanPath.isEmpty {
+      return vaporScanPath
+    }
+
+    let monoRoot = monoRootFromCurrentDirectory()
+    let substrateRoot = monoRoot.appendingPathComponent("private/universal/substrate")
+    var isDirectory: ObjCBool = false
+    if FileManager.default.fileExists(atPath: substrateRoot.path, isDirectory: &isDirectory),
+      isDirectory.boolValue
+    {
+      return substrateRoot.path
+    }
+    return FileManager.default.currentDirectoryPath
   }
 
   private func runDomains() async throws {
@@ -1605,18 +1659,22 @@ struct VaporizeCLI: AsyncParsableCommand {
 
   private func runSwift(arguments: [String]) async throws {
     try await runExecutable(
-      executable: .name("swift"),
-      arguments: arguments,
+      executable: .name("xcrun"),
+      arguments: Self.xcodeSelectedSwiftArguments(arguments),
       sourceTag: "vaporize-swift"
     )
   }
 
   private func runSwiftPackage(arguments: [String]) async throws {
     try await runExecutable(
-      executable: .name("swift"),
-      arguments: arguments,
+      executable: .name("xcrun"),
+      arguments: Self.xcodeSelectedSwiftArguments(arguments),
       sourceTag: "vaporize-swift-package"
     )
+  }
+
+  static func xcodeSelectedSwiftArguments(_ arguments: [String]) -> [String] {
+    ["swift"] + arguments
   }
 
   private func runExecutable(

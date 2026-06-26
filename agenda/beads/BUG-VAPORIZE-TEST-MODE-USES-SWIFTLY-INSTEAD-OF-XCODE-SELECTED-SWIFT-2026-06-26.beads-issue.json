@@ -1,0 +1,35 @@
+{
+  "BeadsIssue": "0.1.0",
+  "schemaVersion": "0.1.0",
+  "id": "BUG-VAPORIZE-TEST-MODE-USES-SWIFTLY-INSTEAD-OF-XCODE-SELECTED-SWIFT-2026-06-26",
+  "title": "vaporize test mode resolved bare swift through Swiftly 6.3.2 instead of Xcode-selected Swift 6.4",
+  "status": "fix-implemented-verification-passed-savepoint-pending",
+  "priority": 1,
+  "issueType": "bug",
+  "labels": [
+    "vaporize",
+    "toolchain",
+    "swiftpm",
+    "test-lane",
+    "xcode-selected-swift",
+    "fix-verified-2026-06-26"
+  ],
+  "createdAt": "2026-06-26T10:55:00Z",
+  "createdBy": "chatgpt loom harness after operator correction to test via vaporize",
+  "historicalContent": {
+    "triggeredBy": "While correcting savepoint verification to run through Vaporize, `vaporize.cli@wrkstrm-core.clia.sh --package-path .../savepoint-commit.digikoma.clia test -- --disable-automatic-resolution` failed before tests because Vaporize executed `/Users/sonoma/.swiftly/bin/swift test`, whose installed Swift version was 6.3.2, against a Swift tools 6.4 package.",
+    "observedFailure": "$ /Users/sonoma/.swiftly/bin/swift test --package-path private/universal/domain/scm/digikoma/savepoint-commit.digikoma.clia -c release --disable-automatic-resolution\nerror: package 'savepoint-commit.digikoma.clia' is using Swift tools version 6.4.0 but the installed version is 6.3.2",
+    "expectedBehavior": "Vaporize's SwiftPM build/test/package lanes should use the Xcode-selected Swift toolchain so substrate Swift 6.4 packages test through the canonical Vaporize gate.",
+    "fixSummary": "Vaporize now routes `runSwift` and `runSwiftPackage` through `xcrun swift ...`; a CUJ-01 regression verifies that SwiftPM package commands are prefixed as Xcode-selected Swift arguments.",
+    "verification": [
+      "Installed patched Vaporize binary at `/Users/sonoma/.swiftpm/bin/vaporize.cli@wrkstrm-core.clia.sh`; previous binary backed up to `/Users/sonoma/.swiftpm/bin/vaporize.cli@wrkstrm-core.clia.sh.bak-20260626T105502Z`.",
+      "Focused Vaporize regression passed through Vaporize: `/Users/sonoma/.swiftpm/bin/vaporize.cli@wrkstrm-core.clia.sh --package-path private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli --configuration debug test -- --disable-automatic-resolution --filter 'CUJ-01 routes SwiftPM package commands through Xcode-selected Swift'`.",
+      "Savepoint package canonical proof passed through Vaporize: `/Users/sonoma/.swiftpm/bin/vaporize.cli@wrkstrm-core.clia.sh --package-path private/universal/domain/scm/digikoma/savepoint-commit.digikoma.clia test -- --disable-automatic-resolution`; Vaporize printed `$ /usr/bin/xcrun swift test ...` and the suite passed 15 tests in 2 suites."
+    ]
+  },
+  "composesWith": [
+    "FR-VAPORIZE-WORKSTREAM-PROCESS-MODERNIZATION-2026-06-26",
+    "[[vaporware-modernization-workstream]]",
+    "[[tests-run-through-vaporize-not-raw-swift]]"
+  ]
+}

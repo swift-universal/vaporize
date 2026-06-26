@@ -6,7 +6,7 @@ import Testing
 
 @Test("CUJ-01 exposes the canonical Vaporize command identity")
 func exposesCanonicalVaporizeCommandIdentity() {
-  #expect(VaporizeCLI.configuration.commandName == "vaporize@wrkstrm-core.cli")
+  #expect(VaporizeCLI.configuration.commandName == "vaporize.cli@wrkstrm-core.clia.sh")
 }
 
 @Test("CUJ-01 parses SwiftPM CLI build mode")
@@ -18,7 +18,7 @@ func parsesSwiftPMCLIBuildMode() throws {
     "--package-path",
     "/workspace/tool",
     "--product",
-    "tool@org.cli",
+    "tool.cli@org.clia.sh",
     "--configuration",
     "debug",
     "--skip-install",
@@ -27,9 +27,58 @@ func parsesSwiftPMCLIBuildMode() throws {
   #expect(command.mode == .build)
   #expect(command.artifact == .cli)
   #expect(command.packagePath == "/workspace/tool")
-  #expect(command.product == "tool@org.cli")
+  #expect(command.product == "tool.cli@org.clia.sh")
   #expect(command.configuration == .debug)
   #expect(command.skipInstall)
+}
+
+@Test("CUJ-01 builds SwiftPM package build arguments")
+func buildsSwiftPMPackageBuildArguments() throws {
+  let command = try VaporizeCLI.parse([
+    "build",
+    "--artifact",
+    "cli",
+    "--package-path",
+    "/workspace/tool",
+    "--product",
+    "tool.cli@org.clia.sh",
+    "--configuration",
+    "debug",
+  ])
+
+  #expect(try command.swiftBuildArguments() == [
+    "build",
+    "--package-path",
+    "/workspace/tool",
+    "-c",
+    "debug",
+    "--product",
+    "tool.cli@org.clia.sh",
+  ])
+}
+
+@Test("CUJ-01 rejects noncanonical SwiftPM CLI build products")
+func rejectsNoncanonicalSwiftPMCLIBuildProducts() throws {
+  let command = try VaporizeCLI.parse([
+    "build",
+    "--artifact",
+    "cli",
+    "--package-path",
+    "/workspace/tool",
+    "--product",
+    "git@swift-universal.clia.sh",
+    "--configuration",
+    "release",
+  ])
+
+  do {
+    _ = try command.swiftBuildArguments()
+    Issue.record("Expected noncanonical CLI product name to throw.")
+  } catch let error as ValidationError {
+    #expect(String(describing: error).contains("suggested 'git.cli@swift-universal.clia.sh'"))
+  } catch {
+    Issue.record("Unexpected error: \(error).")
+  }
 }
 
 @Test("CUJ-01 parses domains mode")
@@ -47,14 +96,14 @@ func parsesDomainFlagForInstallMode() throws {
     "--package-path",
     "/workspace/domain/build/spm/tool",
     "--product",
-    "build-tool@domain.cli",
+    "build-tool.cli@domain.clia.sh",
     "--domain",
     "build",
   ])
   #expect(command.mode == .install)
   #expect(command.toolDomain == "build")
   #expect(command.packagePath == "/workspace/domain/build/spm/tool")
-  #expect(command.product == "build-tool@domain.cli")
+  #expect(command.product == "build-tool.cli@domain.clia.sh")
 }
 
 @Test("CUJ-01 parses self-update mode")
@@ -102,6 +151,20 @@ func buildsSwiftPMPackageTestArguments() throws {
   ])
 }
 
+@Test("CUJ-01 routes SwiftPM package commands through Xcode-selected Swift")
+func routesSwiftPMPackageCommandsThroughXcodeSelectedSwift() {
+  #expect(VaporizeCLI.xcodeSelectedSwiftArguments([
+    "test",
+    "--package-path",
+    "/workspace/tool",
+  ]) == [
+    "swift",
+    "test",
+    "--package-path",
+    "/workspace/tool",
+  ])
+}
+
 @Test("CUJ-01 matches already installed error")
 func matchesAlreadyInstalledError() {
   let message = "error: clia is already installed at /Users/rismay/.swiftpm/bin/clia"
@@ -119,7 +182,7 @@ func buildsSwiftPackageInstallArguments() {
   let installer = SwiftCLIInstaller(
     request: .init(
       packagePath: "/workspace/tool",
-      product: "tool@org.cli",
+      product: "tool.cli@org.clia.sh",
       configuration: .release,
       forceReinstall: false
     )
@@ -133,7 +196,7 @@ func buildsSwiftPackageInstallArguments() {
     "-c",
     "release",
     "--product",
-    "tool@org.cli",
+    "tool.cli@org.clia.sh",
   ])
 }
 
@@ -142,7 +205,7 @@ func buildsSwiftPackageUninstallArguments() {
   let installer = SwiftCLIInstaller(
     request: .init(
       packagePath: "/workspace/tool",
-      product: "tool@org.cli",
+      product: "tool.cli@org.clia.sh",
       configuration: .debug,
       forceReinstall: true
     )
@@ -153,6 +216,6 @@ func buildsSwiftPackageUninstallArguments() {
     "--package-path",
     "/workspace/tool",
     "experimental-uninstall",
-    "tool@org.cli",
+    "tool.cli@org.clia.sh",
   ])
 }
