@@ -34,37 +34,37 @@ public struct VaporizeCriticalUserJourney: Codable, Equatable, Sendable {
   }
 }
 
-public struct VaporizeKuraWorldSeedStateSpec: Codable, Equatable, Sendable {
-  public var worldSlug: String
-  public var worldTitle: String
+public struct VaporizeCUJStateSpec: Codable, Equatable, Sendable {
+  public var stateSlug: String
+  public var stateTitle: String
   public var cujs: [VaporizeCriticalUserJourney]
   public var metadata: [String: String]
 
   public init(
-    worldSlug: String,
-    worldTitle: String,
+    stateSlug: String,
+    stateTitle: String,
     cujs: [VaporizeCriticalUserJourney],
     metadata: [String: String] = [:]
   ) {
-    self.worldSlug = worldSlug
-    self.worldTitle = worldTitle
+    self.stateSlug = stateSlug
+    self.stateTitle = stateTitle
     self.cujs = cujs
     self.metadata = metadata
   }
 }
 
-public struct VaporizeKuraWorldSeedDocument: Codable, Equatable, Sendable {
+public struct VaporizeCUJStateDocument: Codable, Equatable, Sendable {
   public var schemaVersion: String
   public var documentKind: String
-  public var worldSlug: String
-  public var worldTitle: String
+  public var stateSlug: String
+  public var stateTitle: String
   public var sourceKind: String
-  public var records: [VaporizeKuraWorldSeedRecord]
+  public var records: [VaporizeCUJStateRecord]
   public var metadata: [String: String]
   public var createdAt: String
 }
 
-public struct VaporizeKuraWorldSeedRecord: Codable, Equatable, Sendable {
+public struct VaporizeCUJStateRecord: Codable, Equatable, Sendable {
   public var id: String
   public var kind: String
   public var sourceCUJSlug: String
@@ -78,17 +78,18 @@ public struct VaporizeKuraWorldSeedRecord: Codable, Equatable, Sendable {
   public var metadata: [String: String]
 }
 
-public struct VaporizeKuraWorldSeedStateReceipt: Codable, Equatable, Sendable {
+public struct VaporizeCUJStateReceipt: Codable, Equatable, Sendable {
   public var schemaVersion: String
   public var harnessKind: String
-  public var storageFamily: String
-  public var worldSlug: String
+  public var stateFamily: String
+  public var storehouseFamily: String?
+  public var stateSlug: String
   public var rootPath: String
   public var cujManifestPath: String
-  public var seedStatePath: String
+  public var statePath: String
   public var receiptPath: String
   public var cujCount: Int
-  public var seedRecordCount: Int
+  public var stateRecordCount: Int
   public var sourceKind: String
   public var metadata: [String: String]
   public var createdAt: String
@@ -96,84 +97,90 @@ public struct VaporizeKuraWorldSeedStateReceipt: Codable, Equatable, Sendable {
   public init(
     schemaVersion: String,
     harnessKind: String,
-    storageFamily: String,
-    worldSlug: String,
+    stateFamily: String,
+    storehouseFamily: String?,
+    stateSlug: String,
     rootPath: String,
     cujManifestPath: String,
-    seedStatePath: String,
+    statePath: String,
     receiptPath: String,
     cujCount: Int,
-    seedRecordCount: Int,
+    stateRecordCount: Int,
     sourceKind: String,
     metadata: [String: String],
     createdAt: String
   ) {
     self.schemaVersion = schemaVersion
     self.harnessKind = harnessKind
-    self.storageFamily = storageFamily
-    self.worldSlug = worldSlug
+    self.stateFamily = stateFamily
+    self.storehouseFamily = storehouseFamily
+    self.stateSlug = stateSlug
     self.rootPath = rootPath
     self.cujManifestPath = cujManifestPath
-    self.seedStatePath = seedStatePath
+    self.statePath = statePath
     self.receiptPath = receiptPath
     self.cujCount = cujCount
-    self.seedRecordCount = seedRecordCount
+    self.stateRecordCount = stateRecordCount
     self.sourceKind = sourceKind
     self.metadata = metadata
     self.createdAt = createdAt
   }
 }
 
-public struct VaporizeKuraWorldSeedStateHarness {
+public struct VaporizeCUJStateHarness {
   public var rootDirectory: URL
+  public var storehouseFamily: String?
   public var fileManager: FileManager
 
   public init(
     rootDirectory: URL = FileManager.default.temporaryDirectory
-      .appendingPathComponent("vaporize-kura-world-seed-state-\(UUID().uuidString)"),
+      .appendingPathComponent("vaporize-cuj-state-\(UUID().uuidString)"),
+    storehouseFamily: String? = nil,
     fileManager: FileManager = .default
   ) {
     self.rootDirectory = rootDirectory
+    self.storehouseFamily = storehouseFamily
     self.fileManager = fileManager
   }
 
   public func prepare(
-    _ spec: VaporizeKuraWorldSeedStateSpec,
+    _ spec: VaporizeCUJStateSpec,
     createdAt: Date = Date()
-  ) throws -> VaporizeKuraWorldSeedStateReceipt {
-    let normalizedWorldSlug = slug(for: spec.worldSlug)
-    let worldRoot = rootDirectory.appendingPathComponent(normalizedWorldSlug, isDirectory: true)
-    try fileManager.createDirectory(at: worldRoot, withIntermediateDirectories: true)
+  ) throws -> VaporizeCUJStateReceipt {
+    let normalizedStateSlug = slug(for: spec.stateSlug)
+    let stateRoot = rootDirectory.appendingPathComponent(normalizedStateSlug, isDirectory: true)
+    try fileManager.createDirectory(at: stateRoot, withIntermediateDirectories: true)
 
-    let cujManifestURL = worldRoot.appendingPathComponent("cujs.json")
-    let seedStateURL = worldRoot.appendingPathComponent("kura-world.seed-state.json")
-    let receiptURL = worldRoot.appendingPathComponent("kura-world.seed-state.receipt.json")
+    let cujManifestURL = stateRoot.appendingPathComponent("cujs.json")
+    let stateURL = stateRoot.appendingPathComponent("cuj-state.json")
+    let receiptURL = stateRoot.appendingPathComponent("cuj-state.receipt.json")
     let createdAtString = Self.timestampString(from: createdAt)
 
     let records = spec.cujs.map { cuj in
-      seedRecord(for: cuj, worldSlug: normalizedWorldSlug)
+      stateRecord(for: cuj, stateSlug: normalizedStateSlug)
     }
-    let seedDocument = VaporizeKuraWorldSeedDocument(
+    let stateDocument = VaporizeCUJStateDocument(
       schemaVersion: "0.1.0",
-      documentKind: "kura-world-seed-state",
-      worldSlug: normalizedWorldSlug,
-      worldTitle: spec.worldTitle,
+      documentKind: "cuj-state",
+      stateSlug: normalizedStateSlug,
+      stateTitle: spec.stateTitle,
       sourceKind: "critical-user-journey",
       records: records,
       metadata: spec.metadata,
       createdAt: createdAtString
     )
-    let receipt = VaporizeKuraWorldSeedStateReceipt(
+    let receipt = VaporizeCUJStateReceipt(
       schemaVersion: "0.1.0",
-      harnessKind: "kura-world-seed-state-harness",
-      storageFamily: "kura",
-      worldSlug: normalizedWorldSlug,
-      rootPath: worldRoot.path,
+      harnessKind: "cuj-state-harness",
+      stateFamily: "cuj-state",
+      storehouseFamily: storehouseFamily,
+      stateSlug: normalizedStateSlug,
+      rootPath: stateRoot.path,
       cujManifestPath: cujManifestURL.path,
-      seedStatePath: seedStateURL.path,
+      statePath: stateURL.path,
       receiptPath: receiptURL.path,
       cujCount: spec.cujs.count,
-      seedRecordCount: records.count,
+      stateRecordCount: records.count,
       sourceKind: "critical-user-journey",
       metadata: spec.metadata,
       createdAt: createdAtString
@@ -182,19 +189,19 @@ public struct VaporizeKuraWorldSeedStateHarness {
     let encoder = JSONEncoder()
     encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
     try encoder.encode(spec.cujs).write(to: cujManifestURL)
-    try encoder.encode(seedDocument).write(to: seedStateURL)
+    try encoder.encode(stateDocument).write(to: stateURL)
     try encoder.encode(receipt).write(to: receiptURL)
     return receipt
   }
 
-  private func seedRecord(
+  private func stateRecord(
     for cuj: VaporizeCriticalUserJourney,
-    worldSlug: String
-  ) -> VaporizeKuraWorldSeedRecord {
+    stateSlug: String
+  ) -> VaporizeCUJStateRecord {
     let normalizedCUJSlug = slug(for: cuj.slug)
-    return VaporizeKuraWorldSeedRecord(
-      id: "\(worldSlug).cuj.\(normalizedCUJSlug)",
-      kind: "critical-user-journey-seed",
+    return VaporizeCUJStateRecord(
+      id: "\(stateSlug).cuj.\(normalizedCUJSlug)",
+      kind: "critical-user-journey-state",
       sourceCUJSlug: normalizedCUJSlug,
       title: cuj.title,
       actor: cuj.actor,
@@ -217,7 +224,7 @@ public struct VaporizeKuraWorldSeedStateHarness {
     let slug = String(pieces)
       .split(separator: "-")
       .joined(separator: "-")
-    return slug.isEmpty ? "kura-world" : slug
+    return slug.isEmpty ? "cuj-state" : slug
   }
 
   private static func timestampString(from date: Date) -> String {

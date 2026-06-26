@@ -1,0 +1,66 @@
+{
+  "BeadsIssue": "0.1.0",
+  "schemaVersion": "0.1.0",
+  "id": "FR-VAPORIZE-CUJ-STATE-HARNESS-2026-06-26",
+  "title": "Create CUJ state harnesses for Vaporize spawn and modification proof",
+  "status": "open",
+  "priority": 1,
+  "issueType": "feature",
+  "labels": [
+    "vaporize",
+    "cuj-state",
+    "kura-org",
+    "vaporware-spawn",
+    "vaporware-modification",
+    "test-support",
+    "receipt"
+  ],
+  "createdAt": "2026-06-26T12:05:00Z",
+  "createdBy": "codex after operator corrected the abstraction to CUJ state",
+  "historicalContent": {
+    "slug": "FR-VAPORIZE-CUJ-STATE-HARNESS-2026-06-26",
+    "kind": "bead-feature-request",
+    "createdAt": "2026-06-26T12:05:00Z",
+    "createdBy": "codex",
+    "assignee": "wrkstrm-core",
+    "severity": "high",
+    "sourceType": "operator-corrected-vaporize-modernization-slice",
+    "sourceLocation": "Codex session 2026-06-26: operator corrected that the milestone is just CUJ state and an evolved workstream for vaporware spawn and modification.",
+    "description": "Vaporize needs a CUJ-state harness that turns critical user journeys into reusable state for vaporware spawn and modification proof. CUJs are the canonical source records: each CUJ defines an actor, intent, preconditions, actions, outcomes, tags, and metadata. Kura-org remains optional storehouse-family context, but the active abstraction and board milestone are CUJ state.",
+    "implementedFirstSlice": {
+      "supportFile": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/tests/vaporize-test-support/CUJStateTestSupport.swift",
+      "testTarget": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/tests/cuj-21-cuj-state/VaporizeCUJ21CUJStateTests.swift",
+      "packageManifest": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/Package.swift",
+      "boardPresentation": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/agenda/presentations/vaporize-cuj-state-board-milestone-2026-06-26/index.html",
+      "vaporizeReceipt": "vaporize.cli@wrkstrm-core.clia.sh test --package-path private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli --configuration debug -- --filter VaporizeCUJ21CUJStateTests passed 3 tests"
+    },
+    "acceptanceCriteria": [
+      "Shared test support can derive CUJ state records from CUJs.",
+      "Each CUJ-derived state record preserves actor, intent, preconditions, actions, outcomes, tags, and metadata.",
+      "Fixture preparation writes cujs.json, cuj-state.json, and cuj-state.receipt.json.",
+      "The receipt identifies stateFamily as cuj-state and sourceKind as critical-user-journey.",
+      "Kura-org may appear as storehouseFamily metadata, but Kura world is not the milestone abstraction.",
+      "The active CUJ21 proof does not expose Turso, libSQL, databaseURL, database-engine, or kura-world language."
+    ],
+    "linkedTypedRecords": {
+      "cujStateWorkflow": "private/universal/substrate/collectives/spaces-universal/private/universal/kura-spaces/workflows/vaporware-cuj-state-workstream/v0.1.0/vaporware-cuj-state-workstream.workflow.su.json",
+      "cujStateWorkflowInstance": "private/universal/substrate/collectives/spaces-universal/private/universal/kura-spaces/workflows/vaporware-cuj-state-workstream/v0.1.0/vaporware-cuj-state-workstream-2026-06-26.workflow-instance.su.json",
+      "processModernizationProposal": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/agenda/proposals/vaporize-workstream-process-modernization-2026-06-26.md",
+      "processModernizationWorkflowInstance": "private/universal/substrate/collectives/spaces-universal/private/universal/kura-spaces/workflows/vaporware-modernization-workstream/v0.0.2/instances/vaporize-workstream-process-modernization-2026-06-26.workflow-instance.su.json",
+      "processModernizationBead": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/agenda/beads/FR-VAPORIZE-WORKSTREAM-PROCESS-MODERNIZATION-2026-06-26.beads-issue.json",
+      "supersededKuraWorldBead": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/agenda/beads/FR-VAPORIZE-KURA-WORLD-SEED-STATE-HARNESS-2026-06-26.beads-issue.json",
+      "supersededDatabaseBead": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/agenda/beads/FR-VAPORIZE-TURSO-LIKE-DATABASE-TEST-HARNESS-2026-06-26.beads-issue.json"
+    },
+    "knownSeparations": [
+      "This slice produces CUJ state documents for simulation; it is not a production Kura service adapter.",
+      "Kura/Vaults Org owns the storehouse and data-engine family. Vaporize owns the proof harness and receipt lane.",
+      "Database engines are implementation details behind future Kura integration, not the board-facing abstraction."
+    ]
+  },
+  "composesWith": [
+    "[[vaporware-cuj-state-workstream]]",
+    "[[creative-selection-to-vaporware-spawn-request-cycle]]",
+    "[[workflow-workstream-modification-request-cycle]]",
+    "[[typed-receipts-over-ad-hoc-terminal-proof]]"
+  ]
+}

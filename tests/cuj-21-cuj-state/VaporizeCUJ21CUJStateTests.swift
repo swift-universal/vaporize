@@ -2,17 +2,17 @@ import Foundation
 import Testing
 import VaporizeTestSupport
 
-@Test("CUJ-21 derives Kura world seed state from critical user journeys")
-func derivesKuraWorldSeedStateFromCUJs() throws {
+@Test("CUJ-21 derives CUJ state from critical user journeys")
+func derivesCUJStateFromCUJs() throws {
   let root = FileManager.default.temporaryDirectory
-    .appendingPathComponent("vaporize-cuj-21-kura-world-\(UUID().uuidString)")
+    .appendingPathComponent("vaporize-cuj-21-state-\(UUID().uuidString)")
   defer { try? FileManager.default.removeItem(at: root) }
 
-  let harness = VaporizeKuraWorldSeedStateHarness(rootDirectory: root)
+  let harness = VaporizeCUJStateHarness(rootDirectory: root, storehouseFamily: "kura-org")
   let receipt = try harness.prepare(
-    VaporizeKuraWorldSeedStateSpec(
-      worldSlug: "SCM Product Suite",
-      worldTitle: "SCM product suite simulated world",
+    VaporizeCUJStateSpec(
+      stateSlug: "SCM Product Suite",
+      stateTitle: "SCM product suite CUJ state",
       cujs: [
         VaporizeCriticalUserJourney(
           slug: "savepoint emits boundary aware commit",
@@ -32,7 +32,7 @@ func derivesKuraWorldSeedStateFromCUJs() throws {
             "savepoint event id exists",
             "parent pointer is updated",
           ],
-          tags: ["scm", "savepoint", "kura-world"]
+          tags: ["scm", "savepoint", "cuj-state"]
         ),
         VaporizeCriticalUserJourney(
           slug: "vaporize verifies package lane",
@@ -58,43 +58,44 @@ func derivesKuraWorldSeedStateFromCUJs() throws {
     createdAt: Date(timeIntervalSince1970: 0)
   )
 
-  #expect(receipt.harnessKind == "kura-world-seed-state-harness")
-  #expect(receipt.storageFamily == "kura")
-  #expect(receipt.worldSlug == "scm-product-suite")
+  #expect(receipt.harnessKind == "cuj-state-harness")
+  #expect(receipt.stateFamily == "cuj-state")
+  #expect(receipt.storehouseFamily == "kura-org")
+  #expect(receipt.stateSlug == "scm-product-suite")
   #expect(receipt.cujCount == 2)
-  #expect(receipt.seedRecordCount == 2)
+  #expect(receipt.stateRecordCount == 2)
   #expect(receipt.sourceKind == "critical-user-journey")
   #expect(receipt.metadata["collective"] == "kura-org")
   #expect(receipt.createdAt == "1970-01-01T00:00:00Z")
 
   #expect(FileManager.default.fileExists(atPath: receipt.cujManifestPath))
-  #expect(FileManager.default.fileExists(atPath: receipt.seedStatePath))
+  #expect(FileManager.default.fileExists(atPath: receipt.statePath))
   #expect(FileManager.default.fileExists(atPath: receipt.receiptPath))
 
-  let seedData = try Data(contentsOf: URL(fileURLWithPath: receipt.seedStatePath))
-  let seedDocument = try JSONDecoder().decode(VaporizeKuraWorldSeedDocument.self, from: seedData)
+  let stateData = try Data(contentsOf: URL(fileURLWithPath: receipt.statePath))
+  let stateDocument = try JSONDecoder().decode(VaporizeCUJStateDocument.self, from: stateData)
 
-  #expect(seedDocument.documentKind == "kura-world-seed-state")
-  #expect(seedDocument.sourceKind == "critical-user-journey")
-  #expect(seedDocument.records.map(\.sourceCUJSlug) == [
+  #expect(stateDocument.documentKind == "cuj-state")
+  #expect(stateDocument.sourceKind == "critical-user-journey")
+  #expect(stateDocument.records.map(\.sourceCUJSlug) == [
     "savepoint-emits-boundary-aware-commit",
     "vaporize-verifies-package-lane",
   ])
-  #expect(seedDocument.records.first?.actor == "software modification steward")
-  #expect(seedDocument.records.first?.outcomes.contains("parent pointer is updated") == true)
+  #expect(stateDocument.records.first?.actor == "software modification steward")
+  #expect(stateDocument.records.first?.outcomes.contains("parent pointer is updated") == true)
 }
 
-@Test("CUJ-21 keeps Kura world seed-state receipts independent of database engines")
-func seedStateReceiptDoesNotExposeDatabaseEngine() throws {
+@Test("CUJ-21 keeps CUJ state receipts independent of database engines")
+func cujStateReceiptDoesNotExposeDatabaseEngine() throws {
   let root = FileManager.default.temporaryDirectory
-    .appendingPathComponent("vaporize-cuj-21-kura-world-minimal-\(UUID().uuidString)")
+    .appendingPathComponent("vaporize-cuj-21-state-minimal-\(UUID().uuidString)")
   defer { try? FileManager.default.removeItem(at: root) }
 
-  let harness = VaporizeKuraWorldSeedStateHarness(rootDirectory: root)
+  let harness = VaporizeCUJStateHarness(rootDirectory: root)
   let receipt = try harness.prepare(
-    VaporizeKuraWorldSeedStateSpec(
-      worldSlug: "operator review",
-      worldTitle: "Operator review simulated world",
+    VaporizeCUJStateSpec(
+      stateSlug: "operator review",
+      stateTitle: "Operator review CUJ state",
       cujs: [
         VaporizeCriticalUserJourney(
           slug: "review milestone",
@@ -110,32 +111,36 @@ func seedStateReceiptDoesNotExposeDatabaseEngine() throws {
   let receiptData = try Data(contentsOf: URL(fileURLWithPath: receipt.receiptPath))
   let receiptText = try #require(String(data: receiptData, encoding: .utf8))
 
-  #expect(receipt.storageFamily == "kura")
+  #expect(receipt.stateFamily == "cuj-state")
+  #expect(receipt.storehouseFamily == nil)
   #expect(receiptText.contains("turso") == false)
   #expect(receiptText.contains("libsql") == false)
   #expect(receiptText.contains("databaseURL") == false)
+  #expect(receiptText.contains("database-engine") == false)
+  #expect(receiptText.contains("kura-world") == false)
 }
 
-@Test("CUJ-21 Kura world seed-state receipts round-trip through Codable")
-func kuraWorldSeedStateReceiptRoundTrips() throws {
-  let receipt = VaporizeKuraWorldSeedStateReceipt(
+@Test("CUJ-21 CUJ state receipts round-trip through Codable")
+func cujStateReceiptRoundTrips() throws {
+  let receipt = VaporizeCUJStateReceipt(
     schemaVersion: "0.1.0",
-    harnessKind: "kura-world-seed-state-harness",
-    storageFamily: "kura",
-    worldSlug: "round-trip",
+    harnessKind: "cuj-state-harness",
+    stateFamily: "cuj-state",
+    storehouseFamily: "kura-org",
+    stateSlug: "round-trip",
     rootPath: "/tmp/root",
     cujManifestPath: "/tmp/root/cujs.json",
-    seedStatePath: "/tmp/root/kura-world.seed-state.json",
-    receiptPath: "/tmp/root/kura-world.seed-state.receipt.json",
+    statePath: "/tmp/root/cuj-state.json",
+    receiptPath: "/tmp/root/cuj-state.receipt.json",
     cujCount: 2,
-    seedRecordCount: 2,
+    stateRecordCount: 2,
     sourceKind: "critical-user-journey",
     metadata: ["lane": "unit-test"],
     createdAt: "1970-01-01T00:00:00Z"
   )
 
   let data = try JSONEncoder().encode(receipt)
-  let decoded = try JSONDecoder().decode(VaporizeKuraWorldSeedStateReceipt.self, from: data)
+  let decoded = try JSONDecoder().decode(VaporizeCUJStateReceipt.self, from: data)
 
   #expect(decoded == receipt)
 }

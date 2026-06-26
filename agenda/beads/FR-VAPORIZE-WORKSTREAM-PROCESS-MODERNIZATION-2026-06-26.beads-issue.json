@@ -13,9 +13,9 @@
     "proof-lane",
     "no-direct-git",
     "no-jq",
-    "kura-world-seed-state",
-    "cuj-derived-seed-state",
-    "world-simulation",
+    "cuj-state",
+    "vaporware-spawn",
+    "vaporware-modification",
     "scm"
   ],
   "createdAt": "2026-06-26T10:12:31Z",
@@ -38,13 +38,13 @@
       "validate-json is upgraded or documented so repeated --path behavior cannot silently validate only the last path.",
       "SCM product-line audits have a Vaporize-first recipe covering SwiftPM packages, schema JSON validation, and native Xcode project-list exceptions.",
       "Savepoint persistence is treated as the only forward commit primitive for assistants; direct git remains diagnostic only when operator explicitly permits it.",
-      "Simulation-dependent Vaporize tests have a deterministic Kura world seed-state harness derived from CUJs."
+      "Simulation-dependent Vaporize tests have a deterministic CUJ-state harness derived from CUJs."
     ],
     "linkedTypedRecords": {
       "workflowInstance": "private/universal/substrate/collectives/spaces-universal/private/universal/kura-spaces/workflows/vaporware-modernization-workstream/v0.0.2/instances/vaporize-workstream-process-modernization-2026-06-26.workflow-instance.su.json",
       "proposal": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/agenda/proposals/vaporize-workstream-process-modernization-2026-06-26.md",
       "roleManifest": "private/universal/substrate/roles/vaporize-workstream-modernization-steward/private/universal/identity/vaporize-workstream-modernization-steward.role-surface-manifest.json",
-      "kuraWorldSeedStateHarnessBead": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/agenda/beads/FR-VAPORIZE-KURA-WORLD-SEED-STATE-HARNESS-2026-06-26.beads-issue.json",
+      "cujStateHarnessBead": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/agenda/beads/FR-VAPORIZE-CUJ-STATE-HARNESS-2026-06-26.beads-issue.json",
       "existingRealizeBead": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/agenda/beads/vaporize-realize-typed-vaporware-unit.beads-issue.json",
       "existingValidateJsonBead": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/agenda/beads/vaporize-validate-json-multiple-paths.beads-issue.json"
     }

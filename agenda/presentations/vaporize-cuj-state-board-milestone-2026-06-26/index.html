@@ -1,0 +1,399 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Vaporize CUJ State Milestone</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #18201d;
+      --muted: #58645e;
+      --line: #cbd7cf;
+      --field: #edf4f1;
+      --mint: #d7f0e5;
+      --gold: #f6d27a;
+      --rose: #f3a7a0;
+      --blue: #b9d8f1;
+      --panel: #ffffff;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--ink);
+      background: #f8faf8;
+      line-height: 1.45;
+    }
+
+    header {
+      min-height: 92vh;
+      display: grid;
+      grid-template-columns: minmax(280px, 0.95fr) minmax(340px, 1.05fr);
+      align-items: center;
+      gap: 44px;
+      padding: 56px clamp(22px, 5vw, 80px) 34px;
+      background:
+        linear-gradient(120deg, rgba(215, 240, 229, 0.92), rgba(255, 255, 255, 0.7)),
+        repeating-linear-gradient(90deg, rgba(24, 32, 29, 0.06) 0 1px, transparent 1px 44px),
+        repeating-linear-gradient(0deg, rgba(24, 32, 29, 0.05) 0 1px, transparent 1px 44px);
+      border-bottom: 1px solid var(--line);
+    }
+
+    h1 {
+      margin: 0;
+      max-width: 840px;
+      font-size: clamp(44px, 7vw, 96px);
+      line-height: 0.94;
+      letter-spacing: 0;
+    }
+
+    h2 {
+      margin: 0 0 14px;
+      font-size: clamp(25px, 3vw, 42px);
+      line-height: 1.05;
+      letter-spacing: 0;
+    }
+
+    h3 {
+      margin: 0 0 8px;
+      font-size: 18px;
+      letter-spacing: 0;
+    }
+
+    p {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    a {
+      color: #1d6250;
+      font-weight: 720;
+      text-decoration: none;
+      border-bottom: 1px solid rgba(29, 98, 80, 0.35);
+    }
+
+    .eyebrow {
+      margin: 0 0 18px;
+      color: #335248;
+      font-weight: 780;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-size: 13px;
+    }
+
+    .lead {
+      margin-top: 24px;
+      max-width: 760px;
+      font-size: clamp(19px, 2.4vw, 29px);
+      line-height: 1.25;
+      color: #27342f;
+    }
+
+    .decision {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 26px;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      min-height: 36px;
+      padding: 8px 12px;
+      border: 1px solid #adc9bc;
+      background: rgba(255, 255, 255, 0.72);
+      border-radius: 6px;
+      color: #243c34;
+      font-weight: 720;
+      font-size: 13px;
+      white-space: nowrap;
+    }
+
+    .hero-figure {
+      width: 100%;
+      min-height: 420px;
+      display: grid;
+      align-items: center;
+    }
+
+    .hero-figure svg {
+      width: 100%;
+      min-height: 420px;
+      display: block;
+      filter: drop-shadow(0 18px 36px rgba(24, 32, 29, 0.12));
+    }
+
+    main {
+      display: grid;
+      gap: 0;
+    }
+
+    section {
+      padding: 56px clamp(22px, 5vw, 80px);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .band {
+      background: var(--panel);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+      margin-top: 24px;
+    }
+
+    .card {
+      min-height: 150px;
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+    }
+
+    .card strong {
+      display: block;
+      margin-bottom: 8px;
+      color: var(--ink);
+    }
+
+    .table {
+      display: grid;
+      margin-top: 24px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      overflow: hidden;
+      background: #fff;
+    }
+
+    .row {
+      display: grid;
+      grid-template-columns: minmax(150px, 0.7fr) minmax(240px, 1.4fr) minmax(180px, 0.9fr);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .row:last-child {
+      border-bottom: 0;
+    }
+
+    .row > div {
+      padding: 14px 16px;
+      border-right: 1px solid var(--line);
+    }
+
+    .row > div:last-child {
+      border-right: 0;
+    }
+
+    .row.header {
+      background: var(--field);
+      color: #2b433b;
+      font-weight: 780;
+    }
+
+    .code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 0.92em;
+      color: #20362f;
+    }
+
+    .ask {
+      background: #16201c;
+      color: white;
+    }
+
+    .ask p {
+      color: rgba(255, 255, 255, 0.78);
+    }
+
+    .ask a {
+      color: #bdf0de;
+      border-color: rgba(189, 240, 222, 0.45);
+    }
+
+    ul {
+      margin: 18px 0 0;
+      padding: 0;
+      list-style: none;
+      display: grid;
+      gap: 10px;
+    }
+
+    li {
+      display: grid;
+      grid-template-columns: 18px 1fr;
+      gap: 10px;
+      color: var(--muted);
+    }
+
+    li::before {
+      content: "";
+      width: 10px;
+      height: 10px;
+      margin-top: 7px;
+      border-radius: 50%;
+      background: #2b8f72;
+    }
+
+    @media (max-width: 860px) {
+      header {
+        min-height: auto;
+        grid-template-columns: 1fr;
+      }
+
+      .grid {
+        grid-template-columns: 1fr;
+      }
+
+      .row {
+        grid-template-columns: 1fr;
+      }
+
+      .row > div {
+        border-right: 0;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .row > div:last-child {
+        border-bottom: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div>
+      <p class="eyebrow">Board milestone packet / 2026-06-26</p>
+      <h1>Vaporize CUJ State</h1>
+      <p class="lead">Approve CUJ state as the reusable simulation substrate for vaporware spawn and modification. Do not approve database support or the intermediate Kura-world wording as the milestone.</p>
+      <div class="decision" aria-label="decision tags">
+        <span class="pill">Abstraction: CUJ state</span>
+        <span class="pill">Proof lane: Vaporize</span>
+        <span class="pill">Storehouse context: Kura-org</span>
+        <span class="pill">Public claims: blocked</span>
+      </div>
+    </div>
+    <div class="hero-figure" aria-label="CUJ state flow diagram">
+      <svg viewBox="0 0 760 520" role="img" aria-labelledby="flow-title flow-desc">
+        <title id="flow-title">CUJ state architecture</title>
+        <desc id="flow-desc">Critical user journeys produce CUJ state, which feeds Vaporize proof, spawn packets, modification packets, and board gates.</desc>
+        <defs>
+          <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+            <path d="M0,0 L10,5 L0,10 Z" fill="#2e574b"></path>
+          </marker>
+        </defs>
+        <rect x="20" y="24" width="720" height="472" rx="24" fill="#ffffff" stroke="#c2d4cb"></rect>
+        <rect x="58" y="78" width="190" height="100" rx="8" fill="#b9d8f1" stroke="#7098b7"></rect>
+        <text x="78" y="116" font-size="24" font-weight="800" fill="#172722">CUJs</text>
+        <text x="78" y="146" font-size="16" fill="#243d35">actor intent action outcome</text>
+        <rect x="306" y="70" width="210" height="116" rx="8" fill="#d7f0e5" stroke="#79b99f"></rect>
+        <text x="328" y="112" font-size="26" font-weight="900" fill="#172722">CUJ state</text>
+        <text x="328" y="144" font-size="16" fill="#243d35">cuj-state.json</text>
+        <path d="M248 128 C270 128 282 128 306 128" stroke="#2e574b" stroke-width="3" fill="none" marker-end="url(#arrow)"></path>
+        <rect x="574" y="78" width="128" height="100" rx="8" fill="#f6d27a" stroke="#bd8d25"></rect>
+        <text x="594" y="116" font-size="24" font-weight="800" fill="#172722">Vaporize</text>
+        <text x="594" y="146" font-size="16" fill="#243d35">test receipt</text>
+        <path d="M516 128 C542 128 552 128 574 128" stroke="#2e574b" stroke-width="3" fill="none" marker-end="url(#arrow)"></path>
+        <rect x="92" y="290" width="170" height="88" rx="8" fill="#ffffff" stroke="#c2d4cb"></rect>
+        <text x="112" y="326" font-size="20" font-weight="800" fill="#172722">Spawn packet</text>
+        <text x="112" y="354" font-size="15" fill="#58645e">new vaporware</text>
+        <rect x="304" y="290" width="170" height="88" rx="8" fill="#ffffff" stroke="#c2d4cb"></rect>
+        <text x="324" y="326" font-size="20" font-weight="800" fill="#172722">Modification</text>
+        <text x="324" y="354" font-size="15" fill="#58645e">state deltas</text>
+        <rect x="516" y="290" width="170" height="88" rx="8" fill="#ffffff" stroke="#c2d4cb"></rect>
+        <text x="536" y="326" font-size="20" font-weight="800" fill="#172722">Board gates</text>
+        <text x="536" y="354" font-size="15" fill="#58645e">approval only</text>
+        <path d="M390 186 C330 230 248 248 188 290" stroke="#2e574b" stroke-width="3" fill="none" marker-end="url(#arrow)"></path>
+        <path d="M411 186 C405 230 396 250 392 290" stroke="#2e574b" stroke-width="3" fill="none" marker-end="url(#arrow)"></path>
+        <path d="M456 186 C510 228 554 248 596 290" stroke="#2e574b" stroke-width="3" fill="none" marker-end="url(#arrow)"></path>
+        <text x="72" y="448" font-size="17" fill="#243d35">Kura-org remains storehouse context, not the milestone name.</text>
+      </svg>
+    </div>
+  </header>
+
+  <main>
+    <section class="band">
+      <h2>Milestone Boundary</h2>
+      <p>CUJ state is the object under approval. It preserves complete user-journey semantics and can be consumed by both new-vaporware spawn and existing-vaporware modification lanes.</p>
+      <div class="grid">
+        <div class="card">
+          <strong>Approve</strong>
+          <p>CUJ-derived state records, Vaporize proof harness, and receipts for simulation-dependent tests.</p>
+        </div>
+        <div class="card">
+          <strong>Preserve</strong>
+          <p>Kura-org as storehouse-family context when an implementation needs persistence or sync.</p>
+        </div>
+        <div class="card">
+          <strong>Reject</strong>
+          <p>Database/Turso support claims and Kura-world naming as the public or board-facing milestone.</p>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Technical Finding</h2>
+      <p>The right state primitive is not an adapter. It is the canonical user-world state that a CUJ implies.</p>
+      <ul>
+        <li><span>Source record: complete critical user journey.</span></li>
+        <li><span>Materialized files: <span class="code">cujs.json</span>, <span class="code">cuj-state.json</span>, <span class="code">cuj-state.receipt.json</span>.</span></li>
+        <li><span>Receipt fields: <span class="code">stateFamily: cuj-state</span>, optional <span class="code">storehouseFamily: kura-org</span>.</span></li>
+        <li><span>Vaporize proof: <span class="code">VaporizeCUJ21CUJStateTests</span>.</span></li>
+      </ul>
+    </section>
+
+    <section class="band">
+      <h2>Chief Office Review Packet</h2>
+      <div class="table">
+        <div class="row header">
+          <div>Office</div>
+          <div>Concern</div>
+          <div>Disposition</div>
+        </div>
+        <div class="row">
+          <div>CTO</div>
+          <div>Wrong abstraction creates brittle fixtures and database-shaped tests.</div>
+          <div>Use CUJ state first.</div>
+        </div>
+        <div class="row">
+          <div>CPO</div>
+          <div>Spawn and modification both need the same user-state source.</div>
+          <div>Bind to both lanes.</div>
+        </div>
+        <div class="row">
+          <div>COO</div>
+          <div>Persistence needs exact boundaries and typed receipts.</div>
+          <div>Use Savepoint cascade.</div>
+        </div>
+        <div class="row">
+          <div>CEO</div>
+          <div>Board materials must not imply public database support.</div>
+          <div>Public claims blocked.</div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Evidence Links</h2>
+      <ul>
+        <li><span><a href="../../beads/FR-VAPORIZE-CUJ-STATE-HARNESS-2026-06-26.beads-issue.json">Component CUJ-state bead</a></span></li>
+        <li><span><a href="../../../tests/vaporize-test-support/CUJStateTestSupport.swift">CUJStateTestSupport.swift</a></span></li>
+        <li><span><a href="../../../tests/cuj-21-cuj-state/VaporizeCUJ21CUJStateTests.swift">CUJ21 CUJ-state tests</a></span></li>
+        <li><span><a href="../../../../../../../../spaces-universal/private/universal/kura-spaces/workflows/vaporware-cuj-state-workstream/v0.1.0/vaporware-cuj-state-workstream.workflow.su.json">CUJ-state workflow formula</a></span></li>
+      </ul>
+    </section>
+
+    <section class="ask">
+      <h2>Decision Ask</h2>
+      <p>Approve CUJ state as the milestone abstraction for Vaporize spawn and modification proof. Keep Kura-org as implementation context. Keep database support and public claims out of scope until separately implemented, reviewed, and approved.</p>
+    </section>
+  </main>
+</body>
+</html>

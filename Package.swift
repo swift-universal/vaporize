@@ -246,11 +246,11 @@ let package = Package(
       path: "tests/cuj-20-xcode-workspace-schemes"
     ),
     .testTarget(
-      name: "VaporizeCUJ21KuraWorldSeedStateTests",
+      name: "VaporizeCUJ21CUJStateTests",
       dependencies: [
         "VaporizeTestSupport",
       ],
-      path: "tests/cuj-21-kura-world-seed-state"
+      path: "tests/cuj-21-cuj-state"
     ),
     .testTarget(
       name: "VaporizeCUJ12PackageGraphTests",

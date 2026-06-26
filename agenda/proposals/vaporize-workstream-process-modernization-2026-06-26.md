@@ -87,32 +87,33 @@ Replace assistant persistence recipes that use direct `git` with:
 - `savepoint.cli@kura-org.clia.sh emit ...`
 - explicit blocked status when no approved savepoint/status surface exists
 
-### P0: Kura World Seed-State Harness
+### P0: CUJ State Harness
 
-Start the simulation proof lane by deriving Kura seed states from CUJs. The
-seed-state harness should model the world a CUJ needs, not lead with database
-engine concerns:
+Start the simulation proof lane by deriving CUJ state from CUJs. The state
+harness should model what a vaporware spawn or modification lane needs, not
+lead with database engine concerns or over-name the storehouse family:
 
-- `VaporizeKuraWorldSeedStateHarness` prepares isolated Kura world seed-state
-  roots for tests.
+- `VaporizeCUJStateHarness` prepares isolated CUJ-state roots for tests.
 - CUJs are the source records. A CUJ defines actor, intent, preconditions,
   actions, outcomes, tags, and metadata.
-- The harness writes `cujs.json`, `kura-world.seed-state.json`, and
-  `kura-world.seed-state.receipt.json`.
-- The seed-state document contains one Kura world record per CUJ so tests can
+- The harness writes `cujs.json`, `cuj-state.json`, and
+  `cuj-state.receipt.json`.
+- The state document contains one CUJ-state record per CUJ so tests can
   simulate product state from user journeys.
-- The receipt names `storageFamily: kura` and does not expose Turso, libSQL, or
-  database URL fields.
+- The receipt names `stateFamily: cuj-state`. Kura-org may appear as
+  `storehouseFamily` metadata, but Kura world is not the milestone abstraction.
+- The receipt does not expose Turso, libSQL, database URL, database-engine, or
+  Kura-world fields.
 
 Implemented first slice:
 
-- `tests/vaporize-test-support/KuraWorldSeedStateTestSupport.swift`
-- `tests/cuj-21-kura-world-seed-state/VaporizeCUJ21KuraWorldSeedStateTests.swift`
-- `Package.swift` target `VaporizeCUJ21KuraWorldSeedStateTests`
+- `tests/vaporize-test-support/CUJStateTestSupport.swift`
+- `tests/cuj-21-cuj-state/VaporizeCUJ21CUJStateTests.swift`
+- `Package.swift` target `VaporizeCUJ21CUJStateTests`
 
 Exit condition: future integration with `kura@kura-org.sd` or Kura Sync Node is
-explicitly gated and receipt-backed. The core abstraction remains CUJ-derived
-world simulation.
+explicitly gated and receipt-backed. The core abstraction remains CUJ state for
+vaporware spawn and modification.
 
 ### P1: Realize Mode Decision
 
@@ -137,8 +138,8 @@ Every proof mode should support a structured receipt path:
 - `list-targets` / `list-schemes`: target/scheme inventory plus source
   authority.
 - `release-doctor`: existing release checks plus source paths.
-- `kura-world-seed-state`: source CUJ count, seed record count, CUJ manifest
-  path, seed-state document path, storage family, metadata, and created-at
+- `cuj-state`: source CUJ count, state record count, CUJ manifest path,
+  CUJ-state document path, state family, storehouse family, metadata, and created-at
   timestamp.
 
 ### P1: SCM Audit Recipe
@@ -177,7 +178,7 @@ persistence, structured receipts, and explicit native-authority exceptions.
   `private/universal/substrate/collectives/spaces-universal/private/universal/kura-spaces/workflows/vaporware-modernization-workstream/v0.0.2/instances/vaporize-workstream-process-modernization-2026-06-26.workflow-instance.su.json`
 - Component bead:
   `private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/agenda/beads/FR-VAPORIZE-WORKSTREAM-PROCESS-MODERNIZATION-2026-06-26.beads-issue.json`
-- Kura world seed-state harness bead:
-  `private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/agenda/beads/FR-VAPORIZE-KURA-WORLD-SEED-STATE-HARNESS-2026-06-26.beads-issue.json`
+- CUJ state harness bead:
+  `private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/agenda/beads/FR-VAPORIZE-CUJ-STATE-HARNESS-2026-06-26.beads-issue.json`
 - Role manifest:
   `private/universal/substrate/roles/vaporize-workstream-modernization-steward/private/universal/identity/vaporize-workstream-modernization-steward.role-surface-manifest.json`
