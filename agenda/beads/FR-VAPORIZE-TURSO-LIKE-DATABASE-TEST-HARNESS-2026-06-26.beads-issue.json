@@ -1,0 +1,60 @@
+{
+  "BeadsIssue": "0.1.0",
+  "schemaVersion": "0.1.0",
+  "id": "FR-VAPORIZE-TURSO-LIKE-DATABASE-TEST-HARNESS-2026-06-26",
+  "title": "Add Turso-like libSQL database testing harness support to Vaporize",
+  "status": "open",
+  "priority": 1,
+  "issueType": "feature",
+  "labels": [
+    "vaporize",
+    "database-harness",
+    "test-support",
+    "libsql",
+    "turso",
+    "receipt",
+    "network-free-default"
+  ],
+  "createdAt": "2026-06-26T10:30:22Z",
+  "createdBy": "codex after operator requested Turso-like testing harness setup in the Vaporize modernization workstream",
+  "historicalContent": {
+    "slug": "FR-VAPORIZE-TURSO-LIKE-DATABASE-TEST-HARNESS-2026-06-26",
+    "kind": "bead-feature-request",
+    "createdAt": "2026-06-26T10:30:22Z",
+    "createdBy": "codex",
+    "assignee": "wrkstrm-core",
+    "severity": "high",
+    "sourceType": "operator-directed-vaporize-modernization-slice",
+    "sourceLocation": "Codex session 2026-06-26: operator said the workstream specifically needs to start moving to a Turso-like testing harness setup.",
+    "description": "Vaporize needs a database test harness that can model the local/remote split expected from Turso/libSQL without making default tests depend on external network state. The first implementation slice adds shared test-support models and CUJ21 coverage for local libSQL-style fixture materialization, remote Turso-style configuration capture, and JSON receipt round-tripping.",
+    "implementedFirstSlice": {
+      "supportFile": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/tests/vaporize-test-support/DatabaseHarnessTestSupport.swift",
+      "testTarget": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/tests/cuj-21-database-harness/VaporizeCUJ21DatabaseHarnessTests.swift",
+      "packageManifest": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/Package.swift",
+      "vaporizeReceipt": "vaporize.cli@wrkstrm-core.clia.sh test --package-path private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli --configuration debug -- --filter VaporizeCUJ21DatabaseHarnessTests passed 3 tests"
+    },
+    "acceptanceCriteria": [
+      "Shared test support can prepare an isolated local libSQL-style database fixture root.",
+      "Local fixture preparation writes migrations.sql, seed.sql, database-harness-receipt.json, and a concrete .libsql database file.",
+      "Remote Turso-style configuration records a libsql:// database URL and auth-token environment variable name without network access in default tests.",
+      "Database harness receipts round-trip through Codable and include storage mode, network requirement, migration count, seed count, metadata, and created-at timestamp.",
+      "A future opt-in lane can run against real Turso only when explicit environment variables are present, and must emit a structured receipt."
+    ],
+    "linkedTypedRecords": {
+      "processModernizationProposal": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/agenda/proposals/vaporize-workstream-process-modernization-2026-06-26.md",
+      "processModernizationWorkflowInstance": "private/universal/substrate/collectives/spaces-universal/private/universal/kura-spaces/workflows/vaporware-modernization-workstream/v0.0.2/instances/vaporize-workstream-process-modernization-2026-06-26.workflow-instance.su.json",
+      "processModernizationBead": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/agenda/beads/FR-VAPORIZE-WORKSTREAM-PROCESS-MODERNIZATION-2026-06-26.beads-issue.json"
+    },
+    "knownSeparations": [
+      "This slice is a deterministic test harness scaffold, not a production Turso client.",
+      "Default tests remain network-free; real Turso integration must be explicit and environment gated.",
+      "The observed CUJ08 Concourse project.yml fixture mismatch is a stale live-fixture expectation, not a database harness regression."
+    ]
+  },
+  "composesWith": [
+    "[[vaporize-builds-vaporware-warehouse-stores-vaporware]]",
+    "[[tests-default-to-deterministic-local-fixtures]]",
+    "[[networked-integration-tests-must-be-explicitly-gated]]",
+    "[[typed-receipts-over-ad-hoc-terminal-proof]]"
+  ]
+}

@@ -87,6 +87,30 @@ Replace assistant persistence recipes that use direct `git` with:
 - `savepoint.cli@kura-org.clia.sh emit ...`
 - explicit blocked status when no approved savepoint/status surface exists
 
+### P0: Turso-Like Database Harness Setup
+
+Start the database proof lane with deterministic libSQL-style fixtures before
+adding networked Turso execution:
+
+- `VaporizeDatabaseTestHarness` prepares isolated local database fixture roots.
+- Local storage writes a `file://` database URL and creates an empty
+  `.libsql` file for tests that need a concrete database path.
+- Remote storage records a `libsql://` Turso-style database URL plus the auth
+  token environment-variable name, but default tests do not touch the network.
+- Every prepared harness writes `migrations.sql`, `seed.sql`, and
+  `database-harness-receipt.json` with migration counts, seed counts, storage
+  mode, network requirement, metadata, and creation timestamp.
+
+Implemented first slice:
+
+- `tests/vaporize-test-support/DatabaseHarnessTestSupport.swift`
+- `tests/cuj-21-database-harness/VaporizeCUJ21DatabaseHarnessTests.swift`
+- `Package.swift` target `VaporizeCUJ21DatabaseHarnessTests`
+
+Exit condition: networked Turso tests are opt-in behind explicit environment
+configuration and emit structured receipts; default CI/test runs remain
+network-free.
+
 ### P1: Realize Mode Decision
 
 Choose one:
@@ -110,6 +134,9 @@ Every proof mode should support a structured receipt path:
 - `list-targets` / `list-schemes`: target/scheme inventory plus source
   authority.
 - `release-doctor`: existing release checks plus source paths.
+- `database-harness`: storage mode, local/remote URL, migration script path,
+  seed script path, migration count, seed count, network requirement, metadata,
+  and created-at timestamp.
 
 ### P1: SCM Audit Recipe
 
@@ -132,6 +159,8 @@ Vaporize docs for:
 - `jq` proof recipes
 - direct `git` persistence recipes
 - old domain names such as `source-control` where `scm` is canonical
+- stale live-fixture expectations such as CUJ08 Concourse project.yml counts
+  drifting behind the current project topology
 
 ## Decision Ask
 
@@ -145,5 +174,7 @@ persistence, structured receipts, and explicit native-authority exceptions.
   `private/universal/substrate/collectives/spaces-universal/private/universal/kura-spaces/workflows/vaporware-modernization-workstream/v0.0.2/instances/vaporize-workstream-process-modernization-2026-06-26.workflow-instance.su.json`
 - Component bead:
   `private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/agenda/beads/FR-VAPORIZE-WORKSTREAM-PROCESS-MODERNIZATION-2026-06-26.beads-issue.json`
+- Database harness bead:
+  `private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/agenda/beads/FR-VAPORIZE-TURSO-LIKE-DATABASE-TEST-HARNESS-2026-06-26.beads-issue.json`
 - Role manifest:
   `private/universal/substrate/roles/vaporize-workstream-modernization-steward/private/universal/identity/vaporize-workstream-modernization-steward.role-surface-manifest.json`

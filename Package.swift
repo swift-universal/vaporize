@@ -40,7 +40,7 @@ let package = Package(
     // SwiftCLIInstaller library LIFTED to swift-universal/.../tooling/spm/swift-cli-installer/
     // (CEO decision 2026-06-14). Consumers now import via swiftCLIInstallerDependency.
     .library(name: "SwiftAppInstaller", targets: ["SwiftAppInstaller"]),
-    .executable(name: "vaporize@wrkstrm-core.clia.sh", targets: ["VaporizeCLI"]),
+    .executable(name: "vaporize.cli@wrkstrm-core.clia.sh", targets: ["VaporizeCLI"]),
   ],
   dependencies: [
     commonProcessDependency,
@@ -244,6 +244,13 @@ let package = Package(
         .product(name: "ArgumentParser", package: "swift-argument-parser"),
       ],
       path: "tests/cuj-20-xcode-workspace-schemes"
+    ),
+    .testTarget(
+      name: "VaporizeCUJ21DatabaseHarnessTests",
+      dependencies: [
+        "VaporizeTestSupport",
+      ],
+      path: "tests/cuj-21-database-harness"
     ),
     .testTarget(
       name: "VaporizeCUJ12PackageGraphTests",
