@@ -1,0 +1,64 @@
+{
+  "BeadsIssue": "0.1.0",
+  "schemaVersion": "0.1.0",
+  "id": "FR-VAPORIZE-KURA-WORLD-SEED-STATE-HARNESS-2026-06-26",
+  "title": "Create Kura world seed-state harnesses from CUJs for Vaporize simulation proof",
+  "status": "open",
+  "priority": 1,
+  "issueType": "feature",
+  "labels": [
+    "vaporize",
+    "kura",
+    "kura-org",
+    "world-simulation",
+    "seed-state",
+    "cuj-derived",
+    "test-support",
+    "receipt"
+  ],
+  "createdAt": "2026-06-26T11:33:00Z",
+  "createdBy": "codex after operator corrected database/Turso framing to Kura world seed states derived from CUJs",
+  "historicalContent": {
+    "slug": "FR-VAPORIZE-KURA-WORLD-SEED-STATE-HARNESS-2026-06-26",
+    "kind": "bead-feature-request",
+    "createdAt": "2026-06-26T11:33:00Z",
+    "createdBy": "codex",
+    "assignee": "wrkstrm-core",
+    "severity": "high",
+    "sourceType": "operator-corrected-vaporize-modernization-slice",
+    "sourceLocation": "Codex session 2026-06-26: operator corrected that the milestone should use Kura, and create seed states from CUJs to simulate the world.",
+    "description": "Vaporize needs a Kura world seed-state harness that turns critical user journeys into simulated world state. CUJs are the canonical source records: each CUJ defines an actor, intent, preconditions, actions, outcomes, tags, and metadata. The harness materializes those CUJs into a Kura seed-state document plus a receipt so tests can simulate product worlds without centering the design on a database engine.",
+    "implementedFirstSlice": {
+      "supportFile": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/tests/vaporize-test-support/KuraWorldSeedStateTestSupport.swift",
+      "testTarget": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/tests/cuj-21-kura-world-seed-state/VaporizeCUJ21KuraWorldSeedStateTests.swift",
+      "packageManifest": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/Package.swift",
+      "boardPresentation": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/agenda/presentations/vaporize-kura-world-seed-state-board-milestone-2026-06-26/index.html",
+      "vaporizeReceipt": "vaporize.cli@wrkstrm-core.clia.sh test --package-path private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli --configuration debug -- --filter VaporizeCUJ21KuraWorldSeedStateTests passed 3 tests"
+    },
+    "acceptanceCriteria": [
+      "Shared test support can derive Kura world seed-state records from CUJs.",
+      "Each CUJ-derived seed record preserves actor, intent, preconditions, actions, outcomes, tags, and metadata.",
+      "Fixture preparation writes cujs.json, kura-world.seed-state.json, and kura-world.seed-state.receipt.json.",
+      "The receipt identifies storageFamily as kura and sourceKind as critical-user-journey.",
+      "The active CUJ21 proof does not expose Turso, libSQL, databaseURL, or database-engine language.",
+      "Future integration with kura@kura-org.sd or Kura Sync Node remains explicitly gated and receipt-backed."
+    ],
+    "linkedTypedRecords": {
+      "processModernizationProposal": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/agenda/proposals/vaporize-workstream-process-modernization-2026-06-26.md",
+      "processModernizationWorkflowInstance": "private/universal/substrate/collectives/spaces-universal/private/universal/kura-spaces/workflows/vaporware-modernization-workstream/v0.0.2/instances/vaporize-workstream-process-modernization-2026-06-26.workflow-instance.su.json",
+      "processModernizationBead": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/agenda/beads/FR-VAPORIZE-WORKSTREAM-PROCESS-MODERNIZATION-2026-06-26.beads-issue.json",
+      "supersededDatabaseBead": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/agenda/beads/FR-VAPORIZE-TURSO-LIKE-DATABASE-TEST-HARNESS-2026-06-26.beads-issue.json"
+    },
+    "knownSeparations": [
+      "This slice produces Kura seed-state documents for simulation; it is not a production Kura service adapter.",
+      "Kura/Vaults Org owns the storehouse and data-engine family. Vaporize owns the proof harness and receipt lane.",
+      "Database engines are implementation details behind Kura integration, not the board-facing abstraction."
+    ]
+  },
+  "composesWith": [
+    "[[vaporize-builds-vaporware-warehouse-stores-vaporware]]",
+    "[[cujs-are-world-simulation-seeds]]",
+    "[[kura-is-the-substrate-storehouse-family]]",
+    "[[typed-receipts-over-ad-hoc-terminal-proof]]"
+  ]
+}

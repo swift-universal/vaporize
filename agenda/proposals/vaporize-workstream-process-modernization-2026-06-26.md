@@ -87,29 +87,32 @@ Replace assistant persistence recipes that use direct `git` with:
 - `savepoint.cli@kura-org.clia.sh emit ...`
 - explicit blocked status when no approved savepoint/status surface exists
 
-### P0: Turso-Like Database Harness Setup
+### P0: Kura World Seed-State Harness
 
-Start the database proof lane with deterministic libSQL-style fixtures before
-adding networked Turso execution:
+Start the simulation proof lane by deriving Kura seed states from CUJs. The
+seed-state harness should model the world a CUJ needs, not lead with database
+engine concerns:
 
-- `VaporizeDatabaseTestHarness` prepares isolated local database fixture roots.
-- Local storage writes a `file://` database URL and creates an empty
-  `.libsql` file for tests that need a concrete database path.
-- Remote storage records a `libsql://` Turso-style database URL plus the auth
-  token environment-variable name, but default tests do not touch the network.
-- Every prepared harness writes `migrations.sql`, `seed.sql`, and
-  `database-harness-receipt.json` with migration counts, seed counts, storage
-  mode, network requirement, metadata, and creation timestamp.
+- `VaporizeKuraWorldSeedStateHarness` prepares isolated Kura world seed-state
+  roots for tests.
+- CUJs are the source records. A CUJ defines actor, intent, preconditions,
+  actions, outcomes, tags, and metadata.
+- The harness writes `cujs.json`, `kura-world.seed-state.json`, and
+  `kura-world.seed-state.receipt.json`.
+- The seed-state document contains one Kura world record per CUJ so tests can
+  simulate product state from user journeys.
+- The receipt names `storageFamily: kura` and does not expose Turso, libSQL, or
+  database URL fields.
 
 Implemented first slice:
 
-- `tests/vaporize-test-support/DatabaseHarnessTestSupport.swift`
-- `tests/cuj-21-database-harness/VaporizeCUJ21DatabaseHarnessTests.swift`
-- `Package.swift` target `VaporizeCUJ21DatabaseHarnessTests`
+- `tests/vaporize-test-support/KuraWorldSeedStateTestSupport.swift`
+- `tests/cuj-21-kura-world-seed-state/VaporizeCUJ21KuraWorldSeedStateTests.swift`
+- `Package.swift` target `VaporizeCUJ21KuraWorldSeedStateTests`
 
-Exit condition: networked Turso tests are opt-in behind explicit environment
-configuration and emit structured receipts; default CI/test runs remain
-network-free.
+Exit condition: future integration with `kura@kura-org.sd` or Kura Sync Node is
+explicitly gated and receipt-backed. The core abstraction remains CUJ-derived
+world simulation.
 
 ### P1: Realize Mode Decision
 
@@ -134,9 +137,9 @@ Every proof mode should support a structured receipt path:
 - `list-targets` / `list-schemes`: target/scheme inventory plus source
   authority.
 - `release-doctor`: existing release checks plus source paths.
-- `database-harness`: storage mode, local/remote URL, migration script path,
-  seed script path, migration count, seed count, network requirement, metadata,
-  and created-at timestamp.
+- `kura-world-seed-state`: source CUJ count, seed record count, CUJ manifest
+  path, seed-state document path, storage family, metadata, and created-at
+  timestamp.
 
 ### P1: SCM Audit Recipe
 
@@ -174,7 +177,7 @@ persistence, structured receipts, and explicit native-authority exceptions.
   `private/universal/substrate/collectives/spaces-universal/private/universal/kura-spaces/workflows/vaporware-modernization-workstream/v0.0.2/instances/vaporize-workstream-process-modernization-2026-06-26.workflow-instance.su.json`
 - Component bead:
   `private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/agenda/beads/FR-VAPORIZE-WORKSTREAM-PROCESS-MODERNIZATION-2026-06-26.beads-issue.json`
-- Database harness bead:
-  `private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/agenda/beads/FR-VAPORIZE-TURSO-LIKE-DATABASE-TEST-HARNESS-2026-06-26.beads-issue.json`
+- Kura world seed-state harness bead:
+  `private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/agenda/beads/FR-VAPORIZE-KURA-WORLD-SEED-STATE-HARNESS-2026-06-26.beads-issue.json`
 - Role manifest:
   `private/universal/substrate/roles/vaporize-workstream-modernization-steward/private/universal/identity/vaporize-workstream-modernization-steward.role-surface-manifest.json`

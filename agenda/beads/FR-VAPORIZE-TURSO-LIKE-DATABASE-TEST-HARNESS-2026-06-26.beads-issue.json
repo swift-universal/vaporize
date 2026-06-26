@@ -2,8 +2,8 @@
   "BeadsIssue": "0.1.0",
   "schemaVersion": "0.1.0",
   "id": "FR-VAPORIZE-TURSO-LIKE-DATABASE-TEST-HARNESS-2026-06-26",
-  "title": "Add Turso-like libSQL database testing harness support to Vaporize",
-  "status": "open",
+  "title": "Superseded: Turso-like libSQL database testing harness support to Vaporize",
+  "status": "superseded-by-kura-world-seed-state",
   "priority": 1,
   "issueType": "feature",
   "labels": [
@@ -27,6 +27,12 @@
     "sourceType": "operator-directed-vaporize-modernization-slice",
     "sourceLocation": "Codex session 2026-06-26: operator said the workstream specifically needs to start moving to a Turso-like testing harness setup.",
     "description": "Vaporize needs a database test harness that can model the local/remote split expected from Turso/libSQL without making default tests depend on external network state. The first implementation slice adds shared test-support models and CUJ21 coverage for local libSQL-style fixture materialization, remote Turso-style configuration capture, and JSON receipt round-tripping.",
+    "supersededBy": {
+      "reason": "Operator correction on 2026-06-26: the core abstraction is not a database harness. Vaporize needs a Kura world seed-state harness that derives simulated world state from CUJs.",
+      "replacementBead": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/agenda/beads/FR-VAPORIZE-KURA-WORLD-SEED-STATE-HARNESS-2026-06-26.beads-issue.json",
+      "replacementSupportFile": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/tests/vaporize-test-support/KuraWorldSeedStateTestSupport.swift",
+      "replacementTestTarget": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/tests/cuj-21-kura-world-seed-state/VaporizeCUJ21KuraWorldSeedStateTests.swift"
+    },
     "implementedFirstSlice": {
       "supportFile": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/tests/vaporize-test-support/DatabaseHarnessTestSupport.swift",
       "testTarget": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/tests/cuj-21-database-harness/VaporizeCUJ21DatabaseHarnessTests.swift",
@@ -35,11 +41,9 @@
       "vaporizeReceipt": "vaporize.cli@wrkstrm-core.clia.sh test --package-path private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli --configuration debug -- --filter VaporizeCUJ21DatabaseHarnessTests passed 3 tests"
     },
     "acceptanceCriteria": [
-      "Shared test support can prepare an isolated local libSQL-style database fixture root.",
-      "Local fixture preparation writes migrations.sql, seed.sql, database-harness-receipt.json, and a concrete .libsql database file.",
-      "Remote Turso-style configuration records a libsql:// database URL and auth-token environment variable name without network access in default tests.",
-      "Database harness receipts round-trip through Codable and include storage mode, network requirement, migration count, seed count, metadata, and created-at timestamp.",
-      "A future opt-in lane can run against real Turso only when explicit environment variables are present, and must emit a structured receipt."
+      "This superseded bead remains only as a historical correction record.",
+      "The active implementation and proof move to the Kura world seed-state replacement bead.",
+      "No board packet should treat this database/Turso framing as the approved abstraction."
     ],
     "linkedTypedRecords": {
       "processModernizationProposal": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/agenda/proposals/vaporize-workstream-process-modernization-2026-06-26.md",
