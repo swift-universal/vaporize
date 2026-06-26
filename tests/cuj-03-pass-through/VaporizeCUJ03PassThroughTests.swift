@@ -14,11 +14,11 @@ func passModeStripsExplicitSwiftToolAndSeparator() throws {
 
 @Test("CUJ-03 defaults to Swift when the tool name is omitted")
 func passModeDefaultsToSwiftWhenToolNameIsOmitted() throws {
-  let request = try PassThroughRequest(arguments: ["build", "--package-path", "/workspace/pkg", "--product", "vaporize@wrkstrm-core.cli"])
+  let request = try PassThroughRequest(arguments: ["build", "--package-path", "/workspace/pkg", "--product", "vaporize.cli@wrkstrm-core.clia.sh"])
 
   #expect(request.tool == .swift)
   #expect(request.executableName == "swift")
-  #expect(request.arguments == ["build", "--package-path", "/workspace/pkg", "--product", "vaporize@wrkstrm-core.cli"])
+  #expect(request.arguments == ["build", "--package-path", "/workspace/pkg", "--product", "vaporize.cli@wrkstrm-core.clia.sh"])
 }
 
 @Test("CUJ-03 tolerates repeated leading separators")

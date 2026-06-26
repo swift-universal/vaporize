@@ -37,7 +37,7 @@ func releaseReviewArtifactsExist() {
 func launchReviewPacketIsValidJSONAndInternalEssential() throws {
   let packet = try readJSONObject(relativePath: "release/v0.0.1/evidence/launch-review-packet.json")
 
-  #expect(packet["subjectAppSlug"] as? String == "vaporize@wrkstrm-core.cli")
+  #expect(packet["subjectAppSlug"] as? String == "vaporize.cli@wrkstrm-core.clia.sh")
   #expect(packet["subjectWareKindSlug"] as? String == "internal-essential-cli")
   let releaseTarget = try #require(packet["releaseTarget"] as? [String: Any])
   #expect(releaseTarget["toolClassification"] as? String == "internal-essential-tool")

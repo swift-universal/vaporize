@@ -30,7 +30,7 @@ func releaseDoctorPassesLiveReleaseSpine() throws {
   )
 
   #expect(receipt.receiptKind == "vaporize-release-doctor")
-  #expect(receipt.subjectAppSlug == "vaporize@wrkstrm-core.cli")
+  #expect(receipt.subjectAppSlug == "vaporize.cli@wrkstrm-core.clia.sh")
   #expect(receipt.subjectReleaseSlug == "v0.0.1")
   #expect(receipt.overallStatus == "pass")
   #expect(receipt.failedCheckCount == 0)
@@ -141,7 +141,7 @@ private func makeReleaseDoctorFixture(includeGate33: Bool) throws -> URL {
   try write(
     """
     {
-      "subjectAppSlug": "vaporize@wrkstrm-core.cli",
+      "subjectAppSlug": "vaporize.cli@wrkstrm-core.clia.sh",
       "evidenceRefs": [
         { "t": "Release doctor receipt" },
         { "t": "Creative Selection v0.2 target discovery receipt" },

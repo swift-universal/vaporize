@@ -202,7 +202,7 @@ enum VaporizeReleaseDoctor {
     return VaporizeReleaseDoctorReceipt(
       schemaRef: schemaRef,
       requestId: requestId,
-      subjectAppSlug: "vaporize@wrkstrm-core.cli",
+      subjectAppSlug: "vaporize.cli@wrkstrm-core.clia.sh",
       subjectReleaseSlug: "v0.0.1",
       inspectedPath: URL(fileURLWithPath: path).standardizedFileURL.path,
       packageRootPath: roots.packageRoot.path,
@@ -352,7 +352,7 @@ enum VaporizeReleaseDoctor {
         name: "launch-review-subject",
         category: "launch-review",
         path: url.path,
-        passed: object["subjectAppSlug"] as? String == "vaporize@wrkstrm-core.cli",
+        passed: object["subjectAppSlug"] as? String == "vaporize.cli@wrkstrm-core.clia.sh",
         detail: "Launch-review packet subjectAppSlug must name Vaporize."
       ),
       check(

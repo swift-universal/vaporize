@@ -20,19 +20,146 @@ func parsesStatusModeWithJSONOutput() throws {
   #expect(command.vaporOutputFormat.rendererFormat == .json)
 }
 
-@Test("CUJ-07 parses inventory as the warehouse compatibility alias")
-func parsesInventoryCompatibilityAlias() throws {
+@Test("CUJ-07 parses inventory as owned surface inventory")
+func parsesInventoryAsOwnedSurfaceInventory() throws {
   let command = try VaporizeCLI.parse([
     "inventory",
-    "--path",
-    "/tmp/vaporware",
-    "--receipt-path",
-    "/tmp/receipt.json",
+    "--path", "/tmp/substrate",
+    "--format", "json",
+    "--receipt-path", "/tmp/owned-surfaces.json",
   ])
 
   #expect(command.mode == .inventory)
-  #expect(command.vaporScanPath == "/tmp/vaporware")
-  #expect(command.receiptPath == "/tmp/receipt.json")
+  #expect(command.vaporScanPath == "/tmp/substrate")
+  #expect(command.vaporOutputFormat == .json)
+  #expect(command.receiptPath == "/tmp/owned-surfaces.json")
+}
+
+@Test("CUJ-07 owned surface inventory finds packages projects and workspaces")
+func ownedSurfaceInventoryFindsPackagesProjectsAndWorkspaces() throws {
+  let fixture = try makeFixtureDirectory(named: "owned-surfaces")
+  defer { try? FileManager.default.removeItem(at: fixture) }
+
+  try writeText(
+    """
+    // swift-tools-version: 6.4
+    import PackageDescription
+    let package = Package(
+      name: "wrkstrm-docc-cli",
+      products: [
+        .library(name: "WrkstrmDocC", targets: ["WrkstrmDocC"]),
+        .executable(name: "wrkstrm-docc-cli@wrkstrm.clia.sh", targets: ["wrkstrm-docc-cli"])
+      ],
+      targets: []
+    )
+    """,
+    to: fixture.appendingPathComponent(
+      "collectives/wrkstrm/private/universal/spm/domain/tooling/wrkstrm-docc-cli/Package.swift"
+    )
+  )
+
+  try FileManager.default.createDirectory(
+    at: fixture.appendingPathComponent(
+      "collectives/wrkstrm-components/private/docc-browser/demo-apps/docc-browser.demo/docc-browser.demo.xcodeproj"
+    ),
+    withIntermediateDirectories: true
+  )
+  try FileManager.default.createDirectory(
+    at: fixture.appendingPathComponent(
+      "collectives/wrkstrm-core/private/product-lines/concourse/apps/concourse/Concourse.xcworkspace"
+    ),
+    withIntermediateDirectories: true
+  )
+
+  let result = try OwnedSurfaceInventoryScanner().scan(path: fixture.path)
+
+  #expect(result.summary.total == 3)
+  #expect(result.summary.swiftPackages == 1)
+  #expect(result.summary.xcodeProjects == 1)
+  #expect(result.summary.xcodeWorkspaces == 1)
+  #expect(result.summary.activeOwnedSurfaces == 3)
+  #expect(result.summary.activeOwnedSwiftPackages == 1)
+  #expect(result.summary.byDomainProductLine["tooling/wrkstrm-docc-cli"] == 1)
+  #expect(result.summary.byDomainProductLine["docc-browser/docc-browser"] == 1)
+  #expect(result.summary.byDomainProductLine["concourse/concourse"] == 1)
+
+  let package = try #require(result.surfaces.first { $0.kind == .swiftPackage })
+  #expect(package.owner == "wrkstrm")
+  #expect(package.ownershipScope == .activeOwned)
+  #expect(package.domain == "tooling")
+  #expect(package.productLine == "wrkstrm-docc-cli")
+  #expect(Set(package.declaredProducts) == Set(["WrkstrmDocC", "wrkstrm-docc-cli@wrkstrm.clia.sh"]))
+}
+
+@Test("CUJ-07 owned surface inventory separates active generated derived dependency checkouts and references")
+func ownedSurfaceInventorySeparatesActiveGeneratedDerivedDependencyCheckoutsAndReferences() throws {
+  let fixture = try makeFixtureDirectory(named: "owned-surface-scopes")
+  defer { try? FileManager.default.removeItem(at: fixture) }
+
+  try writeText(
+    packageManifest(named: "active-tool"),
+    to: fixture.appendingPathComponent(
+      "collectives/wrkstrm/private/universal/spm/domain/tooling/active-tool/Package.swift"
+    )
+  )
+  try writeText(
+    packageManifest(named: "digikoma-swift-format"),
+    to: fixture.appendingPathComponent(
+      "collectives/takumi-org/private/universal/domain/harnesses/digikoma/domain/build/digikoma-swift-format/Package.swift"
+    )
+  )
+  try writeText(
+    packageManifest(named: "derived-tool"),
+    to: fixture.appendingPathComponent(
+      "collectives/spaces-universal/private/universal/kura-spaces/assistants/chatgpt/private/universal/harvest/2026-03-16/derived-tool/Package.swift"
+    )
+  )
+  try writeText(
+    packageManifest(named: "checkout-tool"),
+    to: fixture.appendingPathComponent(
+      "collectives/wrkstrm-core/private/apple/apps/concourse/build/smoke/SourcePackages/checkouts/checkout-tool/Package.swift"
+    )
+  )
+  try writeText(
+    packageManifest(named: "referenced-tool"),
+    to: fixture.appendingPathComponent(
+      "maintainers/apple/referenced-tool/Package.swift"
+    )
+  )
+
+  let result = try OwnedSurfaceInventoryScanner().scan(path: fixture.path)
+
+  #expect(result.summary.swiftPackages == 5)
+  #expect(result.summary.activeOwnedSwiftPackages == 1)
+  #expect(result.summary.generatedOwnedSwiftPackages == 1)
+  #expect(result.summary.derivedSwiftPackages == 1)
+  #expect(result.summary.dependencyCheckoutSwiftPackages == 1)
+  #expect(result.summary.externalReferenceSwiftPackages == 1)
+  #expect(result.summary.byOwnershipScope["active-owned"] == 1)
+  #expect(result.summary.byOwnershipScope["generated-owned"] == 1)
+  #expect(result.summary.byOwnershipScope["derived"] == 1)
+  #expect(result.summary.byOwnershipScope["dependency-checkout"] == 1)
+  #expect(result.summary.byOwnershipScope["external-reference"] == 1)
+  #expect(result.summary.byOwnershipScopeDomainProductLine["active-owned/tooling/active-tool"] == 1)
+  #expect(result.summary.byOwnershipScopeDomainProductLine["generated-owned/harnesses/digikoma"] == 1)
+  #expect(result.summary.byOwnershipScopeDomainProductLine["derived/assistants/derived-tool"] == 1)
+  #expect(result.summary.byOwnershipScopeDomainProductLine["dependency-checkout/apple/concourse"] == 1)
+  #expect(result.summary.byOwnershipScopeDomainProductLine["external-reference/unclassified/referenced-tool"] == 1)
+
+  let generated = try #require(result.surfaces.first { $0.name == "digikoma-swift-format" })
+  #expect(generated.owner == "takumi-org")
+  #expect(generated.ownershipScope == .generatedOwned)
+  #expect(generated.domain == "harnesses")
+  #expect(generated.productLine == "digikoma")
+  #expect(result.summary.byDomainProductLine["harnesses/digikoma"] == 1)
+
+  let checkout = try #require(result.surfaces.first { $0.name == "checkout-tool" })
+  #expect(checkout.owner == "wrkstrm-core")
+  #expect(checkout.ownershipScope == .dependencyCheckout)
+
+  let derived = try #require(result.surfaces.first { $0.name == "derived-tool" })
+  #expect(derived.owner == "spaces-universal")
+  #expect(derived.ownershipScope == .derived)
 }
 
 @Test("CUJ-07 classifies a collapsed annotation at the top level")
@@ -347,4 +474,26 @@ private func makeFixtureDirectory(named name: String) throws -> URL {
 private func writeJSON(_ contents: String, name: String, in directory: URL) throws {
   let target = directory.appendingPathComponent(name)
   try contents.write(to: target, atomically: true, encoding: .utf8)
+}
+
+private func writeText(_ contents: String, to target: URL) throws {
+  try FileManager.default.createDirectory(
+    at: target.deletingLastPathComponent(),
+    withIntermediateDirectories: true
+  )
+  try contents.write(to: target, atomically: true, encoding: .utf8)
+}
+
+private func packageManifest(named name: String) -> String {
+  """
+  // swift-tools-version: 6.4
+  import PackageDescription
+  let package = Package(
+    name: "\(name)",
+    products: [
+      .executable(name: "\(name)", targets: ["\(name)"])
+    ],
+    targets: []
+  )
+  """
 }

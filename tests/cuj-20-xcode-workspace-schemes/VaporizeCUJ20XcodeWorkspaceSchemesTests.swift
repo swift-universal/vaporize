@@ -46,7 +46,7 @@ func parsesXcodebuildWorkspaceSchemeJSON() throws {
         "schemes": [
           "creative-selection-v0.2",
           "concourse",
-          "vaporize@wrkstrm-core.cli"
+          "vaporize.cli@wrkstrm-core.clia.sh"
         ]
       }
     }
@@ -59,7 +59,7 @@ func parsesXcodebuildWorkspaceSchemeJSON() throws {
   #expect(parsed.schemes == [
     "creative-selection-v0.2",
     "concourse",
-    "vaporize@wrkstrm-core.cli",
+    "vaporize.cli@wrkstrm-core.clia.sh",
   ])
 }
 
