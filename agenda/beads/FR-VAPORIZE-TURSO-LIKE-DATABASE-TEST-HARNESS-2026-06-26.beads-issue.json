@@ -31,6 +31,7 @@
       "supportFile": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/tests/vaporize-test-support/DatabaseHarnessTestSupport.swift",
       "testTarget": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/tests/cuj-21-database-harness/VaporizeCUJ21DatabaseHarnessTests.swift",
       "packageManifest": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/Package.swift",
+      "boardPresentation": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/agenda/presentations/vaporize-database-harness-board-milestone-2026-06-26/index.html",
       "vaporizeReceipt": "vaporize.cli@wrkstrm-core.clia.sh test --package-path private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli --configuration debug -- --filter VaporizeCUJ21DatabaseHarnessTests passed 3 tests"
     },
     "acceptanceCriteria": [
