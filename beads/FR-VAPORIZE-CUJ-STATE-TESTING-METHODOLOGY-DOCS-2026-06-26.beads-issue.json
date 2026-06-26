@@ -40,7 +40,7 @@
     ],
     "linkedTypedRecords": {
       "cujStateWorkflow": "private/universal/substrate/collectives/spaces-universal/private/universal/kura-spaces/workflows/vaporware-cuj-state-workstream/v0.1.0/vaporware-cuj-state-workstream.workflow.su.json",
-      "cujStateHarnessBead": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/agenda/beads/FR-VAPORIZE-CUJ-STATE-HARNESS-2026-06-26.beads-issue.json"
+      "cujStateHarnessBead": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/FR-VAPORIZE-CUJ-STATE-HARNESS-2026-06-26.beads-issue.json"
     }
   },
   "composesWith": [

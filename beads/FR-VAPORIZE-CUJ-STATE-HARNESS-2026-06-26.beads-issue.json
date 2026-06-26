@@ -47,9 +47,9 @@
       "cujStateWorkflowInstance": "private/universal/substrate/collectives/spaces-universal/private/universal/kura-spaces/workflows/vaporware-cuj-state-workstream/v0.1.0/vaporware-cuj-state-workstream-2026-06-26.workflow-instance.su.json",
       "processModernizationProposal": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/agenda/proposals/vaporize-workstream-process-modernization-2026-06-26.md",
       "processModernizationWorkflowInstance": "private/universal/substrate/collectives/spaces-universal/private/universal/kura-spaces/workflows/vaporware-modernization-workstream/v0.0.2/instances/vaporize-workstream-process-modernization-2026-06-26.workflow-instance.su.json",
-      "processModernizationBead": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/agenda/beads/FR-VAPORIZE-WORKSTREAM-PROCESS-MODERNIZATION-2026-06-26.beads-issue.json",
-      "supersededKuraWorldBead": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/agenda/beads/FR-VAPORIZE-KURA-WORLD-SEED-STATE-HARNESS-2026-06-26.beads-issue.json",
-      "supersededDatabaseBead": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/agenda/beads/FR-VAPORIZE-TURSO-LIKE-DATABASE-TEST-HARNESS-2026-06-26.beads-issue.json"
+      "processModernizationBead": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/FR-VAPORIZE-WORKSTREAM-PROCESS-MODERNIZATION-2026-06-26.beads-issue.json",
+      "supersededKuraWorldBead": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/FR-VAPORIZE-KURA-WORLD-SEED-STATE-HARNESS-2026-06-26.beads-issue.json",
+      "supersededDatabaseBead": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/FR-VAPORIZE-TURSO-LIKE-DATABASE-TEST-HARNESS-2026-06-26.beads-issue.json"
     },
     "knownSeparations": [
       "This slice produces CUJ state documents for simulation; it is not a production Kura service adapter.",

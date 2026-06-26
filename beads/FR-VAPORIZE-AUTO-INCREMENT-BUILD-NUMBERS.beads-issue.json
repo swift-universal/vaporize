@@ -73,10 +73,10 @@
       "Concourse build fingerprint health payload"
     ],
     "linkedRecords": [
-      "wrkstrm-core/private/apple/apps/concourse/agenda/beads/P0-CONCOURSE-OLD-VERSION-LAUNCH-ROUTE.issue.json",
+      "wrkstrm-core/private/apple/apps/concourse/beads/P0-CONCOURSE-OLD-VERSION-LAUNCH-ROUTE.issue.json",
       "wrkstrm-core/private/apple/apps/concourse/agenda/quality/concourse-product-to-qa-breakdown-2026-06-11.md",
       "wrkstrm-core/private/apple/apps/concourse/project.yml",
-      "wrkstrm-research/agenda/beads/bump-build-cli-graduation-to-substrate-shared.issue.json"
+      "wrkstrm-research/beads/bump-build-cli-graduation-to-substrate-shared.issue.json"
     ],
     "nonGoals": [
       "Do not make build-number increments an invisible side effect with no receipt.",
@@ -85,7 +85,7 @@
     ],
     "implementationReuse": {
       "canonicalSource": "Hack Nu plist utility / Fastlane + agvtool build-number workflow, to be lifted into the substrate-shared bump-build primitive rather than duplicated inside Vaporize",
-      "existingBacklogRecord": "private/universal/substrate/collectives/wrkstrm-research/agenda/beads/bump-build-cli-graduation-to-substrate-shared.issue.json",
+      "existingBacklogRecord": "private/universal/substrate/collectives/wrkstrm-research/beads/bump-build-cli-graduation-to-substrate-shared.issue.json",
       "existingRule": "CFBundleVersion = previous + 1, starting at 0; CFBundleShortVersionString and CFBundleVersion remain typed-distinct; only build advances per cadence",
       "requiredAdapters": [
         "Xcode project and agvtool adapter for Hack Nu-style projects",

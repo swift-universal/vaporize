@@ -24,12 +24,12 @@
       {
         "bead": "FR-CRAZE-LIST-TARGETS-substrate-canonical-target-discovery",
         "relation": "sibling - list-targets is one mode this bead composes with",
-        "path": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/agenda/beads/FR-CRAZE-LIST-TARGETS-substrate-canonical-target-discovery.issue.json"
+        "path": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/FR-CRAZE-LIST-TARGETS-substrate-canonical-target-discovery.issue.json"
       },
       {
         "bead": "FR-VAPOR-COORDINATION-CUT-v0.0.1-COORDINATED-SCHEMA-UNIVERSAL-CRAZE-BUILDS-VAPORWARE",
         "relation": "schema-prerequisite - the 11 typed primitives this bead's Phase 2+ consumes",
-        "path": "private/universal/substrate/collectives/schema-universal/private/universal/agenda/beads/FR-VAPOR-COORDINATION-CUT-v0.0.1-COORDINATED-SCHEMA-UNIVERSAL-CRAZE-BUILDS-VAPORWARE.issue.json"
+        "path": "private/universal/substrate/collectives/schema-universal/private/universal/beads/FR-VAPOR-COORDINATION-CUT-v0.0.1-COORDINATED-SCHEMA-UNIVERSAL-CRAZE-BUILDS-VAPORWARE.issue.json"
       }
     ],
     "phasedImplementationPlan": {
@@ -112,8 +112,8 @@
     ],
     "linkedTypedRecords": {
       "triggeringAxiom": "private/universal/substrate/collectives/spaces-universal/private/universal/kura-spaces/axioms/craze-builds-vaporware-typed-records-are-substrate-vapor-craze-is-the-collapse-gate.axiom.su.json",
-      "schemaPrerequisite": "private/universal/substrate/collectives/schema-universal/private/universal/agenda/beads/FR-VAPOR-COORDINATION-CUT-v0.0.1-COORDINATED-SCHEMA-UNIVERSAL-CRAZE-BUILDS-VAPORWARE.issue.json",
-      "siblingDiscoveryBead": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/agenda/beads/FR-CRAZE-LIST-TARGETS-substrate-canonical-target-discovery.issue.json",
+      "schemaPrerequisite": "private/universal/substrate/collectives/schema-universal/private/universal/beads/FR-VAPOR-COORDINATION-CUT-v0.0.1-COORDINATED-SCHEMA-UNIVERSAL-CRAZE-BUILDS-VAPORWARE.issue.json",
+      "siblingDiscoveryBead": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/FR-CRAZE-LIST-TARGETS-substrate-canonical-target-discovery.issue.json",
       "cameronDraftSwiftCodableSketches": "private/universal/substrate/collectives/spaces-universal/private/universal/kura-spaces/csuite-fan-in-requests/2026-06-10-craze-builds-vaporware-identity-reframe/first-pass-drafts/swift-engineer-cameron-draft.contribution.json",
       "cycle1VaporInventoryEvidence": "private/universal/substrate/collectives/spaces-universal/private/universal/kura-spaces/csuite-fan-in-requests/2026-06-11-vapor-identification-product-lines-and-families/cycle1-aggregation-packet.json"
     },

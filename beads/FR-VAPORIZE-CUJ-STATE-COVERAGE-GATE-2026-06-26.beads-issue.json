@@ -47,8 +47,8 @@
     ],
     "linkedTypedRecords": {
       "cujStateWorkflow": "private/universal/substrate/collectives/spaces-universal/private/universal/kura-spaces/workflows/vaporware-cuj-state-workstream/v0.1.0/vaporware-cuj-state-workstream.workflow.su.json",
-      "cujStateHarnessBead": "agenda/beads/FR-VAPORIZE-CUJ-STATE-HARNESS-2026-06-26.beads-issue.json",
-      "cujStateDocsBead": "agenda/beads/FR-VAPORIZE-CUJ-STATE-TESTING-METHODOLOGY-DOCS-2026-06-26.beads-issue.json"
+      "cujStateHarnessBead": "beads/FR-VAPORIZE-CUJ-STATE-HARNESS-2026-06-26.beads-issue.json",
+      "cujStateDocsBead": "beads/FR-VAPORIZE-CUJ-STATE-TESTING-METHODOLOGY-DOCS-2026-06-26.beads-issue.json"
     }
   },
   "composesWith": [

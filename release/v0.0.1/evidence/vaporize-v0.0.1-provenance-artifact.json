@@ -609,7 +609,7 @@
       "result": "PASS: 0 safe-to-migrate hits"
     },
     {
-      "command": "vaporize validate-json --path private/apple/spm/vaporize@wrkstrm-core.cli/agenda/beads/FR-VAPORIZE-PKL-PROJECT-GENERATION-move-owned-xcodegen-surfaces-to-pkl.issue.json",
+      "command": "vaporize validate-json --path private/apple/spm/vaporize@wrkstrm-core.cli/beads/FR-VAPORIZE-PKL-PROJECT-GENERATION-move-owned-xcodegen-surfaces-to-pkl.issue.json",
       "result": "PASS"
     },
     {

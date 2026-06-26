@@ -159,7 +159,7 @@
       "creativeSelectionV02ProjectYMLPklImportReceipt": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/creative-selection-v0.2-project-yml-pkl-import.receipt.json",
       "creativeSelectionV02ProjectYMLPklComparisonReceipt": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/creative-selection-v0.2-project-yml-pkl-comparison.receipt.json",
       "provenanceArtifact": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/vaporize-v0.0.1-provenance-artifact.json",
-      "priorXcodeGenBead": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/agenda/beads/FR-VAPORIZE-XCODEGEN-INTEGRATION-substrate-canonical-xcodegen-aware-build.issue.json"
+      "priorXcodeGenBead": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/FR-VAPORIZE-XCODEGEN-INTEGRATION-substrate-canonical-xcodegen-aware-build.issue.json"
     }
   },
   "composesWith": [

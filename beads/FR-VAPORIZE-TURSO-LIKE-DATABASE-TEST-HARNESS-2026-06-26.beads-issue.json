@@ -29,7 +29,7 @@
     "description": "Vaporize needs a database test harness that can model the local/remote split expected from Turso/libSQL without making default tests depend on external network state. The first implementation slice adds shared test-support models and CUJ21 coverage for local libSQL-style fixture materialization, remote Turso-style configuration capture, and JSON receipt round-tripping.",
     "supersededBy": {
       "reason": "Operator correction on 2026-06-26: the core abstraction is not a database harness. Vaporize needs CUJ state for spawn and modification proof; Kura/database concerns are subordinate implementation context.",
-      "replacementBead": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/agenda/beads/FR-VAPORIZE-CUJ-STATE-HARNESS-2026-06-26.beads-issue.json",
+      "replacementBead": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/FR-VAPORIZE-CUJ-STATE-HARNESS-2026-06-26.beads-issue.json",
       "replacementSupportFile": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/tests/vaporize-test-support/CUJStateTestSupport.swift",
       "replacementTestTarget": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/tests/cuj-21-cuj-state/VaporizeCUJ21CUJStateTests.swift"
     },
@@ -48,7 +48,7 @@
     "linkedTypedRecords": {
       "processModernizationProposal": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/agenda/proposals/vaporize-workstream-process-modernization-2026-06-26.md",
       "processModernizationWorkflowInstance": "private/universal/substrate/collectives/spaces-universal/private/universal/kura-spaces/workflows/vaporware-modernization-workstream/v0.0.2/instances/vaporize-workstream-process-modernization-2026-06-26.workflow-instance.su.json",
-      "processModernizationBead": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/agenda/beads/FR-VAPORIZE-WORKSTREAM-PROCESS-MODERNIZATION-2026-06-26.beads-issue.json"
+      "processModernizationBead": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/FR-VAPORIZE-WORKSTREAM-PROCESS-MODERNIZATION-2026-06-26.beads-issue.json"
     },
     "knownSeparations": [
       "This slice is a deterministic test harness scaffold, not a production Turso client.",

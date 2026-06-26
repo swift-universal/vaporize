@@ -63,9 +63,9 @@
       "[[lift-existing-patterns-not-reimplement]] (extend vaporize; do not author parallel structural-rename tool)"
     ],
     "composesWith": [
-      "umbrella migration bead: schema-universal/private/universal/agenda/beads/MIGRATION-substrate-version-shift-down-one-cascade.issue.json",
-      "sibling: schema-bump@schema-universal.cli/agenda/beads/FR-SCHEMA-BUMP-CONSUMER-RECORD-SWEEP-MODE.issue.json (handles record-level + family-dir renames)",
-      "sibling: schema-universal/.../agenda/beads/FR-SUBSTRATE-VERSION-DOCTRINE-LINTER-CLI.issue.json"
+      "umbrella migration bead: schema-universal/private/universal/beads/MIGRATION-substrate-version-shift-down-one-cascade.issue.json",
+      "sibling: schema-bump@schema-universal.cli/beads/FR-SCHEMA-BUMP-CONSUMER-RECORD-SWEEP-MODE.issue.json (handles record-level + family-dir renames)",
+      "sibling: schema-universal/.../beads/FR-SUBSTRATE-VERSION-DOCTRINE-LINTER-CLI.issue.json"
     ],
     "openQuestions": [
       "Per-property OD-N protocol: operator confirmation per property before rename, OR batched OD-N over a candidate list?",

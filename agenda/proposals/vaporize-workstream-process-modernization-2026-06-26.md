@@ -177,8 +177,8 @@ persistence, structured receipts, and explicit native-authority exceptions.
 - Workflow instance:
   `private/universal/substrate/collectives/spaces-universal/private/universal/kura-spaces/workflows/vaporware-modernization-workstream/v0.0.2/instances/vaporize-workstream-process-modernization-2026-06-26.workflow-instance.su.json`
 - Component bead:
-  `private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/agenda/beads/FR-VAPORIZE-WORKSTREAM-PROCESS-MODERNIZATION-2026-06-26.beads-issue.json`
+  `private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/FR-VAPORIZE-WORKSTREAM-PROCESS-MODERNIZATION-2026-06-26.beads-issue.json`
 - CUJ state harness bead:
-  `private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/agenda/beads/FR-VAPORIZE-CUJ-STATE-HARNESS-2026-06-26.beads-issue.json`
+  `private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/FR-VAPORIZE-CUJ-STATE-HARNESS-2026-06-26.beads-issue.json`
 - Role manifest:
   `private/universal/substrate/roles/vaporize-workstream-modernization-steward/private/universal/identity/vaporize-workstream-modernization-steward.role-surface-manifest.json`

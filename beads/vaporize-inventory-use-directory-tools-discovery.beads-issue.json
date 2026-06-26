@@ -62,7 +62,7 @@
       "The bug cross-references the shared DirectoryTools consumer bead."
     ],
     "relatedBeads": [
-      "private/universal/substrate/collectives/swift-universal/private/universal/domain/tooling/spm/directory-tools@swift-universal.cli/agenda/beads/shared-directory-discovery-consumers-vaporware-vaporize.beads-issue.json"
+      "private/universal/substrate/collectives/swift-universal/private/universal/domain/tooling/spm/directory-tools@swift-universal.cli/beads/shared-directory-discovery-consumers-vaporware-vaporize.beads-issue.json"
     ],
     "componentTags": [
       "vaporize@wrkstrm-core.cli",

@@ -29,14 +29,14 @@
     "driftFound": [
       {
         "kind": "open-bead",
-        "path": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/agenda/beads/FR-VAPORIZE-LIST-TARGETS-substrate-canonical-target-discovery.issue.json",
-        "previousPath": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/agenda/beads/FR-CRAZE-LIST-TARGETS-substrate-canonical-target-discovery.issue.json",
+        "path": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/FR-VAPORIZE-LIST-TARGETS-substrate-canonical-target-discovery.issue.json",
+        "previousPath": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/FR-CRAZE-LIST-TARGETS-substrate-canonical-target-discovery.issue.json",
         "requiredDisposition": "RESOLVED 2026-06-11 — bead renamed to FR-VAPORIZE-LIST-TARGETS at the new vaporize@wrkstrm-core.cli home per operator OD-N (directory rename). Old slug preserved here as historical reference."
       },
       {
         "kind": "open-bead",
-        "path": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/agenda/beads/FR-CRAZE-VAPORWARE-AWARENESS-make-craze-the-substrate-canonical-vaporware-collapse-gate-in-code.issue.json",
-        "previousPath": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/agenda/beads/FR-CRAZE-VAPORWARE-AWARENESS-make-craze-the-substrate-canonical-vaporware-collapse-gate-in-code.issue.json",
+        "path": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/FR-CRAZE-VAPORWARE-AWARENESS-make-craze-the-substrate-canonical-vaporware-collapse-gate-in-code.issue.json",
+        "previousPath": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/FR-CRAZE-VAPORWARE-AWARENESS-make-craze-the-substrate-canonical-vaporware-collapse-gate-in-code.issue.json",
         "requiredDisposition": "Filename retained as historical FR-CRAZE-* slug per disposition (supersede via vaporize-realize-typed-vaporware-unit.issue.json). Containing directory moved to vaporize@wrkstrm-core.cli per operator OD-N 2026-06-11."
       },
       {
@@ -60,7 +60,7 @@
     "linkedTypedRecords": {
       "driftCatchPacket": "private/universal/substrate/collectives/spaces-universal/private/universal/kura-spaces/csuite-fan-in-requests/2026-06-11-vaporize-warehouse-integration-csuite-fanout/vaporize-warehouse-drift-catch-packet.json",
       "vaporizeWarehouseAxiom": "private/universal/substrate/collectives/spaces-universal/private/universal/kura-spaces/axioms/vaporize-builds-vaporware-warehouse-stores-vaporware.axiom.su.json",
-      "vaporwareUnitRealizationBead": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/agenda/beads/vaporize-realize-typed-vaporware-unit.issue.json"
+      "vaporwareUnitRealizationBead": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/vaporize-realize-typed-vaporware-unit.issue.json"
     }
   },
   "composesWith": [
