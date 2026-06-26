@@ -165,6 +165,27 @@ func routesSwiftPMPackageCommandsThroughXcodeSelectedSwift() {
   ])
 }
 
+@Test("CUJ-01 parses Swift tools and compiler versions for 6.4 preflight")
+func parsesSwiftToolsAndCompilerVersionsForPreflight() {
+  #expect(VaporizeCLI.swiftPackagePath(in: [
+    "test",
+    "--package-path",
+    "/workspace/tool",
+    "-c",
+    "release",
+  ]) == "/workspace/tool")
+  #expect(VaporizeCLI.swiftToolsVersion(
+    fromPackageManifest: "// swift-tools-version:6.4\nimport PackageDescription"
+  ) == SwiftToolchainVersion("6.4"))
+  #expect(VaporizeCLI.swiftCompilerVersion(
+    from: "swift-driver version: 1.167 Apple Swift version 6.4 (swiftlang-6.4.0.20.104 clang-2100.3.20.102)"
+  ) == SwiftToolchainVersion("6.4"))
+  #expect(VaporizeCLI.swiftCompilerVersion(
+    from: "Apple Swift version 6.3.2 (swift-6.3.2-RELEASE)"
+  ) == SwiftToolchainVersion("6.3.2"))
+  #expect(SwiftToolchainVersion("6.4")! > SwiftToolchainVersion("6.3.2")!)
+}
+
 @Test("CUJ-01 matches already installed error")
 func matchesAlreadyInstalledError() {
   let message = "error: clia is already installed at /Users/rismay/.swiftpm/bin/clia"

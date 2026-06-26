@@ -12,6 +12,7 @@
     "swiftpm",
     "test-lane",
     "xcode-selected-swift",
+    "swift-6.4-preflight",
     "fix-verified-2026-06-26",
     "fix-landed-savepointed"
   ],
@@ -26,7 +27,30 @@
       "Installed patched Vaporize binary at `/Users/sonoma/.swiftpm/bin/vaporize.cli@wrkstrm-core.clia.sh`; previous binary backed up to `/Users/sonoma/.swiftpm/bin/vaporize.cli@wrkstrm-core.clia.sh.bak-20260626T105502Z`.",
       "Focused Vaporize regression passed through Vaporize: `/Users/sonoma/.swiftpm/bin/vaporize.cli@wrkstrm-core.clia.sh --package-path private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli --configuration debug test -- --disable-automatic-resolution --filter 'CUJ-01 routes SwiftPM package commands through Xcode-selected Swift'`.",
       "Savepoint package canonical proof passed through Vaporize: `/Users/sonoma/.swiftpm/bin/vaporize.cli@wrkstrm-core.clia.sh --package-path private/universal/domain/scm/digikoma/savepoint-commit.digikoma.clia test -- --disable-automatic-resolution`; Vaporize printed `$ /usr/bin/xcrun swift test ...` and the suite passed 15 tests in 2 suites."
-    ]
+    ],
+    "modernizationAddendum20260626": {
+      "triggeredBy": "The operator clarified that the stack should be looking to use Swift 6.4, not merely whichever `xcrun swift` happens to resolve.",
+      "fixSummary": [
+        "Vaporize now preflights SwiftPM package invocations by reading the package's `swift-tools-version` and comparing it with `xcrun swift --version` before running build/test/package lanes.",
+        "The package app build path in SwiftAppInstaller now runs package builds through `xcrun swift`.",
+        "The shared SwiftCLIInstaller dependency was updated in swift-universal so CLI install/uninstall lanes use `xcrun swift package ...`."
+      ],
+      "expectedBehavior": "A Swift tools 6.4 package should either run through the Xcode-selected Swift 6.4 compiler or fail early with a clear Vaporize validation error that names the resolved compiler and required tools version.",
+      "verificationPlan": [
+        "Run the new CUJ-01 Swift tools/compiler parser test through Vaporize.",
+        "Run the existing CUJ-01 Xcode-selected Swift command routing test through Vaporize.",
+        "Run savepoint package tests through Vaporize as the canonical proof lane.",
+        "Build and self-install Vaporize through Vaporize so the installed runtime carries the Swift 6.4 preflight."
+      ],
+      "verification": [
+        "`/usr/bin/xcrun swift --version` reported Apple Swift version 6.4 from the Xcode-selected toolchain.",
+        "`/Users/sonoma/.swiftpm/bin/vaporize.cli@wrkstrm-core.clia.sh --package-path private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli --configuration debug test -- --disable-automatic-resolution --filter 'CUJ-01'` passed through Vaporize and printed `$ /usr/bin/xcrun swift test ...`.",
+        "`/Users/sonoma/.swiftpm/bin/vaporize.cli@wrkstrm-core.clia.sh --package-path private/universal/substrate/collectives/kura-org/private/universal/domain/scm/digikoma/savepoint-commit.digikoma.clia test -- --disable-automatic-resolution` passed through Vaporize; 15 tests in 2 suites passed.",
+        "`/Users/sonoma/.swiftpm/bin/vaporize.cli@wrkstrm-core.clia.sh --package-path private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli --product vaporize.cli@wrkstrm-core.clia.sh --configuration release build --skip-install` completed through Vaporize.",
+        "The freshly built Vaporize binary self-installed and printed `/usr/bin/xcrun swift package ... experimental-uninstall` and `/usr/bin/xcrun swift package ... experimental-install ...`.",
+        "Post-install smoke passed through the installed Vaporize binary: `--filter 'CUJ-01 parses Swift tools and compiler versions for 6.4 preflight'`."
+      ]
+    }
   },
   "savepointRefs": [
     {

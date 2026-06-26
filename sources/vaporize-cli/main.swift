@@ -1658,6 +1658,7 @@ struct VaporizeCLI: AsyncParsableCommand {
   }
 
   private func runSwift(arguments: [String]) async throws {
+    try await validateXcodeSelectedSwiftCompatibility(arguments: arguments)
     try await runExecutable(
       executable: .name("xcrun"),
       arguments: Self.xcodeSelectedSwiftArguments(arguments),
@@ -1666,6 +1667,7 @@ struct VaporizeCLI: AsyncParsableCommand {
   }
 
   private func runSwiftPackage(arguments: [String]) async throws {
+    try await validateXcodeSelectedSwiftCompatibility(arguments: arguments)
     try await runExecutable(
       executable: .name("xcrun"),
       arguments: Self.xcodeSelectedSwiftArguments(arguments),
@@ -1675,6 +1677,79 @@ struct VaporizeCLI: AsyncParsableCommand {
 
   static func xcodeSelectedSwiftArguments(_ arguments: [String]) -> [String] {
     ["swift"] + arguments
+  }
+
+  private func validateXcodeSelectedSwiftCompatibility(arguments: [String]) async throws {
+    guard let packagePath = Self.swiftPackagePath(in: arguments),
+      let requiredVersion = try Self.swiftToolsVersion(packagePath: packagePath)
+    else { return }
+
+    let command = CommandSpec(
+      executable: .name("xcrun"),
+      args: Self.xcodeSelectedSwiftArguments(["--version"]),
+      logOptions: .init(
+        exposure: .none,
+        tags: [
+          "source": "vaporize-swift-toolchain-preflight",
+          "canonicalSource": "vaporize-swift-toolchain-preflight",
+          "tool": "swift",
+        ]
+      ),
+      requestId: "vaporize-swift-toolchain-preflight-\(UUID().uuidString)",
+      runnerKind: .auto,
+      streamingMode: .buffered
+    )
+    try command.validateOrThrow()
+
+    let output = try await RunnerControllerFactory.run(command: command)
+    let versionOutput = (String(data: output.stdout, encoding: .utf8) ?? "")
+      + (String(data: output.stderr, encoding: .utf8) ?? "")
+    guard output.isSuccess else {
+      throw ValidationError("Vaporize could not resolve Xcode-selected Swift via `xcrun swift --version`: \(versionOutput)")
+    }
+    guard let actualVersion = Self.swiftCompilerVersion(from: versionOutput) else {
+      throw ValidationError("Vaporize could not parse Xcode-selected Swift version from: \(versionOutput)")
+    }
+    guard actualVersion >= requiredVersion else {
+      throw ValidationError(
+        "Vaporize resolved Swift \(actualVersion), but package at \(packagePath) requires Swift tools \(requiredVersion). Select a Swift \(requiredVersion) or newer Xcode toolchain before running Vaporize."
+      )
+    }
+  }
+
+  static func swiftPackagePath(in arguments: [String]) -> String? {
+    for index in arguments.indices where arguments[index] == "--package-path" {
+      let next = arguments.index(after: index)
+      guard next < arguments.endIndex else { return nil }
+      return arguments[next]
+    }
+    return nil
+  }
+
+  static func swiftToolsVersion(packagePath: String) throws -> SwiftToolchainVersion? {
+    let manifest = URL(fileURLWithPath: packagePath)
+      .appendingPathComponent("Package.swift")
+    guard FileManager.default.fileExists(atPath: manifest.path) else { return nil }
+    let text = try String(contentsOf: manifest, encoding: .utf8)
+    return swiftToolsVersion(fromPackageManifest: text)
+  }
+
+  static func swiftToolsVersion(fromPackageManifest text: String) -> SwiftToolchainVersion? {
+    guard let markerRange = text.range(of: "swift-tools-version:") else { return nil }
+    let tail = text[markerRange.upperBound...].trimmingCharacters(in: .whitespaces)
+    let version = tail.prefix { character in
+      character.isNumber || character == "."
+    }
+    return SwiftToolchainVersion(String(version))
+  }
+
+  static func swiftCompilerVersion(from versionOutput: String) -> SwiftToolchainVersion? {
+    guard let markerRange = versionOutput.range(of: "Swift version ") else { return nil }
+    let tail = versionOutput[markerRange.upperBound...].trimmingCharacters(in: .whitespaces)
+    let version = tail.prefix { character in
+      character.isNumber || character == "."
+    }
+    return SwiftToolchainVersion(String(version))
   }
 
   private func runExecutable(
@@ -1695,6 +1770,36 @@ struct VaporizeCLI: AsyncParsableCommand {
     )
     guard !output.isEmpty else { return }
     print(output, terminator: output.hasSuffix("\n") ? "" : "\n")
+  }
+}
+
+struct SwiftToolchainVersion: Comparable, CustomStringConvertible, Equatable, Sendable {
+  var major: Int
+  var minor: Int
+  var patch: Int
+
+  init?(_ rawValue: String) {
+    let parts = rawValue
+      .split(separator: ".", omittingEmptySubsequences: false)
+      .prefix(3)
+      .map(String.init)
+    guard parts.count >= 2,
+      let major = Int(parts[0]),
+      let minor = Int(parts[1])
+    else { return nil }
+    self.major = major
+    self.minor = minor
+    self.patch = parts.count >= 3 ? (Int(parts[2]) ?? 0) : 0
+  }
+
+  var description: String {
+    patch == 0 ? "\(major).\(minor)" : "\(major).\(minor).\(patch)"
+  }
+
+  static func < (lhs: SwiftToolchainVersion, rhs: SwiftToolchainVersion) -> Bool {
+    if lhs.major != rhs.major { return lhs.major < rhs.major }
+    if lhs.minor != rhs.minor { return lhs.minor < rhs.minor }
+    return lhs.patch < rhs.patch
   }
 }
 

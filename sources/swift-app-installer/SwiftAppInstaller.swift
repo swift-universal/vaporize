@@ -119,8 +119,8 @@ public struct SwiftAppInstaller: Sendable {
     } else {
       _ = try await localShell.run(
         host: .direct,
-        executable: .name("swift"),
-        arguments: [
+        executable: .name("xcrun"),
+        arguments: ["swift"] + [
           "build",
           "--package-path", request.packagePath,
           "-c", request.configuration.rawValue,
