@@ -1,0 +1,53 @@
+{
+  "BeadsIssue": "0.1.0",
+  "schemaVersion": "0.1.0",
+  "id": "FR-VAPORIZE-WORKSTREAM-PROCESS-MODERNIZATION-2026-06-26",
+  "title": "Modernize Vaporize workstream process around Vaporize-first proof lanes and current executable reality",
+  "status": "open",
+  "priority": 1,
+  "issueType": "feature",
+  "labels": [
+    "vaporize",
+    "vaporware-modernization-workstream",
+    "process-modernization",
+    "proof-lane",
+    "no-direct-git",
+    "no-jq",
+    "scm"
+  ],
+  "createdAt": "2026-06-26T10:12:31Z",
+  "createdBy": "codex via $capture after operator correction that Git/Savepoint audits must use vaporize",
+  "historicalContent": {
+    "slug": "FR-VAPORIZE-WORKSTREAM-PROCESS-MODERNIZATION-2026-06-26",
+    "kind": "bead-feature-request",
+    "createdAt": "2026-06-26T10:12:31Z",
+    "createdBy": "codex via $capture",
+    "assignee": "wrkstrm-core",
+    "severity": "high",
+    "sourceType": "operator-corrected-audit-capture",
+    "sourceLocation": "Codex session 2026-06-26: Git/Savepoint SCM audit was corrected from xcrun-swift describe as primary proof to vaporize.cli@wrkstrm-core.clia.sh test as the required proof lane.",
+    "description": "The workstream process must align Vaporize documentation, workflow formulas, audit habits, and receipts with the installed Vaporize command surface. Current installed Vaporize supports test/build/run/pass/use/toolchain/setup/status/warehouse/validate-json/project inspection/list-targets/list-schemes/release-doctor/inventory/domains/self-update/graph. Existing workstream prose still references the older vaporize@wrkstrm-core.cli spelling and the planned but not-installed realize mode. The process needs explicit modern gates so agents use Vaporize first, avoid jq and direct git proof lanes, and route persistence through savepoint.",
+    "acceptanceCriteria": [
+      "Vaporize workstream docs name the installed executable as vaporize.cli@wrkstrm-core.clia.sh.",
+      "Workflow formulas stop treating raw swift package describe, jq, or direct git status as primary proof lanes.",
+      "Every Swift package audit in this workstream has a Vaporize command line equivalent and a structured receipt expectation.",
+      "The planned realize flow is either implemented as a real Vaporize mode or clearly marked collapse-blocked behind vaporize-realize-typed-vaporware-unit.",
+      "validate-json is upgraded or documented so repeated --path behavior cannot silently validate only the last path.",
+      "SCM product-line audits have a Vaporize-first recipe covering SwiftPM packages, schema JSON validation, and native Xcode project-list exceptions.",
+      "Savepoint persistence is treated as the only forward commit primitive for assistants; direct git remains diagnostic only when operator explicitly permits it."
+    ],
+    "linkedTypedRecords": {
+      "workflowInstance": "private/universal/substrate/collectives/spaces-universal/private/universal/kura-spaces/workflows/vaporware-modernization-workstream/v0.0.2/instances/vaporize-workstream-process-modernization-2026-06-26.workflow-instance.su.json",
+      "proposal": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/agenda/proposals/vaporize-workstream-process-modernization-2026-06-26.md",
+      "roleManifest": "private/universal/substrate/roles/vaporize-workstream-modernization-steward/private/universal/identity/vaporize-workstream-modernization-steward.role-surface-manifest.json",
+      "existingRealizeBead": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/agenda/beads/vaporize-realize-typed-vaporware-unit.beads-issue.json",
+      "existingValidateJsonBead": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/agenda/beads/vaporize-validate-json-multiple-paths.beads-issue.json"
+    }
+  },
+  "composesWith": [
+    "[[vaporize-builds-vaporware-warehouse-stores-vaporware]]",
+    "[[component-bugs-file-at-component-home-not-consumer]]",
+    "[[substrate-json-proof-uses-typed-tools-not-jq]]",
+    "[[assistant-persistence-uses-savepoint-not-direct-git]]"
+  ]
+}
