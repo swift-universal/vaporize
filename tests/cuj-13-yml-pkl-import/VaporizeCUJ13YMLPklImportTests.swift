@@ -41,7 +41,7 @@ func importsConcourseYMLIntoPklParitySpecimen() async throws {
   #expect(receipt.importerStatus == "pkl-parity-specimen")
   #expect(receipt.buildableWorldStateGenerated == false)
   #expect(receipt.xcodeProjectGenerated == false)
-  #expect(receipt.targetNames == ["concourse"])
+  #expect(receipt.targetNames == expectedConcourseTargetNames)
   #expect(generatedSpec.name == "concourse")
 }
 

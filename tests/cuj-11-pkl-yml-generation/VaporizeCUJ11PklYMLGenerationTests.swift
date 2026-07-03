@@ -13,7 +13,7 @@ func generatesTransitionalProjectYMLFromPklSpecimen() async throws {
   #expect(receipt.buildableWorldStateGenerated == false)
   #expect(receipt.xcodeProjectGenerated == false)
   #expect(receipt.generatedByteCount > 0)
-  #expect(receipt.targetNames == ["concourse"])
+  #expect(receipt.targetNames == expectedConcourseTargetNames)
 }
 
 @Test("CUJ-11 generated YAML compares back to Pkl")

@@ -36,11 +36,11 @@ func discoversTargetsFromProjectYML() throws {
   #expect(receipt.discoveryPhase == "apple-project-target-discovery-first-slice")
   #expect(receipt.inputKind == "project-yml")
   #expect(receipt.projectName == "concourse")
-  #expect(receipt.targetNames == ["concourse"])
-  #expect(receipt.buildableTargetNames == ["concourse"])
-  #expect(receipt.packageNames == ["WrkstrmOnboarding", "WrkstrmWalkthrough", "common-terminal"])
+  #expect(receipt.targetNames == expectedConcourseTargetNames)
+  #expect(receipt.buildableTargetNames == expectedConcourseBuildableTargetNames)
+  #expect(receipt.packageNames == expectedConcoursePackageNames)
   #expect(receipt.targets.first?.productName == "concourse")
-  #expect(receipt.targets.first?.packageDependencyCount == 3)
+  #expect(receipt.targets.first?.packageDependencyCount == 4)
   #expect(!receipt.boundaries.contains { $0.contains("fleet build parity") })
 }
 
@@ -55,7 +55,7 @@ func discoversTargetsFromProjectPkl() async throws {
   #expect(receipt.selectedProjectSpecPath == concourseProjectPklURL.path)
   #expect(receipt.projectRootPath == concourseProjectPklURL.deletingLastPathComponent().path)
   #expect(receipt.projectName == "concourse")
-  #expect(receipt.targetCount == 1)
+  #expect(receipt.targetCount == expectedConcourseTargetNames.count)
   #expect(receipt.targets.first?.isBuildableCandidate == true)
   #expect(receipt.candidateSchemeNames.contains("concourse"))
 }

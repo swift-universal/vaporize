@@ -14,6 +14,16 @@ public let concourseProjectPklURL = vaporizeTestPackageRoot
   .appendingPathComponent("../../apps/concourse/project.pkl")
   .standardizedFileURL
 
+public let expectedConcourseTargetNames = ["concourse", "concourse-tests-ui"]
+public let expectedConcourseBuildableTargetNames = ["concourse"]
+public let expectedConcoursePackageNames = [
+  "WrkstrmOnboarding",
+  "WrkstrmWalkthrough",
+  "common-feature-flags",
+  "common-terminal",
+  "swift-snapshot-testing",
+]
+
 public let appleProjectSpecPklSchemaURL = vaporizeTestPackageRoot
   .appendingPathComponent("Pkl/AppleProjectSpec.pkl")
   .standardizedFileURL
