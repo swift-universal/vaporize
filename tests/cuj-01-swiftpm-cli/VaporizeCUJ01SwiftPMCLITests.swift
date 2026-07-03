@@ -106,6 +106,44 @@ func parsesDomainFlagForInstallMode() throws {
   #expect(command.product == "build-tool.cli@domain.clia.sh")
 }
 
+@Test("CUJ-01 orders installed CLI candidates by inferred domain before flat bin")
+func ordersInstalledCLICandidatesByInferredDomainBeforeFlatBin() throws {
+  let command = try VaporizeCLI.parse([
+    "run",
+    "--package-path",
+    "/workspace/private/universal/domain/scm/tools/savepoint.cli",
+    "--product",
+    "savepoint.cli@kura-org.clia.sh",
+    "--skip-install",
+  ])
+
+  let candidates = command.installedCLIExecutableCandidatePaths(
+    product: "savepoint.cli@kura-org.clia.sh"
+  )
+
+  #expect(candidates.contains { $0.hasSuffix("/.swiftpm/bin/domain/scm/savepoint.cli@kura-org.clia.sh") })
+  #expect(candidates.last?.hasSuffix("/.swiftpm/bin/savepoint.cli@kura-org.clia.sh") == true)
+}
+
+@Test("CUJ-01 orders explicit domain candidate before flat bin")
+func ordersExplicitDomainCandidateBeforeFlatBin() throws {
+  let command = try VaporizeCLI.parse([
+    "run",
+    "--package-path",
+    "/workspace/tool",
+    "--product",
+    "tool.cli@org.clia.sh",
+    "--domain",
+    "domain/scm",
+    "--skip-install",
+  ])
+
+  let candidates = command.installedCLIExecutableCandidatePaths(product: "tool.cli@org.clia.sh")
+
+  #expect(candidates.first?.hasSuffix("/.swiftpm/bin/domain/domain/scm/tool.cli@org.clia.sh") == true)
+  #expect(candidates.last?.hasSuffix("/.swiftpm/bin/tool.cli@org.clia.sh") == true)
+}
+
 @Test("CUJ-01 parses self-update mode")
 func parsesSelfUpdateMode() throws {
   let command = try VaporizeCLI.parse([

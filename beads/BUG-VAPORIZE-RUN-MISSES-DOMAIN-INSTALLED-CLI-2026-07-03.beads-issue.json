@@ -1,0 +1,40 @@
+{
+  "BeadsIssue": "0.1.0",
+  "schemaVersion": "0.1.0",
+  "id": "BUG-VAPORIZE-RUN-MISSES-DOMAIN-INSTALLED-CLI-2026-07-03",
+  "title": "Vaporize run misses CLIs installed under domain-specific bin paths",
+  "status": "open",
+  "priority": 1,
+  "issueType": "bug",
+  "labels": [
+    "vaporize",
+    "run",
+    "domain-bin",
+    "swiftpm",
+    "tool-discovery",
+    "scm"
+  ],
+  "createdAt": "2026-07-03T01:18:00Z",
+  "createdBy": "codex@loom during Savepoint/Vaporize cleanup",
+  "historicalContent": {
+    "slug": "BUG-VAPORIZE-RUN-MISSES-DOMAIN-INSTALLED-CLI-2026-07-03",
+    "kind": "bead-bug",
+    "severity": "high",
+    "ownerCollective": "wrkstrm-core",
+    "ownerSurface": "vaporize.cli@wrkstrm-core.clia.sh",
+    "componentHome": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/",
+    "observedFailure": "Vaporize run could miss an installed CLI when the executable was available through a domain-specific bin path rather than the flat ~/.swiftpm/bin path.",
+    "expectedBehavior": "Vaporize should prefer inferred or explicit domain-specific installed CLI paths, discover matching domain bin entries, and only fall back to the flat bin path after domain candidates are checked.",
+    "acceptanceCriteria": [
+      "installed CLI candidate resolution checks inferred domain paths before the flat bin path.",
+      "explicit domain flags produce first-priority domain candidates.",
+      "domain bin discovery can find executable products outside the current package's inferred domain.",
+      "validation errors list every checked candidate path.",
+      "CUJ-01 tests pin candidate ordering for inferred and explicit domains."
+    ]
+  },
+  "composesWith": [
+    "BUG-VAPORIZE-TEST-MODE-USES-SWIFTLY-INSTEAD-OF-XCODE-SELECTED-SWIFT-2026-06-26",
+    "FR-VAPORIZE-WORKSTREAM-PROCESS-MODERNIZATION-2026-06-26"
+  ]
+}

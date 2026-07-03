@@ -572,21 +572,44 @@ struct VaporizeCLI: AsyncParsableCommand {
     installedCLIBinDirectory().appendingPathComponent(product).path
   }
 
-  private func installedCLIExecutablePath(product: String) throws -> String {
+  func installedCLIExecutablePath(product: String) throws -> String {
+    let candidates = installedCLIExecutableCandidatePaths(product: product)
+    for path in candidates where FileManager.default.isExecutableFile(atPath: path) {
+      return path
+    }
+    throw ValidationError(
+      """
+      Executable product `\(product)` is not installed or is not executable.
+      Checked:
+      \(candidates.map { "  - \($0)" }.joined(separator: "\n"))
+      """
+    )
+  }
+
+  func installedCLIExecutableCandidatePaths(product: String) -> [String] {
+    var candidates: [String] = []
+    var seen: Set<String> = []
+
+    func append(_ path: String?) {
+      guard let path, !path.isEmpty, !seen.contains(path) else { return }
+      seen.insert(path)
+      candidates.append(path)
+    }
+
     if let packagePath,
-       let domain = inferredDomain(for: product, packagePath: packagePath),
-       let domainPath = domainSpecificCLIPath(product: product, domain: domain),
-       FileManager.default.fileExists(atPath: domainPath)
+       let domain = inferredDomain(for: product, packagePath: packagePath)
     {
-      return domainPath
+      append(domainSpecificCLIPath(product: product, domain: domain))
     }
-    if let domain = inferredDomainValue(),
-       let domainPath = domainSpecificCLIPath(product: product, domain: domain),
-       FileManager.default.fileExists(atPath: domainPath)
-    {
-      return domainPath
+    if let domain = inferredDomainValue() {
+      append(domainSpecificCLIPath(product: product, domain: domain))
     }
-    return installedCLIPath(product: product)
+    for path in discoveredDomainCLIPaths(product: product) {
+      append(path)
+    }
+    append(installedCLIPath(product: product))
+
+    return candidates
   }
 
   private func inferredDomain(for product: String, packagePath: String) -> String? {
@@ -619,6 +642,28 @@ struct VaporizeCLI: AsyncParsableCommand {
     let components = safeDomainPathComponents(domain)
     guard !components.isEmpty else { return nil }
     return domainPath(forComponents: components).appendingPathComponent(product).path
+  }
+
+  private func discoveredDomainCLIPaths(product: String) -> [String] {
+    let base = installedCLIBinDirectory().appendingPathComponent("domain", isDirectory: true)
+    let fileManager = FileManager.default
+    guard fileManager.fileExists(atPath: base.path) else { return [] }
+    guard let enumerator = fileManager.enumerator(
+      at: base,
+      includingPropertiesForKeys: [.isRegularFileKey, .isSymbolicLinkKey],
+      options: [.skipsHiddenFiles]
+    ) else {
+      return []
+    }
+
+    var matches: [String] = []
+    for case let url as URL in enumerator where url.lastPathComponent == product {
+      let path = url.standardizedFileURL.path
+      if fileManager.isExecutableFile(atPath: path) {
+        matches.append(path)
+      }
+    }
+    return matches.sorted()
   }
 
   private func domainPath(forComponents components: [String]) -> URL {
