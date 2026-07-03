@@ -3,7 +3,7 @@
 **Status:** release-prep claim matrix
 **Updated:** 2026-06-14T00:34:28Z
 **Component:** `vaporize@wrkstrm-core.cli`
-**Companions:** `product-definition.md`, `why-vaporize.md`
+**Companions:** `product-definition.md`, `why-vaporize.md`, `public-brochure.md`, `public-changelog.md`
 
 ## Claim Rule
 
@@ -20,6 +20,11 @@ Do not market theoretical claims as measured outcomes.
 Every claim must also trace to `product-definition.md`: a primary user,
 product-level journey, or reason users choose Vaporize. If a claim cannot be
 tied to that product contract, it is not release-ready copy.
+
+The public brochure and public changelog are downstream disclosure surfaces.
+They may use only claims allowed by this matrix, must preserve blocked release
+status, and must not convert internal PRD, CUJ, or launch-review language into
+public copy without an evidence-backed claim boundary.
 
 For runtime claims, "measured" should mean "captured as a Vaporize runtime
 sample in the Kura series with Swift/Apple native artifacts and size metrics

@@ -127,6 +127,6 @@ contract is captured in `release/v0.0.1/wrkstrm-app-minimums.md`.
 ## Release Proof Obligation
 
 For v0.0.1, the PRD, CUJs, PRD review session, release gates,
-launch-review packet, why explainer, performance claim matrix, CUJ coverage
-artifact, engineering DocC catalog, and CUJ-09 release-review tests must all
-acknowledge this product definition.
+launch-review packet, why explainer, performance claim matrix, public brochure,
+public changelog, CUJ coverage artifact, engineering DocC catalog, and CUJ-09
+release-review tests must all acknowledge this product definition.

@@ -167,6 +167,38 @@
       "s": [
         "vaporize",
         "v0.0.1",
+        "public-brochure"
+      ],
+      "t": "Vaporize v0.0.1 public brochure",
+      "tg": [
+        {
+          "k": "rp",
+          "rt": "mono",
+          "v": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/public-brochure.md"
+        }
+      ]
+    },
+    {
+      "LinkRefModel": "0.3.0",
+      "s": [
+        "vaporize",
+        "v0.0.1",
+        "public-changelog"
+      ],
+      "t": "Vaporize v0.0.1 public changelog",
+      "tg": [
+        {
+          "k": "rp",
+          "rt": "mono",
+          "v": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/public-changelog.md"
+        }
+      ]
+    },
+    {
+      "LinkRefModel": "0.3.0",
+      "s": [
+        "vaporize",
+        "v0.0.1",
         "engineering-docc"
       ],
       "t": "Vaporize engineering DocC catalog",
@@ -988,6 +1020,7 @@
     "vaporwareModificationRequestDiscipline": "PASS-WITH-NOTE: vaporize.engineering.docc/vaporware-modification-request-discipline.md distinguishes vaporware feature requests as product input from vaporware modification requests as controlled engineering execution, leaves room for future hardware or other material-domain request families, and defines behavior-changing vaporware modification requests as release work requiring a feature flag or feature-status story, targetable tests, release evidence, CUJ coverage updates when affected, and explicit no-flag exceptions.",
     "whyVaporizeExplainer": "PASS-WITH-NOTE: release/v0.0.1/why-vaporize.md explains value proposition, product choice argument, problems solved, Swift/xcodebuild/xcrun comparison, current baseline benchmarks, build-space savings theory, ergonomics, and benchmark gaps.",
     "performanceMarketingClaims": "PASS-WITH-NOTE: release/v0.0.1/performance-marketing-claims.md defines approved measured/behavioral/theoretical claims, safe copy examples, before/after examples, prohibited claims, benchmark receipts required before stronger claims, and the rule that claims trace to product-definition.md.",
+    "publicDisclosureSurfaces": "PASS-WITH-NOTE: release/v0.0.1/public-brochure.md and release/v0.0.1/public-changelog.md define the external public disclosure draft surface. They are claim-limited by performance-marketing-claims.md and do not approve publication.",
     "engineeringDocCCatalog": "PASS-WITH-NOTE: vaporize.engineering.docc defines the human engineering narrative for future wrkstrm.com/engineering publication and links the narrative boundary to release receipts as the proof corpus.",
     "featureCatalog": "PASS-WITH-NOTE: vaporize.engineering.docc/feature-catalog.md is the canonical human-readable feature list and explanation surface; PRD, CUJs, tests, release gates, receipts, and schema fixtures remain the proof surfaces.",
     "modularityOwnershipBoundaries": "PASS-WITH-NOTE: vaporize.engineering.docc/modularity-and-ownership-boundaries.md classifies genuinely Swift Universal primitives into swift-universal, Apple-bounded orchestration into wrkstrm-core, and requires Vaporize to grow by feature module rather than CLI-router accumulation.",
@@ -1019,7 +1052,7 @@
     "schemaUniversalExtractionPath": "private/universal/substrate/collectives/schema-universal/private/universal/domain/tooling/schema-families/vaporize-schemas/v0.0.1",
     "schemaUniversalExtractionResult": "PASS-WITH-NOTE: JSON schema family and fixture-backed Swift model package extracted for durable Vaporize release evidence and Apple project YAML/Pkl receipts",
     "releaseDoctorCommand": "vaporize release-doctor --path private/apple/spm/vaporize@wrkstrm-core.cli --format json --receipt-path private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/vaporize-v0.0.1-release-doctor.receipt.json",
-    "releaseDoctorResult": "PASS-WITH-NOTE: release-doctor checks release-spine agreement across required artifacts, JSON evidence, PRD/CUJ/gate/catalog tokens, launch-review references, provenance inventory, CUJ coverage, and CUJ-state coverage. A pass proves spine coherence, not final release approval.",
+    "releaseDoctorResult": "PASS-WITH-NOTE: release-doctor checks release-spine agreement across required artifacts, public-disclosure surfaces, JSON evidence, PRD/CUJ/gate/catalog tokens, launch-review references, provenance inventory, CUJ coverage, and CUJ-state coverage. A pass proves spine coherence, not final release approval.",
     "projectTargetDiscoveryCommand": "vaporize list-targets --pkl-path private/apple/apps/creative-selection-v0.2/project.pkl --format json --receipt-path private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/creative-selection-v0.2-list-targets.receipt.json",
     "projectTargetDiscoveryResult": "PASS-WITH-NOTE: Creative Selection v0.2 target discovery emitted one buildable target, candidate scheme names, package count, source paths, and first-slice boundaries from AppleProjectSpec Pkl.",
     "workspaceProductCacheDiscoveryCommand": "vaporize list-targets --pkl-path private/apple/apps/creative-selection-v0.2/project.pkl --configuration release --xcode-product-cache-workspace /tmp/vaporize-maintained-workspace/Huge.xcworkspace --xcode-product-cache-derived-data-path /tmp/vaporize-maintained-workspace/DerivedData --format json --receipt-path private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/creative-selection-v0.2-workspace-cache-discovery.receipt.json",
@@ -1166,7 +1199,7 @@
     {
       "gateRef": "GATE-33-release-doctor",
       "status": "PASS-WITH-NOTE",
-      "rationale": "release-doctor emits a vaporize-release-doctor receipt and checks release-spine agreement across required artifacts, JSON evidence, PRD/CUJ/gate/catalog tokens, launch-review references, provenance inventory, CUJ coverage, and CUJ-state coverage. A pass proves spine coherence, not final release approval."
+      "rationale": "release-doctor emits a vaporize-release-doctor receipt and checks release-spine agreement across required artifacts, public-disclosure surfaces, JSON evidence, PRD/CUJ/gate/catalog tokens, launch-review references, provenance inventory, CUJ coverage, and CUJ-state coverage. A pass proves spine coherence, not final release approval."
     },
     {
       "gateRef": "GATE-34-project-target-discovery",
@@ -1187,6 +1220,11 @@
       "gateRef": "GATE-37-cuj-state-coverage",
       "status": "PASS-WITH-NOTE",
       "rationale": "cuj-state-coverage.json names every required CUJ-state id for the SCM product-suite fixture and attaches CUJ-21 proof entries; release-doctor checks coverage status, required ids, proof floor, uncovered ids, unknown ids, and duplicate proof ids. This proves journey-derived state coverage, not Kura adapter readiness or public release approval."
+    },
+    {
+      "gateRef": "GATE-38-public-disclosure-surfaces",
+      "status": "PASS-WITH-NOTE",
+      "rationale": "public-brochure.md and public-changelog.md define the external public disclosure draft surface, remain constrained by performance-marketing-claims.md, and preserve the blocked release/publication boundary. This proves packet shape, not public launch approval."
     }
   ],
   "knownFollowUps": [
@@ -1241,6 +1279,7 @@
     "x-prd-review-session": "prd-review-session.md defines the required Engineering, QA, and Marketing review before major coding starts. Engineering owns buildability and proof surface, QA owns testability and acceptance, and Marketing owns claim language and prohibited promises. v0.0.1 is backfilled; future major slices require the session before implementation.",
     "x-vaporware-modification-request-discipline": "vaporware-modification-request-discipline.md distinguishes vaporware feature requests as product input from vaporware modification requests as the controlled engineering execution unit, leaving room for future hardware or other material-domain request families. Vaporware modification requests are release work: behavior-changing changes must create or attach to a feature flag, feature status record, or release-feature cohort; add or update targetable tests; run the smallest feature-scoped proof; update release evidence and schema fixtures when affected; and record no-flag exceptions explicitly.",
     "x-performance-marketing-claims": "performance-marketing-claims.md provides approved copy examples and guardrails: do not say Vaporize is faster than Swift, do not claim 2x Xcode builds, and do not claim N GB disk savings until dedicated benchmark receipts exist; every claim must trace to product-definition.md.",
+    "x-public-disclosure-surfaces": "public-brochure.md and public-changelog.md are the draft external public disclosure surfaces. They are downstream from product-definition.md, why-vaporize.md, performance-marketing-claims.md, release-gates.md, and launch-review evidence, and they cannot approve publication while release gates remain blocked.",
     "x-engineering-docc": "vaporize.engineering.docc is the package-local engineering documentation catalog intended for future wrkstrm.com/engineering publication. It is the human narrative; release/v0.0.1/evidence remains the proof corpus.",
     "x-feature-catalog": "vaporize.engineering.docc/feature-catalog.md is the canonical human-readable feature list and explanation surface for Vaporize. It names each major feature, user problem, current surface, and proof boundary; PRD, CUJs, tests, release gates, receipts, and schema fixtures remain the proof surfaces.",
     "x-modularity-ownership-boundaries": "vaporize.engineering.docc/modularity-and-ownership-boundaries.md records the package ownership and growth rule: genuinely Swift Universal primitives belong in swift-universal, Apple/Xcode/app/release orchestration belongs in wrkstrm-core, and Vaporize should add feature modules rather than concentrating feature bodies in the CLI router.",
@@ -1251,7 +1290,7 @@
     "x-performance-baseline": "Local baseline at 2026-06-14T00:44:00Z: validate-json launch packet 0.03s real; vaporize toolchain swift --version 0.25s real; bare swift --version 0.17s real; focused CUJ-15 bare swift and Vaporize toolchain both 6.80s real; earlier full Vaporize suite 15.57s real with 82 tests. Latest coverage model now names 113 tests across 21 CUJ bundles after CUJ-21 coverage-gate additions; focused CUJ-09 coverage run 29.38s real with SwiftPM codecov JSON/profile data and build-size metrics verified.",
     "x-cuj-test-coverage": "Required test count is derived from PRD requirements through active draft CUJs. Current floor: 95 Swift test obligations plus 12 release evidence checks across 21 active CUJs. Current executable suite: 113 Swift tests across 21 implemented CUJ-specific SwiftPM bundles, including CUJ-16 target feature inspection, CUJ-17 release doctor, CUJ-18 project target discovery, CUJ-19 workspace product-cache discovery, CUJ-20 Xcode workspace scheme listing, and CUJ-21 CUJ-state coverage.",
     "x-cuj-state-coverage": "cuj-state-coverage.json is the release evidence that every required journey-derived CUJ-state id has proof. Release doctor fails uncovered, unknown, or duplicate state proof ids. This is not a Kura, Turso, libSQL, sync, migration, or public-release claim.",
-    "x-release-doctor": "release-doctor emits vaporize-v0.0.1-release-doctor.receipt.json and checks release-spine agreement across required artifacts, JSON evidence, PRD/CUJ/gate/catalog tokens, launch-review references, provenance inventory, CUJ coverage, and CUJ-state coverage. A pass proves spine coherence, not final release approval.",
+    "x-release-doctor": "release-doctor emits vaporize-v0.0.1-release-doctor.receipt.json and checks release-spine agreement across required artifacts, public-disclosure surfaces, JSON evidence, PRD/CUJ/gate/catalog tokens, launch-review references, provenance inventory, CUJ coverage, and CUJ-state coverage. A pass proves spine coherence, not final release approval.",
     "x-major-feature-test-suite": "Vaporize package tests now cover major implemented release features through 21 CUJ-specific SwiftPM bundles: command parsing, pass/use/toolchain receipts, JSON validation, inventory scanner/renderer, graph forwarding, Apple project YAML/Pkl migration paths, first-slice Pkl .xcodeproj generation, project target discovery, workspace product-cache discovery, Xcode workspace scheme listing, CUJ-state coverage, shared Xcode workspace product-cache reuse, target feature inspection, release doctor, SwiftPM CLI installer arguments, and app installer Xcode invocation paths.",
     "x-pkl-project-generation-gate": "Internal v0.0.1 release is blocked until our owned Apple project-generation path has fleet build parity from Pkl-backed .xcodeproj world-state generation, with any leftover XcodeGen surfaces quarantined as compatibility.",
     "x-xcodegen-to-pkl-investigation": "Investigation found 155 project.yml files, 185 checked-in .xcodeproj/project.pbxproj files, direct XcodeGen runner surfaces, and no existing Pkl Apple-project generation model. The first approved mitigation slice now reads legacy YAML through Swift and receipts Concourse inspection.",

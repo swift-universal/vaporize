@@ -176,6 +176,51 @@ enum VaporizeReleaseDoctor {
     checks.append(
       textContainsCheck(
         roots: roots,
+        scope: .releaseRoot,
+        relativePath: "release-gates.md",
+        token: "GATE-38-public-disclosure-surfaces",
+        name: "gate-public-disclosure-surfaces"
+      )
+    )
+    checks.append(
+      textContainsCheck(
+        roots: roots,
+        scope: .releaseRoot,
+        relativePath: "public-brochure.md",
+        token: "external public disclosure surface",
+        name: "public-brochure-disclosure-boundary"
+      )
+    )
+    checks.append(
+      textContainsCheck(
+        roots: roots,
+        scope: .releaseRoot,
+        relativePath: "public-brochure.md",
+        token: "Claims Not Yet Allowed",
+        name: "public-brochure-claim-boundary"
+      )
+    )
+    checks.append(
+      textContainsCheck(
+        roots: roots,
+        scope: .releaseRoot,
+        relativePath: "public-changelog.md",
+        token: "external release-note companion",
+        name: "public-changelog-disclosure-boundary"
+      )
+    )
+    checks.append(
+      textContainsCheck(
+        roots: roots,
+        scope: .releaseRoot,
+        relativePath: "public-changelog.md",
+        token: "GATE-38-public-disclosure-surfaces",
+        name: "public-changelog-gate-reference"
+      )
+    )
+    checks.append(
+      textContainsCheck(
+        roots: roots,
         scope: .packageRoot,
         relativePath: "vaporize.engineering.docc/feature-catalog.md",
         token: "Release doctor",
@@ -253,6 +298,8 @@ enum VaporizeReleaseDoctor {
     .release("release-gates.md"),
     .release("why-vaporize.md"),
     .release("performance-marketing-claims.md"),
+    .release("public-brochure.md"),
+    .release("public-changelog.md"),
     .release("wrkstrm-app-minimums.md"),
     .release("evidence/cuj-test-coverage.json"),
     .release("evidence/cuj-state-coverage.json"),
@@ -421,6 +468,13 @@ enum VaporizeReleaseDoctor {
         detail: "Launch-review packet must include the CUJ-state coverage gate."
       ),
       check(
+        name: "launch-review-gate-38",
+        category: "launch-review",
+        path: url.path,
+        passed: gateResults.contains { $0["gateRef"] as? String == "GATE-38-public-disclosure-surfaces" },
+        detail: "Launch-review packet must include the public-disclosure surfaces gate."
+      ),
+      check(
         name: "launch-review-release-doctor-evidence-ref",
         category: "launch-review",
         path: url.path,
@@ -440,6 +494,20 @@ enum VaporizeReleaseDoctor {
         path: url.path,
         passed: evidenceRefs.contains { $0["t"] as? String == "Creative Selection v0.2 workspace cache discovery receipt" },
         detail: "Launch-review packet must reference the workspace product-cache discovery receipt."
+      ),
+      check(
+        name: "launch-review-public-brochure-evidence-ref",
+        category: "launch-review",
+        path: url.path,
+        passed: evidenceRefs.contains { $0["t"] as? String == "Vaporize v0.0.1 public brochure" },
+        detail: "Launch-review packet must reference the public brochure."
+      ),
+      check(
+        name: "launch-review-public-changelog-evidence-ref",
+        category: "launch-review",
+        path: url.path,
+        passed: evidenceRefs.contains { $0["t"] as? String == "Vaporize v0.0.1 public changelog" },
+        detail: "Launch-review packet must reference the public changelog."
       ),
     ]
   }
@@ -692,7 +760,7 @@ struct VaporizeReleaseDoctorReceipt: Codable, Equatable {
   var boundaries = [
     "Release doctor audits release-spine coherence; it does not approve release.",
     "A pass can coexist with release gates that are honestly blocked.",
-    "First slice checks Vaporize v0.0.1 docs, JSON evidence, CUJ coverage, CUJ-state coverage, launch-review references, provenance inventory, project target discovery evidence, workspace product-cache discovery evidence, and Xcode workspace scheme-listing evidence.",
+    "First slice checks Vaporize v0.0.1 docs, public-disclosure surfaces, JSON evidence, CUJ coverage, CUJ-state coverage, launch-review references, provenance inventory, project target discovery evidence, workspace product-cache discovery evidence, and Xcode workspace scheme-listing evidence.",
     "Fleet project-generation parity, runtime sampling, build-size cohorts, and periodic buddy health remain separate follow-up checks.",
   ]
 }

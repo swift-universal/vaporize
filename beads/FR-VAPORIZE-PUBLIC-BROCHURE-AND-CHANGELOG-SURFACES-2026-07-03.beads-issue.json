@@ -1,0 +1,62 @@
+{
+  "BeadsIssue": "0.1.0",
+  "schemaVersion": "0.1.0",
+  "id": "FR-VAPORIZE-PUBLIC-BROCHURE-AND-CHANGELOG-SURFACES-2026-07-03",
+  "title": "Add external public disclosure brochure and changelog surfaces",
+  "status": "open",
+  "priority": 1,
+  "issueType": "feature",
+  "labels": [
+    "vaporize",
+    "vaporware",
+    "public-disclosure",
+    "brochure",
+    "changelog",
+    "release-spine",
+    "claim-control"
+  ],
+  "createdAt": "2026-07-03T00:00:00Z",
+  "createdBy": "codex after chairman requested a brochure and changelog surface for external public disclosure",
+  "historicalContent": {
+    "slug": "FR-VAPORIZE-PUBLIC-BROCHURE-AND-CHANGELOG-SURFACES-2026-07-03",
+    "kind": "bead-feature-request",
+    "createdAt": "2026-07-03T00:00:00Z",
+    "createdBy": "codex",
+    "assignee": "wrkstrm-core",
+    "severity": "high",
+    "componentHome": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli",
+    "sourceType": "operator-requested-release-surface",
+    "sourceLocation": "Codex session 2026-07-03: chairman requested a vacation-brochure style feature surface plus changelog for external public disclosure, distinct from internal PRD and CUJ surfaces.",
+    "description": "Create a public-disclosure surface for Vaporize that can be reviewed externally without collapsing internal PRD, CUJ, launch-review, or claim-control boundaries. The surface must include a feature brochure and public changelog, remain evidence-bound, and preserve blocked release status until the public approval path completes.",
+    "implementedSlice": {
+      "publicBrochure": "release/v0.0.1/public-brochure.md",
+      "publicChangelog": "release/v0.0.1/public-changelog.md",
+      "releaseDoctor": "sources/vaporize-cli/ReleaseDoctor.swift",
+      "releaseReviewTests": "tests/cuj-09-release-review/VaporizeCUJ09ReleaseReviewTests.swift",
+      "releaseDoctorTests": "tests/cuj-17-release-doctor/VaporizeCUJ17ReleaseDoctorTests.swift",
+      "launchReviewPacket": "release/v0.0.1/evidence/launch-review-packet.json",
+      "releaseGates": "release/v0.0.1/release-gates.md",
+      "claimMatrix": "release/v0.0.1/performance-marketing-claims.md"
+    },
+    "acceptanceCriteria": [
+      "Vaporize v0.0.1 has a public brochure artifact distinct from internal PRD and CUJ documents.",
+      "Vaporize v0.0.1 has a public changelog artifact distinct from internal PRD and CUJ documents.",
+      "Both public artifacts clearly state that they are draft public-disclosure surfaces and not publication approval.",
+      "Public claims in both artifacts stay within performance-marketing-claims.md.",
+      "release-gates.md names a public-disclosure gate for the brochure and changelog.",
+      "launch-review-packet.json references the public brochure, public changelog, and public-disclosure gate.",
+      "Release Doctor requires both public artifacts and checks launch-review public-disclosure references.",
+      "CUJ-09 and CUJ-17 focused tests fail if the public-disclosure surface is removed."
+    ],
+    "linkedTypedRecords": {
+      "productDefinition": "release/v0.0.1/product-definition.md",
+      "claimMatrix": "release/v0.0.1/performance-marketing-claims.md",
+      "launchReviewPacket": "release/v0.0.1/evidence/launch-review-packet.json"
+    }
+  },
+  "composesWith": [
+    "[[board-approval-before-public-consumption]]",
+    "[[release-claims-must-trace-to-evidence]]",
+    "[[public-disclosure-is-not-internal-prd-or-cuj]]"
+  ]
+}

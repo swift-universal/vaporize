@@ -11,6 +11,8 @@ func releaseReviewArtifactsExist() {
     "release/v0.0.1/release-gates.md",
     "release/v0.0.1/why-vaporize.md",
     "release/v0.0.1/performance-marketing-claims.md",
+    "release/v0.0.1/public-brochure.md",
+    "release/v0.0.1/public-changelog.md",
     "vaporize.engineering.docc/index.md",
     "vaporize.engineering.docc/feature-catalog.md",
     "vaporize.engineering.docc/modularity-and-ownership-boundaries.md",
@@ -57,6 +59,7 @@ func launchReviewPacketIsValidJSONAndInternalEssential() throws {
   #expect(gateResults.contains { $0["gateRef"] as? String == "GATE-35-workspace-product-cache-discovery" })
   #expect(gateResults.contains { $0["gateRef"] as? String == "GATE-36-xcode-workspace-scheme-listing" })
   #expect(gateResults.contains { $0["gateRef"] as? String == "GATE-37-cuj-state-coverage" })
+  #expect(gateResults.contains { $0["gateRef"] as? String == "GATE-38-public-disclosure-surfaces" })
 }
 
 @Test("CUJ-09 CUJ coverage contract is valid JSON and names the floor")
@@ -104,6 +107,8 @@ func productDefinitionContractPrecedesBuildWork() throws {
   let cuj = try readString(relativePath: "release/v0.0.1/cuj.md")
   let why = try readString(relativePath: "release/v0.0.1/why-vaporize.md")
   let claims = try readString(relativePath: "release/v0.0.1/performance-marketing-claims.md")
+  let publicBrochure = try readString(relativePath: "release/v0.0.1/public-brochure.md")
+  let publicChangelog = try readString(relativePath: "release/v0.0.1/public-changelog.md")
   let gates = try readString(relativePath: "release/v0.0.1/release-gates.md")
   let engineeringDocs = try readString(relativePath: "vaporize.engineering.docc/index.md")
   let featureCatalog = try readString(relativePath: "vaporize.engineering.docc/feature-catalog.md")
@@ -148,6 +153,15 @@ func productDefinitionContractPrecedesBuildWork() throws {
   #expect(claims.contains("Kura runtime sample"))
   #expect(claims.contains("Engineering pedigree"))
   #expect(claims.contains("feature-flag size"))
+  #expect(claims.contains("public-brochure.md"))
+  #expect(claims.contains("public-changelog.md"))
+  #expect(publicBrochure.contains("external public disclosure surface"))
+  #expect(publicBrochure.contains("Feature Brochure"))
+  #expect(publicBrochure.contains("Claims Not Yet Allowed"))
+  #expect(publicBrochure.contains("public-changelog.md"))
+  #expect(publicChangelog.contains("external release-note companion"))
+  #expect(publicChangelog.contains("GATE-38-public-disclosure-surfaces"))
+  #expect(publicChangelog.contains("Not Publicly Claimed"))
   #expect(gates.contains("GATE-26"))
   #expect(gates.contains("GATE-27"))
   #expect(gates.contains("GATE-30"))
@@ -158,6 +172,9 @@ func productDefinitionContractPrecedesBuildWork() throws {
   #expect(gates.contains("GATE-35"))
   #expect(gates.contains("GATE-36"))
   #expect(gates.contains("GATE-37"))
+  #expect(gates.contains("GATE-38"))
+  #expect(gates.contains("public-brochure.md"))
+  #expect(gates.contains("public-changelog.md"))
   #expect(engineeringDocs.contains("wrkstrm.com/engineering"))
   #expect(engineeringDocs.contains("The package-local engineering catalog explains the system. The release packet"))
   #expect(engineeringDocs.contains("pre-code-prd-review"))
@@ -214,6 +231,8 @@ func releaseGatesKeepPklGenerationBlocked() throws {
   #expect(gates.contains("cuj-state-coverage.json"))
   #expect(gates.contains("why-vaporize.md"))
   #expect(gates.contains("performance-marketing-claims.md"))
+  #expect(gates.contains("public-brochure.md"))
+  #expect(gates.contains("public-changelog.md"))
 }
 
 private let packageRoot = URL(fileURLWithPath: #filePath)

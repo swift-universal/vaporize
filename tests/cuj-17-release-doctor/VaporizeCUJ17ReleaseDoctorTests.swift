@@ -39,6 +39,9 @@ func releaseDoctorPassesLiveReleaseSpine() throws {
   #expect(receipt.checks.contains { $0.name == "launch-review-gate-35" && $0.status == "pass" })
   #expect(receipt.checks.contains { $0.name == "launch-review-gate-36" && $0.status == "pass" })
   #expect(receipt.checks.contains { $0.name == "launch-review-gate-37" && $0.status == "pass" })
+  #expect(receipt.checks.contains { $0.name == "launch-review-gate-38" && $0.status == "pass" })
+  #expect(receipt.checks.contains { $0.name == "launch-review-public-brochure-evidence-ref" && $0.status == "pass" })
+  #expect(receipt.checks.contains { $0.name == "launch-review-public-changelog-evidence-ref" && $0.status == "pass" })
   #expect(receipt.checks.contains { $0.name == "coverage-release-doctor-test-bundle" && $0.status == "pass" })
   #expect(receipt.checks.contains { $0.name == "coverage-project-target-discovery-test-bundle" && $0.status == "pass" })
   #expect(receipt.checks.contains { $0.name == "coverage-workspace-cache-discovery-test-bundle" && $0.status == "pass" })
@@ -111,6 +114,8 @@ private func makeReleaseDoctorFixture(includeGate33: Bool) throws -> URL {
     "release/v0.0.1/release-gates.md",
     "release/v0.0.1/why-vaporize.md",
     "release/v0.0.1/performance-marketing-claims.md",
+    "release/v0.0.1/public-brochure.md",
+    "release/v0.0.1/public-changelog.md",
     "release/v0.0.1/wrkstrm-app-minimums.md",
     "vaporize.engineering.docc/index.md",
     "vaporize.engineering.docc/feature-catalog.md",
@@ -129,8 +134,12 @@ private func makeReleaseDoctorFixture(includeGate33: Bool) throws -> URL {
       contents = "CUJ-17 CUJ-18 CUJ-19 CUJ-20 CUJ-21"
     case "release/v0.0.1/release-gates.md":
       contents = includeGate33
-        ? "GATE-33-release-doctor GATE-34-project-target-discovery GATE-35-workspace-product-cache-discovery GATE-36-xcode-workspace-scheme-listing GATE-37-cuj-state-coverage"
-        : "GATE-32 GATE-34-project-target-discovery GATE-35-workspace-product-cache-discovery GATE-36-xcode-workspace-scheme-listing GATE-37-cuj-state-coverage"
+        ? "GATE-33-release-doctor GATE-34-project-target-discovery GATE-35-workspace-product-cache-discovery GATE-36-xcode-workspace-scheme-listing GATE-37-cuj-state-coverage GATE-38-public-disclosure-surfaces"
+        : "GATE-32 GATE-34-project-target-discovery GATE-35-workspace-product-cache-discovery GATE-36-xcode-workspace-scheme-listing GATE-37-cuj-state-coverage GATE-38-public-disclosure-surfaces"
+    case "release/v0.0.1/public-brochure.md":
+      contents = "external public disclosure surface Claims Not Yet Allowed"
+    case "release/v0.0.1/public-changelog.md":
+      contents = "external release-note companion GATE-38-public-disclosure-surfaces"
     case "vaporize.engineering.docc/feature-catalog.md":
       contents = "Release doctor Project target discovery Workspace product-cache discovery Xcode workspace scheme listing"
     case "vaporize.engineering.docc/vaporware-modification-request-discipline.md":
@@ -151,14 +160,17 @@ private func makeReleaseDoctorFixture(includeGate33: Bool) throws -> URL {
       "evidenceRefs": [
         { "t": "Release doctor receipt" },
         { "t": "Creative Selection v0.2 target discovery receipt" },
-        { "t": "Creative Selection v0.2 workspace cache discovery receipt" }
+        { "t": "Creative Selection v0.2 workspace cache discovery receipt" },
+        { "t": "Vaporize v0.0.1 public brochure" },
+        { "t": "Vaporize v0.0.1 public changelog" }
       ],
       "gateResults": [
         \(gateResults),
         { "gateRef": "GATE-34-project-target-discovery", "status": "pass", "rationale": "fixture" },
         { "gateRef": "GATE-35-workspace-product-cache-discovery", "status": "pass", "rationale": "fixture" },
         { "gateRef": "GATE-36-xcode-workspace-scheme-listing", "status": "pass", "rationale": "fixture" },
-        { "gateRef": "GATE-37-cuj-state-coverage", "status": "pass", "rationale": "fixture" }
+        { "gateRef": "GATE-37-cuj-state-coverage", "status": "pass", "rationale": "fixture" },
+        { "gateRef": "GATE-38-public-disclosure-surfaces", "status": "pass", "rationale": "fixture" }
       ]
     }
     """,

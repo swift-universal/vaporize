@@ -32,9 +32,10 @@
       "Hello World Google target feature inspection passes through inspect-target-features, proving project configs, release tiers, configFiles wiring, generated xcconfigs, generated ReleaseFeatures.swift, and digikoma-release-features provenance for the reference target.",
       "The release-facing why-vaporize explainer exists and records current Swift/xcodebuild/xcrun comparison, local benchmark baselines, build-space savings theory, user ergonomics, and unmeasured benchmark gaps.",
       "The performance marketing claims matrix exists and separates approved measured, behavioral, and theoretical claim language from prohibited speed and disk-space claims.",
+      "The public brochure and public changelog exist as draft external disclosure surfaces, constrained by the claim matrix and blocked from publication until approval.",
       "The package-local vaporize.engineering.docc catalog exists as the human engineering narrative for future wrkstrm.com/engineering publication, with release evidence remaining the proof corpus.",
       "The package-local feature catalog exists as the canonical human-readable feature list and explanation surface for Vaporize.",
-      "The package-local release doctor exists and emits a vaporize-release-doctor receipt that verifies release-spine coherence across required artifacts, JSON evidence, launch-review references, provenance, and CUJ coverage.",
+      "The package-local release doctor exists and emits a vaporize-release-doctor receipt that verifies release-spine coherence across required artifacts, public-disclosure surfaces, JSON evidence, launch-review references, provenance, and CUJ coverage.",
       "The package-local modularity and ownership boundary exists: genuinely Swift Universal primitives belong in swift-universal, Apple-bounded orchestration belongs in wrkstrm-core, and Vaporize feature bodies should not accumulate in the CLI router.",
       "A Kura runtime sample series is seeded for Vaporize, with a backfilled CUJ-09 coverage sample that verifies SwiftPM code coverage JSON, raw profile data, merged profile data, build-output size, product size, codecov artifact size, and binary size from a Vaporize toolchain run.",
       "Initial schema-universal extraction exists as vaporize-schemas v0.0.1 for CUJ coverage, provenance, launch-review specialization, and Apple project YAML/Pkl receipts.",
@@ -50,6 +51,7 @@
       "Vaporize automatically emits Kura runtime samples, retains Apple/Swift native artifacts as durable release evidence, or compares per-feature-flag build-size cohorts.",
       "Vaporize performs registry-backed app-minimums inspection across the full wrkstrm app fleet.",
       "Remaining XcodeGen surfaces are migrated or quarantined.",
+      "The public brochure or public changelog is approved for publication.",
       "Vaporize v0.0.1 is ready for final internal-essential release."
     ]
   },
@@ -81,6 +83,14 @@
     {
       "kind": "performance-marketing-claims",
       "path": "private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/performance-marketing-claims.md"
+    },
+    {
+      "kind": "public-brochure",
+      "path": "private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/public-brochure.md"
+    },
+    {
+      "kind": "public-changelog",
+      "path": "private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/public-changelog.md"
     },
     {
       "kind": "engineering-docc-catalog",
