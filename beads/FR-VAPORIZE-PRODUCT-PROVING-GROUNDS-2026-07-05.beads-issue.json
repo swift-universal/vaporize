@@ -33,7 +33,7 @@
       "CUJ-23 defines the product proving-ground adoption journey and proof boundary.",
       "GATE-40 records the product proving-ground release gate.",
       "VaporizeTestSupport defines a product proving-ground profile, scenario, and adoption audit.",
-      "VaporizeCUJ23ProductProvingGroundTests proves a passing Vaporize CLI passport, a Pkl project-generation generator passport, missing-track failure, missing-receipt failure, missing-targetable-test failure, and product-class default track catalog.",
+      "VaporizeCUJ23ProductProvingGroundTests proves a passing Vaporize CLI passport, a generator capability passport for Pkl project generation, missing-track failure, missing-receipt failure, missing-targetable-test failure, and product-class default track catalog.",
       "vaporize.engineering.docc/product-proving-grounds.md documents tracks, class defaults, release rule, and boundaries.",
       "Release Doctor checks FR-033, CUJ-23, GATE-40, the engineering doc, launch-review reference, and CUJ-23 coverage."
     ],

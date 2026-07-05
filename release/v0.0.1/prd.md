@@ -275,8 +275,8 @@ Supporting audiences:
   CUJ-18 `list-targets` first slice, CUJ-19 workspace cache discovery first
   slice, CUJ-20 `list-schemes` first slice, CUJ-21 CUJ-state coverage gate, and
   CUJ-22 SwiftPM CLI resource-bundle install preservation, and CUJ-23 product
-  proving-ground passports including the Pkl project-generation generator
-  passport.
+  proving-ground passports including the generator capability passport for Pkl
+  project generation.
 - `release/v0.0.1/product-definition.md` defines the product, primary users,
   product-level user journeys, choice argument, non-choice cases, and build
   implications before additional feature work is accepted.

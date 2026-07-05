@@ -48,7 +48,7 @@ func productProvingGroundGateFailsIncompletePassports() throws {
   #expect(audit.missingTargetableTestScenarioSlugs == ["swiftpm-resource-hill-climb"])
 }
 
-@Test("cuj-23 proving-ground profile covers Pkl project generation capability tracks")
+@Test("cuj-23 proving-ground profile covers a generator capability for Pkl project generation")
 func productProvingGroundProfileCoversPklProjectGeneration() throws {
   let profile = vaporizePklXcodeProjectGenerationProvingGroundProfile()
   let audit = VaporizeProductProvingGroundAdoptionGate.audit(

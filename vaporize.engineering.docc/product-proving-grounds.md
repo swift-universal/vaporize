@@ -12,6 +12,10 @@ review trusts it. A passport is a typed profile that names the product class,
 owning bead, CUJs, required tracks, scenarios, targetable test bundle, receipt
 refs, release-doctor checks, and explicit boundaries.
 
+In Vaporize this is a reference implementation of the broader proving-ground
+harness and release-review doctrine. Pkl project generation does not own the
+proving ground; it is a generator capability that drives the standard tracks.
+
 The automotive metaphor is useful because it keeps proof concrete. A product
 does not merely have tests. It has driven specific tracks.
 
@@ -65,11 +69,11 @@ The first implementation slice is CUJ-23:
 - `VaporizeProductProvingGroundAdoptionGate` audits required tracks, missing
   CUJs, missing receipts, missing targetable tests, and unknown tracks.
 - `VaporizeCUJ23ProductProvingGroundTests` proves a Vaporize CLI passport, a
-  Pkl project-generation generator passport, incomplete-passport failure, and
-  reusable product-class track defaults.
-- Pkl-backed `.xcodeproj` generation is the first generator-class passport: it
-  ties CUJ-14 graph/scheme tests and release receipts into the CUJ-23
-  proving-ground audit.
+  generator capability passport for Pkl project generation,
+  incomplete-passport failure, and reusable product-class track defaults.
+- Pkl-backed `.xcodeproj` generation is the first generator capability driven
+  through the passport harness: it ties CUJ-14 graph/scheme tests and release
+  receipts into the CUJ-23 proving-ground audit.
 
 ## Boundary
 
