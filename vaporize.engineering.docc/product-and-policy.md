@@ -47,8 +47,15 @@ The current policy boundary is:
   toolchain route.
 - Use `vaporize toolchain -- swift package generate-documentation ...` for
   Swift package API documentation when a package carries the Swift-DocC Plugin.
-- Use `vaporize toolchain -- docc convert ...` for standalone `.docc` catalog
-  conversion so documentation builds stay inside the Vaporize receipt boundary.
+- Use `swift-docc-cli@swift-universal.clia.sh export ...` as the canonical
+  Swift Universal product route for standalone `.docc` catalog export once that
+  product is installed in the runtime environment.
+- Use `swift-docc-preview-cli@swift-universal.clia.sh` and
+  `swift-docc-validator-cli@swift-universal.clia.sh` for preview and validation
+  product surfaces.
+- Treat `vaporize toolchain -- docc convert ...` as the lower-level
+  Swift-DocC compiler fallback so documentation builds still stay inside the
+  Vaporize receipt boundary when the canonical product route is unavailable.
 - Let Vaporize choose the Swift-DocC compiler resolver from the environment:
   Swift toolchain `docc` when present, Xcode DocC as macOS fallback, and direct
   `docc` lookup on non-macOS Swift toolchain hosts.
