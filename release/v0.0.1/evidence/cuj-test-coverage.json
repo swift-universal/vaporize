@@ -7,7 +7,7 @@
   "coverageId": "vaporize-v0.0.1-cuj-test-coverage",
   "subjectAppSlug": "vaporize.cli@wrkstrm-core.clia.sh",
   "subjectReleaseSlug": "v0.0.1",
-  "generatedAt": "2026-06-14T07:21:25Z",
+  "generatedAt": "2026-07-05T00:00:00Z",
   "generatedBy": "codex-crisie",
   "status": "active-cuj-coverage-floor-defined",
   "sourceRule": "Required test count is derived from PRD requirements through active draft CUJs. Actual executable tests may exceed the required floor.",
@@ -17,34 +17,35 @@
     "releaseGates": "private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/release-gates.md"
   },
   "counts": {
-    "activeCUJCount": 21,
+    "activeCUJCount": 22,
     "deferredCUJCount": 1,
-    "requiredSwiftTestObligationCount": 95,
+    "requiredSwiftTestObligationCount": 104,
     "requiredReleaseEvidenceCheckCount": 12,
-    "requiredTargetableTestObligationCount": 107,
-    "currentExecutableSwiftTestCount": 113,
+    "requiredTargetableTestObligationCount": 116,
+    "currentExecutableSwiftTestCount": 138,
     "currentExecutableSwiftTestBreakdown": {
-      "VaporizeCUJ01SwiftPMCLITests": 7,
+      "VaporizeCUJ01SwiftPMCLITests": 20,
       "VaporizeCUJ02MacAppTests": 14,
       "VaporizeCUJ03PassThroughTests": 4,
       "VaporizeCUJ04CommonProcessUseTests": 4,
       "VaporizeCUJ05ToolchainTests": 6,
-      "VaporizeCUJ06JSONValidationTests": 2,
-      "VaporizeCUJ07VaporInventoryTests": 16,
+      "VaporizeCUJ06JSONValidationTests": 3,
+      "VaporizeCUJ07VaporInventoryTests": 18,
       "VaporizeCUJ08ProjectYMLInspectionTests": 5,
-      "VaporizeCUJ09ReleaseReviewTests": 5,
+      "VaporizeCUJ09ReleaseReviewTests": 6,
       "VaporizeCUJ10YMLPklComparisonTests": 4,
       "VaporizeCUJ11PklYMLGenerationTests": 3,
       "VaporizeCUJ12PackageGraphTests": 1,
       "VaporizeCUJ13YMLPklImportTests": 4,
-      "VaporizeCUJ14PklXcodeProjectGenerationTests": 3,
+      "VaporizeCUJ14PklXcodeProjectGenerationTests": 5,
       "VaporizeCUJ15XcodeProductCacheTests": 4,
       "VaporizeCUJ16TargetFeaturesTests": 5,
       "VaporizeCUJ17ReleaseDoctorTests": 5,
       "VaporizeCUJ18ListTargetsTests": 5,
       "VaporizeCUJ19WorkspaceCacheDiscoveryTests": 5,
       "VaporizeCUJ20XcodeWorkspaceSchemesTests": 5,
-      "VaporizeCUJ21CUJStateTests": 6
+      "VaporizeCUJ21CUJStateTests": 6,
+      "VaporizeCUJ22ResourceCLIInstallTests": 6
     }
   },
   "coverage": [
@@ -118,10 +119,10 @@
       "prdRefs": [
         "FR-011"
       ],
-      "requiredSwiftTestObligations": 2,
+      "requiredSwiftTestObligations": 6,
       "status": "covered",
       "evidence": [
-        "VaporizeCUJ06JSONValidationTests.swift"
+        "vaporize-cuj-06-json-validation-tests.swift"
       ]
     },
     {
@@ -173,6 +174,8 @@
         "vaporware-modification-request-discipline.md",
         "cuj.md",
         "release-gates.md",
+        "audience-packet.su.json",
+        "user-manual.md",
         "vaporize.engineering.docc",
         "launch-review-packet.json"
       ]
@@ -236,11 +239,12 @@
       "prdRefs": [
         "FR-020"
       ],
-      "requiredSwiftTestObligations": 3,
+      "requiredSwiftTestObligations": 5,
       "status": "covered-with-boundary",
       "evidence": [
         "VaporizeCUJ14PklXcodeProjectGenerationTests.swift",
-        "creative-selection-v0.2-pkl-xcodeproj-generation.receipt.json"
+        "creative-selection-v0.2-pkl-xcodeproj-generation.receipt.json",
+        "vaporize-pkl-xcodeproj-tool-release-identity-modification.receipt.json"
       ]
     },
     {
@@ -351,6 +355,22 @@
         "cuj-state-coverage.json",
         "cuj-state-testing-methodology.md"
       ]
+    },
+    {
+      "cuj": "CUJ-22",
+      "title": "Assistant Installs Resource-Bearing SwiftPM CLI",
+      "prdRefs": [
+        "FR-002",
+        "FR-032"
+      ],
+      "requiredSwiftTestObligations": 6,
+      "status": "covered-with-boundary",
+      "evidence": [
+        "VaporizeCUJ22ResourceCLIInstallTests.swift",
+        "SimulationProvingGroundTestSupport.swift",
+        "swiftpm-cli-resource-bundle-installs.md",
+        "vaporize-swiftpm-cli-resource-bundle-install-launch-review-modification.receipt.json"
+      ]
     }
   ],
   "deferredCoverage": [
@@ -372,6 +392,7 @@
     "Project target discovery is covered as a first slice; it does not build, install, generate .xcodeproj world-state, or prove .xcworkspace graph membership discovery.",
     "Workspace product-cache discovery is covered as target-fact-derived candidate path and warm/missing inspection; .xcworkspace graph membership, cache warming, fleet coverage, and disk-savings measurement remain deferred.",
     "Xcode workspace scheme listing is covered as a first slice; it asks xcodebuild for live .xcworkspace schemes and records a receipt boundary, but it does not build, install, warm caches, prove product paths, prove fleet coverage, or measure large-workspace runtime.",
-    "CUJ-state coverage proves that each required CUJ-state record has a named proof; it does not prove production Kura storage, database adapter behavior, or public release readiness."
+    "CUJ-state coverage proves that each required CUJ-state record has a named proof; it does not prove production Kura storage, database adapter behavior, or public release readiness.",
+    "SwiftPM CLI resource-bundle install coverage proves installed CLI resource bundles and metadata sidecars; it does not prove app bundle packaging, Bundle.main.infoDictionary product metadata, Sparkle appcast generation, or update signing."
   ]
 }

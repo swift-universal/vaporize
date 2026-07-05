@@ -33,6 +33,8 @@ func releaseDoctorPassesLiveReleaseSpine() throws {
   #expect(receipt.subjectAppSlug == "vaporize.cli@wrkstrm-core.clia.sh")
   #expect(receipt.subjectReleaseSlug == "v0.0.1")
   #expect(receipt.overallStatus == "pass")
+  #expect(receipt.requiredArtifactCount == 26)
+  #expect(receipt.checkCount == 117)
   #expect(receipt.failedCheckCount == 0)
   #expect(receipt.checks.contains { $0.name == "launch-review-gate-33" && $0.status == "pass" })
   #expect(receipt.checks.contains { $0.name == "launch-review-gate-34" && $0.status == "pass" })
@@ -40,13 +42,41 @@ func releaseDoctorPassesLiveReleaseSpine() throws {
   #expect(receipt.checks.contains { $0.name == "launch-review-gate-36" && $0.status == "pass" })
   #expect(receipt.checks.contains { $0.name == "launch-review-gate-37" && $0.status == "pass" })
   #expect(receipt.checks.contains { $0.name == "launch-review-gate-38" && $0.status == "pass" })
+  #expect(receipt.checks.contains { $0.name == "launch-review-gate-39" && $0.status == "pass" })
   #expect(receipt.checks.contains { $0.name == "launch-review-public-brochure-evidence-ref" && $0.status == "pass" })
+  #expect(receipt.checks.contains { $0.name == "launch-review-public-brochure-html-evidence-ref" && $0.status == "pass" })
+  #expect(receipt.checks.contains { $0.name == "launch-review-audience-packet-evidence-ref" && $0.status == "pass" })
+  #expect(receipt.checks.contains { $0.name == "launch-review-user-manual-evidence-ref" && $0.status == "pass" })
   #expect(receipt.checks.contains { $0.name == "launch-review-public-changelog-evidence-ref" && $0.status == "pass" })
+  #expect(receipt.checks.contains { $0.name == "launch-review-resource-cli-install-evidence-ref" && $0.status == "pass" })
+  #expect(receipt.checks.contains { $0.name == "public-brochure-html-marketing-site-headline" && $0.status == "pass" })
+  #expect(receipt.checks.contains { $0.name == "public-brochure-html-disclosure-boundary" && $0.status == "pass" })
+  #expect(receipt.checks.contains { $0.name == "public-brochure-html-carrie-cmo-owner" && $0.status == "pass" })
+  #expect(receipt.checks.contains { $0.name == "audience-packet-model" && $0.status == "pass" })
+  #expect(receipt.checks.contains { $0.name == "audience-packet-publication-boundary" && $0.status == "pass" })
+  #expect(receipt.checks.contains { $0.name == "audience-packet-carrie-cmo-owner" && $0.status == "pass" })
+  #expect(receipt.checks.contains { $0.name == "user-manual-brochure-companion-contract" && $0.status == "pass" })
+  #expect(receipt.checks.contains { $0.name == "user-manual-quick-start" && $0.status == "pass" })
+  #expect(receipt.checks.contains { $0.name == "user-manual-carrie-cmo-owner" && $0.status == "pass" })
+  #expect(receipt.checks.contains { $0.name == "gate-brochure-companion-contract" && $0.status == "pass" })
+  #expect(receipt.checks.contains { $0.name == "gate-vaporware-owning-bead-discipline" && $0.status == "pass" })
+  #expect(receipt.checks.contains { $0.name == "gate-public-disclosure-carrie-cmo-owner" && $0.status == "pass" })
+  #expect(receipt.checks.contains { $0.name == "public-brochure-carrie-cmo-owner" && $0.status == "pass" })
+  #expect(receipt.checks.contains { $0.name == "public-changelog-carrie-cmo-owner" && $0.status == "pass" })
+  #expect(receipt.checks.contains { $0.name == "launch-review-carrie-cmo-owner" && $0.status == "pass" })
+  #expect(receipt.checks.contains { $0.name == "launch-review-carrie-cmo-not-signed-off" && $0.status == "pass" })
+  #expect(receipt.checks.contains { $0.name == "vaporware-modification-owning-bead-discipline" && $0.status == "pass" })
+  #expect(receipt.checks.contains { $0.name == "prd-resource-cli-install-requirement" && $0.status == "pass" })
+  #expect(receipt.checks.contains { $0.name == "cuj-resource-cli-install-journey" && $0.status == "pass" })
+  #expect(receipt.checks.contains { $0.name == "gate-resource-cli-install" && $0.status == "pass" })
+  #expect(receipt.checks.contains { $0.name == "feature-catalog-resource-cli-install" && $0.status == "pass" })
+  #expect(receipt.checks.contains { $0.name == "swiftpm-cli-resource-bundle-doc" && $0.status == "pass" })
   #expect(receipt.checks.contains { $0.name == "coverage-release-doctor-test-bundle" && $0.status == "pass" })
   #expect(receipt.checks.contains { $0.name == "coverage-project-target-discovery-test-bundle" && $0.status == "pass" })
   #expect(receipt.checks.contains { $0.name == "coverage-workspace-cache-discovery-test-bundle" && $0.status == "pass" })
   #expect(receipt.checks.contains { $0.name == "coverage-xcode-workspace-scheme-listing-test-bundle" && $0.status == "pass" })
   #expect(receipt.checks.contains { $0.name == "coverage-cuj-state-test-bundle" && $0.status == "pass" })
+  #expect(receipt.checks.contains { $0.name == "coverage-resource-cli-install-test-bundle" && $0.status == "pass" })
   #expect(receipt.checks.contains { $0.name == "cuj-state-coverage-status" && $0.status == "pass" })
   #expect(receipt.checks.contains { $0.name == "cuj-state-proof-floor" && $0.status == "pass" })
   #expect(receipt.checks.contains { $0.name == "cuj-state-uncovered-empty" && $0.status == "pass" })
@@ -115,7 +145,10 @@ private func makeReleaseDoctorFixture(includeGate33: Bool) throws -> URL {
     "release/v0.0.1/why-vaporize.md",
     "release/v0.0.1/performance-marketing-claims.md",
     "release/v0.0.1/public-brochure.md",
+    "release/v0.0.1/public-brochure.html",
+    "release/v0.0.1/user-manual.md",
     "release/v0.0.1/public-changelog.md",
+    "release/v0.0.1/evidence/audience-packet.su.json",
     "release/v0.0.1/wrkstrm-app-minimums.md",
     "vaporize.engineering.docc/index.md",
     "vaporize.engineering.docc/feature-catalog.md",
@@ -123,27 +156,36 @@ private func makeReleaseDoctorFixture(includeGate33: Bool) throws -> URL {
     "vaporize.engineering.docc/vaporware-modification-request-discipline.md",
     "vaporize.engineering.docc/modularity-and-ownership-boundaries.md",
     "vaporize.engineering.docc/feature-test-lifecycle.md",
+    "vaporize.engineering.docc/swiftpm-cli-resource-bundle-installs.md",
   ] {
     let contents: String
     switch path {
     case "release/v0.0.1/product-definition.md":
       contents = "engineering pedigree"
     case "release/v0.0.1/prd.md":
-      contents = "FR-027 FR-028 FR-029 FR-030 FR-031"
+      contents = "FR-027 FR-028 FR-029 FR-030 FR-031 FR-032"
     case "release/v0.0.1/cuj.md":
-      contents = "CUJ-17 CUJ-18 CUJ-19 CUJ-20 CUJ-21"
+      contents = "CUJ-17 CUJ-18 CUJ-19 CUJ-20 CUJ-21 CUJ-22"
     case "release/v0.0.1/release-gates.md":
       contents = includeGate33
-        ? "GATE-33-release-doctor GATE-34-project-target-discovery GATE-35-workspace-product-cache-discovery GATE-36-xcode-workspace-scheme-listing GATE-37-cuj-state-coverage GATE-38-public-disclosure-surfaces"
-        : "GATE-32 GATE-34-project-target-discovery GATE-35-workspace-product-cache-discovery GATE-36-xcode-workspace-scheme-listing GATE-37-cuj-state-coverage GATE-38-public-disclosure-surfaces"
+        ? "GATE-33-release-doctor GATE-34-project-target-discovery GATE-35-workspace-product-cache-discovery GATE-36-xcode-workspace-scheme-listing GATE-37-cuj-state-coverage GATE-38-public-disclosure-surfaces GATE-39-resource-cli-install Every brochure must have an audience packet and user manual owning bead cmo-chief-marketing-officer-carrie@wrkstrm.occupations.org"
+        : "GATE-32 GATE-34-project-target-discovery GATE-35-workspace-product-cache-discovery GATE-36-xcode-workspace-scheme-listing GATE-37-cuj-state-coverage GATE-38-public-disclosure-surfaces GATE-39-resource-cli-install Every brochure must have an audience packet and user manual owning bead cmo-chief-marketing-officer-carrie@wrkstrm.occupations.org"
     case "release/v0.0.1/public-brochure.md":
-      contents = "external public disclosure surface Claims Not Yet Allowed"
+      contents = "external public disclosure surface Claims Not Yet Allowed cmo-chief-marketing-officer-carrie@wrkstrm.occupations.org"
+    case "release/v0.0.1/public-brochure.html":
+      contents = "Build proof for assistant-run software work not approved for publication cmo-chief-marketing-officer-carrie@wrkstrm.occupations.org"
+    case "release/v0.0.1/user-manual.md":
+      contents = "## Brochure Companion Contract\n## Quick Start\ncmo-chief-marketing-officer-carrie@wrkstrm.occupations.org"
     case "release/v0.0.1/public-changelog.md":
-      contents = "external release-note companion GATE-38-public-disclosure-surfaces"
+      contents = "external release-note companion GATE-38-public-disclosure-surfaces cmo-chief-marketing-officer-carrie@wrkstrm.occupations.org"
+    case "release/v0.0.1/evidence/audience-packet.su.json":
+      contents = #"{"AudienceProfileStackModel":"0.1.0","status":"not approved for publication","ownerOccupationSlug":"cmo-chief-marketing-officer-carrie@wrkstrm.occupations.org"}"#
     case "vaporize.engineering.docc/feature-catalog.md":
-      contents = "Release doctor Project target discovery Workspace product-cache discovery Xcode workspace scheme listing"
+      contents = "Release doctor Project target discovery Workspace product-cache discovery Xcode workspace scheme listing SwiftPM CLI resource-bundle installs"
     case "vaporize.engineering.docc/vaporware-modification-request-discipline.md":
-      contents = "vaporware scaffold feature-request"
+      contents = "vaporware scaffold feature-request owning bead"
+    case "vaporize.engineering.docc/swiftpm-cli-resource-bundle-installs.md":
+      contents = "Bundle.module"
     default:
       contents = "fixture"
     }
@@ -162,7 +204,11 @@ private func makeReleaseDoctorFixture(includeGate33: Bool) throws -> URL {
         { "t": "Creative Selection v0.2 target discovery receipt" },
         { "t": "Creative Selection v0.2 workspace cache discovery receipt" },
         { "t": "Vaporize v0.0.1 public brochure" },
-        { "t": "Vaporize v0.0.1 public changelog" }
+        { "t": "Vaporize v0.0.1 public brochure marketing site" },
+        { "t": "Vaporize v0.0.1 public brochure audience packet" },
+        { "t": "Vaporize v0.0.1 user manual" },
+        { "t": "Vaporize v0.0.1 public changelog" },
+        { "t": "Vaporize CUJ-22 resource CLI install test bundle" }
       ],
       "gateResults": [
         \(gateResults),
@@ -170,8 +216,18 @@ private func makeReleaseDoctorFixture(includeGate33: Bool) throws -> URL {
         { "gateRef": "GATE-35-workspace-product-cache-discovery", "status": "pass", "rationale": "fixture" },
         { "gateRef": "GATE-36-xcode-workspace-scheme-listing", "status": "pass", "rationale": "fixture" },
         { "gateRef": "GATE-37-cuj-state-coverage", "status": "pass", "rationale": "fixture" },
-        { "gateRef": "GATE-38-public-disclosure-surfaces", "status": "pass", "rationale": "fixture" }
-      ]
+        { "gateRef": "GATE-38-public-disclosure-surfaces", "status": "pass", "rationale": "fixture" },
+        { "gateRef": "GATE-39-resource-cli-install", "status": "pass", "rationale": "fixture" }
+      ],
+      "consumerFacingGateOwnership": {
+        "ownerStatus": "assigned-not-signed-off",
+        "ownerName": "Carrie CMO",
+        "ownerOccupationSlug": "cmo-chief-marketing-officer-carrie@wrkstrm.occupations.org"
+      },
+      "signoffs": {
+        "audienceApproverSignoffRef": null,
+        "founderSignoffRef": null
+      }
     }
     """,
     to: releaseRoot.appendingPathComponent("evidence/launch-review-packet.json")
@@ -197,14 +253,15 @@ private func makeReleaseDoctorFixture(includeGate33: Bool) throws -> URL {
     """
     {
       "counts": {
-        "activeCUJCount": 21,
+        "activeCUJCount": 22,
         "requiredReleaseEvidenceCheckCount": 12,
         "currentExecutableSwiftTestBreakdown": {
           "VaporizeCUJ17ReleaseDoctorTests": 5,
           "VaporizeCUJ18ListTargetsTests": 5,
           "VaporizeCUJ19WorkspaceCacheDiscoveryTests": 5,
           "VaporizeCUJ20XcodeWorkspaceSchemesTests": 5,
-          "VaporizeCUJ21CUJStateTests": 6
+          "VaporizeCUJ21CUJStateTests": 6,
+          "VaporizeCUJ22ResourceCLIInstallTests": 6
         }
       }
     }

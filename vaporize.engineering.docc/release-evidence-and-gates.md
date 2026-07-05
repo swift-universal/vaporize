@@ -26,6 +26,7 @@ The v0.0.1 evidence stack is:
 - Release gates that name each proof and blocker.
 - Launch-review packet JSON.
 - Provenance artifact JSON and Markdown.
+- Public brochures with required audience packets and user manuals.
 - Schema-universal schemas, fixtures, and Swift model tests.
 
 This shape prevents the release from becoming "the code seems to work." The
@@ -36,11 +37,11 @@ exists, and which claims are still prohibited.
 
 The current CUJ-derived floor is:
 
-- 21 active CUJs
-- 95 required Swift test obligations
+- 22 active CUJs
+- 104 required Swift test obligations
 - 12 release evidence checks
-- 107 required targetable obligations
-- 113 executable Swift tests across 21 CUJ-specific bundles
+- 116 required targetable obligations
+- 138 executable Swift tests across 22 CUJ-specific bundles
 
 The executable suite may exceed the floor, but the floor comes from PRD and CUJ
 obligations. Test count alone is not a product argument.
@@ -52,8 +53,9 @@ gates already cover command surface, JSON validation, release packet shape,
 schema extraction, project migration first slices, project target discovery
 first slice, workspace product-cache discovery first slice, Xcode workspace
 scheme-listing first slice, shared workspace cache first slice, target feature
-inspection first slice, CUJ-state coverage, release-doctor spine audit, pre-code
-PRD review policy, and package test execution through Vaporize's owned toolchain route.
+inspection first slice, CUJ-state coverage, SwiftPM CLI resource-bundle install
+preservation, release-doctor spine audit, pre-code PRD review policy, and
+package test execution through Vaporize's owned toolchain route.
 
 The blocking gates remain focused on full Apple project generation parity and
 strong benchmark/runtime sample evidence.
@@ -77,3 +79,17 @@ New release evidence should add or update:
 
 That is what lets engineering docs link to artifacts that a reviewer can
 actually validate.
+
+## Brochure Companion Contract
+
+Any Vaporize brochure must have two companions before the release packet can
+present it as publication-shaped:
+
+- An audience packet that names the readers, trust posture, must-see facts,
+  must-not-see facts, and prohibited claims.
+- A user manual beside the brochure that explains how to operate or review the
+  advertised surface.
+
+Release doctor enforces this for the v0.0.1 public brochure through
+`public-brochure.html`, `evidence/audience-packet.su.json`, and
+`user-manual.md`.

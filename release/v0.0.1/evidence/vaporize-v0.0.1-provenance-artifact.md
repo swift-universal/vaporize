@@ -1,7 +1,7 @@
 # Vaporize v0.0.1 - Provenance Artifact
 
-**Generated:** 2026-06-14T07:21:25Z
-**Status:** captured for forward Pkl migration
+**Generated:** 2026-07-05T00:00:00Z
+**Status:** ready for launch review; blocked for final internal release
 **Subject:** `vaporize.cli@wrkstrm-core.clia.sh` v0.0.1 release prep
 
 This artifact gathers the receipts needed to move forward without relying on
@@ -9,13 +9,15 @@ chat memory.
 
 ## Proven
 
-- CUJ-derived test coverage is explicit: 95 required Swift test obligations
-  plus 12 release evidence checks across 21 active CUJs.
-- Vaporize package tests cover 113 executable Swift
-  tests across 21 implemented CUJ-specific SwiftPM test bundles, including
+- CUJ-derived test coverage is explicit: 104 required Swift test obligations
+  plus 12 release evidence checks across 22 active CUJs.
+- Vaporize package tests cover 138 executable Swift
+  tests across 22 implemented CUJ-specific SwiftPM test bundles, including
+  CUJ-14 tool release identity, CUJ-14 unsupported-target boundary coverage,
   CUJ-16 target feature inspection, CUJ-17 release doctor, CUJ-18 project
   target discovery, CUJ-19 workspace product-cache discovery, and CUJ-20 Xcode
-  workspace scheme listing, plus CUJ-21 CUJ-state coverage.
+  workspace scheme listing, CUJ-21 CUJ-state coverage, and CUJ-22
+  resource-bearing CLI install coverage.
 - `product-definition.md` defines Vaporize, primary users, product-level user
   journeys, why users choose it, when not to choose it, and build implications
   before more implementation is accepted.
@@ -65,6 +67,19 @@ chat memory.
 - `performance-marketing-claims.md` defines approved measured, behavioral, and
   theoretical performance claim language, example copy, prohibited claims, and
   required future benchmark receipts.
+- `public-brochure.html` exists as the static marketing-site surface for the
+  public-disclosure draft, while `public-brochure.md` remains the Markdown
+  companion and `public-changelog.md` remains the release-note companion.
+- Carrie CMO (`cmo-chief-marketing-officer-carrie@wrkstrm.occupations.org`)
+  owns the consumer-facing publication gate for the public-disclosure surfaces;
+  wrkstrm-core owns Vaporize implementation evidence and release-doctor
+  mechanics.
+- `audience-packet.su.json` exists as the audience profile stack for the
+  public brochure marketing site, including technical evaluator, future
+  customer, board-approved public reader, operator, and adversarial reviewer
+  boundaries.
+- `user-manual.md` exists beside the public brochure as the operational
+  companion that explains how to run, review, and bound the advertised surface.
 - `vaporize.engineering.docc` exists as the package-local human engineering
   narrative for future `wrkstrm.com/engineering` publication; release evidence
   remains the proof corpus.
@@ -73,6 +88,11 @@ chat memory.
 - `vaporize.engineering.docc/release-doctor.md` exists, and
   `release-doctor` emits a `vaporize-release-doctor` receipt that verifies
   release-spine coherence before assistants trust the packet.
+- `vaporize.engineering.docc/swiftpm-cli-resource-bundle-installs.md` exists,
+  and CUJ-22 proves a resource-bearing CLI simulation proving ground: coverage
+  fails when a scenario receipt is missing, while Vaporize carries processed
+  text, copied directory, decoded JSON, byte-count, and stale-reinstall resource
+  scenarios into `~/.swiftpm/bin` away from `.build`.
 - `vaporize.engineering.docc/modularity-and-ownership-boundaries.md` exists as
   the ownership and modularity rule: Swift Universal primitives belong in
   `swift-universal`, Apple-bounded orchestration belongs in `wrkstrm-core`, and
@@ -102,6 +122,11 @@ chat memory.
 - Vaporize performs registry-backed app-minimums inspection across the full
   wrkstrm app fleet.
 - Remaining XcodeGen surfaces are migrated or quarantined.
+- The public brochure marketing site, audience packet, or user manual is
+  approved for publication or has Carrie CMO/founder/board signoff.
+- CUJ-22 proves resource-bearing CLI installs; it does not prove app bundle
+  packaging, `Bundle.main.infoDictionary` product metadata, Sparkle appcast
+  generation, update signing, or public update delivery.
 - Vaporize v0.0.1 is ready for final internal-essential release.
 
 ## Receipt Index
@@ -125,8 +150,19 @@ chat memory.
 | `product-definition.md` | Product definition, primary users, journeys, choice argument, and build implications are defined | PASS |
 | `why-vaporize.md` | Positioning, tool comparison, benchmark baseline, and ergonomics are explained | PASS-WITH-NOTE |
 | `performance-marketing-claims.md` | Safe performance marketing copy and claim boundaries are defined | PASS-WITH-NOTE |
+| `public-brochure.html` | Static marketing-site draft exists for public disclosure review | PASS-WITH-NOTE |
+| `audience-packet.su.json` | Public brochure audience stack, trust checks, must-see, and must-not-see boundaries are defined | PASS-WITH-NOTE |
+| `user-manual.md` | Public brochure operational companion and brochure companion contract are defined | PASS-WITH-NOTE |
+| `public-brochure.md` | Markdown companion preserves public-disclosure claim boundaries | PASS-WITH-NOTE |
+| `vaporize-public-brochure-marketing-site-modification.receipt.json` | Marketing-site refinement request, tests, install, release-doctor, JSON validation, and static-page checks are captured | PASS-WITH-NOTE |
+| `vaporize-public-brochure-audience-packet-modification.receipt.json` | Audience-packet refinement request, tests, release-doctor, JSON validation, and audience-boundary checks are captured | PASS-WITH-NOTE |
+| `vaporize-public-brochure-user-manual-modification.receipt.json` | User-manual refinement request, tests, release-doctor, JSON validation, and brochure companion contract checks are captured | PASS-WITH-NOTE |
+| `vaporize-public-doc-maintenance-bead-discipline-modification.receipt.json` | Public documentation maintenance request, owning bead, workflow beadTrackingRefs, tests, release-doctor, and JSON validation are captured | PASS-WITH-NOTE |
+| `vaporize-consumer-facing-gate-carrie-cmo-ownership-modification.receipt.json` | Carrie CMO ownership correction, owner-home bead, public packet tokens, tests, release-doctor, and absent publication signoffs are captured | PASS-WITH-NOTE |
+| `vaporize-swiftpm-cli-resource-bundle-install-launch-review-modification.receipt.json` | SwiftPM CLI resource-bundle install refinement, owning bead, CUJ-22 tests, release-doctor, and launch-review evidence are captured | PASS-WITH-NOTE |
 | `vaporize.engineering.docc` | Human engineering docs exist for future `wrkstrm.com/engineering` projection | PASS-WITH-NOTE |
 | `feature-catalog.md` | Major Vaporize features are listed with user problem, current surface, and proof boundary | PASS-WITH-NOTE |
+| `swiftpm-cli-resource-bundle-installs.md` | Resource-bearing SwiftPM CLI install policy and Info.plist sidecar boundary are documented | PASS-WITH-NOTE |
 | `modularity-and-ownership-boundaries.md` | Swift Universal versus wrkstrm-core ownership and Vaporize modularity boundaries are defined | PASS-WITH-NOTE |
 | `vaporware-modification-request-discipline.md` | Vaporware feature requests are distinguished from vaporware modification requests; release-discipline mechanics are defined | PASS-WITH-NOTE |
 | `vaporize-v0.0.1-release-doctor.receipt.json` | Release doctor verifies release-spine agreement before assistants trust the packet | PASS-WITH-NOTE |

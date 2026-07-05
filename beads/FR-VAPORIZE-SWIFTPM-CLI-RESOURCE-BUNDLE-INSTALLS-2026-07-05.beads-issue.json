@@ -1,0 +1,56 @@
+{
+  "BeadsIssue": "0.1.0",
+  "schemaVersion": "0.1.0",
+  "id": "FR-VAPORIZE-SWIFTPM-CLI-RESOURCE-BUNDLE-INSTALLS-2026-07-05",
+  "title": "Preserve SwiftPM CLI resource bundles during Vaporize installs",
+  "status": "done",
+  "priority": 1,
+  "issueType": "feature",
+  "labels": [
+    "vaporize",
+    "swiftpm",
+    "cli-install",
+    "resources",
+    "Bundle.module",
+    "Info.plist",
+    "launch-review",
+    "release-spine",
+    "simulation-proving-ground"
+  ],
+  "createdAt": "2026-07-05T00:00:00Z",
+  "createdBy": "codex after chairman asked to make SwiftPM CLI resource installs work for Vaporize launch review",
+  "historicalContent": {
+    "slug": "FR-VAPORIZE-SWIFTPM-CLI-RESOURCE-BUNDLE-INSTALLS-2026-07-05",
+    "kind": "bead-feature-request",
+    "createdAt": "2026-07-05T00:00:00Z",
+    "createdBy": "codex",
+    "assignee": "wrkstrm-core",
+    "severity": "high",
+    "componentHome": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli",
+    "sourceType": "operator-requested-launch-review-refinement",
+    "sourceLocation": "Codex session 2026-07-05: chairman requested Vaporize launch-review readiness after asking how to make SwiftPM CLI resources and Info.plist/version/build metadata work outside Xcode CLI projects.",
+    "description": "Vaporize CLI installs must preserve SwiftPM target resource bundles used by Bundle.module when a product is installed into ~/.swiftpm/bin. Vaporize should keep SwiftPM experimental-install as the executable primitive, ask SwiftPM for the products directory with swift build --show-bin-path, copy direct .bundle siblings into the installed CLI bin directory, and document the separate product metadata Info.plist sidecar boundary.",
+    "acceptanceCriteria": [
+      "FR-032 defines SwiftPM CLI resource-bundle install preservation in the PRD.",
+      "CUJ-22 defines the resource-bearing CLI install journey and proof boundary.",
+      "GATE-39 records the resource CLI install gate with final-release and Sparkle boundaries.",
+      "VaporizeCUJ22ResourceCLIInstallTests proves a simulation proving-ground manifest, missing-scenario expected-fail coverage audit, and Vaporize expected-pass behavior away from .build.",
+      "vaporize.engineering.docc/swiftpm-cli-resource-bundle-installs.md documents Bundle.module, experimental-install, show-bin-path, resource bundle copying, and metadata Info.plist sidecars.",
+      "Release Doctor checks FR-032, CUJ-22, GATE-39, the engineering doc, launch-review packet references, and CUJ-22 coverage.",
+      "Launch-review and provenance artifacts name the CUJ-22 proof and keep final release blockers honest."
+    ],
+    "linkedTypedRecords": {
+      "prdRequirement": "release/v0.0.1/prd.md#FR-032",
+      "criticalUserJourney": "release/v0.0.1/cuj.md#CUJ-22",
+      "releaseGate": "release/v0.0.1/release-gates.md#GATE-39-resource-cli-install",
+      "engineeringDoc": "vaporize.engineering.docc/swiftpm-cli-resource-bundle-installs.md",
+      "coverageArtifact": "release/v0.0.1/evidence/cuj-test-coverage.json"
+    }
+  },
+  "composesWith": [
+    "[[release-claims-must-trace-to-evidence]]",
+    "[[modification-requests-close-with-receipts]]",
+    "[[swiftpm-resource-bundles-are-install-artifacts]]",
+    "[[cli-metadata-sidecar-is-not-app-bundle-info-plist]]"
+  ]
+}

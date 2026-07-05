@@ -60,6 +60,13 @@ owned XcodeGen/Pkl project-generation flow and Xcode's own workspace graph. It
 does not build, install, warm caches, prove fleet membership, or replace
 AppleProjectSpec target discovery.
 
+The current SwiftPM CLI resource slice keeps `experimental-install` as the
+executable install primitive, then carries SwiftPM resource bundles from the
+SwiftPM-reported build products directory into `~/.swiftpm/bin` so installed
+CLIs using `Bundle.module` keep working away from `.build`. Product version and
+build metadata live in Vaporize's CLI metadata sidecar, not in
+`Bundle.main.infoDictionary`.
+
 The release classification is `internal-essential-tool`: an internal-only tool
 whose absence blocks assistants from completing build, install, launch, release
 packet validation, and Apple toolchain proof workflows. This is not a public
@@ -112,12 +119,14 @@ future hardware or other material-domain request families.
   choose Vaporize before more build work is accepted.
 - Require an Engineering, QA, and Marketing PRD review session before major
   feature coding starts.
-- Require vaporware modification requests to carry a feature flag or
-  feature-status story, targetable tests, and release evidence before they are
-  treated as release-ready.
+- Require vaporware modification requests to carry an owning bead, a feature
+  flag or feature-status story, targetable tests, and release evidence before
+  they are treated as release-ready.
 - Classify Vaporize as an internal essential tool for assistant build,
   install, launch, and release-proof workflows.
 - Support SwiftPM CLI build, install, uninstall, and run flows.
+- Preserve SwiftPM CLI target resource bundles during install without turning
+  CLIs into app bundles.
 - Support Apple app build, install, uninstall, and launch flows for SwiftPM,
   Xcode project, and Xcode workspace homes.
 - Keep direct `xcodebuild` use inside Vaporize as an implementation detail.
@@ -221,7 +230,7 @@ Supporting audiences:
 | FR-008 | Compatibility inventory | Legacy `x-craze-collapse-path` annotations remain readable for classification only. |
 | FR-009 | Package graph forwarder | `graph` forwards to `package-graph@wrkstrm.cli` from the same canonical Vaporize surface. |
 | FR-010 | Xcode-selected toolchain route | `toolchain -- swift <args>` invokes `xcrun swift <args>` inside Vaporize and rejects unsupported tools. |
-| FR-011 | JSON validation route | `validate-json --path <json>` validates JSON with Foundation and can emit a receipt. |
+| FR-011 | JSON validation route | `validate-json --path <json>` validates JSON through the Swift Universal json-formatter package and can emit a receipt. |
 | FR-012 | Release packet | PRD, CUJs, release gates, and launch-review packet exist under `release/v0.0.1/`. |
 | FR-013 | Internal essential tool classification | Release evidence names Vaporize as `internal-essential-tool` and records which assistant workflows it blocks when absent. |
 | FR-014 | Pkl project-generation release gate | Final internal v0.0.1 release is blocked until substrate-owned XcodeGen-managed Apple surfaces move to a Pkl-backed generation path or are explicitly quarantined. |
@@ -242,17 +251,19 @@ Supporting audiences:
 | FR-029 | Workspace product-cache discovery | `list-targets` accepts `--xcode-product-cache-workspace`, `--xcode-product-cache-derived-data-path`, and `--configuration`; when present, the target-discovery receipt includes expected shared DerivedData `.app` candidates and warm/missing status for buildable AppleProjectSpec targets. The command does not parse `.xcworkspace` membership, build, install, warm the cache, or prove fleet cache coverage. |
 | FR-030 | Xcode workspace scheme listing | `list-schemes --xcode-workspace <workspace.xcworkspace>` executes `xcodebuild -list -json -workspace` through Vaporize/CommonProcess, parses the workspace scheme list, and can emit a `vaporize-xcode-workspace-scheme-list` receipt. The command lists schemes only; it does not build, install, warm caches, prove product paths, or prove fleet-wide workspace membership. |
 | FR-031 | CUJ-state coverage gate | CUJ-state coverage evidence names every required journey-derived CUJ-state id, attaches a proof entry for each id, records empty uncovered/unknown/duplicate lists, and is checked by release doctor before release review trusts simulated world state. This proves CUJ-state coverage only; it does not prove Kura, Turso, libSQL, sync, migration, or public release readiness. |
+| FR-032 | SwiftPM CLI resource-bundle install preservation | `install --artifact cli` preserves SwiftPM target resource bundles required by `Bundle.module` for installed CLIs by using SwiftPM `experimental-install` for the executable, asking SwiftPM for the build products directory with `swift build --show-bin-path`, and copying direct `.bundle` siblings into the installed CLI bin directory. Vaporize also writes product version/build facts to the CLI metadata sidecar. This does not turn the CLI into an app bundle, does not make `Bundle.main.infoDictionary` carry product metadata, and does not prove Sparkle appcast generation or update signing. |
 
 ## Release Criteria
 
 - Vaporize's package test suite passes with the Swift 6.4 toolchain:
   `vaporize toolchain -- swift test --package-path private/apple/spm/vaporize@wrkstrm-core.cli`.
-  Current proof: the CUJ-derived coverage floor requires 95 Swift test
-  obligations plus 12 release evidence checks; the executable suite passes 113
-  tests across 21 implemented CUJ targets, including the CUJ-16
+  Current proof: the CUJ-derived coverage floor requires 104 Swift test
+  obligations plus 12 release evidence checks; the executable suite passes 138
+  tests across 22 implemented CUJ targets, including the CUJ-16
   `inspect-target-features` first slice, CUJ-17 `release-doctor` first slice,
   CUJ-18 `list-targets` first slice, CUJ-19 workspace cache discovery first
-  slice, CUJ-20 `list-schemes` first slice, and CUJ-21 CUJ-state coverage gate.
+  slice, CUJ-20 `list-schemes` first slice, CUJ-21 CUJ-state coverage gate, and
+  CUJ-22 SwiftPM CLI resource-bundle install preservation.
 - `release/v0.0.1/product-definition.md` defines the product, primary users,
   product-level user journeys, choice argument, non-choice cases, and build
   implications before additional feature work is accepted.

@@ -25,6 +25,11 @@ let swiftCLIInstallerDependency = localOrRemote(
   url: "https://github.com/swift-universal/swift-cli-installer.git",
   from: "0.0.1"
 )
+let swiftJSONFormatterDependency = localOrRemote(
+  path: "../../../../../swift-universal/private/universal/domain/tooling/spm/swift-json-formatter",
+  url: "https://github.com/swift-universal/swift-json-formatter.git",
+  from: "0.1.0"
+)
 let pklSwiftDependency = Package.Dependency.package(
   url: "https://github.com/apple/pkl-swift",
   from: "0.8.2"
@@ -46,6 +51,7 @@ let package = Package(
     commonProcessDependency,
     commonShellDependency,
     swiftCLIInstallerDependency,
+    swiftJSONFormatterDependency,
     pklSwiftDependency,
     .package(url: "https://github.com/apple/swift-argument-parser", from: "1.6.0"),
     .package(url: "https://github.com/jpsim/Yams", from: "5.1.0"),
@@ -82,6 +88,7 @@ let package = Package(
         .product(name: "CommonShell", package: "common-shell"),
         .product(name: "CommonProcess", package: "common-process"),
         .product(name: "CommonProcessExecutionKit", package: "common-process"),
+        .product(name: "SwiftJSONFormatter", package: "swift-json-formatter"),
         .product(name: "ArgumentParser", package: "swift-argument-parser"),
       ],
       path: "sources/vaporize-cli"
@@ -131,7 +138,10 @@ let package = Package(
     ),
     .testTarget(
       name: "VaporizeCUJ06JSONValidationTests",
-      dependencies: ["VaporizeCLI"],
+      dependencies: [
+        "VaporizeCLI",
+        .product(name: "SwiftJSONFormatter", package: "swift-json-formatter"),
+      ],
       path: "tests/cuj-06-json-validation"
     ),
     .testTarget(
@@ -251,6 +261,15 @@ let package = Package(
         "VaporizeTestSupport",
       ],
       path: "tests/cuj-21-cuj-state"
+    ),
+    .testTarget(
+      name: "VaporizeCUJ22ResourceCLIInstallTests",
+      dependencies: [
+        "VaporizeCLI",
+        "VaporizeTestSupport",
+        .product(name: "ArgumentParser", package: "swift-argument-parser"),
+      ],
+      path: "tests/cuj-22-resource-cli-install"
     ),
     .testTarget(
       name: "VaporizeCUJ12PackageGraphTests",

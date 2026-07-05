@@ -13,7 +13,7 @@ one product-level journey.
 
 | Product-level journey | CUJ proof |
 | --- | --- |
-| Assistant builds, installs, or runs SwiftPM CLI/app software without composing shell choreography | CUJ-01, CUJ-02 |
+| Assistant builds, installs, or runs SwiftPM CLI/app software without composing shell choreography | CUJ-01, CUJ-02, CUJ-22 |
 | Assistant validates release JSON without direct `jq` | CUJ-06 |
 | Assistant uses Xcode-selected Swift without direct `xcrun` | CUJ-05 |
 | Assistant emits receipts for CommonProcess command execution | CUJ-03, CUJ-04 |
@@ -24,6 +24,7 @@ one product-level journey.
 | Release reviewer evaluates product definition, PRD review session, vaporware modification request discipline, user journeys, choice argument, evidence, gates, and blockers without relying on chat memory | CUJ-09 |
 | Assistant audits release-spine coherence before trusting a vaporware packet | CUJ-17 |
 | Assistant gates every journey-derived CUJ state record with proof before release review trusts the simulated world | CUJ-21 |
+| Assistant installs resource-bearing SwiftPM CLIs that use `Bundle.module` without depending on live build products | CUJ-22 |
 
 ## CUJ-01 - Assistant Builds And Installs A SwiftPM CLI
 
@@ -122,7 +123,7 @@ Success:
 
 1. Assistant creates or updates a release packet JSON file.
 2. Assistant runs `vaporize validate-json --path <packet.json>`.
-3. Vaporize parses the file with Foundation.
+3. Vaporize parses the file through the Swift Universal json-formatter package.
 4. Vaporize prints a concise validity result and can emit a
    `vaporize-json-validation` receipt when requested.
 
@@ -295,13 +296,16 @@ Failure truth:
 ## CUJ-14 - Assistant Generates First-Slice Xcode Project World-State From Pkl
 
 1. Assistant has an AppleProjectSpec Pkl specimen for a substrate-owned macOS
-   application target.
+   application or tool target.
 2. Assistant runs
    `vaporize generate-xcodeproj --pkl-path <project.pkl> --output-path <generated.xcodeproj> --receipt-path <receipt>`.
 3. Vaporize evaluates the Pkl record through PklSwift.
 4. Vaporize renders deterministic `.xcodeproj` package world-state, including
    `project.pbxproj` and `project.xcworkspace/contents.xcworkspacedata`.
-5. Vaporize emits a `vaporize-pkl-xcodeproj-generation` receipt.
+5. Vaporize projects typed release identity into Xcode build settings when the
+   target declares bundle id, marketing version, build version, generated
+   Info.plist, or Sparkle feed/signing keys.
+6. Vaporize emits a `vaporize-pkl-xcodeproj-generation` receipt.
 
 Success:
 
@@ -311,15 +315,19 @@ Success:
   generation were performed.
 - Source paths are resolved from the Pkl file's project home, not from the
   chosen output directory.
+- macOS tool targets generate executable product references without a fake
+  `.app` suffix.
 - The renderer is deterministic for the same evaluated spec and source tree.
 
 Failure truth:
 
 - Missing non-optional source paths fail the generation with the target name and
   missing source path.
-- This first slice supports macOS application targets. It does not yet prove
-  fleet build parity, scheme generation, all XcodeGen feature parity, or final
-  internal release readiness.
+- Unsupported target types fail explicitly instead of silently becoming app or
+  tool targets.
+- This first slice supports macOS application and tool targets. It does not yet
+  prove fleet build parity, scheme generation, all XcodeGen feature parity,
+  Sparkle appcast generation, or final internal release readiness.
 
 ## CUJ-15 - Assistant Reuses A Warm Xcode Workspace Product Cache
 
@@ -530,6 +538,40 @@ Failure truth:
 - Kura, Turso, libSQL, sync, production migrations, and public availability remain
   separate integration or release claims.
 
+## CUJ-22 - Assistant Installs A Resource-Bearing SwiftPM CLI
+
+1. Assistant receives a SwiftPM CLI package whose executable target declares
+   `.process("resources")` or `.copy("resources")`.
+2. The CLI reads those resources with `Bundle.module`.
+3. A raw `swift package experimental-install` installs the executable but does
+   not carry the target resource bundle next to the installed binary.
+4. Vaporize installs the same product through `install --artifact cli`, asks
+   SwiftPM for the build products directory with `swift build --show-bin-path`,
+   and copies direct `.bundle` siblings into `~/.swiftpm/bin`.
+5. The installed CLI runs after `.build` is hidden and prints the resource
+   value from the installed resource bundle.
+
+Success:
+
+- A typed simulation proving-ground manifest names every CUJ-22 scenario and
+  fails coverage when a scenario receipt is missing.
+- Processed resources and copied resource directories both work away from the
+  build products directory.
+- JSON resources can be decoded through `Bundle.module` after install.
+- Larger byte-count resources can be read through `Bundle.module` after install.
+- Reinstall replaces a stale installed resource bundle with the fresh build
+  product.
+- Product version/build data is represented by Vaporize's CLI metadata sidecar
+  rather than pretending the bare executable has an app-style Info.plist.
+
+Failure truth:
+
+- This proves SwiftPM CLI resource-bundle carry and product metadata sidecar
+  behavior only.
+- It does not make CLIs into app bundles, does not make
+  `Bundle.main.infoDictionary` expose Vaporize product metadata, and does not
+  prove Sparkle appcast generation, update signing, or runtime update delivery.
+
 ## Test Coverage Contract
 
 Test count is derived from PRD requirements through the active draft CUJs.
@@ -543,7 +585,7 @@ must know the required floor.
 | CUJ-03 | FR-005 | 4 |
 | CUJ-04 | FR-006 | 4 |
 | CUJ-05 | FR-010 | 6 |
-| CUJ-06 | FR-011 | 2 |
+| CUJ-06 | FR-011 | 3 |
 | CUJ-07 | FR-007, FR-008 | 10 |
 | CUJ-08 | FR-015 | 5 |
 | CUJ-09 | FR-012, FR-013, FR-014, FR-022, FR-025, FR-026 | 0 Swift tests; 7 release evidence checks |
@@ -551,7 +593,7 @@ must know the required floor.
 | CUJ-11 | FR-017 | 3 |
 | CUJ-12 | FR-009 | 1 |
 | CUJ-13 | FR-018 | 4 |
-| CUJ-14 | FR-020 | 3 |
+| CUJ-14 | FR-020 | 5 |
 | CUJ-15 | FR-003, FR-021 | 4 |
 | CUJ-16 | FR-023, FR-024 | 5 Swift tests; 1 release evidence check |
 | CUJ-17 | FR-027 | 5 Swift tests; 1 release evidence check |
@@ -559,13 +601,14 @@ must know the required floor.
 | CUJ-19 | FR-021, FR-029 | 5 Swift tests; 1 release evidence check |
 | CUJ-20 | FR-030 | 5 |
 | CUJ-21 | FR-031 | 6 Swift tests; 1 release evidence check |
+| CUJ-22 | FR-002, FR-032 | 6 |
 
 Current active-CUJ requirement:
 
-- Required Swift test obligations: 95
+- Required Swift test obligations: 104
 - Required release evidence checks: 12
-- Required targetable test obligations: 107
-- Current executable Swift tests: 113 across 21 implemented CUJ-specific SwiftPM
+- Required targetable test obligations: 116
+- Current executable Swift tests: 138 across 22 implemented CUJ-specific SwiftPM
   bundles
 - Coverage artifact:
   `release/v0.0.1/evidence/cuj-test-coverage.json`

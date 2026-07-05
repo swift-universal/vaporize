@@ -1,4 +1,5 @@
 import Foundation
+import SwiftJSONFormatter
 
 enum VaporizeReleaseDoctor {
   static let schemaVersion = "0.1.0"
@@ -87,6 +88,15 @@ enum VaporizeReleaseDoctor {
       textContainsCheck(
         roots: roots,
         scope: .releaseRoot,
+        relativePath: "prd.md",
+        token: "FR-032",
+        name: "prd-resource-cli-install-requirement"
+      )
+    )
+    checks.append(
+      textContainsCheck(
+        roots: roots,
+        scope: .releaseRoot,
         relativePath: "cuj.md",
         token: "CUJ-17",
         name: "cuj-release-doctor-journey"
@@ -126,6 +136,15 @@ enum VaporizeReleaseDoctor {
         relativePath: "cuj.md",
         token: "CUJ-21",
         name: "cuj-cuj-state-coverage-journey"
+      )
+    )
+    checks.append(
+      textContainsCheck(
+        roots: roots,
+        scope: .releaseRoot,
+        relativePath: "cuj.md",
+        token: "CUJ-22",
+        name: "cuj-resource-cli-install-journey"
       )
     )
     checks.append(
@@ -186,6 +205,42 @@ enum VaporizeReleaseDoctor {
       textContainsCheck(
         roots: roots,
         scope: .releaseRoot,
+        relativePath: "release-gates.md",
+        token: "GATE-39-resource-cli-install",
+        name: "gate-resource-cli-install"
+      )
+    )
+    checks.append(
+      textContainsCheck(
+        roots: roots,
+        scope: .releaseRoot,
+        relativePath: "release-gates.md",
+        token: "Every brochure must have an audience packet and user manual",
+        name: "gate-brochure-companion-contract"
+      )
+    )
+    checks.append(
+      textContainsCheck(
+        roots: roots,
+        scope: .releaseRoot,
+        relativePath: "release-gates.md",
+        token: "owning bead",
+        name: "gate-vaporware-owning-bead-discipline"
+      )
+    )
+    checks.append(
+      textContainsCheck(
+        roots: roots,
+        scope: .releaseRoot,
+        relativePath: "release-gates.md",
+        token: "cmo-chief-marketing-officer-carrie@wrkstrm.occupations.org",
+        name: "gate-public-disclosure-carrie-cmo-owner"
+      )
+    )
+    checks.append(
+      textContainsCheck(
+        roots: roots,
+        scope: .releaseRoot,
         relativePath: "public-brochure.md",
         token: "external public disclosure surface",
         name: "public-brochure-disclosure-boundary"
@@ -204,6 +259,96 @@ enum VaporizeReleaseDoctor {
       textContainsCheck(
         roots: roots,
         scope: .releaseRoot,
+        relativePath: "public-brochure.md",
+        token: "cmo-chief-marketing-officer-carrie@wrkstrm.occupations.org",
+        name: "public-brochure-carrie-cmo-owner"
+      )
+    )
+    checks.append(
+      textContainsCheck(
+        roots: roots,
+        scope: .releaseRoot,
+        relativePath: "public-brochure.html",
+        token: "Build proof for assistant-run software work",
+        name: "public-brochure-html-marketing-site-headline"
+      )
+    )
+    checks.append(
+      textContainsCheck(
+        roots: roots,
+        scope: .releaseRoot,
+        relativePath: "public-brochure.html",
+        token: "not approved for publication",
+        name: "public-brochure-html-disclosure-boundary"
+      )
+    )
+    checks.append(
+      textContainsCheck(
+        roots: roots,
+        scope: .releaseRoot,
+        relativePath: "public-brochure.html",
+        token: "cmo-chief-marketing-officer-carrie@wrkstrm.occupations.org",
+        name: "public-brochure-html-carrie-cmo-owner"
+      )
+    )
+    checks.append(
+      textContainsCheck(
+        roots: roots,
+        scope: .releaseRoot,
+        relativePath: "evidence/audience-packet.su.json",
+        token: "AudienceProfileStackModel",
+        name: "audience-packet-model"
+      )
+    )
+    checks.append(
+      textContainsCheck(
+        roots: roots,
+        scope: .releaseRoot,
+        relativePath: "evidence/audience-packet.su.json",
+        token: "not approved for publication",
+        name: "audience-packet-publication-boundary"
+      )
+    )
+    checks.append(
+      textContainsCheck(
+        roots: roots,
+        scope: .releaseRoot,
+        relativePath: "evidence/audience-packet.su.json",
+        token: "cmo-chief-marketing-officer-carrie@wrkstrm.occupations.org",
+        name: "audience-packet-carrie-cmo-owner"
+      )
+    )
+    checks.append(
+      textContainsCheck(
+        roots: roots,
+        scope: .releaseRoot,
+        relativePath: "user-manual.md",
+        token: "Brochure Companion Contract",
+        name: "user-manual-brochure-companion-contract"
+      )
+    )
+    checks.append(
+      textContainsCheck(
+        roots: roots,
+        scope: .releaseRoot,
+        relativePath: "user-manual.md",
+        token: "## Quick Start",
+        name: "user-manual-quick-start"
+      )
+    )
+    checks.append(
+      textContainsCheck(
+        roots: roots,
+        scope: .releaseRoot,
+        relativePath: "user-manual.md",
+        token: "cmo-chief-marketing-officer-carrie@wrkstrm.occupations.org",
+        name: "user-manual-carrie-cmo-owner"
+      )
+    )
+    checks.append(
+      textContainsCheck(
+        roots: roots,
+        scope: .releaseRoot,
         relativePath: "public-changelog.md",
         token: "external release-note companion",
         name: "public-changelog-disclosure-boundary"
@@ -216,6 +361,15 @@ enum VaporizeReleaseDoctor {
         relativePath: "public-changelog.md",
         token: "GATE-38-public-disclosure-surfaces",
         name: "public-changelog-gate-reference"
+      )
+    )
+    checks.append(
+      textContainsCheck(
+        roots: roots,
+        scope: .releaseRoot,
+        relativePath: "public-changelog.md",
+        token: "cmo-chief-marketing-officer-carrie@wrkstrm.occupations.org",
+        name: "public-changelog-carrie-cmo-owner"
       )
     )
     checks.append(
@@ -258,9 +412,36 @@ enum VaporizeReleaseDoctor {
       textContainsCheck(
         roots: roots,
         scope: .packageRoot,
+        relativePath: "vaporize.engineering.docc/feature-catalog.md",
+        token: "SwiftPM CLI resource-bundle installs",
+        name: "feature-catalog-resource-cli-install"
+      )
+    )
+    checks.append(
+      textContainsCheck(
+        roots: roots,
+        scope: .packageRoot,
+        relativePath: "vaporize.engineering.docc/swiftpm-cli-resource-bundle-installs.md",
+        token: "Bundle.module",
+        name: "swiftpm-cli-resource-bundle-doc"
+      )
+    )
+    checks.append(
+      textContainsCheck(
+        roots: roots,
+        scope: .packageRoot,
         relativePath: "vaporize.engineering.docc/vaporware-modification-request-discipline.md",
         token: "vaporware scaffold",
         name: "vaporware-scaffold-vocabulary"
+      )
+    )
+    checks.append(
+      textContainsCheck(
+        roots: roots,
+        scope: .packageRoot,
+        relativePath: "vaporize.engineering.docc/vaporware-modification-request-discipline.md",
+        token: "owning bead",
+        name: "vaporware-modification-owning-bead-discipline"
       )
     )
 
@@ -299,10 +480,13 @@ enum VaporizeReleaseDoctor {
     .release("why-vaporize.md"),
     .release("performance-marketing-claims.md"),
     .release("public-brochure.md"),
+    .release("public-brochure.html"),
+    .release("user-manual.md"),
     .release("public-changelog.md"),
     .release("wrkstrm-app-minimums.md"),
     .release("evidence/cuj-test-coverage.json"),
     .release("evidence/cuj-state-coverage.json"),
+    .release("evidence/audience-packet.su.json"),
     .release("evidence/launch-review-packet.json"),
     .release("evidence/vaporize-v0.0.1-provenance-artifact.json"),
     .release("evidence/creative-selection-v0.2-list-targets.receipt.json"),
@@ -313,11 +497,13 @@ enum VaporizeReleaseDoctor {
     .package("vaporize.engineering.docc/vaporware-modification-request-discipline.md"),
     .package("vaporize.engineering.docc/modularity-and-ownership-boundaries.md"),
     .package("vaporize.engineering.docc/feature-test-lifecycle.md"),
+    .package("vaporize.engineering.docc/swiftpm-cli-resource-bundle-installs.md"),
   ]
 
   private static let jsonArtifacts: [ReleaseDoctorArtifact] = [
     .release("evidence/cuj-test-coverage.json"),
     .release("evidence/cuj-state-coverage.json"),
+    .release("evidence/audience-packet.su.json"),
     .release("evidence/launch-review-packet.json"),
     .release("evidence/vaporize-v0.0.1-provenance-artifact.json"),
     .release("evidence/creative-selection-v0.2-list-targets.receipt.json"),
@@ -360,13 +546,13 @@ enum VaporizeReleaseDoctor {
   private static func jsonCheck(name: String, url: URL) -> VaporizeReleaseDoctorCheck {
     do {
       let data = try Data(contentsOf: url)
-      _ = try JSONSerialization.jsonObject(with: data)
+      _ = try SwiftJSONFormatter.parseJSONObject(from: data)
       return check(
         name: name,
         category: "json-validation",
         path: url.path,
         passed: true,
-        detail: "JSON parses with Foundation JSONSerialization."
+        detail: "JSON parses through Swift Universal JSON formatting."
       )
     } catch {
       return check(
@@ -424,6 +610,8 @@ enum VaporizeReleaseDoctor {
 
     let gateResults = object["gateResults"] as? [[String: Any]] ?? []
     let evidenceRefs = object["evidenceRefs"] as? [[String: Any]] ?? []
+    let consumerFacingGateOwnership = object["consumerFacingGateOwnership"] as? [String: Any] ?? [:]
+    let signoffs = object["signoffs"] as? [String: Any] ?? [:]
     return [
       check(
         name: "launch-review-subject",
@@ -475,6 +663,30 @@ enum VaporizeReleaseDoctor {
         detail: "Launch-review packet must include the public-disclosure surfaces gate."
       ),
       check(
+        name: "launch-review-gate-39",
+        category: "launch-review",
+        path: url.path,
+        passed: gateResults.contains { $0["gateRef"] as? String == "GATE-39-resource-cli-install" },
+        detail: "Launch-review packet must include the SwiftPM CLI resource-bundle install gate."
+      ),
+      check(
+        name: "launch-review-carrie-cmo-owner",
+        category: "launch-review",
+        path: url.path,
+        passed: consumerFacingGateOwnership["ownerOccupationSlug"] as? String
+          == "cmo-chief-marketing-officer-carrie@wrkstrm.occupations.org",
+        detail: "Launch-review packet must assign the consumer-facing public-disclosure gate to Carrie CMO."
+      ),
+      check(
+        name: "launch-review-carrie-cmo-not-signed-off",
+        category: "launch-review",
+        path: url.path,
+        passed: consumerFacingGateOwnership["ownerStatus"] as? String == "assigned-not-signed-off"
+          && isNullish(signoffs["audienceApproverSignoffRef"])
+          && isNullish(signoffs["founderSignoffRef"]),
+        detail: "Carrie CMO ownership must remain distinct from publication approval signoff."
+      ),
+      check(
         name: "launch-review-release-doctor-evidence-ref",
         category: "launch-review",
         path: url.path,
@@ -503,11 +715,39 @@ enum VaporizeReleaseDoctor {
         detail: "Launch-review packet must reference the public brochure."
       ),
       check(
+        name: "launch-review-public-brochure-html-evidence-ref",
+        category: "launch-review",
+        path: url.path,
+        passed: evidenceRefs.contains { $0["t"] as? String == "Vaporize v0.0.1 public brochure marketing site" },
+        detail: "Launch-review packet must reference the public brochure marketing site."
+      ),
+      check(
+        name: "launch-review-audience-packet-evidence-ref",
+        category: "launch-review",
+        path: url.path,
+        passed: evidenceRefs.contains { $0["t"] as? String == "Vaporize v0.0.1 public brochure audience packet" },
+        detail: "Launch-review packet must reference the public brochure audience packet."
+      ),
+      check(
+        name: "launch-review-user-manual-evidence-ref",
+        category: "launch-review",
+        path: url.path,
+        passed: evidenceRefs.contains { $0["t"] as? String == "Vaporize v0.0.1 user manual" },
+        detail: "Launch-review packet must reference the user manual."
+      ),
+      check(
         name: "launch-review-public-changelog-evidence-ref",
         category: "launch-review",
         path: url.path,
         passed: evidenceRefs.contains { $0["t"] as? String == "Vaporize v0.0.1 public changelog" },
         detail: "Launch-review packet must reference the public changelog."
+      ),
+      check(
+        name: "launch-review-resource-cli-install-evidence-ref",
+        category: "launch-review",
+        path: url.path,
+        passed: evidenceRefs.contains { $0["t"] as? String == "Vaporize CUJ-22 resource CLI install test bundle" },
+        detail: "Launch-review packet must reference the resource-bearing CLI install test bundle."
       ),
     ]
   }
@@ -577,11 +817,11 @@ enum VaporizeReleaseDoctor {
 
     return [
       check(
-        name: "coverage-active-cuj-21",
+        name: "coverage-active-cuj-22",
         category: "cuj-coverage",
         path: url.path,
-        passed: (counts["activeCUJCount"] as? Int ?? 0) >= 21,
-        detail: "Coverage artifact must count CUJ-21 CUJ-state coverage."
+        passed: (counts["activeCUJCount"] as? Int ?? 0) >= 22,
+        detail: "Coverage artifact must count CUJ-22 resource-bearing CLI install coverage."
       ),
       check(
         name: "coverage-release-evidence-floor",
@@ -624,6 +864,13 @@ enum VaporizeReleaseDoctor {
         path: url.path,
         passed: (breakdown["VaporizeCUJ21CUJStateTests"] as? Int ?? 0) >= 6,
         detail: "Coverage artifact must name the CUJ-21 targetable test bundle."
+      ),
+      check(
+        name: "coverage-resource-cli-install-test-bundle",
+        category: "cuj-coverage",
+        path: url.path,
+        passed: (breakdown["VaporizeCUJ22ResourceCLIInstallTests"] as? Int ?? 0) >= 6,
+        detail: "Coverage artifact must name the CUJ-22 targetable test bundle."
       ),
     ]
   }
@@ -712,11 +959,15 @@ enum VaporizeReleaseDoctor {
 
   private static func jsonObject(url: URL) -> [String: Any]? {
     guard let data = try? Data(contentsOf: url),
-      let object = try? JSONSerialization.jsonObject(with: data)
+      let object = try? SwiftJSONFormatter.parseJSONObject(from: data)
     else {
       return nil
     }
     return object as? [String: Any]
+  }
+
+  private static func isNullish(_ value: Any?) -> Bool {
+    value == nil || value is NSNull
   }
 
   private static func check(

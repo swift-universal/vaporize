@@ -12,7 +12,10 @@ func releaseReviewArtifactsExist() {
     "release/v0.0.1/why-vaporize.md",
     "release/v0.0.1/performance-marketing-claims.md",
     "release/v0.0.1/public-brochure.md",
+    "release/v0.0.1/public-brochure.html",
+    "release/v0.0.1/user-manual.md",
     "release/v0.0.1/public-changelog.md",
+    "release/v0.0.1/evidence/audience-packet.su.json",
     "vaporize.engineering.docc/index.md",
     "vaporize.engineering.docc/feature-catalog.md",
     "vaporize.engineering.docc/modularity-and-ownership-boundaries.md",
@@ -26,10 +29,12 @@ func releaseReviewArtifactsExist() {
     "vaporize.engineering.docc/feature-test-lifecycle.md",
     "vaporize.engineering.docc/cuj-state-testing-methodology.md",
     "vaporize.engineering.docc/release-doctor.md",
+    "vaporize.engineering.docc/swiftpm-cli-resource-bundle-installs.md",
     "release/v0.0.1/evidence/launch-review-packet.json",
     "release/v0.0.1/evidence/cuj-state-coverage.json",
     "release/v0.0.1/evidence/hello-world-google-target-features-inspection.receipt.json",
     "release/v0.0.1/evidence/vaporize-v0.0.1-release-doctor.receipt.json",
+    "release/v0.0.1/evidence/vaporize-consumer-facing-gate-carrie-cmo-ownership-modification.receipt.json",
     "release/v0.0.1/evidence/creative-selection-v0.2-list-targets.receipt.json",
     "release/v0.0.1/evidence/creative-selection-v0.2-workspace-cache-discovery.receipt.json",
   ] {
@@ -45,7 +50,20 @@ func launchReviewPacketIsValidJSONAndInternalEssential() throws {
   #expect(packet["subjectWareKindSlug"] as? String == "internal-essential-cli")
   let releaseTarget = try #require(packet["releaseTarget"] as? [String: Any])
   #expect(releaseTarget["toolClassification"] as? String == "internal-essential-tool")
+  let evidenceRefs = try #require(packet["evidenceRefs"] as? [[String: Any]])
   let gateResults = try #require(packet["gateResults"] as? [[String: Any]])
+  let consumerFacingGateOwnership = try #require(packet["consumerFacingGateOwnership"] as? [String: Any])
+  let signoffs = try #require(packet["signoffs"] as? [String: Any])
+  #expect(evidenceRefs.contains { $0["t"] as? String == "Vaporize v0.0.1 public brochure marketing site" })
+  #expect(evidenceRefs.contains { $0["t"] as? String == "Vaporize v0.0.1 public brochure audience packet" })
+  #expect(evidenceRefs.contains { $0["t"] as? String == "Vaporize v0.0.1 user manual" })
+  #expect(evidenceRefs.contains { $0["t"] as? String == "Vaporize v0.0.1 public brochure" })
+  #expect(evidenceRefs.contains { $0["t"] as? String == "Carrie CMO consumer-facing public-disclosure gate owner" })
+  #expect(evidenceRefs.contains { $0["t"] as? String == "CMO consumer-facing public-disclosure gate ownership bead" })
+  #expect(evidenceRefs.contains { $0["t"] as? String == "Vaporize consumer-facing gate Carrie CMO ownership correction receipt" })
+  #expect(evidenceRefs.contains { $0["t"] as? String == "Vaporize CUJ-22 resource CLI install test bundle" })
+  #expect(evidenceRefs.contains { $0["t"] as? String == "SwiftPM CLI resource-bundle install engineering doc" })
+  #expect(evidenceRefs.contains { $0["t"] as? String == "Vaporize SwiftPM CLI resource-bundle install modification receipt" })
   #expect(gateResults.contains { $0["gateRef"] as? String == "GATE-24-positioning-and-benchmark-explainer" })
   #expect(gateResults.contains { $0["gateRef"] as? String == "GATE-25-performance-marketing-claims" })
   #expect(gateResults.contains { $0["gateRef"] as? String == "GATE-26-product-definition-user-journeys-choice-argument" })
@@ -60,6 +78,15 @@ func launchReviewPacketIsValidJSONAndInternalEssential() throws {
   #expect(gateResults.contains { $0["gateRef"] as? String == "GATE-36-xcode-workspace-scheme-listing" })
   #expect(gateResults.contains { $0["gateRef"] as? String == "GATE-37-cuj-state-coverage" })
   #expect(gateResults.contains { $0["gateRef"] as? String == "GATE-38-public-disclosure-surfaces" })
+  #expect(gateResults.contains { $0["gateRef"] as? String == "GATE-39-resource-cli-install" })
+  #expect(consumerFacingGateOwnership["ownerStatus"] as? String == "assigned-not-signed-off")
+  #expect(consumerFacingGateOwnership["ownerName"] as? String == "Carrie CMO")
+  #expect(
+    consumerFacingGateOwnership["ownerOccupationSlug"] as? String
+      == "cmo-chief-marketing-officer-carrie@wrkstrm.occupations.org"
+  )
+  #expect(signoffs["audienceApproverSignoffRef"] as? NSNull != nil)
+  #expect(signoffs["founderSignoffRef"] as? NSNull != nil)
 }
 
 @Test("CUJ-09 CUJ coverage contract is valid JSON and names the floor")
@@ -67,14 +94,18 @@ func cujCoverageContractIsValidJSONAndNamesTheFloor() throws {
   let coverage = try readJSONObject(relativePath: "release/v0.0.1/evidence/cuj-test-coverage.json")
   let counts = try #require(coverage["counts"] as? [String: Any])
 
-  #expect(counts["activeCUJCount"] as? Int == 21)
+  #expect(counts["activeCUJCount"] as? Int == 22)
   #expect(counts["deferredCUJCount"] as? Int == 1)
-  #expect(counts["requiredSwiftTestObligationCount"] as? Int == 95)
+  #expect(counts["requiredSwiftTestObligationCount"] as? Int == 104)
   #expect(counts["requiredReleaseEvidenceCheckCount"] as? Int == 12)
-  #expect(counts["requiredTargetableTestObligationCount"] as? Int == 107)
-  #expect(counts["currentExecutableSwiftTestCount"] as? Int == 113)
+  #expect(counts["requiredTargetableTestObligationCount"] as? Int == 116)
+  #expect(counts["currentExecutableSwiftTestCount"] as? Int == 138)
   let breakdown = try #require(counts["currentExecutableSwiftTestBreakdown"] as? [String: Any])
+  #expect(breakdown["VaporizeCUJ01SwiftPMCLITests"] as? Int == 20)
+  #expect(breakdown["VaporizeCUJ07VaporInventoryTests"] as? Int == 18)
+  #expect(breakdown["VaporizeCUJ14PklXcodeProjectGenerationTests"] as? Int == 5)
   #expect(breakdown["VaporizeCUJ21CUJStateTests"] as? Int == 6)
+  #expect(breakdown["VaporizeCUJ22ResourceCLIInstallTests"] as? Int == 6)
 }
 
 @Test("CUJ-09 CUJ-state coverage contract is valid JSON and complete")
@@ -107,12 +138,16 @@ func productDefinitionContractPrecedesBuildWork() throws {
   let cuj = try readString(relativePath: "release/v0.0.1/cuj.md")
   let why = try readString(relativePath: "release/v0.0.1/why-vaporize.md")
   let claims = try readString(relativePath: "release/v0.0.1/performance-marketing-claims.md")
+  let audiencePacket = try readString(relativePath: "release/v0.0.1/evidence/audience-packet.su.json")
   let publicBrochure = try readString(relativePath: "release/v0.0.1/public-brochure.md")
+  let publicBrochureHTML = try readString(relativePath: "release/v0.0.1/public-brochure.html")
+  let userManual = try readString(relativePath: "release/v0.0.1/user-manual.md")
   let publicChangelog = try readString(relativePath: "release/v0.0.1/public-changelog.md")
   let gates = try readString(relativePath: "release/v0.0.1/release-gates.md")
   let engineeringDocs = try readString(relativePath: "vaporize.engineering.docc/index.md")
   let featureCatalog = try readString(relativePath: "vaporize.engineering.docc/feature-catalog.md")
   let releaseDoctor = try readString(relativePath: "vaporize.engineering.docc/release-doctor.md")
+  let resourceBundleDoc = try readString(relativePath: "vaporize.engineering.docc/swiftpm-cli-resource-bundle-installs.md")
   let modularity = try readString(relativePath: "vaporize.engineering.docc/modularity-and-ownership-boundaries.md")
   let modificationDiscipline = try readString(relativePath: "vaporize.engineering.docc/vaporware-modification-request-discipline.md")
 
@@ -134,6 +169,7 @@ func productDefinitionContractPrecedesBuildWork() throws {
   #expect(prd.contains("FR-029"))
   #expect(prd.contains("FR-030"))
   #expect(prd.contains("FR-031"))
+  #expect(prd.contains("FR-032"))
   #expect(prd.contains("FR-VAPORIZE-RUNTIME-SAMPLE-SERIES-APPLE-ARTIFACT-INGESTION"))
   #expect(prdReview.contains("Decision: `GO-WITH-NOTES`"))
   #expect(prdReview.contains("Engineering, QA, and Marketing"))
@@ -143,6 +179,7 @@ func productDefinitionContractPrecedesBuildWork() throws {
   #expect(cuj.contains("CUJ-19"))
   #expect(cuj.contains("CUJ-20"))
   #expect(cuj.contains("CUJ-21"))
+  #expect(cuj.contains("CUJ-22"))
   #expect(why.contains("product-definition.md"))
   #expect(why.contains("engineering pedigree"))
   #expect(why.contains("vaporize-runtime-samples"))
@@ -154,12 +191,54 @@ func productDefinitionContractPrecedesBuildWork() throws {
   #expect(claims.contains("Engineering pedigree"))
   #expect(claims.contains("feature-flag size"))
   #expect(claims.contains("public-brochure.md"))
+  #expect(claims.contains("user-manual.md"))
   #expect(claims.contains("public-changelog.md"))
+  #expect(audiencePacket.contains("AudienceProfileStackModel"))
+  #expect(audiencePacket.contains("external-technical-evaluator"))
+  #expect(audiencePacket.contains("future-customer"))
+  #expect(audiencePacket.contains("board-approved-public-reader"))
+  #expect(audiencePacket.contains("discredulous"))
+  #expect(audiencePacket.contains("not approved for publication"))
+  #expect(audiencePacket.contains("Carrie CMO"))
+  #expect(audiencePacket.contains("cmo-chief-marketing-officer-carrie@wrkstrm.occupations.org"))
+  #expect(audiencePacket.contains("Sparkle appcast generation, update signing, or public update delivery"))
   #expect(publicBrochure.contains("external public disclosure surface"))
   #expect(publicBrochure.contains("Feature Brochure"))
+  #expect(publicBrochure.contains("Carrie CMO"))
+  #expect(publicBrochure.contains("cmo-chief-marketing-officer-carrie@wrkstrm.occupations.org"))
+  #expect(publicBrochure.contains("public-brochure.html"))
+  #expect(publicBrochure.contains("audience-packet.su.json"))
+  #expect(publicBrochure.contains("user-manual.md"))
+  #expect(publicBrochure.contains("releaseIdentity"))
+  #expect(publicBrochure.contains("Sparkle"))
   #expect(publicBrochure.contains("Claims Not Yet Allowed"))
   #expect(publicBrochure.contains("public-changelog.md"))
+  #expect(userManual.contains("## Brochure Companion Contract"))
+  #expect(userManual.contains("## Quick Start"))
+  #expect(userManual.contains("## Core Commands"))
+  #expect(userManual.contains("ReleaseIdentity And Sparkle Boundary"))
+  #expect(userManual.contains("Carrie CMO"))
+  #expect(userManual.contains("cmo-chief-marketing-officer-carrie@wrkstrm.occupations.org"))
+  #expect(userManual.contains("evidence/audience-packet.su.json"))
+  #expect(publicBrochureHTML.contains("Build proof for assistant-run software work"))
+  #expect(publicBrochureHTML.contains("public-disclosure draft; Carrie CMO gate owner; not approved for publication"))
+  #expect(publicBrochureHTML.contains("Carrie CMO"))
+  #expect(publicBrochureHTML.contains("cmo-chief-marketing-officer-carrie@wrkstrm.occupations.org"))
+  #expect(publicBrochureHTML.contains("Tool release identity"))
+  #expect(publicBrochureHTML.contains("releaseIdentity"))
+  #expect(publicBrochureHTML.contains("Sparkle Info.plist keys"))
+  #expect(publicBrochureHTML.contains("Claims not yet allowed"))
+  #expect(publicBrochureHTML.contains("117/117"))
+  #expect(publicBrochureHTML.contains("GATE-38"))
+  #expect(publicBrochureHTML.contains("evidence/launch-review-packet.json"))
+  #expect(publicBrochureHTML.contains("evidence/audience-packet.su.json"))
+  #expect(publicBrochureHTML.contains("user-manual.md"))
   #expect(publicChangelog.contains("external release-note companion"))
+  #expect(publicChangelog.contains("public-brochure.html"))
+  #expect(publicChangelog.contains("Carrie CMO"))
+  #expect(publicChangelog.contains("cmo-chief-marketing-officer-carrie@wrkstrm.occupations.org"))
+  #expect(publicChangelog.contains("audience-packet.su.json"))
+  #expect(publicChangelog.contains("user-manual.md"))
   #expect(publicChangelog.contains("GATE-38-public-disclosure-surfaces"))
   #expect(publicChangelog.contains("Not Publicly Claimed"))
   #expect(gates.contains("GATE-26"))
@@ -173,8 +252,16 @@ func productDefinitionContractPrecedesBuildWork() throws {
   #expect(gates.contains("GATE-36"))
   #expect(gates.contains("GATE-37"))
   #expect(gates.contains("GATE-38"))
+  #expect(gates.contains("GATE-39"))
+  #expect(gates.contains("public-brochure.html"))
+  #expect(gates.contains("audience-packet.su.json"))
+  #expect(gates.contains("user-manual.md"))
   #expect(gates.contains("public-brochure.md"))
   #expect(gates.contains("public-changelog.md"))
+  #expect(gates.contains("Every brochure must have an audience packet and user manual"))
+  #expect(gates.contains("owning bead"))
+  #expect(gates.contains("Carrie CMO"))
+  #expect(gates.contains("cmo-chief-marketing-officer-carrie@wrkstrm.occupations.org"))
   #expect(engineeringDocs.contains("wrkstrm.com/engineering"))
   #expect(engineeringDocs.contains("The package-local engineering catalog explains the system. The release packet"))
   #expect(engineeringDocs.contains("pre-code-prd-review"))
@@ -197,7 +284,12 @@ func productDefinitionContractPrecedesBuildWork() throws {
   #expect(featureCatalog.contains("Workspace product-cache discovery"))
   #expect(featureCatalog.contains("Xcode workspace scheme listing"))
   #expect(featureCatalog.contains("CUJ-state coverage"))
+  #expect(featureCatalog.contains("SwiftPM CLI resource-bundle installs"))
   #expect(featureCatalog.contains("correct ownership home"))
+  #expect(resourceBundleDoc.contains("Bundle.module"))
+  #expect(resourceBundleDoc.contains("experimental-install"))
+  #expect(resourceBundleDoc.contains("Info.plist"))
+  #expect(resourceBundleDoc.contains("VaporizeCUJ22ResourceCLIInstallTests"))
   #expect(releaseDoctor.contains("release-spine self-audit command"))
   #expect(releaseDoctor.contains("vaporware scaffold"))
   #expect(releaseDoctor.contains("CUJ-state coverage"))
@@ -214,6 +306,8 @@ func productDefinitionContractPrecedesBuildWork() throws {
   #expect(modificationDiscipline.contains("vaporware scaffold"))
   #expect(modificationDiscipline.contains("feature-request"))
   #expect(modificationDiscipline.contains("Create or attach to a named feature flag"))
+  #expect(modificationDiscipline.contains("Create or attach to an owning bead"))
+  #expect(modificationDiscipline.contains("beadTrackingRefs"))
   #expect(modificationDiscipline.contains("Add or update targetable tests"))
   #expect(modificationDiscipline.contains("Update release evidence"))
 }
@@ -231,6 +325,9 @@ func releaseGatesKeepPklGenerationBlocked() throws {
   #expect(gates.contains("cuj-state-coverage.json"))
   #expect(gates.contains("why-vaporize.md"))
   #expect(gates.contains("performance-marketing-claims.md"))
+  #expect(gates.contains("public-brochure.html"))
+  #expect(gates.contains("audience-packet.su.json"))
+  #expect(gates.contains("user-manual.md"))
   #expect(gates.contains("public-brochure.md"))
   #expect(gates.contains("public-changelog.md"))
 }

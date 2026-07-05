@@ -26,37 +26,39 @@ and CUJ count must already name the behavior being retired from the old location
 
 | Metric | Count |
 | --- | ---: |
-| Active CUJs | 20 |
+| Active CUJs | 22 |
 | Deferred CUJs | 1 |
-| Required Swift test obligations | 89 |
-| Required release evidence checks | 11 |
-| Required targetable test obligations | 100 |
-| Current executable Swift tests | 107 |
+| Required Swift test obligations | 104 |
+| Required release evidence checks | 12 |
+| Required targetable test obligations | 116 |
+| Current executable Swift tests | 138 |
 
 ## Targetable Test Bundles
 
 | CUJ | SwiftPM test target | Current tests |
 | --- | --- | ---: |
-| CUJ-01 | `VaporizeCUJ01SwiftPMCLITests` | 7 |
+| CUJ-01 | `VaporizeCUJ01SwiftPMCLITests` | 20 |
 | CUJ-02 | `VaporizeCUJ02MacAppTests` | 14 |
 | CUJ-03 | `VaporizeCUJ03PassThroughTests` | 4 |
 | CUJ-04 | `VaporizeCUJ04CommonProcessUseTests` | 4 |
 | CUJ-05 | `VaporizeCUJ05ToolchainTests` | 6 |
-| CUJ-06 | `VaporizeCUJ06JSONValidationTests` | 2 |
-| CUJ-07 | `VaporizeCUJ07VaporInventoryTests` | 16 |
+| CUJ-06 | `VaporizeCUJ06JSONValidationTests` | 3 |
+| CUJ-07 | `VaporizeCUJ07VaporInventoryTests` | 18 |
 | CUJ-08 | `VaporizeCUJ08ProjectYMLInspectionTests` | 5 |
-| CUJ-09 | `VaporizeCUJ09ReleaseReviewTests` | 5 |
+| CUJ-09 | `VaporizeCUJ09ReleaseReviewTests` | 6 |
 | CUJ-10 | `VaporizeCUJ10YMLPklComparisonTests` | 4 |
 | CUJ-11 | `VaporizeCUJ11PklYMLGenerationTests` | 3 |
 | CUJ-12 | `VaporizeCUJ12PackageGraphTests` | 1 |
 | CUJ-13 | `VaporizeCUJ13YMLPklImportTests` | 4 |
-| CUJ-14 | `VaporizeCUJ14PklXcodeProjectGenerationTests` | 3 |
+| CUJ-14 | `VaporizeCUJ14PklXcodeProjectGenerationTests` | 5 |
 | CUJ-15 | `VaporizeCUJ15XcodeProductCacheTests` | 4 |
 | CUJ-16 | `VaporizeCUJ16TargetFeaturesTests` | 5 |
 | CUJ-17 | `VaporizeCUJ17ReleaseDoctorTests` | 5 |
 | CUJ-18 | `VaporizeCUJ18ListTargetsTests` | 5 |
 | CUJ-19 | `VaporizeCUJ19WorkspaceCacheDiscoveryTests` | 5 |
 | CUJ-20 | `VaporizeCUJ20XcodeWorkspaceSchemesTests` | 5 |
+| CUJ-21 | `VaporizeCUJ21CUJStateTests` | 6 |
+| CUJ-22 | `VaporizeCUJ22ResourceCLIInstallTests` | 6 |
 
 ## Coverage By CUJ
 
@@ -67,7 +69,7 @@ and CUJ count must already name the behavior being retired from the old location
 | CUJ-03 | FR-005 | 4 | Pass-through parser normalization and receipt shape |
 | CUJ-04 | FR-006 | 4 | CommonProcess decode, file load, validation rejection, receipt shape |
 | CUJ-05 | FR-010 | 6 | Toolchain parser normalization, unsupported/empty rejection, receipt shape |
-| CUJ-06 | FR-011 | 2 | Valid and invalid Foundation JSON validation |
+| CUJ-06 | FR-011 | 3 | Valid and invalid Swift Universal json-formatter-backed validation plus formatter coverage |
 | CUJ-07 | FR-007, FR-008 | 10 | Scanner status classification, legacy key, malformed JSON, path errors, text/JSON renderer |
 | CUJ-08 | FR-015 | 5 | Concourse and multi-target YAML parsing, value/source decoding, read-only bridge evidence |
 | CUJ-09 | FR-012, FR-013, FR-014, FR-022, FR-025, FR-026 | 0 | Product definition, PRD, PRD review session, vaporware modification request discipline, CUJ, release gates, launch-review packet, engineering DocC catalog checks |
@@ -75,13 +77,15 @@ and CUJ count must already name the behavior being retired from the old location
 | CUJ-11 | FR-017 | 3 | Transitional YAML generation, renderer round-trip, generated YAML/Pkl comparison evidence |
 | CUJ-12 | FR-009 | 1 | Graph forwarded argument parsing |
 | CUJ-13 | FR-018 | 4 | Legacy YAML import parsing, generated Pkl evaluation, YAML/Pkl comparison, nested value rendering |
-| CUJ-14 | FR-020 | 3 | generate-xcodeproj parsing, Pkl-backed .xcodeproj output, deterministic renderer proof |
+| CUJ-14 | FR-020 | 5 | generate-xcodeproj parsing, Pkl-backed .xcodeproj output, deterministic renderer proof, tool releaseIdentity expected-pass, unsupported-target expected-fail |
 | CUJ-15 | FR-003, FR-021 | 4 | Product-cache option parsing, cache-first app lookup, shared workspace build invocation, paired option validation |
 | CUJ-16 | FR-023, FR-024 | 5 | Target feature inspection parsing, inferred target, stale xcconfig detection, generated Swift provenance, CLI parsing |
 | CUJ-17 | FR-027 | 5 Swift tests; 1 release evidence check | Release doctor parsing, live-spine pass, release-root resolution, missing-gate failure, unresolved-root rejection |
 | CUJ-18 | FR-028 | 5 Swift tests; 1 release evidence check | list-targets parsing, legacy YAML discovery, Pkl discovery, directory fallback, missing project-spec rejection |
 | CUJ-19 | FR-021, FR-029 | 5 Swift tests; 1 release evidence check | list-targets cache option parsing, missing candidate discovery, warm candidate discovery, non-buildable exclusion, incomplete cache-pair rejection |
 | CUJ-20 | FR-030 | 5 | list-schemes CLI parsing, xcodebuild argument construction, workspace scheme JSON parsing, non-workspace rejection, receipt boundary |
+| CUJ-21 | FR-031 | 6 Swift tests; 1 release evidence check | CUJ-state fixture derivation, source metadata preservation, receipt output, coverage contract validation |
+| CUJ-22 | FR-002, FR-032 | 6 | Typed simulation proving-ground manifest, processed text resource, copied resource directory, decoded JSON resource, byte-count resource, stale installed bundle replacement |
 
 ## Deferred Coverage
 
@@ -101,5 +105,9 @@ and CUJ count must already name the behavior being retired from the old location
   warm caches, prove product paths, or measure large-workspace runtime.
 - wrkstrm app-minimums inspection has a target-level first slice; fleet
   registry-level inspection remains a follow-up.
+- SwiftPM CLI resource-bundle install coverage proves installed CLI resource
+  bundles and metadata sidecars; it does not prove app bundle packaging,
+  `Bundle.main.infoDictionary` product metadata, Sparkle appcast generation, or
+  update signing.
 
 The machine-readable companion is `cuj-test-coverage.json`.

@@ -5,7 +5,7 @@
     "First slice checks Vaporize v0.0.1 docs, public-disclosure surfaces, JSON evidence, CUJ coverage, CUJ-state coverage, launch-review references, provenance inventory, project target discovery evidence, workspace product-cache discovery evidence, and Xcode workspace scheme-listing evidence.",
     "Fleet project-generation parity, runtime sampling, build-size cohorts, and periodic buddy health remain separate follow-up checks."
   ],
-  "checkCount" : 84,
+  "checkCount" : 108,
   "checks" : [
     {
       "category" : "required-artifact",
@@ -74,6 +74,22 @@
     {
       "category" : "required-artifact",
       "detail" : "Required release-root artifact exists.",
+      "name" : "artifact:public-brochure.html",
+      "path" : "\/Users\/sonoma\/mono\/private\/universal\/substrate\/collectives\/wrkstrm-core\/private\/apple\/spm\/vaporize@wrkstrm-core.cli\/release\/v0.0.1\/public-brochure.html",
+      "severity" : "blocking",
+      "status" : "pass"
+    },
+    {
+      "category" : "required-artifact",
+      "detail" : "Required release-root artifact exists.",
+      "name" : "artifact:user-manual.md",
+      "path" : "\/Users\/sonoma\/mono\/private\/universal\/substrate\/collectives\/wrkstrm-core\/private\/apple\/spm\/vaporize@wrkstrm-core.cli\/release\/v0.0.1\/user-manual.md",
+      "severity" : "blocking",
+      "status" : "pass"
+    },
+    {
+      "category" : "required-artifact",
+      "detail" : "Required release-root artifact exists.",
       "name" : "artifact:public-changelog.md",
       "path" : "\/Users\/sonoma\/mono\/private\/universal\/substrate\/collectives\/wrkstrm-core\/private\/apple\/spm\/vaporize@wrkstrm-core.cli\/release\/v0.0.1\/public-changelog.md",
       "severity" : "blocking",
@@ -100,6 +116,14 @@
       "detail" : "Required release-root artifact exists.",
       "name" : "artifact:evidence\/cuj-state-coverage.json",
       "path" : "\/Users\/sonoma\/mono\/private\/universal\/substrate\/collectives\/wrkstrm-core\/private\/apple\/spm\/vaporize@wrkstrm-core.cli\/release\/v0.0.1\/evidence\/cuj-state-coverage.json",
+      "severity" : "blocking",
+      "status" : "pass"
+    },
+    {
+      "category" : "required-artifact",
+      "detail" : "Required release-root artifact exists.",
+      "name" : "artifact:evidence\/audience-packet.su.json",
+      "path" : "\/Users\/sonoma\/mono\/private\/universal\/substrate\/collectives\/wrkstrm-core\/private\/apple\/spm\/vaporize@wrkstrm-core.cli\/release\/v0.0.1\/evidence\/audience-packet.su.json",
       "severity" : "blocking",
       "status" : "pass"
     },
@@ -185,7 +209,7 @@
     },
     {
       "category" : "json-validation",
-      "detail" : "JSON parses with Foundation JSONSerialization.",
+      "detail" : "JSON parses through Swift Universal JSON formatting.",
       "name" : "json:evidence\/cuj-test-coverage.json",
       "path" : "\/Users\/sonoma\/mono\/private\/universal\/substrate\/collectives\/wrkstrm-core\/private\/apple\/spm\/vaporize@wrkstrm-core.cli\/release\/v0.0.1\/evidence\/cuj-test-coverage.json",
       "severity" : "blocking",
@@ -193,7 +217,7 @@
     },
     {
       "category" : "json-validation",
-      "detail" : "JSON parses with Foundation JSONSerialization.",
+      "detail" : "JSON parses through Swift Universal JSON formatting.",
       "name" : "json:evidence\/cuj-state-coverage.json",
       "path" : "\/Users\/sonoma\/mono\/private\/universal\/substrate\/collectives\/wrkstrm-core\/private\/apple\/spm\/vaporize@wrkstrm-core.cli\/release\/v0.0.1\/evidence\/cuj-state-coverage.json",
       "severity" : "blocking",
@@ -201,7 +225,15 @@
     },
     {
       "category" : "json-validation",
-      "detail" : "JSON parses with Foundation JSONSerialization.",
+      "detail" : "JSON parses through Swift Universal JSON formatting.",
+      "name" : "json:evidence\/audience-packet.su.json",
+      "path" : "\/Users\/sonoma\/mono\/private\/universal\/substrate\/collectives\/wrkstrm-core\/private\/apple\/spm\/vaporize@wrkstrm-core.cli\/release\/v0.0.1\/evidence\/audience-packet.su.json",
+      "severity" : "blocking",
+      "status" : "pass"
+    },
+    {
+      "category" : "json-validation",
+      "detail" : "JSON parses through Swift Universal JSON formatting.",
       "name" : "json:evidence\/launch-review-packet.json",
       "path" : "\/Users\/sonoma\/mono\/private\/universal\/substrate\/collectives\/wrkstrm-core\/private\/apple\/spm\/vaporize@wrkstrm-core.cli\/release\/v0.0.1\/evidence\/launch-review-packet.json",
       "severity" : "blocking",
@@ -209,7 +241,7 @@
     },
     {
       "category" : "json-validation",
-      "detail" : "JSON parses with Foundation JSONSerialization.",
+      "detail" : "JSON parses through Swift Universal JSON formatting.",
       "name" : "json:evidence\/vaporize-v0.0.1-provenance-artifact.json",
       "path" : "\/Users\/sonoma\/mono\/private\/universal\/substrate\/collectives\/wrkstrm-core\/private\/apple\/spm\/vaporize@wrkstrm-core.cli\/release\/v0.0.1\/evidence\/vaporize-v0.0.1-provenance-artifact.json",
       "severity" : "blocking",
@@ -217,7 +249,7 @@
     },
     {
       "category" : "json-validation",
-      "detail" : "JSON parses with Foundation JSONSerialization.",
+      "detail" : "JSON parses through Swift Universal JSON formatting.",
       "name" : "json:evidence\/creative-selection-v0.2-list-targets.receipt.json",
       "path" : "\/Users\/sonoma\/mono\/private\/universal\/substrate\/collectives\/wrkstrm-core\/private\/apple\/spm\/vaporize@wrkstrm-core.cli\/release\/v0.0.1\/evidence\/creative-selection-v0.2-list-targets.receipt.json",
       "severity" : "blocking",
@@ -225,7 +257,7 @@
     },
     {
       "category" : "json-validation",
-      "detail" : "JSON parses with Foundation JSONSerialization.",
+      "detail" : "JSON parses through Swift Universal JSON formatting.",
       "name" : "json:evidence\/creative-selection-v0.2-workspace-cache-discovery.receipt.json",
       "path" : "\/Users\/sonoma\/mono\/private\/universal\/substrate\/collectives\/wrkstrm-core\/private\/apple\/spm\/vaporize@wrkstrm-core.cli\/release\/v0.0.1\/evidence\/creative-selection-v0.2-workspace-cache-discovery.receipt.json",
       "severity" : "blocking",
@@ -369,6 +401,30 @@
     },
     {
       "category" : "release-spine-text",
+      "detail" : "Expected token `Every brochure must have an audience packet and user manual` in release-gates.md.",
+      "name" : "gate-brochure-companion-contract",
+      "path" : "\/Users\/sonoma\/mono\/private\/universal\/substrate\/collectives\/wrkstrm-core\/private\/apple\/spm\/vaporize@wrkstrm-core.cli\/release\/v0.0.1\/release-gates.md",
+      "severity" : "blocking",
+      "status" : "pass"
+    },
+    {
+      "category" : "release-spine-text",
+      "detail" : "Expected token `owning bead` in release-gates.md.",
+      "name" : "gate-vaporware-owning-bead-discipline",
+      "path" : "\/Users\/sonoma\/mono\/private\/universal\/substrate\/collectives\/wrkstrm-core\/private\/apple\/spm\/vaporize@wrkstrm-core.cli\/release\/v0.0.1\/release-gates.md",
+      "severity" : "blocking",
+      "status" : "pass"
+    },
+    {
+      "category" : "release-spine-text",
+      "detail" : "Expected token `cmo-chief-marketing-officer-carrie@wrkstrm.occupations.org` in release-gates.md.",
+      "name" : "gate-public-disclosure-carrie-cmo-owner",
+      "path" : "\/Users\/sonoma\/mono\/private\/universal\/substrate\/collectives\/wrkstrm-core\/private\/apple\/spm\/vaporize@wrkstrm-core.cli\/release\/v0.0.1\/release-gates.md",
+      "severity" : "blocking",
+      "status" : "pass"
+    },
+    {
+      "category" : "release-spine-text",
       "detail" : "Expected token `external public disclosure surface` in public-brochure.md.",
       "name" : "public-brochure-disclosure-boundary",
       "path" : "\/Users\/sonoma\/mono\/private\/universal\/substrate\/collectives\/wrkstrm-core\/private\/apple\/spm\/vaporize@wrkstrm-core.cli\/release\/v0.0.1\/public-brochure.md",
@@ -385,6 +441,86 @@
     },
     {
       "category" : "release-spine-text",
+      "detail" : "Expected token `cmo-chief-marketing-officer-carrie@wrkstrm.occupations.org` in public-brochure.md.",
+      "name" : "public-brochure-carrie-cmo-owner",
+      "path" : "\/Users\/sonoma\/mono\/private\/universal\/substrate\/collectives\/wrkstrm-core\/private\/apple\/spm\/vaporize@wrkstrm-core.cli\/release\/v0.0.1\/public-brochure.md",
+      "severity" : "blocking",
+      "status" : "pass"
+    },
+    {
+      "category" : "release-spine-text",
+      "detail" : "Expected token `Build proof for assistant-run software work` in public-brochure.html.",
+      "name" : "public-brochure-html-marketing-site-headline",
+      "path" : "\/Users\/sonoma\/mono\/private\/universal\/substrate\/collectives\/wrkstrm-core\/private\/apple\/spm\/vaporize@wrkstrm-core.cli\/release\/v0.0.1\/public-brochure.html",
+      "severity" : "blocking",
+      "status" : "pass"
+    },
+    {
+      "category" : "release-spine-text",
+      "detail" : "Expected token `not approved for publication` in public-brochure.html.",
+      "name" : "public-brochure-html-disclosure-boundary",
+      "path" : "\/Users\/sonoma\/mono\/private\/universal\/substrate\/collectives\/wrkstrm-core\/private\/apple\/spm\/vaporize@wrkstrm-core.cli\/release\/v0.0.1\/public-brochure.html",
+      "severity" : "blocking",
+      "status" : "pass"
+    },
+    {
+      "category" : "release-spine-text",
+      "detail" : "Expected token `cmo-chief-marketing-officer-carrie@wrkstrm.occupations.org` in public-brochure.html.",
+      "name" : "public-brochure-html-carrie-cmo-owner",
+      "path" : "\/Users\/sonoma\/mono\/private\/universal\/substrate\/collectives\/wrkstrm-core\/private\/apple\/spm\/vaporize@wrkstrm-core.cli\/release\/v0.0.1\/public-brochure.html",
+      "severity" : "blocking",
+      "status" : "pass"
+    },
+    {
+      "category" : "release-spine-text",
+      "detail" : "Expected token `AudienceProfileStackModel` in evidence\/audience-packet.su.json.",
+      "name" : "audience-packet-model",
+      "path" : "\/Users\/sonoma\/mono\/private\/universal\/substrate\/collectives\/wrkstrm-core\/private\/apple\/spm\/vaporize@wrkstrm-core.cli\/release\/v0.0.1\/evidence\/audience-packet.su.json",
+      "severity" : "blocking",
+      "status" : "pass"
+    },
+    {
+      "category" : "release-spine-text",
+      "detail" : "Expected token `not approved for publication` in evidence\/audience-packet.su.json.",
+      "name" : "audience-packet-publication-boundary",
+      "path" : "\/Users\/sonoma\/mono\/private\/universal\/substrate\/collectives\/wrkstrm-core\/private\/apple\/spm\/vaporize@wrkstrm-core.cli\/release\/v0.0.1\/evidence\/audience-packet.su.json",
+      "severity" : "blocking",
+      "status" : "pass"
+    },
+    {
+      "category" : "release-spine-text",
+      "detail" : "Expected token `cmo-chief-marketing-officer-carrie@wrkstrm.occupations.org` in evidence\/audience-packet.su.json.",
+      "name" : "audience-packet-carrie-cmo-owner",
+      "path" : "\/Users\/sonoma\/mono\/private\/universal\/substrate\/collectives\/wrkstrm-core\/private\/apple\/spm\/vaporize@wrkstrm-core.cli\/release\/v0.0.1\/evidence\/audience-packet.su.json",
+      "severity" : "blocking",
+      "status" : "pass"
+    },
+    {
+      "category" : "release-spine-text",
+      "detail" : "Expected token `Brochure Companion Contract` in user-manual.md.",
+      "name" : "user-manual-brochure-companion-contract",
+      "path" : "\/Users\/sonoma\/mono\/private\/universal\/substrate\/collectives\/wrkstrm-core\/private\/apple\/spm\/vaporize@wrkstrm-core.cli\/release\/v0.0.1\/user-manual.md",
+      "severity" : "blocking",
+      "status" : "pass"
+    },
+    {
+      "category" : "release-spine-text",
+      "detail" : "Expected token `## Quick Start` in user-manual.md.",
+      "name" : "user-manual-quick-start",
+      "path" : "\/Users\/sonoma\/mono\/private\/universal\/substrate\/collectives\/wrkstrm-core\/private\/apple\/spm\/vaporize@wrkstrm-core.cli\/release\/v0.0.1\/user-manual.md",
+      "severity" : "blocking",
+      "status" : "pass"
+    },
+    {
+      "category" : "release-spine-text",
+      "detail" : "Expected token `cmo-chief-marketing-officer-carrie@wrkstrm.occupations.org` in user-manual.md.",
+      "name" : "user-manual-carrie-cmo-owner",
+      "path" : "\/Users\/sonoma\/mono\/private\/universal\/substrate\/collectives\/wrkstrm-core\/private\/apple\/spm\/vaporize@wrkstrm-core.cli\/release\/v0.0.1\/user-manual.md",
+      "severity" : "blocking",
+      "status" : "pass"
+    },
+    {
+      "category" : "release-spine-text",
       "detail" : "Expected token `external release-note companion` in public-changelog.md.",
       "name" : "public-changelog-disclosure-boundary",
       "path" : "\/Users\/sonoma\/mono\/private\/universal\/substrate\/collectives\/wrkstrm-core\/private\/apple\/spm\/vaporize@wrkstrm-core.cli\/release\/v0.0.1\/public-changelog.md",
@@ -395,6 +531,14 @@
       "category" : "release-spine-text",
       "detail" : "Expected token `GATE-38-public-disclosure-surfaces` in public-changelog.md.",
       "name" : "public-changelog-gate-reference",
+      "path" : "\/Users\/sonoma\/mono\/private\/universal\/substrate\/collectives\/wrkstrm-core\/private\/apple\/spm\/vaporize@wrkstrm-core.cli\/release\/v0.0.1\/public-changelog.md",
+      "severity" : "blocking",
+      "status" : "pass"
+    },
+    {
+      "category" : "release-spine-text",
+      "detail" : "Expected token `cmo-chief-marketing-officer-carrie@wrkstrm.occupations.org` in public-changelog.md.",
+      "name" : "public-changelog-carrie-cmo-owner",
       "path" : "\/Users\/sonoma\/mono\/private\/universal\/substrate\/collectives\/wrkstrm-core\/private\/apple\/spm\/vaporize@wrkstrm-core.cli\/release\/v0.0.1\/public-changelog.md",
       "severity" : "blocking",
       "status" : "pass"
@@ -435,6 +579,14 @@
       "category" : "release-spine-text",
       "detail" : "Expected token `vaporware scaffold` in vaporize.engineering.docc\/vaporware-modification-request-discipline.md.",
       "name" : "vaporware-scaffold-vocabulary",
+      "path" : "\/Users\/sonoma\/mono\/private\/universal\/substrate\/collectives\/wrkstrm-core\/private\/apple\/spm\/vaporize@wrkstrm-core.cli\/vaporize.engineering.docc\/vaporware-modification-request-discipline.md",
+      "severity" : "blocking",
+      "status" : "pass"
+    },
+    {
+      "category" : "release-spine-text",
+      "detail" : "Expected token `owning bead` in vaporize.engineering.docc\/vaporware-modification-request-discipline.md.",
+      "name" : "vaporware-modification-owning-bead-discipline",
       "path" : "\/Users\/sonoma\/mono\/private\/universal\/substrate\/collectives\/wrkstrm-core\/private\/apple\/spm\/vaporize@wrkstrm-core.cli\/vaporize.engineering.docc\/vaporware-modification-request-discipline.md",
       "severity" : "blocking",
       "status" : "pass"
@@ -497,6 +649,22 @@
     },
     {
       "category" : "launch-review",
+      "detail" : "Launch-review packet must assign the consumer-facing public-disclosure gate to Carrie CMO.",
+      "name" : "launch-review-carrie-cmo-owner",
+      "path" : "\/Users\/sonoma\/mono\/private\/universal\/substrate\/collectives\/wrkstrm-core\/private\/apple\/spm\/vaporize@wrkstrm-core.cli\/release\/v0.0.1\/evidence\/launch-review-packet.json",
+      "severity" : "blocking",
+      "status" : "pass"
+    },
+    {
+      "category" : "launch-review",
+      "detail" : "Carrie CMO ownership must remain distinct from publication approval signoff.",
+      "name" : "launch-review-carrie-cmo-not-signed-off",
+      "path" : "\/Users\/sonoma\/mono\/private\/universal\/substrate\/collectives\/wrkstrm-core\/private\/apple\/spm\/vaporize@wrkstrm-core.cli\/release\/v0.0.1\/evidence\/launch-review-packet.json",
+      "severity" : "blocking",
+      "status" : "pass"
+    },
+    {
+      "category" : "launch-review",
       "detail" : "Launch-review packet must reference the release-doctor receipt.",
       "name" : "launch-review-release-doctor-evidence-ref",
       "path" : "\/Users\/sonoma\/mono\/private\/universal\/substrate\/collectives\/wrkstrm-core\/private\/apple\/spm\/vaporize@wrkstrm-core.cli\/release\/v0.0.1\/evidence\/launch-review-packet.json",
@@ -523,6 +691,30 @@
       "category" : "launch-review",
       "detail" : "Launch-review packet must reference the public brochure.",
       "name" : "launch-review-public-brochure-evidence-ref",
+      "path" : "\/Users\/sonoma\/mono\/private\/universal\/substrate\/collectives\/wrkstrm-core\/private\/apple\/spm\/vaporize@wrkstrm-core.cli\/release\/v0.0.1\/evidence\/launch-review-packet.json",
+      "severity" : "blocking",
+      "status" : "pass"
+    },
+    {
+      "category" : "launch-review",
+      "detail" : "Launch-review packet must reference the public brochure marketing site.",
+      "name" : "launch-review-public-brochure-html-evidence-ref",
+      "path" : "\/Users\/sonoma\/mono\/private\/universal\/substrate\/collectives\/wrkstrm-core\/private\/apple\/spm\/vaporize@wrkstrm-core.cli\/release\/v0.0.1\/evidence\/launch-review-packet.json",
+      "severity" : "blocking",
+      "status" : "pass"
+    },
+    {
+      "category" : "launch-review",
+      "detail" : "Launch-review packet must reference the public brochure audience packet.",
+      "name" : "launch-review-audience-packet-evidence-ref",
+      "path" : "\/Users\/sonoma\/mono\/private\/universal\/substrate\/collectives\/wrkstrm-core\/private\/apple\/spm\/vaporize@wrkstrm-core.cli\/release\/v0.0.1\/evidence\/launch-review-packet.json",
+      "severity" : "blocking",
+      "status" : "pass"
+    },
+    {
+      "category" : "launch-review",
+      "detail" : "Launch-review packet must reference the user manual.",
+      "name" : "launch-review-user-manual-evidence-ref",
       "path" : "\/Users\/sonoma\/mono\/private\/universal\/substrate\/collectives\/wrkstrm-core\/private\/apple\/spm\/vaporize@wrkstrm-core.cli\/release\/v0.0.1\/evidence\/launch-review-packet.json",
       "severity" : "blocking",
       "status" : "pass"
@@ -685,11 +877,11 @@
   "inspectedPath" : "\/Users\/sonoma\/mono\/private\/universal\/substrate\/collectives\/wrkstrm-core\/private\/apple\/spm\/vaporize@wrkstrm-core.cli",
   "overallStatus" : "pass",
   "packageRootPath" : "\/Users\/sonoma\/mono\/private\/universal\/substrate\/collectives\/wrkstrm-core\/private\/apple\/spm\/vaporize@wrkstrm-core.cli",
-  "passedCheckCount" : 84,
+  "passedCheckCount" : 108,
   "receiptKind" : "vaporize-release-doctor",
   "releaseRootPath" : "\/Users\/sonoma\/mono\/private\/universal\/substrate\/collectives\/wrkstrm-core\/private\/apple\/spm\/vaporize@wrkstrm-core.cli\/release\/v0.0.1",
-  "requestId" : "vaporize-release-doctor-744DD5DE-6A05-4552-952C-37CA45D503CB",
-  "requiredArtifactCount" : 22,
+  "requestId" : "vaporize-release-doctor-1A1994EA-18A1-44B7-9205-DB6D66AE9F41",
+  "requiredArtifactCount" : 25,
   "schemaFamilySlug" : "vaporize-schemas",
   "schemaFamilyVersion" : "0.0.1",
   "schemaRef" : "private\/universal\/domain\/tooling\/schema-families\/vaporize-schemas\/v0.0.1\/json\/vaporize-schemas-v000-000-001\/schemas\/vaporize-release-doctor-receipt\/vaporize-release-doctor-receipt.schema.json",

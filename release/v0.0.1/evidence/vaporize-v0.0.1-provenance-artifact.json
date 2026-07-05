@@ -7,54 +7,11 @@
   "artifactId": "vaporize-v0.0.1-provenance-artifact",
   "subjectAppSlug": "vaporize.cli@wrkstrm-core.clia.sh",
   "subjectReleaseSlug": "v0.0.1",
-  "generatedAt": "2026-06-14T07:21:25Z",
+  "generatedAt": "2026-07-05T00:00:00Z",
   "generatedBy": "codex-crisie",
-  "status": "captured-for-forward-pkl-migration",
+  "status": "ready-for-launch-review-blocked-for-internal-release",
   "purpose": "Collect the v0.0.1 release-prep receipts and provenance in one artifact so the next migration slice can proceed from durable evidence rather than chat memory.",
-  "releaseVerdict": {
-    "currentStatus": "blocked-pending-fleet-pkl-project-generation",
-    "proven": [
-      "CUJ-derived test coverage is explicit: 95 required Swift test obligations plus 12 release evidence checks across 21 active CUJs.",
-      "Vaporize package tests cover 113 executable Swift tests across 21 implemented CUJ-specific SwiftPM test bundles, including CUJ-16 target feature inspection, CUJ-17 release doctor, CUJ-18 project target discovery, CUJ-19 workspace product-cache discovery, CUJ-20 Xcode workspace scheme listing, and CUJ-21 CUJ-state coverage.",
-      "The product definition defines Vaporize, primary users, product-level user journeys, choice argument, non-choice cases, and build implications before further build work is accepted.",
-      "The PRD review session gate is codified: Engineering, QA, and Marketing review the PRD before major coding starts; v0.0.1 records a backfilled GO-WITH-NOTES correction because implementation was already in flight.",
-      "The vaporware modification request discipline is codified: vaporware feature requests are product input, while vaporware modification requests are controlled engineering execution; the domain-specific name leaves room for future hardware or other material-domain request families; behavior-changing changes require a feature flag or feature-status story, targetable tests, release evidence, and explicit no-flag exceptions.",
-      "Legacy XcodeGen project.yml files parse through the Swift YAML read bridge.",
-      "All 155 discovered project.yml files under private/universal/substrate/collectives parsed through inspect-project-yml.",
-      "Concourse old XcodeGen script build and Vaporize app build both pass after Vaporize derives legacy WRAPPER_NAME from project.yml.",
-      "Concourse project.pkl evaluates through PklSwift and matches the Swift-read project.yml parity signature with zero mismatches.",
-      "Concourse project.pkl generates transitional AppleProjectSpec YAML through PklSwift, and the generated YAML compares back to Pkl with zero mismatches.",
-      "Creative Selection v0.2 project.yml imports into a generated project.pkl parity specimen, evaluates through PklSwift, and compares back to YAML with zero mismatches.",
-      "Creative Selection v0.2 project.pkl generates first-slice .xcodeproj world-state through Vaporize generate-xcodeproj.",
-      "Shared Xcode workspace product-cache reuse has a first slice: cache-first app lookup, paired option validation, and shared workspace/DerivedData build invocation are covered by CUJ-15.",
-      "Workspace product-cache discovery has a first slice: Creative Selection v0.2 target facts map to an expected shared DerivedData .app candidate with warm/missing status through CUJ-19.",
-      "Xcode workspace scheme listing has a first slice: list-schemes routes xcodebuild -list -json -workspace through Vaporize/CommonProcess and CUJ-20 proves request construction, JSON parsing, input validation, and receipt boundaries.",
-      "Hello World Google target feature inspection passes through inspect-target-features, proving project configs, release tiers, configFiles wiring, generated xcconfigs, generated ReleaseFeatures.swift, and digikoma-release-features provenance for the reference target.",
-      "The release-facing why-vaporize explainer exists and records current Swift/xcodebuild/xcrun comparison, local benchmark baselines, build-space savings theory, user ergonomics, and unmeasured benchmark gaps.",
-      "The performance marketing claims matrix exists and separates approved measured, behavioral, and theoretical claim language from prohibited speed and disk-space claims.",
-      "The public brochure and public changelog exist as draft external disclosure surfaces, constrained by the claim matrix and blocked from publication until approval.",
-      "The package-local vaporize.engineering.docc catalog exists as the human engineering narrative for future wrkstrm.com/engineering publication, with release evidence remaining the proof corpus.",
-      "The package-local feature catalog exists as the canonical human-readable feature list and explanation surface for Vaporize.",
-      "The package-local release doctor exists and emits a vaporize-release-doctor receipt that verifies release-spine coherence across required artifacts, public-disclosure surfaces, JSON evidence, launch-review references, provenance, and CUJ coverage.",
-      "The package-local modularity and ownership boundary exists: genuinely Swift Universal primitives belong in swift-universal, Apple-bounded orchestration belongs in wrkstrm-core, and Vaporize feature bodies should not accumulate in the CLI router.",
-      "A Kura runtime sample series is seeded for Vaporize, with a backfilled CUJ-09 coverage sample that verifies SwiftPM code coverage JSON, raw profile data, merged profile data, build-output size, product size, codecov artifact size, and binary size from a Vaporize toolchain run.",
-      "Initial schema-universal extraction exists as vaporize-schemas v0.0.1 for CUJ coverage, provenance, launch-review specialization, and Apple project YAML/Pkl receipts.",
-      "JSON release evidence validates through Vaporize validate-json.",
-      "Creative Selection v0.2 project target discovery reads AppleProjectSpec Pkl through list-targets and emits target, package, scheme, and buildable-candidate facts."
-    ],
-    "notProven": [
-      "The full fleet builds through Vaporize.",
-      "Pkl-backed .xcodeproj generation covers scheme/resource/package feature parity across the required fleet.",
-      "Vaporize automatically discovers .xcworkspace graph membership for the requested product or scheme.",
-      "Large-workspace scheme-listing runtime and timeout behavior have not been measured.",
-      "Fleet-wide performance or disk-space savings have been measured.",
-      "Vaporize automatically emits Kura runtime samples, retains Apple/Swift native artifacts as durable release evidence, or compares per-feature-flag build-size cohorts.",
-      "Vaporize performs registry-backed app-minimums inspection across the full wrkstrm app fleet.",
-      "Remaining XcodeGen surfaces are migrated or quarantined.",
-      "The public brochure or public changelog is approved for publication.",
-      "Vaporize v0.0.1 is ready for final internal-essential release."
-    ]
-  },
+  "releaseVerdict": "READY-FOR-LAUNCH-REVIEW; BLOCKED-FOR-INTERNAL-ESSENTIAL-RELEASE",
   "primaryReleaseSurfaces": [
     {
       "kind": "product-definition",
@@ -89,8 +46,28 @@
       "path": "private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/public-brochure.md"
     },
     {
+      "kind": "public-brochure-marketing-site",
+      "path": "private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/public-brochure.html"
+    },
+    {
+      "kind": "public-brochure-audience-packet",
+      "path": "private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/audience-packet.su.json"
+    },
+    {
+      "kind": "user-manual",
+      "path": "private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/user-manual.md"
+    },
+    {
       "kind": "public-changelog",
       "path": "private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/public-changelog.md"
+    },
+    {
+      "kind": "consumer-facing-public-disclosure-gate-owner",
+      "path": "private/universal/substrate/collectives/spaces-universal/private/universal/kura-spaces/roles/occupations/cmo-chief-marketing-officer-carrie.org-occupation.json"
+    },
+    {
+      "kind": "consumer-facing-public-disclosure-gate-owner-bead",
+      "path": "private/universal/substrate/collectives/spaces-universal/private/universal/kura-spaces/roles/cmo-chief-marketing-officer/private/universal/beads/FR-CMO-CONSUMER-FACING-PUBLIC-DISCLOSURE-GATE-OWNERSHIP-2026-07-04.beads-issue.json"
     },
     {
       "kind": "engineering-docc-catalog",
@@ -181,6 +158,42 @@
       "result": "PASS-WITH-NOTE: one specimen only"
     },
     {
+      "receiptKind": "vaporize-modification-receipt",
+      "path": "private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/vaporize-pkl-xcodeproj-tool-release-identity-modification.receipt.json",
+      "claim": "CUJ-14 covers typed releaseIdentity projection, macOS tool target product semantics, and unsupported-target expected failure for the Pkl Xcode project generator.",
+      "result": "PASS-WITH-NOTE: focused CUJ-14 proof; fleet build parity remains blocked"
+    },
+    {
+      "receiptKind": "vaporize-modification-receipt",
+      "path": "private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/vaporize-public-brochure-marketing-site-modification.receipt.json",
+      "claim": "CUJ-09 and CUJ-17 cover the public brochure marketing-site artifact, launch-review reference, release-doctor requirement, and blocked publication boundary.",
+      "result": "PASS-WITH-NOTE: focused CUJ-09/CUJ-17 proof; public publication remains blocked"
+    },
+    {
+      "receiptKind": "vaporize-modification-receipt",
+      "path": "private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/vaporize-public-brochure-audience-packet-modification.receipt.json",
+      "claim": "CUJ-09 and CUJ-17 cover the public brochure audience packet, audience-boundary tokens, launch-review reference, release-doctor requirement, and blocked publication boundary.",
+      "result": "PASS-WITH-NOTE: focused CUJ-09/CUJ-17 proof; public publication remains blocked"
+    },
+    {
+      "receiptKind": "vaporize-modification-receipt",
+      "path": "private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/vaporize-public-brochure-user-manual-modification.receipt.json",
+      "claim": "CUJ-09 and CUJ-17 cover the user manual beside the public brochure, the brochure companion contract, launch-review reference, release-doctor requirement, and blocked publication boundary.",
+      "result": "PASS-WITH-NOTE: focused CUJ-09/CUJ-17 proof; public publication remains blocked"
+    },
+    {
+      "receiptKind": "vaporize-modification-receipt",
+      "path": "private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/vaporize-public-doc-maintenance-bead-discipline-modification.receipt.json",
+      "claim": "CUJ-09 and CUJ-17 cover the owning-bead discipline for public documentation artifact maintenance, plus workflow beadTrackingRefs and JSON evidence validation.",
+      "result": "PASS-WITH-NOTE: focused CUJ-09/CUJ-17 proof; public publication remains blocked"
+    },
+    {
+      "receiptKind": "vaporize-modification-receipt",
+      "path": "private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/vaporize-consumer-facing-gate-carrie-cmo-ownership-modification.receipt.json",
+      "claim": "CUJ-09 and CUJ-17 cover Carrie CMO ownership for the consumer-facing public-disclosure gate while keeping publication signoffs absent.",
+      "result": "PASS-WITH-NOTE: focused CUJ-09/CUJ-17 proof; owner assigned, not signed off"
+    },
+    {
       "receiptKind": "vaporize-project-target-discovery",
       "path": "private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/creative-selection-v0.2-list-targets.receipt.json",
       "claim": "Creative Selection v0.2 AppleProjectSpec Pkl target, package, scheme, and buildable-candidate facts are discoverable through Vaporize.",
@@ -208,7 +221,7 @@
       "receiptKind": "cuj-test-coverage",
       "path": "private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/cuj-test-coverage.json",
       "claim": "Required test count is derived from PRD requirements through active draft CUJs.",
-      "result": "PASS-WITH-NOTE: 95 Swift test obligations, 12 release evidence checks, 107 targetable obligations, 113 executable Swift tests across 21 implemented CUJ bundles"
+      "result": "PASS-WITH-NOTE: 104 Swift test obligations, 12 release evidence checks, 116 targetable obligations, 138 executable Swift tests across 22 implemented CUJ bundles"
     },
     {
       "receiptKind": "cuj-state-coverage",
@@ -293,6 +306,12 @@
       "path": "private/universal/substrate/collectives/schema-universal/private/universal/domain/tooling/schema-families/vaporize-schemas/v0.0.1",
       "claim": "Schema-universal JSON schemas, canonical fixtures, and a Swift model package exist for durable Vaporize release evidence and receipts.",
       "result": "PASS: fixture-backed Swift model package decodes canonical release evidence and receipts"
+    },
+    {
+      "receiptKind": "vaporize-resource-cli-install-modification",
+      "path": "private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/vaporize-swiftpm-cli-resource-bundle-install-launch-review-modification.receipt.json",
+      "claim": "SwiftPM CLI resource-bundle install behavior is wired into launch-review evidence through FR-032, CUJ-22, GATE-39, Release Doctor, and focused tests.",
+      "result": "PASS-WITH-NOTE: resource-bearing CLI install proof; not app packaging or Sparkle delivery proof"
     }
   ],
   "sourceChangeSurfaces": [
@@ -373,8 +392,8 @@
       "purpose": "Covers CUJ-05 Xcode-selected Swift toolchain normalization, unsupported/empty tool rejection, and receipt shape."
     },
     {
-      "path": "private/apple/spm/vaporize@wrkstrm-core.cli/tests/cuj-06-json-validation/VaporizeCUJ06JSONValidationTests.swift",
-      "purpose": "Covers CUJ-06 Foundation-backed JSON validation success and failure paths."
+      "path": "private/apple/spm/vaporize@wrkstrm-core.cli/tests/cuj-06-json-validation/vaporize-cuj-06-json-validation-tests.swift",
+      "purpose": "Covers CUJ-06 Swift Universal json-formatter-backed validation success, failure, and canonical formatting paths."
     },
     {
       "path": "private/apple/spm/vaporize@wrkstrm-core.cli/tests/cuj-07-vapor-inventory/VaporizeCUJ07VaporInventoryTests.swift",
@@ -406,7 +425,7 @@
     },
     {
       "path": "private/apple/spm/vaporize@wrkstrm-core.cli/tests/cuj-14-pkl-xcodeproj-generation/VaporizeCUJ14PklXcodeProjectGenerationTests.swift",
-      "purpose": "Covers CUJ-14 generate-xcodeproj parsing, Pkl-backed .xcodeproj output, source-root handling, and deterministic renderer behavior."
+      "purpose": "Covers CUJ-14 generate-xcodeproj parsing, Pkl-backed .xcodeproj output, source-root handling, deterministic renderer behavior, typed releaseIdentity projection for tools, and unsupported target expected failure."
     },
     {
       "path": "private/apple/spm/vaporize@wrkstrm-core.cli/tests/cuj-15-xcode-product-cache/VaporizeCUJ15XcodeProductCacheTests.swift",
@@ -454,7 +473,7 @@
     },
     {
       "path": "private/apple/spm/vaporize@wrkstrm-core.cli/sources/apple-project-spec-core/AppleProjectXcodeProjectGenerator.swift",
-      "purpose": "Implements first-slice AppleProjectSpec Pkl to .xcodeproj world-state generation."
+      "purpose": "Implements first-slice AppleProjectSpec Pkl to .xcodeproj world-state generation, including application and tool product semantics."
     },
     {
       "path": "private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/cuj-test-coverage.json",
@@ -507,6 +526,18 @@
     {
       "path": "private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/creative-selection-v0.2-workspace-cache-discovery.receipt.json",
       "purpose": "Receipts Creative Selection v0.2 workspace product-cache candidate discovery from AppleProjectSpec Pkl target facts."
+    },
+    {
+      "path": "private/apple/spm/vaporize@wrkstrm-core.cli/tests/cuj-22-resource-cli-install/vaporize-cuj-22-resource-cli-install-tests.swift",
+      "purpose": "Covers the CUJ-22 simulation proving-ground manifest, missing-scenario expected-fail coverage audit, processed/copied/JSON/byte-count resource installs, and stale installed bundle replacement."
+    },
+    {
+      "path": "private/apple/spm/vaporize@wrkstrm-core.cli/vaporize.engineering.docc/swiftpm-cli-resource-bundle-installs.md",
+      "purpose": "Documents SwiftPM CLI resource-bundle install policy, product metadata Info.plist sidecar boundary, and the Bundle.module proof surface."
+    },
+    {
+      "path": "private/apple/spm/vaporize@wrkstrm-core.cli/beads/FR-VAPORIZE-SWIFTPM-CLI-RESOURCE-BUNDLE-INSTALLS-2026-07-05.beads-issue.json",
+      "purpose": "Owns the Vaporize resource-bearing SwiftPM CLI install launch-review refinement."
     }
   ],
   "validationEvidence": [
@@ -516,7 +547,7 @@
     },
     {
       "command": "vaporize toolchain -- swift test --package-path private/apple/spm/vaporize@wrkstrm-core.cli",
-      "result": "PASS-WITH-NOTE: coverage model now names 113 tests across 21 implemented CUJ-specific SwiftPM bundles, including CUJ-21 CUJ-state coverage; latest targeted Vaporize runs proved CUJ-09, CUJ-17, and CUJ-21"
+      "result": "PASS-WITH-NOTE: coverage model now names 138 tests across 22 implemented CUJ-specific SwiftPM bundles, including CUJ-14 tool release identity, CUJ-21 CUJ-state coverage, and CUJ-22 resource-bearing CLI install coverage; latest targeted Vaporize runs prove CUJ-09, CUJ-14, CUJ-17, CUJ-21, and CUJ-22"
     },
     {
       "command": "vaporize toolchain -- swift test --package-path private/apple/spm/vaporize@wrkstrm-core.cli --filter VaporizeCUJ16TargetFeaturesTests",
@@ -532,7 +563,7 @@
     },
     {
       "command": "local benchmark baseline captured with /usr/bin/time -p for Vaporize validate-json, Vaporize toolchain swift --version, bare swift --version, focused CUJ-15 through bare Swift, focused CUJ-15 through Vaporize toolchain, and full Vaporize suite",
-      "result": "PASS-WITH-NOTE: validate-json 0.03s, Vaporize swift --version 0.25s, bare swift --version 0.17s, focused CUJ-15 bare Swift 6.80s, focused CUJ-15 Vaporize 6.80s, earlier full Vaporize suite baseline 15.57s with 82 tests, latest coverage model names 113 tests across 21 CUJ bundles; not a fleet performance or disk-space benchmark"
+      "result": "PASS-WITH-NOTE: validate-json 0.03s, Vaporize swift --version 0.25s, bare swift --version 0.17s, focused CUJ-15 bare Swift 6.80s, focused CUJ-15 Vaporize 6.80s, earlier full Vaporize suite baseline 15.57s with 82 tests, latest coverage model names 138 tests across 22 CUJ bundles; not a fleet performance or disk-space benchmark"
     },
     {
       "command": "vaporize toolchain -- swift test --package-path private/apple/spm/vaporize@wrkstrm-core.cli --filter VaporizeCUJ09ReleaseReviewTests --enable-code-coverage",
@@ -645,6 +676,11 @@
     {
       "command": "vaporize validate-json --path private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/creative-selection-v0.2-workspace-cache-discovery.receipt.json",
       "result": "PASS"
+    },
+    {
+      "command": "vaporize test --filter CUJ-22",
+      "result": "PENDING-RERUN: focused CUJ-22 proof will be refreshed after release-spine updates",
+      "claim": "Resource-bearing SwiftPM CLI install behavior is targetable through the CUJ-22 bundle."
     }
   ],
   "savepointEvents": [
@@ -705,6 +741,7 @@
     "The wrkstrm-core build-config composition correction identifies existing sources of truth; Vaporize does not yet automatically join registry, identifier, app-artifacts, and release-feature records into app-facing samples.",
     "The wrkstrm app-minimums target-level slice inspects project.yml targets; Vaporize does not yet join registry, identifier, app-artifacts, and release-feature records across the fleet.",
     "Concourse build comparison is one-specimen evidence and must not be generalized to the whole fleet without additional receipts.",
-    "Project target discovery reads AppleProjectSpec routing facts; it does not build, install, generate .xcodeproj world-state, parse .xcworkspace graph membership, warm the maintained workspace cache, or prove fleet parity."
+    "Project target discovery reads AppleProjectSpec routing facts; it does not build, install, generate .xcodeproj world-state, parse .xcworkspace graph membership, warm the maintained workspace cache, or prove fleet parity.",
+    "CUJ-22 proves SwiftPM CLI resource-bundle install behavior and product metadata sidecars; it does not prove app bundle packaging, Bundle.main product metadata, Sparkle appcast generation, update signing, or public update delivery."
   ]
 }
