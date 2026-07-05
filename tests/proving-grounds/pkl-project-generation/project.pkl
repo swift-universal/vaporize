@@ -1,0 +1,117 @@
+/// Checked-in Vaporize proving-ground specimen for Pkl-backed Apple project generation.
+///
+/// Boundary: this fixture drives the project-generation proving ground; it is
+/// not fleet build parity and it is not release approval.
+
+amends "../../../Pkl/AppleProjectSpec.pkl"
+
+name = "pkl-project-generation-proving-ground"
+
+settings = new {
+  base = new {
+    ["SWIFT_VERSION"] = "6.4"
+  }
+}
+
+packages = new {
+  ["PklGroundSupport"] = new {
+    path = "Packages/PklGroundSupport"
+  }
+}
+
+targets = new {
+  ["PklGroundApp"] = new {
+    type = "application"
+    platform = "macOS"
+    deploymentTarget = "26.0"
+    sources = new {
+      new {
+        path = "Sources/PklGroundApp"
+      }
+    }
+    settings = new {
+      base = new {
+        ["PRODUCT_BUNDLE_IDENTIFIER"] = "com.wrkstrm.pkl-project-generation.proving-ground"
+        ["PRODUCT_NAME"] = "PklGroundApp"
+        ["PRODUCT_MODULE_NAME"] = "PklGroundApp"
+        ["CODE_SIGNING_ALLOWED"] = false
+        ["CODE_SIGNING_REQUIRED"] = false
+      }
+    }
+    dependencies = new {
+      new {
+        target = "PklGroundCore"
+      }
+      new {
+        package = "PklGroundSupport"
+        product = "PklGroundSupport"
+      }
+    }
+  }
+  ["PklGroundCore"] = new {
+    type = "framework"
+    platform = "macOS"
+    deploymentTarget = "26.0"
+    sources = new {
+      new {
+        path = "Sources/PklGroundCore"
+      }
+    }
+    settings = new {
+      base = new {
+        ["PRODUCT_BUNDLE_IDENTIFIER"] = "com.wrkstrm.pkl-project-generation.proving-ground.core"
+        ["PRODUCT_NAME"] = "PklGroundCore"
+        ["PRODUCT_MODULE_NAME"] = "PklGroundCore"
+        ["CODE_SIGNING_ALLOWED"] = false
+        ["CODE_SIGNING_REQUIRED"] = false
+      }
+    }
+  }
+  ["PklGroundCoreTests"] = new {
+    type = "bundle.unit-test"
+    platform = "macOS"
+    deploymentTarget = "26.0"
+    sources = new {
+      new {
+        path = "Tests/PklGroundCoreTests"
+      }
+    }
+    settings = new {
+      base = new {
+        ["PRODUCT_BUNDLE_IDENTIFIER"] = "com.wrkstrm.pkl-project-generation.proving-ground.tests"
+        ["PRODUCT_NAME"] = "PklGroundCoreTests"
+        ["PRODUCT_MODULE_NAME"] = "PklGroundCoreTests"
+        ["CODE_SIGNING_ALLOWED"] = false
+        ["CODE_SIGNING_REQUIRED"] = false
+      }
+    }
+    dependencies = new {
+      new {
+        target = "PklGroundCore"
+      }
+    }
+  }
+}
+
+schemes = new {
+  ["pkl-project-generation-proving-ground"] = new {
+    shared = true
+    build = new Mapping {
+      ["targets"] = new Mapping {
+        ["PklGroundApp"] = "all"
+        ["PklGroundCoreTests"] = new Listing {
+          "test"
+        }
+      }
+    }
+    run = new Mapping {
+      ["config"] = "Debug"
+      ["workingDirectory"] = "$(PROJECT_DIR)"
+    }
+    test = new Mapping {
+      ["targets"] = new Listing {
+        "PklGroundCoreTests"
+      }
+    }
+  }
+}

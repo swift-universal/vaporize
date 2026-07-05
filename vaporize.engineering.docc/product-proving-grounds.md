@@ -14,7 +14,8 @@ refs, release-doctor checks, and explicit boundaries.
 
 In Vaporize this is a reference implementation of the broader proving-ground
 harness and release-review doctrine. Pkl project generation does not own the
-proving ground; it is a generator capability that drives the standard tracks.
+doctrine; `tests/proving-grounds/pkl-project-generation` is the concrete
+proving ground that drives the standard generator tracks.
 
 The automotive metaphor is useful because it keeps proof concrete. A product
 does not merely have tests. It has driven specific tracks.
@@ -68,12 +69,13 @@ The first implementation slice is CUJ-23:
 - `VaporizeProductProvingGroundProfile` defines the passport shape.
 - `VaporizeProductProvingGroundAdoptionGate` audits required tracks, missing
   CUJs, missing receipts, missing targetable tests, and unknown tracks.
-- `VaporizeCUJ23ProductProvingGroundTests` proves a Vaporize CLI passport, a
-  generator capability passport for Pkl project generation,
-  incomplete-passport failure, and reusable product-class track defaults.
-- Pkl-backed `.xcodeproj` generation is the first generator capability driven
-  through the passport harness: it ties CUJ-14 graph/scheme tests and release
-  receipts into the CUJ-23 proving-ground audit.
+- `VaporizeCUJ23ProductProvingGroundTests` proves a Vaporize CLI passport, the
+  Pkl project-generation proving-ground passport, incomplete-passport failure,
+  and reusable product-class track defaults.
+- Pkl-backed `.xcodeproj` generation is the first checked-in generator proving
+  ground driven through the passport harness: it ties
+  `tests/proving-grounds/pkl-project-generation`, CUJ-14 graph/scheme tests,
+  and release receipts into the CUJ-23 proving-ground audit.
 
 ## Boundary
 

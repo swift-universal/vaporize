@@ -23,7 +23,7 @@
     "Tool targets emit com.apple.product-type.tool, compiled Mach-O product refs, and product paths without .app suffix.",
     "Framework/app/unit-test graph generation emits target dependencies, linked and embedded frameworks, local package product dependencies, and shared scheme files.",
     "Unsupported target types remain explicit failures.",
-    "CUJ-23 now carries a generator capability passport for Pkl project generation, tying CUJ-14 graph, negative-gate, release-spine, and generated-fixture evidence into the product proving-ground gate."
+    "CUJ-23 now carries the Pkl project-generation proving-ground passport, tying the checked-in proving-ground specimen, CUJ-14 graph, negative-gate, release-spine, and generated-fixture evidence into the product proving-ground gate."
   ],
   "targetableTests": [
     {
@@ -49,7 +49,7 @@
     {
       "testBundle": "VaporizeCUJ23ProductProvingGroundTests",
       "testName": "productProvingGroundProfileCoversPklProjectGeneration",
-      "expectation": "expected-pass generator capability passport for Pkl project generation covers skid-pad, hill-climb, crash-barrier, inspection-bay, and prototype-track scenarios"
+      "expectation": "expected-pass Pkl project-generation proving-ground passport covers skid-pad, hill-climb, crash-barrier, inspection-bay, and prototype-track scenarios"
     }
   ],
   "proofCommands": [

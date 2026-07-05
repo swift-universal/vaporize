@@ -602,8 +602,8 @@ Success:
   scenario has a targetable test bundle and receipt ref.
 - Product class defaults exist for CLI, app, library, workflow, generator,
   assistant, and site products.
-- A generator capability passport for Pkl project generation names CUJ-14 and
-  CUJ-23 evidence for skid-pad, hill-climb, crash-barrier, inspection-bay, and
+- A Pkl project-generation proving-ground passport names CUJ-14 and CUJ-23
+  evidence for skid-pad, hill-climb, crash-barrier, inspection-bay, and
   prototype-track scenarios.
 - Release Doctor checks FR-033, CUJ-23, GATE-40, the engineering doc, launch
   review evidence, and the CUJ-23 targetable test bundle.

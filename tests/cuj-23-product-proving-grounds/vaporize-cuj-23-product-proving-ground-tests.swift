@@ -48,7 +48,7 @@ func productProvingGroundGateFailsIncompletePassports() throws {
   #expect(audit.missingTargetableTestScenarioSlugs == ["swiftpm-resource-hill-climb"])
 }
 
-@Test("cuj-23 proving-ground profile covers a generator capability for Pkl project generation")
+@Test("cuj-23 proving-ground profile covers the Pkl project-generation proving ground")
 func productProvingGroundProfileCoversPklProjectGeneration() throws {
   let profile = vaporizePklXcodeProjectGenerationProvingGroundProfile()
   let audit = VaporizeProductProvingGroundAdoptionGate.audit(
@@ -167,7 +167,7 @@ private func vaporizePklXcodeProjectGenerationProvingGroundProfile() -> Vaporize
         title: "pkl project input skid pad",
         trackSlug: "skid-pad",
         proofKind: "input-rejection-proof",
-        receiptRef: "tests/cuj-14-pkl-xcodeproj-generation/VaporizeCUJ14PklXcodeProjectGenerationTests.swift",
+        receiptRef: "tests/proving-grounds/pkl-project-generation/proving-ground-passport.json",
         targetableTestBundle: "VaporizeCUJ14PklXcodeProjectGenerationTests"
       ),
       scenario(
@@ -175,7 +175,7 @@ private func vaporizePklXcodeProjectGenerationProvingGroundProfile() -> Vaporize
         title: "pkl project graph hill climb",
         trackSlug: "hill-climb",
         proofKind: "project-graph-generation-proof",
-        receiptRef: "release/v0.0.1/evidence/vaporize-pkl-xcodeproj-tool-release-identity-modification.receipt.json",
+        receiptRef: "tests/proving-grounds/pkl-project-generation/project.pkl",
         targetableTestBundle: "VaporizeCUJ14PklXcodeProjectGenerationTests"
       ),
       scenario(
@@ -183,7 +183,7 @@ private func vaporizePklXcodeProjectGenerationProvingGroundProfile() -> Vaporize
         title: "pkl unsupported target crash barrier",
         trackSlug: "crash-barrier",
         proofKind: "negative-gate-proof",
-        receiptRef: "tests/cuj-14-pkl-xcodeproj-generation/VaporizeCUJ14PklXcodeProjectGenerationTests.swift",
+        receiptRef: "tests/proving-grounds/pkl-project-generation/proving-ground-passport.json",
         targetableTestBundle: "VaporizeCUJ14PklXcodeProjectGenerationTests"
       ),
       scenario(
@@ -199,7 +199,7 @@ private func vaporizePklXcodeProjectGenerationProvingGroundProfile() -> Vaporize
         title: "pkl project prototype track",
         trackSlug: "prototype-track",
         proofKind: "generated-fixture-proof",
-        receiptRef: "tests/cuj-14-pkl-xcodeproj-generation/VaporizeCUJ14PklXcodeProjectGenerationTests.swift",
+        receiptRef: "tests/proving-grounds/pkl-project-generation/project.pkl",
         targetableTestBundle: "VaporizeCUJ14PklXcodeProjectGenerationTests"
       ),
     ],
@@ -212,6 +212,7 @@ private func vaporizePklXcodeProjectGenerationProvingGroundProfile() -> Vaporize
       "cuj": "14,23",
       "feature": "pkl-xcodeproj-generation",
       "gate": "GATE-14-pkl-project-generation",
+      "provingGround": "tests/proving-grounds/pkl-project-generation",
     ]
   )
 }

@@ -122,15 +122,17 @@ func xcodeProjectRenderingIsDeterministic() throws {
 
 @Test("CUJ-14 generates framework app test graph and shared scheme from Pkl")
 func generatesFrameworkAppTestGraphAndSharedSchemeFromPkl() async throws {
-  let fixture = try makeTinyPklSuiteFixture()
-  defer { try? FileManager.default.removeItem(at: fixture.temporaryDirectory) }
+  let fixture = try makePklProjectGenerationProvingGroundFixture()
   defer { try? FileManager.default.removeItem(at: fixture.outputDirectory) }
 
-  let outputURL = fixture.outputDirectory.appendingPathComponent("TinySuiteGenerated.xcodeproj")
+  let manifestData = try Data(contentsOf: fixture.passportJSON)
+  let manifest = try #require(JSONSerialization.jsonObject(with: manifestData) as? [String: Any])
+
+  let outputURL = fixture.outputDirectory.appendingPathComponent("PklGroundGenerated.xcodeproj")
   let receipt = try await AppleProjectXcodeProjectGenerator.generate(
     pklURL: fixture.projectPkl,
     outputURL: outputURL,
-    requestId: "cuj-14-pkl-framework-test-scheme-generation"
+    requestId: "cuj-14-pkl-project-generation-proving-ground"
   )
 
   let pbxprojData = try Data(contentsOf: outputURL.appendingPathComponent("project.pbxproj"))
@@ -138,32 +140,37 @@ func generatesFrameworkAppTestGraphAndSharedSchemeFromPkl() async throws {
   let schemeURL = outputURL
     .appendingPathComponent("xcshareddata")
     .appendingPathComponent("xcschemes")
-    .appendingPathComponent("tiny-pkl-suite.xcscheme")
+    .appendingPathComponent("pkl-project-generation-proving-ground.xcscheme")
   let scheme = try String(contentsOf: schemeURL, encoding: .utf8)
 
+  #expect(manifest["documentKind"] as? String == "vaporize-pkl-project-generation-proving-ground")
+  #expect(manifest["provingGroundSlug"] as? String == "pkl-project-generation")
+  #expect(manifest["projectSpecRef"] as? String == "tests/proving-grounds/pkl-project-generation/project.pkl")
+  #expect(manifest["targetableTestBundle"] as? String == "VaporizeCUJ14PklXcodeProjectGenerationTests")
+  #expect(receipt.projectName == "pkl-project-generation-proving-ground")
   #expect(receipt.targetCount == 3)
   #expect(receipt.packageCount == 1)
   #expect(receipt.schemeCount == 1)
-  #expect(receipt.targetNames == ["TinyApp", "TinyCore", "TinyCoreTests"])
+  #expect(receipt.targetNames == ["PklGroundApp", "PklGroundCore", "PklGroundCoreTests"])
   #expect(receipt.sourceFileCount == 3)
   #expect(receipt.resourceFileCount == 0)
   #expect(receipt.generatedByteCount > pbxprojData.count)
   #expect(pbxproj.contains("productType = \"com.apple.product-type.framework\";"))
   #expect(pbxproj.contains("productType = \"com.apple.product-type.bundle.unit-test\";"))
-  #expect(pbxproj.contains("TinyCore.framework in Frameworks"))
-  #expect(pbxproj.contains("TinyCore.framework in Embed Frameworks"))
+  #expect(pbxproj.contains("PklGroundCore.framework in Frameworks"))
+  #expect(pbxproj.contains("PklGroundCore.framework in Embed Frameworks"))
   #expect(pbxproj.contains("PBXContainerItemProxy"))
   #expect(pbxproj.contains("PBXTargetDependency"))
   #expect(pbxproj.contains("PBXCopyFilesBuildPhase"))
-  #expect(pbxproj.contains("TinySupport in Frameworks"))
-  #expect(pbxproj.contains("TinyCoreTests.xctest"))
+  #expect(pbxproj.contains("PklGroundSupport in Frameworks"))
+  #expect(pbxproj.contains("PklGroundCoreTests.xctest"))
   #expect(pbxproj.contains("BUNDLE_LOADER = \"$(TEST_HOST)\";"))
   #expect(scheme.contains("<BuildAction"))
   #expect(scheme.contains("<TestAction"))
   #expect(scheme.contains("<LaunchAction"))
-  #expect(scheme.contains("BuildableName = \"TinyApp.app\""))
-  #expect(scheme.contains("BuildableName = \"TinyCoreTests.xctest\""))
-  #expect(scheme.contains("ReferencedContainer = \"container:TinySuiteGenerated.xcodeproj\""))
+  #expect(scheme.contains("BuildableName = \"PklGroundApp.app\""))
+  #expect(scheme.contains("BuildableName = \"PklGroundCoreTests.xctest\""))
+  #expect(scheme.contains("ReferencedContainer = \"container:PklGroundGenerated.xcodeproj\""))
   #expect(scheme.contains("customWorkingDirectory = \"$(PROJECT_DIR)\""))
 }
 
@@ -200,6 +207,37 @@ private struct TinyPklSuiteFixture {
   var temporaryDirectory: URL
   var outputDirectory: URL
   var projectPkl: URL
+}
+
+private struct PklProjectGenerationProvingGroundFixture {
+  var rootDirectory: URL
+  var outputDirectory: URL
+  var projectPkl: URL
+  var passportJSON: URL
+}
+
+private func makePklProjectGenerationProvingGroundFixture() throws -> PklProjectGenerationProvingGroundFixture {
+  let rootDirectory = vaporizeTestPackageRoot
+    .appendingPathComponent("tests/proving-grounds/pkl-project-generation")
+    .standardizedFileURL
+  let outputDirectory = FileManager.default.temporaryDirectory
+    .appendingPathComponent("vaporize-pkl-project-generation-proving-ground-output-\(UUID().uuidString)")
+  let projectPkl = rootDirectory.appendingPathComponent("project.pkl")
+  let passportJSON = rootDirectory.appendingPathComponent("proving-ground-passport.json")
+
+  guard FileManager.default.fileExists(atPath: projectPkl.path) else {
+    throw CocoaError(.fileNoSuchFile, userInfo: [NSFilePathErrorKey: projectPkl.path])
+  }
+  guard FileManager.default.fileExists(atPath: passportJSON.path) else {
+    throw CocoaError(.fileNoSuchFile, userInfo: [NSFilePathErrorKey: passportJSON.path])
+  }
+
+  return PklProjectGenerationProvingGroundFixture(
+    rootDirectory: rootDirectory,
+    outputDirectory: outputDirectory,
+    projectPkl: projectPkl,
+    passportJSON: passportJSON
+  )
 }
 
 private func makeTinyPklAppFixture() throws -> TinyPklAppFixture {

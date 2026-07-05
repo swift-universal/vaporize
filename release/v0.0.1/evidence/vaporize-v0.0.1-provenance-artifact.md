@@ -18,8 +18,8 @@ chat memory.
   CUJ-16 target feature inspection, CUJ-17 release doctor, CUJ-18 project
   target discovery, CUJ-19 workspace product-cache discovery, and CUJ-20 Xcode
   workspace scheme listing, CUJ-21 CUJ-state coverage, CUJ-22
-  resource-bearing CLI install coverage, and CUJ-23 product passport plus
-  generator capability passport coverage.
+  resource-bearing CLI install coverage, and CUJ-23 product passport plus Pkl
+  project-generation proving-ground coverage.
 - `product-definition.md` defines Vaporize, primary users, product-level user
   journeys, why users choose it, when not to choose it, and build implications
   before more implementation is accepted.
@@ -96,10 +96,10 @@ chat memory.
   text, copied directory, decoded JSON, byte-count, and stale-reinstall resource
   scenarios into `~/.swiftpm/bin` away from `.build`.
 - `vaporize.engineering.docc/product-proving-grounds.md` exists, and CUJ-23
-  proves product proving-ground passport shapes for vaporware products and a
-  generator capability for Pkl project generation: product class, owning bead,
-  CUJs, tracks, scenarios, targetable tests, receipts, release-doctor checks,
-  and adoption failure modes.
+  proves product proving-ground passport shapes for vaporware products and the
+  Pkl project-generation proving ground: product class, owning bead, CUJs,
+  tracks, scenarios, targetable tests, receipts, release-doctor checks, and
+  adoption failure modes.
 - `vaporize.engineering.docc/modularity-and-ownership-boundaries.md` exists as
   the ownership and modularity rule: Swift Universal primitives belong in
   `swift-universal`, Apple-bounded orchestration belongs in `wrkstrm-core`, and

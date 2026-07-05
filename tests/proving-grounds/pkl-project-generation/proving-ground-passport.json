@@ -1,0 +1,27 @@
+{
+  "schemaVersion": "0.1.0",
+  "documentKind": "vaporize-pkl-project-generation-proving-ground",
+  "provingGroundSlug": "pkl-project-generation",
+  "productSlug": "vaporize-pkl-xcodeproj-generation@wrkstrm-core.feature",
+  "productClass": "generator",
+  "owningBeadRef": "beads/FR-VAPORIZE-PKL-PROJECT-GENERATION-move-owned-xcodegen-surfaces-to-pkl.beads-issue.json",
+  "harnessDoctrineRef": "vaporize.engineering.docc/product-proving-grounds.md",
+  "projectSpecRef": "tests/proving-grounds/pkl-project-generation/project.pkl",
+  "targetableTestBundle": "VaporizeCUJ14PklXcodeProjectGenerationTests",
+  "adoptionTestBundle": "VaporizeCUJ23ProductProvingGroundTests",
+  "requiredTrackSlugs": [
+    "skid-pad",
+    "hill-climb",
+    "crash-barrier",
+    "inspection-bay",
+    "prototype-track"
+  ],
+  "scenarioRefs": [
+    "pkl-project-input-skid-pad",
+    "pkl-project-graph-hill-climb",
+    "pkl-unsupported-target-crash-barrier",
+    "pkl-project-release-inspection-bay",
+    "pkl-project-prototype-track"
+  ],
+  "boundary": "This proving ground proves Pkl-backed project-generation world-state shape for a checked-in specimen. It does not prove fleet build parity or release approval."
+}
