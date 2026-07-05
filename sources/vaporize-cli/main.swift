@@ -25,7 +25,9 @@ struct VaporizeCLI: AsyncParsableCommand {
       Substrate-canonical vaporware-collapse gate. vaporize transmutes typed \
       substrate-vaporware into world-state: binaries land, .app installs, \
       processes run, receipts emit. Modes: install, uninstall, build, test, run, \
-      pass, use, toolchain, setup. Vaporware-awareness modes: status + warehouse enumerate and \
+      pass, use, toolchain, setup. Toolchain mode bridges Swift toolchain tools \
+      such as swift and docc through the owned Vaporize receipt boundary. \
+      Vaporware-awareness modes: status + warehouse enumerate and \
       store vaporware at a path per the `x-vaporize-collapse-path` annotation \
       convention. Project-generation bridge mode: inspect-project-yml reads \
       legacy XcodeGen YAML into an owned Swift model without rewriting it; \
@@ -236,6 +238,11 @@ struct VaporizeCLI: AsyncParsableCommand {
     name: .customLong("developer-dir"),
     help: "DEVELOPER_DIR override for toolchain mode.")
   var developerDirectory: String?
+
+  @Option(
+    name: .customLong("toolchain-bin-path"),
+    help: "Directory containing Swift toolchain executables for toolchain mode. When set, Vaporize runs <toolchain-bin-path>/<tool> instead of platform defaults.")
+  var toolchainBinPath: String?
 
   @Option(
     name: .customLong("xcode-component"),
@@ -962,13 +969,14 @@ struct VaporizeCLI: AsyncParsableCommand {
   }
 
   private func runToolchain() async throws {
-    let request = try XcodeToolchainRequest(arguments: forwardedArguments)
+    let request = try SwiftToolchainRequest(arguments: forwardedArguments)
     let requestId = "vaporize-toolchain-\(UUID().uuidString)"
     let workingDirectory = passWorkingDirectory ?? FileManager.default.currentDirectoryPath
     let environmentUpdates = developerDirectory.map { ["DEVELOPER_DIR": $0] }
+    let invocation = try request.invocation(toolchainBinPath: toolchainBinPath)
     let command = CommandSpec(
-      executable: .name("xcrun"),
-      args: request.xcrunArguments,
+      executable: invocation.executable,
+      args: invocation.arguments,
       env: .inherit(updating: environmentUpdates),
       workingDirectory: workingDirectory,
       logOptions: .init(
@@ -977,6 +985,7 @@ struct VaporizeCLI: AsyncParsableCommand {
           "source": "vaporize-toolchain",
           "canonicalSource": "vaporize-toolchain",
           "tool": request.tool.rawValue,
+          "toolchainResolver": invocation.resolver,
         ]
       ),
       requestId: requestId,
@@ -996,6 +1005,9 @@ struct VaporizeCLI: AsyncParsableCommand {
       requestId: requestId,
       runnerKind: "auto",
       developerDirectorySet: developerDirectory != nil,
+      toolchainBinPathSet: toolchainBinPath != nil,
+      executableRef: invocation.executableRef,
+      resolver: invocation.resolver,
       succeeded: output.isSuccess,
       exitCode: output.exitStatus.exitCode,
       signal: output.exitStatus.signal,
@@ -1920,12 +1932,13 @@ enum CommonProcessSpecLoader {
   }
 }
 
-enum XcodeToolchainTool: String, Codable, Equatable {
+enum SwiftToolchainTool: String, Codable, Equatable {
   case swift
+  case docc
 }
 
-struct XcodeToolchainRequest: Equatable {
-  var tool: XcodeToolchainTool
+struct SwiftToolchainRequest: Equatable {
+  var tool: SwiftToolchainTool
   var arguments: [String]
 
   var xcrunArguments: [String] {
@@ -1938,10 +1951,10 @@ struct XcodeToolchainRequest: Equatable {
       tokens.removeFirst()
     }
     guard let rawTool = tokens.first, !rawTool.isEmpty else {
-      throw ValidationError("toolchain mode requires an Xcode tool, for example: vaporize toolchain -- swift --version.")
+      throw ValidationError("toolchain mode requires a Swift toolchain tool, for example: vaporize toolchain -- swift --version.")
     }
-    guard let tool = XcodeToolchainTool(rawValue: rawTool) else {
-      throw ValidationError("toolchain mode currently supports swift only; got \(rawTool).")
+    guard let tool = SwiftToolchainTool(rawValue: rawTool) else {
+      throw ValidationError("toolchain mode currently supports swift and docc; got \(rawTool).")
     }
     tokens.removeFirst()
     if tokens.first == "--" {
@@ -1950,6 +1963,43 @@ struct XcodeToolchainRequest: Equatable {
     self.tool = tool
     self.arguments = tokens
   }
+
+  func invocation(toolchainBinPath: String?) throws -> ToolchainInvocation {
+    if let toolchainBinPath, !toolchainBinPath.isEmpty {
+      let executablePath = URL(fileURLWithPath: toolchainBinPath)
+        .appendingPathComponent(tool.rawValue)
+        .path
+      return ToolchainInvocation(
+        executable: .path(executablePath),
+        arguments: arguments,
+        executableRef: "path:\(executablePath)",
+        resolver: "toolchain-bin-path"
+      )
+    }
+
+    #if os(macOS)
+      return ToolchainInvocation(
+        executable: .name("xcrun"),
+        arguments: xcrunArguments,
+        executableRef: "name:xcrun",
+        resolver: "xcrun"
+      )
+    #else
+      return ToolchainInvocation(
+        executable: .name(tool.rawValue),
+        arguments: arguments,
+        executableRef: "name:\(tool.rawValue)",
+        resolver: "path"
+      )
+    #endif
+  }
+}
+
+struct ToolchainInvocation {
+  var executable: Executable
+  var arguments: [String]
+  var executableRef: String
+  var resolver: String
 }
 
 enum VaporizeCLIActionability {
@@ -2100,6 +2150,9 @@ struct ToolchainReceipt: Codable, Equatable {
   var requestId: String
   var runnerKind: String
   var developerDirectorySet: Bool
+  var toolchainBinPathSet: Bool
+  var executableRef: String
+  var resolver: String
   var succeeded: Bool
   var exitCode: Int?
   var signal: Int?

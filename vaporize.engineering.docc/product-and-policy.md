@@ -20,7 +20,8 @@ typed options, receipts, release gates, and policy boundaries.
 Vaporize is:
 
 - A build/test/install/run gate for SwiftPM CLIs and Apple app bundles.
-- A toolchain gate for Xcode-selected Swift.
+- A toolchain gate for Swift and DocC commands through Xcode-selected,
+  PATH-selected, or explicit swift-universal toolchain directories.
 - A JSON validation gate for release packets and schema fixtures.
 - A CommonProcess-style invocation gate through `use`.
 - A project migration gate for `project.yml`, Pkl, generated YAML, and
@@ -43,7 +44,12 @@ native tool invocation inside a first-party command surface.
 The current policy boundary is:
 
 - Use `vaporize toolchain -- swift ...` for Swift runs that need the owned
-  Xcode-selected route.
+  toolchain route.
+- Use `vaporize toolchain -- docc convert ...` for DocC conversion so
+  documentation builds stay inside the Vaporize receipt boundary.
+- Use `--toolchain-bin-path <bin>` when a substrate-owned swift-universal
+  toolchain directory should provide `swift`, `docc`, or another supported
+  Swift toolchain executable.
 - Use `vaporize validate-json --path <file>` for JSON validation in this lane.
 - Use Vaporize's app/project/workspace options instead of direct `xcodebuild`
   choreography in release runbooks.

@@ -32,6 +32,36 @@ Each family narrows a lower-level tool into a product-owned lane. That narrowing
 is the engineering value: fewer ambient assumptions, more typed inputs, and
 better receipts.
 
+## Toolchain Bridge
+
+Toolchain mode is the Vaporize-owned route for Swift toolchain commands that
+must be repeatable across host platforms.
+
+On macOS, Vaporize resolves supported tools through Xcode's selected toolchain:
+
+```text
+vaporize toolchain -- swift test
+vaporize toolchain -- docc convert Product.docc --output-path /tmp/Product.doccarchive
+```
+
+Outside macOS, Vaporize invokes the tool name directly so Linux hosts can use
+the active Swift toolchain on `PATH`:
+
+```text
+docc convert ...
+swift test ...
+```
+
+For substrate-owned toolchains, callers can supply an explicit executable
+directory:
+
+```text
+vaporize --toolchain-bin-path <swift-universal-toolchain-bin> toolchain -- docc convert Product.docc
+```
+
+The receipt records the tool, arguments, resolver, executable ref, developer
+directory boundary, and explicit toolchain-bin path boundary.
+
 For the canonical feature-by-feature explanation, see <doc:feature-catalog>.
 This page explains the architecture; the feature catalog names the user problem,
 current surface, and proof boundary for each major Vaporize feature.
