@@ -1,0 +1,13 @@
+{
+  "name": "resource-vault",
+  "entries": [
+    {
+      "slug": "processed-text",
+      "weight": 3
+    },
+    {
+      "slug": "copied-payload",
+      "weight": 5
+    }
+  ]
+}

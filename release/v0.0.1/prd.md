@@ -246,19 +246,19 @@ Supporting audiences:
 | FR-024 | wrkstrm app minimums inspection | `inspect-target-features --path <project.yml> --target <target>` reports target-level release-feature topology: project spec, declared build configurations, tier declarations, `Config/release-features.json`, generated `Config/xcconfigs/*.xcconfig`, project `configFiles` or Pkl equivalent wiring, generated `Sources/ReleaseFeatures.swift`, and `digikoma-release-features` provenance. Registry-backed fleet inspection remains a follow-up. Missing, stale, or unknown minimums block strong feature-cohort, launch-readiness, and per-feature-size claims. |
 | FR-025 | Pre-code PRD review session | Major feature work must record an Engineering, QA, and Marketing PRD review session before coding starts. The session must decide `GO`, `GO-WITH-NOTES`, or `NO-GO`, and must name approved scope, required tests, required release evidence, approved claims, prohibited claims, and blockers. |
 | FR-026 | Vaporware modification request release discipline | Behavior-changing vaporware modification requests create or attach to a feature flag, feature status record, or release-feature cohort; add or update targetable tests; run the smallest feature-scoped proof; update release evidence and schema fixtures when affected; and record any no-flag exception explicitly. |
-| FR-027 | Release doctor spine audit | `release-doctor --path <package-or-release-root>` emits a `vaporize-release-doctor` receipt that verifies required release artifacts exist, evidence JSON parses, PRD/CUJ/gate/catalog surfaces name the release-doctor slice, launch-review references the gate and receipt, provenance inventories the receipt, and CUJ coverage counts CUJ-17. The command audits coherence; it does not approve final release. |
+| FR-027 | Release doctor spine audit | `release-doctor --path <package-or-release-root>` emits a `vaporize-release-doctor` receipt that verifies required release artifacts exist, evidence JSON parses, PRD/CUJ/gate/catalog surfaces name the release-doctor slice, launch-review references the gate and receipt, the launch-review/PRD/release-gate follow-up lists agree, blocker disposition matches the launch-review gate state, provenance inventories the receipt, and CUJ coverage counts CUJ-17. The command audits coherence; it does not approve final release. |
 | FR-028 | Project target discovery | `list-targets --pkl-path <project.pkl>` or `list-targets --package-path <project-dir>` emits a `vaporize-project-target-discovery` receipt that names target, package, scheme, and buildable-candidate facts from AppleProjectSpec. The command discovers routing facts; it does not build, install, generate `.xcodeproj` world-state, or prove fleet parity. |
 | FR-029 | Workspace product-cache discovery | `list-targets` accepts `--xcode-product-cache-workspace`, `--xcode-product-cache-derived-data-path`, and `--configuration`; when present, the target-discovery receipt includes expected shared DerivedData `.app` candidates and warm/missing status for buildable AppleProjectSpec targets. The command does not parse `.xcworkspace` membership, build, install, warm the cache, or prove fleet cache coverage. |
 | FR-030 | Xcode workspace scheme listing | `list-schemes --xcode-workspace <workspace.xcworkspace>` executes `xcodebuild -list -json -workspace` through Vaporize/CommonProcess, parses the workspace scheme list, and can emit a `vaporize-xcode-workspace-scheme-list` receipt. The command lists schemes only; it does not build, install, warm caches, prove product paths, or prove fleet-wide workspace membership. |
 | FR-031 | CUJ-state coverage gate | CUJ-state coverage evidence names every required journey-derived CUJ-state id, attaches a proof entry for each id, records empty uncovered/unknown/duplicate lists, and is checked by release doctor before release review trusts simulated world state. This proves CUJ-state coverage only; it does not prove Kura, Turso, libSQL, sync, migration, or public release readiness. |
-| FR-032 | SwiftPM CLI resource-bundle install preservation | `install --artifact cli` preserves SwiftPM target resource bundles required by `Bundle.module` for installed CLIs by using SwiftPM `experimental-install` for the executable, asking SwiftPM for the build products directory with `swift build --show-bin-path`, and copying direct `.bundle` siblings into the installed CLI bin directory. Vaporize also writes product version/build facts to the CLI metadata sidecar. This does not turn the CLI into an app bundle, does not make `Bundle.main.infoDictionary` carry product metadata, and does not prove Sparkle appcast generation or update signing. |
+| FR-032 | SwiftPM CLI resource-bundle install preservation | `install` preserves SwiftPM target resource bundles required by `Bundle.module` for installed CLIs by using SwiftPM `experimental-install` for the executable, asking SwiftPM for the build products directory with `swift build --show-bin-path`, and copying direct `.bundle` siblings into the installed CLI bin directory. Vaporize also writes product version/build facts to the CLI metadata sidecar. This does not turn the CLI into an app bundle, does not make `Bundle.main.infoDictionary` carry product metadata, and does not prove Sparkle appcast generation or update signing. |
 
 ## Release Criteria
 
 - Vaporize's package test suite passes with the Swift 6.4 toolchain:
   `vaporize toolchain -- swift test --package-path private/apple/spm/vaporize@wrkstrm-core.cli`.
-  Current proof: the CUJ-derived coverage floor requires 105 Swift test
-  obligations plus 12 release evidence checks; the executable suite passes 139
+  Current proof: the CUJ-derived coverage floor requires 106 Swift test
+  obligations plus 12 release evidence checks; the executable suite passes 140
   tests across 22 implemented CUJ targets, including the CUJ-16
   `inspect-target-features` first slice, CUJ-17 `release-doctor` first slice,
   CUJ-18 `list-targets` first slice, CUJ-19 workspace cache discovery first
@@ -349,8 +349,15 @@ Supporting audiences:
 - `FR-VAPORIZE-REALIZE-typed-vaporware-unit`
 - `FR-VAPORIZE-TOOL-CALL-OBSERVABILITY`
 - `FR-VAPORIZE-DRIFT-CATCH-retire-craze-canonical-language`
+- `FR-VAPORIZE-PRODUCT-RELEASE-DIR-RENAME-MODE`
 - `FR-VAPORIZE-XCODE-WORKSPACE-GRAPH-MEMBERSHIP-DISCOVERY`
 - `FR-VAPORIZE-RUNTIME-SAMPLE-SERIES-APPLE-ARTIFACT-INGESTION`
 - `FR-VAPORIZE-WRKSTRM-CORE-BUILD-CONFIG-COMPOSITION`
 - `FR-VAPORIZE-WRKSTRM-APP-MINIMUMS-INSPECTION`
+- `FR-VAPORIZE-ENGINEERING-DOCC-PUBLICATION-PIPELINE`
 - `FR-VAPORIZE-PRD-REVIEW-SESSION-BEFORE-CODING`
+- `FR-VAPORIZE-VAPORWARE-SCAFFOLD-FEATURE-REQUESTS`
+- `FR-VAPORIZE-BUDDY-HEARTBEAT-AND-BUILD-WATCH`
+- `FR-VAPORIZE-XCODE-WORKSPACE-SCHEME-LISTING-RUNTIME-SAMPLES`
+- `FR-VAPORIZE-PUBLIC-DOCUMENTATION-ARTIFACT-MAINTENANCE-2026-07-04`
+- `FR-CMO-CONSUMER-FACING-PUBLIC-DISCLOSURE-GATE-OWNERSHIP-2026-07-04`

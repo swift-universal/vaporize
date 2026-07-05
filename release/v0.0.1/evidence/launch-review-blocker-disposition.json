@@ -1,0 +1,209 @@
+{
+  "VaporizeLaunchReviewBlockerDispositionModel": "0.1.0",
+  "schemaVersion": "0.1.0",
+  "subjectAppSlug": "vaporize.cli@wrkstrm-core.clia.sh",
+  "subjectReleaseSlug": "v0.0.1",
+  "generatedAt": "2026-07-05T00:00:00Z",
+  "generatedBy": "codex-crisie",
+  "status": "active-launch-review-disposition",
+  "dispositionRule": "This artifact burns down duplicate or scope-only blocker records for launch review. It does not approve release gates and does not replace human review.",
+  "humanApprovalBoundary": {
+    "automationCanApproveGate": false,
+    "requiredPendingStatus": "EVIDENCE-READY-PENDING-HUMAN-REVIEW",
+    "approvedStatusesRequireHumanReview": true,
+    "requiredHumanReviewFields": [
+      "reviewerKind=human",
+      "reviewerIdentityRef",
+      "humanReviewRef",
+      "signedAt",
+      "signedByAutomation=false"
+    ]
+  },
+  "launchReviewGateStatusRecommendation": {
+    "packetStatus": "evidence-ready-pending-human-review-blocked-for-internal-release",
+    "evidenceReadyPendingHumanReview": 33,
+    "blocked": 1,
+    "blockedGateRefs": [
+      "GATE-14-pkl-project-generation"
+    ]
+  },
+  "remainingHardBlockers": [
+    {
+      "gateRef": "GATE-14-pkl-project-generation",
+      "status": "BLOCKED",
+      "blockerKind": "release-capability",
+      "ownerRef": "wrkstrm-core/vaporize",
+      "reason": "Final internal release still requires fleet Pkl-backed Apple project-generation parity, scheme/resource/package feature coverage, and explicit quarantine or migration of remaining XcodeGen-backed owned surfaces.",
+      "requiredBeforeInternalRelease": true,
+      "requiredBeforeLaunchReview": false
+    }
+  ],
+  "burnedDownDuplicateOrScopedBlockers": [
+    {
+      "gateRef": "GATE-12-open-feature-beads",
+      "previousStatus": "BLOCKED",
+      "newStatus": "EVIDENCE-READY-PENDING-HUMAN-REVIEW",
+      "disposition": "All known follow-up beads are named and classified in this artifact. The release-blocking Pkl work remains tracked once, under GATE-14.",
+      "requiredBeforeInternalRelease": false
+    },
+    {
+      "gateRef": "GATE-13-tree-cleanliness",
+      "previousStatus": "BLOCKED-BY-EXISTING-TREE",
+      "newStatus": "EVIDENCE-READY-PENDING-HUMAN-REVIEW",
+      "disposition": "Full mono repository cleanliness is outside this scoped Vaporize release slice. The scoped Vaporize path uses release evidence, JSON validation, Release Doctor, full Vaporize tests, and git diff whitespace checks.",
+      "requiredBeforeInternalRelease": false
+    },
+    {
+      "gateRef": "GATE-27-runtime-sample-series-apple-artifact-ingestion",
+      "previousStatus": "BLOCKED-FOR-STRONG-BENCHMARK-CLAIMS",
+      "newStatus": "EVIDENCE-READY-PENDING-HUMAN-REVIEW",
+      "disposition": "Strong benchmark, disk-space, cache-warmth, and fleet-parity claims remain prohibited by the marketing claims matrix until automatic runtime samples and durable Apple artifacts exist. The absence of those claims is not a blocker for internal-essential launch review.",
+      "requiredBeforeInternalRelease": false
+    }
+  ],
+  "followUpDispositions": [
+    {
+      "followUpRef": "FR-VAPORIZE-PKL-PROJECT-GENERATION-move-owned-xcodegen-surfaces-to-pkl",
+      "releaseImpact": "hard-release-blocker",
+      "linkedGateRefs": [
+        "GATE-14-pkl-project-generation"
+      ],
+      "requiredBeforeInternalRelease": true,
+      "requiredBeforeLaunchReview": false
+    },
+    {
+      "followUpRef": "FR-VAPORIZE-AUTO-INCREMENT-BUILD-NUMBERS",
+      "releaseImpact": "post-launch-review-follow-up",
+      "linkedGateRefs": [],
+      "requiredBeforeInternalRelease": false,
+      "requiredBeforeLaunchReview": false
+    },
+    {
+      "followUpRef": "FR-VAPORIZE-REALIZE-typed-vaporware-unit",
+      "releaseImpact": "post-launch-review-follow-up",
+      "linkedGateRefs": [],
+      "requiredBeforeInternalRelease": false,
+      "requiredBeforeLaunchReview": false
+    },
+    {
+      "followUpRef": "FR-VAPORIZE-TOOL-CALL-OBSERVABILITY",
+      "releaseImpact": "post-launch-review-follow-up",
+      "linkedGateRefs": [],
+      "requiredBeforeInternalRelease": false,
+      "requiredBeforeLaunchReview": false
+    },
+    {
+      "followUpRef": "FR-VAPORIZE-DRIFT-CATCH-retire-craze-canonical-language",
+      "releaseImpact": "post-launch-review-follow-up",
+      "linkedGateRefs": [],
+      "requiredBeforeInternalRelease": false,
+      "requiredBeforeLaunchReview": false
+    },
+    {
+      "followUpRef": "FR-VAPORIZE-PRODUCT-RELEASE-DIR-RENAME-MODE",
+      "releaseImpact": "post-launch-review-follow-up",
+      "linkedGateRefs": [],
+      "requiredBeforeInternalRelease": false,
+      "requiredBeforeLaunchReview": false
+    },
+    {
+      "followUpRef": "FR-VAPORIZE-XCODE-WORKSPACE-GRAPH-MEMBERSHIP-DISCOVERY",
+      "releaseImpact": "post-launch-review-follow-up",
+      "linkedGateRefs": [
+        "GATE-34-project-target-discovery",
+        "GATE-36-xcode-workspace-scheme-listing"
+      ],
+      "requiredBeforeInternalRelease": false,
+      "requiredBeforeLaunchReview": false
+    },
+    {
+      "followUpRef": "FR-VAPORIZE-RUNTIME-SAMPLE-SERIES-APPLE-ARTIFACT-INGESTION",
+      "releaseImpact": "strong-claims-follow-up",
+      "linkedGateRefs": [
+        "GATE-27-runtime-sample-series-apple-artifact-ingestion"
+      ],
+      "requiredBeforeInternalRelease": false,
+      "requiredBeforeLaunchReview": false
+    },
+    {
+      "followUpRef": "FR-VAPORIZE-WRKSTRM-CORE-BUILD-CONFIG-COMPOSITION",
+      "releaseImpact": "post-launch-review-follow-up",
+      "linkedGateRefs": [
+        "GATE-28-wrkstrm-core-app-build-config-composition"
+      ],
+      "requiredBeforeInternalRelease": false,
+      "requiredBeforeLaunchReview": false
+    },
+    {
+      "followUpRef": "FR-VAPORIZE-WRKSTRM-APP-MINIMUMS-INSPECTION",
+      "releaseImpact": "post-launch-review-follow-up",
+      "linkedGateRefs": [
+        "GATE-29-wrkstrm-app-minimums-inspection"
+      ],
+      "requiredBeforeInternalRelease": false,
+      "requiredBeforeLaunchReview": false
+    },
+    {
+      "followUpRef": "FR-VAPORIZE-ENGINEERING-DOCC-PUBLICATION-PIPELINE",
+      "releaseImpact": "public-documentation-follow-up",
+      "linkedGateRefs": [
+        "GATE-30-engineering-docc-catalog"
+      ],
+      "requiredBeforeInternalRelease": false,
+      "requiredBeforeLaunchReview": false
+    },
+    {
+      "followUpRef": "FR-VAPORIZE-PRD-REVIEW-SESSION-BEFORE-CODING",
+      "releaseImpact": "future-process-follow-up",
+      "linkedGateRefs": [
+        "GATE-31-pre-code-prd-review-session"
+      ],
+      "requiredBeforeInternalRelease": false,
+      "requiredBeforeLaunchReview": false
+    },
+    {
+      "followUpRef": "FR-VAPORIZE-VAPORWARE-SCAFFOLD-FEATURE-REQUESTS",
+      "releaseImpact": "future-product-intake-follow-up",
+      "linkedGateRefs": [
+        "GATE-32-vaporware-modification-request-discipline"
+      ],
+      "requiredBeforeInternalRelease": false,
+      "requiredBeforeLaunchReview": false
+    },
+    {
+      "followUpRef": "FR-VAPORIZE-BUDDY-HEARTBEAT-AND-BUILD-WATCH",
+      "releaseImpact": "future-operations-follow-up",
+      "linkedGateRefs": [],
+      "requiredBeforeInternalRelease": false,
+      "requiredBeforeLaunchReview": false
+    },
+    {
+      "followUpRef": "FR-VAPORIZE-XCODE-WORKSPACE-SCHEME-LISTING-RUNTIME-SAMPLES",
+      "releaseImpact": "runtime-sample-follow-up",
+      "linkedGateRefs": [
+        "GATE-36-xcode-workspace-scheme-listing",
+        "GATE-27-runtime-sample-series-apple-artifact-ingestion"
+      ],
+      "requiredBeforeInternalRelease": false,
+      "requiredBeforeLaunchReview": false
+    },
+    {
+      "followUpRef": "FR-VAPORIZE-PUBLIC-DOCUMENTATION-ARTIFACT-MAINTENANCE-2026-07-04",
+      "releaseImpact": "chief-office-maintenance-follow-up",
+      "linkedGateRefs": [
+        "GATE-38-public-disclosure-surfaces"
+      ],
+      "requiredBeforeInternalRelease": false,
+      "requiredBeforeLaunchReview": false
+    },
+    {
+      "followUpRef": "FR-CMO-CONSUMER-FACING-PUBLIC-DISCLOSURE-GATE-OWNERSHIP-2026-07-04",
+      "releaseImpact": "chief-office-publication-ownership-follow-up",
+      "linkedGateRefs": [
+        "GATE-38-public-disclosure-surfaces"
+      ],
+      "requiredBeforeInternalRelease": false,
+      "requiredBeforeLaunchReview": false
+    }
+  ]
+}

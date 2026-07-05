@@ -116,7 +116,7 @@ Environment:
 | Bare Swift version comparison | `swift --version` | `0.17s real` |
 | Focused CUJ-15 through bare Swift | `swift test --filter VaporizeCUJ15XcodeProductCacheTests` | `6.80s real` |
 | Focused CUJ-15 through Vaporize toolchain | `vaporize toolchain -- swift test --filter VaporizeCUJ15XcodeProductCacheTests` | `6.80s real` |
-| Full Vaporize suite through Vaporize toolchain | `vaporize toolchain -- swift test` | Latest coverage model: 139 tests across 22 CUJ bundles after CUJ-22 resource-bearing CLI install additions; earlier `/usr/bin/time` baseline: `15.57s real`, 82 tests |
+| Full Vaporize suite through Vaporize toolchain | `vaporize toolchain -- swift test` | Latest coverage model: 142 tests across 22 CUJ bundles after CUJ-17 follow-up coherence and CUJ-22 resource-bearing CLI install additions; earlier `/usr/bin/time` baseline: `15.57s real`, 82 tests |
 | Focused CUJ-09 with SwiftPM coverage enabled | `vaporize toolchain -- swift test --filter VaporizeCUJ09ReleaseReviewTests --enable-code-coverage` | `29.38s real`, 5 tests, SwiftPM codecov JSON verified |
 
 Interpretation:

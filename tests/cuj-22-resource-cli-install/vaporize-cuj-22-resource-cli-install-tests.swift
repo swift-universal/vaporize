@@ -19,8 +19,18 @@ struct VaporizeCUJ22ResourceCLIInstallTests {
       "processed-json-resource",
       "processed-byte-count-resource",
       "stale-resource-reinstall",
+      "checked-in-resource-vault-cli",
+      "legacy-resource-cli-product-gate",
     ])
-    #expect(manifest.scenarios.allSatisfy { $0.fixtureKind == "generated-swiftpm-cli" })
+    #expect(manifest.scenarios.map(\.fixtureKind) == [
+      "generated-swiftpm-cli",
+      "generated-swiftpm-cli",
+      "generated-swiftpm-cli",
+      "generated-swiftpm-cli",
+      "generated-swiftpm-cli",
+      "checked-in-swiftpm-cli",
+      "existing-swiftpm-cli",
+    ])
     #expect(manifest.scenarios.allSatisfy { !$0.isolationRequirements.isEmpty })
     #expect(manifest.scenarios.allSatisfy { !$0.cleanupRequirements.isEmpty })
 
@@ -43,7 +53,7 @@ struct VaporizeCUJ22ResourceCLIInstallTests {
       receipts: Array(receipts.dropLast())
     )
     #expect(missingAudit.coverageStatus == "fail")
-    #expect(missingAudit.uncoveredScenarioSlugs == ["stale-resource-reinstall"])
+    #expect(missingAudit.uncoveredScenarioSlugs == ["legacy-resource-cli-product-gate"])
   }
 
   @Test("cuj-22 proving grounds installs processed text resources")
@@ -147,6 +157,39 @@ struct VaporizeCUJ22ResourceCLIInstallTests {
     #expect(freshReceipt.installedResourceBundleNames == staleReceipt.installedResourceBundleNames)
   }
 
+  @Test("cuj-22 proving grounds installs a checked-in resource vault cli")
+  func installedCheckedInResourceVaultCLIRunsAwayFromBuildProducts() async throws {
+    let scenario = Self.scenario(slug: "checked-in-resource-vault-cli")
+    let fixture = try CheckedInResourceVaultFixture(packageRoot: Self.resourceVaultPackageRoot())
+    defer { fixture.cleanupInstalledArtifacts() }
+
+    let receipt = try await installAndRunCheckedInResourceVault(fixture, scenario: scenario)
+
+    #expect(receipt.status == "pass", "stderr: \(receipt.stderr)")
+    #expect(receipt.exitCode == 0, "stderr: \(receipt.stderr)")
+    #expect(
+      receipt.stdout.trimmingCharacters(in: .whitespacesAndNewlines)
+        == "vault:resource-vault:2:8:installed-vault-ok:processed-text,copied-payload"
+    )
+    #expect(receipt.buildProductsHiddenDuringExecution)
+    #expect(receipt.installedResourceBundleNames.isEmpty == false)
+  }
+
+  @Test("cuj-22 proving grounds records legacy resource cli product gates")
+  func legacyResourceCLIProductGateIsCaptured() async throws {
+    let scenario = Self.scenario(slug: "legacy-resource-cli-product-gate")
+    let probe = try LegacyResourceCLIProbe.zshift(from: Self.wrkstrmCoreRoot())
+
+    let receipt = try await captureLegacyResourceCLIProductGate(probe, scenario: scenario)
+
+    #expect(receipt.status == "pass", "stderr: \(receipt.stderr)")
+    #expect(receipt.exitCode == 0, "stderr: \(receipt.stderr)")
+    #expect(receipt.stderr.contains("vaporize product validation failed"))
+    #expect(receipt.stderr.contains("noncanonical CLI product name 'zshift@wrkstrm-core.clia.sh'"))
+    #expect(receipt.stderr.contains("suggested 'zshift.cli@wrkstrm-core.clia.sh'"))
+    #expect(receipt.installedResourceBundleNames.isEmpty)
+  }
+
   private static var provingGroundManifest: VaporizeSimulationProvingGroundManifest {
     VaporizeSimulationProvingGroundManifest(
       slug: "vaporize-cuj-22-resource-cli-install",
@@ -203,6 +246,26 @@ struct VaporizeCUJ22ResourceCLIInstallTests {
           cleanupRequirements: Self.cleanupRequirements,
           proofCommandRefs: Self.proofCommandRefs
         ),
+        VaporizeSimulationProvingGroundScenario(
+          slug: "checked-in-resource-vault-cli",
+          title: "checked-in resource vault cli",
+          fixtureKind: "checked-in-swiftpm-cli",
+          resourceMode: "copied-nested-resource-vault",
+          expectedStdout: "vault:resource-vault:2:8:installed-vault-ok:processed-text,copied-payload",
+          isolationRequirements: Self.resourceVaultIsolationRequirements,
+          cleanupRequirements: Self.resourceVaultCleanupRequirements,
+          proofCommandRefs: Self.resourceVaultProofCommandRefs
+        ),
+        VaporizeSimulationProvingGroundScenario(
+          slug: "legacy-resource-cli-product-gate",
+          title: "legacy resource cli product gate",
+          fixtureKind: "existing-swiftpm-cli",
+          resourceMode: "processed-directory",
+          expectedStdout: "noncanonical CLI product name",
+          isolationRequirements: Self.legacyResourceCLIIsolationRequirements,
+          cleanupRequirements: Self.legacyResourceCLICleanupRequirements,
+          proofCommandRefs: Self.legacyResourceCLIProofCommandRefs
+        ),
       ],
       metadata: [
         "cuj": "22",
@@ -234,8 +297,80 @@ struct VaporizeCUJ22ResourceCLIInstallTests {
     ]
   }
 
+  private static var resourceVaultIsolationRequirements: [String] {
+    [
+      "use the checked-in lowercase proving-ground resource-vault package",
+      "run installed executable from a temporary directory",
+      "hide package .build before executable launch",
+    ]
+  }
+
+  private static var resourceVaultCleanupRequirements: [String] {
+    [
+      "remove installed executable",
+      "remove installed resource bundles",
+      "remove installed metadata plist",
+      "preserve checked-in proving-ground source files",
+    ]
+  }
+
+  private static var resourceVaultProofCommandRefs: [String] {
+    [
+      "vaporize install --package-path tests/proving-grounds/resource-vault-cli --product resource-vault.cli@vaporize-tests.clia.sh --configuration debug",
+      "~/.swiftpm/bin/resource-vault.cli@vaporize-tests.clia.sh catalog",
+    ]
+  }
+
+  private static var legacyResourceCLIIsolationRequirements: [String] {
+    [
+      "use an existing resource-bearing swiftpm cli package",
+      "stop at vaporize product validation before swiftpm build",
+      "do not mutate installed products",
+    ]
+  }
+
+  private static var legacyResourceCLICleanupRequirements: [String] {
+    [
+      "no installed executable is created",
+      "no installed resource bundle is created",
+      "no installed metadata sidecar is created",
+    ]
+  }
+
+  private static var legacyResourceCLIProofCommandRefs: [String] {
+    [
+      "vaporize install --package-path private/universal/domains/tooling/spm/configs/zshift --product zshift@wrkstrm-core.clia.sh --configuration debug",
+    ]
+  }
+
   private static func scenario(slug: String) -> VaporizeSimulationProvingGroundScenario {
     provingGroundManifest.scenarios.first { $0.slug == slug }!
+  }
+
+  private static func resourceVaultPackageRoot() throws -> URL {
+    try vaporizePackageRoot()
+      .appendingPathComponent("tests", isDirectory: true)
+      .appendingPathComponent("proving-grounds", isDirectory: true)
+      .appendingPathComponent("resource-vault-cli", isDirectory: true)
+  }
+
+  private static func vaporizePackageRoot() throws -> URL {
+    try ancestor(named: "vaporize@wrkstrm-core.cli", from: URL(fileURLWithPath: #filePath))
+  }
+
+  private static func wrkstrmCoreRoot() throws -> URL {
+    try ancestor(named: "wrkstrm-core", from: URL(fileURLWithPath: #filePath))
+  }
+
+  private static func ancestor(named name: String, from start: URL) throws -> URL {
+    var candidate = start
+    while candidate.path != "/" {
+      if candidate.lastPathComponent == name {
+        return candidate
+      }
+      candidate.deleteLastPathComponent()
+    }
+    throw ProvingGroundPathError.missingAncestor(name)
   }
 
   private func installAndRunAwayFromBuildProducts(
@@ -267,6 +402,79 @@ struct VaporizeCUJ22ResourceCLIInstallTests {
       exitCode: output.exitCode,
       stdout: output.stdout,
       stderr: output.stderr,
+      status: status
+    )
+  }
+
+  private func installAndRunCheckedInResourceVault(
+    _ fixture: CheckedInResourceVaultFixture,
+    scenario: VaporizeSimulationProvingGroundScenario
+  ) async throws -> VaporizeSimulationProvingGroundReceipt {
+    var command = try VaporizeCLI.parse([
+      "install",
+      "--package-path", fixture.packageRoot.path,
+      "--product", fixture.product,
+      "--configuration", "debug",
+    ])
+    try await command.run()
+
+    let installedResourceBundleNames = fixture.installedResourceBundleNames()
+    let output = try fixture.runInstalledProductAwayFromBuildProducts()
+    let trimmedStdout = output.stdout.trimmingCharacters(in: .whitespacesAndNewlines)
+    let status = output.exitCode == 0 && trimmedStdout == scenario.expectedStdout ? "pass" : "fail"
+
+    return VaporizeSimulationProvingGroundReceipt(
+      provingGroundSlug: Self.provingGroundManifest.slug,
+      scenarioSlug: scenario.slug,
+      fixtureKind: scenario.fixtureKind,
+      resourceMode: scenario.resourceMode,
+      product: fixture.product,
+      installedExecutablePath: fixture.installedExecutableURL().path,
+      installedResourceBundleNames: installedResourceBundleNames,
+      buildProductsHiddenDuringExecution: true,
+      exitCode: output.exitCode,
+      stdout: output.stdout,
+      stderr: output.stderr,
+      status: status
+    )
+  }
+
+  private func captureLegacyResourceCLIProductGate(
+    _ probe: LegacyResourceCLIProbe,
+    scenario: VaporizeSimulationProvingGroundScenario
+  ) async throws -> VaporizeSimulationProvingGroundReceipt {
+    var stderr = ""
+    var status = "fail"
+
+    var command = try VaporizeCLI.parse([
+      "install",
+      "--package-path", probe.packageRoot.path,
+      "--product", probe.product,
+      "--configuration", "debug",
+    ])
+
+    do {
+      try await command.run()
+      stderr = "expected vaporize product validation to reject \(probe.product)"
+    } catch {
+      stderr = String(describing: error)
+      if probe.expectedErrorSubstrings.allSatisfy({ stderr.contains($0) }) {
+        status = "pass"
+      }
+    }
+
+    return VaporizeSimulationProvingGroundReceipt(
+      provingGroundSlug: Self.provingGroundManifest.slug,
+      scenarioSlug: scenario.slug,
+      fixtureKind: scenario.fixtureKind,
+      resourceMode: scenario.resourceMode,
+      product: probe.product,
+      installedExecutablePath: "",
+      installedResourceBundleNames: [],
+      buildProductsHiddenDuringExecution: false,
+      exitCode: status == "pass" ? 0 : 1,
+      stdout: "",
+      stderr: stderr,
       status: status
     )
   }
@@ -562,6 +770,160 @@ private struct ResourceProbeFixture {
     FileManager.default.homeDirectoryForCurrentUser
       .appendingPathComponent(".swiftpm", isDirectory: true)
       .appendingPathComponent("bin", isDirectory: true)
+  }
+}
+
+private struct CheckedInResourceVaultFixture {
+  var packageRoot: URL
+  let product = "resource-vault.cli@vaporize-tests.clia.sh"
+
+  init(packageRoot: URL) throws {
+    let manifest = packageRoot.appendingPathComponent("Package.swift")
+    guard FileManager.default.fileExists(atPath: manifest.path) else {
+      throw ProvingGroundPathError.missingPackageManifest(manifest.path)
+    }
+    self.packageRoot = packageRoot
+  }
+
+  func runInstalledProductAwayFromBuildProducts() throws -> ProcessOutput {
+    let hiddenBuild = packageRoot.appendingPathComponent(".build-hidden-\(UUID().uuidString)", isDirectory: true)
+    try moveBuildDirectory(to: hiddenBuild)
+    defer { try? restoreBuildDirectory(from: hiddenBuild) }
+
+    return try runInstalledProduct()
+  }
+
+  func runInstalledProduct() throws -> ProcessOutput {
+    let process = Process()
+    process.executableURL = installedExecutableURL()
+    process.arguments = ["catalog"]
+    process.currentDirectoryURL = FileManager.default.temporaryDirectory
+
+    let stdout = Pipe()
+    let stderr = Pipe()
+    process.standardOutput = stdout
+    process.standardError = stderr
+
+    try process.run()
+    process.waitUntilExit()
+
+    return ProcessOutput(
+      exitCode: process.terminationStatus,
+      stdout: String(data: stdout.fileHandleForReading.readDataToEndOfFile(), encoding: .utf8) ?? "",
+      stderr: String(data: stderr.fileHandleForReading.readDataToEndOfFile(), encoding: .utf8) ?? ""
+    )
+  }
+
+  func installedExecutableURL() -> URL {
+    installedBinDirectory().appendingPathComponent(product)
+  }
+
+  func installedResourceBundleNames() -> [String] {
+    let fileManager = FileManager.default
+    let bin = installedBinDirectory()
+    return builtBundleNames()
+      .filter { fileManager.fileExists(atPath: bin.appendingPathComponent($0, isDirectory: true).path) }
+      .sorted()
+  }
+
+  func cleanupInstalledArtifacts() {
+    let fileManager = FileManager.default
+    let bin = installedBinDirectory()
+    try? fileManager.removeItem(at: bin.appendingPathComponent(product))
+    try? fileManager.removeItem(at: bin.appendingPathComponent("\(product).metadata", isDirectory: true))
+
+    for bundleName in builtBundleNames() {
+      try? fileManager.removeItem(at: bin.appendingPathComponent(bundleName, isDirectory: true))
+    }
+  }
+
+  private func moveBuildDirectory(to hiddenBuild: URL) throws {
+    let build = packageRoot.appendingPathComponent(".build", isDirectory: true)
+    if FileManager.default.fileExists(atPath: hiddenBuild.path) {
+      try FileManager.default.removeItem(at: hiddenBuild)
+    }
+    guard FileManager.default.fileExists(atPath: build.path) else { return }
+    try FileManager.default.moveItem(at: build, to: hiddenBuild)
+  }
+
+  private func restoreBuildDirectory(from hiddenBuild: URL) throws {
+    let build = packageRoot.appendingPathComponent(".build", isDirectory: true)
+    if FileManager.default.fileExists(atPath: build.path) {
+      try FileManager.default.removeItem(at: build)
+    }
+    guard FileManager.default.fileExists(atPath: hiddenBuild.path) else { return }
+    try FileManager.default.moveItem(at: hiddenBuild, to: build)
+  }
+
+  private func builtBundleNames() -> [String] {
+    let fileManager = FileManager.default
+    let buildRoot = packageRoot.appendingPathComponent(".build", isDirectory: true)
+    guard let enumerator = fileManager.enumerator(
+      at: buildRoot,
+      includingPropertiesForKeys: [.isDirectoryKey],
+      options: [.skipsHiddenFiles]
+    ) else {
+      return []
+    }
+
+    var names: [String] = []
+    for case let candidate as URL in enumerator where candidate.lastPathComponent.hasSuffix(".bundle") {
+      names.append(candidate.lastPathComponent)
+      enumerator.skipDescendants()
+    }
+    return names
+  }
+
+  private func installedBinDirectory() -> URL {
+    FileManager.default.homeDirectoryForCurrentUser
+      .appendingPathComponent(".swiftpm", isDirectory: true)
+      .appendingPathComponent("bin", isDirectory: true)
+  }
+}
+
+private struct LegacyResourceCLIProbe {
+  var product: String
+  var packageRoot: URL
+  var expectedErrorSubstrings: [String]
+
+  static func zshift(from wrkstrmCoreRoot: URL) throws -> LegacyResourceCLIProbe {
+    let packageRoot = wrkstrmCoreRoot
+      .appendingPathComponent("private", isDirectory: true)
+      .appendingPathComponent("universal", isDirectory: true)
+      .appendingPathComponent("domains", isDirectory: true)
+      .appendingPathComponent("tooling", isDirectory: true)
+      .appendingPathComponent("spm", isDirectory: true)
+      .appendingPathComponent("configs", isDirectory: true)
+      .appendingPathComponent("zshift", isDirectory: true)
+
+    let manifest = packageRoot.appendingPathComponent("Package.swift")
+    guard FileManager.default.fileExists(atPath: manifest.path) else {
+      throw ProvingGroundPathError.missingPackageManifest(manifest.path)
+    }
+
+    return LegacyResourceCLIProbe(
+      product: "zshift@wrkstrm-core.clia.sh",
+      packageRoot: packageRoot,
+      expectedErrorSubstrings: [
+        "vaporize product validation failed",
+        "noncanonical CLI product name 'zshift@wrkstrm-core.clia.sh'",
+        "suggested 'zshift.cli@wrkstrm-core.clia.sh'",
+      ]
+    )
+  }
+}
+
+private enum ProvingGroundPathError: Error, CustomStringConvertible {
+  case missingAncestor(String)
+  case missingPackageManifest(String)
+
+  var description: String {
+    switch self {
+    case .missingAncestor(let name):
+      return "missing ancestor \(name)"
+    case .missingPackageManifest(let path):
+      return "missing package manifest at \(path)"
+    }
   }
 }
 

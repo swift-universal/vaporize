@@ -16,6 +16,7 @@ func releaseReviewArtifactsExist() {
     "release/v0.0.1/user-manual.md",
     "release/v0.0.1/public-changelog.md",
     "release/v0.0.1/evidence/audience-packet.su.json",
+    "release/v0.0.1/evidence/launch-review-blocker-disposition.json",
     "vaporize.engineering.docc/index.md",
     "vaporize.engineering.docc/feature-catalog.md",
     "vaporize.engineering.docc/modularity-and-ownership-boundaries.md",
@@ -66,6 +67,7 @@ func launchReviewPacketIsValidJSONAndInternalEssential() throws {
   #expect(evidenceRefs.contains { $0["t"] as? String == "Vaporize CUJ-22 resource CLI install test bundle" })
   #expect(evidenceRefs.contains { $0["t"] as? String == "SwiftPM CLI resource-bundle install engineering doc" })
   #expect(evidenceRefs.contains { $0["t"] as? String == "Vaporize SwiftPM CLI resource-bundle install modification receipt" })
+  #expect(evidenceRefs.contains { $0["t"] as? String == "Vaporize v0.0.1 launch-review blocker disposition" })
   #expect(gateResults.contains { $0["gateRef"] as? String == "GATE-24-positioning-and-benchmark-explainer" })
   #expect(gateResults.contains { $0["gateRef"] as? String == "GATE-25-performance-marketing-claims" })
   #expect(gateResults.contains { $0["gateRef"] as? String == "GATE-26-product-definition-user-journeys-choice-argument" })
@@ -87,8 +89,8 @@ func launchReviewPacketIsValidJSONAndInternalEssential() throws {
   #expect(humanReviewPolicy["machineProofMayApproveGate"] as? Bool == false)
   #expect(!gateStatuses.contains("PASS"))
   #expect(!gateStatuses.contains("PASS-WITH-NOTE"))
-  #expect(gateStatuses.filter { $0 == "EVIDENCE-READY-PENDING-HUMAN-REVIEW" }.count == 30)
-  #expect(gateStatuses.filter { $0.hasPrefix("BLOCKED") }.count == 4)
+  #expect(gateStatuses.filter { $0 == "EVIDENCE-READY-PENDING-HUMAN-REVIEW" }.count == 33)
+  #expect(gateStatuses.filter { $0.hasPrefix("BLOCKED") }.count == 1)
   #expect(
     gateResults
       .filter { $0["status"] as? String == "EVIDENCE-READY-PENDING-HUMAN-REVIEW" }
@@ -115,17 +117,17 @@ func cujCoverageContractIsValidJSONAndNamesTheFloor() throws {
 
   #expect(counts["activeCUJCount"] as? Int == 22)
   #expect(counts["deferredCUJCount"] as? Int == 1)
-  #expect(counts["requiredSwiftTestObligationCount"] as? Int == 105)
+  #expect(counts["requiredSwiftTestObligationCount"] as? Int == 108)
   #expect(counts["requiredReleaseEvidenceCheckCount"] as? Int == 12)
-  #expect(counts["requiredTargetableTestObligationCount"] as? Int == 117)
-  #expect(counts["currentExecutableSwiftTestCount"] as? Int == 139)
+  #expect(counts["requiredTargetableTestObligationCount"] as? Int == 120)
+  #expect(counts["currentExecutableSwiftTestCount"] as? Int == 142)
   let breakdown = try #require(counts["currentExecutableSwiftTestBreakdown"] as? [String: Any])
   #expect(breakdown["VaporizeCUJ01SwiftPMCLITests"] as? Int == 20)
   #expect(breakdown["VaporizeCUJ07VaporInventoryTests"] as? Int == 18)
   #expect(breakdown["VaporizeCUJ14PklXcodeProjectGenerationTests"] as? Int == 5)
-  #expect(breakdown["VaporizeCUJ17ReleaseDoctorTests"] as? Int == 6)
+  #expect(breakdown["VaporizeCUJ17ReleaseDoctorTests"] as? Int == 7)
   #expect(breakdown["VaporizeCUJ21CUJStateTests"] as? Int == 6)
-  #expect(breakdown["VaporizeCUJ22ResourceCLIInstallTests"] as? Int == 6)
+  #expect(breakdown["VaporizeCUJ22ResourceCLIInstallTests"] as? Int == 8)
 }
 
 @Test("CUJ-09 CUJ-state coverage contract is valid JSON and complete")
@@ -248,7 +250,7 @@ func productDefinitionContractPrecedesBuildWork() throws {
   #expect(publicBrochureHTML.contains("releaseIdentity"))
   #expect(publicBrochureHTML.contains("Sparkle Info.plist keys"))
   #expect(publicBrochureHTML.contains("Claims not yet allowed"))
-  #expect(publicBrochureHTML.contains("120/120"))
+  #expect(publicBrochureHTML.contains("129/129"))
   #expect(publicBrochureHTML.contains("GATE-38"))
   #expect(publicBrochureHTML.contains("evidence/launch-review-packet.json"))
   #expect(publicBrochureHTML.contains("evidence/audience-packet.su.json"))
@@ -343,6 +345,7 @@ func releaseGatesKeepPklGenerationBlocked() throws {
   #expect(gates.contains("Pkl project generation"))
   #expect(gates.contains("cuj-test-coverage.json"))
   #expect(gates.contains("cuj-state-coverage.json"))
+  #expect(gates.contains("launch-review-blocker-disposition.json"))
   #expect(gates.contains("why-vaporize.md"))
   #expect(gates.contains("performance-marketing-claims.md"))
   #expect(gates.contains("public-brochure.html"))

@@ -22,8 +22,8 @@
     "CUJ-22 is the targetable release-facing journey for resource-bearing SwiftPM CLI installs.",
     "GATE-39 records the resource CLI install proof and keeps app packaging, Bundle.main metadata, Sparkle, and public update delivery out of scope.",
     "Release Doctor checks FR-032, CUJ-22, GATE-39, the engineering doc, launch-review references, and CUJ-22 coverage.",
-    "Launch-review and provenance evidence now model 22 active CUJs, 105 Swift test obligations, 117 targetable obligations, and 139 executable Swift tests.",
-    "The launch-review packet is ready for launch review while final internal release remains blocked by named gates.",
+    "Launch-review and provenance evidence now model 22 active CUJs, 106 Swift test obligations, 118 targetable obligations, and 140 executable Swift tests.",
+    "The launch-review packet is ready for launch review while final internal release remains blocked by GATE-14.",
     "CUJ-14 launch-review proof now matches the quoted .pbxproj serializer output for release identity and Info.plist generation settings."
   ],
   "targetableTests": [
@@ -58,6 +58,16 @@
       "expectation": "expected-pass when reinstall replaces stale installed resource bundles"
     },
     {
+      "testBundle": "VaporizeCUJ22ResourceCLIInstallTests",
+      "testName": "installedCheckedInResourceVaultCLIRunsAwayFromBuildProducts",
+      "expectation": "expected-pass when Vaporize installs the checked-in resource vault CLI and the installed executable reads nested copied resources away from .build"
+    },
+    {
+      "testBundle": "VaporizeCUJ22ResourceCLIInstallTests",
+      "testName": "legacyResourceCLIProductGateIsCaptured",
+      "expectation": "expected-pass when an existing resource-bearing CLI with a legacy product name is captured at Vaporize's canonical product gate"
+    },
+    {
       "testBundle": "VaporizeCUJ09ReleaseReviewTests",
       "testName": "productDefinitionContractPrecedesBuildWork",
       "expectation": "expected-pass only when PRD, CUJ, gates, feature catalog, and resource doc name the resource CLI install contract"
@@ -71,7 +81,7 @@
   "proofCommands": [
     {
       "command": "SPM_USE_LOCAL_DEPS=1 /Users/sonoma/.swiftpm/bin/vaporize.cli@wrkstrm-core.clia.sh test --package-path /Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli --configuration debug -- --filter VaporizeCUJ22ResourceCLIInstallTests",
-      "result": "PASS: 6 tests passed"
+      "result": "PASS: 8 tests passed"
     },
     {
       "command": "SPM_USE_LOCAL_DEPS=1 /Users/sonoma/.swiftpm/bin/vaporize.cli@wrkstrm-core.clia.sh test --package-path /Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli --configuration debug -- --filter CUJ-09",
@@ -95,7 +105,7 @@
     },
     {
       "command": "SPM_USE_LOCAL_DEPS=1 /Users/sonoma/.swiftpm/bin/vaporize.cli@wrkstrm-core.clia.sh release-doctor --path private/apple/spm/vaporize@wrkstrm-core.cli --format json --receipt-path private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/vaporize-v0.0.1-release-doctor.receipt.json",
-      "result": "PASS: 120 passed checks, 0 failed checks, 26 required artifacts"
+      "result": "PASS: 129 passed checks, 0 failed checks, 27 required artifacts"
     },
     {
       "command": "SPM_USE_LOCAL_DEPS=1 /Users/sonoma/.swiftpm/bin/vaporize.cli@wrkstrm-core.clia.sh validate-json --path <changed-json-evidence>",
@@ -118,12 +128,13 @@
     "tests/cuj-14-pkl-xcodeproj-generation/VaporizeCUJ14PklXcodeProjectGenerationTests.swift",
     "tests/cuj-17-release-doctor/VaporizeCUJ17ReleaseDoctorTests.swift",
     "tests/cuj-22-resource-cli-install/vaporize-cuj-22-resource-cli-install-tests.swift",
+    "tests/proving-grounds/resource-vault-cli/Package.swift",
     "vaporize.engineering.docc/feature-catalog.md",
     "vaporize.engineering.docc/release-evidence-and-gates.md",
     "vaporize.engineering.docc/swiftpm-cli-resource-bundle-installs.md"
   ],
   "validationLimits": [
-    "Final internal release remains blocked by named release gates.",
+    "Final internal release remains blocked by GATE-14.",
     "The resource-bundle install proof does not turn CLIs into app bundles.",
     "The CLI metadata Info.plist sidecar does not make Bundle.main.infoDictionary expose product metadata.",
     "Sparkle appcast generation, update signing, runtime update delivery, and public publication approval remain unproven."

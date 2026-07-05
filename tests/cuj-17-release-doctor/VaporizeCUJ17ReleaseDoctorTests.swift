@@ -33,8 +33,8 @@ func releaseDoctorPassesLiveReleaseSpine() throws {
   #expect(receipt.subjectAppSlug == "vaporize.cli@wrkstrm-core.clia.sh")
   #expect(receipt.subjectReleaseSlug == "v0.0.1")
   #expect(receipt.overallStatus == "pass")
-  #expect(receipt.requiredArtifactCount == 26)
-  #expect(receipt.checkCount == 120)
+  #expect(receipt.requiredArtifactCount == 27)
+  #expect(receipt.checkCount == 129)
   #expect(receipt.failedCheckCount == 0)
   #expect(receipt.checks.contains { $0.name == "launch-review-gate-33" && $0.status == "pass" })
   #expect(receipt.checks.contains { $0.name == "launch-review-gate-34" && $0.status == "pass" })
@@ -68,6 +68,13 @@ func releaseDoctorPassesLiveReleaseSpine() throws {
   #expect(receipt.checks.contains { $0.name == "launch-review-human-review-policy" && $0.status == "pass" })
   #expect(receipt.checks.contains { $0.name == "launch-review-approved-gates-have-human-review" && $0.status == "pass" })
   #expect(receipt.checks.contains { $0.name == "launch-review-gate-status-vocabulary" && $0.status == "pass" })
+  #expect(receipt.checks.contains { $0.name == "launch-review-known-followups-match-prd" && $0.status == "pass" })
+  #expect(receipt.checks.contains { $0.name == "launch-review-known-followups-match-release-gates" && $0.status == "pass" })
+  #expect(receipt.checks.contains { $0.name == "blocker-disposition-human-approval-boundary" && $0.status == "pass" })
+  #expect(receipt.checks.contains { $0.name == "blocker-disposition-followups-cover-launch-review" && $0.status == "pass" })
+  #expect(receipt.checks.contains { $0.name == "blocker-disposition-hard-blockers-match-launch-review" && $0.status == "pass" })
+  #expect(receipt.checks.contains { $0.name == "blocker-disposition-burns-duplicate-blockers" && $0.status == "pass" })
+  #expect(receipt.checks.contains { $0.name == "blocker-disposition-counts-match-launch-review" && $0.status == "pass" })
   #expect(receipt.checks.contains { $0.name == "vaporware-modification-owning-bead-discipline" && $0.status == "pass" })
   #expect(receipt.checks.contains { $0.name == "prd-resource-cli-install-requirement" && $0.status == "pass" })
   #expect(receipt.checks.contains { $0.name == "cuj-resource-cli-install-journey" && $0.status == "pass" })
@@ -117,6 +124,28 @@ func releaseDoctorRejectsApprovedGateWithoutHumanReview() throws {
   #expect(humanReviewCheck.detail.contains("GATE-33-release-doctor"))
 }
 
+@Test("CUJ-17 release doctor rejects launch-review follow-up drift")
+func releaseDoctorRejectsFollowUpListDrift() throws {
+  let fixtureRoot = try makeReleaseDoctorFixture(
+    includeGate33: true,
+    prdKnownFollowUps: [fixtureFollowUps[0]]
+  )
+  defer { try? FileManager.default.removeItem(at: fixtureRoot) }
+
+  let receipt = try VaporizeReleaseDoctor.inspect(
+    path: fixtureRoot.path,
+    requestId: "release-doctor-follow-up-drift"
+  )
+  let followUpCheck = try #require(
+    receipt.checks.first { $0.name == "launch-review-known-followups-match-prd" }
+  )
+
+  #expect(receipt.overallStatus == "fail")
+  #expect(followUpCheck.status == "fail")
+  #expect(followUpCheck.severity == "blocking")
+  #expect(followUpCheck.detail.contains(fixtureFollowUps[1]))
+}
+
 @Test("CUJ-17 release doctor reports missing gate as a blocking failure")
 func releaseDoctorReportsMissingGate() throws {
   let fixtureRoot = try makeReleaseDoctorFixture(includeGate33: false)
@@ -153,13 +182,24 @@ private let packageRoot = URL(fileURLWithPath: #filePath)
   .deletingLastPathComponent()
   .deletingLastPathComponent()
 
+private let fixtureFollowUps = [
+  "FR-VAPORIZE-PKL-PROJECT-GENERATION-move-owned-xcodegen-surfaces-to-pkl",
+  "FR-VAPORIZE-AUTO-INCREMENT-BUILD-NUMBERS",
+]
+
 private func makeReleaseDoctorFixture(
   includeGate33: Bool,
-  gateStatus: String = "EVIDENCE-READY-PENDING-HUMAN-REVIEW"
+  gateStatus: String = "EVIDENCE-READY-PENDING-HUMAN-REVIEW",
+  launchKnownFollowUps: [String]? = nil,
+  prdKnownFollowUps: [String]? = nil,
+  releaseGateKnownFollowUps: [String]? = nil
 ) throws -> URL {
   let packageRoot = FileManager.default.temporaryDirectory
     .appendingPathComponent("vaporize-release-doctor-\(UUID().uuidString)")
   let releaseRoot = packageRoot.appendingPathComponent("release/v0.0.1")
+  let fixtureLaunchKnownFollowUps = launchKnownFollowUps ?? fixtureFollowUps
+  let fixturePRDKnownFollowUps = prdKnownFollowUps ?? fixtureFollowUps
+  let fixtureReleaseGateKnownFollowUps = releaseGateKnownFollowUps ?? fixtureFollowUps
 
   for path in [
     "release/v0.0.1/product-definition.md",
@@ -174,6 +214,7 @@ private func makeReleaseDoctorFixture(
     "release/v0.0.1/user-manual.md",
     "release/v0.0.1/public-changelog.md",
     "release/v0.0.1/evidence/audience-packet.su.json",
+    "release/v0.0.1/evidence/launch-review-blocker-disposition.json",
     "release/v0.0.1/wrkstrm-app-minimums.md",
     "vaporize.engineering.docc/index.md",
     "vaporize.engineering.docc/feature-catalog.md",
@@ -188,13 +229,25 @@ private func makeReleaseDoctorFixture(
     case "release/v0.0.1/product-definition.md":
       contents = "engineering pedigree"
     case "release/v0.0.1/prd.md":
-      contents = "FR-027 FR-028 FR-029 FR-030 FR-031 FR-032"
+      contents = """
+      FR-027 FR-028 FR-029 FR-030 FR-031 FR-032
+
+      ## Known Release Follow-Ups
+
+      \(markdownFollowUpList(fixturePRDKnownFollowUps))
+      """
     case "release/v0.0.1/cuj.md":
       contents = "CUJ-17 CUJ-18 CUJ-19 CUJ-20 CUJ-21 CUJ-22"
     case "release/v0.0.1/release-gates.md":
+      let followUpSection = """
+
+      ## Open Follow-Up Beads
+
+      \(markdownFollowUpList(fixtureReleaseGateKnownFollowUps))
+      """
       contents = includeGate33
-        ? "GATE-33-release-doctor GATE-34-project-target-discovery GATE-35-workspace-product-cache-discovery GATE-36-xcode-workspace-scheme-listing GATE-37-cuj-state-coverage GATE-38-public-disclosure-surfaces GATE-39-resource-cli-install Every brochure must have an audience packet and user manual owning bead cmo-chief-marketing-officer-carrie@wrkstrm.occupations.org"
-        : "GATE-32 GATE-34-project-target-discovery GATE-35-workspace-product-cache-discovery GATE-36-xcode-workspace-scheme-listing GATE-37-cuj-state-coverage GATE-38-public-disclosure-surfaces GATE-39-resource-cli-install Every brochure must have an audience packet and user manual owning bead cmo-chief-marketing-officer-carrie@wrkstrm.occupations.org"
+        ? "GATE-33-release-doctor GATE-34-project-target-discovery GATE-35-workspace-product-cache-discovery GATE-36-xcode-workspace-scheme-listing GATE-37-cuj-state-coverage GATE-38-public-disclosure-surfaces GATE-39-resource-cli-install Every brochure must have an audience packet and user manual owning bead cmo-chief-marketing-officer-carrie@wrkstrm.occupations.org\(followUpSection)"
+        : "GATE-32 GATE-34-project-target-discovery GATE-35-workspace-product-cache-discovery GATE-36-xcode-workspace-scheme-listing GATE-37-cuj-state-coverage GATE-38-public-disclosure-surfaces GATE-39-resource-cli-install Every brochure must have an audience packet and user manual owning bead cmo-chief-marketing-officer-carrie@wrkstrm.occupations.org\(followUpSection)"
     case "release/v0.0.1/public-brochure.md":
       contents = "external public disclosure surface Claims Not Yet Allowed cmo-chief-marketing-officer-carrie@wrkstrm.occupations.org"
     case "release/v0.0.1/public-brochure.html":
@@ -235,6 +288,7 @@ private func makeReleaseDoctorFixture(
         { "t": "Vaporize v0.0.1 public changelog" },
         { "t": "Vaporize CUJ-22 resource CLI install test bundle" }
       ],
+      "knownFollowUps": \(jsonStringArray(fixtureLaunchKnownFollowUps)),
       "gateResults": [
         \(gateResults),
         { "gateRef": "GATE-34-project-target-discovery", "status": "\(gateStatus)", "rationale": "fixture" },
@@ -242,7 +296,8 @@ private func makeReleaseDoctorFixture(
         { "gateRef": "GATE-36-xcode-workspace-scheme-listing", "status": "\(gateStatus)", "rationale": "fixture" },
         { "gateRef": "GATE-37-cuj-state-coverage", "status": "\(gateStatus)", "rationale": "fixture" },
         { "gateRef": "GATE-38-public-disclosure-surfaces", "status": "\(gateStatus)", "rationale": "fixture" },
-        { "gateRef": "GATE-39-resource-cli-install", "status": "\(gateStatus)", "rationale": "fixture" }
+        { "gateRef": "GATE-39-resource-cli-install", "status": "\(gateStatus)", "rationale": "fixture" },
+        { "gateRef": "GATE-14-pkl-project-generation", "status": "BLOCKED", "rationale": "fixture hard blocker" }
       ],
       "humanReviewPolicy": {
         "approvalStatusRequiresHumanReview": true,
@@ -261,6 +316,32 @@ private func makeReleaseDoctorFixture(
     }
     """,
     to: releaseRoot.appendingPathComponent("evidence/launch-review-packet.json")
+  )
+
+  try write(
+    """
+    {
+      "humanApprovalBoundary": {
+        "automationCanApproveGate": false,
+        "approvedStatusesRequireHumanReview": true,
+        "requiredPendingStatus": "EVIDENCE-READY-PENDING-HUMAN-REVIEW"
+      },
+      "launchReviewGateStatusRecommendation": {
+        "evidenceReadyPendingHumanReview": 7,
+        "blocked": 1
+      },
+      "remainingHardBlockers": [
+        { "gateRef": "GATE-14-pkl-project-generation" }
+      ],
+      "burnedDownDuplicateOrScopedBlockers": [
+        { "gateRef": "GATE-12-open-feature-beads" },
+        { "gateRef": "GATE-13-tree-cleanliness" },
+        { "gateRef": "GATE-27-runtime-sample-series-apple-artifact-ingestion" }
+      ],
+      "followUpDispositions": \(jsonFollowUpDispositionArray(fixtureLaunchKnownFollowUps))
+    }
+    """,
+    to: releaseRoot.appendingPathComponent("evidence/launch-review-blocker-disposition.json")
   )
 
   try write(
@@ -286,7 +367,7 @@ private func makeReleaseDoctorFixture(
         "activeCUJCount": 22,
         "requiredReleaseEvidenceCheckCount": 12,
         "currentExecutableSwiftTestBreakdown": {
-          "VaporizeCUJ17ReleaseDoctorTests": 6,
+          "VaporizeCUJ17ReleaseDoctorTests": 7,
           "VaporizeCUJ18ListTargetsTests": 5,
           "VaporizeCUJ19WorkspaceCacheDiscoveryTests": 5,
           "VaporizeCUJ20XcodeWorkspaceSchemesTests": 5,
@@ -351,4 +432,19 @@ private func write(_ contents: String, to url: URL) throws {
     withIntermediateDirectories: true
   )
   try Data(contents.utf8).write(to: url)
+}
+
+private func markdownFollowUpList(_ refs: [String]) -> String {
+  refs.map { "- `\($0)`" }.joined(separator: "\n")
+}
+
+private func jsonStringArray(_ values: [String]) -> String {
+  let data = try! JSONSerialization.data(withJSONObject: values)
+  return String(data: data, encoding: .utf8)!
+}
+
+private func jsonFollowUpDispositionArray(_ refs: [String]) -> String {
+  let values = refs.map { ["followUpRef": $0] }
+  let data = try! JSONSerialization.data(withJSONObject: values)
+  return String(data: data, encoding: .utf8)!
 }

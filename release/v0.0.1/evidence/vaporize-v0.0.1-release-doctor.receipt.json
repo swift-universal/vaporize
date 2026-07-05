@@ -2,10 +2,10 @@
   "boundaries" : [
     "Release doctor audits release-spine coherence; it does not approve release.",
     "A pass can coexist with release gates that are honestly blocked.",
-    "First slice checks Vaporize v0.0.1 docs, public-disclosure surfaces, JSON evidence, CUJ coverage, CUJ-state coverage, launch-review references, provenance inventory, project target discovery evidence, workspace product-cache discovery evidence, and Xcode workspace scheme-listing evidence.",
+    "First slice checks Vaporize v0.0.1 docs, public-disclosure surfaces, JSON evidence, CUJ coverage, CUJ-state coverage, launch-review references, launch-review\/PRD\/release-gate follow-up list coherence, provenance inventory, project target discovery evidence, workspace product-cache discovery evidence, and Xcode workspace scheme-listing evidence.",
     "Fleet project-generation parity, runtime sampling, build-size cohorts, and periodic buddy health remain separate follow-up checks."
   ],
-  "checkCount" : 120,
+  "checkCount" : 129,
   "checks" : [
     {
       "category" : "required-artifact",
@@ -130,6 +130,14 @@
     {
       "category" : "required-artifact",
       "detail" : "Required release-root artifact exists.",
+      "name" : "artifact:evidence\/launch-review-blocker-disposition.json",
+      "path" : "\/Users\/sonoma\/mono\/private\/universal\/substrate\/collectives\/wrkstrm-core\/private\/apple\/spm\/vaporize@wrkstrm-core.cli\/release\/v0.0.1\/evidence\/launch-review-blocker-disposition.json",
+      "severity" : "blocking",
+      "status" : "pass"
+    },
+    {
+      "category" : "required-artifact",
+      "detail" : "Required release-root artifact exists.",
       "name" : "artifact:evidence\/launch-review-packet.json",
       "path" : "\/Users\/sonoma\/mono\/private\/universal\/substrate\/collectives\/wrkstrm-core\/private\/apple\/spm\/vaporize@wrkstrm-core.cli\/release\/v0.0.1\/evidence\/launch-review-packet.json",
       "severity" : "blocking",
@@ -236,6 +244,14 @@
       "detail" : "JSON parses through Swift Universal JSON formatting.",
       "name" : "json:evidence\/audience-packet.su.json",
       "path" : "\/Users\/sonoma\/mono\/private\/universal\/substrate\/collectives\/wrkstrm-core\/private\/apple\/spm\/vaporize@wrkstrm-core.cli\/release\/v0.0.1\/evidence\/audience-packet.su.json",
+      "severity" : "blocking",
+      "status" : "pass"
+    },
+    {
+      "category" : "json-validation",
+      "detail" : "JSON parses through Swift Universal JSON formatting.",
+      "name" : "json:evidence\/launch-review-blocker-disposition.json",
+      "path" : "\/Users\/sonoma\/mono\/private\/universal\/substrate\/collectives\/wrkstrm-core\/private\/apple\/spm\/vaporize@wrkstrm-core.cli\/release\/v0.0.1\/evidence\/launch-review-blocker-disposition.json",
       "severity" : "blocking",
       "status" : "pass"
     },
@@ -745,6 +761,22 @@
     },
     {
       "category" : "launch-review",
+      "detail" : "Launch packet knownFollowUps and prd.md Known Release Follow-Ups match 17 references.",
+      "name" : "launch-review-known-followups-match-prd",
+      "path" : "\/Users\/sonoma\/mono\/private\/universal\/substrate\/collectives\/wrkstrm-core\/private\/apple\/spm\/vaporize@wrkstrm-core.cli\/release\/v0.0.1\/evidence\/launch-review-packet.json",
+      "severity" : "blocking",
+      "status" : "pass"
+    },
+    {
+      "category" : "launch-review",
+      "detail" : "Launch packet knownFollowUps and release-gates.md Open Follow-Up Beads match 17 references.",
+      "name" : "launch-review-known-followups-match-release-gates",
+      "path" : "\/Users\/sonoma\/mono\/private\/universal\/substrate\/collectives\/wrkstrm-core\/private\/apple\/spm\/vaporize@wrkstrm-core.cli\/release\/v0.0.1\/evidence\/launch-review-packet.json",
+      "severity" : "blocking",
+      "status" : "pass"
+    },
+    {
+      "category" : "launch-review",
       "detail" : "Launch-review packet must reference the release-doctor receipt.",
       "name" : "launch-review-release-doctor-evidence-ref",
       "path" : "\/Users\/sonoma\/mono\/private\/universal\/substrate\/collectives\/wrkstrm-core\/private\/apple\/spm\/vaporize@wrkstrm-core.cli\/release\/v0.0.1\/evidence\/launch-review-packet.json",
@@ -812,6 +844,46 @@
       "detail" : "Launch-review packet must reference the resource-bearing CLI install test bundle.",
       "name" : "launch-review-resource-cli-install-evidence-ref",
       "path" : "\/Users\/sonoma\/mono\/private\/universal\/substrate\/collectives\/wrkstrm-core\/private\/apple\/spm\/vaporize@wrkstrm-core.cli\/release\/v0.0.1\/evidence\/launch-review-packet.json",
+      "severity" : "blocking",
+      "status" : "pass"
+    },
+    {
+      "category" : "blocker-disposition",
+      "detail" : "Blocker disposition must preserve the human approval boundary.",
+      "name" : "blocker-disposition-human-approval-boundary",
+      "path" : "\/Users\/sonoma\/mono\/private\/universal\/substrate\/collectives\/wrkstrm-core\/private\/apple\/spm\/vaporize@wrkstrm-core.cli\/release\/v0.0.1\/evidence\/launch-review-blocker-disposition.json",
+      "severity" : "blocking",
+      "status" : "pass"
+    },
+    {
+      "category" : "blocker-disposition",
+      "detail" : "Launch packet knownFollowUps and launch-review-blocker-disposition.json followUpDispositions match 17 references.",
+      "name" : "blocker-disposition-followups-cover-launch-review",
+      "path" : "\/Users\/sonoma\/mono\/private\/universal\/substrate\/collectives\/wrkstrm-core\/private\/apple\/spm\/vaporize@wrkstrm-core.cli\/release\/v0.0.1\/evidence\/launch-review-blocker-disposition.json",
+      "severity" : "blocking",
+      "status" : "pass"
+    },
+    {
+      "category" : "blocker-disposition",
+      "detail" : "Remaining hard blockers must match launch-review blocked gate refs; packet=GATE-14-pkl-project-generation, disposition=GATE-14-pkl-project-generation.",
+      "name" : "blocker-disposition-hard-blockers-match-launch-review",
+      "path" : "\/Users\/sonoma\/mono\/private\/universal\/substrate\/collectives\/wrkstrm-core\/private\/apple\/spm\/vaporize@wrkstrm-core.cli\/release\/v0.0.1\/evidence\/launch-review-blocker-disposition.json",
+      "severity" : "blocking",
+      "status" : "pass"
+    },
+    {
+      "category" : "blocker-disposition",
+      "detail" : "Blocker disposition must name duplicate or scope-only blockers burned down for launch review.",
+      "name" : "blocker-disposition-burns-duplicate-blockers",
+      "path" : "\/Users\/sonoma\/mono\/private\/universal\/substrate\/collectives\/wrkstrm-core\/private\/apple\/spm\/vaporize@wrkstrm-core.cli\/release\/v0.0.1\/evidence\/launch-review-blocker-disposition.json",
+      "severity" : "blocking",
+      "status" : "pass"
+    },
+    {
+      "category" : "blocker-disposition",
+      "detail" : "Blocker disposition status counts must match launch-review gate results.",
+      "name" : "blocker-disposition-counts-match-launch-review",
+      "path" : "\/Users\/sonoma\/mono\/private\/universal\/substrate\/collectives\/wrkstrm-core\/private\/apple\/spm\/vaporize@wrkstrm-core.cli\/release\/v0.0.1\/evidence\/launch-review-blocker-disposition.json",
       "severity" : "blocking",
       "status" : "pass"
     },
@@ -973,11 +1045,11 @@
   "inspectedPath" : "\/Users\/sonoma\/mono\/private\/universal\/substrate\/collectives\/wrkstrm-core\/private\/apple\/spm\/vaporize@wrkstrm-core.cli",
   "overallStatus" : "pass",
   "packageRootPath" : "\/Users\/sonoma\/mono\/private\/universal\/substrate\/collectives\/wrkstrm-core\/private\/apple\/spm\/vaporize@wrkstrm-core.cli",
-  "passedCheckCount" : 120,
+  "passedCheckCount" : 129,
   "receiptKind" : "vaporize-release-doctor",
   "releaseRootPath" : "\/Users\/sonoma\/mono\/private\/universal\/substrate\/collectives\/wrkstrm-core\/private\/apple\/spm\/vaporize@wrkstrm-core.cli\/release\/v0.0.1",
-  "requestId" : "vaporize-release-doctor-BF905A80-F1E3-444E-8667-5C6A0D41464B",
-  "requiredArtifactCount" : 26,
+  "requestId" : "vaporize-release-doctor-3365B17A-6310-400F-8C65-19C3CB2DCFEE",
+  "requiredArtifactCount" : 27,
   "schemaFamilySlug" : "vaporize-schemas",
   "schemaFamilyVersion" : "0.0.1",
   "schemaRef" : "private\/universal\/domain\/tooling\/schema-families\/vaporize-schemas\/v0.0.1\/json\/vaporize-schemas-v000-000-001\/schemas\/vaporize-release-doctor-receipt\/vaporize-release-doctor-receipt.schema.json",

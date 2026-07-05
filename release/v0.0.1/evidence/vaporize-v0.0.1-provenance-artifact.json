@@ -221,7 +221,7 @@
       "receiptKind": "cuj-test-coverage",
       "path": "private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/cuj-test-coverage.json",
       "claim": "Required test count is derived from PRD requirements through active draft CUJs.",
-      "result": "PASS-WITH-NOTE: 105 Swift test obligations, 12 release evidence checks, 117 targetable obligations, 139 executable Swift tests across 22 implemented CUJ bundles"
+      "result": "PASS-WITH-NOTE: 106 Swift test obligations, 12 release evidence checks, 118 targetable obligations, 140 executable Swift tests across 22 implemented CUJ bundles"
     },
     {
       "receiptKind": "cuj-state-coverage",
@@ -547,7 +547,7 @@
     },
     {
       "command": "vaporize toolchain -- swift test --package-path private/apple/spm/vaporize@wrkstrm-core.cli",
-      "result": "PASS-WITH-NOTE: coverage model now names 139 tests across 22 implemented CUJ-specific SwiftPM bundles, including CUJ-14 tool release identity, CUJ-21 CUJ-state coverage, and CUJ-22 resource-bearing CLI install coverage; latest targeted Vaporize runs prove CUJ-09, CUJ-14, CUJ-17, CUJ-21, and CUJ-22"
+      "result": "PASS-WITH-NOTE: coverage model now names 142 tests across 22 implemented CUJ-specific SwiftPM bundles, including CUJ-14 tool release identity, CUJ-17 follow-up list drift coverage, CUJ-21 CUJ-state coverage, and CUJ-22 resource-bearing CLI install coverage; latest targeted Vaporize runs prove CUJ-09, CUJ-14, CUJ-17, CUJ-21, and CUJ-22"
     },
     {
       "command": "vaporize toolchain -- swift test --package-path private/apple/spm/vaporize@wrkstrm-core.cli --filter VaporizeCUJ16TargetFeaturesTests",
@@ -555,7 +555,7 @@
     },
     {
       "command": "vaporize toolchain -- swift test --package-path private/apple/spm/vaporize@wrkstrm-core.cli --filter VaporizeCUJ17ReleaseDoctorTests",
-      "result": "PASS: 5 tests cover release-doctor CLI parsing, live-spine pass, release-root resolution, missing-gate failure, and unresolved-root rejection"
+      "result": "PASS: 7 tests cover release-doctor CLI parsing, live-spine pass, release-root resolution, missing-gate failure, unresolved-root rejection, unreviewed gate approval failure, and follow-up list drift failure"
     },
     {
       "command": "vaporize toolchain -- swift test --package-path private/apple/spm/vaporize@wrkstrm-core.cli --filter VaporizeCUJ15XcodeProductCacheTests",
@@ -563,7 +563,7 @@
     },
     {
       "command": "local benchmark baseline captured with /usr/bin/time -p for Vaporize validate-json, Vaporize toolchain swift --version, bare swift --version, focused CUJ-15 through bare Swift, focused CUJ-15 through Vaporize toolchain, and full Vaporize suite",
-      "result": "PASS-WITH-NOTE: validate-json 0.03s, Vaporize swift --version 0.25s, bare swift --version 0.17s, focused CUJ-15 bare Swift 6.80s, focused CUJ-15 Vaporize 6.80s, earlier full Vaporize suite baseline 15.57s with 82 tests, latest coverage model names 139 tests across 22 CUJ bundles; not a fleet performance or disk-space benchmark"
+      "result": "PASS-WITH-NOTE: validate-json 0.03s, Vaporize swift --version 0.25s, bare swift --version 0.17s, focused CUJ-15 bare Swift 6.80s, focused CUJ-15 Vaporize 6.80s, earlier full Vaporize suite baseline 15.57s with 82 tests, latest coverage model names 142 tests across 22 CUJ bundles; not a fleet performance or disk-space benchmark"
     },
     {
       "command": "vaporize toolchain -- swift test --package-path private/apple/spm/vaporize@wrkstrm-core.cli --filter VaporizeCUJ09ReleaseReviewTests --enable-code-coverage",

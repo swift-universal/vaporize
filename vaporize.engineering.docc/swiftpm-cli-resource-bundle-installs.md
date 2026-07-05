@@ -170,13 +170,19 @@ The durable proof is a simulation proving ground CUJ:
 - Fixture CLIs declare `.process("resources")` or `.copy("resources")`.
 - The fixtures read text, JSON, and byte-count payloads through
   `Bundle.module`.
-- Vaporize installs each generated product through `install --artifact cli`.
+- Vaporize installs each generated product through `install`.
 - Each test confirms Vaporize copied the resource bundle into the installed bin
   directory.
 - Each test hides `.build` and runs from a temporary directory, proving the
   installed executable is not falling back to build products.
 - The stale reinstall scenario proves a fresh Vaporize install replaces the
   installed bundle payload.
+- The checked-in `resource-vault.cli@vaporize-tests.clia.sh` proving-ground
+  package exercises a lowercase, non-generated CLI that reads nested copied
+  JSON and text resources from the installed bundle.
+- The legacy `zshift@wrkstrm-core.clia.sh` scenario records the current
+  product-name gate for an existing resource-bearing CLI and the actionable
+  canonical suggestion before any SwiftPM build begins.
 
 The focused test is:
 
@@ -220,7 +226,7 @@ for resource-bearing CLI installs.
 For a live resource-bearing CLI, the operator check is:
 
 ```text
-vaporize.cli@wrkstrm-core.clia.sh install --artifact cli --package-path <package> --product <product> --configuration release --force
+vaporize.cli@wrkstrm-core.clia.sh install --package-path <package> --product <product> --configuration release --force
 <installed-product> <resource-reading-command>
 ```
 

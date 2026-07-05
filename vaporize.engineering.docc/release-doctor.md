@@ -41,6 +41,8 @@ The v0.0.1 first slice checks:
   machine-supported gates use `EVIDENCE-READY-PENDING-HUMAN-REVIEW`, while
   `PASS`, `PASS-WITH-NOTE`, `APPROVED`, and `APPROVED-WITH-NOTE` require a
   gate-level human review record with `reviewerKind=human`
+- launch-review `knownFollowUps`, PRD `Known Release Follow-Ups`, and release
+  gates `Open Follow-Up Beads` name the same follow-up bead set
 - provenance inventory names the release-doctor receipt
 - CUJ coverage counts CUJ-17 and its targetable test bundle
 - CUJ-state coverage names every required state id, proves each id, and leaves
@@ -57,6 +59,9 @@ replacement for the other work.
   behavioral proof.
 - It does not let automated proof approve a gate. A gate approval without a
   human review record is a blocking release-doctor failure.
+- It does not approve or create follow-up bead dispositions. It blocks drift
+  when the launch packet, PRD, release gates, and blocker-disposition artifact
+  disagree about which follow-ups exist or which blockers remain hard blockers.
 - It does not perform periodic build health or buddy heartbeat checks yet.
 - It does not own Engineering/QA/Marketing review or competitor reports; those
   belong with the future review/scaffold lane.

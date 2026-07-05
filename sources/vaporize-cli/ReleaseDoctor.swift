@@ -446,6 +446,7 @@ enum VaporizeReleaseDoctor {
     )
 
     checks.append(contentsOf: launchReviewChecks(roots: roots))
+    checks.append(contentsOf: blockerDispositionChecks(roots: roots))
     checks.append(contentsOf: provenanceChecks(roots: roots))
     checks.append(contentsOf: coverageChecks(roots: roots))
     checks.append(contentsOf: cujStateCoverageChecks(roots: roots))
@@ -487,6 +488,7 @@ enum VaporizeReleaseDoctor {
     .release("evidence/cuj-test-coverage.json"),
     .release("evidence/cuj-state-coverage.json"),
     .release("evidence/audience-packet.su.json"),
+    .release("evidence/launch-review-blocker-disposition.json"),
     .release("evidence/launch-review-packet.json"),
     .release("evidence/vaporize-v0.0.1-provenance-artifact.json"),
     .release("evidence/creative-selection-v0.2-list-targets.receipt.json"),
@@ -504,6 +506,7 @@ enum VaporizeReleaseDoctor {
     .release("evidence/cuj-test-coverage.json"),
     .release("evidence/cuj-state-coverage.json"),
     .release("evidence/audience-packet.su.json"),
+    .release("evidence/launch-review-blocker-disposition.json"),
     .release("evidence/launch-review-packet.json"),
     .release("evidence/vaporize-v0.0.1-provenance-artifact.json"),
     .release("evidence/creative-selection-v0.2-list-targets.receipt.json"),
@@ -613,6 +616,17 @@ enum VaporizeReleaseDoctor {
     let consumerFacingGateOwnership = object["consumerFacingGateOwnership"] as? [String: Any] ?? [:]
     let signoffs = object["signoffs"] as? [String: Any] ?? [:]
     let humanReviewPolicy = object["humanReviewPolicy"] as? [String: Any] ?? [:]
+    let knownFollowUps = object["knownFollowUps"] as? [String] ?? []
+    let prdKnownFollowUps = markdownBacktickList(
+      roots: roots,
+      relativePath: "prd.md",
+      heading: "Known Release Follow-Ups"
+    )
+    let gateKnownFollowUps = markdownBacktickList(
+      roots: roots,
+      relativePath: "release-gates.md",
+      heading: "Open Follow-Up Beads"
+    )
     let approvedGatesWithoutHumanReview = gateResults.filter { gate in
       guard let status = gate["status"] as? String else { return false }
       return isGateApprovalStatus(status) && !hasHumanGateReview(gate)
@@ -721,6 +735,28 @@ enum VaporizeReleaseDoctor {
           "Gate statuses must be blocked, evidence-ready pending human review, or human-approved; unrecognized gates: \(gateRefs(unrecognizedGateStatuses))."
       ),
       check(
+        name: "launch-review-known-followups-match-prd",
+        category: "launch-review",
+        path: url.path,
+        passed: sameReferenceList(knownFollowUps, prdKnownFollowUps),
+        detail: referenceComparisonDetail(
+          packetRefs: knownFollowUps,
+          artifactName: "prd.md Known Release Follow-Ups",
+          artifactRefs: prdKnownFollowUps
+        )
+      ),
+      check(
+        name: "launch-review-known-followups-match-release-gates",
+        category: "launch-review",
+        path: url.path,
+        passed: sameReferenceList(knownFollowUps, gateKnownFollowUps),
+        detail: referenceComparisonDetail(
+          packetRefs: knownFollowUps,
+          artifactName: "release-gates.md Open Follow-Up Beads",
+          artifactRefs: gateKnownFollowUps
+        )
+      ),
+      check(
         name: "launch-review-release-doctor-evidence-ref",
         category: "launch-review",
         path: url.path,
@@ -782,6 +818,94 @@ enum VaporizeReleaseDoctor {
         path: url.path,
         passed: evidenceRefs.contains { $0["t"] as? String == "Vaporize CUJ-22 resource CLI install test bundle" },
         detail: "Launch-review packet must reference the resource-bearing CLI install test bundle."
+      ),
+    ]
+  }
+
+  private static func blockerDispositionChecks(roots: ReleaseDoctorRoots) -> [VaporizeReleaseDoctorCheck] {
+    let relativePath = "evidence/launch-review-blocker-disposition.json"
+    let url = roots.url(for: .releaseRoot, relativePath: relativePath)
+    guard let object = jsonObject(url: url) else {
+      return [
+        check(
+          name: "blocker-disposition-readable",
+          category: "blocker-disposition",
+          path: url.path,
+          passed: false,
+          detail: "Could not decode launch-review blocker disposition as a JSON object."
+        )
+      ]
+    }
+
+    let launchReviewURL = roots.url(for: .releaseRoot, relativePath: "evidence/launch-review-packet.json")
+    let launchReview = jsonObject(url: launchReviewURL) ?? [:]
+    let knownFollowUps = launchReview["knownFollowUps"] as? [String] ?? []
+    let gateResults = launchReview["gateResults"] as? [[String: Any]] ?? []
+    let packetBlockedGateRefs = gateResults
+      .filter { (($0["status"] as? String)?.uppercased().hasPrefix("BLOCKED") ?? false) }
+      .compactMap { $0["gateRef"] as? String }
+      .sorted()
+
+    let followUpDispositions = object["followUpDispositions"] as? [[String: Any]] ?? []
+    let dispositionFollowUps = followUpDispositions
+      .compactMap { $0["followUpRef"] as? String }
+    let remainingHardBlockers = object["remainingHardBlockers"] as? [[String: Any]] ?? []
+    let remainingHardBlockerRefs = remainingHardBlockers
+      .compactMap { $0["gateRef"] as? String }
+      .sorted()
+    let burnedDownBlockers = object["burnedDownDuplicateOrScopedBlockers"] as? [[String: Any]] ?? []
+    let burnedDownBlockerRefs = Set(burnedDownBlockers.compactMap { $0["gateRef"] as? String })
+    let humanApprovalBoundary = object["humanApprovalBoundary"] as? [String: Any] ?? [:]
+    let gateRecommendation = object["launchReviewGateStatusRecommendation"] as? [String: Any] ?? [:]
+
+    return [
+      check(
+        name: "blocker-disposition-human-approval-boundary",
+        category: "blocker-disposition",
+        path: url.path,
+        passed: humanApprovalBoundary["automationCanApproveGate"] as? Bool == false
+          && humanApprovalBoundary["approvedStatusesRequireHumanReview"] as? Bool == true
+          && humanApprovalBoundary["requiredPendingStatus"] as? String == "EVIDENCE-READY-PENDING-HUMAN-REVIEW",
+        detail: "Blocker disposition must preserve the human approval boundary."
+      ),
+      check(
+        name: "blocker-disposition-followups-cover-launch-review",
+        category: "blocker-disposition",
+        path: url.path,
+        passed: sameReferenceList(knownFollowUps, dispositionFollowUps),
+        detail: referenceComparisonDetail(
+          packetRefs: knownFollowUps,
+          artifactName: "launch-review-blocker-disposition.json followUpDispositions",
+          artifactRefs: dispositionFollowUps
+        )
+      ),
+      check(
+        name: "blocker-disposition-hard-blockers-match-launch-review",
+        category: "blocker-disposition",
+        path: url.path,
+        passed: !remainingHardBlockerRefs.isEmpty && remainingHardBlockerRefs == packetBlockedGateRefs,
+        detail:
+          "Remaining hard blockers must match launch-review blocked gate refs; packet=\(joinedOrNone(packetBlockedGateRefs)), disposition=\(joinedOrNone(remainingHardBlockerRefs))."
+      ),
+      check(
+        name: "blocker-disposition-burns-duplicate-blockers",
+        category: "blocker-disposition",
+        path: url.path,
+        passed: burnedDownBlockerRefs.isSuperset(of: [
+          "GATE-12-open-feature-beads",
+          "GATE-13-tree-cleanliness",
+          "GATE-27-runtime-sample-series-apple-artifact-ingestion",
+        ]),
+        detail: "Blocker disposition must name duplicate or scope-only blockers burned down for launch review."
+      ),
+      check(
+        name: "blocker-disposition-counts-match-launch-review",
+        category: "blocker-disposition",
+        path: url.path,
+        passed: gateRecommendation["evidenceReadyPendingHumanReview"] as? Int
+          == gateResults.filter { $0["status"] as? String == "EVIDENCE-READY-PENDING-HUMAN-REVIEW" }.count
+          && gateRecommendation["blocked"] as? Int == packetBlockedGateRefs.count,
+        detail: "Blocker disposition status counts must match launch-review gate results."
       ),
     ]
   }
@@ -1037,6 +1161,88 @@ enum VaporizeReleaseDoctor {
     return refs.isEmpty ? "none" : refs.joined(separator: ", ")
   }
 
+  private static func markdownBacktickList(
+    roots: ReleaseDoctorRoots,
+    relativePath: String,
+    heading: String
+  ) -> [String]? {
+    let url = roots.url(for: .releaseRoot, relativePath: relativePath)
+    guard let text = try? String(contentsOf: url, encoding: .utf8) else {
+      return nil
+    }
+    let marker = "## \(heading)"
+    guard let headingRange = text.range(of: marker) else {
+      return nil
+    }
+    let tail = text[headingRange.upperBound...]
+    let sectionEnd = tail.range(of: "\n## ")?.lowerBound ?? tail.endIndex
+    let section = tail[..<sectionEnd]
+    return section.components(separatedBy: .newlines).compactMap { line in
+      let trimmed = line.trimmingCharacters(in: .whitespaces)
+      guard trimmed.hasPrefix("- `"), let firstTick = trimmed.firstIndex(of: "`") else {
+        return nil
+      }
+      let afterFirstTick = trimmed[trimmed.index(after: firstTick)...]
+      guard let secondTick = afterFirstTick.firstIndex(of: "`") else {
+        return nil
+      }
+      return String(afterFirstTick[..<secondTick])
+    }
+  }
+
+  private static func sameReferenceList(_ packetRefs: [String], _ artifactRefs: [String]?) -> Bool {
+    guard let artifactRefs else {
+      return false
+    }
+    return !packetRefs.isEmpty
+      && Set(packetRefs) == Set(artifactRefs)
+      && duplicateValues(in: packetRefs).isEmpty
+      && duplicateValues(in: artifactRefs).isEmpty
+  }
+
+  private static func referenceComparisonDetail(
+    packetRefs: [String],
+    artifactName: String,
+    artifactRefs: [String]?
+  ) -> String {
+    guard let artifactRefs else {
+      return "Could not read \(artifactName) follow-up section."
+    }
+    let packetSet = Set(packetRefs)
+    let artifactSet = Set(artifactRefs)
+    let missing = packetSet.subtracting(artifactSet).sorted()
+    let extra = artifactSet.subtracting(packetSet).sorted()
+    let duplicatePacketRefs = duplicateValues(in: packetRefs)
+    let duplicateArtifactRefs = duplicateValues(in: artifactRefs)
+    if !packetRefs.isEmpty,
+      missing.isEmpty,
+      extra.isEmpty,
+      duplicatePacketRefs.isEmpty,
+      duplicateArtifactRefs.isEmpty
+    {
+      return "Launch packet knownFollowUps and \(artifactName) match \(packetRefs.count) references."
+    }
+    return [
+      "Missing from \(artifactName): \(joinedOrNone(missing))",
+      "Extra in \(artifactName): \(joinedOrNone(extra))",
+      "Duplicate packet refs: \(joinedOrNone(duplicatePacketRefs))",
+      "Duplicate \(artifactName) refs: \(joinedOrNone(duplicateArtifactRefs))",
+    ].joined(separator: "; ")
+  }
+
+  private static func duplicateValues(in values: [String]) -> [String] {
+    var seen = Set<String>()
+    var duplicates = Set<String>()
+    for value in values where !seen.insert(value).inserted {
+      duplicates.insert(value)
+    }
+    return duplicates.sorted()
+  }
+
+  private static func joinedOrNone(_ values: [String]) -> String {
+    values.isEmpty ? "none" : values.joined(separator: ", ")
+  }
+
   private static func check(
     name: String,
     category: String,
@@ -1078,7 +1284,7 @@ struct VaporizeReleaseDoctorReceipt: Codable, Equatable {
   var boundaries = [
     "Release doctor audits release-spine coherence; it does not approve release.",
     "A pass can coexist with release gates that are honestly blocked.",
-    "First slice checks Vaporize v0.0.1 docs, public-disclosure surfaces, JSON evidence, CUJ coverage, CUJ-state coverage, launch-review references, provenance inventory, project target discovery evidence, workspace product-cache discovery evidence, and Xcode workspace scheme-listing evidence.",
+    "First slice checks Vaporize v0.0.1 docs, public-disclosure surfaces, JSON evidence, CUJ coverage, CUJ-state coverage, launch-review references, launch-review/PRD/release-gate follow-up list coherence, launch-review blocker disposition, provenance inventory, project target discovery evidence, workspace product-cache discovery evidence, and Xcode workspace scheme-listing evidence.",
     "Fleet project-generation parity, runtime sampling, build-size cohorts, and periodic buddy health remain separate follow-up checks.",
   ]
 }

@@ -545,7 +545,7 @@ Failure truth:
 2. The CLI reads those resources with `Bundle.module`.
 3. A raw `swift package experimental-install` installs the executable but does
    not carry the target resource bundle next to the installed binary.
-4. Vaporize installs the same product through `install --artifact cli`, asks
+4. Vaporize installs the same product through `install`, asks
    SwiftPM for the build products directory with `swift build --show-bin-path`,
    and copies direct `.bundle` siblings into `~/.swiftpm/bin`.
 5. The installed CLI runs after `.build` is hidden and prints the resource
@@ -561,6 +561,10 @@ Success:
 - Larger byte-count resources can be read through `Bundle.module` after install.
 - Reinstall replaces a stale installed resource bundle with the fresh build
   product.
+- A checked-in lowercase resource-vault proving-ground CLI installs through
+  Vaporize and reads nested copied JSON/text resources after `.build` is hidden.
+- Existing legacy resource-bearing CLIs with noncanonical product names are
+  captured at Vaporize's product gate with an actionable canonical suggestion.
 - Product version/build data is represented by Vaporize's CLI metadata sidecar
   rather than pretending the bare executable has an app-style Info.plist.
 
@@ -596,19 +600,19 @@ must know the required floor.
 | CUJ-14 | FR-020 | 5 |
 | CUJ-15 | FR-003, FR-021 | 4 |
 | CUJ-16 | FR-023, FR-024 | 5 Swift tests; 1 release evidence check |
-| CUJ-17 | FR-027 | 6 Swift tests; 1 release evidence check |
+| CUJ-17 | FR-027 | 7 Swift tests; 1 release evidence check |
 | CUJ-18 | FR-028 | 5 Swift tests; 1 release evidence check |
 | CUJ-19 | FR-021, FR-029 | 5 Swift tests; 1 release evidence check |
 | CUJ-20 | FR-030 | 5 |
 | CUJ-21 | FR-031 | 6 Swift tests; 1 release evidence check |
-| CUJ-22 | FR-002, FR-032 | 6 |
+| CUJ-22 | FR-002, FR-032 | 8 |
 
 Current active-CUJ requirement:
 
-- Required Swift test obligations: 105
+- Required Swift test obligations: 108
 - Required release evidence checks: 12
-- Required targetable test obligations: 117
-- Current executable Swift tests: 139 across 22 implemented CUJ-specific SwiftPM
+- Required targetable test obligations: 120
+- Current executable Swift tests: 142 across 22 implemented CUJ-specific SwiftPM
   bundles
 - Coverage artifact:
   `release/v0.0.1/evidence/cuj-test-coverage.json`
