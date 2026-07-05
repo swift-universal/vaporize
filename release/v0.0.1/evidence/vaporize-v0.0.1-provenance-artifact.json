@@ -221,7 +221,7 @@
       "receiptKind": "cuj-test-coverage",
       "path": "private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/cuj-test-coverage.json",
       "claim": "Required test count is derived from PRD requirements through active draft CUJs.",
-      "result": "PASS-WITH-NOTE: 106 Swift test obligations, 12 release evidence checks, 118 targetable obligations, 140 executable Swift tests across 22 implemented CUJ bundles"
+      "result": "PASS-WITH-NOTE: 108 Swift test obligations, 12 release evidence checks, 120 targetable obligations, 142 executable Swift tests across 22 implemented CUJ bundles"
     },
     {
       "receiptKind": "cuj-state-coverage",

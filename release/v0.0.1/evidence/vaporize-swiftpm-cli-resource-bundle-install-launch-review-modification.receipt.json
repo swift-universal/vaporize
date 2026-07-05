@@ -22,7 +22,7 @@
     "CUJ-22 is the targetable release-facing journey for resource-bearing SwiftPM CLI installs.",
     "GATE-39 records the resource CLI install proof and keeps app packaging, Bundle.main metadata, Sparkle, and public update delivery out of scope.",
     "Release Doctor checks FR-032, CUJ-22, GATE-39, the engineering doc, launch-review references, and CUJ-22 coverage.",
-    "Launch-review and provenance evidence now model 22 active CUJs, 106 Swift test obligations, 118 targetable obligations, and 140 executable Swift tests.",
+    "Launch-review and provenance evidence now model 22 active CUJs, 108 Swift test obligations, 120 targetable obligations, and 142 executable Swift tests.",
     "The launch-review packet is ready for launch review while final internal release remains blocked by GATE-14.",
     "CUJ-14 launch-review proof now matches the quoted .pbxproj serializer output for release identity and Info.plist generation settings."
   ],

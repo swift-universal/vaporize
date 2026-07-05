@@ -10,8 +10,8 @@
 **BLOCKED-FOR-INTERNAL-ESSENTIAL-RELEASE.**
 
 The CUJ-derived test coverage contract now defines the required floor:
-106 Swift test obligations plus 12 release evidence checks across 22 active CUJs.
-The Vaporize package tests cover 140 executable Swift tests across 22 implemented
+108 Swift test obligations plus 12 release evidence checks across 22 active CUJs.
+The Vaporize package tests cover 142 executable Swift tests across 22 implemented
 CUJ-specific SwiftPM bundles through Vaporize's owned Xcode-selected toolchain
 mode, including the CUJ-16 `inspect-target-features` first slice and CUJ-17
 `release-doctor` first slice, CUJ-18 `list-targets` first slice, and CUJ-19
@@ -89,7 +89,7 @@ statuses without human review as blocking failures.
 | GATE-02 - CUJs authored | EVIDENCE-READY-PENDING-HUMAN-REVIEW | `release/v0.0.1/cuj.md` |
 | GATE-03 - Release gates authored | EVIDENCE-READY-PENDING-HUMAN-REVIEW | This file |
 | GATE-04 - Launch-review packet authored | EVIDENCE-READY-PENDING-HUMAN-REVIEW | `release/v0.0.1/evidence/launch-review-packet.json` |
-| GATE-05 - CUJ-derived package tests pass | EVIDENCE-READY-PENDING-HUMAN-REVIEW | `release/v0.0.1/evidence/cuj-test-coverage.json` requires 106 Swift test obligations plus 12 release evidence checks across 22 active CUJs. `vaporize.cli@wrkstrm-core.clia.sh test --package-path private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli --configuration debug -- --filter VaporizeCUJ22ResourceCLIInstallTests` proves the resource-bearing CLI simulation proving-ground install path, and the focused CUJ-09/CUJ-21/CUJ-17 runs prove the updated 140-test coverage model across 22 implemented CUJ-specific SwiftPM bundles. |
+| GATE-05 - CUJ-derived package tests pass | EVIDENCE-READY-PENDING-HUMAN-REVIEW | `release/v0.0.1/evidence/cuj-test-coverage.json` requires 108 Swift test obligations plus 12 release evidence checks across 22 active CUJs. `vaporize.cli@wrkstrm-core.clia.sh test --package-path private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli --configuration debug -- --filter VaporizeCUJ22ResourceCLIInstallTests` proves the resource-bearing CLI simulation proving-ground install path, and the focused CUJ-09/CUJ-21/CUJ-17 runs prove the updated 142-test coverage model across 22 implemented CUJ-specific SwiftPM bundles. |
 | GATE-06 - Required toolchain owned by Vaporize | EVIDENCE-READY-PENDING-HUMAN-REVIEW | Current host check at 2026-06-13T21:39:03Z found bare `swift` and `vaporize toolchain -- swift` both reporting Apple Swift 6.4, and focused CUJ-15 took `6.80s` through both routes once warm. Earlier release-prep runs observed bare Swift drift. Vaporize remains the owned route because it stabilizes toolchain policy and release evidence even when host PATH happens to be correct. |
 | GATE-07 - CLI help reflects release surface | EVIDENCE-READY-PENDING-HUMAN-REVIEW | Vaporize help advertises `use`, `toolchain`, `validate-json`, `inspect-project-yml`, `inspect-target-features`, `compare-project-yml-pkl`, `import-project-yml`, `generate-project-yml`, `generate-xcodeproj`, `list-targets`, `list-schemes`, `release-doctor`, `--common-process-spec`, `--xcode-product-cache-workspace`, and `--xcode-product-cache-derived-data-path`. |
 | GATE-08 - CommonProcess use mode tested | EVIDENCE-READY-PENDING-HUMAN-REVIEW | `VaporizeUseCommonProcessTests.swift` decodes valid spec JSON, loads a spec from disk, and rejects invalid executable refs. |

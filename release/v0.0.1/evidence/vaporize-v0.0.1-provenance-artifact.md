@@ -9,9 +9,9 @@ chat memory.
 
 ## Proven
 
-- CUJ-derived test coverage is explicit: 106 required Swift test obligations
+- CUJ-derived test coverage is explicit: 108 required Swift test obligations
   plus 12 release evidence checks across 22 active CUJs.
-- Vaporize package tests cover 140 executable Swift
+- Vaporize package tests cover 142 executable Swift
   tests across 22 implemented CUJ-specific SwiftPM test bundles, including
   CUJ-14 tool release identity, CUJ-14 unsupported-target boundary coverage,
   CUJ-16 target feature inspection, CUJ-17 release doctor, CUJ-18 project

@@ -38,10 +38,10 @@ exists, and which claims are still prohibited.
 The current CUJ-derived floor is:
 
 - 22 active CUJs
-- 106 required Swift test obligations
+- 108 required Swift test obligations
 - 12 release evidence checks
-- 118 required targetable obligations
-- 140 executable Swift tests across 22 CUJ-specific bundles
+- 120 required targetable obligations
+- 142 executable Swift tests across 22 CUJ-specific bundles
 
 The executable suite may exceed the floor, but the floor comes from PRD and CUJ
 obligations. Test count alone is not a product argument.
