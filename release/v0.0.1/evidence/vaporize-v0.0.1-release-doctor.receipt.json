@@ -2,7 +2,7 @@
   "boundaries" : [
     "Release doctor audits release-spine coherence; it does not approve release.",
     "A pass can coexist with release gates that are honestly blocked.",
-    "First slice checks Vaporize v0.0.1 docs, public-disclosure surfaces, JSON evidence, CUJ coverage, CUJ-state coverage, launch-review references, launch-review\/PRD\/release-gate follow-up list coherence, launch-review blocker disposition, provenance inventory, project target discovery evidence, workspace product-cache discovery evidence, and Xcode workspace scheme-listing evidence.",
+    "First slice checks Vaporize v0.0.1 docs, public-disclosure surfaces, JSON evidence, CUJ coverage, CUJ-state coverage, product proving-ground coverage, launch-review references, launch-review\/PRD\/release-gate follow-up list coherence, launch-review blocker disposition, provenance inventory, project target discovery evidence, workspace product-cache discovery evidence, and Xcode workspace scheme-listing evidence.",
     "Fleet project-generation parity, runtime sampling, build-size cohorts, and periodic buddy health remain separate follow-up checks."
   ],
   "checkCount" : 139,
@@ -977,15 +977,15 @@
     },
     {
       "category" : "cuj-coverage",
-      "detail" : "Coverage artifact must count CUJ-22 resource-bearing CLI install coverage.",
-      "name" : "coverage-active-cuj-22",
+      "detail" : "Coverage artifact must count CUJ-23 product proving-ground coverage.",
+      "name" : "coverage-active-cuj-23",
       "path" : "\/Users\/sonoma\/mono\/private\/universal\/substrate\/collectives\/wrkstrm-core\/private\/apple\/spm\/vaporize@wrkstrm-core.cli\/release\/v0.0.1\/evidence\/cuj-test-coverage.json",
       "severity" : "blocking",
       "status" : "pass"
     },
     {
       "category" : "cuj-coverage",
-      "detail" : "Coverage artifact must include release-doctor, target discovery, workspace cache discovery, and CUJ-state coverage evidence obligations.",
+      "detail" : "Coverage artifact must include release-doctor, target discovery, workspace cache discovery, CUJ-state coverage, and product proving-ground evidence obligations.",
       "name" : "coverage-release-evidence-floor",
       "path" : "\/Users\/sonoma\/mono\/private\/universal\/substrate\/collectives\/wrkstrm-core\/private\/apple\/spm\/vaporize@wrkstrm-core.cli\/release\/v0.0.1\/evidence\/cuj-test-coverage.json",
       "severity" : "blocking",
@@ -1128,7 +1128,7 @@
   "passedCheckCount" : 139,
   "receiptKind" : "vaporize-release-doctor",
   "releaseRootPath" : "\/Users\/sonoma\/mono\/private\/universal\/substrate\/collectives\/wrkstrm-core\/private\/apple\/spm\/vaporize@wrkstrm-core.cli\/release\/v0.0.1",
-  "requestId" : "vaporize-release-doctor-B2983B4A-F557-4DE3-8741-357578BF17D9",
+  "requestId" : "vaporize-release-doctor-E91F0CEC-4BC3-4679-B024-086A8D3C4F3C",
   "requiredArtifactCount" : 28,
   "schemaFamilySlug" : "vaporize-schemas",
   "schemaFamilyVersion" : "0.0.1",

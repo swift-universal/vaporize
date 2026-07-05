@@ -692,6 +692,14 @@
       "result": "PASS: 6 tests cover CUJ-state derivation, database-boundary hygiene, receipt round-trip, complete coverage, missing-state failure, and unknown-state failure"
     },
     {
+      "command": "vaporize.cli@wrkstrm-core.clia.sh test --package-path private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli --configuration debug -- --filter VaporizeCUJ23ProductProvingGroundTests",
+      "result": "PASS: 3 tests cover product proving-ground passport adoption, incomplete-passport failure, and product-class default tracks"
+    },
+    {
+      "command": "vaporize.cli@wrkstrm-core.clia.sh release-doctor --path private/apple/spm/vaporize@wrkstrm-core.cli --format json --receipt-path release/v0.0.1/evidence/vaporize-v0.0.1-release-doctor.receipt.json",
+      "result": "PASS: 139 checks, 0 failures, 28 required artifacts"
+    },
+    {
       "command": "vaporize validate-json --path private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/creative-selection-v0.2-list-targets.receipt.json",
       "result": "PASS"
     },
