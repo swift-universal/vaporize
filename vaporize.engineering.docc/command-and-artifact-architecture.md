@@ -34,33 +34,42 @@ better receipts.
 
 ## Toolchain Bridge
 
-Toolchain mode is the Vaporize-owned route for Swift toolchain commands that
-must be repeatable across host platforms.
+Toolchain mode is the Vaporize-owned route for Swift documentation and
+toolchain commands whose resolver differs by host environment.
 
-On macOS, Vaporize resolves supported tools through Xcode's selected toolchain:
+Swift commands that need the Apple build lane use Xcode's selected toolchain on
+macOS:
 
 ```text
 vaporize toolchain -- swift test
+```
+
+For Swift package API documentation, the modern Swift-facing surface is the
+Swift-DocC Plugin command:
+
+```text
+vaporize toolchain -- swift package generate-documentation
+```
+
+For standalone `.docc` catalogs, Vaporize uses the lower-level Swift-DocC
+Documentation Compiler executable:
+
+```text
 vaporize toolchain -- docc convert Product.docc --output-path /tmp/Product.doccarchive
 ```
 
-Outside macOS, Vaporize invokes the tool name directly so Linux hosts can use
-the active Swift toolchain on `PATH`:
+If a Swift toolchain-provided `docc` executable is available, Vaporize uses
+that compiler directly. If not, Vaporize falls back to Xcode DocC on macOS.
+Outside macOS, Vaporize invokes `docc` by name so Linux Swift toolchains can
+provide the compiler on `PATH`:
 
 ```text
 docc convert ...
 swift test ...
 ```
 
-For substrate-owned toolchains, callers can supply an explicit executable
-directory:
-
-```text
-vaporize --toolchain-bin-path <swift-universal-toolchain-bin> toolchain -- docc convert Product.docc
-```
-
 The receipt records the tool, arguments, resolver, executable ref, developer
-directory boundary, and explicit toolchain-bin path boundary.
+directory boundary, and the environment-owned resolver decision.
 
 For the canonical feature-by-feature explanation, see <doc:feature-catalog>.
 This page explains the architecture; the feature catalog names the user problem,

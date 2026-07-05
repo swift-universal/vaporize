@@ -240,11 +240,6 @@ struct VaporizeCLI: AsyncParsableCommand {
   var developerDirectory: String?
 
   @Option(
-    name: .customLong("toolchain-bin-path"),
-    help: "Directory containing Swift toolchain executables for toolchain mode. When set, Vaporize runs <toolchain-bin-path>/<tool> instead of platform defaults.")
-  var toolchainBinPath: String?
-
-  @Option(
     name: .customLong("xcode-component"),
     help: "Xcode component to download in setup mode, for example MetalToolchain.")
   var xcodeComponent: String?
@@ -973,7 +968,7 @@ struct VaporizeCLI: AsyncParsableCommand {
     let requestId = "vaporize-toolchain-\(UUID().uuidString)"
     let workingDirectory = passWorkingDirectory ?? FileManager.default.currentDirectoryPath
     let environmentUpdates = developerDirectory.map { ["DEVELOPER_DIR": $0] }
-    let invocation = try request.invocation(toolchainBinPath: toolchainBinPath)
+    let invocation = try request.invocation()
     let command = CommandSpec(
       executable: invocation.executable,
       args: invocation.arguments,
@@ -1005,7 +1000,6 @@ struct VaporizeCLI: AsyncParsableCommand {
       requestId: requestId,
       runnerKind: "auto",
       developerDirectorySet: developerDirectory != nil,
-      toolchainBinPathSet: toolchainBinPath != nil,
       executableRef: invocation.executableRef,
       resolver: invocation.resolver,
       succeeded: output.isSuccess,
@@ -1964,34 +1958,66 @@ struct SwiftToolchainRequest: Equatable {
     self.arguments = tokens
   }
 
-  func invocation(toolchainBinPath: String?) throws -> ToolchainInvocation {
-    if let toolchainBinPath, !toolchainBinPath.isEmpty {
-      let executablePath = URL(fileURLWithPath: toolchainBinPath)
-        .appendingPathComponent(tool.rawValue)
-        .path
+  func invocation(
+    environment: ToolchainResolutionEnvironment = .current()
+  ) throws -> ToolchainInvocation {
+    if tool == .docc, let swiftToolchainDocCPath = environment.swiftToolchainDocCPath {
       return ToolchainInvocation(
-        executable: .path(executablePath),
+        executable: .path(swiftToolchainDocCPath),
         arguments: arguments,
-        executableRef: "path:\(executablePath)",
-        resolver: "toolchain-bin-path"
+        executableRef: "path:\(swiftToolchainDocCPath)",
+        resolver: "swift-toolchain"
       )
     }
 
-    #if os(macOS)
+    if environment.platform == .macOS {
       return ToolchainInvocation(
         executable: .name("xcrun"),
         arguments: xcrunArguments,
         executableRef: "name:xcrun",
         resolver: "xcrun"
       )
+    }
+
+    return ToolchainInvocation(
+      executable: .name(tool.rawValue),
+      arguments: arguments,
+      executableRef: "name:\(tool.rawValue)",
+      resolver: "path"
+    )
+  }
+}
+
+struct ToolchainResolutionEnvironment: Equatable {
+  enum Platform: Equatable {
+    case macOS
+    case other
+  }
+
+  var platform: Platform
+  var swiftToolchainDocCPath: String?
+
+  static func current(
+    fileManager: FileManager = .default,
+    environment: [String: String] = ProcessInfo.processInfo.environment
+  ) -> ToolchainResolutionEnvironment {
+    let homeDirectory = environment["HOME"] ?? NSHomeDirectory()
+    let knownSwiftToolchainDocCPath = URL(fileURLWithPath: homeDirectory)
+      .appendingPathComponent(".swiftly/bin/docc")
+      .path
+
+    #if os(macOS)
+      let platform = Platform.macOS
     #else
-      return ToolchainInvocation(
-        executable: .name(tool.rawValue),
-        arguments: arguments,
-        executableRef: "name:\(tool.rawValue)",
-        resolver: "path"
-      )
+      let platform = Platform.other
     #endif
+
+    return ToolchainResolutionEnvironment(
+      platform: platform,
+      swiftToolchainDocCPath: fileManager.isExecutableFile(atPath: knownSwiftToolchainDocCPath)
+        ? knownSwiftToolchainDocCPath
+        : nil
+    )
   }
 }
 
@@ -2150,7 +2176,6 @@ struct ToolchainReceipt: Codable, Equatable {
   var requestId: String
   var runnerKind: String
   var developerDirectorySet: Bool
-  var toolchainBinPathSet: Bool
   var executableRef: String
   var resolver: String
   var succeeded: Bool

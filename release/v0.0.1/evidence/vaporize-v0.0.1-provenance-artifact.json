@@ -221,7 +221,7 @@
       "receiptKind": "cuj-test-coverage",
       "path": "private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/cuj-test-coverage.json",
       "claim": "Required test count is derived from PRD requirements through active draft CUJs.",
-      "result": "PASS-WITH-NOTE: 116 Swift test obligations, 13 release evidence checks, 129 targetable obligations, 150 executable Swift tests across 23 implemented CUJ bundles"
+      "result": "PASS-WITH-NOTE: 116 Swift test obligations, 13 release evidence checks, 129 targetable obligations, 155 executable Swift tests across 23 implemented CUJ bundles"
     },
     {
       "receiptKind": "cuj-state-coverage",
@@ -569,7 +569,7 @@
     },
     {
       "command": "vaporize.cli@wrkstrm-core.clia.sh test --package-path private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli --configuration debug",
-      "result": "PASS-WITH-NOTE: latest full Vaporize package run passed after the expanded Pkl proving-ground addition; coverage model now names 150 tests across 23 implemented CUJ-specific SwiftPM bundles, including CUJ-10 checked-in XcodeGen-to-Pkl parity proving grounds, CUJ-13 parity-ground import coverage, CUJ-14 graph/scheme generation, above-parity Pkl generation, and tool release identity, CUJ-17 follow-up list drift coverage, CUJ-21 CUJ-state coverage, CUJ-22 resource-bearing CLI install coverage, and CUJ-23 product passport plus Pkl project-generation proving-ground coverage"
+      "result": "PASS-WITH-NOTE: latest full Vaporize package run passed after the expanded Pkl proving-ground addition; coverage model now names 155 tests across 23 implemented CUJ-specific SwiftPM bundles, including CUJ-10 checked-in XcodeGen-to-Pkl parity proving grounds, CUJ-13 parity-ground import coverage, CUJ-14 graph/scheme generation, above-parity Pkl generation, and tool release identity, CUJ-17 follow-up list drift coverage, CUJ-21 CUJ-state coverage, CUJ-22 resource-bearing CLI install coverage, and CUJ-23 product passport plus Pkl project-generation proving-ground coverage"
     },
     {
       "command": "vaporize toolchain -- swift test --package-path private/apple/spm/vaporize@wrkstrm-core.cli --filter VaporizeCUJ16TargetFeaturesTests",
@@ -585,7 +585,7 @@
     },
     {
       "command": "local benchmark baseline captured with /usr/bin/time -p for Vaporize validate-json, Vaporize toolchain swift --version, bare swift --version, focused CUJ-15 through bare Swift, focused CUJ-15 through Vaporize toolchain, and full Vaporize suite",
-      "result": "PASS-WITH-NOTE: validate-json 0.03s, Vaporize swift --version 0.25s, bare swift --version 0.17s, focused CUJ-15 bare Swift 6.80s, focused CUJ-15 Vaporize 6.80s, earlier full Vaporize suite baseline 15.57s with 82 tests, latest coverage model names 150 tests across 23 CUJ bundles; not a fleet performance or disk-space benchmark"
+      "result": "PASS-WITH-NOTE: validate-json 0.03s, Vaporize swift --version 0.25s, bare swift --version 0.17s, focused CUJ-15 bare Swift 6.80s, focused CUJ-15 Vaporize 6.80s, earlier full Vaporize suite baseline 15.57s with 82 tests, latest coverage model names 155 tests across 23 CUJ bundles; not a fleet performance or disk-space benchmark"
     },
     {
       "command": "vaporize toolchain -- swift test --package-path private/apple/spm/vaporize@wrkstrm-core.cli --filter VaporizeCUJ09ReleaseReviewTests --enable-code-coverage",

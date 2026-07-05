@@ -31,7 +31,7 @@ and CUJ count must already name the behavior being retired from the old location
 | Required Swift test obligations | 116 |
 | Required release evidence checks | 13 |
 | Required targetable test obligations | 129 |
-| Current executable Swift tests | 150 |
+| Current executable Swift tests | 155 |
 
 ## Targetable Test Bundles
 
@@ -41,7 +41,7 @@ and CUJ count must already name the behavior being retired from the old location
 | CUJ-02 | `VaporizeCUJ02MacAppTests` | 14 |
 | CUJ-03 | `VaporizeCUJ03PassThroughTests` | 4 |
 | CUJ-04 | `VaporizeCUJ04CommonProcessUseTests` | 4 |
-| CUJ-05 | `VaporizeCUJ05ToolchainTests` | 6 |
+| CUJ-05 | `VaporizeCUJ05ToolchainTests` | 11 |
 | CUJ-06 | `VaporizeCUJ06JSONValidationTests` | 3 |
 | CUJ-07 | `VaporizeCUJ07VaporInventoryTests` | 18 |
 | CUJ-08 | `VaporizeCUJ08ProjectYMLInspectionTests` | 5 |
@@ -69,7 +69,7 @@ and CUJ count must already name the behavior being retired from the old location
 | CUJ-02 | FR-003, FR-004, FR-015 | 9 | App install parsing, Xcode invocation, derived data, bundle-name resolution, invalid Xcode config |
 | CUJ-03 | FR-005 | 4 | Pass-through parser normalization and receipt shape |
 | CUJ-04 | FR-006 | 4 | CommonProcess decode, file load, validation rejection, receipt shape |
-| CUJ-05 | FR-010 | 6 | Toolchain parser normalization, unsupported/empty rejection, receipt shape |
+| CUJ-05 | FR-010 | 11 | Toolchain parser normalization, swift-toolchain DocC routing, macOS fallback routing, non-macOS direct lookup, unsupported/empty rejection, receipt shape |
 | CUJ-06 | FR-011 | 3 | Valid and invalid Swift Universal json-formatter-backed validation plus formatter coverage |
 | CUJ-07 | FR-007, FR-008 | 10 | Scanner status classification, legacy key, malformed JSON, path errors, text/JSON renderer |
 | CUJ-08 | FR-015 | 5 | Concourse and multi-target YAML parsing, value/source decoding, read-only bridge evidence |

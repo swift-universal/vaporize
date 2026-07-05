@@ -56,48 +56,82 @@ func toolchainModeToleratesRepeatedLeadingSeparators() throws {
   #expect(request.arguments == ["test"])
 }
 
-@Test("CUJ-05 resolves explicit toolchain bin path")
-func resolvesExplicitToolchainBinPath() throws {
+@Test("CUJ-05 resolves Swift toolchain DocC when available")
+func resolvesSwiftToolchainDocCWhenAvailable() throws {
   let request = try SwiftToolchainRequest(arguments: ["docc", "convert", "Product.docc"])
-  let invocation = try request.invocation(toolchainBinPath: "/opt/swift-toolchain/usr/bin")
+  let invocation = try request.invocation(
+    environment: ToolchainResolutionEnvironment(
+      platform: .macOS,
+      swiftToolchainDocCPath: "/Users/example/.swiftly/bin/docc"
+    )
+  )
 
   switch invocation.executable.ref {
   case .path(let path):
-    #expect(path == "/opt/swift-toolchain/usr/bin/docc")
+    #expect(path == "/Users/example/.swiftly/bin/docc")
   default:
-    Issue.record("expected explicit toolchain path")
+    Issue.record("expected Swift toolchain DocC path")
   }
   #expect(invocation.arguments == ["convert", "Product.docc"])
-  #expect(invocation.executableRef == "path:/opt/swift-toolchain/usr/bin/docc")
-  #expect(invocation.resolver == "toolchain-bin-path")
+  #expect(invocation.executableRef == "path:/Users/example/.swiftly/bin/docc")
+  #expect(invocation.resolver == "swift-toolchain")
 }
 
-@Test("CUJ-05 resolves platform default toolchain")
-func resolvesPlatformDefaultToolchain() throws {
+@Test("CUJ-05 resolves macOS DocC fallback through xcrun")
+func resolvesMacOSDocCFallbackThroughXcrun() throws {
   let request = try SwiftToolchainRequest(arguments: ["docc", "convert", "Product.docc"])
-  let invocation = try request.invocation(toolchainBinPath: nil)
+  let invocation = try request.invocation(
+    environment: ToolchainResolutionEnvironment(platform: .macOS, swiftToolchainDocCPath: nil)
+  )
 
-  #if os(macOS)
-    switch invocation.executable.ref {
-    case .name(let name):
-      #expect(name == "xcrun")
-    default:
-      Issue.record("expected xcrun on macOS")
-    }
-    #expect(invocation.arguments == ["docc", "convert", "Product.docc"])
-    #expect(invocation.executableRef == "name:xcrun")
-    #expect(invocation.resolver == "xcrun")
-  #else
-    switch invocation.executable.ref {
-    case .name(let name):
-      #expect(name == "docc")
-    default:
-      Issue.record("expected direct docc lookup outside macOS")
-    }
-    #expect(invocation.arguments == ["convert", "Product.docc"])
-    #expect(invocation.executableRef == "name:docc")
-    #expect(invocation.resolver == "path")
-  #endif
+  switch invocation.executable.ref {
+  case .name(let name):
+    #expect(name == "xcrun")
+  default:
+    Issue.record("expected xcrun on macOS")
+  }
+  #expect(invocation.arguments == ["docc", "convert", "Product.docc"])
+  #expect(invocation.executableRef == "name:xcrun")
+  #expect(invocation.resolver == "xcrun")
+}
+
+@Test("CUJ-05 resolves non-macOS DocC by tool name")
+func resolvesNonMacOSDocCByToolName() throws {
+  let request = try SwiftToolchainRequest(arguments: ["docc", "convert", "Product.docc"])
+  let invocation = try request.invocation(
+    environment: ToolchainResolutionEnvironment(platform: .other, swiftToolchainDocCPath: nil)
+  )
+
+  switch invocation.executable.ref {
+  case .name(let name):
+    #expect(name == "docc")
+  default:
+    Issue.record("expected direct docc lookup outside macOS")
+  }
+  #expect(invocation.arguments == ["convert", "Product.docc"])
+  #expect(invocation.executableRef == "name:docc")
+  #expect(invocation.resolver == "path")
+}
+
+@Test("CUJ-05 keeps macOS Swift on xcrun lane")
+func keepsMacOSSwiftOnXcrunLane() throws {
+  let request = try SwiftToolchainRequest(arguments: ["swift", "--version"])
+  let invocation = try request.invocation(
+    environment: ToolchainResolutionEnvironment(
+      platform: .macOS,
+      swiftToolchainDocCPath: "/Users/example/.swiftly/bin/docc"
+    )
+  )
+
+  switch invocation.executable.ref {
+  case .name(let name):
+    #expect(name == "xcrun")
+  default:
+    Issue.record("expected xcrun for Swift on macOS")
+  }
+  #expect(invocation.arguments == ["swift", "--version"])
+  #expect(invocation.executableRef == "name:xcrun")
+  #expect(invocation.resolver == "xcrun")
 }
 
 @Test("CUJ-05 rejects unsupported Swift toolchain tools")
@@ -123,9 +157,8 @@ func toolchainReceiptRecordsDeveloperDirBoundary() throws {
     requestId: "vaporize-toolchain-test",
     runnerKind: "auto",
     developerDirectorySet: true,
-    toolchainBinPathSet: true,
-    executableRef: "path:/opt/swift-toolchain/usr/bin/docc",
-    resolver: "toolchain-bin-path",
+    executableRef: "path:/Users/example/.swiftly/bin/docc",
+    resolver: "swift-toolchain",
     succeeded: true,
     exitCode: 0,
     signal: nil,
@@ -139,9 +172,8 @@ func toolchainReceiptRecordsDeveloperDirBoundary() throws {
   #expect(decoded.schemaVersion == "0.1.0")
   #expect(decoded.receiptKind == "vaporize-toolchain")
   #expect(decoded.developerDirectorySet)
-  #expect(decoded.toolchainBinPathSet)
-  #expect(decoded.executableRef == "path:/opt/swift-toolchain/usr/bin/docc")
-  #expect(decoded.resolver == "toolchain-bin-path")
+  #expect(decoded.executableRef == "path:/Users/example/.swiftly/bin/docc")
+  #expect(decoded.resolver == "swift-toolchain")
   #expect(decoded.arguments == ["--version"])
   #expect(decoded.succeeded)
 }

@@ -41,7 +41,7 @@ The current CUJ-derived floor is:
 - 113 required Swift test obligations
 - 13 release evidence checks
 - 126 required targetable obligations
-- 150 executable Swift tests across 23 CUJ-specific bundles
+- 155 executable Swift tests across 23 CUJ-specific bundles
 
 The executable suite may exceed the floor, but the floor comes from PRD and CUJ
 obligations. Test count alone is not a product argument.
