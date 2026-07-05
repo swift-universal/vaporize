@@ -17,6 +17,18 @@ harness and release-review doctrine. Pkl project generation does not own the
 doctrine; `tests/proving-grounds/pkl-project-generation` is the concrete
 proving ground that drives the standard generator tracks.
 
+The Pkl migration proving grounds have two layers:
+
+- `tests/proving-grounds/xcodegen-to-pkl-parity` holds multiple checked-in
+  XcodeGen `project.yml` plus AppleProjectSpec `project.pkl` pairs. CUJ-10
+  compares the stored pairs, and CUJ-13 regenerates Pkl from every YAML fixture
+  to prove the importer creates the same project signature.
+- `tests/proving-grounds/pkl-project-generation` holds Pkl-forward generation
+  specimens. The root specimen proves the standard generator track shape; the
+  `beyond-*` specimens prove Pkl-backed `.xcodeproj` generation behavior that
+  goes beyond parity, including resourceful Sparkle app metadata and release
+  tool world-state.
+
 The automotive metaphor is useful because it keeps proof concrete. A product
 does not merely have tests. It has driven specific tracks.
 
@@ -76,6 +88,10 @@ The first implementation slice is CUJ-23:
   ground driven through the passport harness: it ties
   `tests/proving-grounds/pkl-project-generation`, CUJ-14 graph/scheme tests,
   and release receipts into the CUJ-23 proving-ground audit.
+- XcodeGen-to-Pkl parity is now checked through multiple fixtures in
+  `tests/proving-grounds/xcodegen-to-pkl-parity`; above-parity project
+  generation is checked through Pkl-only `beyond-*` fixtures under
+  `tests/proving-grounds/pkl-project-generation`.
 
 ## Boundary
 

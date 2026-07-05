@@ -28,10 +28,10 @@ and CUJ count must already name the behavior being retired from the old location
 | --- | ---: |
 | Active CUJs | 23 |
 | Deferred CUJs | 1 |
-| Required Swift test obligations | 113 |
+| Required Swift test obligations | 116 |
 | Required release evidence checks | 13 |
-| Required targetable test obligations | 126 |
-| Current executable Swift tests | 147 |
+| Required targetable test obligations | 129 |
+| Current executable Swift tests | 150 |
 
 ## Targetable Test Bundles
 
@@ -46,11 +46,11 @@ and CUJ count must already name the behavior being retired from the old location
 | CUJ-07 | `VaporizeCUJ07VaporInventoryTests` | 18 |
 | CUJ-08 | `VaporizeCUJ08ProjectYMLInspectionTests` | 5 |
 | CUJ-09 | `VaporizeCUJ09ReleaseReviewTests` | 6 |
-| CUJ-10 | `VaporizeCUJ10YMLPklComparisonTests` | 4 |
+| CUJ-10 | `VaporizeCUJ10YMLPklComparisonTests` | 5 |
 | CUJ-11 | `VaporizeCUJ11PklYMLGenerationTests` | 3 |
 | CUJ-12 | `VaporizeCUJ12PackageGraphTests` | 1 |
-| CUJ-13 | `VaporizeCUJ13YMLPklImportTests` | 4 |
-| CUJ-14 | `VaporizeCUJ14PklXcodeProjectGenerationTests` | 6 |
+| CUJ-13 | `VaporizeCUJ13YMLPklImportTests` | 5 |
+| CUJ-14 | `VaporizeCUJ14PklXcodeProjectGenerationTests` | 7 |
 | CUJ-15 | `VaporizeCUJ15XcodeProductCacheTests` | 4 |
 | CUJ-16 | `VaporizeCUJ16TargetFeaturesTests` | 5 |
 | CUJ-17 | `VaporizeCUJ17ReleaseDoctorTests` | 7 |
@@ -74,11 +74,11 @@ and CUJ count must already name the behavior being retired from the old location
 | CUJ-07 | FR-007, FR-008 | 10 | Scanner status classification, legacy key, malformed JSON, path errors, text/JSON renderer |
 | CUJ-08 | FR-015 | 5 | Concourse and multi-target YAML parsing, value/source decoding, read-only bridge evidence |
 | CUJ-09 | FR-012, FR-013, FR-014, FR-022, FR-025, FR-026 | 0 | Product definition, PRD, PRD review session, vaporware modification request discipline, CUJ, release gates, launch-review packet, engineering DocC catalog checks |
-| CUJ-10 | FR-016 | 4 | Pkl parity comparison, loader failure, mismatch reporting, script normalization |
+| CUJ-10 | FR-016 | 5 | Pkl parity comparison, checked-in XcodeGen-to-Pkl parity proving grounds, loader failure, mismatch reporting, script normalization |
 | CUJ-11 | FR-017 | 3 | Transitional YAML generation, renderer round-trip, generated YAML/Pkl comparison evidence |
 | CUJ-12 | FR-009 | 1 | Graph forwarded argument parsing |
-| CUJ-13 | FR-018 | 4 | Legacy YAML import parsing, generated Pkl evaluation, YAML/Pkl comparison, nested value rendering |
-| CUJ-14 | FR-020 | 6 | generate-xcodeproj parsing, Pkl-backed .xcodeproj output, deterministic renderer proof, tool releaseIdentity expected-pass, framework/app/unit-test/package/shared-scheme graph expected-pass, unsupported-target expected-fail |
+| CUJ-13 | FR-018 | 5 | Legacy YAML import parsing, generated Pkl evaluation, YAML/Pkl comparison, every parity proving-ground import, nested value rendering |
+| CUJ-14 | FR-020 | 7 | generate-xcodeproj parsing, Pkl-backed .xcodeproj output, deterministic renderer proof, tool releaseIdentity expected-pass, framework/app/unit-test/package/shared-scheme graph expected-pass, above-parity Pkl generation grounds, unsupported-target expected-fail |
 | CUJ-15 | FR-003, FR-021 | 4 | Product-cache option parsing, cache-first app lookup, shared workspace build invocation, paired option validation |
 | CUJ-16 | FR-023, FR-024 | 5 | Target feature inspection parsing, inferred target, stale xcconfig detection, generated Swift provenance, CLI parsing |
 | CUJ-17 | FR-027 | 7 Swift tests; 1 release evidence check | Release doctor parsing, live-spine pass, release-root resolution, missing-gate failure, unresolved-root rejection, unreviewed gate approval failure, follow-up list drift failure |

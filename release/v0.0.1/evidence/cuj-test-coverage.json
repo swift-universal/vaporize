@@ -19,10 +19,10 @@
   "counts": {
     "activeCUJCount": 23,
     "deferredCUJCount": 1,
-    "requiredSwiftTestObligationCount": 113,
+    "requiredSwiftTestObligationCount": 116,
     "requiredReleaseEvidenceCheckCount": 13,
-    "requiredTargetableTestObligationCount": 126,
-    "currentExecutableSwiftTestCount": 147,
+    "requiredTargetableTestObligationCount": 129,
+    "currentExecutableSwiftTestCount": 150,
     "currentExecutableSwiftTestBreakdown": {
       "VaporizeCUJ01SwiftPMCLITests": 20,
       "VaporizeCUJ02MacAppTests": 14,
@@ -33,11 +33,11 @@
       "VaporizeCUJ07VaporInventoryTests": 18,
       "VaporizeCUJ08ProjectYMLInspectionTests": 5,
       "VaporizeCUJ09ReleaseReviewTests": 6,
-      "VaporizeCUJ10YMLPklComparisonTests": 4,
+      "VaporizeCUJ10YMLPklComparisonTests": 5,
       "VaporizeCUJ11PklYMLGenerationTests": 3,
       "VaporizeCUJ12PackageGraphTests": 1,
-      "VaporizeCUJ13YMLPklImportTests": 4,
-      "VaporizeCUJ14PklXcodeProjectGenerationTests": 6,
+      "VaporizeCUJ13YMLPklImportTests": 5,
+      "VaporizeCUJ14PklXcodeProjectGenerationTests": 7,
       "VaporizeCUJ15XcodeProductCacheTests": 4,
       "VaporizeCUJ16TargetFeaturesTests": 5,
       "VaporizeCUJ17ReleaseDoctorTests": 7,
@@ -84,7 +84,7 @@
       "prdRefs": [
         "FR-005"
       ],
-      "requiredSwiftTestObligations": 4,
+      "requiredSwiftTestObligations": 5,
       "status": "covered",
       "evidence": [
         "VaporizeCUJ03PassThroughTests.swift"
@@ -191,6 +191,7 @@
       "status": "covered",
       "evidence": [
         "VaporizeCUJ10YMLPklComparisonTests.swift",
+        "tests/proving-grounds/xcodegen-to-pkl-parity",
         "concourse-project-yml-pkl-comparison.receipt.json"
       ]
     },
@@ -226,10 +227,11 @@
       "prdRefs": [
         "FR-018"
       ],
-      "requiredSwiftTestObligations": 4,
+      "requiredSwiftTestObligations": 5,
       "status": "covered",
       "evidence": [
         "VaporizeCUJ13YMLPklImportTests.swift",
+        "tests/proving-grounds/xcodegen-to-pkl-parity",
         "creative-selection-v0.2-project-yml-pkl-import.receipt.json",
         "creative-selection-v0.2-project-yml-pkl-comparison.receipt.json"
       ]
@@ -240,13 +242,15 @@
       "prdRefs": [
         "FR-020"
       ],
-      "requiredSwiftTestObligations": 6,
+      "requiredSwiftTestObligations": 7,
       "status": "covered-with-boundary",
       "evidence": [
         "VaporizeCUJ14PklXcodeProjectGenerationTests.swift",
         "creative-selection-v0.2-pkl-xcodeproj-generation.receipt.json",
         "vaporize-pkl-xcodeproj-tool-release-identity-modification.receipt.json",
-        "framework/unit-test/target-dependency/shared-scheme expected-pass coverage"
+        "framework/unit-test/target-dependency/shared-scheme expected-pass coverage",
+        "tests/proving-grounds/pkl-project-generation/beyond-resourceful-sparkle-app",
+        "tests/proving-grounds/pkl-project-generation/beyond-release-tool"
       ]
     },
     {
@@ -404,7 +408,7 @@
     "This artifact defines the active-CUJ coverage floor; it does not approve v0.0.1 release.",
     "Major feature coding requires an Engineering, QA, and Marketing PRD review session before implementation; v0.0.1 records a backfilled GO-WITH-NOTES correction because the release-prep lane was already in flight.",
     "Behavior-changing vaporware modification requests require a feature flag or feature-status story, targetable tests, and release evidence before release-ready status.",
-    "Pkl-backed .xcodeproj world-state generation covers app, framework, tool, unit-test, target-dependency, local package, and shared-scheme first slices; fleet build parity and quarantine disposition remain release-blocking.",
+    "Pkl-backed .xcodeproj world-state generation covers app, framework, tool, unit-test, target-dependency, local package, shared-scheme, resourceful Sparkle app, and release-tool first slices; fleet build parity and quarantine disposition remain release-blocking.",
     "wrkstrm app-minimums inspection has a target-level first slice; registry-backed fleet inspection remains deferred.",
     "Feature-scoped test migration is allowed only after a targetable feature bundle proves the behavior, the replacement evidence is named, and the coverage artifact is updated; duplicate older tests may then be deleted in the same change.",
     "Actual executable Swift tests may exceed the required count when extra regression coverage is useful.",

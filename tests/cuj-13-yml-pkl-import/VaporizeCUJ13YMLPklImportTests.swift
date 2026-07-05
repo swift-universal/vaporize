@@ -66,6 +66,56 @@ func importedPklComparesBackToSourceYML() async throws {
   #expect(comparison.mismatchCount == 0)
 }
 
+@Test("CUJ-13 imports every XcodeGen parity proving ground into evaluable Pkl")
+func importsEveryXcodeGenParityProvingGroundIntoPkl() async throws {
+  #expect(xcodeGenToPklParityProvingGrounds.count >= 5)
+
+  for ground in xcodeGenToPklParityProvingGrounds {
+    let temporaryDirectory = FileManager.default.temporaryDirectory
+      .appendingPathComponent("vaporize-\(ground.slug)-import-\(UUID().uuidString)")
+    let generatedPkl = temporaryDirectory.appendingPathComponent("project.generated.pkl")
+    try FileManager.default.createDirectory(at: temporaryDirectory, withIntermediateDirectories: true)
+    defer { try? FileManager.default.removeItem(at: temporaryDirectory) }
+
+    let schemaAmendsPath = relativePathForPklAmends(
+      from: generatedPkl.deletingLastPathComponent(),
+      to: appleProjectSpecPklSchemaURL
+    )
+    let receipt = try AppleProjectSpecPklImporter.generate(
+      ymlURL: ground.projectYMLURL,
+      outputURL: generatedPkl,
+      schemaAmendsPath: schemaAmendsPath,
+      requestId: "xcodegen-to-pkl-proving-ground-import-\(ground.slug)"
+    )
+    let ymlSpec = try AppleProjectYMLReader.load(url: ground.projectYMLURL)
+    let generatedSpec = try await AppleProjectPklLoader.load(url: generatedPkl)
+    let checkedInSpec = try await AppleProjectPklLoader.load(url: ground.projectPklURL)
+    let generatedComparison = AppleProjectSpecComparator.receipt(
+      ymlSpec: ymlSpec,
+      pklSpec: generatedSpec,
+      ymlPath: ground.projectYMLURL.path,
+      pklPath: generatedPkl.path,
+      requestId: "xcodegen-to-pkl-proving-ground-generated-comparison-\(ground.slug)"
+    )
+    let checkedInComparison = AppleProjectSpecComparator.receipt(
+      ymlSpec: ymlSpec,
+      pklSpec: checkedInSpec,
+      ymlPath: ground.projectYMLURL.path,
+      pklPath: ground.projectPklURL.path,
+      requestId: "xcodegen-to-pkl-proving-ground-checked-in-comparison-\(ground.slug)"
+    )
+
+    #expect(receipt.receiptKind == "vaporize-apple-project-yml-pkl-import")
+    #expect(receipt.projectName == ground.expectedProjectName)
+    #expect(receipt.targetNames == ground.expectedTargetNames)
+    #expect(receipt.packageNames == ground.expectedPackageNames)
+    #expect(generatedComparison.matched == true)
+    #expect(generatedComparison.mismatchCount == 0)
+    #expect(checkedInComparison.matched == true)
+    #expect(checkedInComparison.mismatchCount == 0)
+  }
+}
+
 @Test("CUJ-13 Pkl renderer preserves nested values and script strings")
 func pklRendererPreservesNestedValuesAndScripts() async throws {
   let spec = try decodeAppleProjectYML(

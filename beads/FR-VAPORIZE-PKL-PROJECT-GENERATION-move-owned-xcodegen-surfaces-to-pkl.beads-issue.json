@@ -149,6 +149,21 @@
         "generationReceipt": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/creative-selection-v0.2-pkl-xcodeproj-generation.receipt.json"
       },
       {
+        "slice": "checked-in-xcodegen-to-pkl-parity-proving-grounds",
+        "status": "complete-with-focused-proof",
+        "description": "Vaporize now carries five checked-in XcodeGen-to-Pkl parity proving grounds covering minimal app, configured release app, package/framework graph, test-host suite, and tool shapes. CUJ-10 compares the stored YAML/Pkl pairs, and CUJ-13 regenerates Pkl from every YAML fixture to prove importer parity.",
+        "fixtureRoot": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/tests/proving-grounds/xcodegen-to-pkl-parity",
+        "comparisonTests": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/tests/cuj-10-yml-pkl-comparison/VaporizeCUJ10YMLPklComparisonTests.swift",
+        "importTests": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/tests/cuj-13-yml-pkl-import/VaporizeCUJ13YMLPklImportTests.swift"
+      },
+      {
+        "slice": "above-parity-pkl-project-generation-proving-grounds",
+        "status": "complete-with-focused-proof",
+        "description": "Vaporize now carries Pkl-only above-parity project-generation grounds for a resourceful Sparkle app and release tool. CUJ-14 generates .xcodeproj world-state from both specimens and checks release identity, resource, scheme, and tool product semantics.",
+        "fixtureRoot": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/tests/proving-grounds/pkl-project-generation",
+        "generationTests": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/tests/cuj-14-pkl-xcodeproj-generation/VaporizeCUJ14PklXcodeProjectGenerationTests.swift"
+      },
+      {
         "slice": "tool-release-identity-xcodeproj-generation",
         "status": "complete-with-focused-proof",
         "description": "The 2026-07-04 vaporware modification request adds typed releaseIdentity to AppleProjectSpec, maps it into Xcode build settings and Sparkle Info.plist keys, supports macOS tool target product semantics, and keeps unsupported target types as expected failures. This proves CUJ-14 fixture behavior, not fleet build parity or Sparkle appcast generation.",

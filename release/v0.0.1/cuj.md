@@ -635,11 +635,11 @@ must know the required floor.
 | CUJ-07 | FR-007, FR-008 | 10 |
 | CUJ-08 | FR-015 | 5 |
 | CUJ-09 | FR-012, FR-013, FR-014, FR-022, FR-025, FR-026 | 0 Swift tests; 7 release evidence checks |
-| CUJ-10 | FR-016 | 4 |
+| CUJ-10 | FR-016 | 5 |
 | CUJ-11 | FR-017 | 3 |
 | CUJ-12 | FR-009 | 1 |
-| CUJ-13 | FR-018 | 4 |
-| CUJ-14 | FR-020 | 6 |
+| CUJ-13 | FR-018 | 5 |
+| CUJ-14 | FR-020 | 7 |
 | CUJ-15 | FR-003, FR-021 | 4 |
 | CUJ-16 | FR-023, FR-024 | 5 Swift tests; 1 release evidence check |
 | CUJ-17 | FR-027 | 7 Swift tests; 1 release evidence check |
@@ -652,10 +652,10 @@ must know the required floor.
 
 Current active-CUJ requirement:
 
-- Required Swift test obligations: 113
+- Required Swift test obligations: 116
 - Required release evidence checks: 13
-- Required targetable test obligations: 126
-- Current executable Swift tests: 147 across 23 implemented CUJ-specific SwiftPM
+- Required targetable test obligations: 129
+- Current executable Swift tests: 150 across 23 implemented CUJ-specific SwiftPM
   bundles
 - Coverage artifact:
   `release/v0.0.1/evidence/cuj-test-coverage.json`

@@ -737,6 +737,7 @@ public enum AppleProjectSpecComparator {
     appendMismatch("settingsBase", yml.settingsBase, pkl.settingsBase, to: &mismatches)
     appendMismatch("packages", yml.packages, pkl.packages, to: &mismatches)
     appendMismatch("targets", yml.targets, pkl.targets, to: &mismatches)
+    appendMismatch("schemes", yml.schemes, pkl.schemes, to: &mismatches)
     return mismatches
   }
 
@@ -848,6 +849,7 @@ public struct AppleProjectSpecParitySignature: Codable, Equatable, Sendable {
   public var settingsBase: [String: String]
   public var packages: [String: AppleProjectPackageSignature]
   public var targets: [String: AppleProjectTargetSignature]
+  public var schemes: [String: AppleProjectSchemeSignature]
 
   public init(spec: AppleProjectSpec) {
     self.projectName = spec.name
@@ -860,6 +862,7 @@ public struct AppleProjectSpecParitySignature: Codable, Equatable, Sendable {
     self.settingsBase = signatureMap(spec.settings?.base)
     self.packages = spec.packages.mapValues { AppleProjectPackageSignature(package: $0) }
     self.targets = spec.targets.mapValues { AppleProjectTargetSignature(target: $0) }
+    self.schemes = spec.schemes.mapValues { AppleProjectSchemeSignature(scheme: $0) }
   }
 }
 
@@ -886,6 +889,9 @@ public struct AppleProjectTargetSignature: Codable, Equatable, Sendable {
   public var platform: String?
   public var deploymentTarget: String?
   public var sourcePaths: [String]
+  public var sources: [AppleProjectSourceSignature]
+  public var info: AppleProjectInfoSignature?
+  public var releaseIdentity: AppleProjectReleaseIdentitySignature?
   public var settingsBase: [String: String]
   public var settingConfigs: [String: [String: String]]
   public var configFiles: [String: String]
@@ -898,12 +904,63 @@ public struct AppleProjectTargetSignature: Codable, Equatable, Sendable {
     self.platform = target.platform
     self.deploymentTarget = target.deploymentTarget?.stringValue
     self.sourcePaths = (target.sources ?? []).map(\.path)
+    self.sources = (target.sources ?? []).map(AppleProjectSourceSignature.init)
+    self.info = target.info.map(AppleProjectInfoSignature.init)
+    self.releaseIdentity = target.releaseIdentity.map(AppleProjectReleaseIdentitySignature.init)
     self.settingsBase = signatureMap(target.settings?.base)
     self.settingConfigs = (target.settings?.configs ?? [:]).mapValues(signatureMap)
     self.configFiles = target.configFiles ?? [:]
     self.dependencies = (target.dependencies ?? []).map(AppleProjectDependencySignature.init)
     self.preBuildScripts = (target.preBuildScripts ?? []).map(AppleProjectBuildScriptSignature.init)
     self.postBuildScripts = (target.postBuildScripts ?? []).map(AppleProjectBuildScriptSignature.init)
+  }
+}
+
+public struct AppleProjectSourceSignature: Codable, Equatable, Sendable {
+  public var path: String
+  public var name: String?
+  public var type: String?
+  public var optional: Bool?
+  public var excludes: [String]
+
+  public init(source: AppleProjectSource) {
+    self.path = source.path
+    self.name = source.name
+    self.type = source.type
+    self.optional = source.optional
+    self.excludes = source.excludes ?? []
+  }
+}
+
+public struct AppleProjectInfoSignature: Codable, Equatable, Sendable {
+  public var path: String?
+  public var properties: [String: AppleProjectValue]
+
+  public init(info: AppleProjectInfo) {
+    self.path = info.path
+    self.properties = info.properties ?? [:]
+  }
+}
+
+public struct AppleProjectReleaseIdentitySignature: Codable, Equatable, Sendable {
+  public var bundleIdentifier: String?
+  public var shortVersion: String?
+  public var buildVersion: String?
+  public var buildSha: String?
+  public var buildDate: String?
+  public var generateInfoPlist: Bool?
+  public var sparkleFeedURL: String?
+  public var sparklePublicEDKey: String?
+
+  public init(releaseIdentity: AppleProjectReleaseIdentity) {
+    self.bundleIdentifier = releaseIdentity.bundleIdentifier
+    self.shortVersion = releaseIdentity.shortVersion
+    self.buildVersion = releaseIdentity.buildVersion
+    self.buildSha = releaseIdentity.buildSha
+    self.buildDate = releaseIdentity.buildDate
+    self.generateInfoPlist = releaseIdentity.generateInfoPlist
+    self.sparkleFeedURL = releaseIdentity.sparkleFeedURL
+    self.sparklePublicEDKey = releaseIdentity.sparklePublicEDKey
   }
 }
 
@@ -932,6 +989,20 @@ public struct AppleProjectBuildScriptSignature: Codable, Equatable, Sendable {
     self.name = script.name
     self.basedOnDependencyAnalysis = script.basedOnDependencyAnalysis
     self.normalizedScript = script.script.normalizedProjectScript
+  }
+}
+
+public struct AppleProjectSchemeSignature: Codable, Equatable, Sendable {
+  public var shared: Bool?
+  public var build: AppleProjectValue?
+  public var run: AppleProjectValue?
+  public var test: AppleProjectValue?
+
+  public init(scheme: AppleProjectScheme) {
+    self.shared = scheme.shared
+    self.build = scheme.build
+    self.run = scheme.run
+    self.test = scheme.test
   }
 }
 

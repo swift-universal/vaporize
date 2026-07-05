@@ -34,7 +34,7 @@ func releaseDoctorPassesLiveReleaseSpine() throws {
   #expect(receipt.subjectReleaseSlug == "v0.0.1")
   #expect(receipt.overallStatus == "pass")
   #expect(receipt.requiredArtifactCount == 28)
-  #expect(receipt.checkCount == 139)
+  #expect(receipt.checkCount == 141)
   #expect(receipt.failedCheckCount == 0)
   #expect(receipt.checks.contains { $0.name == "launch-review-gate-33" && $0.status == "pass" })
   #expect(receipt.checks.contains { $0.name == "launch-review-gate-34" && $0.status == "pass" })
@@ -88,6 +88,8 @@ func releaseDoctorPassesLiveReleaseSpine() throws {
   #expect(receipt.checks.contains { $0.name == "gate-product-proving-grounds" && $0.status == "pass" })
   #expect(receipt.checks.contains { $0.name == "feature-catalog-product-proving-grounds" && $0.status == "pass" })
   #expect(receipt.checks.contains { $0.name == "product-proving-ground-doc" && $0.status == "pass" })
+  #expect(receipt.checks.contains { $0.name == "coverage-yml-pkl-parity-proving-ground-test-bundle" && $0.status == "pass" })
+  #expect(receipt.checks.contains { $0.name == "coverage-yml-pkl-import-proving-ground-test-bundle" && $0.status == "pass" })
   #expect(receipt.checks.contains { $0.name == "coverage-release-doctor-test-bundle" && $0.status == "pass" })
   #expect(receipt.checks.contains { $0.name == "coverage-pkl-xcodeproj-graph-scheme-test-bundle" && $0.status == "pass" })
   #expect(receipt.checks.contains { $0.name == "coverage-project-target-discovery-test-bundle" && $0.status == "pass" })
@@ -381,8 +383,10 @@ private func makeReleaseDoctorFixture(
         "activeCUJCount": 23,
         "requiredReleaseEvidenceCheckCount": 13,
         "currentExecutableSwiftTestBreakdown": {
+          "VaporizeCUJ10YMLPklComparisonTests": 5,
+          "VaporizeCUJ13YMLPklImportTests": 5,
           "VaporizeCUJ17ReleaseDoctorTests": 7,
-          "VaporizeCUJ14PklXcodeProjectGenerationTests": 6,
+          "VaporizeCUJ14PklXcodeProjectGenerationTests": 7,
           "VaporizeCUJ18ListTargetsTests": 5,
           "VaporizeCUJ19WorkspaceCacheDiscoveryTests": 5,
           "VaporizeCUJ20XcodeWorkspaceSchemesTests": 5,

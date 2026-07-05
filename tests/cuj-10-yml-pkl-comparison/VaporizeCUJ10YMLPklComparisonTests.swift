@@ -22,6 +22,33 @@ func comparesConcourseProjectYMLWithPklSpecimen() async throws {
   #expect(receipt.pklSignature.targets["concourse"]?.settingConfigs["Debug"]?["WRAPPER_NAME"] == "concourse-$(MARKETING_VERSION)-debug.app")
 }
 
+@Test("CUJ-10 compares checked-in XcodeGen-to-Pkl parity proving grounds")
+func comparesCheckedInXcodeGenToPklParityProvingGrounds() async throws {
+  #expect(xcodeGenToPklParityProvingGrounds.count >= 5)
+
+  for ground in xcodeGenToPklParityProvingGrounds {
+    let ymlSpec = try AppleProjectYMLReader.load(url: ground.projectYMLURL)
+    let pklSpec = try await AppleProjectPklLoader.load(url: ground.projectPklURL)
+    let receipt = AppleProjectSpecComparator.receipt(
+      ymlSpec: ymlSpec,
+      pklSpec: pklSpec,
+      ymlPath: ground.projectYMLURL.path,
+      pklPath: ground.projectPklURL.path,
+      requestId: "xcodegen-to-pkl-parity-\(ground.slug)"
+    )
+
+    #expect(receipt.receiptKind == "vaporize-apple-project-yml-pkl-comparison")
+    #expect(receipt.matched == true)
+    #expect(receipt.mismatchCount == 0)
+    #expect(receipt.pklSignature.projectName == ground.expectedProjectName)
+    #expect(receipt.pklSignature.targets.keys.sorted() == ground.expectedTargetNames)
+    #expect(receipt.pklSignature.packages.keys.sorted() == ground.expectedPackageNames)
+    #expect(receipt.pklSignature.schemes.keys.sorted() == ground.expectedSchemeNames)
+    #expect(FileManager.default.fileExists(atPath: ground.projectYMLURL.path))
+    #expect(FileManager.default.fileExists(atPath: ground.projectPklURL.path))
+  }
+}
+
 @Test("CUJ-10 Pkl loader wraps evaluation failures with the source path")
 func pklLoaderWrapsEvaluationFailuresWithSourcePath() async throws {
   let missingPkl = FileManager.default.temporaryDirectory

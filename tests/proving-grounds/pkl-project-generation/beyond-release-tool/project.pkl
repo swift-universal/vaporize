@@ -1,0 +1,55 @@
+/// Above-parity Vaporize proving-ground specimen for Pkl-backed tool generation.
+///
+/// Boundary: this proves generated project world-state shape, not install,
+/// appcast publishing, or fleet build parity.
+
+amends "../../../../Pkl/AppleProjectSpec.pkl"
+
+name = "pkl-beyond-release-tool"
+
+settings = new {
+  base = new {
+    ["SWIFT_VERSION"] = "6.4"
+  }
+}
+
+targets = new {
+  ["ReleaseTool"] = new {
+    type = "tool"
+    platform = "macOS"
+    deploymentTarget = "26.0"
+    sources = new {
+      new {
+        path = "Sources/ReleaseTool"
+      }
+    }
+    releaseIdentity = new {
+      bundleIdentifier = "com.wrkstrm.pkl.beyond.release-tool"
+      shortVersion = "2.0.0"
+      buildVersion = "200"
+      generateInfoPlist = true
+      sparkleFeedURL = "https://updates.example.com/pkl-beyond-release-tool/appcast.xml"
+    }
+    settings = new {
+      base = new {
+        ["PRODUCT_NAME"] = "pkl-beyond-release-tool"
+        ["CODE_SIGNING_ALLOWED"] = false
+        ["CODE_SIGNING_REQUIRED"] = false
+      }
+    }
+  }
+}
+
+schemes = new {
+  ["ReleaseTool"] = new {
+    shared = true
+    build = new Mapping {
+      ["targets"] = new Mapping {
+        ["ReleaseTool"] = "all"
+      }
+    }
+    run = new Mapping {
+      ["config"] = "Debug"
+    }
+  }
+}

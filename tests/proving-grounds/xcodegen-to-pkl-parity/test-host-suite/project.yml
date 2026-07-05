@@ -1,0 +1,52 @@
+name: parity-test-host-suite
+settings:
+  base:
+    SWIFT_VERSION: "6.4"
+targets:
+  HostCore:
+    type: framework
+    platform: macOS
+    deploymentTarget: "26.0"
+    sources:
+      - path: Sources/HostCore
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.wrkstrm.parity.test-host-suite.core
+        PRODUCT_NAME: HostCore
+  HostApp:
+    type: application
+    platform: macOS
+    deploymentTarget: "26.0"
+    sources:
+      - path: Sources/HostApp
+    dependencies:
+      - target: HostCore
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.wrkstrm.parity.test-host-suite
+        PRODUCT_NAME: HostApp
+  HostCoreTests:
+    type: bundle.unit-test
+    platform: macOS
+    deploymentTarget: "26.0"
+    sources:
+      - path: Tests/HostCoreTests
+    dependencies:
+      - target: HostCore
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.wrkstrm.parity.test-host-suite.tests
+        PRODUCT_NAME: HostCoreTests
+schemes:
+  HostApp:
+    shared: true
+    build:
+      targets:
+        HostApp: all
+        HostCoreTests: [test]
+    test:
+      targets:
+        - HostCoreTests
+    run:
+      config: Debug
+      workingDirectory: $(PROJECT_DIR)

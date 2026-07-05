@@ -174,6 +174,52 @@ func generatesFrameworkAppTestGraphAndSharedSchemeFromPkl() async throws {
   #expect(scheme.contains("customWorkingDirectory = \"$(PROJECT_DIR)\""))
 }
 
+@Test("CUJ-14 generates above-parity Pkl project-generation proving grounds")
+func generatesAboveParityPklProjectGenerationProvingGrounds() async throws {
+  #expect(pklProjectGenerationBeyondProvingGrounds.count >= 2)
+
+  for ground in pklProjectGenerationBeyondProvingGrounds {
+    let outputDirectory = FileManager.default.temporaryDirectory
+      .appendingPathComponent("vaporize-\(ground.slug)-xcodeproj-output-\(UUID().uuidString)")
+    defer { try? FileManager.default.removeItem(at: outputDirectory) }
+
+    let manifestData = try Data(contentsOf: ground.passportJSONURL)
+    let manifest = try #require(JSONSerialization.jsonObject(with: manifestData) as? [String: Any])
+    let outputURL = outputDirectory.appendingPathComponent("BeyondGenerated.xcodeproj")
+    let receipt = try await AppleProjectXcodeProjectGenerator.generate(
+      pklURL: ground.projectPklURL,
+      outputURL: outputURL,
+      requestId: "cuj-14-above-parity-\(ground.slug)"
+    )
+
+    let pbxprojData = try Data(contentsOf: outputURL.appendingPathComponent("project.pbxproj"))
+    let pbxproj = String(decoding: pbxprojData, as: UTF8.self)
+
+    #expect(manifest["documentKind"] as? String == "vaporize-pkl-project-generation-beyond-proving-ground")
+    #expect(manifest["provingGroundSlug"] as? String == ground.slug)
+    #expect(manifest["targetableTestBundle"] as? String == "VaporizeCUJ14PklXcodeProjectGenerationTests")
+    #expect(receipt.projectName == ground.expectedProjectName)
+    #expect(receipt.targetNames == ground.expectedTargetNames)
+    #expect(receipt.packageNames == ground.expectedPackageNames)
+    #expect(receipt.schemeCount == ground.expectedSchemeNames.count)
+    #expect(receipt.sourceFileCount == ground.expectedSourceFileCount)
+    #expect(receipt.resourceFileCount == ground.expectedResourceFileCount)
+    for fragment in ground.expectedPBXProjFragments {
+      #expect(pbxproj.contains(fragment))
+    }
+    for schemeName in ground.expectedSchemeNames {
+      let schemeURL = outputURL
+        .appendingPathComponent("xcshareddata")
+        .appendingPathComponent("xcschemes")
+        .appendingPathComponent("\(schemeName).xcscheme")
+      let scheme = try String(contentsOf: schemeURL, encoding: .utf8)
+      for fragment in ground.expectedSchemeFragments {
+        #expect(scheme.contains(fragment))
+      }
+    }
+  }
+}
+
 @Test("CUJ-14 rejects unsupported Xcode target types from Pkl")
 func rejectsUnsupportedXcodeTargetTypesFromPkl() throws {
   let spec = try decodeAppleProjectYML(tinyUnsupportedTargetYML)

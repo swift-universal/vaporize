@@ -1,0 +1,18 @@
+{
+  "schemaVersion": "0.1.0",
+  "documentKind": "vaporize-pkl-project-generation-beyond-proving-ground",
+  "provingGroundSlug": "beyond-resourceful-sparkle-app",
+  "productSlug": "vaporize-pkl-xcodeproj-generation@wrkstrm-core.feature",
+  "productClass": "generator",
+  "owningBeadRef": "beads/FR-VAPORIZE-PKL-PROJECT-GENERATION-move-owned-xcodegen-surfaces-to-pkl.beads-issue.json",
+  "harnessDoctrineRef": "vaporize.engineering.docc/product-proving-grounds.md",
+  "projectSpecRef": "tests/proving-grounds/pkl-project-generation/beyond-resourceful-sparkle-app/project.pkl",
+  "targetableTestBundle": "VaporizeCUJ14PklXcodeProjectGenerationTests",
+  "trackSlug": "above-and-beyond",
+  "scenarioRefs": [
+    "pkl-resourceful-sparkle-app-world-state",
+    "pkl-release-identity-infoplist-projection",
+    "pkl-shared-scheme-working-directory"
+  ],
+  "boundary": "This proving ground proves Pkl-backed .xcodeproj generation for a resource-bearing Sparkle-ready app specimen. It does not prove signed appcasts, notarization, or fleet build parity."
+}

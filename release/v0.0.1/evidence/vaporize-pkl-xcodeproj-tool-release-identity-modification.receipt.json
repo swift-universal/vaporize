@@ -44,7 +44,7 @@
     {
       "testBundle": "VaporizeCUJ09ReleaseReviewTests",
       "testName": "cujCoverageContractIsValidJSONAndNamesTheFloor",
-      "expectation": "release-review fails if CUJ coverage counters drift from the new 147-test model"
+      "expectation": "release-review fails if CUJ coverage counters drift from the new 150-test model"
     },
     {
       "testBundle": "VaporizeCUJ23ProductProvingGroundTests",

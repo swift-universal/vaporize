@@ -267,8 +267,8 @@ Supporting audiences:
 
 - Vaporize's package test suite passes with the Swift 6.4 toolchain:
   `vaporize toolchain -- swift test --package-path private/apple/spm/vaporize@wrkstrm-core.cli`.
-  Current proof: the CUJ-derived coverage floor requires 113 Swift test
-  obligations plus 13 release evidence checks; the executable suite passes 147
+  Current proof: the CUJ-derived coverage floor requires 116 Swift test
+  obligations plus 13 release evidence checks; the executable suite passes 150
   tests across 23 implemented CUJ targets, including the CUJ-14 expanded
   Pkl `.xcodeproj` graph and shared-scheme slice, CUJ-16
   `inspect-target-features` first slice, CUJ-17 `release-doctor` first slice,

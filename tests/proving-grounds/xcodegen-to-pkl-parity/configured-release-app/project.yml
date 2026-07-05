@@ -1,0 +1,70 @@
+name: parity-configured-release-app
+options:
+  minimumXcodeGenVersion: 2.41.0
+  useBaseInternationalization: true
+  createIntermediateGroups: true
+configs:
+  Debug: debug
+  Release: release
+settings:
+  base:
+    SWIFT_VERSION: "6.4"
+    MARKETING_VERSION: "3.2.1"
+  configs:
+    Debug:
+      CURRENT_PROJECT_VERSION: "321-debug"
+    Release:
+      CURRENT_PROJECT_VERSION: "321"
+targets:
+  ConfiguredReleaseApp:
+    type: application
+    platform: macOS
+    deploymentTarget: "26.0"
+    sources:
+      - path: Sources/ConfiguredReleaseApp
+        name: App Sources
+        excludes:
+          - Generated/**
+    info:
+      path: Sources/ConfiguredReleaseApp/Info.plist
+      properties:
+        CFBundleDisplayName: Configured Release App
+        NSPrincipalClass: NSApplication
+        Vaporize:
+          releaseTier: canary
+          sparkleReady: true
+    releaseIdentity:
+      bundleIdentifier: com.wrkstrm.parity.configured-release-app
+      shortVersion: "3.2.1"
+      buildVersion: "321"
+      buildSha: parity321
+      buildDate: "2026-07-05T00:00:00Z"
+      sparkleFeedURL: https://updates.example.com/configured-release-app/appcast.xml
+      sparklePublicEDKey: configured-release-app-ed25519
+    configFiles:
+      Debug: Config/Debug.xcconfig
+      Release: Config/Release.xcconfig
+    settings:
+      base:
+        PRODUCT_NAME: ConfiguredReleaseApp
+        CODE_SIGNING_ALLOWED: false
+        CODE_SIGNING_REQUIRED: false
+    preBuildScripts:
+      - name: Generate Release Metadata
+        basedOnDependencyAnalysis: false
+        script: |
+          set -euo pipefail
+          echo "metadata"
+    postBuildScripts:
+      - name: Stage Appcast Draft
+        script: |
+          echo "stage appcast"
+schemes:
+  ConfiguredReleaseApp:
+    shared: true
+    build:
+      targets:
+        ConfiguredReleaseApp: all
+    run:
+      config: Release
+      workingDirectory: $(PROJECT_DIR)

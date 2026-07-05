@@ -1,0 +1,27 @@
+name: parity-minimal-mac-app
+options:
+  minimumXcodeGenVersion: 2.39.0
+settings:
+  base:
+    SWIFT_VERSION: "6.4"
+targets:
+  MinimalMacApp:
+    type: application
+    platform: macOS
+    deploymentTarget: "26.0"
+    sources:
+      - path: Sources/MinimalMacApp
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.wrkstrm.parity.minimal-mac-app
+        PRODUCT_NAME: MinimalMacApp
+        CODE_SIGNING_ALLOWED: false
+        CODE_SIGNING_REQUIRED: false
+schemes:
+  MinimalMacApp:
+    shared: true
+    build:
+      targets:
+        MinimalMacApp: all
+    run:
+      config: Debug

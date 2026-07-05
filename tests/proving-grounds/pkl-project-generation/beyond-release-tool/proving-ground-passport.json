@@ -1,0 +1,18 @@
+{
+  "schemaVersion": "0.1.0",
+  "documentKind": "vaporize-pkl-project-generation-beyond-proving-ground",
+  "provingGroundSlug": "beyond-release-tool",
+  "productSlug": "vaporize-pkl-xcodeproj-generation@wrkstrm-core.feature",
+  "productClass": "generator",
+  "owningBeadRef": "beads/FR-VAPORIZE-PKL-PROJECT-GENERATION-move-owned-xcodegen-surfaces-to-pkl.beads-issue.json",
+  "harnessDoctrineRef": "vaporize.engineering.docc/product-proving-grounds.md",
+  "projectSpecRef": "tests/proving-grounds/pkl-project-generation/beyond-release-tool/project.pkl",
+  "targetableTestBundle": "VaporizeCUJ14PklXcodeProjectGenerationTests",
+  "trackSlug": "above-and-beyond",
+  "scenarioRefs": [
+    "pkl-tool-product-world-state",
+    "pkl-tool-release-identity-generated-infoplist",
+    "pkl-tool-shared-scheme"
+  ],
+  "boundary": "This proving ground proves Pkl-backed .xcodeproj generation for a release-tool specimen. It does not prove CLI installation, Sparkle delivery, or fleet build parity."
+}

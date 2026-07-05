@@ -1049,6 +1049,20 @@ enum VaporizeReleaseDoctor {
         detail: "Coverage artifact must include release-doctor, target discovery, workspace cache discovery, CUJ-state coverage, and product proving-ground evidence obligations."
       ),
       check(
+        name: "coverage-yml-pkl-parity-proving-ground-test-bundle",
+        category: "cuj-coverage",
+        path: url.path,
+        passed: (breakdown["VaporizeCUJ10YMLPklComparisonTests"] as? Int ?? 0) >= 5,
+        detail: "Coverage artifact must name CUJ-10 checked-in XcodeGen-to-Pkl parity proving-ground coverage."
+      ),
+      check(
+        name: "coverage-yml-pkl-import-proving-ground-test-bundle",
+        category: "cuj-coverage",
+        path: url.path,
+        passed: (breakdown["VaporizeCUJ13YMLPklImportTests"] as? Int ?? 0) >= 5,
+        detail: "Coverage artifact must name CUJ-13 generated Pkl import coverage for every parity proving ground."
+      ),
+      check(
         name: "coverage-release-doctor-test-bundle",
         category: "cuj-coverage",
         path: url.path,
@@ -1059,8 +1073,8 @@ enum VaporizeReleaseDoctor {
         name: "coverage-pkl-xcodeproj-graph-scheme-test-bundle",
         category: "cuj-coverage",
         path: url.path,
-        passed: (breakdown["VaporizeCUJ14PklXcodeProjectGenerationTests"] as? Int ?? 0) >= 6,
-        detail: "Coverage artifact must name CUJ-14 framework, unit-test, target-dependency, package, and shared-scheme generation coverage."
+        passed: (breakdown["VaporizeCUJ14PklXcodeProjectGenerationTests"] as? Int ?? 0) >= 7,
+        detail: "Coverage artifact must name CUJ-14 framework, unit-test, target-dependency, package, shared-scheme, and above-parity Pkl generation coverage."
       ),
       check(
         name: "coverage-project-target-discovery-test-bundle",

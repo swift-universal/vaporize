@@ -1,0 +1,75 @@
+/// Above-parity Vaporize proving-ground specimen for Pkl-backed app generation.
+///
+/// Boundary: this proves generated project world-state shape, not signing,
+/// notarization, Sparkle publishing, or fleet build parity.
+
+amends "../../../../Pkl/AppleProjectSpec.pkl"
+
+name = "pkl-beyond-resourceful-sparkle-app"
+
+settings = new {
+  base = new {
+    ["SWIFT_VERSION"] = "6.4"
+    ["MARKETING_VERSION"] = "7.8.9"
+    ["CURRENT_PROJECT_VERSION"] = "789"
+  }
+}
+
+targets = new {
+  ["ResourcefulSparkleApp"] = new {
+    type = "application"
+    platform = "macOS"
+    deploymentTarget = "26.0"
+    sources = new {
+      new {
+        path = "Sources/ResourcefulSparkleApp"
+      }
+    }
+    info = new {
+      path = "Sources/ResourcefulSparkleApp/Info.plist"
+      properties = new Mapping {
+        ["CFBundleDisplayName"] = "Resourceful Sparkle App"
+        ["NSPrincipalClass"] = "NSApplication"
+      }
+    }
+    releaseIdentity = new {
+      bundleIdentifier = "com.wrkstrm.pkl.beyond.resourceful-sparkle-app"
+      shortVersion = "7.8.9"
+      buildVersion = "789"
+      buildSha = "sparkleabc"
+      buildDate = "2026-07-05T00:00:00Z"
+      sparkleFeedURL = "https://updates.example.com/resourceful-sparkle-app/appcast.xml"
+      sparklePublicEDKey = "resourceful-sparkle-app-ed25519"
+    }
+    settings = new {
+      base = new {
+        ["PRODUCT_NAME"] = "ResourcefulSparkleApp"
+        ["PRODUCT_MODULE_NAME"] = "ResourcefulSparkleApp"
+        ["CODE_SIGNING_ALLOWED"] = false
+        ["CODE_SIGNING_REQUIRED"] = false
+      }
+    }
+    postBuildScripts = new {
+      new {
+        name = "Stage Sparkle Draft"
+        basedOnDependencyAnalysis = false
+        script = "set -euo pipefail\necho stage-resourceful-sparkle-app"
+      }
+    }
+  }
+}
+
+schemes = new {
+  ["ResourcefulSparkleApp"] = new {
+    shared = true
+    build = new Mapping {
+      ["targets"] = new Mapping {
+        ["ResourcefulSparkleApp"] = "all"
+      }
+    }
+    run = new Mapping {
+      ["config"] = "Release"
+      ["workingDirectory"] = "$(PROJECT_DIR)"
+    }
+  }
+}

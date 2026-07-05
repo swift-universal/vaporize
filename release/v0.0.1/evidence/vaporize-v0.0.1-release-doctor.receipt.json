@@ -5,7 +5,7 @@
     "First slice checks Vaporize v0.0.1 docs, public-disclosure surfaces, JSON evidence, CUJ coverage, CUJ-state coverage, product proving-ground coverage, launch-review references, launch-review\/PRD\/release-gate follow-up list coherence, launch-review blocker disposition, provenance inventory, project target discovery evidence, workspace product-cache discovery evidence, and Xcode workspace scheme-listing evidence.",
     "Fleet project-generation parity, runtime sampling, build-size cohorts, and periodic buddy health remain separate follow-up checks."
   ],
-  "checkCount" : 139,
+  "checkCount" : 141,
   "checks" : [
     {
       "category" : "required-artifact",
@@ -993,6 +993,22 @@
     },
     {
       "category" : "cuj-coverage",
+      "detail" : "Coverage artifact must name CUJ-10 checked-in XcodeGen-to-Pkl parity proving-ground coverage.",
+      "name" : "coverage-yml-pkl-parity-proving-ground-test-bundle",
+      "path" : "\/Users\/sonoma\/mono\/private\/universal\/substrate\/collectives\/wrkstrm-core\/private\/apple\/spm\/vaporize@wrkstrm-core.cli\/release\/v0.0.1\/evidence\/cuj-test-coverage.json",
+      "severity" : "blocking",
+      "status" : "pass"
+    },
+    {
+      "category" : "cuj-coverage",
+      "detail" : "Coverage artifact must name CUJ-13 generated Pkl import coverage for every parity proving ground.",
+      "name" : "coverage-yml-pkl-import-proving-ground-test-bundle",
+      "path" : "\/Users\/sonoma\/mono\/private\/universal\/substrate\/collectives\/wrkstrm-core\/private\/apple\/spm\/vaporize@wrkstrm-core.cli\/release\/v0.0.1\/evidence\/cuj-test-coverage.json",
+      "severity" : "blocking",
+      "status" : "pass"
+    },
+    {
+      "category" : "cuj-coverage",
       "detail" : "Coverage artifact must name the CUJ-17 targetable test bundle.",
       "name" : "coverage-release-doctor-test-bundle",
       "path" : "\/Users\/sonoma\/mono\/private\/universal\/substrate\/collectives\/wrkstrm-core\/private\/apple\/spm\/vaporize@wrkstrm-core.cli\/release\/v0.0.1\/evidence\/cuj-test-coverage.json",
@@ -1001,7 +1017,7 @@
     },
     {
       "category" : "cuj-coverage",
-      "detail" : "Coverage artifact must name CUJ-14 framework, unit-test, target-dependency, package, and shared-scheme generation coverage.",
+      "detail" : "Coverage artifact must name CUJ-14 framework, unit-test, target-dependency, package, shared-scheme, and above-parity Pkl generation coverage.",
       "name" : "coverage-pkl-xcodeproj-graph-scheme-test-bundle",
       "path" : "\/Users\/sonoma\/mono\/private\/universal\/substrate\/collectives\/wrkstrm-core\/private\/apple\/spm\/vaporize@wrkstrm-core.cli\/release\/v0.0.1\/evidence\/cuj-test-coverage.json",
       "severity" : "blocking",
@@ -1125,10 +1141,10 @@
   "inspectedPath" : "\/Users\/sonoma\/mono\/private\/universal\/substrate\/collectives\/wrkstrm-core\/private\/apple\/spm\/vaporize@wrkstrm-core.cli",
   "overallStatus" : "pass",
   "packageRootPath" : "\/Users\/sonoma\/mono\/private\/universal\/substrate\/collectives\/wrkstrm-core\/private\/apple\/spm\/vaporize@wrkstrm-core.cli",
-  "passedCheckCount" : 139,
+  "passedCheckCount" : 141,
   "receiptKind" : "vaporize-release-doctor",
   "releaseRootPath" : "\/Users\/sonoma\/mono\/private\/universal\/substrate\/collectives\/wrkstrm-core\/private\/apple\/spm\/vaporize@wrkstrm-core.cli\/release\/v0.0.1",
-  "requestId" : "vaporize-release-doctor-199DF9FC-2182-4027-90D8-1DDDEB03C63A",
+  "requestId" : "vaporize-release-doctor-F327366A-A3A5-41BA-85BB-89EAE8400FA2",
   "requiredArtifactCount" : 28,
   "schemaFamilySlug" : "vaporize-schemas",
   "schemaFamilyVersion" : "0.0.1",

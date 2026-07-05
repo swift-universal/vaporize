@@ -1,0 +1,46 @@
+name: parity-package-framework-suite
+settings:
+  base:
+    SWIFT_VERSION: "6.4"
+packages:
+  LocalSupport:
+    path: Packages/LocalSupport
+  RemoteAnalytics:
+    url: https://example.com/remote-analytics.git
+    from: 1.0.0
+targets:
+  SharedFramework:
+    type: framework
+    platform: macOS
+    deploymentTarget: "26.0"
+    sources:
+      - path: Sources/SharedFramework
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.wrkstrm.parity.package-framework-suite.shared
+        PRODUCT_NAME: SharedFramework
+  PackageApp:
+    type: application
+    platform: macOS
+    deploymentTarget: "26.0"
+    sources:
+      - path: Sources/PackageApp
+    dependencies:
+      - target: SharedFramework
+      - package: LocalSupport
+        product: LocalSupport
+      - package: RemoteAnalytics
+        product: RemoteAnalytics
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.wrkstrm.parity.package-framework-suite
+        PRODUCT_NAME: PackageApp
+schemes:
+  PackageApp:
+    shared: true
+    build:
+      targets:
+        PackageApp: all
+        SharedFramework: [test, run]
+    run:
+      config: Debug
