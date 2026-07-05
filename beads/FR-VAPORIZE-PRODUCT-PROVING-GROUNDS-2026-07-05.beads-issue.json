@@ -1,0 +1,54 @@
+{
+  "BeadsIssue": "0.1.0",
+  "schemaVersion": "0.1.0",
+  "id": "FR-VAPORIZE-PRODUCT-PROVING-GROUNDS-2026-07-05",
+  "title": "Adopt product proving-ground passports for vaporware products",
+  "status": "done",
+  "priority": 1,
+  "issueType": "feature",
+  "labels": [
+    "vaporize",
+    "vaporware",
+    "proving-ground",
+    "release-doctor",
+    "cuj-23",
+    "test-support",
+    "release-spine"
+  ],
+  "createdAt": "2026-07-05T00:00:00Z",
+  "createdBy": "codex after chairman connected vaporware product proof to automotive proving grounds",
+  "historicalContent": {
+    "slug": "FR-VAPORIZE-PRODUCT-PROVING-GROUNDS-2026-07-05",
+    "kind": "bead-feature-request",
+    "createdAt": "2026-07-05T00:00:00Z",
+    "createdBy": "codex",
+    "assignee": "wrkstrm-core",
+    "severity": "high",
+    "componentHome": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli",
+    "sourceType": "operator-requested-product-proof-doctrine",
+    "sourceLocation": "Codex session 2026-07-05: chairman asked to evolve proving grounds so every vaporware product carries the same kind of proof discipline car designers use.",
+    "description": "Create the first typed product proving-ground passport for vaporware products. Each product class should know expected tracks, each product profile should name owning bead, CUJs, scenarios, targetable tests, receipts, and release-doctor checks, and release review should be able to reject incomplete passports.",
+    "acceptanceCriteria": [
+      "FR-033 defines product proving-ground passports in the PRD.",
+      "CUJ-23 defines the product proving-ground adoption journey and proof boundary.",
+      "GATE-40 records the product proving-ground release gate.",
+      "VaporizeTestSupport defines a product proving-ground profile, scenario, and adoption audit.",
+      "VaporizeCUJ23ProductProvingGroundTests proves a passing Vaporize CLI passport, missing-track failure, missing-receipt failure, missing-targetable-test failure, and product-class default track catalog.",
+      "vaporize.engineering.docc/product-proving-grounds.md documents tracks, class defaults, release rule, and boundaries.",
+      "Release Doctor checks FR-033, CUJ-23, GATE-40, the engineering doc, launch-review reference, and CUJ-23 coverage."
+    ],
+    "linkedTypedRecords": {
+      "prdRequirement": "release/v0.0.1/prd.md#FR-033",
+      "criticalUserJourney": "release/v0.0.1/cuj.md#CUJ-23",
+      "releaseGate": "release/v0.0.1/release-gates.md#GATE-40-product-proving-grounds",
+      "engineeringDoc": "vaporize.engineering.docc/product-proving-grounds.md",
+      "coverageArtifact": "release/v0.0.1/evidence/cuj-test-coverage.json"
+    }
+  },
+  "composesWith": [
+    "[[release-claims-must-trace-to-evidence]]",
+    "[[typed-receipts-over-ad-hoc-terminal-proof]]",
+    "[[simulations-are-special-proving-ground-tests]]",
+    "[[vaporware-products-need-passports]]"
+  ]
+}

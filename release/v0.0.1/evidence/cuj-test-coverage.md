@@ -26,12 +26,12 @@ and CUJ count must already name the behavior being retired from the old location
 
 | Metric | Count |
 | --- | ---: |
-| Active CUJs | 22 |
+| Active CUJs | 23 |
 | Deferred CUJs | 1 |
-| Required Swift test obligations | 108 |
-| Required release evidence checks | 12 |
-| Required targetable test obligations | 120 |
-| Current executable Swift tests | 142 |
+| Required Swift test obligations | 112 |
+| Required release evidence checks | 13 |
+| Required targetable test obligations | 125 |
+| Current executable Swift tests | 146 |
 
 ## Targetable Test Bundles
 
@@ -50,7 +50,7 @@ and CUJ count must already name the behavior being retired from the old location
 | CUJ-11 | `VaporizeCUJ11PklYMLGenerationTests` | 3 |
 | CUJ-12 | `VaporizeCUJ12PackageGraphTests` | 1 |
 | CUJ-13 | `VaporizeCUJ13YMLPklImportTests` | 4 |
-| CUJ-14 | `VaporizeCUJ14PklXcodeProjectGenerationTests` | 5 |
+| CUJ-14 | `VaporizeCUJ14PklXcodeProjectGenerationTests` | 6 |
 | CUJ-15 | `VaporizeCUJ15XcodeProductCacheTests` | 4 |
 | CUJ-16 | `VaporizeCUJ16TargetFeaturesTests` | 5 |
 | CUJ-17 | `VaporizeCUJ17ReleaseDoctorTests` | 7 |
@@ -59,6 +59,7 @@ and CUJ count must already name the behavior being retired from the old location
 | CUJ-20 | `VaporizeCUJ20XcodeWorkspaceSchemesTests` | 5 |
 | CUJ-21 | `VaporizeCUJ21CUJStateTests` | 6 |
 | CUJ-22 | `VaporizeCUJ22ResourceCLIInstallTests` | 8 |
+| CUJ-23 | `VaporizeCUJ23ProductProvingGroundTests` | 3 |
 
 ## Coverage By CUJ
 
@@ -77,7 +78,7 @@ and CUJ count must already name the behavior being retired from the old location
 | CUJ-11 | FR-017 | 3 | Transitional YAML generation, renderer round-trip, generated YAML/Pkl comparison evidence |
 | CUJ-12 | FR-009 | 1 | Graph forwarded argument parsing |
 | CUJ-13 | FR-018 | 4 | Legacy YAML import parsing, generated Pkl evaluation, YAML/Pkl comparison, nested value rendering |
-| CUJ-14 | FR-020 | 5 | generate-xcodeproj parsing, Pkl-backed .xcodeproj output, deterministic renderer proof, tool releaseIdentity expected-pass, unsupported-target expected-fail |
+| CUJ-14 | FR-020 | 6 | generate-xcodeproj parsing, Pkl-backed .xcodeproj output, deterministic renderer proof, tool releaseIdentity expected-pass, framework/app/unit-test/package/shared-scheme graph expected-pass, unsupported-target expected-fail |
 | CUJ-15 | FR-003, FR-021 | 4 | Product-cache option parsing, cache-first app lookup, shared workspace build invocation, paired option validation |
 | CUJ-16 | FR-023, FR-024 | 5 | Target feature inspection parsing, inferred target, stale xcconfig detection, generated Swift provenance, CLI parsing |
 | CUJ-17 | FR-027 | 7 Swift tests; 1 release evidence check | Release doctor parsing, live-spine pass, release-root resolution, missing-gate failure, unresolved-root rejection, unreviewed gate approval failure, follow-up list drift failure |
@@ -86,6 +87,7 @@ and CUJ count must already name the behavior being retired from the old location
 | CUJ-20 | FR-030 | 5 | list-schemes CLI parsing, xcodebuild argument construction, workspace scheme JSON parsing, non-workspace rejection, receipt boundary |
 | CUJ-21 | FR-031 | 6 Swift tests; 1 release evidence check | CUJ-state fixture derivation, source metadata preservation, receipt output, coverage contract validation |
 | CUJ-22 | FR-002, FR-032 | 8 | Typed simulation proving-ground manifest, processed text resource, copied resource directory, decoded JSON resource, byte-count resource, stale installed bundle replacement, checked-in resource vault CLI install, legacy resource CLI product-gate capture |
+| CUJ-23 | FR-033 | 3 Swift tests; 1 release evidence check | Product proving-ground passport profile, incomplete-passport failure, reusable product-class track catalog, release-doctor coverage |
 
 ## Deferred Coverage
 
@@ -109,5 +111,8 @@ and CUJ count must already name the behavior being retired from the old location
   bundles and metadata sidecars; it does not prove app bundle packaging,
   `Bundle.main.infoDictionary` product metadata, Sparkle appcast generation, or
   update signing.
+- Product proving-ground passport coverage proves adoption evidence shape; it
+  does not approve releases or replace product-specific proving-ground
+  scenarios.
 
 The machine-readable companion is `cuj-test-coverage.json`.

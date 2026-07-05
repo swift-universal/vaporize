@@ -272,6 +272,13 @@ let package = Package(
       path: "tests/cuj-22-resource-cli-install"
     ),
     .testTarget(
+      name: "VaporizeCUJ23ProductProvingGroundTests",
+      dependencies: [
+        "VaporizeTestSupport",
+      ],
+      path: "tests/cuj-23-product-proving-grounds"
+    ),
+    .testTarget(
       name: "VaporizeCUJ12PackageGraphTests",
       dependencies: [
         "VaporizeCLI",

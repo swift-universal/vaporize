@@ -16,7 +16,7 @@ Vaporize v0.0.1 has matured from a command wrapper into a release-spine tool for
 - Audience packet at `evidence/audience-packet.su.json` for the brochure's technical evaluator, future customer, board-approved public reader, operator, and adversarial reviewer profiles.
 - User manual at `user-manual.md` so the brochure sits beside an operational review path.
 - Release doctor checks for public-disclosure docs and launch-review references.
-- ReleaseIdentity-facing public copy for Pkl-backed app and tool target generation, including Sparkle Info.plist key projection boundaries.
+- ReleaseIdentity-facing public copy for Pkl-backed app, framework, tool, unit-test, local package, and shared-scheme generation, including Sparkle Info.plist key projection boundaries.
 - CUJ-state coverage evidence for journey-derived state proof.
 - Project target discovery from AppleProjectSpec records.
 - Shared workspace product-cache candidate discovery from target facts.

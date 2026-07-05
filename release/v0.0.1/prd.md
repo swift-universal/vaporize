@@ -81,6 +81,12 @@ JSON evidence, launch-review references, provenance, and CUJ coverage before
 assistants trust the packet. It is a consistency gate, not a release approval
 gate.
 
+The current product proving-ground slice turns the CUJ-22 simulation language
+into a reusable product passport pattern. Each vaporware product class can now
+name required proving-ground tracks, scenarios, targetable tests, receipts, and
+release-doctor checks before release review treats the product as embodied
+proof.
+
 ## Product Definition, User Journeys, And Choice Argument
 
 `release/v0.0.1/product-definition.md` is the release-prep product contract for
@@ -176,6 +182,9 @@ future hardware or other material-domain request families.
   agreement across product definition, PRD, CUJs, gates, launch-review packet,
   provenance, CUJ coverage, feature catalog, and engineering DocC before
   assistants trust the packet.
+- Provide product proving-ground passports so every vaporware product class can
+  declare required tracks, scenarios, targetable tests, receipts, and
+  release-doctor checks before release review trusts it.
 - Provide `status` and `warehouse` inventory modes for
   `x-vaporize-collapse-path` records, with legacy `x-craze-collapse-path`
   read-only fallback.
@@ -252,18 +261,21 @@ Supporting audiences:
 | FR-030 | Xcode workspace scheme listing | `list-schemes --xcode-workspace <workspace.xcworkspace>` executes `xcodebuild -list -json -workspace` through Vaporize/CommonProcess, parses the workspace scheme list, and can emit a `vaporize-xcode-workspace-scheme-list` receipt. The command lists schemes only; it does not build, install, warm caches, prove product paths, or prove fleet-wide workspace membership. |
 | FR-031 | CUJ-state coverage gate | CUJ-state coverage evidence names every required journey-derived CUJ-state id, attaches a proof entry for each id, records empty uncovered/unknown/duplicate lists, and is checked by release doctor before release review trusts simulated world state. This proves CUJ-state coverage only; it does not prove Kura, Turso, libSQL, sync, migration, or public release readiness. |
 | FR-032 | SwiftPM CLI resource-bundle install preservation | `install` preserves SwiftPM target resource bundles required by `Bundle.module` for installed CLIs by using SwiftPM `experimental-install` for the executable, asking SwiftPM for the build products directory with `swift build --show-bin-path`, and copying direct `.bundle` siblings into the installed CLI bin directory. Vaporize also writes product version/build facts to the CLI metadata sidecar. This does not turn the CLI into an app bundle, does not make `Bundle.main.infoDictionary` carry product metadata, and does not prove Sparkle appcast generation or update signing. |
+| FR-033 | Product proving-ground passports | Vaporware products carry a typed proving-ground profile naming product class, owning bead, CUJs, required tracks, scenarios, targetable tests, receipts, release-doctor checks, and boundaries. The adoption gate fails missing tracks, missing CUJs, missing receipt refs, missing targetable test bundles, and unknown track slugs. This proves release-review evidence shape; it does not approve the release or replace product-specific behavioral tests. |
 
 ## Release Criteria
 
 - Vaporize's package test suite passes with the Swift 6.4 toolchain:
   `vaporize toolchain -- swift test --package-path private/apple/spm/vaporize@wrkstrm-core.cli`.
-  Current proof: the CUJ-derived coverage floor requires 108 Swift test
-  obligations plus 12 release evidence checks; the executable suite passes 142
-  tests across 22 implemented CUJ targets, including the CUJ-16
+  Current proof: the CUJ-derived coverage floor requires 112 Swift test
+  obligations plus 13 release evidence checks; the executable suite passes 146
+  tests across 23 implemented CUJ targets, including the CUJ-14 expanded
+  Pkl `.xcodeproj` graph and shared-scheme slice, CUJ-16
   `inspect-target-features` first slice, CUJ-17 `release-doctor` first slice,
   CUJ-18 `list-targets` first slice, CUJ-19 workspace cache discovery first
   slice, CUJ-20 `list-schemes` first slice, CUJ-21 CUJ-state coverage gate, and
-  CUJ-22 SwiftPM CLI resource-bundle install preservation.
+  CUJ-22 SwiftPM CLI resource-bundle install preservation, and CUJ-23 product
+  proving-ground passports.
 - `release/v0.0.1/product-definition.md` defines the product, primary users,
   product-level user journeys, choice argument, non-choice cases, and build
   implications before additional feature work is accepted.

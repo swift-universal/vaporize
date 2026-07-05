@@ -63,7 +63,9 @@ Targets can declare `releaseIdentity` with:
 
 During `.xcodeproj` generation, Vaporize projects those fields into Xcode build
 settings. That gives app and tool targets the same Xcode-facing behavior while
-keeping the source of truth in the Pkl model.
+keeping the source of truth in the Pkl model. The current generator also emits
+framework, application, unit-test, target-dependency, local package product, and
+shared-scheme world-state for the CUJ-14 expanded graph slice.
 
 This matters for Sparkle because appcast generation and update comparison depend
 on the same two typed values Xcode writes into bundle metadata:

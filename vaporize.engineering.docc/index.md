@@ -43,6 +43,7 @@ and explicit disposition of remaining XcodeGen surfaces.
 - <doc:target-feature-inspection>
 - <doc:feature-test-lifecycle>
 - <doc:cuj-state-testing-methodology>
+- <doc:product-proving-grounds>
 - <doc:release-doctor>
 
 ## Source Of Truth

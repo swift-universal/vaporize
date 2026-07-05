@@ -21,7 +21,7 @@
   },
   "launchReviewGateStatusRecommendation": {
     "packetStatus": "evidence-ready-pending-human-review-blocked-for-internal-release",
-    "evidenceReadyPendingHumanReview": 33,
+    "evidenceReadyPendingHumanReview": 34,
     "blocked": 1,
     "blockedGateRefs": [
       "GATE-14-pkl-project-generation"
@@ -33,7 +33,7 @@
       "status": "BLOCKED",
       "blockerKind": "release-capability",
       "ownerRef": "wrkstrm-core/vaporize",
-      "reason": "Final internal release still requires fleet Pkl-backed Apple project-generation parity, scheme/resource/package feature coverage, and explicit quarantine or migration of remaining XcodeGen-backed owned surfaces.",
+      "reason": "Final internal release still requires fleet Pkl-backed Apple project-generation build parity and explicit quarantine or migration of remaining XcodeGen-backed owned surfaces.",
       "requiredBeforeInternalRelease": true,
       "requiredBeforeLaunchReview": false
     }

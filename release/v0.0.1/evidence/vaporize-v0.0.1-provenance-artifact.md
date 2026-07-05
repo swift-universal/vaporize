@@ -9,15 +9,17 @@ chat memory.
 
 ## Proven
 
-- CUJ-derived test coverage is explicit: 108 required Swift test obligations
-  plus 12 release evidence checks across 22 active CUJs.
-- Vaporize package tests cover 142 executable Swift
-  tests across 22 implemented CUJ-specific SwiftPM test bundles, including
-  CUJ-14 tool release identity, CUJ-14 unsupported-target boundary coverage,
+- CUJ-derived test coverage is explicit: 112 required Swift test obligations
+  plus 13 release evidence checks across 23 active CUJs.
+- Vaporize package tests cover 146 executable Swift
+  tests across 23 implemented CUJ-specific SwiftPM test bundles, including
+  CUJ-14 tool release identity, CUJ-14 graph/scheme generation,
+  CUJ-14 unsupported-target boundary coverage,
   CUJ-16 target feature inspection, CUJ-17 release doctor, CUJ-18 project
   target discovery, CUJ-19 workspace product-cache discovery, and CUJ-20 Xcode
-  workspace scheme listing, CUJ-21 CUJ-state coverage, and CUJ-22
-  resource-bearing CLI install coverage.
+  workspace scheme listing, CUJ-21 CUJ-state coverage, CUJ-22
+  resource-bearing CLI install coverage, and CUJ-23 product proving-ground
+  passport coverage.
 - `product-definition.md` defines Vaporize, primary users, product-level user
   journeys, why users choose it, when not to choose it, and build implications
   before more implementation is accepted.
@@ -93,6 +95,10 @@ chat memory.
   fails when a scenario receipt is missing, while Vaporize carries processed
   text, copied directory, decoded JSON, byte-count, and stale-reinstall resource
   scenarios into `~/.swiftpm/bin` away from `.build`.
+- `vaporize.engineering.docc/product-proving-grounds.md` exists, and CUJ-23
+  proves the first product proving-ground passport shape for vaporware products:
+  product class, owning bead, CUJs, tracks, scenarios, targetable tests,
+  receipts, release-doctor checks, and adoption failure modes.
 - `vaporize.engineering.docc/modularity-and-ownership-boundaries.md` exists as
   the ownership and modularity rule: Swift Universal primitives belong in
   `swift-universal`, Apple-bounded orchestration belongs in `wrkstrm-core`, and
@@ -163,6 +169,7 @@ chat memory.
 | `vaporize.engineering.docc` | Human engineering docs exist for future `wrkstrm.com/engineering` projection | PASS-WITH-NOTE |
 | `feature-catalog.md` | Major Vaporize features are listed with user problem, current surface, and proof boundary | PASS-WITH-NOTE |
 | `swiftpm-cli-resource-bundle-installs.md` | Resource-bearing SwiftPM CLI install policy and Info.plist sidecar boundary are documented | PASS-WITH-NOTE |
+| `product-proving-grounds.md` | Product proving-ground passport tracks, class defaults, and release-review boundaries are documented | PASS-WITH-NOTE |
 | `modularity-and-ownership-boundaries.md` | Swift Universal versus wrkstrm-core ownership and Vaporize modularity boundaries are defined | PASS-WITH-NOTE |
 | `vaporware-modification-request-discipline.md` | Vaporware feature requests are distinguished from vaporware modification requests; release-discipline mechanics are defined | PASS-WITH-NOTE |
 | `vaporize-v0.0.1-release-doctor.receipt.json` | Release doctor verifies release-spine agreement before assistants trust the packet | PASS-WITH-NOTE |

@@ -11,7 +11,7 @@
 
 It does not approve a release. It checks whether the product definition, PRD,
 CUJs, release gates, launch-review packet, provenance artifact, CUJ coverage,
-CUJ-state coverage, public brochure companions, feature catalog, and
+CUJ-state coverage, product proving-ground coverage, public brochure companions, feature catalog, and
 engineering DocC surface agree with each other before assistants trust the
 packet.
 
@@ -47,6 +47,8 @@ The v0.0.1 first slice checks:
 - CUJ coverage counts CUJ-17 and its targetable test bundle
 - CUJ-state coverage names every required state id, proves each id, and leaves
   uncovered, unknown, and duplicate proof lists empty
+- product proving-ground coverage names CUJ-23, its targetable test bundle, and
+  the engineering doc that defines proving-ground passports
 
 ## Boundaries
 

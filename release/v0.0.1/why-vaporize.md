@@ -33,7 +33,7 @@ world-state.
 | Problem | Vaporize answer | Current proof |
 | --- | --- | --- |
 | Engineering standards drift into ad hoc proof | Vaporize makes the owned route prefer native artifacts, typed samples, receipts, and gates | Product definition, runtime sample series, release gates |
-| Assistants improvise shell choreography | One canonical command surface for build, test, install, run, open, validate, inspect, import, generate, list targets, list workspace schemes, inventory, and toolchain selection | README, PRD FR-001 through FR-032, 22 CUJ bundles |
+| Assistants improvise shell choreography | One canonical command surface for build, test, install, run, open, validate, inspect, import, generate, list targets, list workspace schemes, inventory, and toolchain selection | README, PRD FR-001 through FR-033, 23 CUJ bundles |
 | Direct native tools bypass policy | `xcodebuild`, `xcrun`, and JSON validation details live behind Vaporize modes | CUJ-05, CUJ-06, release gates |
 | Build/install output is hard to review | Receipts record what was requested and what happened | Pass/use/toolchain/validation/project receipts |
 | Xcode project migration needs proof | YAML, Pkl, generated YAML, and first-slice `.xcodeproj` generation are compared and receipted | CUJ-08, CUJ-10, CUJ-11, CUJ-13, CUJ-14 |
@@ -116,7 +116,7 @@ Environment:
 | Bare Swift version comparison | `swift --version` | `0.17s real` |
 | Focused CUJ-15 through bare Swift | `swift test --filter VaporizeCUJ15XcodeProductCacheTests` | `6.80s real` |
 | Focused CUJ-15 through Vaporize toolchain | `vaporize toolchain -- swift test --filter VaporizeCUJ15XcodeProductCacheTests` | `6.80s real` |
-| Full Vaporize suite through Vaporize toolchain | `vaporize toolchain -- swift test` | Latest coverage model: 142 tests across 22 CUJ bundles after CUJ-17 follow-up coherence and CUJ-22 resource-bearing CLI install additions; earlier `/usr/bin/time` baseline: `15.57s real`, 82 tests |
+| Full Vaporize suite through Vaporize toolchain | `vaporize toolchain -- swift test` | Latest coverage model: 146 tests across 23 CUJ bundles after CUJ-14 graph/scheme generation, CUJ-17 follow-up coherence, CUJ-22 resource-bearing CLI install, and CUJ-23 product proving-ground passport additions; earlier `/usr/bin/time` baseline: `15.57s real`, 82 tests |
 | Focused CUJ-09 with SwiftPM coverage enabled | `vaporize toolchain -- swift test --filter VaporizeCUJ09ReleaseReviewTests --enable-code-coverage` | `29.38s real`, 5 tests, SwiftPM codecov JSON verified |
 
 Interpretation:

@@ -25,6 +25,7 @@ one product-level journey.
 | Assistant audits release-spine coherence before trusting a vaporware packet | CUJ-17 |
 | Assistant gates every journey-derived CUJ state record with proof before release review trusts the simulated world | CUJ-21 |
 | Assistant installs resource-bearing SwiftPM CLIs that use `Bundle.module` without depending on live build products | CUJ-22 |
+| Assistant adopts a proving-ground passport before release review trusts a vaporware product | CUJ-23 |
 
 ## CUJ-01 - Assistant Builds And Installs A SwiftPM CLI
 
@@ -293,15 +294,17 @@ Failure truth:
 - A successful import does not prove buildable project generation or fleet
   migration readiness.
 
-## CUJ-14 - Assistant Generates First-Slice Xcode Project World-State From Pkl
+## CUJ-14 - Assistant Generates Expanded Xcode Project World-State From Pkl
 
 1. Assistant has an AppleProjectSpec Pkl specimen for a substrate-owned macOS
-   application or tool target.
+   application, framework, tool, or unit-test target graph.
 2. Assistant runs
    `vaporize generate-xcodeproj --pkl-path <project.pkl> --output-path <generated.xcodeproj> --receipt-path <receipt>`.
 3. Vaporize evaluates the Pkl record through PklSwift.
 4. Vaporize renders deterministic `.xcodeproj` package world-state, including
-   `project.pbxproj` and `project.xcworkspace/contents.xcworkspacedata`.
+   `project.pbxproj`, `project.xcworkspace/contents.xcworkspacedata`, target
+   dependencies, linked and embedded framework phases, local package product
+   dependencies, and shared `xcshareddata/xcschemes/*.xcscheme` files.
 5. Vaporize projects typed release identity into Xcode build settings when the
    target declares bundle id, marketing version, build version, generated
    Info.plist, or Sparkle feed/signing keys.
@@ -317,17 +320,19 @@ Success:
   chosen output directory.
 - macOS tool targets generate executable product references without a fake
   `.app` suffix.
+- Framework, application, unit-test, local package, and shared-scheme graph
+  generation has expected-pass coverage.
 - The renderer is deterministic for the same evaluated spec and source tree.
 
 Failure truth:
 
 - Missing non-optional source paths fail the generation with the target name and
   missing source path.
-- Unsupported target types fail explicitly instead of silently becoming app or
-  tool targets.
-- This first slice supports macOS application and tool targets. It does not yet
-  prove fleet build parity, scheme generation, all XcodeGen feature parity,
-  Sparkle appcast generation, or final internal release readiness.
+- Unsupported target types fail explicitly instead of silently becoming a
+  supported target type.
+- This expanded slice does not yet prove fleet build parity, all XcodeGen
+  feature parity, Sparkle appcast generation, or final internal release
+  readiness.
 
 ## CUJ-15 - Assistant Reuses A Warm Xcode Workspace Product Cache
 
@@ -576,6 +581,40 @@ Failure truth:
   `Bundle.main.infoDictionary` expose Vaporize product metadata, and does not
   prove Sparkle appcast generation, update signing, or runtime update delivery.
 
+## CUJ-23 - Assistant Adopts Product Proving-Ground Passport
+
+1. Assistant receives or creates a vaporware product that needs release-review
+   evidence.
+2. Assistant identifies the product class, owning bead, CUJs, and expected
+   proving-ground tracks for that class.
+3. Assistant records a typed product proving-ground profile with scenarios,
+   targetable test bundle refs, receipt refs, release-doctor check refs, and
+   explicit boundaries.
+4. Vaporize audits the profile before release review trusts the product.
+
+Success:
+
+- The product proving-ground profile has document kind
+  `vaporware-product-proving-ground-profile`.
+- The profile names the product class, owning bead, CUJs, required tracks,
+  scenarios, release-doctor checks, targetable tests, and receipt refs.
+- The adoption gate passes when every required track is covered and every
+  scenario has a targetable test bundle and receipt ref.
+- Product class defaults exist for CLI, app, library, workflow, assistant, and
+  site products.
+- Release Doctor checks FR-033, CUJ-23, GATE-40, the engineering doc, launch
+  review evidence, and the CUJ-23 targetable test bundle.
+
+Failure truth:
+
+- Missing required tracks fail the passport.
+- Missing CUJ refs fail the passport.
+- Missing receipt refs fail the passport.
+- Missing targetable test bundles fail the passport.
+- Unknown track slugs fail the passport.
+- This proves adoption evidence shape only. Product-specific behavior still
+  needs product-specific proving-ground scenarios.
+
 ## Test Coverage Contract
 
 Test count is derived from PRD requirements through the active draft CUJs.
@@ -597,7 +636,7 @@ must know the required floor.
 | CUJ-11 | FR-017 | 3 |
 | CUJ-12 | FR-009 | 1 |
 | CUJ-13 | FR-018 | 4 |
-| CUJ-14 | FR-020 | 5 |
+| CUJ-14 | FR-020 | 6 |
 | CUJ-15 | FR-003, FR-021 | 4 |
 | CUJ-16 | FR-023, FR-024 | 5 Swift tests; 1 release evidence check |
 | CUJ-17 | FR-027 | 7 Swift tests; 1 release evidence check |
@@ -606,13 +645,14 @@ must know the required floor.
 | CUJ-20 | FR-030 | 5 |
 | CUJ-21 | FR-031 | 6 Swift tests; 1 release evidence check |
 | CUJ-22 | FR-002, FR-032 | 8 |
+| CUJ-23 | FR-033 | 3 Swift tests; 1 release evidence check |
 
 Current active-CUJ requirement:
 
-- Required Swift test obligations: 108
-- Required release evidence checks: 12
-- Required targetable test obligations: 120
-- Current executable Swift tests: 142 across 22 implemented CUJ-specific SwiftPM
+- Required Swift test obligations: 112
+- Required release evidence checks: 13
+- Required targetable test obligations: 125
+- Current executable Swift tests: 146 across 23 implemented CUJ-specific SwiftPM
   bundles
 - Coverage artifact:
   `release/v0.0.1/evidence/cuj-test-coverage.json`
@@ -637,9 +677,8 @@ Current status:
   `FR-VAPORIZE-PKL-PROJECT-GENERATION-move-owned-xcodegen-surfaces-to-pkl`.
 - Creative Selection v0.2 now has a generated `project.pkl` parity specimen and
   Vaporize can generate first-slice `.xcodeproj` world-state from it.
-- This remains blocked for final internal release until fleet build parity,
-  scheme/resource/package feature coverage, and explicit XcodeGen quarantine
-  disposition are proven.
+- This remains blocked for final internal release until fleet build parity and
+  explicit XcodeGen quarantine disposition are proven.
 - Existing XcodeGen surfaces remain historical compatibility, not the forward
   release path for our own apps.
 - Shared workspace product-cache reuse may speed this journey once the fleet is

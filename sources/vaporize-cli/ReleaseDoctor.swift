@@ -97,6 +97,15 @@ enum VaporizeReleaseDoctor {
       textContainsCheck(
         roots: roots,
         scope: .releaseRoot,
+        relativePath: "prd.md",
+        token: "FR-033",
+        name: "prd-product-proving-ground-requirement"
+      )
+    )
+    checks.append(
+      textContainsCheck(
+        roots: roots,
+        scope: .releaseRoot,
         relativePath: "cuj.md",
         token: "CUJ-17",
         name: "cuj-release-doctor-journey"
@@ -145,6 +154,15 @@ enum VaporizeReleaseDoctor {
         relativePath: "cuj.md",
         token: "CUJ-22",
         name: "cuj-resource-cli-install-journey"
+      )
+    )
+    checks.append(
+      textContainsCheck(
+        roots: roots,
+        scope: .releaseRoot,
+        relativePath: "cuj.md",
+        token: "CUJ-23",
+        name: "cuj-product-proving-ground-journey"
       )
     )
     checks.append(
@@ -208,6 +226,15 @@ enum VaporizeReleaseDoctor {
         relativePath: "release-gates.md",
         token: "GATE-39-resource-cli-install",
         name: "gate-resource-cli-install"
+      )
+    )
+    checks.append(
+      textContainsCheck(
+        roots: roots,
+        scope: .releaseRoot,
+        relativePath: "release-gates.md",
+        token: "GATE-40-product-proving-grounds",
+        name: "gate-product-proving-grounds"
       )
     )
     checks.append(
@@ -421,9 +448,27 @@ enum VaporizeReleaseDoctor {
       textContainsCheck(
         roots: roots,
         scope: .packageRoot,
+        relativePath: "vaporize.engineering.docc/feature-catalog.md",
+        token: "Vaporware product proving grounds",
+        name: "feature-catalog-product-proving-grounds"
+      )
+    )
+    checks.append(
+      textContainsCheck(
+        roots: roots,
+        scope: .packageRoot,
         relativePath: "vaporize.engineering.docc/swiftpm-cli-resource-bundle-installs.md",
         token: "Bundle.module",
         name: "swiftpm-cli-resource-bundle-doc"
+      )
+    )
+    checks.append(
+      textContainsCheck(
+        roots: roots,
+        scope: .packageRoot,
+        relativePath: "vaporize.engineering.docc/product-proving-grounds.md",
+        token: "proving-ground passport",
+        name: "product-proving-ground-doc"
       )
     )
     checks.append(
@@ -500,6 +545,7 @@ enum VaporizeReleaseDoctor {
     .package("vaporize.engineering.docc/modularity-and-ownership-boundaries.md"),
     .package("vaporize.engineering.docc/feature-test-lifecycle.md"),
     .package("vaporize.engineering.docc/swiftpm-cli-resource-bundle-installs.md"),
+    .package("vaporize.engineering.docc/product-proving-grounds.md"),
   ]
 
   private static let jsonArtifacts: [ReleaseDoctorArtifact] = [
@@ -693,6 +739,13 @@ enum VaporizeReleaseDoctor {
         detail: "Launch-review packet must include the SwiftPM CLI resource-bundle install gate."
       ),
       check(
+        name: "launch-review-gate-40",
+        category: "launch-review",
+        path: url.path,
+        passed: gateResults.contains { $0["gateRef"] as? String == "GATE-40-product-proving-grounds" },
+        detail: "Launch-review packet must include the product proving-ground gate."
+      ),
+      check(
         name: "launch-review-carrie-cmo-owner",
         category: "launch-review",
         path: url.path,
@@ -818,6 +871,13 @@ enum VaporizeReleaseDoctor {
         path: url.path,
         passed: evidenceRefs.contains { $0["t"] as? String == "Vaporize CUJ-22 resource CLI install test bundle" },
         detail: "Launch-review packet must reference the resource-bearing CLI install test bundle."
+      ),
+      check(
+        name: "launch-review-product-proving-ground-evidence-ref",
+        category: "launch-review",
+        path: url.path,
+        passed: evidenceRefs.contains { $0["t"] as? String == "Vaporize CUJ-23 product proving-ground adoption test bundle" },
+        detail: "Launch-review packet must reference the product proving-ground adoption test bundle."
       ),
     ]
   }
@@ -975,18 +1035,18 @@ enum VaporizeReleaseDoctor {
 
     return [
       check(
-        name: "coverage-active-cuj-22",
+        name: "coverage-active-cuj-23",
         category: "cuj-coverage",
         path: url.path,
-        passed: (counts["activeCUJCount"] as? Int ?? 0) >= 22,
-        detail: "Coverage artifact must count CUJ-22 resource-bearing CLI install coverage."
+        passed: (counts["activeCUJCount"] as? Int ?? 0) >= 23,
+        detail: "Coverage artifact must count CUJ-23 product proving-ground coverage."
       ),
       check(
         name: "coverage-release-evidence-floor",
         category: "cuj-coverage",
         path: url.path,
-        passed: (counts["requiredReleaseEvidenceCheckCount"] as? Int ?? 0) >= 12,
-        detail: "Coverage artifact must include release-doctor, target discovery, workspace cache discovery, and CUJ-state coverage evidence obligations."
+        passed: (counts["requiredReleaseEvidenceCheckCount"] as? Int ?? 0) >= 13,
+        detail: "Coverage artifact must include release-doctor, target discovery, workspace cache discovery, CUJ-state coverage, and product proving-ground evidence obligations."
       ),
       check(
         name: "coverage-release-doctor-test-bundle",
@@ -994,6 +1054,13 @@ enum VaporizeReleaseDoctor {
         path: url.path,
         passed: (breakdown["VaporizeCUJ17ReleaseDoctorTests"] as? Int ?? 0) >= 4,
         detail: "Coverage artifact must name the CUJ-17 targetable test bundle."
+      ),
+      check(
+        name: "coverage-pkl-xcodeproj-graph-scheme-test-bundle",
+        category: "cuj-coverage",
+        path: url.path,
+        passed: (breakdown["VaporizeCUJ14PklXcodeProjectGenerationTests"] as? Int ?? 0) >= 6,
+        detail: "Coverage artifact must name CUJ-14 framework, unit-test, target-dependency, package, and shared-scheme generation coverage."
       ),
       check(
         name: "coverage-project-target-discovery-test-bundle",
@@ -1029,6 +1096,13 @@ enum VaporizeReleaseDoctor {
         path: url.path,
         passed: (breakdown["VaporizeCUJ22ResourceCLIInstallTests"] as? Int ?? 0) >= 6,
         detail: "Coverage artifact must name the CUJ-22 targetable test bundle."
+      ),
+      check(
+        name: "coverage-product-proving-ground-test-bundle",
+        category: "cuj-coverage",
+        path: url.path,
+        passed: (breakdown["VaporizeCUJ23ProductProvingGroundTests"] as? Int ?? 0) >= 3,
+        detail: "Coverage artifact must name the CUJ-23 targetable test bundle."
       ),
     ]
   }
@@ -1284,7 +1358,7 @@ struct VaporizeReleaseDoctorReceipt: Codable, Equatable {
   var boundaries = [
     "Release doctor audits release-spine coherence; it does not approve release.",
     "A pass can coexist with release gates that are honestly blocked.",
-    "First slice checks Vaporize v0.0.1 docs, public-disclosure surfaces, JSON evidence, CUJ coverage, CUJ-state coverage, launch-review references, launch-review/PRD/release-gate follow-up list coherence, launch-review blocker disposition, provenance inventory, project target discovery evidence, workspace product-cache discovery evidence, and Xcode workspace scheme-listing evidence.",
+    "First slice checks Vaporize v0.0.1 docs, public-disclosure surfaces, JSON evidence, CUJ coverage, CUJ-state coverage, product proving-ground coverage, launch-review references, launch-review/PRD/release-gate follow-up list coherence, launch-review blocker disposition, provenance inventory, project target discovery evidence, workspace product-cache discovery evidence, and Xcode workspace scheme-listing evidence.",
     "Fleet project-generation parity, runtime sampling, build-size cohorts, and periodic buddy health remain separate follow-up checks.",
   ]
 }

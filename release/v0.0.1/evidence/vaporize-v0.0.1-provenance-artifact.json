@@ -160,7 +160,7 @@
     {
       "receiptKind": "vaporize-modification-receipt",
       "path": "private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/vaporize-pkl-xcodeproj-tool-release-identity-modification.receipt.json",
-      "claim": "CUJ-14 covers typed releaseIdentity projection, macOS tool target product semantics, and unsupported-target expected failure for the Pkl Xcode project generator.",
+      "claim": "CUJ-14 covers typed releaseIdentity projection, macOS tool target product semantics, framework/app/unit-test target dependencies, local package products, shared scheme files, and unsupported-target expected failure for the Pkl Xcode project generator.",
       "result": "PASS-WITH-NOTE: focused CUJ-14 proof; fleet build parity remains blocked"
     },
     {
@@ -221,7 +221,7 @@
       "receiptKind": "cuj-test-coverage",
       "path": "private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/cuj-test-coverage.json",
       "claim": "Required test count is derived from PRD requirements through active draft CUJs.",
-      "result": "PASS-WITH-NOTE: 108 Swift test obligations, 12 release evidence checks, 120 targetable obligations, 142 executable Swift tests across 22 implemented CUJ bundles"
+      "result": "PASS-WITH-NOTE: 112 Swift test obligations, 13 release evidence checks, 125 targetable obligations, 146 executable Swift tests across 23 implemented CUJ bundles"
     },
     {
       "receiptKind": "cuj-state-coverage",
@@ -284,6 +284,12 @@
       "result": "PASS-WITH-NOTE: PRD, CUJs, tests, release gates, receipts, and schema fixtures remain the proof surfaces"
     },
     {
+      "receiptKind": "engineering-product-proving-grounds",
+      "path": "private/apple/spm/vaporize@wrkstrm-core.cli/vaporize.engineering.docc/product-proving-grounds.md",
+      "claim": "Vaporize has a reusable proving-ground passport doctrine for vaporware products.",
+      "result": "PASS-WITH-NOTE: CUJ-23 covers adoption shape; product-specific behavior still needs product-specific scenarios"
+    },
+    {
       "receiptKind": "engineering-modularity-ownership-boundaries",
       "path": "private/apple/spm/vaporize@wrkstrm-core.cli/vaporize.engineering.docc/modularity-and-ownership-boundaries.md",
       "claim": "Vaporize has an explicit ownership and modularity rule for Swift Universal extraction, wrkstrm-core Apple-bounded code, and CLI-router growth control.",
@@ -326,6 +332,10 @@
     {
       "path": "private/apple/spm/vaporize@wrkstrm-core.cli/vaporize.engineering.docc/feature-catalog.md",
       "purpose": "Adds the canonical human-readable Vaporize feature list and explanation surface."
+    },
+    {
+      "path": "private/apple/spm/vaporize@wrkstrm-core.cli/vaporize.engineering.docc/product-proving-grounds.md",
+      "purpose": "Documents product proving-ground tracks, product-class defaults, release-review passport rules, and boundaries."
     },
     {
       "path": "private/apple/spm/vaporize@wrkstrm-core.cli/vaporize.engineering.docc/modularity-and-ownership-boundaries.md",
@@ -425,7 +435,7 @@
     },
     {
       "path": "private/apple/spm/vaporize@wrkstrm-core.cli/tests/cuj-14-pkl-xcodeproj-generation/VaporizeCUJ14PklXcodeProjectGenerationTests.swift",
-      "purpose": "Covers CUJ-14 generate-xcodeproj parsing, Pkl-backed .xcodeproj output, source-root handling, deterministic renderer behavior, typed releaseIdentity projection for tools, and unsupported target expected failure."
+      "purpose": "Covers CUJ-14 generate-xcodeproj parsing, Pkl-backed .xcodeproj output, source-root handling, deterministic renderer behavior, typed releaseIdentity projection for tools, framework/app/unit-test target dependencies, local package products, shared scheme files, and unsupported target expected failure."
     },
     {
       "path": "private/apple/spm/vaporize@wrkstrm-core.cli/tests/cuj-15-xcode-product-cache/VaporizeCUJ15XcodeProductCacheTests.swift",
@@ -473,7 +483,7 @@
     },
     {
       "path": "private/apple/spm/vaporize@wrkstrm-core.cli/sources/apple-project-spec-core/AppleProjectXcodeProjectGenerator.swift",
-      "purpose": "Implements first-slice AppleProjectSpec Pkl to .xcodeproj world-state generation, including application and tool product semantics."
+      "purpose": "Implements AppleProjectSpec Pkl to .xcodeproj world-state generation, including application, framework, tool, unit-test, target-dependency, local package, and shared-scheme semantics."
     },
     {
       "path": "private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/cuj-test-coverage.json",
@@ -532,12 +542,24 @@
       "purpose": "Covers the CUJ-22 simulation proving-ground manifest, missing-scenario expected-fail coverage audit, processed/copied/JSON/byte-count resource installs, and stale installed bundle replacement."
     },
     {
+      "path": "private/apple/spm/vaporize@wrkstrm-core.cli/tests/vaporize-test-support/ProductProvingGroundTestSupport.swift",
+      "purpose": "Defines the typed product proving-ground profile, scenario, adoption audit, and product-class track catalog."
+    },
+    {
+      "path": "private/apple/spm/vaporize@wrkstrm-core.cli/tests/cuj-23-product-proving-grounds/vaporize-cuj-23-product-proving-ground-tests.swift",
+      "purpose": "Covers the CUJ-23 product proving-ground passport, incomplete-passport failures, and product-class default tracks."
+    },
+    {
       "path": "private/apple/spm/vaporize@wrkstrm-core.cli/vaporize.engineering.docc/swiftpm-cli-resource-bundle-installs.md",
       "purpose": "Documents SwiftPM CLI resource-bundle install policy, product metadata Info.plist sidecar boundary, and the Bundle.module proof surface."
     },
     {
       "path": "private/apple/spm/vaporize@wrkstrm-core.cli/beads/FR-VAPORIZE-SWIFTPM-CLI-RESOURCE-BUNDLE-INSTALLS-2026-07-05.beads-issue.json",
       "purpose": "Owns the Vaporize resource-bearing SwiftPM CLI install launch-review refinement."
+    },
+    {
+      "path": "private/apple/spm/vaporize@wrkstrm-core.cli/beads/FR-VAPORIZE-PRODUCT-PROVING-GROUNDS-2026-07-05.beads-issue.json",
+      "purpose": "Owns the Vaporize product proving-ground passport adoption slice."
     }
   ],
   "validationEvidence": [
@@ -547,7 +569,7 @@
     },
     {
       "command": "vaporize toolchain -- swift test --package-path private/apple/spm/vaporize@wrkstrm-core.cli",
-      "result": "PASS-WITH-NOTE: coverage model now names 142 tests across 22 implemented CUJ-specific SwiftPM bundles, including CUJ-14 tool release identity, CUJ-17 follow-up list drift coverage, CUJ-21 CUJ-state coverage, and CUJ-22 resource-bearing CLI install coverage; latest targeted Vaporize runs prove CUJ-09, CUJ-14, CUJ-17, CUJ-21, and CUJ-22"
+      "result": "PASS-WITH-NOTE: coverage model now names 146 tests across 23 implemented CUJ-specific SwiftPM bundles, including CUJ-14 graph/scheme generation and tool release identity, CUJ-17 follow-up list drift coverage, CUJ-21 CUJ-state coverage, CUJ-22 resource-bearing CLI install coverage, and CUJ-23 product proving-ground passport coverage; latest targeted Vaporize runs prove CUJ-09, CUJ-14, CUJ-17, CUJ-21, CUJ-22, and CUJ-23"
     },
     {
       "command": "vaporize toolchain -- swift test --package-path private/apple/spm/vaporize@wrkstrm-core.cli --filter VaporizeCUJ16TargetFeaturesTests",
@@ -563,7 +585,7 @@
     },
     {
       "command": "local benchmark baseline captured with /usr/bin/time -p for Vaporize validate-json, Vaporize toolchain swift --version, bare swift --version, focused CUJ-15 through bare Swift, focused CUJ-15 through Vaporize toolchain, and full Vaporize suite",
-      "result": "PASS-WITH-NOTE: validate-json 0.03s, Vaporize swift --version 0.25s, bare swift --version 0.17s, focused CUJ-15 bare Swift 6.80s, focused CUJ-15 Vaporize 6.80s, earlier full Vaporize suite baseline 15.57s with 82 tests, latest coverage model names 142 tests across 22 CUJ bundles; not a fleet performance or disk-space benchmark"
+      "result": "PASS-WITH-NOTE: validate-json 0.03s, Vaporize swift --version 0.25s, bare swift --version 0.17s, focused CUJ-15 bare Swift 6.80s, focused CUJ-15 Vaporize 6.80s, earlier full Vaporize suite baseline 15.57s with 82 tests, latest coverage model names 146 tests across 23 CUJ bundles; not a fleet performance or disk-space benchmark"
     },
     {
       "command": "vaporize toolchain -- swift test --package-path private/apple/spm/vaporize@wrkstrm-core.cli --filter VaporizeCUJ09ReleaseReviewTests --enable-code-coverage",

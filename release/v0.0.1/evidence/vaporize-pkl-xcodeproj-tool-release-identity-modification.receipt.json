@@ -19,8 +19,9 @@
   "changedBehavior": [
     "AppleProjectSpec Pkl and Swift model now carry typed releaseIdentity.",
     "releaseIdentity maps to PRODUCT_BUNDLE_IDENTIFIER, MARKETING_VERSION, CURRENT_PROJECT_VERSION, generated Info.plist, Vaporize build metadata keys, and Sparkle feed/signing Info.plist keys.",
-    "generate-xcodeproj supports macOS application and tool targets.",
+    "generate-xcodeproj supports macOS application, framework, tool, and unit-test targets.",
     "Tool targets emit com.apple.product-type.tool, compiled Mach-O product refs, and product paths without .app suffix.",
+    "Framework/app/unit-test graph generation emits target dependencies, linked and embedded frameworks, local package product dependencies, and shared scheme files.",
     "Unsupported target types remain explicit failures."
   ],
   "targetableTests": [
@@ -32,7 +33,12 @@
     {
       "testBundle": "VaporizeCUJ14PklXcodeProjectGenerationTests",
       "testName": "rejectsUnsupportedXcodeTargetTypesFromPkl",
-      "expectation": "expected-fail unsupported framework target throws unsupportedTargetType"
+      "expectation": "expected-fail unsupported staticLibrary target throws unsupportedTargetType"
+    },
+    {
+      "testBundle": "VaporizeCUJ14PklXcodeProjectGenerationTests",
+      "testName": "generatesFrameworkAppTestGraphAndSharedSchemeFromPkl",
+      "expectation": "expected-pass framework/app/unit-test graph emits target dependencies, package products, embedded frameworks, and shared scheme files"
     },
     {
       "testBundle": "VaporizeCUJ09ReleaseReviewTests",

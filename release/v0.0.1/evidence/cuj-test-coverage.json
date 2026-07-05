@@ -17,12 +17,12 @@
     "releaseGates": "private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/release-gates.md"
   },
   "counts": {
-    "activeCUJCount": 22,
+    "activeCUJCount": 23,
     "deferredCUJCount": 1,
-    "requiredSwiftTestObligationCount": 108,
-    "requiredReleaseEvidenceCheckCount": 12,
-    "requiredTargetableTestObligationCount": 120,
-    "currentExecutableSwiftTestCount": 142,
+    "requiredSwiftTestObligationCount": 112,
+    "requiredReleaseEvidenceCheckCount": 13,
+    "requiredTargetableTestObligationCount": 125,
+    "currentExecutableSwiftTestCount": 146,
     "currentExecutableSwiftTestBreakdown": {
       "VaporizeCUJ01SwiftPMCLITests": 20,
       "VaporizeCUJ02MacAppTests": 14,
@@ -37,7 +37,7 @@
       "VaporizeCUJ11PklYMLGenerationTests": 3,
       "VaporizeCUJ12PackageGraphTests": 1,
       "VaporizeCUJ13YMLPklImportTests": 4,
-      "VaporizeCUJ14PklXcodeProjectGenerationTests": 5,
+      "VaporizeCUJ14PklXcodeProjectGenerationTests": 6,
       "VaporizeCUJ15XcodeProductCacheTests": 4,
       "VaporizeCUJ16TargetFeaturesTests": 5,
       "VaporizeCUJ17ReleaseDoctorTests": 7,
@@ -45,7 +45,8 @@
       "VaporizeCUJ19WorkspaceCacheDiscoveryTests": 5,
       "VaporizeCUJ20XcodeWorkspaceSchemesTests": 5,
       "VaporizeCUJ21CUJStateTests": 6,
-      "VaporizeCUJ22ResourceCLIInstallTests": 8
+      "VaporizeCUJ22ResourceCLIInstallTests": 8,
+      "VaporizeCUJ23ProductProvingGroundTests": 3
     }
   },
   "coverage": [
@@ -57,7 +58,7 @@
         "FR-002",
         "FR-004"
       ],
-      "requiredSwiftTestObligations": 5,
+      "requiredSwiftTestObligations": 6,
       "status": "covered",
       "evidence": [
         "VaporizeCUJ01SwiftPMCLITests.swift"
@@ -235,16 +236,17 @@
     },
     {
       "cuj": "CUJ-14",
-      "title": "Assistant Generates First-Slice Xcode Project World-State From Pkl",
+      "title": "Assistant Generates Expanded Xcode Project World-State From Pkl",
       "prdRefs": [
         "FR-020"
       ],
-      "requiredSwiftTestObligations": 5,
+      "requiredSwiftTestObligations": 6,
       "status": "covered-with-boundary",
       "evidence": [
         "VaporizeCUJ14PklXcodeProjectGenerationTests.swift",
         "creative-selection-v0.2-pkl-xcodeproj-generation.receipt.json",
-        "vaporize-pkl-xcodeproj-tool-release-identity-modification.receipt.json"
+        "vaporize-pkl-xcodeproj-tool-release-identity-modification.receipt.json",
+        "framework/unit-test/target-dependency/shared-scheme expected-pass coverage"
       ]
     },
     {
@@ -363,13 +365,29 @@
         "FR-002",
         "FR-032"
       ],
-      "requiredSwiftTestObligations": 6,
+      "requiredSwiftTestObligations": 8,
       "status": "covered-with-boundary",
       "evidence": [
         "VaporizeCUJ22ResourceCLIInstallTests.swift",
         "SimulationProvingGroundTestSupport.swift",
         "swiftpm-cli-resource-bundle-installs.md",
         "vaporize-swiftpm-cli-resource-bundle-install-launch-review-modification.receipt.json"
+      ]
+    },
+    {
+      "cuj": "CUJ-23",
+      "title": "Assistant Adopts Product Proving-Ground Passport",
+      "prdRefs": [
+        "FR-033"
+      ],
+      "requiredSwiftTestObligations": 3,
+      "requiredReleaseEvidenceChecks": 1,
+      "status": "covered-with-release-evidence",
+      "evidence": [
+        "VaporizeCUJ23ProductProvingGroundTests.swift",
+        "ProductProvingGroundTestSupport.swift",
+        "product-proving-grounds.md",
+        "FR-VAPORIZE-PRODUCT-PROVING-GROUNDS-2026-07-05.beads-issue.json"
       ]
     }
   ],
@@ -384,7 +402,7 @@
     "This artifact defines the active-CUJ coverage floor; it does not approve v0.0.1 release.",
     "Major feature coding requires an Engineering, QA, and Marketing PRD review session before implementation; v0.0.1 records a backfilled GO-WITH-NOTES correction because the release-prep lane was already in flight.",
     "Behavior-changing vaporware modification requests require a feature flag or feature-status story, targetable tests, and release evidence before release-ready status.",
-    "First-slice Pkl-backed .xcodeproj world-state generation is covered; fleet build parity and quarantine disposition remain release-blocking.",
+    "Pkl-backed .xcodeproj world-state generation covers app, framework, tool, unit-test, target-dependency, local package, and shared-scheme first slices; fleet build parity and quarantine disposition remain release-blocking.",
     "wrkstrm app-minimums inspection has a target-level first slice; registry-backed fleet inspection remains deferred.",
     "Feature-scoped test migration is allowed only after a targetable feature bundle proves the behavior, the replacement evidence is named, and the coverage artifact is updated; duplicate older tests may then be deleted in the same change.",
     "Actual executable Swift tests may exceed the required count when extra regression coverage is useful.",
@@ -393,6 +411,7 @@
     "Workspace product-cache discovery is covered as target-fact-derived candidate path and warm/missing inspection; .xcworkspace graph membership, cache warming, fleet coverage, and disk-savings measurement remain deferred.",
     "Xcode workspace scheme listing is covered as a first slice; it asks xcodebuild for live .xcworkspace schemes and records a receipt boundary, but it does not build, install, warm caches, prove product paths, prove fleet coverage, or measure large-workspace runtime.",
     "CUJ-state coverage proves that each required CUJ-state record has a named proof; it does not prove production Kura storage, database adapter behavior, or public release readiness.",
-    "SwiftPM CLI resource-bundle install coverage proves installed CLI resource bundles and metadata sidecars; it does not prove app bundle packaging, Bundle.main.infoDictionary product metadata, Sparkle appcast generation, or update signing."
+    "SwiftPM CLI resource-bundle install coverage proves installed CLI resource bundles and metadata sidecars; it does not prove app bundle packaging, Bundle.main.infoDictionary product metadata, Sparkle appcast generation, or update signing.",
+    "Product proving-ground passport coverage proves adoption evidence shape; it does not approve releases or replace product-specific proving-ground scenarios."
   ]
 }
