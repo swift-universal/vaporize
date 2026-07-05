@@ -1101,8 +1101,8 @@ enum VaporizeReleaseDoctor {
         name: "coverage-product-proving-ground-test-bundle",
         category: "cuj-coverage",
         path: url.path,
-        passed: (breakdown["VaporizeCUJ23ProductProvingGroundTests"] as? Int ?? 0) >= 3,
-        detail: "Coverage artifact must name the CUJ-23 targetable test bundle."
+        passed: (breakdown["VaporizeCUJ23ProductProvingGroundTests"] as? Int ?? 0) >= 4,
+        detail: "Coverage artifact must name the CUJ-23 targetable product and Pkl generator proving-ground test bundle."
       ),
     ]
   }

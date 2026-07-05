@@ -600,8 +600,11 @@ Success:
   scenarios, release-doctor checks, targetable tests, and receipt refs.
 - The adoption gate passes when every required track is covered and every
   scenario has a targetable test bundle and receipt ref.
-- Product class defaults exist for CLI, app, library, workflow, assistant, and
-  site products.
+- Product class defaults exist for CLI, app, library, workflow, generator,
+  assistant, and site products.
+- A Pkl project-generation generator passport names CUJ-14 and CUJ-23 evidence
+  for skid-pad, hill-climb, crash-barrier, inspection-bay, and prototype-track
+  scenarios.
 - Release Doctor checks FR-033, CUJ-23, GATE-40, the engineering doc, launch
   review evidence, and the CUJ-23 targetable test bundle.
 
@@ -645,14 +648,14 @@ must know the required floor.
 | CUJ-20 | FR-030 | 5 |
 | CUJ-21 | FR-031 | 6 Swift tests; 1 release evidence check |
 | CUJ-22 | FR-002, FR-032 | 8 |
-| CUJ-23 | FR-033 | 3 Swift tests; 1 release evidence check |
+| CUJ-23 | FR-033 | 4 Swift tests; 1 release evidence check |
 
 Current active-CUJ requirement:
 
-- Required Swift test obligations: 112
+- Required Swift test obligations: 113
 - Required release evidence checks: 13
-- Required targetable test obligations: 125
-- Current executable Swift tests: 146 across 23 implemented CUJ-specific SwiftPM
+- Required targetable test obligations: 126
+- Current executable Swift tests: 147 across 23 implemented CUJ-specific SwiftPM
   bundles
 - Coverage artifact:
   `release/v0.0.1/evidence/cuj-test-coverage.json`

@@ -132,6 +132,14 @@ public enum VaporizeProductProvingGroundAdoptionGate {
         "inspection-bay",
         "prototype-track",
       ]
+    case "generator":
+      return [
+        "skid-pad",
+        "hill-climb",
+        "crash-barrier",
+        "inspection-bay",
+        "prototype-track",
+      ]
     case "assistant":
       return [
         "weather-track",

@@ -267,15 +267,16 @@ Supporting audiences:
 
 - Vaporize's package test suite passes with the Swift 6.4 toolchain:
   `vaporize toolchain -- swift test --package-path private/apple/spm/vaporize@wrkstrm-core.cli`.
-  Current proof: the CUJ-derived coverage floor requires 112 Swift test
-  obligations plus 13 release evidence checks; the executable suite passes 146
+  Current proof: the CUJ-derived coverage floor requires 113 Swift test
+  obligations plus 13 release evidence checks; the executable suite passes 147
   tests across 23 implemented CUJ targets, including the CUJ-14 expanded
   Pkl `.xcodeproj` graph and shared-scheme slice, CUJ-16
   `inspect-target-features` first slice, CUJ-17 `release-doctor` first slice,
   CUJ-18 `list-targets` first slice, CUJ-19 workspace cache discovery first
   slice, CUJ-20 `list-schemes` first slice, CUJ-21 CUJ-state coverage gate, and
   CUJ-22 SwiftPM CLI resource-bundle install preservation, and CUJ-23 product
-  proving-ground passports.
+  proving-ground passports including the Pkl project-generation generator
+  passport.
 - `release/v0.0.1/product-definition.md` defines the product, primary users,
   product-level user journeys, choice argument, non-choice cases, and build
   implications before additional feature work is accepted.

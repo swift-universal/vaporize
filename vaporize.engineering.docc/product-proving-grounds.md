@@ -42,6 +42,10 @@ inspection bay, and prototype coverage.
 Workflows should emphasize skid-pad invalid-state rejection, crash barriers,
 inspection bay, and prototype simulations.
 
+Generators should prove skid-pad input rejection, hill-climb graph generation,
+crash barriers for unsupported output shapes, inspection-bay release evidence,
+and prototype fixtures for generated world-state.
+
 Assistants should prove weather-track behavior for unavailable tools or missing
 resources, crash barriers, inspection bay, and prototype transcript fixtures.
 
@@ -60,8 +64,12 @@ The first implementation slice is CUJ-23:
 - `VaporizeProductProvingGroundProfile` defines the passport shape.
 - `VaporizeProductProvingGroundAdoptionGate` audits required tracks, missing
   CUJs, missing receipts, missing targetable tests, and unknown tracks.
-- `VaporizeCUJ23ProductProvingGroundTests` proves a Vaporize CLI passport,
-  incomplete-passport failure, and reusable product-class track defaults.
+- `VaporizeCUJ23ProductProvingGroundTests` proves a Vaporize CLI passport, a
+  Pkl project-generation generator passport, incomplete-passport failure, and
+  reusable product-class track defaults.
+- Pkl-backed `.xcodeproj` generation is the first generator-class passport: it
+  ties CUJ-14 graph/scheme tests and release receipts into the CUJ-23
+  proving-ground audit.
 
 ## Boundary
 

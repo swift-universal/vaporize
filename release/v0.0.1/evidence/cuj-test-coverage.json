@@ -19,10 +19,10 @@
   "counts": {
     "activeCUJCount": 23,
     "deferredCUJCount": 1,
-    "requiredSwiftTestObligationCount": 112,
+    "requiredSwiftTestObligationCount": 113,
     "requiredReleaseEvidenceCheckCount": 13,
-    "requiredTargetableTestObligationCount": 125,
-    "currentExecutableSwiftTestCount": 146,
+    "requiredTargetableTestObligationCount": 126,
+    "currentExecutableSwiftTestCount": 147,
     "currentExecutableSwiftTestBreakdown": {
       "VaporizeCUJ01SwiftPMCLITests": 20,
       "VaporizeCUJ02MacAppTests": 14,
@@ -46,7 +46,7 @@
       "VaporizeCUJ20XcodeWorkspaceSchemesTests": 5,
       "VaporizeCUJ21CUJStateTests": 6,
       "VaporizeCUJ22ResourceCLIInstallTests": 8,
-      "VaporizeCUJ23ProductProvingGroundTests": 3
+      "VaporizeCUJ23ProductProvingGroundTests": 4
     }
   },
   "coverage": [
@@ -380,13 +380,15 @@
       "prdRefs": [
         "FR-033"
       ],
-      "requiredSwiftTestObligations": 3,
+      "requiredSwiftTestObligations": 4,
       "requiredReleaseEvidenceChecks": 1,
       "status": "covered-with-release-evidence",
       "evidence": [
         "VaporizeCUJ23ProductProvingGroundTests.swift",
         "ProductProvingGroundTestSupport.swift",
         "product-proving-grounds.md",
+        "VaporizeCUJ14PklXcodeProjectGenerationTests.swift",
+        "vaporize-pkl-xcodeproj-tool-release-identity-modification.receipt.json",
         "FR-VAPORIZE-PRODUCT-PROVING-GROUNDS-2026-07-05.beads-issue.json"
       ]
     }
@@ -412,6 +414,6 @@
     "Xcode workspace scheme listing is covered as a first slice; it asks xcodebuild for live .xcworkspace schemes and records a receipt boundary, but it does not build, install, warm caches, prove product paths, prove fleet coverage, or measure large-workspace runtime.",
     "CUJ-state coverage proves that each required CUJ-state record has a named proof; it does not prove production Kura storage, database adapter behavior, or public release readiness.",
     "SwiftPM CLI resource-bundle install coverage proves installed CLI resource bundles and metadata sidecars; it does not prove app bundle packaging, Bundle.main.infoDictionary product metadata, Sparkle appcast generation, or update signing.",
-    "Product proving-ground passport coverage proves adoption evidence shape; it does not approve releases or replace product-specific proving-ground scenarios."
+    "Product proving-ground passport coverage proves adoption evidence shape, including the Pkl project-generation generator passport; it does not approve releases or replace product-specific proving-ground scenarios."
   ]
 }

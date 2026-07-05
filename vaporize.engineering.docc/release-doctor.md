@@ -47,8 +47,9 @@ The v0.0.1 first slice checks:
 - CUJ coverage counts CUJ-17 and its targetable test bundle
 - CUJ-state coverage names every required state id, proves each id, and leaves
   uncovered, unknown, and duplicate proof lists empty
-- product proving-ground coverage names CUJ-23, its targetable test bundle, and
-  the engineering doc that defines proving-ground passports
+- product proving-ground coverage names CUJ-23, its targetable test bundle, the
+  Pkl project-generation generator passport, and the engineering doc that
+  defines proving-ground passports
 
 ## Boundaries
 

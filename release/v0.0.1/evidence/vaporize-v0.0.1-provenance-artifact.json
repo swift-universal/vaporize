@@ -221,7 +221,7 @@
       "receiptKind": "cuj-test-coverage",
       "path": "private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/cuj-test-coverage.json",
       "claim": "Required test count is derived from PRD requirements through active draft CUJs.",
-      "result": "PASS-WITH-NOTE: 112 Swift test obligations, 13 release evidence checks, 125 targetable obligations, 146 executable Swift tests across 23 implemented CUJ bundles"
+      "result": "PASS-WITH-NOTE: 113 Swift test obligations, 13 release evidence checks, 126 targetable obligations, 147 executable Swift tests across 23 implemented CUJ bundles"
     },
     {
       "receiptKind": "cuj-state-coverage",
@@ -547,7 +547,7 @@
     },
     {
       "path": "private/apple/spm/vaporize@wrkstrm-core.cli/tests/cuj-23-product-proving-grounds/vaporize-cuj-23-product-proving-ground-tests.swift",
-      "purpose": "Covers the CUJ-23 product proving-ground passport, incomplete-passport failures, and product-class default tracks."
+      "purpose": "Covers the CUJ-23 product proving-ground passport, Pkl project-generation generator passport, incomplete-passport failures, and product-class default tracks."
     },
     {
       "path": "private/apple/spm/vaporize@wrkstrm-core.cli/vaporize.engineering.docc/swiftpm-cli-resource-bundle-installs.md",
@@ -568,8 +568,8 @@
       "result": "PASS: 10 Swift Testing tests decode and round-trip canonical Vaporize schema fixtures"
     },
     {
-      "command": "vaporize toolchain -- swift test --package-path private/apple/spm/vaporize@wrkstrm-core.cli",
-      "result": "PASS-WITH-NOTE: coverage model now names 146 tests across 23 implemented CUJ-specific SwiftPM bundles, including CUJ-14 graph/scheme generation and tool release identity, CUJ-17 follow-up list drift coverage, CUJ-21 CUJ-state coverage, CUJ-22 resource-bearing CLI install coverage, and CUJ-23 product proving-ground passport coverage; latest targeted Vaporize runs prove CUJ-09, CUJ-14, CUJ-17, CUJ-21, CUJ-22, and CUJ-23"
+      "command": "vaporize.cli@wrkstrm-core.clia.sh test --package-path private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli --configuration debug",
+      "result": "PASS-WITH-NOTE: latest full Vaporize package run passed after the Pkl generator passport addition; coverage model now names 147 tests across 23 implemented CUJ-specific SwiftPM bundles, including CUJ-14 graph/scheme generation and tool release identity, CUJ-17 follow-up list drift coverage, CUJ-21 CUJ-state coverage, CUJ-22 resource-bearing CLI install coverage, and CUJ-23 product plus Pkl generator proving-ground passport coverage"
     },
     {
       "command": "vaporize toolchain -- swift test --package-path private/apple/spm/vaporize@wrkstrm-core.cli --filter VaporizeCUJ16TargetFeaturesTests",
@@ -585,7 +585,7 @@
     },
     {
       "command": "local benchmark baseline captured with /usr/bin/time -p for Vaporize validate-json, Vaporize toolchain swift --version, bare swift --version, focused CUJ-15 through bare Swift, focused CUJ-15 through Vaporize toolchain, and full Vaporize suite",
-      "result": "PASS-WITH-NOTE: validate-json 0.03s, Vaporize swift --version 0.25s, bare swift --version 0.17s, focused CUJ-15 bare Swift 6.80s, focused CUJ-15 Vaporize 6.80s, earlier full Vaporize suite baseline 15.57s with 82 tests, latest coverage model names 146 tests across 23 CUJ bundles; not a fleet performance or disk-space benchmark"
+      "result": "PASS-WITH-NOTE: validate-json 0.03s, Vaporize swift --version 0.25s, bare swift --version 0.17s, focused CUJ-15 bare Swift 6.80s, focused CUJ-15 Vaporize 6.80s, earlier full Vaporize suite baseline 15.57s with 82 tests, latest coverage model names 147 tests across 23 CUJ bundles; not a fleet performance or disk-space benchmark"
     },
     {
       "command": "vaporize toolchain -- swift test --package-path private/apple/spm/vaporize@wrkstrm-core.cli --filter VaporizeCUJ09ReleaseReviewTests --enable-code-coverage",
@@ -693,7 +693,7 @@
     },
     {
       "command": "vaporize.cli@wrkstrm-core.clia.sh test --package-path private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli --configuration debug -- --filter VaporizeCUJ23ProductProvingGroundTests",
-      "result": "PASS: 3 tests cover product proving-ground passport adoption, incomplete-passport failure, and product-class default tracks"
+      "result": "PASS: 4 tests cover product proving-ground passport adoption, Pkl project-generation generator passport coverage, incomplete-passport failure, and product-class default tracks"
     },
     {
       "command": "vaporize.cli@wrkstrm-core.clia.sh release-doctor --path private/apple/spm/vaporize@wrkstrm-core.cli --format json --receipt-path release/v0.0.1/evidence/vaporize-v0.0.1-release-doctor.receipt.json",

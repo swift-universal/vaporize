@@ -28,10 +28,10 @@ and CUJ count must already name the behavior being retired from the old location
 | --- | ---: |
 | Active CUJs | 23 |
 | Deferred CUJs | 1 |
-| Required Swift test obligations | 112 |
+| Required Swift test obligations | 113 |
 | Required release evidence checks | 13 |
-| Required targetable test obligations | 125 |
-| Current executable Swift tests | 146 |
+| Required targetable test obligations | 126 |
+| Current executable Swift tests | 147 |
 
 ## Targetable Test Bundles
 
@@ -59,7 +59,7 @@ and CUJ count must already name the behavior being retired from the old location
 | CUJ-20 | `VaporizeCUJ20XcodeWorkspaceSchemesTests` | 5 |
 | CUJ-21 | `VaporizeCUJ21CUJStateTests` | 6 |
 | CUJ-22 | `VaporizeCUJ22ResourceCLIInstallTests` | 8 |
-| CUJ-23 | `VaporizeCUJ23ProductProvingGroundTests` | 3 |
+| CUJ-23 | `VaporizeCUJ23ProductProvingGroundTests` | 4 |
 
 ## Coverage By CUJ
 
@@ -87,7 +87,7 @@ and CUJ count must already name the behavior being retired from the old location
 | CUJ-20 | FR-030 | 5 | list-schemes CLI parsing, xcodebuild argument construction, workspace scheme JSON parsing, non-workspace rejection, receipt boundary |
 | CUJ-21 | FR-031 | 6 Swift tests; 1 release evidence check | CUJ-state fixture derivation, source metadata preservation, receipt output, coverage contract validation |
 | CUJ-22 | FR-002, FR-032 | 8 | Typed simulation proving-ground manifest, processed text resource, copied resource directory, decoded JSON resource, byte-count resource, stale installed bundle replacement, checked-in resource vault CLI install, legacy resource CLI product-gate capture |
-| CUJ-23 | FR-033 | 3 Swift tests; 1 release evidence check | Product proving-ground passport profile, incomplete-passport failure, reusable product-class track catalog, release-doctor coverage |
+| CUJ-23 | FR-033 | 4 Swift tests; 1 release evidence check | Product proving-ground passport profile, Pkl project-generation generator passport, incomplete-passport failure, reusable product-class track catalog, release-doctor coverage |
 
 ## Deferred Coverage
 

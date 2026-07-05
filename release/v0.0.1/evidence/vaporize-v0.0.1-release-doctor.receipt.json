@@ -1049,7 +1049,7 @@
     },
     {
       "category" : "cuj-coverage",
-      "detail" : "Coverage artifact must name the CUJ-23 targetable test bundle.",
+      "detail" : "Coverage artifact must name the CUJ-23 targetable product and Pkl generator proving-ground test bundle.",
       "name" : "coverage-product-proving-ground-test-bundle",
       "path" : "\/Users\/sonoma\/mono\/private\/universal\/substrate\/collectives\/wrkstrm-core\/private\/apple\/spm\/vaporize@wrkstrm-core.cli\/release\/v0.0.1\/evidence\/cuj-test-coverage.json",
       "severity" : "blocking",
@@ -1128,7 +1128,7 @@
   "passedCheckCount" : 139,
   "receiptKind" : "vaporize-release-doctor",
   "releaseRootPath" : "\/Users\/sonoma\/mono\/private\/universal\/substrate\/collectives\/wrkstrm-core\/private\/apple\/spm\/vaporize@wrkstrm-core.cli\/release\/v0.0.1",
-  "requestId" : "vaporize-release-doctor-E91F0CEC-4BC3-4679-B024-086A8D3C4F3C",
+  "requestId" : "vaporize-release-doctor-92731859-E4BA-4F40-9793-64B5D8EFAF72",
   "requiredArtifactCount" : 28,
   "schemaFamilySlug" : "vaporize-schemas",
   "schemaFamilyVersion" : "0.0.1",

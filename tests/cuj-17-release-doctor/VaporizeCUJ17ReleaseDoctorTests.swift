@@ -388,7 +388,7 @@ private func makeReleaseDoctorFixture(
           "VaporizeCUJ20XcodeWorkspaceSchemesTests": 5,
           "VaporizeCUJ21CUJStateTests": 6,
           "VaporizeCUJ22ResourceCLIInstallTests": 6,
-          "VaporizeCUJ23ProductProvingGroundTests": 3
+          "VaporizeCUJ23ProductProvingGroundTests": 4
         }
       }
     }

@@ -48,9 +48,36 @@ func productProvingGroundGateFailsIncompletePassports() throws {
   #expect(audit.missingTargetableTestScenarioSlugs == ["swiftpm-resource-hill-climb"])
 }
 
+@Test("cuj-23 proving-ground profile covers Pkl project generation capability tracks")
+func productProvingGroundProfileCoversPklProjectGeneration() throws {
+  let profile = vaporizePklXcodeProjectGenerationProvingGroundProfile()
+  let audit = VaporizeProductProvingGroundAdoptionGate.audit(
+    profile: profile,
+    requiredCUJRefs: ["CUJ-14", "CUJ-23"]
+  )
+
+  #expect(profile.documentKind == "vaporware-product-proving-ground-profile")
+  #expect(profile.productSlug == "vaporize-pkl-xcodeproj-generation@wrkstrm-core.feature")
+  #expect(profile.productClass == "generator")
+  #expect(profile.requiredTrackSlugs == VaporizeProductProvingGroundAdoptionGate.requiredTracks(for: "generator"))
+  #expect(profile.scenarios.map(\.slug) == [
+    "pkl-project-input-skid-pad",
+    "pkl-project-graph-hill-climb",
+    "pkl-unsupported-target-crash-barrier",
+    "pkl-project-release-inspection-bay",
+    "pkl-project-prototype-track",
+  ])
+  #expect(profile.scenarios.allSatisfy { $0.targetableTestBundle == "VaporizeCUJ14PklXcodeProjectGenerationTests" })
+  #expect(audit.coverageStatus == "pass")
+  #expect(audit.missingTrackSlugs.isEmpty)
+  #expect(audit.missingCUJRefs.isEmpty)
+  #expect(audit.missingReceiptScenarioSlugs.isEmpty)
+  #expect(audit.missingTargetableTestScenarioSlugs.isEmpty)
+}
+
 @Test("cuj-23 product-class catalog defines reusable proving-ground tracks")
 func productClassCatalogDefinesReusableTracks() throws {
-  let productClasses = ["cli", "app", "library", "workflow", "assistant", "site"]
+  let productClasses = ["cli", "app", "library", "workflow", "generator", "assistant", "site"]
 
   for productClass in productClasses {
     let tracks = VaporizeProductProvingGroundAdoptionGate.requiredTracks(for: productClass)
@@ -127,12 +154,75 @@ private func vaporizeCLIProvingGroundProfile() -> VaporizeProductProvingGroundPr
   )
 }
 
+private func vaporizePklXcodeProjectGenerationProvingGroundProfile() -> VaporizeProductProvingGroundProfile {
+  VaporizeProductProvingGroundProfile(
+    productSlug: "vaporize-pkl-xcodeproj-generation@wrkstrm-core.feature",
+    productClass: "generator",
+    owningBeadRef: "beads/FR-VAPORIZE-PKL-PROJECT-GENERATION-move-owned-xcodegen-surfaces-to-pkl.beads-issue.json",
+    cujRefs: ["CUJ-14", "CUJ-23"],
+    requiredTrackSlugs: VaporizeProductProvingGroundAdoptionGate.requiredTracks(for: "generator"),
+    scenarios: [
+      scenario(
+        slug: "pkl-project-input-skid-pad",
+        title: "pkl project input skid pad",
+        trackSlug: "skid-pad",
+        proofKind: "input-rejection-proof",
+        receiptRef: "tests/cuj-14-pkl-xcodeproj-generation/VaporizeCUJ14PklXcodeProjectGenerationTests.swift",
+        targetableTestBundle: "VaporizeCUJ14PklXcodeProjectGenerationTests"
+      ),
+      scenario(
+        slug: "pkl-project-graph-hill-climb",
+        title: "pkl project graph hill climb",
+        trackSlug: "hill-climb",
+        proofKind: "project-graph-generation-proof",
+        receiptRef: "release/v0.0.1/evidence/vaporize-pkl-xcodeproj-tool-release-identity-modification.receipt.json",
+        targetableTestBundle: "VaporizeCUJ14PklXcodeProjectGenerationTests"
+      ),
+      scenario(
+        slug: "pkl-unsupported-target-crash-barrier",
+        title: "pkl unsupported target crash barrier",
+        trackSlug: "crash-barrier",
+        proofKind: "negative-gate-proof",
+        receiptRef: "tests/cuj-14-pkl-xcodeproj-generation/VaporizeCUJ14PklXcodeProjectGenerationTests.swift",
+        targetableTestBundle: "VaporizeCUJ14PklXcodeProjectGenerationTests"
+      ),
+      scenario(
+        slug: "pkl-project-release-inspection-bay",
+        title: "pkl project release inspection bay",
+        trackSlug: "inspection-bay",
+        proofKind: "release-spine-proof",
+        receiptRef: "release/v0.0.1/evidence/vaporize-v0.0.1-release-doctor.receipt.json",
+        targetableTestBundle: "VaporizeCUJ14PklXcodeProjectGenerationTests"
+      ),
+      scenario(
+        slug: "pkl-project-prototype-track",
+        title: "pkl project prototype track",
+        trackSlug: "prototype-track",
+        proofKind: "generated-fixture-proof",
+        receiptRef: "tests/cuj-14-pkl-xcodeproj-generation/VaporizeCUJ14PklXcodeProjectGenerationTests.swift",
+        targetableTestBundle: "VaporizeCUJ14PklXcodeProjectGenerationTests"
+      ),
+    ],
+    releaseDoctorCheckRefs: [
+      "coverage-pkl-xcodeproj-graph-scheme-test-bundle",
+      "coverage-product-proving-ground-test-bundle",
+      "product-proving-ground-doc",
+    ],
+    metadata: [
+      "cuj": "14,23",
+      "feature": "pkl-xcodeproj-generation",
+      "gate": "GATE-14-pkl-project-generation",
+    ]
+  )
+}
+
 private func scenario(
   slug: String,
   title: String,
   trackSlug: String,
   proofKind: String,
-  receiptRef: String
+  receiptRef: String,
+  targetableTestBundle: String = "VaporizeCUJ23ProductProvingGroundTests"
 ) -> VaporizeProductProvingGroundScenario {
   VaporizeProductProvingGroundScenario(
     slug: slug,
@@ -140,7 +230,7 @@ private func scenario(
     trackSlug: trackSlug,
     proofKind: proofKind,
     maturity: "release-gated",
-    targetableTestBundle: "VaporizeCUJ23ProductProvingGroundTests",
+    targetableTestBundle: targetableTestBundle,
     receiptRef: receiptRef
   )
 }

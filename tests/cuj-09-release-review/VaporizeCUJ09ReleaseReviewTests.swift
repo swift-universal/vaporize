@@ -121,10 +121,10 @@ func cujCoverageContractIsValidJSONAndNamesTheFloor() throws {
 
   #expect(counts["activeCUJCount"] as? Int == 23)
   #expect(counts["deferredCUJCount"] as? Int == 1)
-  #expect(counts["requiredSwiftTestObligationCount"] as? Int == 112)
+  #expect(counts["requiredSwiftTestObligationCount"] as? Int == 113)
   #expect(counts["requiredReleaseEvidenceCheckCount"] as? Int == 13)
-  #expect(counts["requiredTargetableTestObligationCount"] as? Int == 125)
-  #expect(counts["currentExecutableSwiftTestCount"] as? Int == 146)
+  #expect(counts["requiredTargetableTestObligationCount"] as? Int == 126)
+  #expect(counts["currentExecutableSwiftTestCount"] as? Int == 147)
   let breakdown = try #require(counts["currentExecutableSwiftTestBreakdown"] as? [String: Any])
   #expect(breakdown["VaporizeCUJ01SwiftPMCLITests"] as? Int == 20)
   #expect(breakdown["VaporizeCUJ07VaporInventoryTests"] as? Int == 18)
@@ -132,7 +132,7 @@ func cujCoverageContractIsValidJSONAndNamesTheFloor() throws {
   #expect(breakdown["VaporizeCUJ17ReleaseDoctorTests"] as? Int == 7)
   #expect(breakdown["VaporizeCUJ21CUJStateTests"] as? Int == 6)
   #expect(breakdown["VaporizeCUJ22ResourceCLIInstallTests"] as? Int == 8)
-  #expect(breakdown["VaporizeCUJ23ProductProvingGroundTests"] as? Int == 3)
+  #expect(breakdown["VaporizeCUJ23ProductProvingGroundTests"] as? Int == 4)
 }
 
 @Test("CUJ-09 CUJ-state coverage contract is valid JSON and complete")

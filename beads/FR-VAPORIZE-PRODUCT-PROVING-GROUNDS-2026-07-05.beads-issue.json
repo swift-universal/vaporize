@@ -27,13 +27,13 @@
     "componentHome": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli",
     "sourceType": "operator-requested-product-proof-doctrine",
     "sourceLocation": "Codex session 2026-07-05: chairman asked to evolve proving grounds so every vaporware product carries the same kind of proof discipline car designers use.",
-    "description": "Create the first typed product proving-ground passport for vaporware products. Each product class should know expected tracks, each product profile should name owning bead, CUJs, scenarios, targetable tests, receipts, and release-doctor checks, and release review should be able to reject incomplete passports.",
+    "description": "Create typed product proving-ground passports for vaporware products and generator capabilities. Each product class should know expected tracks, each product profile should name owning bead, CUJs, scenarios, targetable tests, receipts, and release-doctor checks, and release review should be able to reject incomplete passports.",
     "acceptanceCriteria": [
       "FR-033 defines product proving-ground passports in the PRD.",
       "CUJ-23 defines the product proving-ground adoption journey and proof boundary.",
       "GATE-40 records the product proving-ground release gate.",
       "VaporizeTestSupport defines a product proving-ground profile, scenario, and adoption audit.",
-      "VaporizeCUJ23ProductProvingGroundTests proves a passing Vaporize CLI passport, missing-track failure, missing-receipt failure, missing-targetable-test failure, and product-class default track catalog.",
+      "VaporizeCUJ23ProductProvingGroundTests proves a passing Vaporize CLI passport, a Pkl project-generation generator passport, missing-track failure, missing-receipt failure, missing-targetable-test failure, and product-class default track catalog.",
       "vaporize.engineering.docc/product-proving-grounds.md documents tracks, class defaults, release rule, and boundaries.",
       "Release Doctor checks FR-033, CUJ-23, GATE-40, the engineering doc, launch-review reference, and CUJ-23 coverage."
     ],

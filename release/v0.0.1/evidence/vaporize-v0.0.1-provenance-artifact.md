@@ -9,17 +9,17 @@ chat memory.
 
 ## Proven
 
-- CUJ-derived test coverage is explicit: 112 required Swift test obligations
+- CUJ-derived test coverage is explicit: 113 required Swift test obligations
   plus 13 release evidence checks across 23 active CUJs.
-- Vaporize package tests cover 146 executable Swift
+- Vaporize package tests cover 147 executable Swift
   tests across 23 implemented CUJ-specific SwiftPM test bundles, including
   CUJ-14 tool release identity, CUJ-14 graph/scheme generation,
   CUJ-14 unsupported-target boundary coverage,
   CUJ-16 target feature inspection, CUJ-17 release doctor, CUJ-18 project
   target discovery, CUJ-19 workspace product-cache discovery, and CUJ-20 Xcode
   workspace scheme listing, CUJ-21 CUJ-state coverage, CUJ-22
-  resource-bearing CLI install coverage, and CUJ-23 product proving-ground
-  passport coverage.
+  resource-bearing CLI install coverage, and CUJ-23 product plus Pkl generator
+  proving-ground passport coverage.
 - `product-definition.md` defines Vaporize, primary users, product-level user
   journeys, why users choose it, when not to choose it, and build implications
   before more implementation is accepted.
@@ -96,9 +96,10 @@ chat memory.
   text, copied directory, decoded JSON, byte-count, and stale-reinstall resource
   scenarios into `~/.swiftpm/bin` away from `.build`.
 - `vaporize.engineering.docc/product-proving-grounds.md` exists, and CUJ-23
-  proves the first product proving-ground passport shape for vaporware products:
-  product class, owning bead, CUJs, tracks, scenarios, targetable tests,
-  receipts, release-doctor checks, and adoption failure modes.
+  proves product proving-ground passport shapes for vaporware products and the
+  Pkl project-generation generator: product class, owning bead, CUJs, tracks,
+  scenarios, targetable tests, receipts, release-doctor checks, and adoption
+  failure modes.
 - `vaporize.engineering.docc/modularity-and-ownership-boundaries.md` exists as
   the ownership and modularity rule: Swift Universal primitives belong in
   `swift-universal`, Apple-bounded orchestration belongs in `wrkstrm-core`, and

@@ -22,7 +22,8 @@
     "generate-xcodeproj supports macOS application, framework, tool, and unit-test targets.",
     "Tool targets emit com.apple.product-type.tool, compiled Mach-O product refs, and product paths without .app suffix.",
     "Framework/app/unit-test graph generation emits target dependencies, linked and embedded frameworks, local package product dependencies, and shared scheme files.",
-    "Unsupported target types remain explicit failures."
+    "Unsupported target types remain explicit failures.",
+    "CUJ-23 now carries a generator-class proving-ground passport for Pkl project generation, tying CUJ-14 graph, negative-gate, release-spine, and generated-fixture evidence into the product proving-ground gate."
   ],
   "targetableTests": [
     {
@@ -43,7 +44,12 @@
     {
       "testBundle": "VaporizeCUJ09ReleaseReviewTests",
       "testName": "cujCoverageContractIsValidJSONAndNamesTheFloor",
-      "expectation": "release-review fails if CUJ coverage counters drift from the new 115-test model"
+      "expectation": "release-review fails if CUJ coverage counters drift from the new 147-test model"
+    },
+    {
+      "testBundle": "VaporizeCUJ23ProductProvingGroundTests",
+      "testName": "productProvingGroundProfileCoversPklProjectGeneration",
+      "expectation": "expected-pass Pkl project-generation generator passport covers skid-pad, hill-climb, crash-barrier, inspection-bay, and prototype-track scenarios"
     }
   ],
   "proofCommands": [
