@@ -2,7 +2,7 @@
   "boundaries" : [
     "Release doctor audits release-spine coherence; it does not approve release.",
     "A pass can coexist with release gates that are honestly blocked.",
-    "First slice checks Vaporize v0.0.1 docs, public-disclosure surfaces, JSON evidence, CUJ coverage, CUJ-state coverage, launch-review references, launch-review\/PRD\/release-gate follow-up list coherence, provenance inventory, project target discovery evidence, workspace product-cache discovery evidence, and Xcode workspace scheme-listing evidence.",
+    "First slice checks Vaporize v0.0.1 docs, public-disclosure surfaces, JSON evidence, CUJ coverage, CUJ-state coverage, launch-review references, launch-review\/PRD\/release-gate follow-up list coherence, launch-review blocker disposition, provenance inventory, project target discovery evidence, workspace product-cache discovery evidence, and Xcode workspace scheme-listing evidence.",
     "Fleet project-generation parity, runtime sampling, build-size cohorts, and periodic buddy health remain separate follow-up checks."
   ],
   "checkCount" : 129,
@@ -1048,7 +1048,7 @@
   "passedCheckCount" : 129,
   "receiptKind" : "vaporize-release-doctor",
   "releaseRootPath" : "\/Users\/sonoma\/mono\/private\/universal\/substrate\/collectives\/wrkstrm-core\/private\/apple\/spm\/vaporize@wrkstrm-core.cli\/release\/v0.0.1",
-  "requestId" : "vaporize-release-doctor-3365B17A-6310-400F-8C65-19C3CB2DCFEE",
+  "requestId" : "vaporize-release-doctor-A1FF9B89-120F-40F1-831A-70FE09FF4D72",
   "requiredArtifactCount" : 27,
   "schemaFamilySlug" : "vaporize-schemas",
   "schemaFamilyVersion" : "0.0.1",
