@@ -7,7 +7,7 @@
   "subjectReleaseSlug": "v0.0.1",
   "createdAt": "2026-07-05T00:00:00Z",
   "createdBy": "codex",
-  "status": "completed-with-focused-proof",
+  "status": "completed-with-launch-review-proof",
   "requestRef": "private/universal/substrate/collectives/spaces-universal/private/universal/kura-spaces/workflows/software-modification-workstream-capture/v0.1.0/requests/2026-07-05-vaporize-swiftpm-cli-resource-bundle-install-launch-review.vaporware-modification-request.su.json",
   "workflowInstanceRef": "private/universal/substrate/collectives/spaces-universal/private/universal/kura-spaces/workflows/software-modification-workstream-capture/v0.1.0/software-modification-workstream-capture-2026-07-05-vaporize-swiftpm-cli-resource-bundle-install-launch-review.workflow-instance.su.json",
   "releaseCohortRef": "GATE-39-resource-cli-install",
@@ -22,8 +22,9 @@
     "CUJ-22 is the targetable release-facing journey for resource-bearing SwiftPM CLI installs.",
     "GATE-39 records the resource CLI install proof and keeps app packaging, Bundle.main metadata, Sparkle, and public update delivery out of scope.",
     "Release Doctor checks FR-032, CUJ-22, GATE-39, the engineering doc, launch-review references, and CUJ-22 coverage.",
-    "Launch-review and provenance evidence now model 22 active CUJs, 104 Swift test obligations, 116 targetable obligations, and 138 executable Swift tests.",
-    "The launch-review packet is ready for launch review while final internal release remains blocked by named gates."
+    "Launch-review and provenance evidence now model 22 active CUJs, 105 Swift test obligations, 117 targetable obligations, and 139 executable Swift tests.",
+    "The launch-review packet is ready for launch review while final internal release remains blocked by named gates.",
+    "CUJ-14 launch-review proof now matches the quoted .pbxproj serializer output for release identity and Info.plist generation settings."
   ],
   "targetableTests": [
     {
@@ -69,20 +70,32 @@
   ],
   "proofCommands": [
     {
-      "command": "SPM_USE_LOCAL_DEPS=1 /Users/sonoma/.swiftpm/bin/vaporize.cli@wrkstrm-core.clia.sh --package-path /Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli --configuration debug test -- --filter VaporizeCUJ22ResourceCLIInstallTests",
+      "command": "SPM_USE_LOCAL_DEPS=1 /Users/sonoma/.swiftpm/bin/vaporize.cli@wrkstrm-core.clia.sh test --package-path /Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli --configuration debug -- --filter VaporizeCUJ22ResourceCLIInstallTests",
       "result": "PASS: 6 tests passed"
     },
     {
-      "command": "SPM_USE_LOCAL_DEPS=1 /Users/sonoma/.swiftpm/bin/vaporize.cli@wrkstrm-core.clia.sh --package-path /Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli --configuration debug test -- --filter VaporizeCUJ09ReleaseReviewTests",
+      "command": "SPM_USE_LOCAL_DEPS=1 /Users/sonoma/.swiftpm/bin/vaporize.cli@wrkstrm-core.clia.sh test --package-path /Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli --configuration debug -- --filter CUJ-09",
       "result": "PASS: 6 tests passed"
     },
     {
-      "command": "SPM_USE_LOCAL_DEPS=1 /Users/sonoma/.swiftpm/bin/vaporize.cli@wrkstrm-core.clia.sh --package-path /Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli --configuration debug test -- --filter VaporizeCUJ17ReleaseDoctorTests",
+      "command": "SPM_USE_LOCAL_DEPS=1 /Users/sonoma/.swiftpm/bin/vaporize.cli@wrkstrm-core.clia.sh test --package-path /Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli --configuration debug -- --filter CUJ-17",
+      "result": "PASS: 6 tests passed"
+    },
+    {
+      "command": "SPM_USE_LOCAL_DEPS=1 /Users/sonoma/.swiftpm/bin/vaporize.cli@wrkstrm-core.clia.sh toolchain -- swift test --package-path /Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli -c debug --filter VaporizeCUJ14PklXcodeProjectGenerationTests",
       "result": "PASS: 5 tests passed"
     },
     {
+      "command": "SPM_USE_LOCAL_DEPS=1 /Users/sonoma/.swiftpm/bin/vaporize.cli@wrkstrm-core.clia.sh test --package-path /Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli --configuration debug",
+      "result": "PASS: full Vaporize SwiftPM test suite passed"
+    },
+    {
+      "command": "SPM_USE_LOCAL_DEPS=1 /Users/sonoma/.swiftpm/bin/vaporize.cli@wrkstrm-core.clia.sh install --artifact cli --package-path /Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli --product vaporize.cli@wrkstrm-core.clia.sh --configuration release --force --product-version 0.0.1 --product-build 20260705 --product-build-date 2026-07-05T00:00:00Z",
+      "result": "PASS: installed current Vaporize CLI source with product metadata sidecar"
+    },
+    {
       "command": "SPM_USE_LOCAL_DEPS=1 /Users/sonoma/.swiftpm/bin/vaporize.cli@wrkstrm-core.clia.sh release-doctor --path private/apple/spm/vaporize@wrkstrm-core.cli --format json --receipt-path private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/vaporize-v0.0.1-release-doctor.receipt.json",
-      "result": "PASS: 108 passed checks, 0 failed checks, 25 required artifacts"
+      "result": "PASS: 120 passed checks, 0 failed checks, 26 required artifacts"
     },
     {
       "command": "SPM_USE_LOCAL_DEPS=1 /Users/sonoma/.swiftpm/bin/vaporize.cli@wrkstrm-core.clia.sh validate-json --path <changed-json-evidence>",
@@ -102,6 +115,7 @@
     "release/v0.0.1/evidence/vaporize-v0.0.1-provenance-artifact.md",
     "sources/vaporize-cli/ReleaseDoctor.swift",
     "tests/cuj-09-release-review/VaporizeCUJ09ReleaseReviewTests.swift",
+    "tests/cuj-14-pkl-xcodeproj-generation/VaporizeCUJ14PklXcodeProjectGenerationTests.swift",
     "tests/cuj-17-release-doctor/VaporizeCUJ17ReleaseDoctorTests.swift",
     "tests/cuj-22-resource-cli-install/vaporize-cuj-22-resource-cli-install-tests.swift",
     "vaporize.engineering.docc/feature-catalog.md",

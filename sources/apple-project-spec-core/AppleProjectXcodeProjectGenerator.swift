@@ -1,14 +1,14 @@
 import Foundation
 
 public enum AppleProjectXcodeProjectGenerationError: Error, CustomStringConvertible {
-  case noApplicationTargets
+  case noBuildableTargets
   case unsupportedTargetType(targetName: String, type: String?)
   case missingSourcePath(targetName: String, path: String)
 
   public var description: String {
     switch self {
-    case .noApplicationTargets:
-      return "AppleProjectSpec does not contain any application targets."
+    case .noBuildableTargets:
+      return "AppleProjectSpec does not contain any application or tool targets."
     case .unsupportedTargetType(let targetName, let type):
       return "Target \(targetName) has unsupported type \(type ?? "<nil>")."
     case .missingSourcePath(let targetName, let path):
@@ -105,22 +105,22 @@ public enum AppleProjectXcodeProjectRenderer {
     spec: AppleProjectSpec,
     projectDirectory: URL
   ) throws -> AppleRenderedXcodeProject {
-    let applicationTargets = spec.targets
-      .filter { _, target in target.type == nil || target.type == "application" }
+    let buildableTargets = spec.targets
+      .filter { _, target in target.isXcodeProjectGenerationSupported }
       .sorted { $0.key < $1.key }
-    guard !applicationTargets.isEmpty else {
+    guard !buildableTargets.isEmpty else {
       if let first = spec.targets.sorted(by: { $0.key < $1.key }).first {
         throw AppleProjectXcodeProjectGenerationError.unsupportedTargetType(
           targetName: first.key,
           type: first.value.type
         )
       }
-      throw AppleProjectXcodeProjectGenerationError.noApplicationTargets
+      throw AppleProjectXcodeProjectGenerationError.noBuildableTargets
     }
 
     let context = try RenderContext(
       spec: spec,
-      applicationTargets: applicationTargets,
+      buildableTargets: buildableTargets,
       projectDirectory: projectDirectory
     )
     return AppleRenderedXcodeProject(
@@ -149,7 +149,7 @@ private struct RenderContext {
 
   init(
     spec: AppleProjectSpec,
-    applicationTargets: [(key: String, value: AppleProjectTarget)],
+    buildableTargets: [(key: String, value: AppleProjectTarget)],
     projectDirectory: URL
   ) throws {
     self.spec = spec
@@ -168,7 +168,7 @@ private struct RenderContext {
     var fileRecords: [FileRecord] = []
     var productRecords: [ProductRecord] = []
 
-    for (targetName, target) in applicationTargets {
+    for (targetName, target) in buildableTargets {
       let discoveredFiles = try Self.discoverFiles(
         targetName: targetName,
         target: target,
@@ -296,7 +296,7 @@ private struct RenderContext {
   private func appendPBXFileReferences(to lines: inout [String]) {
     lines.append("/* Begin PBXFileReference section */")
     for target in targetRecords {
-      lines.append("\t\t\(target.productFileID) /* \(target.productName).app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = \(pbxValue("\(target.productName).app")); sourceTree = BUILT_PRODUCTS_DIR; };")
+      lines.append("\t\t\(target.productFileID) /* \(target.productFileName) */ = {isa = PBXFileReference; explicitFileType = \(target.productFileType); includeInIndex = 0; path = \(pbxValue(target.productFileName)); sourceTree = BUILT_PRODUCTS_DIR; };")
     }
     for package in packageRecords {
       guard let path = package.package.path else { continue }
@@ -349,7 +349,7 @@ private struct RenderContext {
     lines.append("\t\t\tisa = PBXGroup;")
     lines.append("\t\t\tchildren = (")
     for target in targetRecords {
-      lines.append("\t\t\t\t\(target.productFileID) /* \(target.productName).app */,")
+      lines.append("\t\t\t\t\(target.productFileID) /* \(target.productFileName) */,")
     }
     lines.append("\t\t\t);")
     lines.append("\t\t\tname = Products;")
@@ -424,8 +424,8 @@ private struct RenderContext {
       }
       lines.append("\t\t\t);")
       lines.append("\t\t\tproductName = \(pbxValue(target.productName));")
-      lines.append("\t\t\tproductReference = \(target.productFileID) /* \(target.productName).app */;")
-      lines.append("\t\t\tproductType = \"com.apple.product-type.application\";")
+      lines.append("\t\t\tproductReference = \(target.productFileID) /* \(target.productFileName) */;")
+      lines.append("\t\t\tproductType = \(target.productType);")
       lines.append("\t\t};")
     }
     lines.append("/* End PBXNativeTarget section */")
@@ -683,6 +683,7 @@ private struct RenderContext {
     merge(configValues(in: spec.settings, configuration: configuration), into: &settings)
     merge(target.target.settings?.base, into: &settings)
     merge(configValues(in: target.target.settings, configuration: configuration), into: &settings)
+    applyReleaseIdentity(target.target.releaseIdentity, target: target, into: &settings)
     if let deploymentTarget = target.target.deploymentTarget?.stringValue {
       settings["MACOSX_DEPLOYMENT_TARGET"] = .string(deploymentTarget)
     }
@@ -690,6 +691,40 @@ private struct RenderContext {
       settings["INFOPLIST_FILE"] = .string(infoPath)
     }
     return settings
+  }
+
+  private func applyReleaseIdentity(
+    _ identity: AppleProjectReleaseIdentity?,
+    target: TargetRecord,
+    into settings: inout [String: PBXSettingValue]
+  ) {
+    guard let identity else { return }
+    if let bundleIdentifier = identity.bundleIdentifier, !bundleIdentifier.isEmpty {
+      settings["PRODUCT_BUNDLE_IDENTIFIER"] = .string(bundleIdentifier)
+    }
+    if let shortVersion = identity.shortVersion, !shortVersion.isEmpty {
+      settings["MARKETING_VERSION"] = .string(shortVersion)
+    }
+    if let buildVersion = identity.buildVersion, !buildVersion.isEmpty {
+      settings["CURRENT_PROJECT_VERSION"] = .string(buildVersion)
+    }
+    if let buildSha = identity.buildSha, !buildSha.isEmpty {
+      settings["INFOPLIST_KEY_VaporizeProductBuildSHA"] = .string(buildSha)
+    }
+    if let buildDate = identity.buildDate, !buildDate.isEmpty {
+      settings["INFOPLIST_KEY_VaporizeProductBuildDate"] = .string(buildDate)
+    }
+    if let sparkleFeedURL = identity.sparkleFeedURL, !sparkleFeedURL.isEmpty {
+      settings["INFOPLIST_KEY_SUFeedURL"] = .string(sparkleFeedURL)
+    }
+    if let sparklePublicEDKey = identity.sparklePublicEDKey, !sparklePublicEDKey.isEmpty {
+      settings["INFOPLIST_KEY_SUPublicEDKey"] = .string(sparklePublicEDKey)
+    }
+    if let generateInfoPlist = identity.generateInfoPlist {
+      settings["GENERATE_INFOPLIST_FILE"] = .string(generateInfoPlist ? "YES" : "NO")
+    } else if target.target.infoPath == nil {
+      settings["GENERATE_INFOPLIST_FILE"] = .string("YES")
+    }
   }
 
   private func defaultProjectSettings(configuration: String) -> [String: PBXSettingValue] {
@@ -758,8 +793,7 @@ private struct RenderContext {
   }
 
   private func defaultTargetSettings(target: TargetRecord, configuration _: String) -> [String: PBXSettingValue] {
-    [
-      "ASSETCATALOG_COMPILER_APPICON_NAME": .string("AppIcon"),
+    var settings: [String: PBXSettingValue] = [
       "CODE_SIGNING_ALLOWED": .string("NO"),
       "CODE_SIGNING_REQUIRED": .string("NO"),
       "COMBINE_HIDPI_IMAGES": .string("YES"),
@@ -769,6 +803,10 @@ private struct RenderContext {
       "PRODUCT_NAME": .string(target.productName),
       "SDKROOT": .string("macosx"),
     ]
+    if target.isApplication {
+      settings["ASSETCATALOG_COMPILER_APPICON_NAME"] = .string("AppIcon")
+    }
+    return settings
   }
 
   private func configValues(
@@ -902,6 +940,28 @@ private struct TargetRecord {
     }
     return firstSource
   }
+
+  var isApplication: Bool {
+    target.normalizedType == "application"
+  }
+
+  var isTool: Bool {
+    target.normalizedType == "tool"
+  }
+
+  var productFileName: String {
+    isApplication ? "\(productName).app" : productName
+  }
+
+  var productFileType: String {
+    isApplication ? "wrapper.application" : pbxValue("compiled.mach-o.executable")
+  }
+
+  var productType: String {
+    isApplication
+      ? pbxValue("com.apple.product-type.application")
+      : pbxValue("com.apple.product-type.tool")
+  }
 }
 
 private struct FileRecord {
@@ -1019,6 +1079,14 @@ private enum PBXSettingValue: Equatable {
 }
 
 private extension AppleProjectTarget {
+  var normalizedType: String {
+    type ?? "application"
+  }
+
+  var isXcodeProjectGenerationSupported: Bool {
+    normalizedType == "application" || normalizedType == "tool"
+  }
+
   var infoPath: String? {
     if let path = info?.path { return path }
     return settings?.base?["INFOPLIST_FILE"]?.stringValue
@@ -1120,6 +1188,6 @@ public struct PklXcodeProjectGenerationReceipt: Codable, Equatable, Sendable {
   public var generatedByteCount: Int
   public var buildableWorldStateGenerated = true
   public var xcodeProjectGenerated = true
-  public var boundary = "Generates .xcodeproj world-state from evaluated AppleProjectSpec Pkl; first slice supports macOS application targets."
+  public var boundary = "Generates .xcodeproj world-state from evaluated AppleProjectSpec Pkl; first slice supports macOS application and tool targets."
   public var pklSignature: AppleProjectSpecParitySignature
 }

@@ -612,6 +612,15 @@ enum VaporizeReleaseDoctor {
     let evidenceRefs = object["evidenceRefs"] as? [[String: Any]] ?? []
     let consumerFacingGateOwnership = object["consumerFacingGateOwnership"] as? [String: Any] ?? [:]
     let signoffs = object["signoffs"] as? [String: Any] ?? [:]
+    let humanReviewPolicy = object["humanReviewPolicy"] as? [String: Any] ?? [:]
+    let approvedGatesWithoutHumanReview = gateResults.filter { gate in
+      guard let status = gate["status"] as? String else { return false }
+      return isGateApprovalStatus(status) && !hasHumanGateReview(gate)
+    }
+    let unrecognizedGateStatuses = gateResults.filter { gate in
+      guard let status = gate["status"] as? String else { return true }
+      return !isRecognizedGateStatus(status)
+    }
     return [
       check(
         name: "launch-review-subject",
@@ -685,6 +694,31 @@ enum VaporizeReleaseDoctor {
           && isNullish(signoffs["audienceApproverSignoffRef"])
           && isNullish(signoffs["founderSignoffRef"]),
         detail: "Carrie CMO ownership must remain distinct from publication approval signoff."
+      ),
+      check(
+        name: "launch-review-human-review-policy",
+        category: "launch-review",
+        path: url.path,
+        passed: humanReviewPolicy["approvalStatusRequiresHumanReview"] as? Bool == true
+          && humanReviewPolicy["automationSignerAllowed"] as? Bool == false
+          && humanReviewPolicy["machineProofMayApproveGate"] as? Bool == false,
+        detail: "Launch-review packet must declare that approved gate statuses require human review."
+      ),
+      check(
+        name: "launch-review-approved-gates-have-human-review",
+        category: "launch-review",
+        path: url.path,
+        passed: approvedGatesWithoutHumanReview.isEmpty,
+        detail:
+          "Approved gate statuses require gate-level human review records; missing review gates: \(gateRefs(approvedGatesWithoutHumanReview))."
+      ),
+      check(
+        name: "launch-review-gate-status-vocabulary",
+        category: "launch-review",
+        path: url.path,
+        passed: unrecognizedGateStatuses.isEmpty,
+        detail:
+          "Gate statuses must be blocked, evidence-ready pending human review, or human-approved; unrecognized gates: \(gateRefs(unrecognizedGateStatuses))."
       ),
       check(
         name: "launch-review-release-doctor-evidence-ref",
@@ -968,6 +1002,39 @@ enum VaporizeReleaseDoctor {
 
   private static func isNullish(_ value: Any?) -> Bool {
     value == nil || value is NSNull
+  }
+
+  private static func isGateApprovalStatus(_ status: String) -> Bool {
+    ["PASS", "PASS-WITH-NOTE", "APPROVED", "APPROVED-WITH-NOTE"].contains(status.uppercased())
+  }
+
+  private static func isRecognizedGateStatus(_ status: String) -> Bool {
+    let normalized = status.uppercased()
+    return isGateApprovalStatus(normalized)
+      || normalized == "EVIDENCE-READY-PENDING-HUMAN-REVIEW"
+      || normalized == "PENDING-HUMAN-REVIEW"
+      || normalized.hasPrefix("BLOCKED")
+  }
+
+  private static func hasHumanGateReview(_ gate: [String: Any]) -> Bool {
+    guard let review = gate["humanReview"] as? [String: Any] else {
+      return false
+    }
+    let reviewerKind = (review["reviewerKind"] as? String)?.lowercased()
+    let humanReviewRef = review["humanReviewRef"] as? String
+    let reviewerIdentityRef = review["reviewerIdentityRef"] as? String
+    let signedAt = review["signedAt"] as? String
+    let signedByAutomation = review["signedByAutomation"] as? Bool
+    return reviewerKind == "human"
+      && !(humanReviewRef ?? "").isEmpty
+      && !(reviewerIdentityRef ?? "").isEmpty
+      && !(signedAt ?? "").isEmpty
+      && signedByAutomation == false
+  }
+
+  private static func gateRefs(_ gates: [[String: Any]]) -> String {
+    let refs = gates.compactMap { $0["gateRef"] as? String }
+    return refs.isEmpty ? "none" : refs.joined(separator: ", ")
   }
 
   private static func check(

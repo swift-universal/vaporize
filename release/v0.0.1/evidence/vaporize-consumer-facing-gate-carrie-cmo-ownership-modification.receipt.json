@@ -1,0 +1,90 @@
+{
+  "VaporizeModificationReceipt": "0.1.0",
+  "schemaVersion": "0.1.0",
+  "receiptKind": "vaporize-modification-receipt",
+  "receiptId": "vaporize-consumer-facing-gate-carrie-cmo-ownership-modification-2026-07-04",
+  "subjectAppSlug": "vaporize.cli@wrkstrm-core.clia.sh",
+  "subjectReleaseSlug": "v0.0.1",
+  "createdAt": "2026-07-04T23:04:00Z",
+  "createdBy": "codex",
+  "status": "completed-with-focused-proof",
+  "requestRef": "private/universal/substrate/collectives/spaces-universal/private/universal/kura-spaces/workflows/software-modification-workstream-capture/v0.1.0/requests/2026-07-04-vaporize-consumer-facing-gate-carrie-cmo-ownership.vaporware-modification-request.su.json",
+  "workflowInstanceRef": "private/universal/substrate/collectives/spaces-universal/private/universal/kura-spaces/workflows/software-modification-workstream-capture/v0.1.0/software-modification-workstream-capture-2026-07-04-vaporize-consumer-facing-gate-carrie-cmo-ownership.workflow-instance.su.json",
+  "releaseCohortRef": "GATE-38-public-disclosure-surfaces",
+  "owningBeadRef": "private/universal/substrate/collectives/spaces-universal/private/universal/kura-spaces/roles/cmo-chief-marketing-officer/private/universal/beads/FR-CMO-CONSUMER-FACING-PUBLIC-DISCLOSURE-GATE-OWNERSHIP-2026-07-04.beads-issue.json",
+  "companionBeadRefs": [
+    "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/FR-VAPORIZE-PUBLIC-DOCUMENTATION-ARTIFACT-MAINTENANCE-2026-07-04.beads-issue.json"
+  ],
+  "featureFlagDisposition": {
+    "createdFeatureFlag": false,
+    "attachedFeatureStatus": "GATE-38-public-disclosure-surfaces",
+    "noFlagReason": "The change modifies public-disclosure ownership, release evidence, and release-doctor validation, not runtime product behavior."
+  },
+  "changedBehavior": [
+    "Carrie CMO (cmo-chief-marketing-officer-carrie@wrkstrm.occupations.org) is assigned as the consumer-facing publication gate owner for Vaporize public-disclosure surfaces.",
+    "The CMO owner-home bead is the primary maintenance handle for the public-disclosure gate ownership correction.",
+    "wrkstrm-core remains the implementation evidence and release-doctor mechanics owner for the Vaporize release packet.",
+    "Public brochure, public brochure HTML, user manual, public changelog, audience packet, release gates, launch review, and provenance evidence name the Carrie CMO ownership boundary.",
+    "Release Doctor checks Carrie CMO owner tokens across public-disclosure artifacts and checks that launch-review ownership remains assigned-not-signed-off.",
+    "Launch-review signoffs remain null; this receipt does not approve publication."
+  ],
+  "targetableTests": [
+    {
+      "testBundle": "VaporizeCUJ09ReleaseReviewTests",
+      "testName": "launchReviewPacketIsValidJSONAndInternalEssential",
+      "expectation": "expected-pass only when launch-review evidence names Carrie CMO as consumer-facing gate owner and leaves signoffs null"
+    },
+    {
+      "testBundle": "VaporizeCUJ09ReleaseReviewTests",
+      "testName": "productDefinitionContractPrecedesBuildWork",
+      "expectation": "expected-pass only when public artifacts, audience packet, release gates, and brochure site carry the Carrie CMO owner token"
+    },
+    {
+      "testBundle": "VaporizeCUJ17ReleaseDoctorTests",
+      "testName": "releaseDoctorPassesLiveReleaseSpine",
+      "expectation": "expected-pass only when release doctor reports the Carrie CMO owner and non-signoff checks as pass"
+    }
+  ],
+  "proofCommands": [
+    {
+      "command": "SPM_USE_LOCAL_DEPS=1 /Users/sonoma/.swiftpm/bin/vaporize.cli@wrkstrm-core.clia.sh test --package-path /Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli --configuration debug -- --filter CUJ-09",
+      "result": "PASS: exited 0"
+    },
+    {
+      "command": "SPM_USE_LOCAL_DEPS=1 /Users/sonoma/.swiftpm/bin/vaporize.cli@wrkstrm-core.clia.sh test --package-path /Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli --configuration debug -- --filter CUJ-17",
+      "result": "PASS: exited 0"
+    },
+    {
+      "command": "SPM_USE_LOCAL_DEPS=1 /Users/sonoma/.swiftpm/bin/vaporize.cli@wrkstrm-core.clia.sh install --artifact cli --package-path /Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli --product vaporize.cli@wrkstrm-core.clia.sh --configuration release --force --product-version 0.0.1 --product-build 20260704 --product-build-date 2026-07-04T23:04:00Z",
+      "result": "PASS: exited 0"
+    },
+    {
+      "command": "/Users/sonoma/.swiftpm/bin/vaporize.cli@wrkstrm-core.clia.sh release-doctor --path private/apple/spm/vaporize@wrkstrm-core.cli --format json --receipt-path private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/vaporize-v0.0.1-release-doctor.receipt.json",
+      "result": "PASS: 108 passed checks, 0 failed checks, 25 required artifacts"
+    },
+    {
+      "command": "/Users/sonoma/.swiftpm/bin/vaporize.cli@wrkstrm-core.clia.sh validate-json --path <changed-json-evidence>",
+      "result": "PASS: CMO bead, request packet, workflow instance, modification receipt, audience packet, launch-review packet, provenance artifact, and release-doctor receipt validated"
+    }
+  ],
+  "releaseEvidenceUpdates": [
+    "release/v0.0.1/release-gates.md",
+    "release/v0.0.1/public-brochure.html",
+    "release/v0.0.1/public-brochure.md",
+    "release/v0.0.1/user-manual.md",
+    "release/v0.0.1/public-changelog.md",
+    "release/v0.0.1/evidence/audience-packet.su.json",
+    "release/v0.0.1/evidence/launch-review-packet.json",
+    "release/v0.0.1/evidence/vaporize-v0.0.1-provenance-artifact.json",
+    "release/v0.0.1/evidence/vaporize-v0.0.1-provenance-artifact.md",
+    "release/v0.0.1/evidence/vaporize-v0.0.1-release-doctor.receipt.json",
+    "sources/vaporize-cli/ReleaseDoctor.swift",
+    "tests/cuj-09-release-review/VaporizeCUJ09ReleaseReviewTests.swift",
+    "tests/cuj-17-release-doctor/VaporizeCUJ17ReleaseDoctorTests.swift"
+  ],
+  "validationLimits": [
+    "Full Vaporize package suite was not run for this correction.",
+    "Carrie CMO ownership does not approve publication.",
+    "The public-disclosure surfaces remain drafts until Carrie CMO signoff, required founder signoff, and any board/publication approvals are recorded."
+  ]
+}

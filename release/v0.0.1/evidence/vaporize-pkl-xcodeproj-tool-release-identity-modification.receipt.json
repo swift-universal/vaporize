@@ -1,0 +1,77 @@
+{
+  "VaporizeModificationReceipt": "0.1.0",
+  "schemaVersion": "0.1.0",
+  "receiptKind": "vaporize-modification-receipt",
+  "receiptId": "vaporize-pkl-xcodeproj-tool-release-identity-modification-2026-07-04",
+  "subjectAppSlug": "vaporize.cli@wrkstrm-core.clia.sh",
+  "subjectReleaseSlug": "v0.0.1",
+  "createdAt": "2026-07-04T20:41:49Z",
+  "createdBy": "codex",
+  "status": "completed-with-focused-proof",
+  "requestRef": "private/universal/substrate/collectives/spaces-universal/private/universal/kura-spaces/workflows/software-modification-workstream-capture/v0.1.0/requests/2026-07-04-vaporize-pkl-xcodeproj-tool-release-identity.vaporware-modification-request.su.json",
+  "workflowInstanceRef": "private/universal/substrate/collectives/spaces-universal/private/universal/kura-spaces/workflows/software-modification-workstream-capture/v0.1.0/software-modification-workstream-capture-2026-07-04-vaporize-pkl-xcodeproj-tool-release-identity.workflow-instance.su.json",
+  "releaseCohortRef": "GATE-14/GATE-22 Pkl project generation",
+  "featureFlagDisposition": {
+    "createdFeatureFlag": false,
+    "attachedFeatureStatus": "vaporize-v0.0.1-pkl-project-generation",
+    "noFlagReason": "Internal project-generation behavior is controlled through the Pkl project-generation release cohort, CUJ-14 tests, and release evidence rather than a runtime feature flag."
+  },
+  "changedBehavior": [
+    "AppleProjectSpec Pkl and Swift model now carry typed releaseIdentity.",
+    "releaseIdentity maps to PRODUCT_BUNDLE_IDENTIFIER, MARKETING_VERSION, CURRENT_PROJECT_VERSION, generated Info.plist, Vaporize build metadata keys, and Sparkle feed/signing Info.plist keys.",
+    "generate-xcodeproj supports macOS application and tool targets.",
+    "Tool targets emit com.apple.product-type.tool, compiled Mach-O product refs, and product paths without .app suffix.",
+    "Unsupported target types remain explicit failures."
+  ],
+  "targetableTests": [
+    {
+      "testBundle": "VaporizeCUJ14PklXcodeProjectGenerationTests",
+      "testName": "generatesToolTargetReleaseIdentityFromPkl",
+      "expectation": "expected-pass tool target with releaseIdentity emits tool product semantics and version/build/Sparkle settings"
+    },
+    {
+      "testBundle": "VaporizeCUJ14PklXcodeProjectGenerationTests",
+      "testName": "rejectsUnsupportedXcodeTargetTypesFromPkl",
+      "expectation": "expected-fail unsupported framework target throws unsupportedTargetType"
+    },
+    {
+      "testBundle": "VaporizeCUJ09ReleaseReviewTests",
+      "testName": "cujCoverageContractIsValidJSONAndNamesTheFloor",
+      "expectation": "release-review fails if CUJ coverage counters drift from the new 115-test model"
+    }
+  ],
+  "proofCommands": [
+    {
+      "command": "SPM_USE_LOCAL_DEPS=1 /Users/sonoma/.swiftpm/bin/vaporize.cli@wrkstrm-core.clia.sh test --package-path /Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli --configuration debug -- --filter CUJ-14",
+      "result": "PASS: exited 0"
+    },
+    {
+      "command": "SPM_USE_LOCAL_DEPS=1 /Users/sonoma/.swiftpm/bin/vaporize.cli@wrkstrm-core.clia.sh test --package-path /Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli --configuration debug -- --filter CUJ-09",
+      "result": "PASS: exited 0"
+    },
+    {
+      "command": "/Users/sonoma/.swiftpm/bin/vaporize.cli@wrkstrm-core.clia.sh validate-json --path <request/workflow/release evidence JSON>",
+      "result": "PASS: request packet, workflow instance, modification receipt, CUJ coverage, launch-review packet, provenance artifact, and owning bead validated"
+    },
+    {
+      "command": "/Users/sonoma/.swiftpm/bin/vaporize.cli@wrkstrm-core.clia.sh release-doctor --path private/apple/spm/vaporize@wrkstrm-core.cli --format json --receipt-path private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/vaporize-v0.0.1-release-doctor.receipt.json",
+      "result": "PASS: current regenerated release-doctor receipt reports 108 passed checks, 0 failed checks"
+    },
+    {
+      "command": "git diff --check -- <touched Vaporize source/test/doc/evidence files>",
+      "result": "PASS: exited 0"
+    }
+  ],
+  "releaseEvidenceUpdates": [
+    "release/v0.0.1/evidence/cuj-test-coverage.json",
+    "release/v0.0.1/evidence/cuj-test-coverage.md",
+    "release/v0.0.1/release-gates.md",
+    "release/v0.0.1/evidence/launch-review-packet.json",
+    "release/v0.0.1/evidence/vaporize-v0.0.1-provenance-artifact.json"
+  ],
+  "validationLimits": [
+    "Full Vaporize package suite was not run before this receipt was authored.",
+    "Fleet Pkl-backed .xcodeproj build parity remains blocked.",
+    "This receipt does not prove Sparkle appcast generation or update signing."
+  ]
+}

@@ -228,7 +228,7 @@ public enum AppleProjectTargetDiscovery {
       return []
     }
     return targets
-      .filter(\.isBuildableCandidate)
+      .filter { $0.isApplication && $0.isBuildableCandidate }
       .map { target in
         AppleProjectProductCacheCandidate(
           targetName: target.name,
@@ -294,10 +294,12 @@ public struct AppleProjectDiscoveredTarget: Codable, Equatable, Sendable {
   public var hasPreBuildScripts: Bool
   public var hasPostBuildScripts: Bool
   public var isApplication: Bool
+  public var isTool: Bool
   public var isBuildableCandidate: Bool
 
   init(name: String, target: AppleProjectTarget) {
     let dependencies = target.dependencies ?? []
+    let normalizedType = target.type ?? "application"
     self.name = name
     self.type = target.type
     self.platform = target.platform
@@ -311,8 +313,9 @@ public struct AppleProjectDiscoveredTarget: Codable, Equatable, Sendable {
     self.configFileCount = buildConfigurationNames.count
     self.hasPreBuildScripts = !(target.preBuildScripts?.isEmpty ?? true)
     self.hasPostBuildScripts = !(target.postBuildScripts?.isEmpty ?? true)
-    self.isApplication = target.type == "application"
-    self.isBuildableCandidate = target.type == "application" && (target.platform == nil || target.platform == "macOS")
+    self.isApplication = normalizedType == "application"
+    self.isTool = normalizedType == "tool"
+    self.isBuildableCandidate = (isApplication || isTool) && (target.platform == nil || target.platform == "macOS")
   }
 }
 

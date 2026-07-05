@@ -1,0 +1,69 @@
+{
+  "BeadsIssue": "0.1.0",
+  "schemaVersion": "0.1.0",
+  "id": "FR-VAPORIZE-PUBLIC-DOCUMENTATION-ARTIFACT-MAINTENANCE-2026-07-04",
+  "title": "Maintain public documentation artifacts through explicit modification beads",
+  "status": "open",
+  "priority": 1,
+  "issueType": "feature",
+  "labels": [
+    "vaporize",
+    "vaporware",
+    "public-disclosure",
+    "documentation",
+    "brochure",
+    "user-manual",
+    "audience-packet",
+    "bead-tracking",
+    "release-spine"
+  ],
+  "createdAt": "2026-07-04T22:34:00Z",
+  "createdBy": "codex after chairman requested explicit maintenance beads for modification requests",
+  "historicalContent": {
+    "slug": "FR-VAPORIZE-PUBLIC-DOCUMENTATION-ARTIFACT-MAINTENANCE-2026-07-04",
+    "kind": "bead-feature-request",
+    "createdAt": "2026-07-04T22:34:00Z",
+    "createdBy": "codex",
+    "assignee": "wrkstrm-core",
+    "severity": "high",
+    "componentHome": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli",
+    "sourceType": "operator-requested-maintenance-discipline",
+    "sourceLocation": "Codex session 2026-07-04: chairman observed that modification requests for public documentation artifacts need explicit bead creation and maintenance tracking.",
+    "description": "Public documentation release artifacts must not be maintained as loose release docs. Every modification request that creates or changes the brochure, marketing site, audience packet, user manual, public changelog, public release gate, or their release-doctor checks must cite an owning bead in the component home, carry that bead through beadTrackingRefs, and close with a receipt that names the maintenance state.",
+    "ownedArtifactFamily": [
+      "release/v0.0.1/public-brochure.html",
+      "release/v0.0.1/public-brochure.md",
+      "release/v0.0.1/evidence/audience-packet.su.json",
+      "release/v0.0.1/user-manual.md",
+      "release/v0.0.1/public-changelog.md",
+      "release/v0.0.1/release-gates.md",
+      "vaporize.engineering.docc/vaporware-modification-request-discipline.md",
+      "release/v0.0.1/evidence/launch-review-packet.json",
+      "release/v0.0.1/evidence/vaporize-v0.0.1-provenance-artifact.json",
+      "sources/vaporize-cli/ReleaseDoctor.swift",
+      "tests/cuj-09-release-review/VaporizeCUJ09ReleaseReviewTests.swift",
+      "tests/cuj-17-release-doctor/VaporizeCUJ17ReleaseDoctorTests.swift"
+    ],
+    "acceptanceCriteria": [
+      "The public documentation artifact family has an owning bead in the Vaporize component home.",
+      "Every public documentation modification request names this bead or a more specific successor bead.",
+      "Every workflow instance for a public documentation modification includes the owning bead in beadTrackingRefs before the typed request packet.",
+      "Vaporware modification discipline documentation requires an owning bead or an explicit no-bead exception.",
+      "GATE-32 records the owning-bead obligation for future modification requests.",
+      "Release Doctor checks the owning-bead discipline text in the gate and engineering DocC surfaces.",
+      "The modification receipt records which request, workflow instance, bead, tests, release-doctor run, and JSON validation prove the maintenance refinement."
+    ],
+    "linkedTypedRecords": {
+      "releaseGate": "release/v0.0.1/release-gates.md#GATE-32-vaporware-modification-request-discipline",
+      "disciplineDoc": "vaporize.engineering.docc/vaporware-modification-request-discipline.md",
+      "publicDisclosureGate": "release/v0.0.1/release-gates.md#GATE-38-public-disclosure-surfaces",
+      "workflowBasis": "private/universal/substrate/collectives/spaces-universal/private/universal/kura-spaces/workflows/software-modification-workstream-capture/v0.1.0/vaporware-request-modification-pipeline-basis-2026-06-25.su.json"
+    }
+  },
+  "composesWith": [
+    "[[public-disclosure-is-not-internal-prd-or-cuj]]",
+    "[[release-claims-must-trace-to-evidence]]",
+    "[[owner-home-bead-precedes-job-board-projection]]",
+    "[[modification-requests-close-with-receipts]]"
+  ]
+}

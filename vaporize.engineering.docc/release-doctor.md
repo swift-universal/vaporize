@@ -11,8 +11,9 @@
 
 It does not approve a release. It checks whether the product definition, PRD,
 CUJs, release gates, launch-review packet, provenance artifact, CUJ coverage,
-CUJ-state coverage, feature catalog, and engineering DocC surface agree with
-each other before assistants trust the packet.
+CUJ-state coverage, public brochure companions, feature catalog, and
+engineering DocC surface agree with each other before assistants trust the
+packet.
 
 ## Command
 
@@ -33,8 +34,13 @@ The v0.0.1 first slice checks:
 - required release and engineering artifacts exist
 - release evidence JSON parses through Foundation
 - PRD, CUJs, release gates, and feature catalog name the release-doctor slice
+- the public brochure has the required audience packet and user manual
 - vaporware scaffold vocabulary exists in the modification-request discipline
 - launch-review packet references the release-doctor gate and receipt
+- launch-review gate statuses distinguish machine evidence from human approval:
+  machine-supported gates use `EVIDENCE-READY-PENDING-HUMAN-REVIEW`, while
+  `PASS`, `PASS-WITH-NOTE`, `APPROVED`, and `APPROVED-WITH-NOTE` require a
+  gate-level human review record with `reviewerKind=human`
 - provenance inventory names the release-doctor receipt
 - CUJ coverage counts CUJ-17 and its targetable test bundle
 - CUJ-state coverage names every required state id, proves each id, and leaves
@@ -49,6 +55,8 @@ replacement for the other work.
   generation.
 - It does not run the full test suite yet; CUJ-specific bundles still own
   behavioral proof.
+- It does not let automated proof approve a gate. A gate approval without a
+  human review record is a blocking release-doctor failure.
 - It does not perform periodic build health or buddy heartbeat checks yet.
 - It does not own Engineering/QA/Marketing review or competitor reports; those
   belong with the future review/scaffold lane.

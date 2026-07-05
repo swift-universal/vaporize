@@ -43,6 +43,39 @@ and the generated world-state.
 That ownership matters because future features should be added to the model
 instead of inherited from a general-purpose generator by accident.
 
+## Release Identity
+
+XcodeGen let owned projects express release identity as untyped target build
+settings such as `MARKETING_VERSION`, `CURRENT_PROJECT_VERSION`,
+`PRODUCT_BUNDLE_IDENTIFIER`, and `GENERATE_INFOPLIST_FILE`. Vaporize's Pkl
+replacement makes that a typed target concern instead.
+
+Targets can declare `releaseIdentity` with:
+
+- `bundleIdentifier`
+- `shortVersion`
+- `buildVersion`
+- `buildSha`
+- `buildDate`
+- `generateInfoPlist`
+- `sparkleFeedURL`
+- `sparklePublicEDKey`
+
+During `.xcodeproj` generation, Vaporize projects those fields into Xcode build
+settings. That gives app and tool targets the same Xcode-facing behavior while
+keeping the source of truth in the Pkl model.
+
+This matters for Sparkle because appcast generation and update comparison depend
+on the same two typed values Xcode writes into bundle metadata:
+
+- `shortVersion` maps to `MARKETING_VERSION` and Sparkle's
+  `sparkle:shortVersionString`.
+- `buildVersion` maps to `CURRENT_PROJECT_VERSION` and Sparkle's
+  `sparkle:version`.
+
+For generated Info.plist targets, Vaporize also maps Sparkle feed/signing values
+through `INFOPLIST_KEY_SUFeedURL` and `INFOPLIST_KEY_SUPublicEDKey`.
+
 ## Receipt Chain
 
 The migration chain is proven through receipts under

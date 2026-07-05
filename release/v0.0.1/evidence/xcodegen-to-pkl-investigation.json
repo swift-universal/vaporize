@@ -341,7 +341,7 @@
         "private/apple/spm/vaporize@wrkstrm-core.cli/tests/cuj-03-pass-through/VaporizeCUJ03PassThroughTests.swift",
         "private/apple/spm/vaporize@wrkstrm-core.cli/tests/cuj-04-common-process-use/VaporizeCUJ04CommonProcessUseTests.swift",
         "private/apple/spm/vaporize@wrkstrm-core.cli/tests/cuj-05-toolchain/VaporizeCUJ05ToolchainTests.swift",
-        "private/apple/spm/vaporize@wrkstrm-core.cli/tests/cuj-06-json-validation/VaporizeCUJ06JSONValidationTests.swift",
+        "private/apple/spm/vaporize@wrkstrm-core.cli/tests/cuj-06-json-validation/vaporize-cuj-06-json-validation-tests.swift",
         "private/apple/spm/vaporize@wrkstrm-core.cli/tests/cuj-07-vapor-inventory/VaporizeCUJ07VaporInventoryTests.swift",
         "private/apple/spm/vaporize@wrkstrm-core.cli/tests/cuj-08-project-yml-inspection/VaporizeCUJ08ProjectYMLInspectionTests.swift",
         "private/apple/spm/vaporize@wrkstrm-core.cli/tests/cuj-09-release-review/VaporizeCUJ09ReleaseReviewTests.swift",

@@ -34,7 +34,7 @@ func releaseDoctorPassesLiveReleaseSpine() throws {
   #expect(receipt.subjectReleaseSlug == "v0.0.1")
   #expect(receipt.overallStatus == "pass")
   #expect(receipt.requiredArtifactCount == 26)
-  #expect(receipt.checkCount == 117)
+  #expect(receipt.checkCount == 120)
   #expect(receipt.failedCheckCount == 0)
   #expect(receipt.checks.contains { $0.name == "launch-review-gate-33" && $0.status == "pass" })
   #expect(receipt.checks.contains { $0.name == "launch-review-gate-34" && $0.status == "pass" })
@@ -65,6 +65,9 @@ func releaseDoctorPassesLiveReleaseSpine() throws {
   #expect(receipt.checks.contains { $0.name == "public-changelog-carrie-cmo-owner" && $0.status == "pass" })
   #expect(receipt.checks.contains { $0.name == "launch-review-carrie-cmo-owner" && $0.status == "pass" })
   #expect(receipt.checks.contains { $0.name == "launch-review-carrie-cmo-not-signed-off" && $0.status == "pass" })
+  #expect(receipt.checks.contains { $0.name == "launch-review-human-review-policy" && $0.status == "pass" })
+  #expect(receipt.checks.contains { $0.name == "launch-review-approved-gates-have-human-review" && $0.status == "pass" })
+  #expect(receipt.checks.contains { $0.name == "launch-review-gate-status-vocabulary" && $0.status == "pass" })
   #expect(receipt.checks.contains { $0.name == "vaporware-modification-owning-bead-discipline" && $0.status == "pass" })
   #expect(receipt.checks.contains { $0.name == "prd-resource-cli-install-requirement" && $0.status == "pass" })
   #expect(receipt.checks.contains { $0.name == "cuj-resource-cli-install-journey" && $0.status == "pass" })
@@ -93,6 +96,25 @@ func releaseDoctorResolvesReleaseRoot() throws {
   #expect(receipt.packageRootPath == packageRoot.path)
   #expect(receipt.releaseRootPath == packageRoot.appendingPathComponent("release/v0.0.1").path)
   #expect(receipt.overallStatus == "pass")
+}
+
+@Test("CUJ-17 release doctor rejects approved gates without human review")
+func releaseDoctorRejectsApprovedGateWithoutHumanReview() throws {
+  let fixtureRoot = try makeReleaseDoctorFixture(includeGate33: true, gateStatus: "PASS")
+  defer { try? FileManager.default.removeItem(at: fixtureRoot) }
+
+  let receipt = try VaporizeReleaseDoctor.inspect(
+    path: fixtureRoot.path,
+    requestId: "release-doctor-unreviewed-gate-pass"
+  )
+  let humanReviewCheck = try #require(
+    receipt.checks.first { $0.name == "launch-review-approved-gates-have-human-review" }
+  )
+
+  #expect(receipt.overallStatus == "fail")
+  #expect(humanReviewCheck.status == "fail")
+  #expect(humanReviewCheck.severity == "blocking")
+  #expect(humanReviewCheck.detail.contains("GATE-33-release-doctor"))
 }
 
 @Test("CUJ-17 release doctor reports missing gate as a blocking failure")
@@ -131,7 +153,10 @@ private let packageRoot = URL(fileURLWithPath: #filePath)
   .deletingLastPathComponent()
   .deletingLastPathComponent()
 
-private func makeReleaseDoctorFixture(includeGate33: Bool) throws -> URL {
+private func makeReleaseDoctorFixture(
+  includeGate33: Bool,
+  gateStatus: String = "EVIDENCE-READY-PENDING-HUMAN-REVIEW"
+) throws -> URL {
   let packageRoot = FileManager.default.temporaryDirectory
     .appendingPathComponent("vaporize-release-doctor-\(UUID().uuidString)")
   let releaseRoot = packageRoot.appendingPathComponent("release/v0.0.1")
@@ -193,8 +218,8 @@ private func makeReleaseDoctorFixture(includeGate33: Bool) throws -> URL {
   }
 
   let gateResults = includeGate33
-    ? #"{"gateRef":"GATE-33-release-doctor","status":"pass","rationale":"fixture"}"#
-    : #"{"gateRef":"GATE-32","status":"pass","rationale":"fixture"}"#
+    ? "{\"gateRef\":\"GATE-33-release-doctor\",\"status\":\"\(gateStatus)\",\"rationale\":\"fixture\"}"
+    : "{\"gateRef\":\"GATE-32\",\"status\":\"\(gateStatus)\",\"rationale\":\"fixture\"}"
   try write(
     """
     {
@@ -212,13 +237,18 @@ private func makeReleaseDoctorFixture(includeGate33: Bool) throws -> URL {
       ],
       "gateResults": [
         \(gateResults),
-        { "gateRef": "GATE-34-project-target-discovery", "status": "pass", "rationale": "fixture" },
-        { "gateRef": "GATE-35-workspace-product-cache-discovery", "status": "pass", "rationale": "fixture" },
-        { "gateRef": "GATE-36-xcode-workspace-scheme-listing", "status": "pass", "rationale": "fixture" },
-        { "gateRef": "GATE-37-cuj-state-coverage", "status": "pass", "rationale": "fixture" },
-        { "gateRef": "GATE-38-public-disclosure-surfaces", "status": "pass", "rationale": "fixture" },
-        { "gateRef": "GATE-39-resource-cli-install", "status": "pass", "rationale": "fixture" }
+        { "gateRef": "GATE-34-project-target-discovery", "status": "\(gateStatus)", "rationale": "fixture" },
+        { "gateRef": "GATE-35-workspace-product-cache-discovery", "status": "\(gateStatus)", "rationale": "fixture" },
+        { "gateRef": "GATE-36-xcode-workspace-scheme-listing", "status": "\(gateStatus)", "rationale": "fixture" },
+        { "gateRef": "GATE-37-cuj-state-coverage", "status": "\(gateStatus)", "rationale": "fixture" },
+        { "gateRef": "GATE-38-public-disclosure-surfaces", "status": "\(gateStatus)", "rationale": "fixture" },
+        { "gateRef": "GATE-39-resource-cli-install", "status": "\(gateStatus)", "rationale": "fixture" }
       ],
+      "humanReviewPolicy": {
+        "approvalStatusRequiresHumanReview": true,
+        "automationSignerAllowed": false,
+        "machineProofMayApproveGate": false
+      },
       "consumerFacingGateOwnership": {
         "ownerStatus": "assigned-not-signed-off",
         "ownerName": "Carrie CMO",
@@ -256,7 +286,7 @@ private func makeReleaseDoctorFixture(includeGate33: Bool) throws -> URL {
         "activeCUJCount": 22,
         "requiredReleaseEvidenceCheckCount": 12,
         "currentExecutableSwiftTestBreakdown": {
-          "VaporizeCUJ17ReleaseDoctorTests": 5,
+          "VaporizeCUJ17ReleaseDoctorTests": 6,
           "VaporizeCUJ18ListTargetsTests": 5,
           "VaporizeCUJ19WorkspaceCacheDiscoveryTests": 5,
           "VaporizeCUJ20XcodeWorkspaceSchemesTests": 5,

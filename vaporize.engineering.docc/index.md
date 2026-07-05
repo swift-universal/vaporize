@@ -35,6 +35,7 @@ and explicit disposition of remaining XcodeGen surfaces.
 - <doc:modularity-and-ownership-boundaries>
 - <doc:vaporware-modification-request-discipline>
 - <doc:command-and-artifact-architecture>
+- <doc:swiftpm-cli-resource-bundle-installs>
 - <doc:project-generation-and-migration>
 - <doc:release-evidence-and-gates>
 - <doc:pre-code-prd-review>

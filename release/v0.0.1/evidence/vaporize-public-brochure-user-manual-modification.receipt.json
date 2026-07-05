@@ -1,0 +1,92 @@
+{
+  "VaporizeModificationReceipt": "0.1.0",
+  "schemaVersion": "0.1.0",
+  "receiptKind": "vaporize-modification-receipt",
+  "receiptId": "vaporize-public-brochure-user-manual-modification-2026-07-04",
+  "subjectAppSlug": "vaporize.cli@wrkstrm-core.clia.sh",
+  "subjectReleaseSlug": "v0.0.1",
+  "createdAt": "2026-07-04T21:57:41Z",
+  "createdBy": "codex",
+  "status": "completed-with-focused-proof",
+  "requestRef": "private/universal/substrate/collectives/spaces-universal/private/universal/kura-spaces/workflows/software-modification-workstream-capture/v0.1.0/requests/2026-07-04-vaporize-public-brochure-user-manual.vaporware-modification-request.su.json",
+  "workflowInstanceRef": "private/universal/substrate/collectives/spaces-universal/private/universal/kura-spaces/workflows/software-modification-workstream-capture/v0.1.0/software-modification-workstream-capture-2026-07-04-vaporize-public-brochure-user-manual.workflow-instance.su.json",
+  "releaseCohortRef": "GATE-38-public-disclosure-surfaces",
+  "featureFlagDisposition": {
+    "createdFeatureFlag": false,
+    "attachedFeatureStatus": "vaporize-v0.0.1-public-disclosure",
+    "noFlagReason": "The change modifies release-disclosure manual evidence and release-doctor validation, not runtime product behavior."
+  },
+  "changedBehavior": [
+    "Vaporize v0.0.1 now carries a user manual at release/v0.0.1/user-manual.md.",
+    "Every Vaporize brochure must sit beside an audience packet and user manual before it is considered publication-shaped.",
+    "The manual documents quick start, core commands, releaseIdentity and Sparkle boundaries, review checklist, and troubleshooting.",
+    "Release doctor requires user-manual.md as a release artifact, checks manual contract tokens, checks the all-brochures gate token, and requires a launch-review evidence reference.",
+    "The public brochure marketing site links to the manual and reports the updated 108/108 release-doctor check count after the Carrie CMO gate-owner expansion."
+  ],
+  "targetableTests": [
+    {
+      "testBundle": "VaporizeCUJ09ReleaseReviewTests",
+      "testName": "releaseReviewArtifactsExist",
+      "expectation": "expected-pass only when user-manual.md exists beside the v0.0.1 public brochure"
+    },
+    {
+      "testBundle": "VaporizeCUJ09ReleaseReviewTests",
+      "testName": "launchReviewPacketIsValidJSONAndInternalEssential",
+      "expectation": "expected-pass only when launch review references the user manual"
+    },
+    {
+      "testBundle": "VaporizeCUJ09ReleaseReviewTests",
+      "testName": "productDefinitionContractPrecedesBuildWork",
+      "expectation": "expected-pass only when the user manual, brochure, changelog, claims, and gates agree on the manual companion contract"
+    },
+    {
+      "testBundle": "VaporizeCUJ17ReleaseDoctorTests",
+      "testName": "releaseDoctorPassesLiveReleaseSpine",
+      "expectation": "expected-pass only when release doctor checks the user manual artifact, manual tokens, gate token, launch-review reference, and 98-check floor"
+    }
+  ],
+  "proofCommands": [
+    {
+      "command": "SPM_USE_LOCAL_DEPS=1 /Users/sonoma/.swiftpm/bin/vaporize.cli@wrkstrm-core.clia.sh test --package-path /Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli --configuration debug -- --filter CUJ-09",
+      "result": "PASS: exited 0"
+    },
+    {
+      "command": "SPM_USE_LOCAL_DEPS=1 /Users/sonoma/.swiftpm/bin/vaporize.cli@wrkstrm-core.clia.sh test --package-path /Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli --configuration debug -- --filter CUJ-17",
+      "result": "PASS: exited 0"
+    },
+    {
+      "command": "SPM_USE_LOCAL_DEPS=1 /Users/sonoma/.swiftpm/bin/vaporize.cli@wrkstrm-core.clia.sh install --artifact cli --package-path /Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli --product vaporize.cli@wrkstrm-core.clia.sh --configuration release --force --product-version 0.0.1 --product-build 20260704 --product-build-date 2026-07-04T22:00:30Z",
+      "result": "PASS: exited 0"
+    },
+    {
+      "command": "/Users/sonoma/.swiftpm/bin/vaporize.cli@wrkstrm-core.clia.sh release-doctor --path private/apple/spm/vaporize@wrkstrm-core.cli --format json --receipt-path private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/vaporize-v0.0.1-release-doctor.receipt.json",
+      "result": "PASS: 108 passed checks, 0 failed checks, 25 required artifacts"
+    },
+    {
+      "command": "/Users/sonoma/.swiftpm/bin/vaporize.cli@wrkstrm-core.clia.sh validate-json --path <release/workstream JSON>",
+      "result": "PASS: launch-review packet, provenance artifact, release-doctor receipt, CUJ coverage, request packet, workflow instance, and modification receipt validated"
+    },
+    {
+      "command": "git diff --check -- <touched tracked Vaporize files>",
+      "result": "PASS: exited 0"
+    }
+  ],
+  "releaseEvidenceUpdates": [
+    "release/v0.0.1/user-manual.md",
+    "release/v0.0.1/public-brochure.html",
+    "release/v0.0.1/public-brochure.md",
+    "release/v0.0.1/public-changelog.md",
+    "release/v0.0.1/release-gates.md",
+    "release/v0.0.1/product-definition.md",
+    "release/v0.0.1/performance-marketing-claims.md",
+    "release/v0.0.1/evidence/launch-review-packet.json",
+    "release/v0.0.1/evidence/vaporize-v0.0.1-provenance-artifact.json",
+    "release/v0.0.1/evidence/vaporize-v0.0.1-provenance-artifact.md",
+    "release/v0.0.1/evidence/vaporize-v0.0.1-release-doctor.receipt.json"
+  ],
+  "validationLimits": [
+    "Full Vaporize package suite was not run for this refinement.",
+    "The brochure, audience packet, and user manual remain public-disclosure drafts and are not approved for publication.",
+    "This receipt does not approve hosted documentation, localization, brand campaign, public hosting, Sparkle appcast generation, update signing, or public update delivery."
+  ]
+}

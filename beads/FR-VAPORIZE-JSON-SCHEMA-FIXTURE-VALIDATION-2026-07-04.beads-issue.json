@@ -1,0 +1,69 @@
+{
+  "BeadsIssue": "0.1.0",
+  "schemaVersion": "0.1.0",
+  "id": "FR-VAPORIZE-JSON-SCHEMA-FIXTURE-VALIDATION-2026-07-04",
+  "title": "Add Vaporize JSON Schema fixture validation for schema-universal expected-pass and expected-fail records",
+  "status": "open",
+  "priority": 1,
+  "issueType": "feature",
+  "labels": [
+    "vaporize",
+    "validate-json-schema",
+    "json-schema",
+    "schema-universal",
+    "vaporware-modification",
+    "fixture-proof",
+    "release-evidence",
+    "cli-error-actionability"
+  ],
+  "createdAt": "2026-07-04T21:13:58Z",
+  "createdBy": "codex after chairman required a governed vaporware modification request",
+  "historicalContent": {
+    "slug": "FR-VAPORIZE-JSON-SCHEMA-FIXTURE-VALIDATION-2026-07-04",
+    "kind": "bead-feature-request",
+    "createdAt": "2026-07-04T21:13:58Z",
+    "createdBy": "codex",
+    "assignee": "wrkstrm-core",
+    "severity": "high",
+    "sourceType": "chairman-directed-vaporware-modification-request",
+    "sourceLocation": "Codex session 2026-07-04: chairman rejected jq as authoritative schema fixture proof and required an entire Vaporware Modification Request before implementation.",
+    "description": "Vaporize needs a first-class JSON Schema fixture validation command so schema-backed release evidence can prove both expected-pass and expected-fail fixtures without ad hoc jq checks. The first proof set is schema-universal workstream-schemas v0.0.4, whose fixtures distinguish ongoing workstreams, temporary initiatives, summaries, and invalid lifecycle classifications.",
+    "acceptanceCriteria": [
+      "Vaporize exposes validate-json-schema with --schema, --fixture, and --expect pass|fail.",
+      "The command exits 0 only when the actual schema validation result matches the declared expectation.",
+      "The command exits nonzero when the fixture fails an expected-pass check or unexpectedly passes an expected-fail check.",
+      "The command emits or can write a structured receipt naming schema path, fixture path, expectation, actual result, diagnostics, and next steps.",
+      "The implementation supports the local reference and draft vocabulary needs of workstream-schemas v0.0.4 before that fixture set is claimed as proved.",
+      "CUJ-06 Swift Testing coverage exercises JSON syntax validation, expected-pass schema validation, expected-fail schema validation, expectation mismatch, and actionable failure output.",
+      "No XCTest target is introduced for this slice.",
+      "Release evidence names the new schema-backed fixture validation obligation or explicitly records why release-doctor enforcement is deferred.",
+      "Every command error includes robust next steps, procedure or evidence links, and guidance to bring the error to Digikoma when the operator cannot proceed.",
+      "The prior jq semantic fixture check is not used as the authoritative release proof."
+    ],
+    "linkedTypedRecords": {
+      "vaporwareModificationRequest": "private/universal/substrate/collectives/spaces-universal/private/universal/kura-spaces/workflows/software-modification-workstream-capture/v0.1.0/requests/2026-07-04-vaporize-json-schema-fixture-validation.vaporware-modification-request.su.json",
+      "workflowInstance": "private/universal/substrate/collectives/spaces-universal/private/universal/kura-spaces/workflows/software-modification-workstream-capture/v0.1.0/software-modification-workstream-capture-2026-07-04-vaporize-json-schema-fixture-validation.workflow-instance.su.json",
+      "schemaFixtureRoot": "private/universal/substrate/collectives/schema-universal/private/universal/domain/system/schema-families/workstream-schemas/v0.0.4/fixtures",
+      "primarySchema": "private/universal/substrate/collectives/schema-universal/private/universal/domain/system/schema-families/workstream-schemas/v0.0.4/json/wrkstrm-workstream-schemas-v000-000-004/schemas/workstream/workstream.schema.json",
+      "intakeProtocol": "private/universal/substrate/collectives/spaces-universal/private/universal/kura-spaces/operating-protocols/bead-backlog-job-board-intake/v0.1.0/bead-backlog-job-board-intake.operating-protocol.su.json",
+      "boardPresentation": "private/universal/substrate/collectives/spaces-universal/private/universal/kura-spaces/board-meetings/2026-07-04-vaporize-json-schema-fixture-validation/index.html",
+      "audiovisualBriefing": "private/universal/substrate/collectives/spaces-universal/private/universal/kura-spaces/board-meetings/2026-07-04-vaporize-json-schema-fixture-validation/video.html",
+      "readthroughVoiceReceipt": "private/universal/substrate/collectives/spaces-universal/private/universal/kura-spaces/board-meetings/2026-07-04-vaporize-json-schema-fixture-validation/readthrough-voice-receipt.json",
+      "vaporwareModificationDiscipline": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/vaporize.engineering.docc/vaporware-modification-request-discipline.md",
+      "relatedValidateJsonMultiplePathsBug": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/vaporize-validate-json-multiple-paths.beads-issue.json"
+    },
+    "knownSeparations": [
+      "This bead owns the Vaporize command and release proof lane, not the schema-universal workstream schema semantics.",
+      "schema-universal owns the schema files, fixture records, and schema migrator semantics.",
+      "The initial command may scope to local schemas and local references; remote schema fetching is not part of the first acceptance slice.",
+      "The existing validate-json repeated --path bug can be fixed alongside this work, but it is not a substitute for schema instance validation.",
+      "The bead is filed at the Vaporize owner home first; a job-board projection should reference this bead when a Vaporize implementation board is opened."
+    ]
+  },
+  "composesWith": [
+    "[[vaporware-modification-request-discipline]]",
+    "[[typed-receipts-over-ad-hoc-terminal-proof]]",
+    "[[vaporize-validate-json-multiple-paths]]",
+    "[[FR-VAPORIZE-CUJ-STATE-HARNESS-2026-06-26]]"
+  ]
+}

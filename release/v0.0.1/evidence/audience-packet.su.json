@@ -1,0 +1,333 @@
+{
+  "AudienceProfileStackModel": "0.1.0",
+  "schemaVersion": "0.1.0",
+  "stackId": "vaporize-v0.0.1-public-brochure-audience-stack",
+  "subjectAppSlug": "vaporize.cli@wrkstrm-core.clia.sh",
+  "subjectReleaseSlug": "v0.0.1",
+  "surfaceSlug": "public-brochure-marketing-site",
+  "surfaceRefs": [
+    {
+      "LinkRefModel": "0.3.0",
+      "s": [
+        "vaporize",
+        "v0.0.1",
+        "public-brochure-html"
+      ],
+      "t": "Vaporize v0.0.1 public brochure marketing site",
+      "tg": [
+        {
+          "k": "rp",
+          "rt": "mono",
+          "v": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/public-brochure.html"
+        }
+      ]
+    }
+  ],
+  "emittedAt": "2026-07-04T21:34:21Z",
+  "emittedBy": "codex",
+  "status": "public-disclosure-draft-not-approved-for-publication",
+  "consumerFacingGateOwner": {
+    "ownerStatus": "assigned-not-signed-off",
+    "ownerName": "Carrie CMO",
+    "ownerOccupationSlug": "cmo-chief-marketing-officer-carrie@wrkstrm.occupations.org",
+    "ownerRoleSlug": "cmo-chief-marketing-officer",
+    "scope": [
+      "audience packet approval-readiness",
+      "public brochure publication-readiness",
+      "public-facing claim posture"
+    ],
+    "boundary": "Carrie CMO owns the consumer-facing publication gate. Ownership does not approve publication; signoff remains absent until recorded in launch-review evidence."
+  },
+  "audiences": [
+    {
+      "ordinal": 1,
+      "audienceKind": "adversarial",
+      "slug": "the-entity",
+      "displayName": "the entity (adversarial public-surface reviewer)",
+      "epistemicPosture": "discredulous",
+      "mustSee": [
+        "not approved for publication",
+        "Carrie CMO owns the consumer-facing publication gate without signoff",
+        "blocked claims remain explicit",
+        "public copy cannot expose private credentials, internal-only operator rationale, or unapproved release status"
+      ],
+      "mustNotSee": [
+        "Vault credential resolution mechanism",
+        "private operator approval rationale",
+        "claim language that implies public release approval",
+        "claim language that implies Sparkle appcast generation or update signing is proven"
+      ],
+      "caresAbout": [
+        "leak prevention",
+        "blocked-publication state",
+        "claim boundary fidelity"
+      ],
+      "informationBoundary": {
+        "publicInformation": [
+          "Vaporize gives assistant-run build work an owned proof surface",
+          "the release packet is still a draft disclosure surface",
+          "release doctor currently gates the audience packet and marketing site"
+        ],
+        "gatedInformation": [
+          "launch-review packet links",
+          "release-doctor receipt links",
+          "workstream modification receipts"
+        ],
+        "privateInformation": [
+          "credentials",
+          "operator-private approval rationale",
+          "non-public release-decision deliberation"
+        ],
+        "prohibitedPublicClaims": [
+          "Vaporize is faster than Swift or Xcode",
+          "Vaporize saves a fixed amount of disk space",
+          "Vaporize has fleet Pkl-backed Xcode project-generation parity",
+          "Vaporize proves Sparkle appcast generation, update signing, or public update delivery",
+          "Vaporize v0.0.1 is approved for public release"
+        ]
+      },
+      "accessBranch": "public-disclosure-draft",
+      "privacyTier": "public-draft-no-publication-approval"
+    },
+    {
+      "ordinal": 2,
+      "audienceKind": "external-technical-evaluator",
+      "slug": "external-technical-evaluator",
+      "displayName": "external technical evaluator",
+      "epistemicPosture": "discredulous",
+      "mustSee": [
+        "native Swift and Xcode remain the execution engines",
+        "release-doctor pass/fail counts",
+        "CUJ and launch-review evidence links",
+        "explicit unproven fleet and Sparkle boundaries"
+      ],
+      "mustNotSee": [
+        "unsupported speed claims",
+        "unreceipted fleet-parity claims",
+        "marketing copy detached from release evidence"
+      ],
+      "caresAbout": [
+        "proof before category claims",
+        "clear distinction between generated project settings and runtime update delivery",
+        "repeatable evidence paths"
+      ],
+      "informationBoundary": {
+        "publicInformation": [
+          "proof-first execution model",
+          "Pkl-backed app and tool project generation first slice",
+          "typed releaseIdentity projection",
+          "release-doctor gate status"
+        ],
+        "gatedInformation": [
+          "local release evidence paths in the draft packet"
+        ],
+        "privateInformation": [
+          "private operator deliberation",
+          "credentials"
+        ],
+        "prohibitedPublicClaims": [
+          "faster compiler",
+          "fleet parity",
+          "public release approval",
+          "Sparkle appcast/signing readiness"
+        ]
+      },
+      "accessBranch": "public-disclosure-draft",
+      "privacyTier": "public-draft-no-publication-approval"
+    },
+    {
+      "ordinal": 3,
+      "audienceKind": "future-customer",
+      "slug": "future-customer",
+      "displayName": "future customer evaluating assistant-run software work",
+      "epistemicPosture": "discerning",
+      "mustSee": [
+        "what problem Vaporize solves",
+        "why receipts and gates matter",
+        "where the current release remains blocked"
+      ],
+      "mustNotSee": [
+        "claims that require internal implementation knowledge to trust",
+        "unapproved publication or availability language"
+      ],
+      "caresAbout": [
+        "reduced ambiguity in assistant-run build work",
+        "reviewable evidence",
+        "honest product maturity"
+      ],
+      "informationBoundary": {
+        "publicInformation": [
+          "Vaporize is an owned proof surface for assistant-run build work",
+          "native tools remain the source of execution truth",
+          "claims remain constrained by release evidence"
+        ],
+        "gatedInformation": [
+          "draft release packet details"
+        ],
+        "privateInformation": [
+          "internal pricing",
+          "private roadmap commitments",
+          "operator approval rationale"
+        ],
+        "prohibitedPublicClaims": [
+          "generally available product",
+          "guaranteed performance improvement",
+          "guaranteed disk savings"
+        ]
+      },
+      "accessBranch": "public-disclosure-draft",
+      "privacyTier": "public-draft-no-publication-approval"
+    },
+    {
+      "ordinal": 4,
+      "audienceKind": "board-approved-public-reader",
+      "slug": "board-approved-public-reader",
+      "displayName": "board-approved public reader",
+      "epistemicPosture": "discerning",
+      "mustSee": [
+        "positioning stripped of internal-only process detail",
+        "claim language approved by the release packet",
+        "publication approval status",
+        "Carrie CMO owner status before public publication"
+      ],
+      "mustNotSee": [
+        "draft-only local filesystem paths after public publication",
+        "internal-only workflow chatter",
+        "unapproved release claims"
+      ],
+      "caresAbout": [
+        "clear value proposition",
+        "public-safe proof",
+        "no internal leakage"
+      ],
+      "informationBoundary": {
+        "publicInformation": [
+          "approved value proposition",
+          "approved proof-backed claims",
+          "approved claim limitations"
+        ],
+        "gatedInformation": [
+          "draft local evidence links before public packaging"
+        ],
+        "privateInformation": [
+          "substrate-internal paths not meant for published site",
+          "private operator approval rationale"
+        ],
+        "prohibitedPublicClaims": [
+          "public approval before signoff",
+          "internal release readiness before gates close"
+        ]
+      },
+      "accessBranch": "public-after-approval-only",
+      "privacyTier": "publication-requires-operator-approval"
+    },
+    {
+      "ordinal": 5,
+      "audienceKind": "operator",
+      "slug": "rismay",
+      "displayName": "rismay (founder, chairman, operator)",
+      "epistemicPosture": "proof-demanding",
+      "mustSee": [
+        "audience packet exists before the public surface is treated as launchable",
+        "release-doctor requires the audience packet",
+        "the public site is still blocked from publication"
+      ],
+      "mustNotSee": [],
+      "caresAbout": [
+        "literal artifact placement",
+        "proof that the site, packet, gates, tests, and receipts agree",
+        "no vague public-readiness claims"
+      ],
+      "informationBoundary": {
+        "publicInformation": [],
+        "gatedInformation": [],
+        "privateInformation": [
+          "all"
+        ],
+        "prohibitedPublicClaims": []
+      },
+      "accessBranch": "private",
+      "privacyTier": "substrate-internal"
+    }
+  ],
+  "sharedMessageFrame": {
+    "primaryReaderConclusion": "Vaporize makes assistant-run Swift and Apple build work reviewable by routing native execution through receipts and release gates.",
+    "secondaryReaderConclusion": "The v0.0.1 public brochure is a draft surface with real proof links, not a public launch approval.",
+    "forbiddenReaderConclusion": "Vaporize is publicly released, faster than Swift/Xcode, fleet-parity complete, or Sparkle-update-ready."
+  },
+  "trustChecks": [
+    {
+      "slug": "proof-before-claim",
+      "rule": "Any proof, performance, Sparkle, or fleet statement must link back to release evidence or appear in the blocked-claims section."
+    },
+    {
+      "slug": "draft-boundary-visible",
+      "rule": "The marketing site must visibly state that it is a public-disclosure draft and not approved for publication."
+    },
+    {
+      "slug": "audience-packet-before-publication",
+      "rule": "The audience packet must exist and pass release-doctor before the site can be routed to any public publication lane."
+    },
+    {
+      "slug": "carrie-cmo-before-publication",
+      "rule": "The release packet must name Carrie CMO (cmo-chief-marketing-officer-carrie@wrkstrm.occupations.org) as the consumer-facing gate owner before the site can leave draft state."
+    }
+  ],
+  "sourceRefs": [
+    {
+      "LinkRefModel": "0.3.0",
+      "s": [
+        "vaporize",
+        "v0.0.1",
+        "public-brochure-html"
+      ],
+      "t": "Vaporize v0.0.1 public brochure marketing site",
+      "tg": [
+        {
+          "k": "rp",
+          "rt": "mono",
+          "v": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/public-brochure.html"
+        }
+      ]
+    },
+    {
+      "LinkRefModel": "0.3.0",
+      "s": [
+        "vaporize",
+        "v0.0.1",
+        "performance-marketing-claims"
+      ],
+      "t": "Vaporize performance marketing claims and examples",
+      "tg": [
+        {
+          "k": "rp",
+          "rt": "mono",
+          "v": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/performance-marketing-claims.md"
+        }
+      ]
+    },
+    {
+      "LinkRefModel": "0.3.0",
+      "s": [
+        "vaporize",
+        "v0.0.1",
+        "release-gates"
+      ],
+      "t": "Vaporize v0.0.1 release gates",
+      "tg": [
+        {
+          "k": "rp",
+          "rt": "mono",
+          "v": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/release-gates.md"
+        }
+      ]
+    }
+  ],
+  "axiomCitations": [
+    "[[audience-packet-must-precede-content-reference]]",
+    "[[audience-epistemic-posture-discredulous-requires-proof-before-trust]]",
+    "[[release-gate-audience-review]]",
+    "[[localization-never-outruns-audience-review]]"
+  ],
+  "schemaFamilyRef": "audience-profile-stack-schemas v0.0.1"
+}

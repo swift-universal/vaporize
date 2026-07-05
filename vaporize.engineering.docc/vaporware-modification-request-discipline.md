@@ -55,6 +55,8 @@ treated as release-ready:
 
 - Create or attach to a named feature flag, feature status record, or
   release-feature cohort.
+- Create or attach to an owning bead in the owning component or workstream home,
+  and carry that bead through the workflow instance `beadTrackingRefs`.
 - Add or update targetable tests for the changed behavior.
 - Run the smallest feature-scoped test bundle that proves the behavior.
 - Update release evidence when the behavior affects release claims, receipts,
@@ -63,6 +65,21 @@ treated as release-ready:
   required test or release evidence obligation.
 - Record any exception explicitly in the PRD, CUJ, release gate, or receipt
   surface.
+
+## Bead Tracking Rule
+
+The owning bead is the durable maintenance handle for a modification request. It
+must be created or selected before substantial world-state changes begin, and it
+must live in the component or workstream home that owns the affected artifact
+family.
+
+The workflow instance must list the owning bead in `beadTrackingRefs` before the
+typed request packet. Related bugs, job-board cards, release gates, and operating
+protocols may also appear, but they do not replace the owning bead.
+
+If a tiny recovery edit genuinely has no bead, the request packet and receipt
+must record a no-bead exception with the reason, the validation limit, and the
+follow-up bead or typed record that will absorb the maintenance obligation.
 
 ## Feature Flag Rule
 
@@ -120,9 +137,11 @@ For Vaporize, this discipline is enforced through:
 - `release/v0.0.1/release-gates.md`
 - `release/v0.0.1/evidence/launch-review-packet.json`
 - `release/v0.0.1/evidence/vaporize-v0.0.1-provenance-artifact.json`
+- component-home beads such as
+  `beads/FR-VAPORIZE-PUBLIC-DOCUMENTATION-ARTIFACT-MAINTENANCE-2026-07-04.beads-issue.json`
 - CUJ-specific SwiftPM test bundles
 - schema-universal fixtures when evidence becomes schema-backed
 
 The practical rule for assistants is simple: do not call a behavior-changing
-vaporware modification complete until its feature flag or feature-status story,
-tests, and release evidence are all accounted for.
+vaporware modification complete until its owning bead, feature flag or
+feature-status story, tests, and release evidence are all accounted for.

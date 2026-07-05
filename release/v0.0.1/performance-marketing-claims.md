@@ -3,7 +3,7 @@
 **Status:** release-prep claim matrix
 **Updated:** 2026-06-14T00:34:28Z
 **Component:** `vaporize@wrkstrm-core.cli`
-**Companions:** `product-definition.md`, `why-vaporize.md`, `public-brochure.md`, `public-changelog.md`
+**Companions:** `product-definition.md`, `why-vaporize.md`, `public-brochure.md`, `user-manual.md`, `evidence/audience-packet.su.json`, `public-changelog.md`
 
 ## Claim Rule
 

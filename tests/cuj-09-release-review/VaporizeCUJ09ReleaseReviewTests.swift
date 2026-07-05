@@ -54,6 +54,8 @@ func launchReviewPacketIsValidJSONAndInternalEssential() throws {
   let gateResults = try #require(packet["gateResults"] as? [[String: Any]])
   let consumerFacingGateOwnership = try #require(packet["consumerFacingGateOwnership"] as? [String: Any])
   let signoffs = try #require(packet["signoffs"] as? [String: Any])
+  let humanReviewPolicy = try #require(packet["humanReviewPolicy"] as? [String: Any])
+  let gateStatuses = gateResults.compactMap { $0["status"] as? String }
   #expect(evidenceRefs.contains { $0["t"] as? String == "Vaporize v0.0.1 public brochure marketing site" })
   #expect(evidenceRefs.contains { $0["t"] as? String == "Vaporize v0.0.1 public brochure audience packet" })
   #expect(evidenceRefs.contains { $0["t"] as? String == "Vaporize v0.0.1 user manual" })
@@ -79,6 +81,23 @@ func launchReviewPacketIsValidJSONAndInternalEssential() throws {
   #expect(gateResults.contains { $0["gateRef"] as? String == "GATE-37-cuj-state-coverage" })
   #expect(gateResults.contains { $0["gateRef"] as? String == "GATE-38-public-disclosure-surfaces" })
   #expect(gateResults.contains { $0["gateRef"] as? String == "GATE-39-resource-cli-install" })
+  #expect(packet["packetStatus"] as? String == "evidence-ready-pending-human-review-blocked-for-internal-release")
+  #expect(humanReviewPolicy["approvalStatusRequiresHumanReview"] as? Bool == true)
+  #expect(humanReviewPolicy["automationSignerAllowed"] as? Bool == false)
+  #expect(humanReviewPolicy["machineProofMayApproveGate"] as? Bool == false)
+  #expect(!gateStatuses.contains("PASS"))
+  #expect(!gateStatuses.contains("PASS-WITH-NOTE"))
+  #expect(gateStatuses.filter { $0 == "EVIDENCE-READY-PENDING-HUMAN-REVIEW" }.count == 30)
+  #expect(gateStatuses.filter { $0.hasPrefix("BLOCKED") }.count == 4)
+  #expect(
+    gateResults
+      .filter { $0["status"] as? String == "EVIDENCE-READY-PENDING-HUMAN-REVIEW" }
+      .allSatisfy {
+        $0["humanReviewRequired"] as? Bool == true
+          && $0["humanReviewRef"] as? NSNull != nil
+          && $0["evidenceStatus"] as? String != nil
+      }
+  )
   #expect(consumerFacingGateOwnership["ownerStatus"] as? String == "assigned-not-signed-off")
   #expect(consumerFacingGateOwnership["ownerName"] as? String == "Carrie CMO")
   #expect(
@@ -96,14 +115,15 @@ func cujCoverageContractIsValidJSONAndNamesTheFloor() throws {
 
   #expect(counts["activeCUJCount"] as? Int == 22)
   #expect(counts["deferredCUJCount"] as? Int == 1)
-  #expect(counts["requiredSwiftTestObligationCount"] as? Int == 104)
+  #expect(counts["requiredSwiftTestObligationCount"] as? Int == 105)
   #expect(counts["requiredReleaseEvidenceCheckCount"] as? Int == 12)
-  #expect(counts["requiredTargetableTestObligationCount"] as? Int == 116)
-  #expect(counts["currentExecutableSwiftTestCount"] as? Int == 138)
+  #expect(counts["requiredTargetableTestObligationCount"] as? Int == 117)
+  #expect(counts["currentExecutableSwiftTestCount"] as? Int == 139)
   let breakdown = try #require(counts["currentExecutableSwiftTestBreakdown"] as? [String: Any])
   #expect(breakdown["VaporizeCUJ01SwiftPMCLITests"] as? Int == 20)
   #expect(breakdown["VaporizeCUJ07VaporInventoryTests"] as? Int == 18)
   #expect(breakdown["VaporizeCUJ14PklXcodeProjectGenerationTests"] as? Int == 5)
+  #expect(breakdown["VaporizeCUJ17ReleaseDoctorTests"] as? Int == 6)
   #expect(breakdown["VaporizeCUJ21CUJStateTests"] as? Int == 6)
   #expect(breakdown["VaporizeCUJ22ResourceCLIInstallTests"] as? Int == 6)
 }
@@ -228,7 +248,7 @@ func productDefinitionContractPrecedesBuildWork() throws {
   #expect(publicBrochureHTML.contains("releaseIdentity"))
   #expect(publicBrochureHTML.contains("Sparkle Info.plist keys"))
   #expect(publicBrochureHTML.contains("Claims not yet allowed"))
-  #expect(publicBrochureHTML.contains("117/117"))
+  #expect(publicBrochureHTML.contains("120/120"))
   #expect(publicBrochureHTML.contains("GATE-38"))
   #expect(publicBrochureHTML.contains("evidence/launch-review-packet.json"))
   #expect(publicBrochureHTML.contains("evidence/audience-packet.su.json"))

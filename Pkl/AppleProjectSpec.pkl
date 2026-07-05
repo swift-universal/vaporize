@@ -20,6 +20,17 @@ class Settings {
   configs: Mapping<String, Mapping<String, Any>>?
 }
 
+class ReleaseIdentity {
+  bundleIdentifier: String?
+  shortVersion: String?
+  buildVersion: String?
+  buildSha: String?
+  buildDate: String?
+  generateInfoPlist: Boolean?
+  sparkleFeedURL: String?
+  sparklePublicEDKey: String?
+}
+
 class PackageDependency {
   path: String?
   url: String?
@@ -62,6 +73,7 @@ class Target {
   deploymentTarget: Any?
   sources: Listing<Source>?
   info: Info?
+  releaseIdentity: ReleaseIdentity?
   settings: Settings?
   configFiles: Mapping<String, String>?
   dependencies: Listing<Dependency>?

@@ -20,7 +20,7 @@ The current v0.0.1 command surface includes these families:
 
 - `install`, `uninstall`, `build`, `test`, and `run` for CLI and app artifacts.
 - `pass`, `use`, and `toolchain` for bounded command invocation.
-- `validate-json` for Foundation-backed JSON validation.
+- `validate-json` for JSON validation through the Swift Universal json-formatter package.
 - `status` and `warehouse` for vaporware inventory.
 - `inspect-project-yml`, `compare-project-yml-pkl`, `import-project-yml`,
   `generate-project-yml`, and `generate-xcodeproj` for Apple project migration.

@@ -6,6 +6,7 @@ import CommonShell
 import Foundation
 import SwiftAppInstaller
 import SwiftCLIInstaller
+import SwiftJSONFormatter
 
 @main
 struct VaporizeCLI: AsyncParsableCommand {
@@ -109,6 +110,26 @@ struct VaporizeCLI: AsyncParsableCommand {
 
   @Option(name: .customLong("product"), help: "Product name (binary or app bundle).")
   var product: String?
+
+  @Option(
+    name: .customLong("product-version"),
+    help: "Version recorded as CFBundleShortVersionString in the installed CLI metadata Info.plist.")
+  var productVersion: String?
+
+  @Option(
+    name: .customLong("product-build"),
+    help: "Build recorded as CFBundleVersion in the installed CLI metadata Info.plist.")
+  var productBuild: String?
+
+  @Option(
+    name: .customLong("product-build-sha"),
+    help: "Source revision recorded in the installed CLI metadata Info.plist.")
+  var productBuildSha: String?
+
+  @Option(
+    name: .customLong("product-build-date"),
+    help: "Build date recorded in the installed CLI metadata Info.plist.")
+  var productBuildDate: String?
 
   @Option(
     name: .customLong("app-bundle-name"),
@@ -351,7 +372,13 @@ struct VaporizeCLI: AsyncParsableCommand {
       packagePath: packagePath,
       product: product,
       configuration: .init(rawValue: configuration.rawValue) ?? .release,
-      forceReinstall: true
+      forceReinstall: true,
+      productVersion: Self.vaporizeVersion,
+      productBuild: Self.buildIdentifier,
+      productBuildSha: Self.buildSha,
+      productBuildDate: Self.buildDate,
+      installerVersion: Self.vaporizeVersion,
+      installerBuild: Self.buildIdentifier
     )
     try await SwiftCLIInstaller(request: request).run()
     try publishInstalledCLI(toDomain: updateDomain, product: product)
@@ -406,7 +433,13 @@ struct VaporizeCLI: AsyncParsableCommand {
       packagePath: packagePath,
       product: product,
       configuration: .init(rawValue: configuration.rawValue) ?? .release,
-      forceReinstall: forceReinstall
+      forceReinstall: forceReinstall,
+      productVersion: resolvedProductVersion(for: product),
+      productBuild: resolvedProductBuild(for: product),
+      productBuildSha: resolvedProductBuildSha(for: product),
+      productBuildDate: resolvedProductBuildDate(for: product),
+      installerVersion: Self.vaporizeVersion,
+      installerBuild: Self.buildIdentifier
     )
     try await SwiftCLIInstaller(request: request).run()
     try publishInstalledCLI(toDomain: installDomain, product: product)
@@ -806,7 +839,12 @@ struct VaporizeCLI: AsyncParsableCommand {
     do {
       try SwiftCLIProductName.validate(product)
     } catch let error as SwiftCLIProductNameError {
-      throw ValidationError(error.description)
+      throw ValidationError(
+        VaporizeCLIActionability.productValidationMessage(
+          errorDescription: error.description,
+          product: product
+        )
+      )
     }
     return product
   }
@@ -860,6 +898,22 @@ struct VaporizeCLI: AsyncParsableCommand {
       }
       throw ExitCode.failure
     }
+  }
+
+  private func resolvedProductVersion(for product: String) -> String? {
+    productVersion ?? (product == Self.configuration.commandName ? Self.vaporizeVersion : nil)
+  }
+
+  private func resolvedProductBuild(for product: String) -> String? {
+    productBuild ?? (product == Self.configuration.commandName ? Self.buildIdentifier : nil)
+  }
+
+  private func resolvedProductBuildSha(for product: String) -> String? {
+    productBuildSha ?? (product == Self.configuration.commandName ? Self.buildSha : nil)
+  }
+
+  private func resolvedProductBuildDate(for product: String) -> String? {
+    productBuildDate ?? (product == Self.configuration.commandName ? Self.buildDate : nil)
   }
 
   private func printVersionMetadata() {
@@ -1898,9 +1952,44 @@ struct XcodeToolchainRequest: Equatable {
   }
 }
 
+enum VaporizeCLIActionability {
+  static let policyRef = "private/universal/substrate/collectives/spaces-universal/private/universal/kura-spaces/policies/cli-error-actionability/v0.1.0/cli-error-actionability.policy.su.json"
+  static let procedureRef = "private/universal/substrate/collectives/spaces-universal/private/universal/kura-spaces/operating-protocols/cli-error-actionability/v0.1.0/cli-error-actionability.operating-protocol.su.json"
+  static let digikomaRef = "private/universal/substrate/collectives/spaces-universal/private/universal/kura-spaces/digikoma/specs/digikoma-cli-error-triage.spec.json"
+  static let digikomaPackagePath = "private/universal/substrate/collectives/kura-org/private/universal/domain/tooling/digikoma/cli-error-triage.digikoma.clia"
+
+  static func productValidationMessage(errorDescription: String, product: String) -> String {
+    """
+    vaporize product validation failed.
+    error: \(errorDescription)
+    reason: --product must use the canonical Swift CLI product shape \(SwiftCLIProductName.canonicalShape).
+    policy: \(policyRef)
+    procedure: \(procedureRef)
+    digikoma: \(digikomaRef)
+    digikoma-command: \(productValidationDigikomaCommand(product: product))
+    next:
+      1. Replace --product with a canonical product like <tool>.cli@<collective>.clia.sh.
+      2. Rerun the original vaporize command with the corrected --product value.
+      3. If the product name is generated by a manifest or tool record, repair that source record before retrying.
+      4. If still blocked, capture the full error text and run the digikoma-command above.
+    """
+  }
+
+  private static func productValidationDigikomaCommand(product: String) -> String {
+    let originalCommand = shellSingleQuoted(
+      "vaporize.cli@wrkstrm-core.clia.sh run --product \(product)"
+    )
+    return "vaporize.cli@wrkstrm-core.clia.sh run --package-path \(digikomaPackagePath) --product cli-error-triage.digikoma@kura-org.clia.sh --configuration debug -- --error-file <path-to-full-error.txt> --command \(originalCommand) --working-directory <repo-root>"
+  }
+
+  private static func shellSingleQuoted(_ value: String) -> String {
+    "'\(value.replacingOccurrences(of: "'", with: "'\"'\"'"))'"
+  }
+}
+
 enum JSONValidation {
   static func validate(data: Data, path: String, requestId: String) throws -> JSONValidationReceipt {
-    _ = try JSONSerialization.jsonObject(with: data)
+    _ = try SwiftJSONFormatter.parseJSONObject(from: data)
     return JSONValidationReceipt(
       path: path,
       requestId: requestId,

@@ -38,24 +38,28 @@ exists, and which claims are still prohibited.
 The current CUJ-derived floor is:
 
 - 22 active CUJs
-- 104 required Swift test obligations
+- 105 required Swift test obligations
 - 12 release evidence checks
-- 116 required targetable obligations
-- 138 executable Swift tests across 22 CUJ-specific bundles
+- 117 required targetable obligations
+- 139 executable Swift tests across 22 CUJ-specific bundles
 
 The executable suite may exceed the floor, but the floor comes from PRD and CUJ
 obligations. Test count alone is not a product argument.
 
 ## Release Gate Status
 
-The current release verdict is blocked for internal essential release. Passing
-gates already cover command surface, JSON validation, release packet shape,
+The current release verdict is blocked for internal essential release. Machine
+evidence already covers command surface, JSON validation, release packet shape,
 schema extraction, project migration first slices, project target discovery
 first slice, workspace product-cache discovery first slice, Xcode workspace
 scheme-listing first slice, shared workspace cache first slice, target feature
 inspection first slice, CUJ-state coverage, SwiftPM CLI resource-bundle install
 preservation, release-doctor spine audit, pre-code PRD review policy, and
 package test execution through Vaporize's owned toolchain route.
+
+That evidence does not pass a gate by itself. Gate approval requires a
+gate-level human review record. Until that exists, supported gates remain
+`EVIDENCE-READY-PENDING-HUMAN-REVIEW`.
 
 The blocking gates remain focused on full Apple project generation parity and
 strong benchmark/runtime sample evidence.

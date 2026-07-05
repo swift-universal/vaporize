@@ -141,6 +141,20 @@
         "generatedPkl": "private/universal/substrate/collectives/wrkstrm-core/private/apple/apps/creative-selection-v0.2/project.pkl",
         "importReceipt": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/creative-selection-v0.2-project-yml-pkl-import.receipt.json",
         "comparisonReceipt": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/creative-selection-v0.2-project-yml-pkl-comparison.receipt.json"
+      },
+      {
+        "slice": "creative-selection-v0.2-pkl-xcodeproj-generation",
+        "status": "complete-with-boundary",
+        "description": "Vaporize generate-xcodeproj renders Creative Selection v0.2 project.pkl into first-slice .xcodeproj world-state. This proves one app specimen, not fleet build parity.",
+        "generationReceipt": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/creative-selection-v0.2-pkl-xcodeproj-generation.receipt.json"
+      },
+      {
+        "slice": "tool-release-identity-xcodeproj-generation",
+        "status": "complete-with-focused-proof",
+        "description": "The 2026-07-04 vaporware modification request adds typed releaseIdentity to AppleProjectSpec, maps it into Xcode build settings and Sparkle Info.plist keys, supports macOS tool target product semantics, and keeps unsupported target types as expected failures. This proves CUJ-14 fixture behavior, not fleet build parity or Sparkle appcast generation.",
+        "modificationRequest": "private/universal/substrate/collectives/spaces-universal/private/universal/kura-spaces/workflows/software-modification-workstream-capture/v0.1.0/requests/2026-07-04-vaporize-pkl-xcodeproj-tool-release-identity.vaporware-modification-request.su.json",
+        "workflowInstance": "private/universal/substrate/collectives/spaces-universal/private/universal/kura-spaces/workflows/software-modification-workstream-capture/v0.1.0/software-modification-workstream-capture-2026-07-04-vaporize-pkl-xcodeproj-tool-release-identity.workflow-instance.su.json",
+        "modificationReceipt": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/vaporize-pkl-xcodeproj-tool-release-identity-modification.receipt.json"
       }
     ],
     "linkedTypedRecords": {
@@ -158,6 +172,10 @@
       "creativeSelectionV02GeneratedPkl": "private/universal/substrate/collectives/wrkstrm-core/private/apple/apps/creative-selection-v0.2/project.pkl",
       "creativeSelectionV02ProjectYMLPklImportReceipt": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/creative-selection-v0.2-project-yml-pkl-import.receipt.json",
       "creativeSelectionV02ProjectYMLPklComparisonReceipt": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/creative-selection-v0.2-project-yml-pkl-comparison.receipt.json",
+      "creativeSelectionV02PklXcodeProjectGenerationReceipt": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/creative-selection-v0.2-pkl-xcodeproj-generation.receipt.json",
+      "toolReleaseIdentityModificationRequest": "private/universal/substrate/collectives/spaces-universal/private/universal/kura-spaces/workflows/software-modification-workstream-capture/v0.1.0/requests/2026-07-04-vaporize-pkl-xcodeproj-tool-release-identity.vaporware-modification-request.su.json",
+      "toolReleaseIdentityWorkflowInstance": "private/universal/substrate/collectives/spaces-universal/private/universal/kura-spaces/workflows/software-modification-workstream-capture/v0.1.0/software-modification-workstream-capture-2026-07-04-vaporize-pkl-xcodeproj-tool-release-identity.workflow-instance.su.json",
+      "toolReleaseIdentityModificationReceipt": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/vaporize-pkl-xcodeproj-tool-release-identity-modification.receipt.json",
       "provenanceArtifact": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/vaporize-v0.0.1-provenance-artifact.json",
       "priorXcodeGenBead": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/FR-VAPORIZE-XCODEGEN-INTEGRATION-substrate-canonical-xcodegen-aware-build.issue.json"
     }

@@ -1,0 +1,101 @@
+{
+  "VaporizeModificationReceipt": "0.1.0",
+  "schemaVersion": "0.1.0",
+  "receiptKind": "vaporize-modification-receipt",
+  "receiptId": "vaporize-public-brochure-marketing-site-modification-2026-07-04",
+  "subjectAppSlug": "vaporize.cli@wrkstrm-core.clia.sh",
+  "subjectReleaseSlug": "v0.0.1",
+  "createdAt": "2026-07-04T21:23:09Z",
+  "createdBy": "codex",
+  "status": "completed-with-focused-proof",
+  "requestRef": "private/universal/substrate/collectives/spaces-universal/private/universal/kura-spaces/workflows/software-modification-workstream-capture/v0.1.0/requests/2026-07-04-vaporize-public-brochure-marketing-site.vaporware-modification-request.su.json",
+  "workflowInstanceRef": "private/universal/substrate/collectives/spaces-universal/private/universal/kura-spaces/workflows/software-modification-workstream-capture/v0.1.0/software-modification-workstream-capture-2026-07-04-vaporize-public-brochure-marketing-site.workflow-instance.su.json",
+  "releaseCohortRef": "GATE-38-public-disclosure-surfaces",
+  "featureFlagDisposition": {
+    "createdFeatureFlag": false,
+    "attachedFeatureStatus": "vaporize-v0.0.1-public-disclosure",
+    "noFlagReason": "The change modifies release-disclosure artifact shape and release-doctor validation, not runtime product behavior."
+  },
+  "changedBehavior": [
+    "Vaporize v0.0.1 now carries a browser-openable static marketing site at release/v0.0.1/public-brochure.html.",
+    "The Markdown public brochure names the HTML marketing site as the primary public brochure surface and remains the text companion.",
+    "GATE-38, launch review, public changelog, and provenance evidence now name the HTML site explicitly.",
+    "Release doctor requires public-brochure.html, checks its marketing headline and publication boundary, and requires a launch-review evidence reference.",
+    "The live release-doctor receipt now reports 108 passed checks, 0 failed checks, and 25 required artifacts after the Carrie CMO gate-owner expansion."
+  ],
+  "targetableTests": [
+    {
+      "testBundle": "VaporizeCUJ09ReleaseReviewTests",
+      "testName": "releaseReviewArtifactsExist",
+      "expectation": "expected-pass only when public-brochure.html exists in the v0.0.1 release packet"
+    },
+    {
+      "testBundle": "VaporizeCUJ09ReleaseReviewTests",
+      "testName": "launchReviewPacketIsValidJSONAndInternalEssential",
+      "expectation": "expected-pass only when launch review references the public brochure marketing site"
+    },
+    {
+      "testBundle": "VaporizeCUJ09ReleaseReviewTests",
+      "testName": "productDefinitionContractPrecedesBuildWork",
+      "expectation": "expected-pass only when the site keeps proof-backed claim language, releaseIdentity/Sparkle boundaries, and GATE-38 copy"
+    },
+    {
+      "testBundle": "VaporizeCUJ17ReleaseDoctorTests",
+      "testName": "releaseDoctorPassesLiveReleaseSpine",
+      "expectation": "expected-pass only when release doctor checks the HTML artifact, headline, disclosure boundary, and launch-review reference"
+    }
+  ],
+  "proofCommands": [
+    {
+      "command": "SPM_USE_LOCAL_DEPS=1 /Users/sonoma/.swiftpm/bin/vaporize.cli@wrkstrm-core.clia.sh test --package-path /Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli --configuration debug -- --filter CUJ-09",
+      "result": "PASS: exited 0"
+    },
+    {
+      "command": "SPM_USE_LOCAL_DEPS=1 /Users/sonoma/.swiftpm/bin/vaporize.cli@wrkstrm-core.clia.sh test --package-path /Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli --configuration debug -- --filter CUJ-17",
+      "result": "PASS: exited 0"
+    },
+    {
+      "command": "SPM_USE_LOCAL_DEPS=1 /Users/sonoma/.swiftpm/bin/vaporize.cli@wrkstrm-core.clia.sh install --artifact cli --package-path /Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli --product vaporize.cli@wrkstrm-core.clia.sh --configuration release --force --product-version 0.0.1 --product-build 20260704 --product-build-date 2026-07-04T21:19:47Z",
+      "result": "PASS: exited 0; installed metadata has CFBundleShortVersionString=0.0.1, CFBundleVersion=20260704, VaporizeProductBuildDate=2026-07-04T21:19:47Z"
+    },
+    {
+      "command": "/Users/sonoma/.swiftpm/bin/vaporize.cli@wrkstrm-core.clia.sh release-doctor --path private/apple/spm/vaporize@wrkstrm-core.cli --format json --receipt-path private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/vaporize-v0.0.1-release-doctor.receipt.json",
+      "result": "PASS: current regenerated release-doctor receipt reports 108 passed checks, 0 failed checks, 25 required artifacts"
+    },
+    {
+      "command": "/Users/sonoma/.swiftpm/bin/vaporize.cli@wrkstrm-core.clia.sh validate-json --path <changed-json-evidence>",
+      "result": "PASS: launch-review packet, provenance artifact, release-doctor receipt, and modification receipt validated"
+    },
+    {
+      "command": "ruby -r nokogiri -e '<parse public-brochure.html and assert h1/canvas/launch-review link>'",
+      "result": "PASS: html structure ok"
+    },
+    {
+      "command": "node -e '<extract inline script from public-brochure.html and construct Function>'",
+      "result": "PASS: inline script syntax ok"
+    },
+    {
+      "command": "git diff --check -- <touched tracked Vaporize files>",
+      "result": "PASS: exited 0"
+    },
+    {
+      "command": "rg -n \"[ \\\\t]$\" private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/public-brochure.html",
+      "result": "PASS: no trailing whitespace matches"
+    }
+  ],
+  "releaseEvidenceUpdates": [
+    "release/v0.0.1/public-brochure.html",
+    "release/v0.0.1/public-brochure.md",
+    "release/v0.0.1/public-changelog.md",
+    "release/v0.0.1/release-gates.md",
+    "release/v0.0.1/evidence/launch-review-packet.json",
+    "release/v0.0.1/evidence/vaporize-v0.0.1-provenance-artifact.json",
+    "release/v0.0.1/evidence/vaporize-v0.0.1-provenance-artifact.md",
+    "release/v0.0.1/evidence/vaporize-v0.0.1-release-doctor.receipt.json"
+  ],
+  "validationLimits": [
+    "Full Vaporize package suite was not run for this refinement.",
+    "The marketing site remains a public-disclosure draft and is not approved for publication.",
+    "This receipt does not prove Sparkle appcast generation, update signing, public hosting, analytics, or public update delivery."
+  ]
+}

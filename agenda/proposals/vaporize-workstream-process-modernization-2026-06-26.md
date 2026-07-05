@@ -78,7 +78,8 @@ the headline receipt for Vaporize-owned process work.
 
 Replace proof recipes that use `jq` with:
 
-- `vaporize validate-json --path <file>` for JSON syntax receipts
+- `vaporize validate-json --path <file>` for JSON syntax receipts backed by
+  the Swift Universal json-formatter package consumed by Vaporize
 - generated Swift model decoding where typed conformance matters
 - future typed-record-validator when it lands
 

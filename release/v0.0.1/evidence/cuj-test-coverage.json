@@ -19,10 +19,10 @@
   "counts": {
     "activeCUJCount": 22,
     "deferredCUJCount": 1,
-    "requiredSwiftTestObligationCount": 104,
+    "requiredSwiftTestObligationCount": 105,
     "requiredReleaseEvidenceCheckCount": 12,
-    "requiredTargetableTestObligationCount": 116,
-    "currentExecutableSwiftTestCount": 138,
+    "requiredTargetableTestObligationCount": 117,
+    "currentExecutableSwiftTestCount": 139,
     "currentExecutableSwiftTestBreakdown": {
       "VaporizeCUJ01SwiftPMCLITests": 20,
       "VaporizeCUJ02MacAppTests": 14,
@@ -40,7 +40,7 @@
       "VaporizeCUJ14PklXcodeProjectGenerationTests": 5,
       "VaporizeCUJ15XcodeProductCacheTests": 4,
       "VaporizeCUJ16TargetFeaturesTests": 5,
-      "VaporizeCUJ17ReleaseDoctorTests": 5,
+      "VaporizeCUJ17ReleaseDoctorTests": 6,
       "VaporizeCUJ18ListTargetsTests": 5,
       "VaporizeCUJ19WorkspaceCacheDiscoveryTests": 5,
       "VaporizeCUJ20XcodeWorkspaceSchemesTests": 5,
@@ -283,7 +283,7 @@
       "prdRefs": [
         "FR-027"
       ],
-      "requiredSwiftTestObligations": 5,
+      "requiredSwiftTestObligations": 6,
       "requiredReleaseEvidenceChecks": 1,
       "status": "covered-with-boundary",
       "evidence": [

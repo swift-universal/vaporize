@@ -5,7 +5,7 @@
     "First slice checks Vaporize v0.0.1 docs, public-disclosure surfaces, JSON evidence, CUJ coverage, CUJ-state coverage, launch-review references, provenance inventory, project target discovery evidence, workspace product-cache discovery evidence, and Xcode workspace scheme-listing evidence.",
     "Fleet project-generation parity, runtime sampling, build-size cohorts, and periodic buddy health remain separate follow-up checks."
   ],
-  "checkCount" : 117,
+  "checkCount" : 120,
   "checks" : [
     {
       "category" : "required-artifact",
@@ -721,6 +721,30 @@
     },
     {
       "category" : "launch-review",
+      "detail" : "Launch-review packet must declare that approved gate statuses require human review.",
+      "name" : "launch-review-human-review-policy",
+      "path" : "\/Users\/sonoma\/mono\/private\/universal\/substrate\/collectives\/wrkstrm-core\/private\/apple\/spm\/vaporize@wrkstrm-core.cli\/release\/v0.0.1\/evidence\/launch-review-packet.json",
+      "severity" : "blocking",
+      "status" : "pass"
+    },
+    {
+      "category" : "launch-review",
+      "detail" : "Approved gate statuses require gate-level human review records; missing review gates: none.",
+      "name" : "launch-review-approved-gates-have-human-review",
+      "path" : "\/Users\/sonoma\/mono\/private\/universal\/substrate\/collectives\/wrkstrm-core\/private\/apple\/spm\/vaporize@wrkstrm-core.cli\/release\/v0.0.1\/evidence\/launch-review-packet.json",
+      "severity" : "blocking",
+      "status" : "pass"
+    },
+    {
+      "category" : "launch-review",
+      "detail" : "Gate statuses must be blocked, evidence-ready pending human review, or human-approved; unrecognized gates: none.",
+      "name" : "launch-review-gate-status-vocabulary",
+      "path" : "\/Users\/sonoma\/mono\/private\/universal\/substrate\/collectives\/wrkstrm-core\/private\/apple\/spm\/vaporize@wrkstrm-core.cli\/release\/v0.0.1\/evidence\/launch-review-packet.json",
+      "severity" : "blocking",
+      "status" : "pass"
+    },
+    {
+      "category" : "launch-review",
       "detail" : "Launch-review packet must reference the release-doctor receipt.",
       "name" : "launch-review-release-doctor-evidence-ref",
       "path" : "\/Users\/sonoma\/mono\/private\/universal\/substrate\/collectives\/wrkstrm-core\/private\/apple\/spm\/vaporize@wrkstrm-core.cli\/release\/v0.0.1\/evidence\/launch-review-packet.json",
@@ -949,10 +973,10 @@
   "inspectedPath" : "\/Users\/sonoma\/mono\/private\/universal\/substrate\/collectives\/wrkstrm-core\/private\/apple\/spm\/vaporize@wrkstrm-core.cli",
   "overallStatus" : "pass",
   "packageRootPath" : "\/Users\/sonoma\/mono\/private\/universal\/substrate\/collectives\/wrkstrm-core\/private\/apple\/spm\/vaporize@wrkstrm-core.cli",
-  "passedCheckCount" : 117,
+  "passedCheckCount" : 120,
   "receiptKind" : "vaporize-release-doctor",
   "releaseRootPath" : "\/Users\/sonoma\/mono\/private\/universal\/substrate\/collectives\/wrkstrm-core\/private\/apple\/spm\/vaporize@wrkstrm-core.cli\/release\/v0.0.1",
-  "requestId" : "vaporize-release-doctor-9ABF8A15-B8AD-4C39-B572-C2E7AB0BD7CE",
+  "requestId" : "vaporize-release-doctor-BF905A80-F1E3-444E-8667-5C6A0D41464B",
   "requiredArtifactCount" : 26,
   "schemaFamilySlug" : "vaporize-schemas",
   "schemaFamilyVersion" : "0.0.1",

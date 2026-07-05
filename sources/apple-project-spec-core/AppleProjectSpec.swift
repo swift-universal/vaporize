@@ -62,6 +62,17 @@ public struct AppleProjectSettings: Codable, Equatable, Sendable {
   public var configs: [String: [String: AppleProjectValue]]?
 }
 
+public struct AppleProjectReleaseIdentity: Codable, Equatable, Sendable {
+  public var bundleIdentifier: String?
+  public var shortVersion: String?
+  public var buildVersion: String?
+  public var buildSha: String?
+  public var buildDate: String?
+  public var generateInfoPlist: Bool?
+  public var sparkleFeedURL: String?
+  public var sparklePublicEDKey: String?
+}
+
 public struct AppleProjectPackage: Codable, Equatable, Sendable {
   public var path: String?
   public var url: String?
@@ -77,6 +88,7 @@ public struct AppleProjectTarget: Codable, Equatable, Sendable {
   public var deploymentTarget: AppleProjectValue?
   public var sources: [AppleProjectSource]?
   public var info: AppleProjectInfo?
+  public var releaseIdentity: AppleProjectReleaseIdentity?
   public var settings: AppleProjectSettings?
   public var configFiles: [String: String]?
   public var dependencies: [AppleProjectDependency]?
@@ -401,6 +413,9 @@ public enum AppleProjectPklRenderer {
     if let info = target.info {
       appendAssignment("info", renderInfo(info, indent: level + 2), indent: level + 2, to: &lines)
     }
+    if let releaseIdentity = target.releaseIdentity {
+      appendAssignment("releaseIdentity", renderReleaseIdentity(releaseIdentity, indent: level + 2), indent: level + 2, to: &lines)
+    }
     if let settings = target.settings {
       appendAssignment("settings", renderSettings(settings, indent: level + 2), indent: level + 2, to: &lines)
     }
@@ -439,6 +454,23 @@ public enum AppleProjectPklRenderer {
     if let properties = info.properties, !properties.isEmpty {
       appendAssignment("properties", renderMapping(properties, indent: level + 2), indent: level + 2, to: &lines)
     }
+    lines.append("\(indent(level))}")
+    return lines.joined(separator: "\n")
+  }
+
+  private static func renderReleaseIdentity(
+    _ identity: AppleProjectReleaseIdentity,
+    indent level: Int
+  ) -> String {
+    var lines = ["new {"]
+    appendOptional("bundleIdentifier", identity.bundleIdentifier.map(renderString), indent: level + 2, to: &lines)
+    appendOptional("shortVersion", identity.shortVersion.map(renderString), indent: level + 2, to: &lines)
+    appendOptional("buildVersion", identity.buildVersion.map(renderString), indent: level + 2, to: &lines)
+    appendOptional("buildSha", identity.buildSha.map(renderString), indent: level + 2, to: &lines)
+    appendOptional("buildDate", identity.buildDate.map(renderString), indent: level + 2, to: &lines)
+    appendOptional("generateInfoPlist", identity.generateInfoPlist.map(renderBool), indent: level + 2, to: &lines)
+    appendOptional("sparkleFeedURL", identity.sparkleFeedURL.map(renderString), indent: level + 2, to: &lines)
+    appendOptional("sparklePublicEDKey", identity.sparklePublicEDKey.map(renderString), indent: level + 2, to: &lines)
     lines.append("\(indent(level))}")
     return lines.joined(separator: "\n")
   }

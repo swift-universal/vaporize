@@ -28,10 +28,10 @@ and CUJ count must already name the behavior being retired from the old location
 | --- | ---: |
 | Active CUJs | 22 |
 | Deferred CUJs | 1 |
-| Required Swift test obligations | 104 |
+| Required Swift test obligations | 105 |
 | Required release evidence checks | 12 |
-| Required targetable test obligations | 116 |
-| Current executable Swift tests | 138 |
+| Required targetable test obligations | 117 |
+| Current executable Swift tests | 139 |
 
 ## Targetable Test Bundles
 
@@ -53,7 +53,7 @@ and CUJ count must already name the behavior being retired from the old location
 | CUJ-14 | `VaporizeCUJ14PklXcodeProjectGenerationTests` | 5 |
 | CUJ-15 | `VaporizeCUJ15XcodeProductCacheTests` | 4 |
 | CUJ-16 | `VaporizeCUJ16TargetFeaturesTests` | 5 |
-| CUJ-17 | `VaporizeCUJ17ReleaseDoctorTests` | 5 |
+| CUJ-17 | `VaporizeCUJ17ReleaseDoctorTests` | 6 |
 | CUJ-18 | `VaporizeCUJ18ListTargetsTests` | 5 |
 | CUJ-19 | `VaporizeCUJ19WorkspaceCacheDiscoveryTests` | 5 |
 | CUJ-20 | `VaporizeCUJ20XcodeWorkspaceSchemesTests` | 5 |
@@ -80,7 +80,7 @@ and CUJ count must already name the behavior being retired from the old location
 | CUJ-14 | FR-020 | 5 | generate-xcodeproj parsing, Pkl-backed .xcodeproj output, deterministic renderer proof, tool releaseIdentity expected-pass, unsupported-target expected-fail |
 | CUJ-15 | FR-003, FR-021 | 4 | Product-cache option parsing, cache-first app lookup, shared workspace build invocation, paired option validation |
 | CUJ-16 | FR-023, FR-024 | 5 | Target feature inspection parsing, inferred target, stale xcconfig detection, generated Swift provenance, CLI parsing |
-| CUJ-17 | FR-027 | 5 Swift tests; 1 release evidence check | Release doctor parsing, live-spine pass, release-root resolution, missing-gate failure, unresolved-root rejection |
+| CUJ-17 | FR-027 | 6 Swift tests; 1 release evidence check | Release doctor parsing, live-spine pass, release-root resolution, missing-gate failure, unresolved-root rejection, unreviewed gate approval failure |
 | CUJ-18 | FR-028 | 5 Swift tests; 1 release evidence check | list-targets parsing, legacy YAML discovery, Pkl discovery, directory fallback, missing project-spec rejection |
 | CUJ-19 | FR-021, FR-029 | 5 Swift tests; 1 release evidence check | list-targets cache option parsing, missing candidate discovery, warm candidate discovery, non-buildable exclusion, incomplete cache-pair rejection |
 | CUJ-20 | FR-030 | 5 | list-schemes CLI parsing, xcodebuild argument construction, workspace scheme JSON parsing, non-workspace rejection, receipt boundary |

@@ -1,0 +1,83 @@
+{
+  "VaporizeModificationReceipt": "0.1.0",
+  "schemaVersion": "0.1.0",
+  "receiptKind": "vaporize-modification-receipt",
+  "receiptId": "vaporize-public-doc-maintenance-bead-discipline-modification-2026-07-04",
+  "subjectAppSlug": "vaporize.cli@wrkstrm-core.clia.sh",
+  "subjectReleaseSlug": "v0.0.1",
+  "createdAt": "2026-07-04T22:34:00Z",
+  "createdBy": "codex",
+  "status": "completed-with-focused-proof",
+  "requestRef": "private/universal/substrate/collectives/spaces-universal/private/universal/kura-spaces/workflows/software-modification-workstream-capture/v0.1.0/requests/2026-07-04-vaporize-public-doc-maintenance-bead-discipline.vaporware-modification-request.su.json",
+  "workflowInstanceRef": "private/universal/substrate/collectives/spaces-universal/private/universal/kura-spaces/workflows/software-modification-workstream-capture/v0.1.0/software-modification-workstream-capture-2026-07-04-vaporize-public-doc-maintenance-bead-discipline.workflow-instance.su.json",
+  "releaseCohortRef": "GATE-32-vaporware-modification-request-discipline",
+  "owningBeadRef": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/FR-VAPORIZE-PUBLIC-DOCUMENTATION-ARTIFACT-MAINTENANCE-2026-07-04.beads-issue.json",
+  "featureFlagDisposition": {
+    "createdFeatureFlag": false,
+    "attachedFeatureStatus": "GATE-32-vaporware-modification-request-discipline",
+    "noFlagReason": "The change modifies release-discipline, workflow basis, and release-doctor validation, not runtime product behavior."
+  },
+  "changedBehavior": [
+    "Vaporize v0.0.1 now has an owning public documentation artifact-family maintenance bead.",
+    "Vaporware modification request discipline requires an owning bead in the component or workstream home, workflow beadTrackingRefs, and explicit no-bead exceptions when needed.",
+    "GATE-32 and FR-026 now name the owning-bead requirement.",
+    "The software-modification pipeline basis now treats owner-home beads as intake output and receipt closeout state.",
+    "Existing public brochure marketing-site, audience-packet, and user-manual workflow instances now list the owning bead before their typed request packets.",
+    "Release Doctor checks the owning-bead discipline text in both release-gates.md and the DocC discipline page.",
+    "The public brochure marketing site reports the updated 108/108 release-doctor check count after the Carrie CMO gate-owner expansion."
+  ],
+  "targetableTests": [
+    {
+      "testBundle": "VaporizeCUJ09ReleaseReviewTests",
+      "testName": "productDefinitionContractPrecedesBuildWork",
+      "expectation": "expected-pass only when PRD, gates, DocC discipline, public brochure proof copy, and public documentation artifacts agree on the owning-bead maintenance rule"
+    },
+    {
+      "testBundle": "VaporizeCUJ17ReleaseDoctorTests",
+      "testName": "releaseDoctorPassesLiveReleaseSpine",
+      "expectation": "expected-pass only when release doctor checks the gate and DocC owning-bead discipline tokens"
+    }
+  ],
+  "proofCommands": [
+    {
+      "command": "SPM_USE_LOCAL_DEPS=1 /Users/sonoma/.swiftpm/bin/vaporize.cli@wrkstrm-core.clia.sh test --package-path /Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli --configuration debug -- --filter CUJ-09",
+      "result": "PASS: exited 0"
+    },
+    {
+      "command": "SPM_USE_LOCAL_DEPS=1 /Users/sonoma/.swiftpm/bin/vaporize.cli@wrkstrm-core.clia.sh test --package-path /Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli --configuration debug -- --filter CUJ-17",
+      "result": "PASS: exited 0"
+    },
+    {
+      "command": "SPM_USE_LOCAL_DEPS=1 /Users/sonoma/.swiftpm/bin/vaporize.cli@wrkstrm-core.clia.sh install --artifact cli --package-path /Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli --product vaporize.cli@wrkstrm-core.clia.sh --configuration release --force --product-version 0.0.1 --product-build 20260704 --product-build-date 2026-07-04T22:34:00Z",
+      "result": "PASS: exited 0"
+    },
+    {
+      "command": "/Users/sonoma/.swiftpm/bin/vaporize.cli@wrkstrm-core.clia.sh release-doctor --path private/apple/spm/vaporize@wrkstrm-core.cli --format json --receipt-path private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/vaporize-v0.0.1-release-doctor.receipt.json",
+      "result": "PASS: 108 passed checks, 0 failed checks, 25 required artifacts"
+    },
+    {
+      "command": "/Users/sonoma/.swiftpm/bin/vaporize.cli@wrkstrm-core.clia.sh validate-json --path <changed-json-evidence>",
+      "result": "PASS: owning bead, request packet, workflow instance, modification receipt, updated public-doc workflow instances, launch-review packet, provenance artifact, and release-doctor receipt validated"
+    }
+  ],
+  "releaseEvidenceUpdates": [
+    "beads/FR-VAPORIZE-PUBLIC-DOCUMENTATION-ARTIFACT-MAINTENANCE-2026-07-04.beads-issue.json",
+    "vaporize.engineering.docc/vaporware-modification-request-discipline.md",
+    "release/v0.0.1/prd.md",
+    "release/v0.0.1/release-gates.md",
+    "release/v0.0.1/public-brochure.html",
+    "release/v0.0.1/evidence/launch-review-packet.json",
+    "release/v0.0.1/evidence/vaporize-v0.0.1-provenance-artifact.json",
+    "release/v0.0.1/evidence/vaporize-v0.0.1-provenance-artifact.md",
+    "release/v0.0.1/evidence/vaporize-v0.0.1-release-doctor.receipt.json",
+    "release/v0.0.1/evidence/vaporize-public-doc-maintenance-bead-discipline-modification.receipt.json",
+    "sources/vaporize-cli/ReleaseDoctor.swift",
+    "tests/cuj-09-release-review/VaporizeCUJ09ReleaseReviewTests.swift",
+    "tests/cuj-17-release-doctor/VaporizeCUJ17ReleaseDoctorTests.swift"
+  ],
+  "validationLimits": [
+    "Full Vaporize package suite was not run for this refinement.",
+    "The public documentation artifacts remain public-disclosure drafts and are not approved for publication.",
+    "This does not create a dedicated public documentation artifact creation workflow; it strengthens the software-modification request discipline and release gate proof."
+  ]
+}
