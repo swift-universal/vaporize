@@ -124,7 +124,7 @@ func cujCoverageContractIsValidJSONAndNamesTheFloor() throws {
   #expect(counts["requiredSwiftTestObligationCount"] as? Int == 116)
   #expect(counts["requiredReleaseEvidenceCheckCount"] as? Int == 13)
   #expect(counts["requiredTargetableTestObligationCount"] as? Int == 129)
-  #expect(counts["currentExecutableSwiftTestCount"] as? Int == 155)
+  #expect(counts["currentExecutableSwiftTestCount"] as? Int == 160)
   let breakdown = try #require(counts["currentExecutableSwiftTestBreakdown"] as? [String: Any])
   #expect(breakdown["VaporizeCUJ01SwiftPMCLITests"] as? Int == 20)
   #expect(breakdown["VaporizeCUJ07VaporInventoryTests"] as? Int == 18)

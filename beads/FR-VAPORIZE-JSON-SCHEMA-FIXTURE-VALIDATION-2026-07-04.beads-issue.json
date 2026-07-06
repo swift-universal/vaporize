@@ -3,7 +3,7 @@
   "schemaVersion": "0.1.0",
   "id": "FR-VAPORIZE-JSON-SCHEMA-FIXTURE-VALIDATION-2026-07-04",
   "title": "Add Vaporize JSON Schema fixture validation for schema-universal expected-pass and expected-fail records",
-  "status": "open",
+  "status": "in-progress",
   "priority": 1,
   "issueType": "feature",
   "labels": [
@@ -58,6 +58,28 @@
       "The initial command may scope to local schemas and local references; remote schema fetching is not part of the first acceptance slice.",
       "The existing validate-json repeated --path bug can be fixed alongside this work, but it is not a substitute for schema instance validation.",
       "The bead is filed at the Vaporize owner home first; a job-board projection should reference this bead when a Vaporize implementation board is opened."
+    ],
+    "progressNotes": [
+      {
+        "at": "2026-07-05",
+        "by": "claude",
+        "note": "validate-json-schema mode landed: sources/vaporize-cli/JSONSchemaValidation.swift (draft-2020-12 subset engine: type/properties/required/additionalProperties/const/enum/allOf/anyOf/oneOf/if-then-else/items/minItems/minLength/minimum/$defs; $ref internal pointers + local relative-file refs with canonical-path caching and cycle guard; remote http(s) $ref raises actionable unsupported-schema-feature error). CLI wiring in main.swift: Mode.validateJSONSchema, --schema/--fixture/--expect (ExpectOutcome pass|fail), JSONSchemaValidationReceipt (receiptKind vaporize-json-schema-validation) emitted via emitReceiptIfRequested, and VaporizeCLIActionability.schemaValidationMessage naming schema path, fixture path, expectation, actual, diagnostics, next steps, and the Digikoma triage command with existing policy/procedure/digikoma refs.",
+        "evidence": [
+          "SPM_USE_LOCAL_DEPS=1 swift build: Build complete",
+          "swift test --filter VaporizeCUJ06JSONValidationTests: 8 tests passed (3 prior JSON-syntax tests kept + 5 new CUJ-06 schema tests: expected-pass, expected-fail with diagnostics, expectation mismatch, actionable failure message, remote-$ref rejection)",
+          "Live nine-fixture matrix against workstream-schemas v0.0.4: 4 canonical fixtures --expect pass exit 0; 5 invalid fixtures --expect fail exit 0; invalid fixture with --expect pass exits 64 with the actionable message; receipt emission proved via --receipt-path"
+        ]
+      },
+      {
+        "at": "2026-07-05",
+        "by": "claude",
+        "note": "Schema-side fix required for the proof set: workstream.schema.json and workstream-summary.schema.json (plus their versions/0.0.4 copies) in schema-universal carried dangling relative $refs to primitives/schema-primitives (7 x ../ where the on-disk layout at domain/primitives requires 8 x ../; versions copies 9 -> 10). Fixed in place and verified all ref targets resolve. Sibling schemas workstream-contribution.schema.json and workstream-moment.schema.json (and their versions copies) still carry the same dangling-primitives-$ref bug; they are outside this fixture proof set and remain for schema-universal to fix."
+      },
+      {
+        "at": "2026-07-05",
+        "by": "claude",
+        "note": "Release evidence: cuj-test-coverage.json/.md updated (VaporizeCUJ06JSONValidationTests 3 -> 8, currentExecutableSwiftTestCount 155 -> 160) and the CUJ-09 counter expectation updated to 160; the CUJ-09 coverage-contract test passes. NOT done yet: release-gates/release-doctor enforcement naming the schema-backed fixture validation obligation (acceptance criterion 8) is still pending, and the prior validate-json multiple --path bug remains open in its own bead. Pre-existing unrelated failure noted honestly: CUJ-09 'product definition contract precedes build work' fails at HEAD because feature-catalog.md no longer contains 'Xcode-selected Swift toolchain' (removed by commit a223620d in the FR-VAPORIZE-DOCC-TOOLCHAIN-BRIDGE-2026-07-05 workstream); not caused by and not force-fixed in this slice."
+      }
     ]
   },
   "composesWith": [

@@ -31,7 +31,7 @@ and CUJ count must already name the behavior being retired from the old location
 | Required Swift test obligations | 116 |
 | Required release evidence checks | 13 |
 | Required targetable test obligations | 129 |
-| Current executable Swift tests | 155 |
+| Current executable Swift tests | 160 |
 
 ## Targetable Test Bundles
 
@@ -42,7 +42,7 @@ and CUJ count must already name the behavior being retired from the old location
 | CUJ-03 | `VaporizeCUJ03PassThroughTests` | 4 |
 | CUJ-04 | `VaporizeCUJ04CommonProcessUseTests` | 4 |
 | CUJ-05 | `VaporizeCUJ05ToolchainTests` | 11 |
-| CUJ-06 | `VaporizeCUJ06JSONValidationTests` | 3 |
+| CUJ-06 | `VaporizeCUJ06JSONValidationTests` | 8 |
 | CUJ-07 | `VaporizeCUJ07VaporInventoryTests` | 18 |
 | CUJ-08 | `VaporizeCUJ08ProjectYMLInspectionTests` | 5 |
 | CUJ-09 | `VaporizeCUJ09ReleaseReviewTests` | 6 |
@@ -70,7 +70,7 @@ and CUJ count must already name the behavior being retired from the old location
 | CUJ-03 | FR-005 | 4 | Pass-through parser normalization and receipt shape |
 | CUJ-04 | FR-006 | 4 | CommonProcess decode, file load, validation rejection, receipt shape |
 | CUJ-05 | FR-010 | 11 | Toolchain parser normalization, swift-toolchain DocC routing, macOS fallback routing, non-macOS direct lookup, unsupported/empty rejection, receipt shape |
-| CUJ-06 | FR-011 | 3 | Valid and invalid Swift Universal json-formatter-backed validation plus formatter coverage |
+| CUJ-06 | FR-011 | 3 | Valid and invalid Swift Universal json-formatter-backed validation plus formatter coverage; validate-json-schema engine expected-pass, expected-fail, expectation-mismatch, remote-$ref rejection, and actionable-failure coverage against workstream-schemas v0.0.4 fixtures |
 | CUJ-07 | FR-007, FR-008 | 10 | Scanner status classification, legacy key, malformed JSON, path errors, text/JSON renderer |
 | CUJ-08 | FR-015 | 5 | Concourse and multi-target YAML parsing, value/source decoding, read-only bridge evidence |
 | CUJ-09 | FR-012, FR-013, FR-014, FR-022, FR-025, FR-026 | 0 | Product definition, PRD, PRD review session, vaporware modification request discipline, CUJ, release gates, launch-review packet, engineering DocC catalog checks |

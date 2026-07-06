@@ -65,6 +65,7 @@ struct VaporizeCLI: AsyncParsableCommand {
     case status
     case warehouse
     case validateJSON = "validate-json"
+    case validateJSONSchema = "validate-json-schema"
     case inspectProjectYML = "inspect-project-yml"
     case inspectTargetFeatures = "inspect-target-features"
     case compareProjectYMLPkl = "compare-project-yml-pkl"
@@ -98,7 +99,12 @@ struct VaporizeCLI: AsyncParsableCommand {
     case app
   }
 
-  @Argument(help: "Mode: install, uninstall, build, test, run, pass, use, toolchain, setup, status, warehouse, validate-json, inspect-project-yml, inspect-target-features, compare-project-yml-pkl, import-project-yml, generate-project-yml, generate-xcodeproj, list-targets, list-schemes, release-doctor, inventory, domains, self-update, or graph (forwards to package-graph@wrkstrm.cli).")
+  enum ExpectOutcome: String, ExpressibleByArgument {
+    case pass
+    case fail
+  }
+
+  @Argument(help: "Mode: install, uninstall, build, test, run, pass, use, toolchain, setup, status, warehouse, validate-json, validate-json-schema, inspect-project-yml, inspect-target-features, compare-project-yml-pkl, import-project-yml, generate-project-yml, generate-xcodeproj, list-targets, list-schemes, release-doctor, inventory, domains, self-update, or graph (forwards to package-graph@wrkstrm.cli).")
   var mode: Mode?
 
   @Flag(help: "Prints the tool name, version, and build metadata and exits.")
@@ -250,6 +256,21 @@ struct VaporizeCLI: AsyncParsableCommand {
   var vaporScanPath: String?
 
   @Option(
+    name: .customLong("schema"),
+    help: "JSON Schema file path for validate-json-schema mode.")
+  var jsonSchemaPath: String?
+
+  @Option(
+    name: .customLong("fixture"),
+    help: "Fixture JSON instance path validated against --schema in validate-json-schema mode.")
+  var jsonSchemaFixturePath: String?
+
+  @Option(
+    name: .customLong("expect"),
+    help: "Expected validate-json-schema outcome: pass or fail. Exit is nonzero when the actual outcome differs.")
+  var jsonSchemaExpectedOutcome: ExpectOutcome?
+
+  @Option(
     name: .customLong("pkl-path"),
     help: "Path to an AppleProjectSpec Pkl record for compare-project-yml-pkl, generate-project-yml, generate-xcodeproj, or list-targets mode.")
   var pklPath: String?
@@ -315,6 +336,8 @@ struct VaporizeCLI: AsyncParsableCommand {
       try await runVaporWarehouse()
     case .validateJSON:
       try await validateJSON()
+    case .validateJSONSchema:
+      try await validateJSONSchema()
     case .inspectProjectYML:
       try await inspectProjectYML()
     case .inspectTargetFeatures:
@@ -1286,6 +1309,99 @@ struct VaporizeCLI: AsyncParsableCommand {
     }
   }
 
+  private func validateJSONSchema() async throws {
+    guard let jsonSchemaPath, !jsonSchemaPath.isEmpty else {
+      throw ValidationError("--schema is required for validate-json-schema mode.")
+    }
+    guard let jsonSchemaFixturePath, !jsonSchemaFixturePath.isEmpty else {
+      throw ValidationError("--fixture is required for validate-json-schema mode.")
+    }
+
+    let requestId = "vaporize-validate-json-schema-\(UUID().uuidString)"
+    let expectedLabel = jsonSchemaExpectedOutcome?.rawValue
+
+    let outcome: JSONSchemaValidation.Outcome
+    do {
+      outcome = try JSONSchemaValidation.validate(
+        schemaPath: jsonSchemaPath,
+        fixturePath: jsonSchemaFixturePath
+      )
+    } catch let engineError as JSONSchemaValidation.EngineError {
+      let message = VaporizeCLIActionability.schemaValidationMessage(
+        errorDescription: String(describing: engineError),
+        schemaPath: jsonSchemaPath,
+        fixturePath: jsonSchemaFixturePath,
+        expected: expectedLabel,
+        actual: "fail",
+        diagnostics: [String(describing: engineError)]
+      )
+      let receipt = JSONSchemaValidationReceipt(
+        schemaPath: jsonSchemaPath,
+        fixturePath: jsonSchemaFixturePath,
+        requestId: requestId,
+        expected: expectedLabel,
+        actual: "fail",
+        matched: expectedLabel == nil ? nil : false,
+        diagnostics: [String(describing: engineError)],
+        nextSteps: Self.schemaValidationFailureNextSteps
+      )
+      try emitReceiptIfRequested(receipt)
+      throw ValidationError(message)
+    }
+
+    let (actual, matched) = JSONSchemaValidation.expectationOutcome(
+      expected: expectedLabel,
+      valid: outcome.valid
+    )
+    let succeeded = matched ?? outcome.valid
+    let receipt = JSONSchemaValidationReceipt(
+      schemaPath: jsonSchemaPath,
+      fixturePath: jsonSchemaFixturePath,
+      requestId: requestId,
+      expected: expectedLabel,
+      actual: actual,
+      matched: matched,
+      diagnostics: outcome.diagnostics,
+      nextSteps: succeeded
+        ? ["No action required: actual outcome '\(actual)' matches the declared expectation."]
+        : Self.schemaValidationFailureNextSteps
+    )
+    try emitReceiptIfRequested(receipt)
+
+    if succeeded {
+      let expectationSuffix = expectedLabel.map { " (expected \($0))" } ?? ""
+      print(
+        "schema validation \(actual)\(expectationSuffix): \(jsonSchemaFixturePath) against \(jsonSchemaPath)"
+      )
+      return
+    }
+
+    let errorDescription: String
+    if let expectedLabel, matched == false {
+      errorDescription =
+        "actual outcome '\(actual)' did not match --expect \(expectedLabel)"
+    } else {
+      errorDescription = "fixture failed JSON Schema validation"
+    }
+    throw ValidationError(
+      VaporizeCLIActionability.schemaValidationMessage(
+        errorDescription: errorDescription,
+        schemaPath: jsonSchemaPath,
+        fixturePath: jsonSchemaFixturePath,
+        expected: expectedLabel,
+        actual: actual,
+        diagnostics: outcome.diagnostics
+      )
+    )
+  }
+
+  private static let schemaValidationFailureNextSteps: [String] = [
+    "Inspect each diagnostic's instance path in the fixture and fix the fixture, the schema, or the declared --expect value.",
+    "If a diagnostic names an unresolvable or remote $ref, repair the schema's $ref target; remote http(s) refs are unsupported by design.",
+    "Rerun the validate-json-schema command after the fix.",
+    "If still blocked, capture the full error text and bring it to Digikoma via the digikoma-command in the error message.",
+  ]
+
   private func inspectProjectYML() async throws {
     guard let vaporScanPath, !vaporScanPath.isEmpty else {
       throw ValidationError("--path is required for inspect-project-yml mode.")
@@ -2051,6 +2167,53 @@ enum VaporizeCLIActionability {
     """
   }
 
+  static func schemaValidationMessage(
+    errorDescription: String,
+    schemaPath: String,
+    fixturePath: String,
+    expected: String?,
+    actual: String,
+    diagnostics: [String]
+  ) -> String {
+    let expectation = expected ?? "none declared"
+    let diagnosticLines =
+      diagnostics.isEmpty
+      ? "  (none)"
+      : diagnostics.map { "  - \($0)" }.joined(separator: "\n")
+    let rerunExpectSuffix = expected.map { " --expect \($0)" } ?? ""
+    return """
+      vaporize JSON Schema validation failed.
+      error: \(errorDescription)
+      schema: \(schemaPath)
+      fixture: \(fixturePath)
+      expected: \(expectation)
+      actual: \(actual)
+      diagnostics:
+      \(diagnosticLines)
+      policy: \(policyRef)
+      procedure: \(procedureRef)
+      digikoma: \(digikomaRef)
+      digikoma-command: \(schemaValidationDigikomaCommand(schemaPath: schemaPath, fixturePath: fixturePath, expected: expected))
+      next:
+        1. Inspect each diagnostic's instance path in the fixture and fix the fixture, the schema, or the declared --expect value.
+        2. If a diagnostic names an unresolvable or remote $ref, repair the schema's $ref target; remote http(s) refs are unsupported by design.
+        3. Rerun: vaporize.cli@wrkstrm-core.clia.sh validate-json-schema --schema \(schemaPath) --fixture \(fixturePath)\(rerunExpectSuffix)
+        4. If still blocked, capture the full error text and bring it to Digikoma by running the digikoma-command above.
+      """
+  }
+
+  private static func schemaValidationDigikomaCommand(
+    schemaPath: String,
+    fixturePath: String,
+    expected: String?
+  ) -> String {
+    let expectSuffix = expected.map { " --expect \($0)" } ?? ""
+    let originalCommand = shellSingleQuoted(
+      "vaporize.cli@wrkstrm-core.clia.sh validate-json-schema --schema \(schemaPath) --fixture \(fixturePath)\(expectSuffix)"
+    )
+    return "vaporize.cli@wrkstrm-core.clia.sh run --package-path \(digikomaPackagePath) --product cli-error-triage.digikoma@kura-org.clia.sh --configuration debug -- --error-file <path-to-full-error.txt> --command \(originalCommand) --working-directory <repo-root>"
+  }
+
   private static func productValidationDigikomaCommand(product: String) -> String {
     let originalCommand = shellSingleQuoted(
       "vaporize.cli@wrkstrm-core.clia.sh run --product \(product)"
@@ -2212,4 +2375,20 @@ struct JSONValidationReceipt: Codable, Equatable {
   var valid: Bool
   var byteCount: Int
   var errorMessage: String?
+}
+
+struct JSONSchemaValidationReceipt: Codable, Equatable {
+  var schemaVersion = "0.1.0"
+  var receiptKind = "vaporize-json-schema-validation"
+  var schemaPath: String
+  var fixturePath: String
+  var requestId: String
+  /// Declared expectation from --expect (pass or fail), when provided.
+  var expected: String?
+  /// Actual engine outcome: "pass" or "fail".
+  var actual: String
+  /// Whether actual matched the declared expectation; nil when no --expect.
+  var matched: Bool?
+  var diagnostics: [String]
+  var nextSteps: [String]
 }

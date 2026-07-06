@@ -55,14 +55,14 @@ For standalone `.docc` catalog export in our stack, the modern owned tool name
 is the Swift Universal product:
 
 ```text
-swift-docc-cli@swift-universal.clia.sh export --bundle Product.docc --output /tmp/Product.doccarchive
+docc.cli@swift-universal.clia.sh export --bundle Product.docc --output /tmp/Product.doccarchive
 ```
 
 Preview and validation use sibling Swift Universal products:
 
 ```text
-swift-docc-preview-cli@swift-universal.clia.sh serve --bundle Product.docc
-swift-docc-validator-cli@swift-universal.clia.sh workspace /workspace
+docc-preview.cli@swift-universal.clia.sh serve --bundle Product.docc
+docc-validator.cli@swift-universal.clia.sh workspace /workspace
 ```
 
 The lower-level Swift-DocC Documentation Compiler executable is the fallback
