@@ -1,0 +1,27 @@
+{
+  "BeadsIssue": "0.1.0",
+  "schemaVersion": "0.1.0",
+  "id": "FR-VAPORIZE-JSON-SCHEMA-PATTERN-KEYWORD-SUPPORT-2026-07-06",
+  "title": "validate-json-schema: support the 'pattern' keyword so substrate contract schemas validate",
+  "createdAt": "2026-07-06",
+  "createdBy": "Claude Fable 5 on hulk harness, agent clia",
+  "issueType": "feature",
+  "status": "open",
+  "priority": 2,
+  "labels": ["vaporize", "json-schema", "capture-step-3-5", "fable-program"],
+  "description": "First real /capture consumer of validate-json-schema (2026-07-06) hit the loud unsupported-keyword refusal on 'pattern' (axiom.schema.json /slug, and role-workflow-schemas formula/instance). The refusal is correct behavior per the no-silent-fallback axiom, but 'pattern' is a bounded, safe regex keyword used across schema-universal contract schemas. Supporting it (NSRegularExpression or Swift Regex, anchored per JSON Schema semantics) would let /capture Step 3.5 mechanize fully for workflow-formula, workflow-instance, and axiom records instead of falling back to manual required-fields checks.",
+  "acceptanceCriteria": [
+    "'pattern' keyword validates string instances per JSON Schema draft-2020-12 semantics (unanchored regex search).",
+    "CUJ-06 gains a pattern pass + fail test case.",
+    "Proof: vaporize validate-json-schema --schema axiom.schema.json --fixture <a conformant axiom> --expect pass exits 0.",
+    "Unsupported-keyword refusal behavior unchanged for genuinely unsupported features."
+  ],
+  "relatedTypedRecords": [
+    {
+      "LinkRefModel": "0.3.0",
+      "s": ["kind:beads-issue", "slug:FR-VAPORIZE-JSON-SCHEMA-FIXTURE-VALIDATION-2026-07-04"],
+      "t": "the parent validation lane",
+      "tg": [{ "k": "rp", "rt": "mono", "v": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/FR-VAPORIZE-JSON-SCHEMA-FIXTURE-VALIDATION-2026-07-04.beads-issue.json" }]
+    }
+  ]
+}
