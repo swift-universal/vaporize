@@ -24,10 +24,16 @@
     "install-safety",
     "presence-check"
   ],
+  "hardeningLanded": {
+    "date": "2026-07-08",
+    "items": [
+      "installApp() (.app path) made ATOMIC: copy to a staged sibling on the same volume, then swap via replaceItemAt (replace) or moveItem (fresh) — eliminates the remove-then-copy window entirely, plus a loud post-install presence check (new InstallerError.installVerificationFailed). This is the atomic upgrade the CLI path could not get (SwiftPM's `experimental-install` owns the CLI copy, so installCLI only verifies after; the .app path is vaporize-owned so it gets true atomicity).",
+      "Positive per-install presence confirmation added to installCLI(): prints 'vaporize: verified <product> installed at <path>' on success — a suite reinstall (one invocation per product) emits one confirmation each, so a single missing binary surfaces immediately (the visibility half of the multi-binary summary).",
+      "Compile verified (swift build exit 0); fully-hardened vaporize release-installed live."
+    ]
+  },
   "furtherHardening": [
-    "Consider making the CLI install atomic (copy-to-temp then atomic replaceItemAt) so there is no window where the destination is absent, rather than only detecting the miss after the fact.",
-    "installApp() (SwiftAppInstaller.swift) uses the same remove-then-copy shape for .app bundles (removeItem(destination) then copyItem); apply the same presence-check or atomic-replace hardening there.",
-    "Emit a post-build presence summary across a requested product set so multi-binary installs (e.g. the full savepoint suite) surface any single missing binary immediately."
+    "Full multi-product BATCH verify surface: a `vaporize verify --products a,b,c` subcommand (or multi `--product` support) that checks + reports presence across a named set in ONE invocation, so the savepoint suite (4 products, currently 4 separate calls) can be verified as a set. Distinct feature needing its own design; per-install confirmation (landed above) is the interim."
   ],
   "relatedTypedRecords": [
     {

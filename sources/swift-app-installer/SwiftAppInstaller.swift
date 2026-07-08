@@ -195,18 +195,39 @@ public struct SwiftAppInstaller: Sendable {
 
   private func installApp(from source: URL, to destination: URL, force: Bool) throws {
     let fm = FileManager.default
-    if fm.fileExists(atPath: destination.path) {
-      if force {
-        try fm.removeItem(at: destination)
-      } else {
-        throw InstallerError.appAlreadyInstalled(destination.path)
-      }
+    let destinationExists = fm.fileExists(atPath: destination.path)
+    if destinationExists && !force {
+      throw InstallerError.appAlreadyInstalled(destination.path)
     }
-    try fm.createDirectory(
-      at: destination.deletingLastPathComponent(),
-      withIntermediateDirectories: true
-    )
-    try fm.copyItem(at: source, to: destination)
+    let parent = destination.deletingLastPathComponent()
+    try fm.createDirectory(at: parent, withIntermediateDirectories: true)
+
+    // Atomic install: copy into a staged sibling on the SAME volume as the destination,
+    // then swap it into place in a single step (replaceItemAt when replacing, moveItem for
+    // a fresh install). This eliminates the remove-then-copy window where an aborted copy
+    // leaves NO installed app — the same silent "removed but not replaced" failure mode
+    // fixed for CLI installs in installCLI(), applied here for .app parity. See
+    // BUG-VAPORIZE-CLI-INSTALL-NO-POST-INSTALL-PRESENCE-CHECK-2026-07-08.
+    let staged = parent.appendingPathComponent(
+      ".\(destination.lastPathComponent).installing-\(ProcessInfo.processInfo.globallyUniqueString)")
+    if fm.fileExists(atPath: staged.path) { try fm.removeItem(at: staged) }
+    do {
+      try fm.copyItem(at: source, to: staged)
+      if destinationExists {
+        _ = try fm.replaceItemAt(destination, withItemAt: staged)
+      } else {
+        try fm.moveItem(at: staged, to: destination)
+      }
+    } catch {
+      try? fm.removeItem(at: staged)
+      throw error
+    }
+
+    // Post-install presence check: fail loud if nothing landed rather than reporting a
+    // silent success with no installed app.
+    guard fm.fileExists(atPath: destination.path) else {
+      throw InstallerError.installVerificationFailed(destination.path)
+    }
   }
 
   // MARK: - Launch
@@ -378,6 +399,7 @@ public enum InstallerError: Error, CustomStringConvertible {
   case appAlreadyInstalled(String)
   case invalidXcodeBuildConfiguration(String)
   case invalidXcodeBuildSetting(String)
+  case installVerificationFailed(String)
 
   public var description: String {
     switch self {
@@ -389,6 +411,12 @@ public enum InstallerError: Error, CustomStringConvertible {
       return reason
     case .invalidXcodeBuildSetting(let setting):
       return "Invalid xcode build setting '\(setting)'. Use KEY=VALUE."
+    case .installVerificationFailed(let path):
+      return """
+        Install reported success but no app bundle landed at \(path). This guards the \
+        remove-then-copy failure mode where the prior install is removed but the new one \
+        is never written. Re-run the install; if it recurs, inspect the build/copy step.
+        """
     }
   }
 }

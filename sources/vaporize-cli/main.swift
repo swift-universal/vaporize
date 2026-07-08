@@ -488,6 +488,10 @@ struct VaporizeCLI: AsyncParsableCommand {
       )
     }
     try publishInstalledCLI(toDomain: installDomain, product: product)
+    // Positive presence confirmation: name the verified path so a multi-binary suite
+    // reinstall (one invocation per product) emits one confirmation each — any single
+    // missing binary surfaces immediately rather than hiding behind a silent success.
+    print("vaporize: verified \(product) installed at \(installedPath)")
   }
 
   private func installApp(launchApp: Bool) async throws {
