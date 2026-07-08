@@ -26,6 +26,7 @@ one product-level journey.
 | Assistant gates every journey-derived CUJ state record with proof before release review trusts the simulated world | CUJ-21 |
 | Assistant installs resource-bearing SwiftPM CLIs that use `Bundle.module` without depending on live build products | CUJ-22 |
 | Assistant adopts a proving-ground passport before release review trusts a vaporware product | CUJ-23 |
+| Assistant trusts that a reported-success install actually landed the artifact (fail-loud + atomic swap) | CUJ-24 |
 
 ## CUJ-01 - Assistant Builds And Installs A SwiftPM CLI
 
@@ -661,6 +662,31 @@ Current active-CUJ requirement:
   `release/v0.0.1/evidence/cuj-test-coverage.json`
 - CUJ-state coverage artifact:
   `release/v0.0.1/evidence/cuj-state-coverage.json`
+
+## CUJ-24 - Assistant Trusts Install Integrity
+
+1. Assistant runs a Vaporize install (`--artifact cli` or `--artifact app`).
+2. Vaporize performs the build and install through its owned install lane.
+3. Vaporize verifies the artifact actually landed at the install path.
+4. On CLI-install success, Vaporize prints `verified <product> installed at <path>`.
+5. If nothing landed, Vaporize fails loud rather than reporting a silent success.
+
+Acceptance:
+
+- CLI install fails with a typed error when no executable lands at the install
+  path after `experimental-install`, and prints a verified-installed
+  confirmation on success (the visibility that surfaces a missing binary in a
+  multi-product suite reinstall).
+- App install stages to a same-volume sibling then atomically swaps
+  (`replaceItemAt` when replacing, `moveItem` for a fresh install), so an aborted
+  copy never leaves a missing install; fails loud
+  (`InstallerError.installVerificationFailed`) if nothing landed; leaves no
+  `.installing-` staged residue.
+- Simulated by `VaporizeCUJ24InstallIntegrityTests` (atomic install lands +
+  leaves no residue; forced reinstall replaces atomically; unforced install over
+  an existing bundle refuses loudly).
+- Backs `BUG-VAPORIZE-CLI-INSTALL-NO-POST-INSTALL-PRESENCE-CHECK-2026-07-08` and
+  the `tooling-silent-fallback-to-wrong-state-not-error-loud` axiom.
 
 ## Deferred CUJ - Assistant Proves Fleet Pkl-Backed Apple Project Build Parity
 

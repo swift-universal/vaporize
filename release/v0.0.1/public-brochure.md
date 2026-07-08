@@ -60,6 +60,7 @@ These statements are safe for this draft:
 - Vaporize wraps Swift and Xcode workflows with release evidence and typed receipts.
 - Vaporize can validate JSON release evidence, inspect Apple project records, generate first-slice Xcode project world-state, and audit its own release spine.
 - Vaporize has first-slice support for Pkl-backed Apple project generation, tool release identity projection, target discovery, workspace product-cache candidate discovery, and Xcode workspace scheme listing.
+- Vaporize verifies that a reported-success install actually landed the artifact: CLI installs fail loud if no binary lands, and app installs swap atomically so an aborted copy never leaves a missing install (simulated by CUJ-24).
 - Vaporize keeps public claims constrained by measured, behavioral, or theoretical proof status.
 
 ## Claims Not Yet Allowed

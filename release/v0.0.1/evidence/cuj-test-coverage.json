@@ -8,7 +8,7 @@
   "subjectAppSlug": "vaporize.cli@wrkstrm-core.clia.sh",
   "subjectReleaseSlug": "v0.0.1",
   "generatedAt": "2026-07-05T00:00:00Z",
-  "generatedBy": "codex-crisie",
+  "generatedBy": "claude (hulk) + prior codex-crisie",
   "status": "active-cuj-coverage-floor-defined",
   "sourceRule": "Required test count is derived from PRD requirements through active draft CUJs. Actual executable tests may exceed the required floor.",
   "sourceArtifacts": {
@@ -17,15 +17,15 @@
     "releaseGates": "private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/release-gates.md"
   },
   "counts": {
-    "activeCUJCount": 23,
+    "activeCUJCount": 24,
     "deferredCUJCount": 1,
-    "requiredSwiftTestObligationCount": 116,
+    "requiredSwiftTestObligationCount": 119,
     "requiredReleaseEvidenceCheckCount": 13,
-    "requiredTargetableTestObligationCount": 129,
-    "currentExecutableSwiftTestCount": 160,
+    "requiredTargetableTestObligationCount": 132,
+    "currentExecutableSwiftTestCount": 163,
     "currentExecutableSwiftTestBreakdown": {
       "VaporizeCUJ01SwiftPMCLITests": 20,
-      "VaporizeCUJ02MacAppTests": 14,
+      "VaporizeCUJ02MacAppTests": 17,
       "VaporizeCUJ03PassThroughTests": 4,
       "VaporizeCUJ04CommonProcessUseTests": 4,
       "VaporizeCUJ05ToolchainTests": 11,
@@ -394,6 +394,20 @@
         "VaporizeCUJ14PklXcodeProjectGenerationTests.swift",
         "vaporize-pkl-xcodeproj-tool-release-identity-modification.receipt.json",
         "FR-VAPORIZE-PRODUCT-PROVING-GROUNDS-2026-07-05.beads-issue.json"
+      ]
+    },
+    {
+      "cuj": "CUJ-24",
+      "title": "Assistant Trusts Install Integrity",
+      "prdRefs": [
+        "FR-020"
+      ],
+      "requiredSwiftTestObligations": 3,
+      "requiredReleaseEvidenceChecks": 0,
+      "status": "covered",
+      "evidence": [
+        "VaporizeCUJ24InstallIntegrityTests.swift",
+        "BUG-VAPORIZE-CLI-INSTALL-NO-POST-INSTALL-PRESENCE-CHECK-2026-07-08.beads-issue.json"
       ]
     }
   ],
