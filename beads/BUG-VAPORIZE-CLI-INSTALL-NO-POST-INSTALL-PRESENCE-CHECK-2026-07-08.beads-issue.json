@@ -1,0 +1,40 @@
+{
+  "BeadsIssue": "0.1.0",
+  "schemaVersion": "0.1.0",
+  "id": "BUG-VAPORIZE-CLI-INSTALL-NO-POST-INSTALL-PRESENCE-CHECK-2026-07-08",
+  "title": "vaporize CLI install reports success without verifying the executable actually landed (silent 'removed but not replaced')",
+  "createdAt": "2026-07-08",
+  "createdBy": "Claude (hulk harness)",
+  "issueType": "bug",
+  "status": "fixed-pending-savepoint",
+  "priority": 2,
+  "description": "installCLI() (sources/vaporize-cli/main.swift) runs SwiftCLIInstaller.run() (which delegates to `swift package experimental-install`) and then publishInstalledCLI() to symlink into the domain tree — but it NEVER verifies that an executable actually landed at the flat install path (~/.swiftpm/bin/<product>). `experimental-install` removes any prior binary before writing the new one; if the copy step aborts/fails, the destination is left MISSING while the command still returns success. Vaporize then reports a successful build/install with no installed tool. This is the root cause of BUG-SAVEPOINT-CLI-MISSING-FROM-SWIFTPM-BIN-2026-07-08: savepoint.cli@kura-org.clia.sh regressed to a lone .bak with no live binary, undetected until next use (3 weeks later).",
+  "impact": "Violates the substrate axiom [[tooling-silent-fallback-to-wrong-state-not-error-loud]]: a tool that cannot do the thing must fail loudly. A silent install failure that reports success is exactly the drift class the axiom forbids.",
+  "resolution": {
+    "date": "2026-07-08",
+    "outcome": "fixed",
+    "pendingSavepoint": true,
+    "fix": "Added a post-install presence check in installCLI() immediately after SwiftCLIInstaller.run(): guard FileManager.default.isExecutableFile(atPath: installedCLIPath(product:)) else { throw ValidationError(...) }. Reuses the existing loud ValidationError primitive. Now a build/install that leaves the destination missing fails loudly instead of reporting success.",
+    "sourceRef": "sources/vaporize-cli/main.swift installCLI()"
+  },
+  "labels": [
+    "vaporize",
+    "cli-install",
+    "silent-fallback",
+    "install-safety",
+    "presence-check"
+  ],
+  "furtherHardening": [
+    "Consider making the CLI install atomic (copy-to-temp then atomic replaceItemAt) so there is no window where the destination is absent, rather than only detecting the miss after the fact.",
+    "installApp() (SwiftAppInstaller.swift) uses the same remove-then-copy shape for .app bundles (removeItem(destination) then copyItem); apply the same presence-check or atomic-replace hardening there.",
+    "Emit a post-build presence summary across a requested product set so multi-binary installs (e.g. the full savepoint suite) surface any single missing binary immediately."
+  ],
+  "relatedTypedRecords": [
+    {
+      "LinkRefModel": "0.3.0",
+      "s": [ "kind:bead", "slug:BUG-SAVEPOINT-CLI-MISSING-FROM-SWIFTPM-BIN-2026-07-08" ],
+      "t": "The downstream symptom: savepoint.cli missing (lone .bak); root-caused to this vaporize install gap.",
+      "tg": [ { "k": "rp", "rt": "mono", "v": "private/universal/substrate/collectives/kura-org/private/universal/domain/scm/tools/savepoint.cli/beads/BUG-SAVEPOINT-CLI-MISSING-FROM-SWIFTPM-BIN-2026-07-08.beads-issue.json" } ]
+    }
+  ]
+}

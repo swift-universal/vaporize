@@ -467,6 +467,26 @@ struct VaporizeCLI: AsyncParsableCommand {
       installerBuild: Self.buildIdentifier
     )
     try await SwiftCLIInstaller(request: request).run()
+    // Post-install presence check: the installer must have landed an executable at the
+    // flat install path. `swift package experimental-install` removes any prior binary
+    // before writing the new one, so an aborted/failed copy leaves the destination
+    // MISSING while the command still returns success — the "removed but not replaced"
+    // failure mode that left savepoint.cli@kura-org.clia.sh as a lone .bak with no live
+    // binary (BUG-SAVEPOINT-CLI-MISSING-FROM-SWIFTPM-BIN-2026-07-08). Fail loudly here
+    // instead of reporting a silent success with no installed tool.
+    let installedPath = installedCLIPath(product: product)
+    guard FileManager.default.isExecutableFile(atPath: installedPath) else {
+      throw ValidationError(
+        """
+        Install reported success but no executable landed for product `\(product)`.
+        Expected an executable at:
+          \(installedPath)
+        This guards the remove-then-copy failure mode where the prior binary is removed
+        but the new one is never written (leaving nothing, or only a stale .bak). Re-run
+        the build; if it recurs, inspect the `swift package experimental-install` copy step.
+        """
+      )
+    }
     try publishInstalledCLI(toDomain: installDomain, product: product)
   }
 
