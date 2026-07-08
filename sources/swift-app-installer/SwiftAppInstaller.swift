@@ -103,20 +103,27 @@ public struct SwiftAppInstaller: Sendable {
       return
     }
 
-    var localShell = shell
-    localShell.logOptions = .init(
-      exposure: .summary,
-      tags: ["source": "swift-app-installer", "level": "L1"]
-    )
     if request.hasXcodeBuildConfiguration {
+      var xcodeShell = shell
+      // Expose the full xcodebuild log so compile/link failures are visible
+      // in the receipt instead of being swallowed by a summary exposure.
+      xcodeShell.logOptions = .init(
+        exposure: .verbose,
+        tags: ["source": "swift-app-installer", "level": "L1", "build": "xcodebuild"]
+      )
       let invocation = try request.xcodeBuildInvocation()
-      _ = try await localShell.run(
+      _ = try await xcodeShell.run(
         host: .direct,
         executable: .name("xcodebuild"),
         arguments: invocation.arguments,
         runnerKind: .auto
       )
     } else {
+      var localShell = shell
+      localShell.logOptions = .init(
+        exposure: .summary,
+        tags: ["source": "swift-app-installer", "level": "L1"]
+      )
       _ = try await localShell.run(
         host: .direct,
         executable: .name("xcrun"),
@@ -157,7 +164,7 @@ public struct SwiftAppInstaller: Sendable {
     ) {
       candidates.append(cachedProduct)
     }
-    if let dd = request.derivedDataPath {
+    if let dd = request.resolvedXcodeDerivedDataPath {
       let ddRoot = URL(fileURLWithPath: dd)
       candidates.append(
         ddRoot.appendingPathComponent("Build/Products/\(configuration.rawValue.capitalized)/\(product).app"))
@@ -229,8 +236,30 @@ public struct SwiftAppInstaller: Sendable {
 }
 
 extension SwiftAppInstaller.Request {
+  /// Package-local DerivedData directory used when an Xcode app build is
+  /// requested without an explicit `--derived-data-path` (and without a shared
+  /// product cache). Historically vaporize passed no `-derivedDataPath`, so
+  /// xcodebuild wrote the `.app` into `~/Library/Developer/Xcode/DerivedData/...`
+  /// while the post-build locator only searched SwiftPM `.build/...` layouts —
+  /// reporting "App bundle not found" even after a successful build.
+  static let defaultXcodeDerivedDataDirectoryName = ".build/vaporize-xcode-derived-data"
+
   var locatedAppBundleName: String {
     appBundleName ?? product
+  }
+
+  /// Non-cache DerivedData path that xcodebuild writes to and the post-build
+  /// locator searches. When an Xcode project/workspace build is requested
+  /// without an explicit path, a stable package-local default is synthesized so
+  /// the xcodebuild output directory and the locator stay aligned. Returns `nil`
+  /// when a shared product cache owns the DerivedData (the cache candidate is
+  /// searched separately) or when there is no DerivedData in play.
+  var resolvedXcodeDerivedDataPath: String? {
+    if let derivedDataPath { return derivedDataPath }
+    guard xcodeProductCacheDerivedDataPath == nil else { return nil }
+    guard xcodeProject != nil || xcodeWorkspace != nil else { return nil }
+    return URL(fileURLWithPath: packagePath)
+      .appendingPathComponent(Self.defaultXcodeDerivedDataDirectoryName).path
   }
 
   var hasXcodeBuildConfiguration: Bool {
@@ -298,7 +327,7 @@ extension SwiftAppInstaller.Request {
     }
     if let cacheDerivedDataPath = xcodeProductCacheDerivedDataPath {
       args += ["-derivedDataPath", cacheDerivedDataPath]
-    } else if let derivedDataPath {
+    } else if let derivedDataPath = resolvedXcodeDerivedDataPath {
       args += ["-derivedDataPath", derivedDataPath]
     }
     if let resultBundlePath = xcodeResultBundlePath {

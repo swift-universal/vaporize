@@ -1,0 +1,54 @@
+{
+  "BeadsIssue": "0.1.0",
+  "schemaVersion": "0.1.0",
+  "id": "BUG-VAPORIZE-XCODE-APP-INSTALL-DERIVED-DATA-LOCATE-2026-07-07",
+  "title": "vaporize install --artifact app --xcode-project drives xcodebuild but reports 'App bundle not found' because the locator never searched the xcodebuild DerivedData output",
+  "status": "fix-landed",
+  "priority": 1,
+  "issueType": "bug",
+  "labels": [
+    "vaporize",
+    "swift-app-installer",
+    "xcodebuild",
+    "derived-data-path",
+    "app-artifact",
+    "bundle-locate",
+    "log-exposure",
+    "cuj-02",
+    "fix-verified-2026-07-07"
+  ],
+  "createdAt": "2026-07-07T00:00:00Z",
+  "createdBy": "opus harness after operator surfaced the gap by USING vaporize install --artifact app --xcode-project",
+  "historicalContent": {
+    "triggeredBy": "Running `vaporize install --artifact app --xcode-project X.xcodeproj --scheme S` (without --derived-data-path) drives xcodebuild correctly, the build SUCCEEDS, but vaporize then reports 'App bundle not found'.",
+    "rootCause": "In sources/swift-app-installer/SwiftAppInstaller.swift, `Request.xcodeBuildInvocation()` only appended `-derivedDataPath` when `derivedDataPath` or `xcodeProductCacheDerivedDataPath` was explicitly set. With neither set, xcodebuild wrote the product into its DEFAULT `~/Library/Developer/Xcode/DerivedData/<Project>-<hash>/Build/Products/<Config>/NAME.app`. Meanwhile `buildCandidates(for:configuration:product:)` only added a DerivedData candidate when `request.derivedDataPath` was non-nil, otherwise searching solely SwiftPM `.build/apple/Products/...` and `.build/<config>/...` layouts. The xcodebuild output directory and the locator directory were therefore never aligned, yielding InstallerError.appBundleNotFound on a successful build. Secondary: the xcodebuild step ran under `.summary` log exposure, so compile/link errors were not surfaced.",
+    "fixSummary": [
+      "Added `Request.resolvedXcodeDerivedDataPath` — a single source of truth for the non-cache DerivedData path. When an Xcode project/workspace build is requested without an explicit `--derived-data-path` (and without a shared product cache), it synthesizes a stable package-local default `<packagePath>/.build/vaporize-xcode-derived-data`.",
+      "`xcodeBuildInvocation()` now pins `-derivedDataPath` to `resolvedXcodeDerivedDataPath` (product cache still takes precedence), so xcodebuild always writes to a directory vaporize controls.",
+      "`buildCandidates(...)` now derives its DerivedData candidate from `resolvedXcodeDerivedDataPath`, so the post-build locator searches exactly where xcodebuild wrote the `.app`.",
+      "The SwiftPM `.build/...` candidates are unchanged, and the SwiftPM `xcrun swift build` path is untouched (its locator still resolves via the unchanged `.build` layouts because `resolvedXcodeDerivedDataPath` returns nil when no Xcode container is configured).",
+      "The xcodebuild build now runs under `.verbose` log exposure (tags build=xcodebuild) so compile/link failures are visible in the receipt instead of being swallowed."
+    ],
+    "expectedBehavior": "An `--artifact app --xcode-project/--xcode-workspace` install whose xcodebuild succeeds must locate and install the built `.app`, and a failing xcodebuild must surface its compiler output.",
+    "codeTouchpoints": [
+      "sources/swift-app-installer/SwiftAppInstaller.swift: buildApp() (split log exposure), buildCandidates() (resolvedXcodeDerivedDataPath), Request.xcodeBuildInvocation() (-derivedDataPath from resolved path), Request.resolvedXcodeDerivedDataPath + defaultXcodeDerivedDataDirectoryName (new)."
+    ],
+    "testsAdded": [
+      "tests/cuj-02-mac-app: 'CUJ-02 synthesizes a package-local derived data path when none is provided for an Xcode build' (invocation now pins -derivedDataPath).",
+      "tests/cuj-02-mac-app: 'CUJ-02 locates the Xcode-built app under the synthesized derived data directory' (locator finds NAME.app under the DerivedData-style Build/Products/<Config>/).",
+      "tests/cuj-02-mac-app: 'CUJ-02 SwiftPM layout is still located when no Xcode build is configured' (SwiftPM locator regression guard).",
+      "Updated existing 'CUJ-02 defaults Xcode destination when using xcodebuild' to expect the synthesized -derivedDataPath."
+    ],
+    "verification": [
+      "Built and ran the full vaporize test suite THROUGH vaporize: `cd sources; vaporize.cli@wrkstrm-core.clia.sh test --package-path . --configuration debug`."
+    ]
+  },
+  "composesWith": [
+    "BUG-VAPORIZE-TEST-MODE-USES-SWIFTLY-INSTEAD-OF-XCODE-SELECTED-SWIFT-2026-06-26",
+    "[[tests-run-through-vaporize-not-raw-swift]]",
+    "[[tooling-silent-fallback-to-wrong-state-not-error-loud]]"
+  ],
+  "deferred": {
+    "releaseGateCeremony": "This is a targeted bugfix landed with a unit-level regression. The full release-gate ceremony (PRD review, release/vX evidence bundle) is DEFERRED and not part of this bead."
+  }
+}

@@ -155,8 +155,85 @@ func defaultsXcodeDestinationWhenUsingXcodebuild() throws {
     "-scheme", "CreativeSelection",
     "-configuration", "Release",
     "-destination", SwiftAppInstaller.defaultXcodeDestination,
+    "-derivedDataPath", "/workspace/App/.build/vaporize-xcode-derived-data",
     "build",
   ])
+}
+
+@Test("CUJ-02 synthesizes a package-local derived data path when none is provided for an Xcode build")
+func synthesizesDerivedDataPathForXcodeBuildWithoutExplicitPath() throws {
+  let request = SwiftAppInstaller.Request(
+    packagePath: "/workspace/App",
+    product: "CreativeSelection",
+    configuration: .debug,
+    destination: "/Applications",
+    forceReinstall: false,
+    skipBuild: false,
+    xcodeProject: "/workspace/App/CreativeSelection.xcodeproj",
+    xcodeScheme: "CreativeSelection"
+  )
+
+  // The xcodebuild invocation must pin an explicit -derivedDataPath so a
+  // successful build lands in a directory the locator also searches.
+  #expect(try request.xcodeBuildInvocation().arguments == [
+    "-project", "/workspace/App/CreativeSelection.xcodeproj",
+    "-scheme", "CreativeSelection",
+    "-configuration", "Debug",
+    "-destination", SwiftAppInstaller.defaultXcodeDestination,
+    "-derivedDataPath", "/workspace/App/.build/vaporize-xcode-derived-data",
+    "build",
+  ])
+  #expect(request.resolvedXcodeDerivedDataPath == "/workspace/App/.build/vaporize-xcode-derived-data")
+}
+
+@Test("CUJ-02 locates the Xcode-built app under the synthesized derived data directory")
+func locatesXcodeBuiltAppUnderSynthesizedDerivedData() throws {
+  let tmp = URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent(UUID().uuidString)
+  try FileManager.default.createDirectory(at: tmp, withIntermediateDirectories: true)
+  defer { try? FileManager.default.removeItem(at: tmp) }
+
+  // Mirror what xcodebuild writes under the pinned -derivedDataPath.
+  let builtApp = tmp
+    .appendingPathComponent(SwiftAppInstaller.Request.defaultXcodeDerivedDataDirectoryName)
+    .appendingPathComponent("Build/Products/Debug/CreativeSelection.app")
+  try FileManager.default.createDirectory(at: builtApp, withIntermediateDirectories: true)
+
+  let request = SwiftAppInstaller.Request(
+    packagePath: tmp.path,
+    product: "CreativeSelection",
+    configuration: .debug,
+    destination: "/Applications",
+    forceReinstall: false,
+    skipBuild: true,
+    xcodeProject: tmp.appendingPathComponent("CreativeSelection.xcodeproj").path,
+    xcodeScheme: "CreativeSelection"
+  )
+
+  let installer = SwiftAppInstaller(request: request)
+  #expect(try installer.locateBuiltApp().path == builtApp.path)
+}
+
+@Test("CUJ-02 SwiftPM layout is still located when no Xcode build is configured")
+func swiftPMLayoutStillLocatedWithoutXcodeBuild() throws {
+  let tmp = URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent(UUID().uuidString)
+  try FileManager.default.createDirectory(at: tmp, withIntermediateDirectories: true)
+  defer { try? FileManager.default.removeItem(at: tmp) }
+
+  let swiftPMApp = tmp.appendingPathComponent(".build/apple/Products/Debug/PlainApp.app")
+  try FileManager.default.createDirectory(at: swiftPMApp, withIntermediateDirectories: true)
+
+  let request = SwiftAppInstaller.Request(
+    packagePath: tmp.path,
+    product: "PlainApp",
+    configuration: .debug,
+    destination: "/Applications",
+    forceReinstall: false,
+    skipBuild: true
+  )
+
+  // No Xcode build → no synthesized derived data candidate; SwiftPM path wins.
+  #expect(request.resolvedXcodeDerivedDataPath == nil)
+  #expect(try SwiftAppInstaller(request: request).locateBuiltApp().path == swiftPMApp.path)
 }
 
 @Test("CUJ-02 rejects ambiguous Xcode container")
