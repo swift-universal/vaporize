@@ -1,0 +1,22 @@
+{
+  "BeadsIssue": "0.1.0",
+  "schemaVersion": "0.1.0",
+  "id": "FR-VAPORIZE-BUILD-TEST-LIBRARY-ONLY-PRODUCT-2026-07-08",
+  "title": "vaporize build/test cannot target a library-only product — --product demands a canonical CLI name",
+  "status": "open",
+  "priority": 3,
+  "issueType": "task",
+  "labels": ["vaporize", "build", "library-product", "recorded-build-gate"],
+  "createdAt": "2026-07-08",
+  "createdBy": "Claude Opus 4.8 mono harness",
+  "description": "vaporize build (and test) require --product, and --product validation demands the canonical CLI product shape <tool>.<surface>@<collective>.clia.sh (exactly one @). A library-only SwiftPM package with no executable — e.g. the SchemaSets aggregator index (product 'SchemaSets') relocated into schema-universal on 2026-07-08 — has no product name of that shape, so `vaporize build --product SchemaSets` is refused ('noncanonical CLI product name'). The refusal is correct per the no-silent-fallback axiom and routed me to the package's own documented `swift build --package-path ...` gate, but it means library aggregators / pure schema-set packages have NO recorded-build-gate path through vaporize. Since vaporize is the canonical build/test/receipt gate, library-only packages are currently un-gateable.",
+  "acceptanceCriteria": [
+    "vaporize build/test can target a library product (or a whole package with no executable), either by accepting a library product name or a --library/--all-products mode that builds the package graph without requiring a canonical CLI product.",
+    "A recorded receipt is emitted for the library build/test so aggregators (schema sets, kits) get the same gate coverage as CLIs.",
+    "The error message for a genuinely-noncanonical CLI name is preserved; only library-only packages gain the new path."
+  ],
+  "composesWith": [
+    "FR-VAPORIZE-JSON-SCHEMA-PATTERN-KEYWORD-SUPPORT-2026-07-06",
+    "partition-a-migration-by-content-seams-not-filesystem-grouping"
+  ]
+}
