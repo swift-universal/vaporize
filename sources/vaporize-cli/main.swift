@@ -494,9 +494,50 @@ struct VaporizeCLI: AsyncParsableCommand {
     print("vaporize: verified \(product) installed at \(installedPath)")
   }
 
+  /// Resolve the Xcode build inputs for app mode so an Xcode-project app builds
+  /// through the xcodebuild path instead of the SwiftPM builder.
+  ///
+  /// - Explicit `--xcode-project` / `--xcode-workspace` always win untouched.
+  /// - A real Swift package (a `Package.swift` at the package path) keeps the
+  ///   existing `swift build` path.
+  /// - Otherwise the path is treated as an Xcode-project app: discover a unique
+  ///   `.xcworkspace` (preferred) or `.xcodeproj` there and default the scheme
+  ///   to the product name, so `vaporize --artifact app --package-path <app> run`
+  ///   works without hand-fed flags.
+  /// - If the path is neither a Swift package nor a unique Xcode
+  ///   project/workspace, fail LOUD rather than silently invoking `swift build`
+  ///   against a non-SPM directory (the silent-fallback-to-wrong-state failure
+  ///   this method exists to kill).
+  private func resolvedXcodeAppInputs(packagePath: String, product: String) throws
+    -> (project: String?, workspace: String?, scheme: String?)
+  {
+    // Gather the filesystem facts here; the routing decision itself lives in the
+    // filesystem-free XcodeAppInputResolver so it can be swept in the proving
+    // ground (Tests/cuj-02-mac-app).
+    let fileManager = FileManager.default
+    let root = URL(fileURLWithPath: packagePath, isDirectory: true)
+    let hasPackageSwift = fileManager.fileExists(
+      atPath: root.appendingPathComponent("Package.swift").path)
+    let entries = (try? fileManager.contentsOfDirectory(atPath: packagePath)) ?? []
+    do {
+      let inputs = try XcodeAppInputResolver.resolve(
+        packageDirectory: packagePath,
+        explicitProject: xcodeProject,
+        explicitWorkspace: xcodeWorkspace,
+        explicitScheme: xcodeScheme,
+        hasPackageSwift: hasPackageSwift,
+        entries: entries,
+        product: product)
+      return (inputs.project, inputs.workspace, inputs.scheme)
+    } catch let error as XcodeAppInputResolver.NoBuildableProject {
+      throw ValidationError(error.description)
+    }
+  }
+
   private func installApp(launchApp: Bool) async throws {
     let packagePath = try requirePackagePath()
     let product = try requireProduct()
+    let xcodeInputs = try resolvedXcodeAppInputs(packagePath: packagePath, product: product)
     let request = SwiftAppInstaller.Request(
       packagePath: packagePath,
       product: product,
@@ -506,9 +547,9 @@ struct VaporizeCLI: AsyncParsableCommand {
       forceReinstall: forceReinstall,
       skipBuild: skipBuild,
       launch: launchApp,
-      xcodeProject: xcodeProject,
-      xcodeWorkspace: xcodeWorkspace,
-      xcodeScheme: xcodeScheme,
+      xcodeProject: xcodeInputs.project,
+      xcodeWorkspace: xcodeInputs.workspace,
+      xcodeScheme: xcodeInputs.scheme,
       derivedDataPath: derivedDataPath,
       xcodeProductCacheWorkspace: xcodeProductCacheWorkspace,
       xcodeProductCacheDerivedDataPath: xcodeProductCacheDerivedDataPath,
@@ -544,6 +585,7 @@ struct VaporizeCLI: AsyncParsableCommand {
   private func buildAppOnly() async throws {
     let packagePath = try requirePackagePath()
     let product = try requireProduct()
+    let xcodeInputs = try resolvedXcodeAppInputs(packagePath: packagePath, product: product)
     let request = SwiftAppInstaller.Request(
       packagePath: packagePath,
       product: product,
@@ -553,9 +595,9 @@ struct VaporizeCLI: AsyncParsableCommand {
       forceReinstall: forceReinstall,
       skipBuild: false,
       launch: false,
-      xcodeProject: xcodeProject,
-      xcodeWorkspace: xcodeWorkspace,
-      xcodeScheme: xcodeScheme,
+      xcodeProject: xcodeInputs.project,
+      xcodeWorkspace: xcodeInputs.workspace,
+      xcodeScheme: xcodeInputs.scheme,
       derivedDataPath: derivedDataPath,
       xcodeProductCacheWorkspace: xcodeProductCacheWorkspace,
       xcodeProductCacheDerivedDataPath: xcodeProductCacheDerivedDataPath,
