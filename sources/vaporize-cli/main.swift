@@ -70,6 +70,7 @@ struct VaporizeCLI: AsyncParsableCommand {
     case inspectTargetFeatures = "inspect-target-features"
     case compareProjectYMLPkl = "compare-project-yml-pkl"
     case importProjectYML = "import-project-yml"
+    case upgradeProjectYMLToPkl = "upgrade-project-yml-to-pkl"
     case generateProjectYML = "generate-project-yml"
     case generateXcodeProject = "generate-xcodeproj"
     case listTargets = "list-targets"
@@ -285,6 +286,11 @@ struct VaporizeCLI: AsyncParsableCommand {
     help: "Output path for import-project-yml, generate-project-yml, or generate-xcodeproj mode.")
   var generatedOutputPath: String?
 
+  @Flag(
+    name: .customLong("apply"),
+    help: "For upgrade-project-yml-to-pkl mode: retire the project.yml after a parity-verified upgrade. Without it the upgrade is a dry-run preview.")
+  var applyUpgrade: Bool = false
+
   @Option(
     name: .customLong("format"),
     help: "Output format for status, inventory, domains, inspect-project-yml, inspect-target-features, compare-project-yml-pkl, import-project-yml, generate-project-yml, generate-xcodeproj, list-targets, list-schemes, or release-doctor mode: text (default) or json.")
@@ -346,6 +352,8 @@ struct VaporizeCLI: AsyncParsableCommand {
       try await compareProjectYMLPkl()
     case .importProjectYML:
       try await importProjectYML()
+    case .upgradeProjectYMLToPkl:
+      try await upgradeProjectYMLToPkl()
     case .generateProjectYML:
       try await generateProjectYML()
     case .generateXcodeProject:
@@ -1608,6 +1616,80 @@ struct VaporizeCLI: AsyncParsableCommand {
       let data = try encoder.encode(receipt)
       FileHandle.standardOutput.write(data)
       FileHandle.standardOutput.write(Data("\n".utf8))
+    }
+  }
+
+  /// Upgrade an app from legacy project.yml to a project.pkl project: import the
+  /// yml to a sibling project.pkl, parity-gate by loading the pkl back and
+  /// comparing to the yml, and — only on a clean parity with --apply — retire the
+  /// project.yml. Dry-run (preview) by default. The retire-or-keep decision is the
+  /// filesystem-free AppleProjectPklUpgradePlanner (see its proving ground).
+  private func upgradeProjectYMLToPkl() async throws {
+    guard let vaporScanPath, !vaporScanPath.isEmpty else {
+      throw ValidationError("--path is required for upgrade-project-yml-to-pkl mode (the project.yml).")
+    }
+    let ymlURL = URL(fileURLWithPath: vaporScanPath).standardizedFileURL
+    guard FileManager.default.fileExists(atPath: ymlURL.path) else {
+      throw ValidationError("upgrade-project-yml-to-pkl: no project.yml at \(ymlURL.path).")
+    }
+    // Default the pkl output beside the yml (project.pkl) unless --output-path given.
+    let pklURL: URL = {
+      if let generatedOutputPath, !generatedOutputPath.isEmpty {
+        return URL(fileURLWithPath: generatedOutputPath).standardizedFileURL
+      }
+      return ymlURL.deletingLastPathComponent().appendingPathComponent("project.pkl")
+    }()
+    let requestId = "vaporize-upgrade-project-yml-to-pkl-\(UUID().uuidString)"
+
+    // 1. Import: project.yml -> project.pkl.
+    let schemaURL = try resolvedAppleProjectSpecSchemaURL()
+    let schemaAmendsPath = relativePath(from: pklURL.deletingLastPathComponent(), to: schemaURL)
+    let importReceipt = try AppleProjectSpecPklImporter.generate(
+      ymlURL: ymlURL,
+      outputURL: pklURL,
+      schemaAmendsPath: schemaAmendsPath,
+      requestId: requestId
+    )
+
+    // 2. Parity gate: load the generated pkl back and compare to the yml.
+    let ymlSpec = try AppleProjectYMLReader.load(url: ymlURL)
+    let pklSpec = try await AppleProjectPklLoader.load(url: pklURL)
+    let comparison = AppleProjectSpecComparator.receipt(
+      ymlSpec: ymlSpec,
+      pklSpec: pklSpec,
+      ymlPath: ymlURL.path,
+      pklPath: pklURL.path,
+      requestId: requestId
+    )
+
+    // 3. Decide (pure), then act.
+    let decision = AppleProjectPklUpgradePlanner.decide(
+      parityMatched: comparison.matched,
+      mismatches: comparison.mismatches,
+      apply: applyUpgrade
+    )
+    switch decision {
+    case .blockedByParity(let mismatches):
+      // Leave the unverified pkl for inspection; never retire the yml on a mismatch.
+      throw ValidationError(
+        "upgrade-project-yml-to-pkl: parity check failed for \(ymlURL.lastPathComponent) — "
+          + "project.yml kept. Inspect \(pklURL.lastPathComponent) against these fields: "
+          + mismatches.joined(separator: ", ") + "."
+      )
+    case .previewed:
+      print(
+        "upgrade preview: \(importReceipt.projectName) -> \(pklURL.lastPathComponent) "
+          + "(targets=\(importReceipt.targetCount) packages=\(importReceipt.packageCount)); parity matched. "
+          + "Re-run with --apply to retire \(ymlURL.lastPathComponent)."
+      )
+    case .upgraded(let retireYml):
+      if retireYml {
+        try FileManager.default.removeItem(at: ymlURL)
+      }
+      print(
+        "upgraded: \(importReceipt.projectName) is now a project.pkl project "
+          + "(\(pklURL.lastPathComponent)); retired \(ymlURL.lastPathComponent)."
+      )
     }
   }
 
