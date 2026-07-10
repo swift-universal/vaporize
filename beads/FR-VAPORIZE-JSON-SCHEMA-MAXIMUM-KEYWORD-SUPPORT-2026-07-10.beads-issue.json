@@ -1,0 +1,21 @@
+{
+ "BeadsIssue": "0.1.0",
+ "schemaVersion": "0.1.0",
+ "id": "FR-VAPORIZE-JSON-SCHEMA-MAXIMUM-KEYWORD-SUPPORT-2026-07-10",
+ "title": "validate-json-schema: support the 'maximum'/'minimum' numeric keywords",
+ "status": "open",
+ "priority": 2,
+ "issueType": "feature",
+ "labels": ["vaporize", "validate-json-schema", "assignee:unassigned"],
+ "createdAt": "2026-07-10",
+ "createdBy": "prime (57 HATS chrome-CUJ validation)",
+ "description": "Sibling of FR-VAPORIZE-JSON-SCHEMA-PATTERN-KEYWORD-SUPPORT-2026-07-06. The validator refused LOUDLY (correct behavior) on cuj-schemas v0.0.1 cuj.schema.json: \"unsupported schema feature: keyword 'maximum' (instance path /c)\" — the CUJModel chrononID and k/st ordinals declare minimum+maximum bounds. Consequence: every CUJ record validation falls back to the manual required[]/type check, so the whole cuj-schemas family is outside mechanical validation. Repro: vaporize.cli validate-json-schema --schema <cuj.schema.json> --fixture <any .cuj.json> --expect pass. The refusal is the tool working ([[tooling-silent-fallback-to-wrong-state-not-error-loud]]); this FR asks for the keyword, not a softer refusal.",
+ "acceptanceCriteria": [
+  "minimum/maximum on integer+number properties enforce bounds.",
+  "cuj-schemas v0.0.1 validates the five shipped + four chrome 57 HATS CUJs mechanically."
+ ],
+ "composesWith": [
+  "[[FR-VAPORIZE-JSON-SCHEMA-PATTERN-KEYWORD-SUPPORT-2026-07-06]]",
+  "[[component-bugs-file-at-component-home-not-consumer]]"
+ ]
+}
