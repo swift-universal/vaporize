@@ -279,6 +279,22 @@ let package = Package(
       path: "tests/cuj-23-product-proving-grounds"
     ),
     .testTarget(
+      name: "VaporizeCUJ25PortfolioAuditTests",
+      dependencies: [
+        "VaporizeCLI",
+        .product(name: "ArgumentParser", package: "swift-argument-parser"),
+      ],
+      path: "tests/cuj-25-portfolio-audit"
+    ),
+    .testTarget(
+      name: "VaporizeCUJ26AutomatedProofLedgerTests",
+      dependencies: [
+        "VaporizeCLI",
+        .product(name: "ArgumentParser", package: "swift-argument-parser"),
+      ],
+      path: "tests/cuj-26-automated-proof-ledger"
+    ),
+    .testTarget(
       name: "VaporizeCUJ12PackageGraphTests",
       dependencies: [
         "VaporizeCLI",

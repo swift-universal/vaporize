@@ -5,7 +5,7 @@
     "First slice checks Vaporize v0.0.1 docs, public-disclosure surfaces, JSON evidence, CUJ coverage, CUJ-state coverage, product proving-ground coverage, launch-review references, launch-review\/PRD\/release-gate follow-up list coherence, launch-review blocker disposition, provenance inventory, project target discovery evidence, workspace product-cache discovery evidence, and Xcode workspace scheme-listing evidence.",
     "Fleet project-generation parity, runtime sampling, build-size cohorts, and periodic buddy health remain separate follow-up checks."
   ],
-  "checkCount" : 141,
+  "checkCount" : 146,
   "checks" : [
     {
       "category" : "required-artifact",
@@ -361,6 +361,14 @@
     },
     {
       "category" : "release-spine-text",
+      "detail" : "Expected token `FR-034` in prd.md.",
+      "name" : "prd-automated-proof-ledger-requirement",
+      "path" : "\/Users\/sonoma\/mono\/private\/universal\/substrate\/collectives\/wrkstrm-core\/private\/apple\/spm\/vaporize@wrkstrm-core.cli\/release\/v0.0.1\/prd.md",
+      "severity" : "blocking",
+      "status" : "pass"
+    },
+    {
+      "category" : "release-spine-text",
       "detail" : "Expected token `CUJ-17` in cuj.md.",
       "name" : "cuj-release-doctor-journey",
       "path" : "\/Users\/sonoma\/mono\/private\/universal\/substrate\/collectives\/wrkstrm-core\/private\/apple\/spm\/vaporize@wrkstrm-core.cli\/release\/v0.0.1\/cuj.md",
@@ -411,6 +419,22 @@
       "category" : "release-spine-text",
       "detail" : "Expected token `CUJ-23` in cuj.md.",
       "name" : "cuj-product-proving-ground-journey",
+      "path" : "\/Users\/sonoma\/mono\/private\/universal\/substrate\/collectives\/wrkstrm-core\/private\/apple\/spm\/vaporize@wrkstrm-core.cli\/release\/v0.0.1\/cuj.md",
+      "severity" : "blocking",
+      "status" : "pass"
+    },
+    {
+      "category" : "release-spine-text",
+      "detail" : "Expected token `CUJ-25` in cuj.md.",
+      "name" : "cuj-portfolio-audit-journey",
+      "path" : "\/Users\/sonoma\/mono\/private\/universal\/substrate\/collectives\/wrkstrm-core\/private\/apple\/spm\/vaporize@wrkstrm-core.cli\/release\/v0.0.1\/cuj.md",
+      "severity" : "blocking",
+      "status" : "pass"
+    },
+    {
+      "category" : "release-spine-text",
+      "detail" : "Expected token `CUJ-26` in cuj.md.",
+      "name" : "cuj-automated-proof-ledger-journey",
       "path" : "\/Users\/sonoma\/mono\/private\/universal\/substrate\/collectives\/wrkstrm-core\/private\/apple\/spm\/vaporize@wrkstrm-core.cli\/release\/v0.0.1\/cuj.md",
       "severity" : "blocking",
       "status" : "pass"
@@ -977,8 +1001,8 @@
     },
     {
       "category" : "cuj-coverage",
-      "detail" : "Coverage artifact must count CUJ-23 product proving-ground coverage.",
-      "name" : "coverage-active-cuj-23",
+      "detail" : "Coverage artifact must count through CUJ-26 automated-proof ledger coverage.",
+      "name" : "coverage-active-cuj-26",
       "path" : "\/Users\/sonoma\/mono\/private\/universal\/substrate\/collectives\/wrkstrm-core\/private\/apple\/spm\/vaporize@wrkstrm-core.cli\/release\/v0.0.1\/evidence\/cuj-test-coverage.json",
       "severity" : "blocking",
       "status" : "pass"
@@ -1072,6 +1096,22 @@
       "status" : "pass"
     },
     {
+      "category" : "cuj-coverage",
+      "detail" : "Coverage artifact must name the CUJ-25 targetable portfolio audit test bundle.",
+      "name" : "coverage-cuj-portfolio-audit-test-bundle",
+      "path" : "\/Users\/sonoma\/mono\/private\/universal\/substrate\/collectives\/wrkstrm-core\/private\/apple\/spm\/vaporize@wrkstrm-core.cli\/release\/v0.0.1\/evidence\/cuj-test-coverage.json",
+      "severity" : "blocking",
+      "status" : "pass"
+    },
+    {
+      "category" : "cuj-coverage",
+      "detail" : "Coverage artifact must name the CUJ-26 targetable automated-proof ledger test bundle.",
+      "name" : "coverage-cuj-automated-proof-ledger-test-bundle",
+      "path" : "\/Users\/sonoma\/mono\/private\/universal\/substrate\/collectives\/wrkstrm-core\/private\/apple\/spm\/vaporize@wrkstrm-core.cli\/release\/v0.0.1\/evidence\/cuj-test-coverage.json",
+      "severity" : "blocking",
+      "status" : "pass"
+    },
+    {
       "category" : "cuj-state-coverage",
       "detail" : "CUJ-state coverage evidence must be a cuj-state-coverage document.",
       "name" : "cuj-state-coverage-document-kind",
@@ -1141,10 +1181,10 @@
   "inspectedPath" : "\/Users\/sonoma\/mono\/private\/universal\/substrate\/collectives\/wrkstrm-core\/private\/apple\/spm\/vaporize@wrkstrm-core.cli",
   "overallStatus" : "pass",
   "packageRootPath" : "\/Users\/sonoma\/mono\/private\/universal\/substrate\/collectives\/wrkstrm-core\/private\/apple\/spm\/vaporize@wrkstrm-core.cli",
-  "passedCheckCount" : 141,
+  "passedCheckCount" : 146,
   "receiptKind" : "vaporize-release-doctor",
   "releaseRootPath" : "\/Users\/sonoma\/mono\/private\/universal\/substrate\/collectives\/wrkstrm-core\/private\/apple\/spm\/vaporize@wrkstrm-core.cli\/release\/v0.0.1",
-  "requestId" : "vaporize-release-doctor-2070BF7F-C8BD-4150-9081-F77469225410",
+  "requestId" : "vaporize-release-doctor-4C1EEE6E-D272-4710-92C2-7317C501BE61",
   "requiredArtifactCount" : 28,
   "schemaFamilySlug" : "vaporize-schemas",
   "schemaFamilyVersion" : "0.0.1",

@@ -263,21 +263,22 @@ Supporting audiences:
 | FR-031 | CUJ-state coverage gate | CUJ-state coverage evidence names every required journey-derived CUJ-state id, attaches a proof entry for each id, records empty uncovered/unknown/duplicate lists, and is checked by release doctor before release review trusts simulated world state. This proves CUJ-state coverage only; it does not prove Kura, Turso, libSQL, sync, migration, or public release readiness. |
 | FR-032 | SwiftPM CLI resource-bundle install preservation | `install` preserves SwiftPM target resource bundles required by `Bundle.module` for installed CLIs by using SwiftPM `experimental-install` for the executable, asking SwiftPM for the build products directory with `swift build --show-bin-path`, and copying direct `.bundle` siblings into the installed CLI bin directory. Vaporize also writes product version/build facts to the CLI metadata sidecar. This does not turn the CLI into an app bundle, does not make `Bundle.main.infoDictionary` carry product metadata, and does not prove Sparkle appcast generation or update signing. |
 | FR-033 | Product proving-ground passports | Vaporware products carry a typed proving-ground profile naming product class, owning bead, CUJs, required tracks, scenarios, targetable tests, receipts, release-doctor checks, and boundaries. The adoption gate fails missing tracks, missing CUJs, missing receipt refs, missing targetable test bundles, and unknown track slugs. This proves release-review evidence shape; it does not approve the release or replace product-specific behavioral tests. |
+| FR-034 | Canonical automated-proof ledger | `cuj-audit --proof-ledger-path <path>` writes a typed cross-portfolio ledger that binds each CUJ definition to declared proof references, resolvable owning-package tests, saved green execution receipts, last-proven chronons, and explicit remaining obligations. The canonical ledger lives in the `vaporware-cuj-state-workstream`; executable tests and green receipts remain in their owning implementation and evidence homes. Only explicit green receipt results count as saved evidence, and automation never substitutes for required human approval. |
 
 ## Release Criteria
 
 - Vaporize's package test suite passes with the Swift 6.4 toolchain:
   `vaporize toolchain -- swift test --package-path private/apple/spm/vaporize@wrkstrm-core.cli`.
-  Current proof: the CUJ-derived coverage floor requires 116 Swift test
-  obligations plus 13 release evidence checks; the executable suite passes 150
-  tests across 23 implemented CUJ targets, including the CUJ-14 expanded
+  Current proof: the CUJ-derived coverage floor requires 128 Swift test
+  obligations plus 13 release evidence checks; the executable suite passes 190
+  tests across 25 implemented CUJ targets, including the CUJ-14 expanded
   Pkl `.xcodeproj` graph and shared-scheme slice, CUJ-16
   `inspect-target-features` first slice, CUJ-17 `release-doctor` first slice,
   CUJ-18 `list-targets` first slice, CUJ-19 workspace cache discovery first
   slice, CUJ-20 `list-schemes` first slice, CUJ-21 CUJ-state coverage gate, and
-  CUJ-22 SwiftPM CLI resource-bundle install preservation, and CUJ-23 product
+  CUJ-22 SwiftPM CLI resource-bundle install preservation, CUJ-23 product
   proving-ground passports including the Pkl project-generation proving-ground
-  passport.
+  passport, CUJ-25 portfolio audit, and CUJ-26 canonical automated-proof ledger.
 - `release/v0.0.1/product-definition.md` defines the product, primary users,
   product-level user journeys, choice argument, non-choice cases, and build
   implications before additional feature work is accepted.

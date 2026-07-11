@@ -41,7 +41,11 @@ struct VaporizeCLI: AsyncParsableCommand {
       release-doctor audits the release spine before claims are trusted. \
       `inventory` discovers Package.swift, .xcodeproj, .xcworkspace, \
       project.yml, and project.pkl surfaces by domain, product line, and \
-      ownership scope. \
+      ownership scope. `cuj-audit` inventories CUJ definitions, proof \
+      bindings, canonical product homes, and active-owned implementation \
+      coverage without conflating fixtures, matrices, receipts, or tests; \
+      `--proof-ledger-path` writes the canonical cross-portfolio proof index \
+      while executable tests and green receipts remain in their owning homes. \
       `domains` lists available tool domains from the tools collection. \
       Legacy `x-craze-collapse-path` remains a compatibility alias during migration.
       Target feature inspection mode: inspect-target-features reads a project.yml \
@@ -77,6 +81,7 @@ struct VaporizeCLI: AsyncParsableCommand {
     case listSchemes = "list-schemes"
     case releaseDoctor = "release-doctor"
     case inventory
+    case cujAudit = "cuj-audit"
 
     /// Substrate package-graph subfunction. Forwards remaining arguments to
     /// `package-graph@wrkstrm.cli` (a sibling SPM binary at
@@ -105,7 +110,7 @@ struct VaporizeCLI: AsyncParsableCommand {
     case fail
   }
 
-  @Argument(help: "Mode: install, uninstall, build, test, run, pass, use, toolchain, setup, status, warehouse, validate-json, validate-json-schema, inspect-project-yml, inspect-target-features, compare-project-yml-pkl, import-project-yml, generate-project-yml, generate-xcodeproj, list-targets, list-schemes, release-doctor, inventory, domains, self-update, or graph (forwards to package-graph@wrkstrm.cli).")
+  @Argument(help: "Mode: install, uninstall, build, test, run, pass, use, toolchain, setup, status, warehouse, validate-json, validate-json-schema, inspect-project-yml, inspect-target-features, compare-project-yml-pkl, import-project-yml, generate-project-yml, generate-xcodeproj, list-targets, list-schemes, release-doctor, inventory, cuj-audit, domains, self-update, or graph (forwards to package-graph@wrkstrm.cli).")
   var mode: Mode?
 
   @Flag(help: "Prints the tool name, version, and build metadata and exits.")
@@ -228,8 +233,18 @@ struct VaporizeCLI: AsyncParsableCommand {
 
   @Option(
     name: .customLong("receipt-path"),
-    help: "Write the pass-through or use JSON receipt to this path.")
+    help: "Write the pass-through, use, inventory, or CUJ audit JSON receipt to this path.")
   var receiptPath: String?
+
+  @Option(
+    name: .customLong("report-path"),
+    help: "Write the CUJ audit Markdown report to this path.")
+  var reportPath: String?
+
+  @Option(
+    name: .customLong("proof-ledger-path"),
+    help: "Write the canonical CUJ automated-proof ledger to this path.")
+  var proofLedgerPath: String?
 
   @Option(
     name: .customLong("working-directory"),
@@ -243,7 +258,7 @@ struct VaporizeCLI: AsyncParsableCommand {
 
   @Option(
     name: .customLong("developer-dir"),
-    help: "DEVELOPER_DIR override for toolchain mode.")
+    help: "DEVELOPER_DIR override for toolchain mode and SwiftPM CLI build/install/test.")
   var developerDirectory: String?
 
   @Option(
@@ -253,7 +268,7 @@ struct VaporizeCLI: AsyncParsableCommand {
 
   @Option(
     name: .customLong("path"),
-    help: "Path for status, warehouse, inventory, validate-json, inspect-project-yml, inspect-target-features, compare-project-yml-pkl, import-project-yml, or list-targets modes.")
+    help: "Path for status, warehouse, inventory, cuj-audit, validate-json, inspect-project-yml, inspect-target-features, compare-project-yml-pkl, import-project-yml, or list-targets modes.")
   var vaporScanPath: String?
 
   @Option(
@@ -293,7 +308,7 @@ struct VaporizeCLI: AsyncParsableCommand {
 
   @Option(
     name: .customLong("format"),
-    help: "Output format for status, inventory, domains, inspect-project-yml, inspect-target-features, compare-project-yml-pkl, import-project-yml, generate-project-yml, generate-xcodeproj, list-targets, list-schemes, or release-doctor mode: text (default) or json.")
+    help: "Output format for status, inventory, cuj-audit, domains, inspect-project-yml, inspect-target-features, compare-project-yml-pkl, import-project-yml, generate-project-yml, generate-xcodeproj, list-targets, list-schemes, or release-doctor mode: text (default) or json.")
   var vaporOutputFormat: VaporOutputFormatArgument = .text
 
   @Option(name: .customLong("domain"), help: "Tool domain for install/uninstall/run and domain path shaping (for example build).")
@@ -366,6 +381,8 @@ struct VaporizeCLI: AsyncParsableCommand {
       try await releaseDoctor()
     case .inventory:
       try await runOwnedSurfaceInventory()
+    case .cujAudit:
+      try await runCUJPortfolioAudit()
     case .domains:
       try await runDomains()
     case .selfUpdate:
@@ -411,7 +428,8 @@ struct VaporizeCLI: AsyncParsableCommand {
       productBuildSha: Self.buildSha,
       productBuildDate: Self.buildDate,
       installerVersion: Self.vaporizeVersion,
-      installerBuild: Self.buildIdentifier
+      installerBuild: Self.buildIdentifier,
+      developerDirectory: developerDirectory
     )
     try await SwiftCLIInstaller(request: request).run()
     try publishInstalledCLI(toDomain: updateDomain, product: product)
@@ -472,7 +490,8 @@ struct VaporizeCLI: AsyncParsableCommand {
       productBuildSha: resolvedProductBuildSha(for: product),
       productBuildDate: resolvedProductBuildDate(for: product),
       installerVersion: Self.vaporizeVersion,
-      installerBuild: Self.buildIdentifier
+      installerBuild: Self.buildIdentifier,
+      developerDirectory: developerDirectory
     )
     try await SwiftCLIInstaller(request: request).run()
     // Post-install presence check: the installer must have landed an executable at the
@@ -901,6 +920,11 @@ struct VaporizeCLI: AsyncParsableCommand {
     return arguments
   }
 
+  func developerDirectoryEnvironment() -> [String: String]? {
+    guard let developerDirectory, !developerDirectory.isEmpty else { return nil }
+    return ["DEVELOPER_DIR": developerDirectory]
+  }
+
   private func requirePackagePath() throws -> String {
     guard let packagePath, !packagePath.isEmpty else {
       throw ValidationError("--package-path is required for operation mode.")
@@ -1203,6 +1227,50 @@ struct VaporizeCLI: AsyncParsableCommand {
       return substrateRoot.path
     }
     return FileManager.default.currentDirectoryPath
+  }
+
+  private func runCUJPortfolioAudit() async throws {
+    let scanPath = try ownedSurfaceInventoryPath()
+    let result = try CUJPortfolioAuditScanner().scan(path: scanPath)
+    let generatedAt = Date()
+    let data = try CUJPortfolioAuditRenderer.renderJSON(
+      result,
+      vaporizeVersion: Self.vaporizeVersion,
+      scannedAt: generatedAt
+    )
+    let report = CUJPortfolioAuditRenderer.renderMarkdown(result)
+    let proofLedger = try CUJAutomatedProofLedgerRenderer.renderJSON(
+      result,
+      vaporizeVersion: Self.vaporizeVersion,
+      generatedAt: generatedAt
+    )
+
+    if let receiptPath {
+      try writeCUJAudit(Data(data), to: receiptPath)
+    }
+    if let reportPath {
+      try writeCUJAudit(Data(report.utf8), to: reportPath)
+    }
+    if let proofLedgerPath {
+      try writeCUJAudit(proofLedger, to: proofLedgerPath)
+    }
+
+    switch vaporOutputFormat {
+    case .text:
+      print(report, terminator: "")
+    case .json:
+      FileHandle.standardOutput.write(data)
+      FileHandle.standardOutput.write(Data("\n".utf8))
+    }
+  }
+
+  private func writeCUJAudit(_ data: Data, to path: String) throws {
+    let url = URL(fileURLWithPath: path)
+    try FileManager.default.createDirectory(
+      at: url.deletingLastPathComponent(),
+      withIntermediateDirectories: true
+    )
+    try data.write(to: url, options: .atomic)
   }
 
   private func runDomains() async throws {
@@ -2031,7 +2099,8 @@ struct VaporizeCLI: AsyncParsableCommand {
     try await runExecutable(
       executable: .name("xcrun"),
       arguments: Self.xcodeSelectedSwiftArguments(arguments),
-      sourceTag: "vaporize-swift"
+      sourceTag: "vaporize-swift",
+      environment: developerDirectoryEnvironment()
     )
   }
 
@@ -2040,7 +2109,8 @@ struct VaporizeCLI: AsyncParsableCommand {
     try await runExecutable(
       executable: .name("xcrun"),
       arguments: Self.xcodeSelectedSwiftArguments(arguments),
-      sourceTag: "vaporize-swift-package"
+      sourceTag: "vaporize-swift-package",
+      environment: developerDirectoryEnvironment()
     )
   }
 
@@ -2056,6 +2126,7 @@ struct VaporizeCLI: AsyncParsableCommand {
     let command = CommandSpec(
       executable: .name("xcrun"),
       args: Self.xcodeSelectedSwiftArguments(["--version"]),
+      env: .inherit(updating: developerDirectoryEnvironment()),
       logOptions: .init(
         exposure: .none,
         tags: [
@@ -2124,7 +2195,8 @@ struct VaporizeCLI: AsyncParsableCommand {
   private func runExecutable(
     executable: Executable,
     arguments: [String],
-    sourceTag: String
+    sourceTag: String,
+    environment: [String: String]? = nil
   ) async throws {
     var shell = CommonShell()
     shell.logOptions = .init(
@@ -2135,6 +2207,7 @@ struct VaporizeCLI: AsyncParsableCommand {
       host: .direct,
       executable: executable,
       arguments: arguments,
+      environment: environment,
       runnerKind: .auto
     )
     guard !output.isEmpty else { return }

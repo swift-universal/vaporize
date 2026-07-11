@@ -6,7 +6,8 @@ import Foundation
 ///
 /// Supported vocabulary: `type`, `properties`, `required`,
 /// `additionalProperties`, `const`, `enum`, `allOf`, `anyOf`, `oneOf`,
-/// `if`/`then`/`else`, `items`, `minItems`, `minLength`, `minimum`, `$defs`,
+/// `if`/`then`/`else`, `items`, `minItems`, `minProperties`, `minLength`,
+/// `pattern`, `minimum`, `maximum`, `$defs`,
 /// and `$ref` for internal pointers (`#/$defs/...`) plus local relative-file
 /// refs resolved against the referring schema file's directory. Remote
 /// `http(s)` refs are an explicit non-goal and raise an actionable
@@ -153,7 +154,7 @@ enum JSONSchemaValidation {
     private static let handledKeywords: Set<String> = [
       "$ref", "type", "properties", "required", "additionalProperties",
       "const", "enum", "allOf", "anyOf", "oneOf", "if", "then", "else",
-      "items", "minItems", "minLength", "minimum",
+      "items", "minItems", "minProperties", "minLength", "pattern", "minimum", "maximum",
     ]
     private static let ignoredAnnotationKeywords: Set<String> = [
       "$schema", "$id", "$defs", "title", "description", "$comment",
@@ -387,6 +388,15 @@ enum JSONSchemaValidation {
         }
       }
 
+      if case .number(let minProperties)? = keywords["minProperties"],
+        members.count < Int(minProperties)
+      {
+        diagnostics.append(
+          "\(pointer): minProperties — expected at least \(Int(minProperties)) properties, got \(members.count)"
+        )
+        valid = false
+      }
+
       return valid
     }
 
@@ -417,7 +427,8 @@ enum JSONSchemaValidation {
           elements.count < Int(minItems)
         {
           diagnostics.append(
-            "\(pointer): minItems — expected at least \(Int(minItems)) items, got \(elements.count)")
+            "\(pointer): minItems — expected at least \(Int(minItems)) items, got \(elements.count)"
+          )
           valid = false
         }
       }
@@ -432,11 +443,37 @@ enum JSONSchemaValidation {
         valid = false
       }
 
+      if case .string(let stringValue) = instance,
+        case .string(let pattern)? = keywords["pattern"]
+      {
+        let expression: NSRegularExpression
+        do {
+          expression = try NSRegularExpression(pattern: pattern)
+        } catch {
+          throw JSONSchemaValidation.EngineError.schemaParseFailure(
+            "invalid 'pattern' in \(context.documentPath): \(error.localizedDescription)"
+          )
+        }
+        let range = NSRange(stringValue.startIndex..<stringValue.endIndex, in: stringValue)
+        if expression.firstMatch(in: stringValue, range: range) == nil {
+          diagnostics.append("\(pointer): pattern — value does not match '\(pattern)'")
+          valid = false
+        }
+      }
+
       if case .number(let numberValue) = instance,
         case .number(let minimum)? = keywords["minimum"],
         numberValue < minimum
       {
         diagnostics.append("\(pointer): minimum — \(numberValue) is less than \(minimum)")
+        valid = false
+      }
+
+      if case .number(let numberValue) = instance,
+        case .number(let maximum)? = keywords["maximum"],
+        numberValue > maximum
+      {
+        diagnostics.append("\(pointer): maximum - \(numberValue) is greater than \(maximum)")
         valid = false
       }
 
@@ -649,7 +686,8 @@ enum JSONSchemaValidation {
           current = elements[index]
         default:
           throw JSONSchemaValidation.EngineError.schemaParseFailure(
-            "unresolvable $ref '\(ref)' in \(documentPath): cannot descend into \(current.typeName)")
+            "unresolvable $ref '\(ref)' in \(documentPath): cannot descend into \(current.typeName)"
+          )
         }
       }
       return current

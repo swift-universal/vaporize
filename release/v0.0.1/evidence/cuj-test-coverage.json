@@ -7,8 +7,8 @@
   "coverageId": "vaporize-v0.0.1-cuj-test-coverage",
   "subjectAppSlug": "vaporize.cli@wrkstrm-core.clia.sh",
   "subjectReleaseSlug": "v0.0.1",
-  "generatedAt": "2026-07-05T00:00:00Z",
-  "generatedBy": "claude (hulk) + prior codex-crisie",
+  "generatedAt": "2026-07-10T22:58:56Z",
+  "generatedBy": "claude (hulk) + prior codex-crisie + codex CUJ-25/CUJ-26",
   "status": "active-cuj-coverage-floor-defined",
   "sourceRule": "Required test count is derived from PRD requirements through active draft CUJs. Actual executable tests may exceed the required floor.",
   "sourceArtifacts": {
@@ -17,26 +17,26 @@
     "releaseGates": "private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/release-gates.md"
   },
   "counts": {
-    "activeCUJCount": 24,
+    "activeCUJCount": 26,
     "deferredCUJCount": 1,
-    "requiredSwiftTestObligationCount": 119,
+    "requiredSwiftTestObligationCount": 128,
     "requiredReleaseEvidenceCheckCount": 13,
-    "requiredTargetableTestObligationCount": 132,
-    "currentExecutableSwiftTestCount": 163,
+    "requiredTargetableTestObligationCount": 141,
+    "currentExecutableSwiftTestCount": 190,
     "currentExecutableSwiftTestBreakdown": {
-      "VaporizeCUJ01SwiftPMCLITests": 20,
-      "VaporizeCUJ02MacAppTests": 17,
+      "VaporizeCUJ01SwiftPMCLITests": 21,
+      "VaporizeCUJ02MacAppTests": 29,
       "VaporizeCUJ03PassThroughTests": 4,
       "VaporizeCUJ04CommonProcessUseTests": 4,
       "VaporizeCUJ05ToolchainTests": 11,
-      "VaporizeCUJ06JSONValidationTests": 8,
+      "VaporizeCUJ06JSONValidationTests": 9,
       "VaporizeCUJ07VaporInventoryTests": 18,
       "VaporizeCUJ08ProjectYMLInspectionTests": 5,
       "VaporizeCUJ09ReleaseReviewTests": 6,
       "VaporizeCUJ10YMLPklComparisonTests": 5,
       "VaporizeCUJ11PklYMLGenerationTests": 3,
       "VaporizeCUJ12PackageGraphTests": 1,
-      "VaporizeCUJ13YMLPklImportTests": 5,
+      "VaporizeCUJ13YMLPklImportTests": 9,
       "VaporizeCUJ14PklXcodeProjectGenerationTests": 7,
       "VaporizeCUJ15XcodeProductCacheTests": 4,
       "VaporizeCUJ16TargetFeaturesTests": 5,
@@ -46,7 +46,9 @@
       "VaporizeCUJ20XcodeWorkspaceSchemesTests": 5,
       "VaporizeCUJ21CUJStateTests": 6,
       "VaporizeCUJ22ResourceCLIInstallTests": 8,
-      "VaporizeCUJ23ProductProvingGroundTests": 4
+      "VaporizeCUJ23ProductProvingGroundTests": 4,
+      "VaporizeCUJ25PortfolioAuditTests": 4,
+      "VaporizeCUJ26AutomatedProofLedgerTests": 5
     }
   },
   "coverage": [
@@ -408,6 +410,39 @@
       "evidence": [
         "VaporizeCUJ24InstallIntegrityTests.swift",
         "BUG-VAPORIZE-CLI-INSTALL-NO-POST-INSTALL-PRESENCE-CHECK-2026-07-08.beads-issue.json"
+      ]
+    },
+    {
+      "cuj": "CUJ-25",
+      "title": "Assistant Audits The CUJ Portfolio",
+      "prdRefs": [
+        "FR-007",
+        "FR-008"
+      ],
+      "requiredSwiftTestObligations": 4,
+      "requiredReleaseEvidenceChecks": 0,
+      "status": "covered-with-saved-evidence",
+      "evidence": [
+        "VaporizeCUJ25PortfolioAuditTests.swift",
+        "CUJPortfolioAudit.swift",
+        "2026-07-10-substrate-cuj-portfolio-audit.su.json",
+        "2026-07-10-substrate-cuj-portfolio-audit.md"
+      ]
+    },
+    {
+      "cuj": "CUJ-26",
+      "title": "Assistant Uses The Canonical Automated-Proof Ledger",
+      "prdRefs": [
+        "FR-034"
+      ],
+      "requiredSwiftTestObligations": 5,
+      "requiredReleaseEvidenceChecks": 0,
+      "status": "covered-with-canonical-ledger",
+      "evidence": [
+        "VaporizeCUJ26AutomatedProofLedgerTests.swift",
+        "CUJAutomatedProofLedger.swift",
+        "cuj-automated-proof-ledger.schema.json",
+        "cuj-automated-proof-ledger.su.json"
       ]
     }
   ],

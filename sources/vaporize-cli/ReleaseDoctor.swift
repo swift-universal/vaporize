@@ -106,6 +106,15 @@ enum VaporizeReleaseDoctor {
       textContainsCheck(
         roots: roots,
         scope: .releaseRoot,
+        relativePath: "prd.md",
+        token: "FR-034",
+        name: "prd-automated-proof-ledger-requirement"
+      )
+    )
+    checks.append(
+      textContainsCheck(
+        roots: roots,
+        scope: .releaseRoot,
         relativePath: "cuj.md",
         token: "CUJ-17",
         name: "cuj-release-doctor-journey"
@@ -163,6 +172,24 @@ enum VaporizeReleaseDoctor {
         relativePath: "cuj.md",
         token: "CUJ-23",
         name: "cuj-product-proving-ground-journey"
+      )
+    )
+    checks.append(
+      textContainsCheck(
+        roots: roots,
+        scope: .releaseRoot,
+        relativePath: "cuj.md",
+        token: "CUJ-25",
+        name: "cuj-portfolio-audit-journey"
+      )
+    )
+    checks.append(
+      textContainsCheck(
+        roots: roots,
+        scope: .releaseRoot,
+        relativePath: "cuj.md",
+        token: "CUJ-26",
+        name: "cuj-automated-proof-ledger-journey"
       )
     )
     checks.append(
@@ -1035,11 +1062,11 @@ enum VaporizeReleaseDoctor {
 
     return [
       check(
-        name: "coverage-active-cuj-23",
+        name: "coverage-active-cuj-26",
         category: "cuj-coverage",
         path: url.path,
-        passed: (counts["activeCUJCount"] as? Int ?? 0) >= 23,
-        detail: "Coverage artifact must count CUJ-23 product proving-ground coverage."
+        passed: (counts["activeCUJCount"] as? Int ?? 0) >= 26,
+        detail: "Coverage artifact must count through CUJ-26 automated-proof ledger coverage."
       ),
       check(
         name: "coverage-release-evidence-floor",
@@ -1117,6 +1144,20 @@ enum VaporizeReleaseDoctor {
         path: url.path,
         passed: (breakdown["VaporizeCUJ23ProductProvingGroundTests"] as? Int ?? 0) >= 4,
         detail: "Coverage artifact must name the CUJ-23 targetable product passport and Pkl project-generation proving-ground test bundle."
+      ),
+      check(
+        name: "coverage-cuj-portfolio-audit-test-bundle",
+        category: "cuj-coverage",
+        path: url.path,
+        passed: (breakdown["VaporizeCUJ25PortfolioAuditTests"] as? Int ?? 0) >= 4,
+        detail: "Coverage artifact must name the CUJ-25 targetable portfolio audit test bundle."
+      ),
+      check(
+        name: "coverage-cuj-automated-proof-ledger-test-bundle",
+        category: "cuj-coverage",
+        path: url.path,
+        passed: (breakdown["VaporizeCUJ26AutomatedProofLedgerTests"] as? Int ?? 0) >= 5,
+        detail: "Coverage artifact must name the CUJ-26 targetable automated-proof ledger test bundle."
       ),
     ]
   }

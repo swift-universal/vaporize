@@ -1,6 +1,6 @@
 # Vaporize v0.0.1 - CUJ Test Coverage
 
-**Generated:** 2026-06-14T07:21:25Z
+**Generated:** 2026-07-10T22:58:56Z
 **Status:** active CUJ coverage floor defined
 **Component:** `vaporize@wrkstrm-core.cli`
 **Schema:** `vaporize-schemas v0.0.1` / `VaporizeCUJTestCoverageModel`
@@ -26,30 +26,30 @@ and CUJ count must already name the behavior being retired from the old location
 
 | Metric | Count |
 | --- | ---: |
-| Active CUJs | 23 |
+| Active CUJs | 26 |
 | Deferred CUJs | 1 |
-| Required Swift test obligations | 116 |
+| Required Swift test obligations | 128 |
 | Required release evidence checks | 13 |
-| Required targetable test obligations | 129 |
-| Current executable Swift tests | 160 |
+| Required targetable test obligations | 141 |
+| Current executable Swift tests | 190 |
 
 ## Targetable Test Bundles
 
 | CUJ | SwiftPM test target | Current tests |
 | --- | --- | ---: |
-| CUJ-01 | `VaporizeCUJ01SwiftPMCLITests` | 20 |
-| CUJ-02 | `VaporizeCUJ02MacAppTests` | 14 |
+| CUJ-01 | `VaporizeCUJ01SwiftPMCLITests` | 21 |
+| CUJ-02 | `VaporizeCUJ02MacAppTests` | 26 |
 | CUJ-03 | `VaporizeCUJ03PassThroughTests` | 4 |
 | CUJ-04 | `VaporizeCUJ04CommonProcessUseTests` | 4 |
 | CUJ-05 | `VaporizeCUJ05ToolchainTests` | 11 |
-| CUJ-06 | `VaporizeCUJ06JSONValidationTests` | 8 |
+| CUJ-06 | `VaporizeCUJ06JSONValidationTests` | 9 |
 | CUJ-07 | `VaporizeCUJ07VaporInventoryTests` | 18 |
 | CUJ-08 | `VaporizeCUJ08ProjectYMLInspectionTests` | 5 |
 | CUJ-09 | `VaporizeCUJ09ReleaseReviewTests` | 6 |
 | CUJ-10 | `VaporizeCUJ10YMLPklComparisonTests` | 5 |
 | CUJ-11 | `VaporizeCUJ11PklYMLGenerationTests` | 3 |
 | CUJ-12 | `VaporizeCUJ12PackageGraphTests` | 1 |
-| CUJ-13 | `VaporizeCUJ13YMLPklImportTests` | 5 |
+| CUJ-13 | `VaporizeCUJ13YMLPklImportTests` | 9 |
 | CUJ-14 | `VaporizeCUJ14PklXcodeProjectGenerationTests` | 7 |
 | CUJ-15 | `VaporizeCUJ15XcodeProductCacheTests` | 4 |
 | CUJ-16 | `VaporizeCUJ16TargetFeaturesTests` | 5 |
@@ -60,6 +60,12 @@ and CUJ count must already name the behavior being retired from the old location
 | CUJ-21 | `VaporizeCUJ21CUJStateTests` | 6 |
 | CUJ-22 | `VaporizeCUJ22ResourceCLIInstallTests` | 8 |
 | CUJ-23 | `VaporizeCUJ23ProductProvingGroundTests` | 4 |
+| CUJ-24 | `VaporizeCUJ24InstallIntegrityTests` (inside CUJ-02 target) | 3 |
+| CUJ-25 | `VaporizeCUJ25PortfolioAuditTests` | 4 |
+| CUJ-26 | `VaporizeCUJ26AutomatedProofLedgerTests` | 5 |
+
+The CUJ-02 SwiftPM target contains 29 discovered tests: 26 attributed to
+CUJ-02 and 3 attributed to CUJ-24's install-integrity slice.
 
 ## Coverage By CUJ
 
@@ -88,6 +94,9 @@ and CUJ count must already name the behavior being retired from the old location
 | CUJ-21 | FR-031 | 6 Swift tests; 1 release evidence check | CUJ-state fixture derivation, source metadata preservation, receipt output, coverage contract validation |
 | CUJ-22 | FR-002, FR-032 | 8 | Typed simulation proving-ground manifest, processed text resource, copied resource directory, decoded JSON resource, byte-count resource, stale installed bundle replacement, checked-in resource vault CLI install, legacy resource CLI product-gate capture |
 | CUJ-23 | FR-033 | 4 Swift tests; 1 release evidence check | Product proving-ground passport profile, Pkl project-generation proving-ground passport, incomplete-passport failure, reusable product-class track catalog, release-doctor coverage |
+| CUJ-24 | FR-020 | 3 | Atomic app install, forced replacement, and fail-loud existing-install behavior |
+| CUJ-25 | FR-007, FR-008 | 4 | Saved audit CLI parsing, typed artifact-class separation, canonical zero-CUJ detection, legacy journey retention, proof matching, malformed proven-state reporting |
+| CUJ-26 | FR-034 | 5 | Canonical ledger path parsing, owning-package executable resolution, partial-receipt rejection, strict proven-state requirements, explicit obligations, typed JSON round trip |
 
 ## Deferred Coverage
 

@@ -1,0 +1,34 @@
+{
+  "BeadsIssue": "0.1.0",
+  "schemaVersion": "0.1.0",
+  "id": "FR-VAPORIZE-CUJ-PORTFOLIO-AUDIT-AUTOMATED-PROOF-LEDGER-2026-07-10",
+  "title": "Audit the CUJ portfolio and emit a strict automated-proof ledger",
+  "status": "implemented-awaiting-savepoint",
+  "priority": 1,
+  "issueType": "feature",
+  "labels": [
+    "vaporize",
+    "cuj",
+    "portfolio-audit",
+    "automated-proof",
+    "release-evidence"
+  ],
+  "createdAt": "2026-07-10T23:52:14Z",
+  "createdBy": "codex after the chairman requested cross-project CUJ truth and durable automated proofs",
+  "historicalContent": {
+    "slug": "FR-VAPORIZE-CUJ-PORTFOLIO-AUDIT-AUTOMATED-PROOF-LEDGER-2026-07-10",
+    "kind": "bead-feature-request",
+    "assignee": "wrkstrm-core",
+    "severity": "high",
+    "componentHome": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli",
+    "sourceType": "operator-requested-system",
+    "description": "Make CUJ-25 audit active-owned project and definition truth across the portfolio, make CUJ-26 emit one canonical proof ledger, reject unsupported proven claims, and carry the resulting evidence through the Vaporize release spine.",
+    "acceptanceCriteria": [
+      "CUJ-25 distinguishes active-owned implementation roots from dependency checkouts and reports typed, legacy, bound, executable, evidence-backed, and proven counts.",
+      "CUJ-26 emits one saved ledger that separates missing-binding, binding-only, executable-bound, evidence-backed, and strict proven states.",
+      "A strict proven claim requires a binding, an executable test, a saved green receipt, and a chronon.",
+      "Automation never substitutes for a required human approval.",
+      "The full Vaporize suite, schema suite, release doctor, and JSON validation remain green."
+    ]
+  }
+}

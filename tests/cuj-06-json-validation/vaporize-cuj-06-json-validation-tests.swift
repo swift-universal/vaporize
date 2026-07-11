@@ -1,6 +1,6 @@
 import Foundation
-import Testing
 import SwiftJSONFormatter
+import Testing
 
 @testable import VaporizeCLI
 
@@ -141,7 +141,9 @@ func schemaValidationDetectsExpectationMismatch() throws {
   #expect(undeclared.matched == nil)
 }
 
-@Test("CUJ-06 actionable schema validation failure names paths, expectation, actual, next steps, and Digikoma")
+@Test(
+  "CUJ-06 actionable schema validation failure names paths, expectation, actual, next steps, and Digikoma"
+)
 func schemaValidationFailureMessageIsActionable() throws {
   let schemaPath = try workstreamSchemaPath()
   let fixture = try fixturePath("invalid.ongoing-with-terminal-receipt.workstream.json")
@@ -184,4 +186,74 @@ func schemaValidationRejectsRemoteRef() throws {
       fixturePath: fixtureURL.path
     )
   }
+}
+
+@Test("CUJ-06 schema validation enforces numeric, object, and string constraints")
+func schemaValidationEnforcesNumericMaximum() throws {
+  let scratch = FileManager.default.temporaryDirectory
+    .appendingPathComponent("cuj-06-maximum-\(UUID().uuidString)")
+  try FileManager.default.createDirectory(at: scratch, withIntermediateDirectories: true)
+  defer { try? FileManager.default.removeItem(at: scratch) }
+
+  let schemaURL = scratch.appendingPathComponent("maximum.schema.json")
+  try Data(#"{"type":"integer","minimum":1,"maximum":3}"#.utf8).write(to: schemaURL)
+  let passingURL = scratch.appendingPathComponent("passing.json")
+  try Data("3".utf8).write(to: passingURL)
+  let failingURL = scratch.appendingPathComponent("failing.json")
+  try Data("4".utf8).write(to: failingURL)
+
+  let passing = try JSONSchemaValidation.validate(
+    schemaPath: schemaURL.path,
+    fixturePath: passingURL.path
+  )
+  let failing = try JSONSchemaValidation.validate(
+    schemaPath: schemaURL.path,
+    fixturePath: failingURL.path
+  )
+
+  #expect(passing.valid)
+  #expect(!failing.valid)
+  #expect(failing.diagnostics.contains { $0.contains("maximum") })
+
+  let objectSchemaURL = scratch.appendingPathComponent("min-properties.schema.json")
+  try Data(#"{"type":"object","minProperties":1}"#.utf8).write(to: objectSchemaURL)
+  let populatedObjectURL = scratch.appendingPathComponent("populated-object.json")
+  try Data(#"{"proof":true}"#.utf8).write(to: populatedObjectURL)
+  let emptyObjectURL = scratch.appendingPathComponent("empty-object.json")
+  try Data("{}".utf8).write(to: emptyObjectURL)
+
+  let populatedObject = try JSONSchemaValidation.validate(
+    schemaPath: objectSchemaURL.path,
+    fixturePath: populatedObjectURL.path
+  )
+  let emptyObject = try JSONSchemaValidation.validate(
+    schemaPath: objectSchemaURL.path,
+    fixturePath: emptyObjectURL.path
+  )
+
+  #expect(populatedObject.valid)
+  #expect(!emptyObject.valid)
+  #expect(emptyObject.diagnostics.contains { $0.contains("minProperties") })
+
+  let patternSchemaURL = scratch.appendingPathComponent("pattern.schema.json")
+  try Data(#"{"type":"string","pattern":"^CUJ-[0-9][0-9]$"}"#.utf8).write(
+    to: patternSchemaURL
+  )
+  let matchingStringURL = scratch.appendingPathComponent("matching-string.json")
+  try Data(#""CUJ-26""#.utf8).write(to: matchingStringURL)
+  let nonmatchingStringURL = scratch.appendingPathComponent("nonmatching-string.json")
+  try Data(#""cuj-26""#.utf8).write(to: nonmatchingStringURL)
+
+  let matchingString = try JSONSchemaValidation.validate(
+    schemaPath: patternSchemaURL.path,
+    fixturePath: matchingStringURL.path
+  )
+  let nonmatchingString = try JSONSchemaValidation.validate(
+    schemaPath: patternSchemaURL.path,
+    fixturePath: nonmatchingStringURL.path
+  )
+
+  #expect(matchingString.valid)
+  #expect(!nonmatchingString.valid)
+  #expect(nonmatchingString.diagnostics.contains { $0.contains("pattern") })
 }

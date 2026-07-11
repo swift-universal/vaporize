@@ -27,6 +27,8 @@ one product-level journey.
 | Assistant installs resource-bearing SwiftPM CLIs that use `Bundle.module` without depending on live build products | CUJ-22 |
 | Assistant adopts a proving-ground passport before release review trusts a vaporware product | CUJ-23 |
 | Assistant trusts that a reported-success install actually landed the artifact (fail-loud + atomic swap) | CUJ-24 |
+| Assistant audits CUJ coverage across canonical product homes and active-owned implementation projects without hand scans | CUJ-25 |
+| Assistant uses one canonical ledger to find executable CUJ proofs, saved green receipts, and remaining proof obligations | CUJ-26 |
 
 ## CUJ-01 - Assistant Builds And Installs A SwiftPM CLI
 
@@ -650,14 +652,17 @@ must know the required floor.
 | CUJ-21 | FR-031 | 6 Swift tests; 1 release evidence check |
 | CUJ-22 | FR-002, FR-032 | 8 |
 | CUJ-23 | FR-033 | 4 Swift tests; 1 release evidence check |
+| CUJ-24 | FR-020 | 3 |
+| CUJ-25 | FR-007, FR-008 | 4 |
+| CUJ-26 | FR-034 | 5 |
 
 Current active-CUJ requirement:
 
-- Required Swift test obligations: 116
+- Required Swift test obligations: 128
 - Required release evidence checks: 13
-- Required targetable test obligations: 129
-- Current executable Swift tests: 155 across 23 implemented CUJ-specific SwiftPM
-  bundles
+- Required targetable test obligations: 141
+- Current executable Swift tests: 190 across 25 implemented CUJ-specific SwiftPM
+  bundles (CUJ-24 remains focused inside the CUJ-02 app-install target)
 - Coverage artifact:
   `release/v0.0.1/evidence/cuj-test-coverage.json`
 - CUJ-state coverage artifact:
@@ -687,6 +692,65 @@ Acceptance:
   an existing bundle refuses loudly).
 - Backs `BUG-VAPORIZE-CLI-INSTALL-NO-POST-INSTALL-PRESENCE-CHECK-2026-07-08` and
   the `tooling-silent-fallback-to-wrong-state-not-error-loud` axiom.
+
+## CUJ-25 - Assistant Audits The CUJ Portfolio
+
+1. Assistant runs `vaporize.cli@wrkstrm-core.clia.sh cuj-audit --path <substrate>`.
+2. Vaporize inventories canonical product homes and active-owned build surfaces
+   through the existing owned-surface model.
+3. Vaporize classifies standalone typed definitions, legacy JSON collections,
+   Markdown and DocC journeys, matrices, receipts, manifests, fixtures, trees,
+   and Swift test proofs as distinct artifact classes.
+4. Vaporize binds definitions to their owning project and records structural
+   issues, declared or matched proof evidence, and zero-CUJ product homes.
+5. Assistant saves the JSON receipt and Markdown report outside temporary
+   storage, then uses the exact gap list to author the next CUJs.
+
+Acceptance:
+
+- Dependency checkouts, generated projects, derived state, and external
+  references do not inflate the active-owned implementation denominator.
+- Schema fixtures, journey trees, coverage matrices, scenario receipts, and
+  tests remain visible but never masquerade as standalone product definitions.
+- Compact CUJs receive structural checks, including the proven-state proof and
+  last-proven requirements.
+- `VaporizeCUJ25PortfolioAuditTests` proves CLI parsing, artifact-class
+  separation, canonical zero-CUJ detection, legacy multi-journey retention,
+  proof matching, and malformed proven-state reporting.
+- A substrate-wide JSON receipt and readable report are saved in the
+  `vaporware-cuj-state-workstream` evidence home.
+
+## CUJ-26 - Assistant Uses The Canonical Automated-Proof Ledger
+
+1. Assistant runs `cuj-audit` with `--proof-ledger-path` set to the canonical
+   `vaporware-cuj-state-workstream` automated-proofs path.
+2. Vaporize reads each CUJ's declared proof references and resolves the named
+   Swift Testing type and method in the owning implementation package.
+3. Vaporize accepts saved evidence only from receipt-like JSON with an explicit
+   green result; partial, failing, declarative, schema, matrix, and launch-packet
+   mentions do not become green proof.
+4. Vaporize classifies every journey as missing-binding, binding-only,
+   executable-bound, evidence-backed, proven, or invalid-proven-claim and emits
+   concrete obligations for every missing leg.
+5. Assistant saves the typed ledger at its canonical workflow home and uses it
+   to evolve proof coverage without moving executable tests or owning receipts.
+
+Acceptance:
+
+- The canonical ledger is
+  `private/universal/substrate/collectives/spaces-universal/private/universal/kura-spaces/workflows/vaporware-cuj-state-workstream/v0.1.0/automated-proofs/cuj-automated-proof-ledger.su.json`.
+- Executable tests remain in owning implementation packages; green execution
+  receipts remain in owning proving-ground or release evidence homes.
+- Strict `proven` requires a declared proof reference, a resolvable executable
+  test, saved green evidence, and a last-proven Chronon ID.
+- Status-3 records that do not satisfy all four legs are reported as invalid
+  proven claims; the tool does not manufacture evidence or chronons.
+- The ledger validates against the schema-universal
+  `cuj-automated-proof-ledger` schema and states that automated proof cannot
+  approve a human review gate.
+- `VaporizeCUJ26AutomatedProofLedgerTests` proves path parsing, executable proof
+  resolution, rejection of partial evidence, strict proven state, obligation
+  emission, and JSON round-trip behavior.
 
 ## Deferred CUJ - Assistant Proves Fleet Pkl-Backed Apple Project Build Parity
 

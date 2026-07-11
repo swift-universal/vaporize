@@ -1,6 +1,6 @@
 # Vaporize v0.0.1 - Provenance Artifact
 
-**Generated:** 2026-07-05T00:00:00Z
+**Generated:** 2026-07-10T22:58:56Z
 **Status:** ready for launch review; blocked for final internal release
 **Subject:** `vaporize.cli@wrkstrm-core.clia.sh` v0.0.1 release prep
 
@@ -9,10 +9,10 @@ chat memory.
 
 ## Proven
 
-- CUJ-derived test coverage is explicit: 113 required Swift test obligations
-  plus 13 release evidence checks across 23 active CUJs.
-- Vaporize package tests cover 155 executable Swift
-  tests across 23 implemented CUJ-specific SwiftPM test bundles, including
+- CUJ-derived test coverage is explicit: 128 required Swift test obligations
+  plus 13 release evidence checks across 26 active CUJs.
+- Vaporize package tests cover 190 executable Swift
+  tests across 25 implemented CUJ-specific SwiftPM test bundles, including
   CUJ-10 checked-in XcodeGen-to-Pkl parity proving grounds, CUJ-13
   parity-ground import coverage, CUJ-14 tool release identity,
   CUJ-14 graph/scheme generation, CUJ-14 above-parity Pkl generation,
@@ -20,8 +20,12 @@ chat memory.
   CUJ-16 target feature inspection, CUJ-17 release doctor, CUJ-18 project
   target discovery, CUJ-19 workspace product-cache discovery, and CUJ-20 Xcode
   workspace scheme listing, CUJ-21 CUJ-state coverage, CUJ-22
-  resource-bearing CLI install coverage, and CUJ-23 product passport plus Pkl
-  project-generation proving-ground coverage.
+  resource-bearing CLI install coverage, CUJ-23 product passport plus Pkl
+  project-generation proving-ground coverage, CUJ-25 portfolio audit, and
+  CUJ-26 canonical automated-proof ledger coverage.
+- The canonical cross-portfolio automated-proof ledger lives in the
+  `vaporware-cuj-state-workstream`. It indexes owning-package tests and owning
+  green receipts, but does not replace either artifact or human gate approval.
 - `product-definition.md` defines Vaporize, primary users, product-level user
   journeys, why users choose it, when not to choose it, and build implications
   before more implementation is accepted.

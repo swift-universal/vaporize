@@ -149,6 +149,25 @@ func parsesInstalledCLIProductMetadataFlags() throws {
   #expect(command.productBuildDate == "2026-07-03T00:00:00Z")
 }
 
+@Test("CUJ-01 forwards developer directory to SwiftPM CLI operations")
+func forwardsDeveloperDirectoryToSwiftPMCLIOperations() throws {
+  let command = try VaporizeCLI.parse([
+    "install",
+    "--artifact",
+    "cli",
+    "--package-path",
+    "/workspace/tool",
+    "--product",
+    "tool.cli@org.clia.sh",
+    "--developer-dir",
+    "/Applications/Xcode.app/Contents/Developer",
+  ])
+
+  #expect(command.developerDirectoryEnvironment() == [
+    "DEVELOPER_DIR": "/Applications/Xcode.app/Contents/Developer",
+  ])
+}
+
 @Test("CUJ-01 orders installed CLI candidates by inferred domain before flat bin")
 func ordersInstalledCLICandidatesByInferredDomainBeforeFlatBin() throws {
   let command = try VaporizeCLI.parse([
