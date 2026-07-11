@@ -1,6 +1,6 @@
 # Vaporize v0.0.1 - CUJ Test Coverage
 
-**Generated:** 2026-07-10T22:58:56Z
+**Generated:** 2026-07-11T02:51:43Z
 **Status:** active CUJ coverage floor defined
 **Component:** `vaporize@wrkstrm-core.cli`
 **Schema:** `vaporize-schemas v0.0.1` / `VaporizeCUJTestCoverageModel`
@@ -26,12 +26,12 @@ and CUJ count must already name the behavior being retired from the old location
 
 | Metric | Count |
 | --- | ---: |
-| Active CUJs | 26 |
+| Active CUJs | 27 |
 | Deferred CUJs | 1 |
-| Required Swift test obligations | 128 |
-| Required release evidence checks | 13 |
-| Required targetable test obligations | 141 |
-| Current executable Swift tests | 190 |
+| Required Swift test obligations | 132 |
+| Required release evidence checks | 14 |
+| Required targetable test obligations | 146 |
+| Current executable Swift tests | 196 |
 
 ## Targetable Test Bundles
 
@@ -61,8 +61,9 @@ and CUJ count must already name the behavior being retired from the old location
 | CUJ-22 | `VaporizeCUJ22ResourceCLIInstallTests` | 8 |
 | CUJ-23 | `VaporizeCUJ23ProductProvingGroundTests` | 4 |
 | CUJ-24 | `VaporizeCUJ24InstallIntegrityTests` (inside CUJ-02 target) | 3 |
-| CUJ-25 | `VaporizeCUJ25PortfolioAuditTests` | 4 |
+| CUJ-25 | `VaporizeCUJ25PortfolioAuditTests` | 6 |
 | CUJ-26 | `VaporizeCUJ26AutomatedProofLedgerTests` | 5 |
+| CUJ-27 | `VaporizeCUJ27ProjectCoverageLedgerTests` | 4 |
 
 The CUJ-02 SwiftPM target contains 29 discovered tests: 26 attributed to
 CUJ-02 and 3 attributed to CUJ-24's install-integrity slice.
@@ -95,8 +96,9 @@ CUJ-02 and 3 attributed to CUJ-24's install-integrity slice.
 | CUJ-22 | FR-002, FR-032 | 8 | Typed simulation proving-ground manifest, processed text resource, copied resource directory, decoded JSON resource, byte-count resource, stale installed bundle replacement, checked-in resource vault CLI install, legacy resource CLI product-gate capture |
 | CUJ-23 | FR-033 | 4 Swift tests; 1 release evidence check | Product proving-ground passport profile, Pkl project-generation proving-ground passport, incomplete-passport failure, reusable product-class track catalog, release-doctor coverage |
 | CUJ-24 | FR-020 | 3 | Atomic app install, forced replacement, and fail-loud existing-install behavior |
-| CUJ-25 | FR-007, FR-008 | 4 | Saved audit CLI parsing, typed artifact-class separation, canonical zero-CUJ detection, legacy journey retention, proof matching, malformed proven-state reporting |
+| CUJ-25 | FR-007, FR-008 | 4 | Saved audit CLI parsing, typed artifact-class separation, canonical zero-CUJ detection, legacy journey retention, project-qualified reused-ID identity, harness runtime-snapshot exclusion, proof matching, malformed proven-state reporting |
 | CUJ-26 | FR-034 | 5 | Canonical ledger path parsing, owning-package executable resolution, partial-receipt rejection, strict proven-state requirements, explicit obligations, typed JSON round trip |
+| CUJ-27 | FR-035 | 4 Swift tests; 1 release evidence check | Saved JSON/CSV paths, one row per implementation project, exact proof dimensions and rollups, CSV completeness, schema-backed JSON round trip, runtime-snapshot denominator exclusion |
 
 ## Deferred Coverage
 

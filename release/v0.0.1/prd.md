@@ -1,7 +1,7 @@
 # Vaporize v0.0.1 - PRD
 
 **Status:** release-prep draft; blocked pending fleet Pkl-backed Xcode world-state parity
-**Updated:** 2026-06-14T07:21:25Z
+**Updated:** 2026-07-11T02:51:43Z
 **Component:** `vaporize@wrkstrm-core.cli`
 **Release target:** internal essential substrate CLI
 **Tool classification:** `internal-essential-tool`
@@ -86,6 +86,12 @@ into a reusable product passport pattern. Each vaporware product class can now
 name required proving-ground tracks, scenarios, targetable tests, receipts, and
 release-doctor checks before release review treats the product as embodied
 proof.
+
+The current portfolio-detail slice adds a typed implementation-project coverage
+ledger. It preserves one row per active-owned project, exact surface paths,
+mapping provenance, project-qualified CUJ identity, every proof leg, coverage
+band, and quantified next actions in JSON and CSV. Aggregate portfolio counts
+remain rollups over that register, not a substitute for it.
 
 ## Product Definition, User Journeys, And Choice Argument
 
@@ -264,21 +270,23 @@ Supporting audiences:
 | FR-032 | SwiftPM CLI resource-bundle install preservation | `install` preserves SwiftPM target resource bundles required by `Bundle.module` for installed CLIs by using SwiftPM `experimental-install` for the executable, asking SwiftPM for the build products directory with `swift build --show-bin-path`, and copying direct `.bundle` siblings into the installed CLI bin directory. Vaporize also writes product version/build facts to the CLI metadata sidecar. This does not turn the CLI into an app bundle, does not make `Bundle.main.infoDictionary` carry product metadata, and does not prove Sparkle appcast generation or update signing. |
 | FR-033 | Product proving-ground passports | Vaporware products carry a typed proving-ground profile naming product class, owning bead, CUJs, required tracks, scenarios, targetable tests, receipts, release-doctor checks, and boundaries. The adoption gate fails missing tracks, missing CUJs, missing receipt refs, missing targetable test bundles, and unknown track slugs. This proves release-review evidence shape; it does not approve the release or replace product-specific behavioral tests. |
 | FR-034 | Canonical automated-proof ledger | `cuj-audit --proof-ledger-path <path>` writes a typed cross-portfolio ledger that binds each CUJ definition to declared proof references, resolvable owning-package tests, saved green execution receipts, last-proven chronons, and explicit remaining obligations. The canonical ledger lives in the `vaporware-cuj-state-workstream`; executable tests and green receipts remain in their owning implementation and evidence homes. Only explicit green receipt results count as saved evidence, and automation never substitutes for required human approval. |
+| FR-035 | Fine-grained implementation-project CUJ coverage | `cuj-audit --project-ledger-path <json> --project-ledger-csv-path <csv>` writes one row per active-owned implementation project with owner, domain, product line, exact surface paths, mapping method and confidence, composite `(projectKey, definitionID)` references, definition source classes, proof-state and obligation counts, typed/binding/executable/evidence/chronon/structural/strict proof legs, completion basis points, coverage band, and quantified next actions. Harness runtime `jobs/` snapshots, dependency checkouts, generated state, and projections do not enter the active-owned denominator. Aggregate-only reporting does not satisfy this requirement. |
 
 ## Release Criteria
 
 - Vaporize's package test suite passes with the Swift 6.4 toolchain:
   `vaporize toolchain -- swift test --package-path private/apple/spm/vaporize@wrkstrm-core.cli`.
-  Current proof: the CUJ-derived coverage floor requires 128 Swift test
-  obligations plus 13 release evidence checks; the executable suite passes 190
-  tests across 25 implemented CUJ targets, including the CUJ-14 expanded
+  Current proof: the CUJ-derived coverage floor requires 132 Swift test
+  obligations plus 14 release evidence checks; the executable suite passes 196
+  tests across 26 implemented CUJ targets, including the CUJ-14 expanded
   Pkl `.xcodeproj` graph and shared-scheme slice, CUJ-16
   `inspect-target-features` first slice, CUJ-17 `release-doctor` first slice,
   CUJ-18 `list-targets` first slice, CUJ-19 workspace cache discovery first
   slice, CUJ-20 `list-schemes` first slice, CUJ-21 CUJ-state coverage gate, and
   CUJ-22 SwiftPM CLI resource-bundle install preservation, CUJ-23 product
   proving-ground passports including the Pkl project-generation proving-ground
-  passport, CUJ-25 portfolio audit, and CUJ-26 canonical automated-proof ledger.
+  passport, CUJ-25 portfolio audit, CUJ-26 canonical automated-proof ledger, and
+  CUJ-27 implementation-project coverage ledger.
 - `release/v0.0.1/product-definition.md` defines the product, primary users,
   product-level user journeys, choice argument, non-choice cases, and build
   implications before additional feature work is accepted.

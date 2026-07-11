@@ -34,7 +34,7 @@ func releaseDoctorPassesLiveReleaseSpine() throws {
   #expect(receipt.subjectReleaseSlug == "v0.0.1")
   #expect(receipt.overallStatus == "pass")
   #expect(receipt.requiredArtifactCount == 28)
-  #expect(receipt.checkCount == 146)
+  #expect(receipt.checkCount == 149)
   #expect(receipt.failedCheckCount == 0)
   #expect(receipt.checks.contains { $0.name == "launch-review-gate-33" && $0.status == "pass" })
   #expect(receipt.checks.contains { $0.name == "launch-review-gate-34" && $0.status == "pass" })
@@ -247,14 +247,14 @@ private func makeReleaseDoctorFixture(
       contents = "engineering pedigree"
     case "release/v0.0.1/prd.md":
       contents = """
-      FR-027 FR-028 FR-029 FR-030 FR-031 FR-032 FR-033 FR-034
+      FR-027 FR-028 FR-029 FR-030 FR-031 FR-032 FR-033 FR-034 FR-035
 
       ## Known Release Follow-Ups
 
       \(markdownFollowUpList(fixturePRDKnownFollowUps))
       """
     case "release/v0.0.1/cuj.md":
-      contents = "CUJ-17 CUJ-18 CUJ-19 CUJ-20 CUJ-21 CUJ-22 CUJ-23 CUJ-25 CUJ-26"
+      contents = "CUJ-17 CUJ-18 CUJ-19 CUJ-20 CUJ-21 CUJ-22 CUJ-23 CUJ-25 CUJ-26 CUJ-27"
     case "release/v0.0.1/release-gates.md":
       let followUpSection = """
 
@@ -385,8 +385,8 @@ private func makeReleaseDoctorFixture(
     """
     {
       "counts": {
-        "activeCUJCount": 26,
-        "requiredReleaseEvidenceCheckCount": 13,
+        "activeCUJCount": 27,
+        "requiredReleaseEvidenceCheckCount": 14,
         "currentExecutableSwiftTestBreakdown": {
           "VaporizeCUJ10YMLPklComparisonTests": 5,
           "VaporizeCUJ13YMLPklImportTests": 5,
@@ -399,7 +399,8 @@ private func makeReleaseDoctorFixture(
           "VaporizeCUJ22ResourceCLIInstallTests": 6,
           "VaporizeCUJ23ProductProvingGroundTests": 4,
           "VaporizeCUJ25PortfolioAuditTests": 4,
-          "VaporizeCUJ26AutomatedProofLedgerTests": 5
+          "VaporizeCUJ26AutomatedProofLedgerTests": 5,
+          "VaporizeCUJ27ProjectCoverageLedgerTests": 4
         }
       }
     }

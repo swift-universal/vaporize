@@ -230,6 +230,9 @@ struct OwnedSurfaceInventoryScanner {
     if Self.skippedDirectoryNames.contains(component), values?.isDirectory == true {
       return true
     }
+    if values?.isDirectory == true, Self.isHarnessRuntimeJobsDirectory(url) {
+      return true
+    }
     if url.path.contains("/Package.resolved") {
       return true
     }
@@ -450,6 +453,15 @@ struct OwnedSurfaceInventoryScanner {
       }
     }
     return false
+  }
+
+  private static func isHarnessRuntimeJobsDirectory(_ url: URL) -> Bool {
+    let components = url.standardizedFileURL.pathComponents
+    guard url.lastPathComponent == "jobs", let jobsIndex = components.lastIndex(of: "jobs"),
+      jobsIndex >= 4
+    else { return false }
+    return components[jobsIndex - 4] == "harnesses"
+      && components[jobsIndex - 2] == "forms"
   }
 
   private static let skippedDirectoryNames: Set<String> = [

@@ -45,7 +45,9 @@ struct VaporizeCLI: AsyncParsableCommand {
       bindings, canonical product homes, and active-owned implementation \
       coverage without conflating fixtures, matrices, receipts, or tests; \
       `--proof-ledger-path` writes the canonical cross-portfolio proof index \
-      while executable tests and green receipts remain in their owning homes. \
+      while `--project-ledger-path` and `--project-ledger-csv-path` write one \
+      fine-grained coverage row per active-owned implementation project. \
+      Executable tests and green receipts remain in their owning homes. \
       `domains` lists available tool domains from the tools collection. \
       Legacy `x-craze-collapse-path` remains a compatibility alias during migration.
       Target feature inspection mode: inspect-target-features reads a project.yml \
@@ -245,6 +247,16 @@ struct VaporizeCLI: AsyncParsableCommand {
     name: .customLong("proof-ledger-path"),
     help: "Write the canonical CUJ automated-proof ledger to this path.")
   var proofLedgerPath: String?
+
+  @Option(
+    name: .customLong("project-ledger-path"),
+    help: "Write the fine-grained active-owned implementation project CUJ coverage ledger to this path.")
+  var projectLedgerPath: String?
+
+  @Option(
+    name: .customLong("project-ledger-csv-path"),
+    help: "Write the fine-grained implementation project CUJ coverage ledger as CSV to this path.")
+  var projectLedgerCSVPath: String?
 
   @Option(
     name: .customLong("working-directory"),
@@ -1244,6 +1256,16 @@ struct VaporizeCLI: AsyncParsableCommand {
       vaporizeVersion: Self.vaporizeVersion,
       generatedAt: generatedAt
     )
+    let projectLedger = try CUJImplementationProjectCoverageLedgerRenderer.renderJSON(
+      result,
+      vaporizeVersion: Self.vaporizeVersion,
+      generatedAt: generatedAt
+    )
+    let projectLedgerCSV = CUJImplementationProjectCoverageLedgerRenderer.renderCSV(
+      result,
+      vaporizeVersion: Self.vaporizeVersion,
+      generatedAt: generatedAt
+    )
 
     if let receiptPath {
       try writeCUJAudit(Data(data), to: receiptPath)
@@ -1253,6 +1275,12 @@ struct VaporizeCLI: AsyncParsableCommand {
     }
     if let proofLedgerPath {
       try writeCUJAudit(proofLedger, to: proofLedgerPath)
+    }
+    if let projectLedgerPath {
+      try writeCUJAudit(projectLedger, to: projectLedgerPath)
+    }
+    if let projectLedgerCSVPath {
+      try writeCUJAudit(Data(projectLedgerCSV.utf8), to: projectLedgerCSVPath)
     }
 
     switch vaporOutputFormat {

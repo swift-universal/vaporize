@@ -7,18 +7,19 @@
   "artifactId": "vaporize-v0.0.1-provenance-artifact",
   "subjectAppSlug": "vaporize.cli@wrkstrm-core.clia.sh",
   "subjectReleaseSlug": "v0.0.1",
-  "generatedAt": "2026-07-10T22:58:56Z",
-  "generatedBy": "codex-crisie + codex CUJ-25/CUJ-26",
+  "generatedAt": "2026-07-11T02:57:18Z",
+  "generatedBy": "codex-crisie + codex CUJ-25/CUJ-26/CUJ-27",
   "status": "ready-for-launch-review-blocked-for-internal-release",
   "purpose": "Collect the v0.0.1 release-prep receipts and provenance in one artifact so the next migration slice can proceed from durable evidence rather than chat memory.",
   "releaseVerdict": {
     "currentStatus": "blocked-pending-fleet-pkl-project-generation",
     "proven": [
-      "CUJ-derived test coverage names 128 required Swift obligations plus 13 release evidence checks across 26 active CUJs.",
-      "The Vaporize package passes 190 executable Swift tests across 25 CUJ-specific bundles through the Vaporize-owned toolchain lane.",
-      "The canonical automated-proof ledger indexes 231 discovered CUJ definitions and reports zero invalid proven claims.",
-      "The saved Release Doctor receipt passes 146 of 146 release-spine checks.",
-      "The launch-review packet, Release Doctor receipt, CUJ coverage artifact, and automated-proof ledger validate against their schema-universal schemas."
+      "CUJ-derived test coverage names 132 required Swift obligations plus 14 release evidence checks across 27 active CUJs.",
+      "The Vaporize package passes 196 executable Swift tests across 26 CUJ-specific bundles through the Vaporize-owned toolchain lane.",
+      "The canonical automated-proof ledger indexes 231 project-qualified CUJ definitions and reports zero invalid proven claims.",
+      "The implementation-project ledger retains 1,413 project rows, 1,641 surface paths, composite CUJ identity, proof legs, and 2,385 action units.",
+      "The saved Release Doctor receipt passes 149 of 149 release-spine checks.",
+      "The launch-review packet, Release Doctor receipt, CUJ coverage artifact, automated-proof ledger, and implementation-project ledger validate against their schema-universal schemas."
     ],
     "notProven": [
       "Fleet Pkl-backed Xcode project generation and build parity are not complete.",
@@ -236,13 +237,19 @@
       "receiptKind": "cuj-test-coverage",
       "path": "private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/cuj-test-coverage.json",
       "claim": "Required test count is derived from PRD requirements through active draft CUJs.",
-      "result": "PASS-WITH-NOTE: 128 Swift test obligations, 13 release evidence checks, 141 targetable obligations, 190 executable Swift tests across 25 implemented CUJ bundles"
+      "result": "PASS-WITH-NOTE: 132 Swift test obligations, 14 release evidence checks, 146 targetable obligations, 196 executable Swift tests across 26 implemented CUJ bundles"
     },
     {
       "receiptKind": "cuj-automated-proof-ledger",
       "path": "private/universal/substrate/collectives/spaces-universal/private/universal/kura-spaces/workflows/vaporware-cuj-state-workstream/v0.1.0/automated-proofs/cuj-automated-proof-ledger.su.json",
       "claim": "Every discovered CUJ has one canonical cross-portfolio proof-state entry and explicit remaining obligations.",
       "result": "PASS-WITH-NOTE: the ledger indexes owning tests and green receipts; it is not executable proof or human gate approval by itself"
+    },
+    {
+      "receiptKind": "cuj-implementation-project-coverage-ledger",
+      "path": "private/universal/substrate/collectives/spaces-universal/private/universal/kura-spaces/workflows/vaporware-cuj-state-workstream/v0.1.0/automated-proofs/cuj-implementation-project-coverage-ledger.su.json",
+      "claim": "Every active-owned implementation project has one detailed coverage row with exact surfaces, mappings, proof legs, and quantified actions.",
+      "result": "PASS-WITH-NOTE: schema-valid JSON and 1,414-line CSV; coverage evidence does not approve a human gate"
     },
     {
       "receiptKind": "cuj-state-coverage",
@@ -586,11 +593,11 @@
   "validationEvidence": [
     {
       "command": "vaporize toolchain -- swift test --package-path private/universal/substrate/collectives/schema-universal/private/universal/domain/tooling/schema-families/vaporize-schemas/v0.0.1/spm/vaporize-schemas-v000-000-001",
-      "result": "PASS: 14 Swift Testing tests decode and round-trip canonical Vaporize schema fixtures, including the automated-proof ledger model"
+      "result": "PASS: 15 Swift Testing tests decode and round-trip canonical Vaporize schema fixtures, including the automated-proof and implementation-project ledger models"
     },
     {
       "command": "vaporize.cli@wrkstrm-core.clia.sh test --package-path private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli --configuration debug",
-      "result": "PASS-WITH-NOTE: coverage model names 190 tests across 25 implemented CUJ-specific SwiftPM bundles, including CUJ-25 portfolio audit and CUJ-26 canonical automated-proof ledger coverage"
+      "result": "PASS-WITH-NOTE: coverage model names 196 tests across 26 implemented CUJ-specific SwiftPM bundles, including CUJ-25 portfolio audit, CUJ-26 canonical automated-proof ledger, and CUJ-27 implementation-project coverage"
     },
     {
       "command": "vaporize toolchain -- swift test --package-path private/apple/spm/vaporize@wrkstrm-core.cli --filter VaporizeCUJ16TargetFeaturesTests",
@@ -606,7 +613,7 @@
     },
     {
       "command": "local benchmark baseline captured with /usr/bin/time -p for Vaporize validate-json, Vaporize toolchain swift --version, bare swift --version, focused CUJ-15 through bare Swift, focused CUJ-15 through Vaporize toolchain, and full Vaporize suite",
-      "result": "PASS-WITH-NOTE: validate-json 0.03s, Vaporize swift --version 0.25s, bare swift --version 0.17s, focused CUJ-15 bare Swift 6.80s, focused CUJ-15 Vaporize 6.80s, earlier full Vaporize suite baseline 15.57s with 82 tests, latest coverage model names 190 tests across 25 CUJ bundles; not a fleet performance or disk-space benchmark"
+      "result": "PASS-WITH-NOTE: validate-json 0.03s, Vaporize swift --version 0.25s, bare swift --version 0.17s, focused CUJ-15 bare Swift 6.80s, focused CUJ-15 Vaporize 6.80s, earlier full Vaporize suite baseline 15.57s with 82 tests, latest coverage model names 196 tests across 26 CUJ bundles; not a fleet performance or disk-space benchmark"
     },
     {
       "command": "vaporize toolchain -- swift test --package-path private/apple/spm/vaporize@wrkstrm-core.cli --filter VaporizeCUJ09ReleaseReviewTests --enable-code-coverage",
@@ -730,7 +737,7 @@
     },
     {
       "command": "vaporize test --filter CUJ-22",
-      "result": "PASS: the full 190-test Vaporize suite includes all 8 CUJ-22 resource-bearing SwiftPM CLI install tests"
+      "result": "PASS: the full 196-test Vaporize suite includes all 8 CUJ-22 resource-bearing SwiftPM CLI install tests"
     }
   ],
   "savepointEvents": [

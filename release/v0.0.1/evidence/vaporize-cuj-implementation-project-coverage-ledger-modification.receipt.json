@@ -1,0 +1,127 @@
+{
+  "VaporizeModificationReceipt": "0.1.0",
+  "schemaVersion": "0.1.0",
+  "receiptKind": "vaporize-modification-receipt",
+  "receiptId": "vaporize-cuj-implementation-project-coverage-ledger-2026-07-11",
+  "subjectAppSlug": "vaporize.cli@wrkstrm-core.clia.sh",
+  "subjectReleaseSlug": "v0.0.1",
+  "createdAt": "2026-07-11T03:30:00Z",
+  "createdBy": "codex",
+  "status": "completed-with-automated-proof-human-review-pending",
+  "requestRef": "private/universal/substrate/collectives/spaces-universal/private/universal/kura-spaces/workflows/software-modification-workstream-capture/v0.1.0/requests/2026-07-11-cuj-implementation-project-coverage-register.vaporware-modification-request.su.json",
+  "workflowInstanceRef": "private/universal/substrate/collectives/spaces-universal/private/universal/kura-spaces/workflows/software-modification-workstream-capture/v0.1.0/software-modification-workstream-capture-2026-07-11-cuj-implementation-project-coverage-register.workflow-instance.su.json",
+  "cujWorkflowInstanceRef": "private/universal/substrate/collectives/spaces-universal/private/universal/kura-spaces/workflows/vaporware-cuj-state-workstream/v0.1.0/vaporware-cuj-state-workstream-2026-07-11-implementation-project-coverage-register.workflow-instance.su.json",
+  "owningBeadRef": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/FR-VAPORIZE-CUJ-IMPLEMENTATION-PROJECT-COVERAGE-2026-07-11.beads-issue.json",
+  "releaseCohortRef": "FR-035-CUJ-27",
+  "featureFlagDisposition": {
+    "createdFeatureFlag": false,
+    "noFlagReason": "The project coverage ledger is an explicit audit output and saved evidence contract, not runtime behavior requiring a feature toggle."
+  },
+  "portfolioCensus": {
+    "scannedAt": "2026-07-11T02:37:46Z",
+    "activeOwnedImplementationProjectCount": 1413,
+    "implementationSurfacePathCount": 1641,
+    "mappedProjectCount": 49,
+    "unmappedProjectCount": 1364,
+    "projectWithCUJCount": 30,
+    "projectWithoutCUJCount": 1383,
+    "projectQualifiedDefinitionCount": 231,
+    "distinctDefinitionIDLabelCount": 216,
+    "reusedDefinitionIDLabelCount": 12,
+    "definitionRecordUsingReusedIDLabelCount": 27,
+    "projectCUJAssociationCount": 416,
+    "projectActionUnitCount": 2385,
+    "ownerRollupCount": 21,
+    "domainRollupCount": 159
+  },
+  "changedBehavior": [
+    "CUJ-27 emits one durable JSON row and one CSV row for every active-owned implementation project.",
+    "Each project row retains exact implementation surfaces, owner and domain, product mapping confidence, project-qualified CUJ references, proof legs, proof states, obligations, and next actions.",
+    "CUJ definition identity is the composite pair of project key and definition ID; reused labels are measured rather than silently merged.",
+    "Live harness job snapshots under harness form job trees are excluded from implementation-project and CUJ-definition denominators.",
+    "The portfolio audit emits nine coverage bands and nine action queues with owner and domain rollups.",
+    "The Board package exposes all 1413 rows through a local searchable, filterable, sortable, paginated portfolio surface and project detail dialog.",
+    "The project ledger has a canonical schema and synchronized fixtures in schema-universal.",
+    "Release coverage now names 27 active CUJs, 132 required Swift obligations, 14 release checks, 146 targetable obligations, and 196 executable Swift tests."
+  ],
+  "targetableTests": [
+    {
+      "testBundle": "VaporizeCUJ25PortfolioAuditTests",
+      "testCount": 6,
+      "expectation": "Project and definition denominators exclude runtime snapshots and reused CUJ labels remain project-qualified."
+    },
+    {
+      "testBundle": "VaporizeCUJ27ProjectCoverageLedgerTests",
+      "testCount": 4,
+      "expectation": "JSON and CSV retain every project path, proof dimension, rollup, boundary, and parsed output path."
+    },
+    {
+      "testBundle": "VaporizeCUJ09ReleaseReviewTests",
+      "testCount": 6,
+      "expectation": "The release coverage contract names the current CUJ and executable-test floor."
+    },
+    {
+      "testBundle": "VaporizeCUJ17ReleaseDoctorTests",
+      "testCount": 7,
+      "expectation": "Release Doctor audits the final release spine and CUJ-27 evidence."
+    }
+  ],
+  "proofCommands": [
+    {
+      "command": "SPM_USE_LOCAL_DEPS=1 vaporize.cli@wrkstrm-core.clia.sh test --package-path .",
+      "workingDirectory": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli",
+      "result": "PASS: complete release-mode suite, 196 executable Swift tests"
+    },
+    {
+      "command": "/usr/bin/xcrun swift test --filter VaporizeCUJ09ReleaseReviewTests",
+      "workingDirectory": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli",
+      "result": "PASS: 6 tests"
+    },
+    {
+      "command": "vaporize.cli@wrkstrm-core.clia.sh release-doctor --path private/apple/spm/vaporize@wrkstrm-core.cli --format json --receipt-path private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/vaporize-v0.0.1-release-doctor.receipt.json",
+      "workingDirectory": "private/universal/substrate/collectives/wrkstrm-core",
+      "result": "PASS: 149 checks"
+    },
+    {
+      "command": "swift test",
+      "workingDirectory": "private/universal/substrate/collectives/schema-universal/private/apple/spm/schema-universal-vaporize-schemas",
+      "result": "PASS: 15 schema tests"
+    },
+    {
+      "command": "common-shell.cli@swift-universal.clia.sh --file render-bundle/project-coverage-data.common-shell.json",
+      "workingDirectory": "private/universal/substrate/collectives/spaces-universal/private/universal/kura-spaces/board-meetings/2026-07-10-cuj-automated-proof-governance",
+      "result": "PASS: emitted 1413 project rows into the saved Board data bundle"
+    },
+    {
+      "command": "vaporize.cli@wrkstrm-core.clia.sh validate-json-schema --schema <project-ledger-schema> --fixture <live-project-ledger> --expect pass",
+      "result": "PASS: live 1413-row ledger and canonical fixture satisfy the project coverage schema"
+    }
+  ],
+  "releaseEvidenceUpdates": [
+    "release/v0.0.1/prd.md",
+    "release/v0.0.1/cuj.md",
+    "release/v0.0.1/product-definition.md",
+    "release/v0.0.1/release-gates.md",
+    "release/v0.0.1/why-vaporize.md",
+    "release/v0.0.1/evidence/cuj-test-coverage.json",
+    "release/v0.0.1/evidence/cuj-test-coverage.md",
+    "release/v0.0.1/evidence/launch-review-packet.json",
+    "release/v0.0.1/evidence/vaporize-v0.0.1-provenance-artifact.json",
+    "release/v0.0.1/evidence/vaporize-v0.0.1-provenance-artifact.md",
+    "release/v0.0.1/evidence/vaporize-v0.0.1-release-doctor.receipt.json",
+    "sources/vaporize-cli/CUJPortfolioAudit.swift",
+    "sources/vaporize-cli/CUJImplementationProjectCoverageLedger.swift",
+    "sources/vaporize-cli/OwnedSurfaceInventory.swift",
+    "sources/vaporize-cli/ReleaseDoctor.swift",
+    "tests/cuj-25-portfolio-audit/VaporizeCUJ25PortfolioAuditTests.swift",
+    "tests/cuj-27-project-coverage-ledger/VaporizeCUJ27ProjectCoverageLedgerTests.swift",
+    "vaporize.engineering.docc/feature-catalog.md"
+  ],
+  "validationLimits": [
+    "Automated evidence is green, but no human review or release approval is inferred.",
+    "Only 49 of 1413 implementation projects currently have a product mapping; 1364 require applicability classification.",
+    "Only 30 projects currently carry one or more project-qualified CUJ definitions.",
+    "No definition currently satisfies the strict-proven state requiring executable proof, saved green evidence, and a last-proven chronon.",
+    "The project register reports current repository truth; it does not invent CUJs or approve mappings for owners."
+  ]
+}

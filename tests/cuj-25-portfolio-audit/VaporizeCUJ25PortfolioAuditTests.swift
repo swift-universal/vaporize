@@ -118,6 +118,9 @@ func separatesDefinitionsMatricesReceiptsFixturesAndTests() throws {
   let result = try CUJPortfolioAuditScanner().scan(path: fixture.path)
 
   #expect(result.summary.uniqueDefinitionCount == 3)
+  #expect(result.summary.distinctDefinitionIDCount == 3)
+  #expect(result.summary.duplicatedDefinitionIDCount == 0)
+  #expect(result.summary.definitionRecordsUsingDuplicatedIDs == 0)
   #expect(result.summary.standaloneTypedDefinitionCount == 2)
   #expect(result.summary.matrixDefinitionCount == 1)
   #expect(result.summary.proofBoundDefinitionCount == 3)
@@ -145,6 +148,35 @@ func separatesDefinitionsMatricesReceiptsFixturesAndTests() throws {
   let acme = try #require(result.projects.first { $0.name == "acme-product" })
   #expect(acme.directDefinitionIDs.isEmpty)
   #expect(acme.linkedDefinitionIDs == ["cuj-acme-launch"])
+}
+
+@Test("CUJ-25 scopes reused definition IDs by project identity")
+func scopesReusedDefinitionIDsByProjectIdentity() throws {
+  let fixture = try makeFixtureDirectory(named: "project-qualified-definition-ids")
+  defer { try? FileManager.default.removeItem(at: fixture) }
+
+  for product in ["alpha", "beta"] {
+    try writeText(
+      packageManifest(named: product),
+      to: fixture.appendingPathComponent(
+        "collectives/wrkstrm-core/private/apple/apps/\(product)/Package.swift"
+      )
+    )
+    try writeText(
+      compactCUJ(id: "CUJ-1", status: 1, withProof: false),
+      to: fixture.appendingPathComponent(
+        "collectives/wrkstrm/private/universal/kura-spaces/product-lines/\(product)/cujs/CUJ-1.cuj.su.json"
+      )
+    )
+  }
+
+  let result = try CUJPortfolioAuditScanner().scan(path: fixture.path)
+
+  #expect(result.summary.uniqueDefinitionCount == 2)
+  #expect(result.summary.distinctDefinitionIDCount == 1)
+  #expect(result.summary.duplicatedDefinitionIDCount == 1)
+  #expect(result.summary.definitionRecordsUsingDuplicatedIDs == 2)
+  #expect(Set(result.definitions.map(\.projectKey)).count == 2)
 }
 
 @Test("CUJ-25 retains legacy multi-journey JSON and Markdown as definitions")
@@ -251,6 +283,44 @@ func reportsMalformedProvenRecords() throws {
   #expect(result.summary.structurallyInvalidDefinitionCount == 1)
   #expect(report.contains("cuj-broken-proven"))
   #expect(report.contains("Zero-CUJ Product Homes") == false)
+}
+
+@Test("CUJ-25 excludes harness job snapshots from project and definition denominators")
+func excludesHarnessJobSnapshots() throws {
+  let fixture = try makeFixtureDirectory(named: "harness-job-snapshots")
+  defer { try? FileManager.default.removeItem(at: fixture) }
+
+  try writeText(
+    packageManifest(named: "alpha"),
+    to: fixture.appendingPathComponent(
+      "collectives/wrkstrm-core/private/apple/spm/alpha/Package.swift"
+    )
+  )
+  try writeText(
+    compactCUJ(id: "cuj-alpha-launch", status: 1, withProof: false),
+    to: fixture.appendingPathComponent(
+      "collectives/wrkstrm/private/universal/kura-spaces/product-lines/alpha/cujs/cuj-alpha-launch.cuj.su.json"
+    )
+  )
+  try writeText(
+    packageManifest(named: "snapshot-alpha"),
+    to: fixture.appendingPathComponent(
+      "harnesses/claude/forms/hulk/jobs/123/tmp/copied-substrate/collectives/wrkstrm-core/private/apple/spm/snapshot-alpha/Package.swift"
+    )
+  )
+  try writeText(
+    compactCUJ(id: "cuj-snapshot-only", status: 1, withProof: false),
+    to: fixture.appendingPathComponent(
+      "harnesses/claude/forms/hulk/jobs/123/tmp/copied-substrate/collectives/wrkstrm/private/universal/kura-spaces/product-lines/snapshot-alpha/cujs/cuj-snapshot-only.cuj.su.json"
+    )
+  )
+
+  let result = try CUJPortfolioAuditScanner().scan(path: fixture.path)
+
+  #expect(result.summary.activeOwnedImplementationProjectCount == 1)
+  #expect(result.summary.uniqueDefinitionCount == 1)
+  #expect(result.definitions.map(\.id) == ["cuj-alpha-launch"])
+  #expect(result.implementationProjects.first?.productLine == "alpha")
 }
 
 private func compactCUJ(id: String, status: Int, withProof: Bool) -> String {

@@ -51,6 +51,12 @@ and release gates that keep unproven claims blocked.
 8. Release reviewer evaluates product definition, user journeys, choice
    argument, evidence, gates, and blockers without relying on chat memory.
    Covered by CUJ-09.
+9. Assistant audits CUJ definitions and automated proof without confusing
+   declarations, executable tests, saved evidence, human approval, or runtime
+   copies. Covered by CUJ-25 and CUJ-26.
+10. Assistant inspects coverage and next actions for every active-owned
+    implementation project instead of receiving an aggregate-only census.
+    Covered by CUJ-27.
 
 ## Why Users Choose Vaporize
 

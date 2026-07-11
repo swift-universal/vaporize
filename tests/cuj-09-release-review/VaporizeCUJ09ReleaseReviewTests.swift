@@ -119,12 +119,12 @@ func cujCoverageContractIsValidJSONAndNamesTheFloor() throws {
   let coverage = try readJSONObject(relativePath: "release/v0.0.1/evidence/cuj-test-coverage.json")
   let counts = try #require(coverage["counts"] as? [String: Any])
 
-  #expect(counts["activeCUJCount"] as? Int == 26)
+  #expect(counts["activeCUJCount"] as? Int == 27)
   #expect(counts["deferredCUJCount"] as? Int == 1)
-  #expect(counts["requiredSwiftTestObligationCount"] as? Int == 128)
-  #expect(counts["requiredReleaseEvidenceCheckCount"] as? Int == 13)
-  #expect(counts["requiredTargetableTestObligationCount"] as? Int == 141)
-  #expect(counts["currentExecutableSwiftTestCount"] as? Int == 190)
+  #expect(counts["requiredSwiftTestObligationCount"] as? Int == 132)
+  #expect(counts["requiredReleaseEvidenceCheckCount"] as? Int == 14)
+  #expect(counts["requiredTargetableTestObligationCount"] as? Int == 146)
+  #expect(counts["currentExecutableSwiftTestCount"] as? Int == 196)
   let breakdown = try #require(counts["currentExecutableSwiftTestBreakdown"] as? [String: Any])
   #expect(breakdown["VaporizeCUJ01SwiftPMCLITests"] as? Int == 21)
   #expect(breakdown["VaporizeCUJ02MacAppTests"] as? Int == 29)
@@ -137,8 +137,9 @@ func cujCoverageContractIsValidJSONAndNamesTheFloor() throws {
   #expect(breakdown["VaporizeCUJ21CUJStateTests"] as? Int == 6)
   #expect(breakdown["VaporizeCUJ22ResourceCLIInstallTests"] as? Int == 8)
   #expect(breakdown["VaporizeCUJ23ProductProvingGroundTests"] as? Int == 4)
-  #expect(breakdown["VaporizeCUJ25PortfolioAuditTests"] as? Int == 4)
+  #expect(breakdown["VaporizeCUJ25PortfolioAuditTests"] as? Int == 6)
   #expect(breakdown["VaporizeCUJ26AutomatedProofLedgerTests"] as? Int == 5)
+  #expect(breakdown["VaporizeCUJ27ProjectCoverageLedgerTests"] as? Int == 4)
 }
 
 @Test("CUJ-09 CUJ-state coverage contract is valid JSON and complete")

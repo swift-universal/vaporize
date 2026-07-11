@@ -126,6 +126,12 @@ func ownedSurfaceInventorySeparatesActiveGeneratedDerivedDependencyCheckoutsAndR
       "maintainers/apple/referenced-tool/Package.swift"
     )
   )
+  try writeText(
+    packageManifest(named: "runtime-snapshot-tool"),
+    to: fixture.appendingPathComponent(
+      "harnesses/claude/forms/hulk/jobs/123/tmp/copied-substrate/collectives/wrkstrm-core/private/apple/spm/runtime-snapshot-tool/Package.swift"
+    )
+  )
 
   let result = try OwnedSurfaceInventoryScanner().scan(path: fixture.path)
 
@@ -135,6 +141,7 @@ func ownedSurfaceInventorySeparatesActiveGeneratedDerivedDependencyCheckoutsAndR
   #expect(result.summary.derivedSwiftPackages == 1)
   #expect(result.summary.dependencyCheckoutSwiftPackages == 1)
   #expect(result.summary.externalReferenceSwiftPackages == 1)
+  #expect(result.surfaces.contains { $0.name == "runtime-snapshot-tool" } == false)
   #expect(result.summary.byOwnershipScope["active-owned"] == 1)
   #expect(result.summary.byOwnershipScope["generated-owned"] == 1)
   #expect(result.summary.byOwnershipScope["derived"] == 1)

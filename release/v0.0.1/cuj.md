@@ -1,7 +1,7 @@
 # Vaporize v0.0.1 - Critical User Journeys
 
 **Status:** release-prep draft; blocked pending fleet Pkl project-generation parity
-**Updated:** 2026-06-14T07:21:25Z
+**Updated:** 2026-07-11T02:51:43Z
 **Component:** `vaporize@wrkstrm-core.cli`
 **Tool classification:** `internal-essential-tool`
 
@@ -29,6 +29,7 @@ one product-level journey.
 | Assistant trusts that a reported-success install actually landed the artifact (fail-loud + atomic swap) | CUJ-24 |
 | Assistant audits CUJ coverage across canonical product homes and active-owned implementation projects without hand scans | CUJ-25 |
 | Assistant uses one canonical ledger to find executable CUJ proofs, saved green receipts, and remaining proof obligations | CUJ-26 |
+| Assistant inspects CUJ coverage and next actions for every active-owned implementation project without reducing the census to aggregate counts | CUJ-27 |
 
 ## CUJ-01 - Assistant Builds And Installs A SwiftPM CLI
 
@@ -655,13 +656,14 @@ must know the required floor.
 | CUJ-24 | FR-020 | 3 |
 | CUJ-25 | FR-007, FR-008 | 4 |
 | CUJ-26 | FR-034 | 5 |
+| CUJ-27 | FR-035 | 4 Swift tests; 1 release evidence check |
 
 Current active-CUJ requirement:
 
-- Required Swift test obligations: 128
-- Required release evidence checks: 13
-- Required targetable test obligations: 141
-- Current executable Swift tests: 190 across 25 implemented CUJ-specific SwiftPM
+- Required Swift test obligations: 132
+- Required release evidence checks: 14
+- Required targetable test obligations: 146
+- Current executable Swift tests: 196 across 26 implemented CUJ-specific SwiftPM
   bundles (CUJ-24 remains focused inside the CUJ-02 app-install target)
 - Coverage artifact:
   `release/v0.0.1/evidence/cuj-test-coverage.json`
@@ -751,6 +753,43 @@ Acceptance:
 - `VaporizeCUJ26AutomatedProofLedgerTests` proves path parsing, executable proof
   resolution, rejection of partial evidence, strict proven state, obligation
   emission, and JSON round-trip behavior.
+
+## CUJ-27 - Assistant Inspects Every Implementation Project's CUJ Coverage
+
+1. Assistant runs `cuj-audit` with both `--project-ledger-path` and
+   `--project-ledger-csv-path` set to saved workflow evidence homes.
+2. Vaporize groups active-owned Package.swift, Xcode project, Xcode workspace,
+   project.yml, and project.pkl surfaces into one implementation-project row per
+   canonical home.
+3. Vaporize maps each row to product records using explicit path overlap or a
+   unique product-name match and records the method and confidence.
+4. Vaporize associates definitions by composite `(projectKey, definitionID)`
+   identity, because CUJ ID labels are not globally unique across projects.
+5. Vaporize computes typed, binding, executable, evidence, chronon, structural,
+   and strict proof legs; proof states; obligations; completion basis points;
+   coverage band; and quantified next actions for each row.
+6. Assistant uses the JSON, CSV, or board portfolio register to inspect exact
+   projects and rollups without replacing the project census with a few totals.
+
+Acceptance:
+
+- Every active-owned implementation project appears exactly once and retains
+  every exact implementation surface path.
+- Harness runtime `jobs/` snapshots, dependency checkouts, generated outputs,
+  derived state, external references, and projections do not inflate the
+  denominator.
+- Unmapped no-CUJ rows receive an applicability-classification action; mapped
+  no-CUJ rows receive an author-or-link action. Infrastructure is not forced to
+  invent a journey before applicability is classified.
+- Definition identity is project-qualified, while the summary separately names
+  project-qualified records, distinct ID labels, reused labels, and project-CUJ
+  associations.
+- Owner, domain, surface-kind, mapping-confidence, coverage-band, and action-kind
+  rollups remain derivable from the project rows.
+- The JSON validates against schema-universal and the CSV has one header plus
+  one row per project.
+- `VaporizeCUJ27ProjectCoverageLedgerTests` proves CLI paths, one-row-per-project
+  dimensions, CSV completeness, typed JSON round trip, rollups, and boundaries.
 
 ## Deferred CUJ - Assistant Proves Fleet Pkl-Backed Apple Project Build Parity
 

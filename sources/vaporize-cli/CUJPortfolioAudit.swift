@@ -109,6 +109,13 @@ struct CUJDefinitionRecord: Codable, Equatable {
   }
 }
 
+struct CUJDefinitionIdentityRef: Codable, Equatable, Hashable {
+  var projectKey: String
+  var definitionID: String
+
+  var compositeKey: String { "\(projectKey)|\(definitionID)" }
+}
+
 struct CUJProjectRecord: Codable, Equatable {
   var key: String
   var name: String
@@ -118,12 +125,25 @@ struct CUJProjectRecord: Codable, Equatable {
   var directDefinitionIDs: [String]
   var linkedDefinitionIDs: [String]
   var definitionIDs: [String]
+  var directDefinitionRefs: [CUJDefinitionIdentityRef]
+  var linkedDefinitionRefs: [CUJDefinitionIdentityRef]
+  var definitionRefs: [CUJDefinitionIdentityRef]
   var standaloneTypedDefinitionCount: Int
   var matrixDefinitionCount: Int
   var legacyDefinitionCount: Int
   var proofBoundDefinitionCount: Int
   var provenDefinitionCount: Int
   var structuralIssueCount: Int
+}
+
+enum CUJImplementationProjectMappingMethod: String, Codable, Equatable {
+  case pathOverlap = "path-overlap"
+  case uniqueProductName = "unique-product-name"
+}
+
+struct CUJImplementationProjectMappingRecord: Codable, Equatable {
+  var projectKey: String
+  var methods: [CUJImplementationProjectMappingMethod]
 }
 
 struct CUJImplementationProjectRecord: Codable, Equatable {
@@ -134,12 +154,17 @@ struct CUJImplementationProjectRecord: Codable, Equatable {
   var surfaceKinds: [OwnedSurfaceKind]
   var surfacePaths: [String]
   var mappedProjectKeys: [String]
+  var projectMappings: [CUJImplementationProjectMappingRecord]
   var definitionIDs: [String]
+  var definitionRefs: [CUJDefinitionIdentityRef]
 }
 
 struct CUJPortfolioAuditSummary: Codable, Equatable {
   var artifactCount: Int = 0
   var uniqueDefinitionCount: Int = 0
+  var distinctDefinitionIDCount: Int = 0
+  var duplicatedDefinitionIDCount: Int = 0
+  var definitionRecordsUsingDuplicatedIDs: Int = 0
   var standaloneTypedDefinitionCount: Int = 0
   var matrixDefinitionCount: Int = 0
   var legacyDefinitionCount: Int = 0
@@ -874,6 +899,14 @@ struct CUJPortfolioAuditScanner {
         definitions: definitions
       ).filter { !directIDs.contains($0.id) }
       let projectDefinitions = directDefinitions + linkedDefinitions
+      let directDefinitionRefs = directDefinitions.map {
+        CUJDefinitionIdentityRef(projectKey: $0.projectKey, definitionID: $0.id)
+      }.sorted(by: definitionRefLessThan)
+      let linkedDefinitionRefs = linkedDefinitions.map {
+        CUJDefinitionIdentityRef(projectKey: $0.projectKey, definitionID: $0.id)
+      }.sorted(by: definitionRefLessThan)
+      let definitionRefs = Array(Set(directDefinitionRefs + linkedDefinitionRefs)).sorted(
+        by: definitionRefLessThan)
       return CUJProjectRecord(
         key: identity.key,
         name: identity.name,
@@ -883,6 +916,9 @@ struct CUJPortfolioAuditScanner {
         directDefinitionIDs: directDefinitions.map(\.id).sorted(by: localizedLessThan),
         linkedDefinitionIDs: linkedDefinitions.map(\.id).sorted(by: localizedLessThan),
         definitionIDs: projectDefinitions.map(\.id).sorted(by: localizedLessThan),
+        directDefinitionRefs: directDefinitionRefs,
+        linkedDefinitionRefs: linkedDefinitionRefs,
+        definitionRefs: definitionRefs,
         standaloneTypedDefinitionCount: projectDefinitions.filter {
           $0.sourceClasses.contains(where: \.isStandaloneTypedDefinition)
         }.count,
@@ -948,24 +984,27 @@ struct CUJPortfolioAuditScanner {
     let grouped = Dictionary(grouping: activeSurfaces) { surface in
       implementationHome(for: surface, root: root)
     }
-    let definitionIDsByProject = Dictionary(
-      uniqueKeysWithValues: projects.map { ($0.key, $0.definitionIDs) }
+    let definitionRefsByProject = Dictionary(
+      uniqueKeysWithValues: projects.map { ($0.key, $0.definitionRefs) }
     )
     let projectsByNormalizedName = Dictionary(grouping: projects) { normalizeProjectName($0.name) }
 
     return grouped.map { homePath, surfaces in
-      var mappedKeys: Set<String> = []
+      var mappingMethodsByProjectKey: [String: Set<CUJImplementationProjectMappingMethod>] = [:]
       for project in projects
       where pathContains(homePath, project.homePath) || pathContains(project.homePath, homePath) {
-        mappedKeys.insert(project.key)
+        mappingMethodsByProjectKey[project.key, default: []].insert(.pathOverlap)
       }
       let productName = normalizeProjectName(surfaces.first?.productLine ?? "")
       if let candidates = projectsByNormalizedName[productName], candidates.count == 1,
         let candidate = candidates.first
       {
-        mappedKeys.insert(candidate.key)
+        mappingMethodsByProjectKey[candidate.key, default: []].insert(.uniqueProductName)
       }
-      let definitionIDs = mappedKeys.flatMap { definitionIDsByProject[$0] ?? [] }
+      let mappedKeys = Set(mappingMethodsByProjectKey.keys)
+      let definitionRefs = Array(
+        Set(mappedKeys.flatMap { definitionRefsByProject[$0] ?? [] })
+      ).sorted(by: definitionRefLessThan)
       return CUJImplementationProjectRecord(
         homePath: homePath,
         owner: surfaces.compactMap(\.owner).first,
@@ -975,7 +1014,15 @@ struct CUJPortfolioAuditScanner {
         surfacePaths: surfaces.map { relativePath($0.path, root: root) }.sorted(
           by: localizedLessThan),
         mappedProjectKeys: mappedKeys.sorted(by: localizedLessThan),
-        definitionIDs: Array(Set(definitionIDs)).sorted(by: localizedLessThan)
+        projectMappings: mappingMethodsByProjectKey.map { projectKey, methods in
+          CUJImplementationProjectMappingRecord(
+            projectKey: projectKey,
+            methods: methods.sorted { $0.rawValue < $1.rawValue }
+          )
+        }.sorted { localizedLessThan($0.projectKey, $1.projectKey) },
+        definitionIDs: Array(Set(definitionRefs.map(\.definitionID))).sorted(
+          by: localizedLessThan),
+        definitionRefs: definitionRefs
       )
     }.sorted { localizedLessThan($0.homePath, $1.homePath) }
   }
@@ -990,6 +1037,13 @@ struct CUJPortfolioAuditScanner {
     var summary = CUJPortfolioAuditSummary()
     summary.artifactCount = artifacts.count
     summary.uniqueDefinitionCount = definitions.count
+    let definitionsByID = Dictionary(grouping: definitions, by: \.id)
+    let duplicatedDefinitionGroups = definitionsByID.values.filter { $0.count > 1 }
+    summary.distinctDefinitionIDCount = definitionsByID.count
+    summary.duplicatedDefinitionIDCount = duplicatedDefinitionGroups.count
+    summary.definitionRecordsUsingDuplicatedIDs = duplicatedDefinitionGroups.reduce(0) {
+      $0 + $1.count
+    }
     summary.standaloneTypedDefinitionCount =
       definitions.filter {
         $0.sourceClasses.contains(where: \.isStandaloneTypedDefinition)
@@ -1423,6 +1477,16 @@ struct CUJPortfolioAuditScanner {
 
   private func shouldSkipDirectory(_ url: URL) -> Bool {
     Self.skippedDirectoryNames.contains(url.lastPathComponent)
+      || isHarnessRuntimeJobsDirectory(url)
+  }
+
+  private func isHarnessRuntimeJobsDirectory(_ url: URL) -> Bool {
+    let components = url.standardizedFileURL.pathComponents
+    guard url.lastPathComponent == "jobs", let jobsIndex = components.lastIndex(of: "jobs"),
+      jobsIndex >= 4
+    else { return false }
+    return components[jobsIndex - 4] == "harnesses"
+      && components[jobsIndex - 2] == "forms"
   }
 
   private func isJSONCUJCandidate(lowerPath: String) -> Bool {
@@ -1823,6 +1887,16 @@ struct CUJPortfolioAuditScanner {
     lhs.localizedStandardCompare(rhs) == .orderedAscending
   }
 
+  private func definitionRefLessThan(
+    _ lhs: CUJDefinitionIdentityRef,
+    _ rhs: CUJDefinitionIdentityRef
+  ) -> Bool {
+    if lhs.projectKey != rhs.projectKey {
+      return localizedLessThan(lhs.projectKey, rhs.projectKey)
+    }
+    return localizedLessThan(lhs.definitionID, rhs.definitionID)
+  }
+
   private enum JSONInspectionError: Error {
     case notObject
   }
@@ -1884,7 +1958,12 @@ enum CUJPortfolioAuditRenderer {
     lines.append("| Measure | Count |")
     lines.append("| --- | ---: |")
     lines.append("| CUJ artifacts, kept in separate semantic classes | \(summary.artifactCount) |")
-    lines.append("| Unique journey definitions | \(summary.uniqueDefinitionCount) |")
+    lines.append("| Project-qualified journey definition records | \(summary.uniqueDefinitionCount) |")
+    lines.append("| Distinct definition ID labels | \(summary.distinctDefinitionIDCount) |")
+    lines.append("| Reused definition ID labels | \(summary.duplicatedDefinitionIDCount) |")
+    lines.append(
+      "| Definition records using reused ID labels | \(summary.definitionRecordsUsingDuplicatedIDs) |"
+    )
     lines.append("| Standalone typed definitions | \(summary.standaloneTypedDefinitionCount) |")
     lines.append("| Matrix-defined journeys | \(summary.matrixDefinitionCount) |")
     lines.append(

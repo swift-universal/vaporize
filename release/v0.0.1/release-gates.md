@@ -1,7 +1,7 @@
 # Vaporize v0.0.1 - Release Gates
 
 **Status:** release-prep draft; blocked pending fleet Pkl-backed Xcode world-state parity
-**Updated:** 2026-07-10T22:58:56Z
+**Updated:** 2026-07-11T02:51:43Z
 **Component:** `vaporize@wrkstrm-core.cli`
 **Tool classification:** `internal-essential-tool`
 
@@ -10,8 +10,8 @@
 **BLOCKED-FOR-INTERNAL-ESSENTIAL-RELEASE.**
 
 The CUJ-derived test coverage contract now defines the required floor:
-128 Swift test obligations plus 13 release evidence checks across 26 active CUJs.
-The Vaporize package tests cover 190 executable Swift tests across 25 implemented
+132 Swift test obligations plus 14 release evidence checks across 27 active CUJs.
+The Vaporize package tests cover 196 executable Swift tests across 26 implemented
 CUJ-specific SwiftPM bundles through Vaporize's owned Xcode-selected toolchain
 mode, including the CUJ-16 `inspect-target-features` first slice and CUJ-17
 `release-doctor` first slice, CUJ-18 `list-targets` first slice, and CUJ-19
@@ -21,7 +21,8 @@ install preservation, and CUJ-14 expected-pass/expected-fail coverage for typed
 release identity plus framework/app/unit-test/package/shared-scheme graph
 generation, plus CUJ-23 product proving-ground passports, including the Pkl
 project-generation proving-ground passport, CUJ-25 saved portfolio audit
-coverage, and CUJ-26 canonical automated-proof ledger coverage. The evidence-ready
+coverage, CUJ-26 canonical automated-proof ledger coverage, and CUJ-27
+implementation-project coverage ledger. The evidence-ready
 Swift YAML read bridge,
 PklSwift-backed Pkl parity specimen, transitional YAML generation slice,
 legacy-YAML-to-Pkl import slice, and major-feature test expansion are landed
@@ -92,9 +93,9 @@ statuses without human review as blocking failures.
 | GATE-02 - CUJs authored | EVIDENCE-READY-PENDING-HUMAN-REVIEW | `release/v0.0.1/cuj.md` |
 | GATE-03 - Release gates authored | EVIDENCE-READY-PENDING-HUMAN-REVIEW | This file |
 | GATE-04 - Launch-review packet authored | EVIDENCE-READY-PENDING-HUMAN-REVIEW | `release/v0.0.1/evidence/launch-review-packet.json` |
-| GATE-05 - CUJ-derived package tests pass | EVIDENCE-READY-PENDING-HUMAN-REVIEW | `release/v0.0.1/evidence/cuj-test-coverage.json` requires 128 Swift test obligations plus 13 release evidence checks across 26 active CUJs. `vaporize.cli@wrkstrm-core.clia.sh test --package-path private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli --configuration debug -- --filter 'VaporizeCUJ10YMLPklComparisonTests\|VaporizeCUJ13YMLPklImportTests\|VaporizeCUJ14PklXcodeProjectGenerationTests'` proves checked-in XcodeGen-to-Pkl parity grounds, generated Pkl import parity for every ground, and above-parity Pkl `.xcodeproj` generation grounds; the full suite plus focused CUJ-09/CUJ-17/CUJ-21/CUJ-22/CUJ-23/CUJ-25/CUJ-26 runs prove the 190-test coverage model across 25 implemented CUJ-specific SwiftPM bundles. |
+| GATE-05 - CUJ-derived package tests pass | EVIDENCE-READY-PENDING-HUMAN-REVIEW | `release/v0.0.1/evidence/cuj-test-coverage.json` requires 132 Swift test obligations plus 14 release evidence checks across 27 active CUJs. `vaporize.cli@wrkstrm-core.clia.sh test --package-path private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli --configuration debug -- --filter 'VaporizeCUJ10YMLPklComparisonTests\|VaporizeCUJ13YMLPklImportTests\|VaporizeCUJ14PklXcodeProjectGenerationTests'` proves checked-in XcodeGen-to-Pkl parity grounds, generated Pkl import parity for every ground, and above-parity Pkl `.xcodeproj` generation grounds; the full suite plus focused CUJ-09/CUJ-17/CUJ-21/CUJ-22/CUJ-23/CUJ-25/CUJ-26/CUJ-27 runs prove the 196-test coverage model across 26 implemented CUJ-specific SwiftPM bundles. |
 | GATE-06 - Required toolchain owned by Vaporize | EVIDENCE-READY-PENDING-HUMAN-REVIEW | Current host check at 2026-06-13T21:39:03Z found bare `swift` and `vaporize toolchain -- swift` both reporting Apple Swift 6.4, and focused CUJ-15 took `6.80s` through both routes once warm. Earlier release-prep runs observed bare Swift drift. Vaporize remains the owned route because it stabilizes toolchain policy and release evidence even when host PATH happens to be correct. |
-| GATE-07 - CLI help reflects release surface | EVIDENCE-READY-PENDING-HUMAN-REVIEW | Vaporize help advertises `use`, `toolchain`, `validate-json`, `inventory`, `cuj-audit`, `--proof-ledger-path`, `inspect-project-yml`, `inspect-target-features`, `compare-project-yml-pkl`, `import-project-yml`, `generate-project-yml`, `generate-xcodeproj`, `list-targets`, `list-schemes`, `release-doctor`, `--common-process-spec`, `--xcode-product-cache-workspace`, and `--xcode-product-cache-derived-data-path`. |
+| GATE-07 - CLI help reflects release surface | EVIDENCE-READY-PENDING-HUMAN-REVIEW | Vaporize help advertises `use`, `toolchain`, `validate-json`, `inventory`, `cuj-audit`, `--proof-ledger-path`, `--project-ledger-path`, `--project-ledger-csv-path`, `inspect-project-yml`, `inspect-target-features`, `compare-project-yml-pkl`, `import-project-yml`, `generate-project-yml`, `generate-xcodeproj`, `list-targets`, `list-schemes`, `release-doctor`, `--common-process-spec`, `--xcode-product-cache-workspace`, and `--xcode-product-cache-derived-data-path`. |
 | GATE-08 - CommonProcess use mode tested | EVIDENCE-READY-PENDING-HUMAN-REVIEW | `VaporizeUseCommonProcessTests.swift` decodes valid spec JSON, loads a spec from disk, and rejects invalid executable refs. |
 | GATE-09 - Vapor inventory tests pass | EVIDENCE-READY-PENDING-HUMAN-REVIEW | `VaporizeCUJ07VaporInventoryTests` covers scanner status classification, legacy key handling, malformed JSON, path errors, and text/JSON rendering. |
 | GATE-10 - JSON release packet validates | EVIDENCE-READY-PENDING-HUMAN-REVIEW | `vaporize validate-json --path release/v0.0.1/evidence/launch-review-packet.json` passed. |

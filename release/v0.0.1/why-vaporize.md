@@ -33,7 +33,7 @@ world-state.
 | Problem | Vaporize answer | Current proof |
 | --- | --- | --- |
 | Engineering standards drift into ad hoc proof | Vaporize makes the owned route prefer native artifacts, typed samples, receipts, and gates | Product definition, runtime sample series, release gates |
-| Assistants improvise shell choreography | One canonical command surface for build, test, install, run, open, validate, inspect, import, generate, list targets, list workspace schemes, inventory, and toolchain selection | README, PRD FR-001 through FR-034, 25 CUJ bundles |
+| Assistants improvise shell choreography | One canonical command surface for build, test, install, run, open, validate, inspect, import, generate, list targets, list workspace schemes, inventory, and toolchain selection | README, PRD FR-001 through FR-035, 26 CUJ bundles |
 | Direct native tools bypass policy | `xcodebuild`, `xcrun`, and JSON validation details live behind Vaporize modes | CUJ-05, CUJ-06, release gates |
 | Build/install output is hard to review | Receipts record what was requested and what happened | Pass/use/toolchain/validation/project receipts |
 | Xcode project migration needs proof | YAML, Pkl, generated YAML, and first-slice `.xcodeproj` generation are compared and receipted | CUJ-08, CUJ-10, CUJ-11, CUJ-13, CUJ-14 |
@@ -43,6 +43,7 @@ world-state.
 | Huge workspace products are rebuilt locally | Shared workspace product-cache flags search the warm workspace DerivedData product before local outputs, `list-targets` names expected cache candidates and warm/missing state, and cache misses build through the shared workspace | CUJ-15, CUJ-19 |
 | Release review drifts into chat memory | PRD, CUJs, gates, launch packet, provenance, and schema fixtures name the evidence and counts | Release v0.0.1 packet |
 | Automated CUJ proof is scattered or overstated | The canonical proof ledger indexes owning-package tests, owning evidence receipts, strict proof state, and remaining obligations without moving the owned artifacts | CUJ-26, `cuj-automated-proof-ledger.su.json` |
+| Portfolio reporting collapses hundreds of projects into a few totals | The project coverage ledger retains one row per active-owned implementation project with exact surfaces, mapping provenance, composite CUJ identity, proof legs, and quantified actions | CUJ-27, `cuj-implementation-project-coverage-ledger.su.json`, CSV companion |
 
 ## Compared To Swift Alone
 
@@ -117,7 +118,7 @@ Environment:
 | Bare Swift version comparison | `swift --version` | `0.17s real` |
 | Focused CUJ-15 through bare Swift | `swift test --filter VaporizeCUJ15XcodeProductCacheTests` | `6.80s real` |
 | Focused CUJ-15 through Vaporize toolchain | `vaporize toolchain -- swift test --filter VaporizeCUJ15XcodeProductCacheTests` | `6.80s real` |
-| Full Vaporize suite through Vaporize toolchain | `vaporize toolchain -- swift test` | Latest coverage model: 190 tests across 25 CUJ bundles, including CUJ-25 portfolio audit and CUJ-26 automated-proof ledger coverage; earlier `/usr/bin/time` baseline: `15.57s real`, 82 tests |
+| Full Vaporize suite through Vaporize toolchain | `vaporize toolchain -- swift test` | Latest coverage model: 196 tests across 26 CUJ bundles, including CUJ-25 portfolio audit, CUJ-26 automated-proof ledger, and CUJ-27 project coverage ledger; earlier `/usr/bin/time` baseline: `15.57s real`, 82 tests |
 | Focused CUJ-09 with SwiftPM coverage enabled | `vaporize toolchain -- swift test --filter VaporizeCUJ09ReleaseReviewTests --enable-code-coverage` | `29.38s real`, 5 tests, SwiftPM codecov JSON verified |
 
 Interpretation:

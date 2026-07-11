@@ -115,6 +115,15 @@ enum VaporizeReleaseDoctor {
       textContainsCheck(
         roots: roots,
         scope: .releaseRoot,
+        relativePath: "prd.md",
+        token: "FR-035",
+        name: "prd-implementation-project-coverage-ledger-requirement"
+      )
+    )
+    checks.append(
+      textContainsCheck(
+        roots: roots,
+        scope: .releaseRoot,
         relativePath: "cuj.md",
         token: "CUJ-17",
         name: "cuj-release-doctor-journey"
@@ -190,6 +199,15 @@ enum VaporizeReleaseDoctor {
         relativePath: "cuj.md",
         token: "CUJ-26",
         name: "cuj-automated-proof-ledger-journey"
+      )
+    )
+    checks.append(
+      textContainsCheck(
+        roots: roots,
+        scope: .releaseRoot,
+        relativePath: "cuj.md",
+        token: "CUJ-27",
+        name: "cuj-implementation-project-coverage-ledger-journey"
       )
     )
     checks.append(
@@ -1062,18 +1080,18 @@ enum VaporizeReleaseDoctor {
 
     return [
       check(
-        name: "coverage-active-cuj-26",
+        name: "coverage-active-cuj-27",
         category: "cuj-coverage",
         path: url.path,
-        passed: (counts["activeCUJCount"] as? Int ?? 0) >= 26,
-        detail: "Coverage artifact must count through CUJ-26 automated-proof ledger coverage."
+        passed: (counts["activeCUJCount"] as? Int ?? 0) >= 27,
+        detail: "Coverage artifact must count through CUJ-27 implementation-project coverage."
       ),
       check(
         name: "coverage-release-evidence-floor",
         category: "cuj-coverage",
         path: url.path,
-        passed: (counts["requiredReleaseEvidenceCheckCount"] as? Int ?? 0) >= 13,
-        detail: "Coverage artifact must include release-doctor, target discovery, workspace cache discovery, CUJ-state coverage, and product proving-ground evidence obligations."
+        passed: (counts["requiredReleaseEvidenceCheckCount"] as? Int ?? 0) >= 14,
+        detail: "Coverage artifact must include release-doctor, target discovery, workspace cache discovery, CUJ-state coverage, product proving-ground, and project-ledger evidence obligations."
       ),
       check(
         name: "coverage-yml-pkl-parity-proving-ground-test-bundle",
@@ -1158,6 +1176,13 @@ enum VaporizeReleaseDoctor {
         path: url.path,
         passed: (breakdown["VaporizeCUJ26AutomatedProofLedgerTests"] as? Int ?? 0) >= 5,
         detail: "Coverage artifact must name the CUJ-26 targetable automated-proof ledger test bundle."
+      ),
+      check(
+        name: "coverage-cuj-implementation-project-ledger-test-bundle",
+        category: "cuj-coverage",
+        path: url.path,
+        passed: (breakdown["VaporizeCUJ27ProjectCoverageLedgerTests"] as? Int ?? 0) >= 4,
+        detail: "Coverage artifact must name the CUJ-27 targetable implementation-project coverage ledger test bundle."
       ),
     ]
   }
