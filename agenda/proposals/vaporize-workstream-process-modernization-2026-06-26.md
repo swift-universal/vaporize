@@ -182,4 +182,4 @@ persistence, structured receipts, and explicit native-authority exceptions.
 - CUJ state harness bead:
   `private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/FR-VAPORIZE-CUJ-STATE-HARNESS-2026-06-26.beads-issue.json`
 - Role manifest:
-  `private/universal/substrate/roles/vaporize-workstream-modernization-steward/private/universal/identity/vaporize-workstream-modernization-steward.role-surface-manifest.json`
+  `private/universal/substrate/collectives/spaces-universal/private/universal/kura-spaces/roles/vaporize-workstream-modernization-steward/private/universal/identity/vaporize-workstream-modernization-steward.role-surface-manifest.json`
