@@ -7,6 +7,7 @@ import Foundation
 import SwiftAppInstaller
 import SwiftCLIInstaller
 import SwiftJSONFormatter
+import TranslateSourceGate
 
 @main
 struct VaporizeCLI: AsyncParsableCommand {
@@ -344,6 +345,8 @@ struct VaporizeCLI: AsyncParsableCommand {
       )
     }
 
+    try enforceI18nSourcePolicy(for: mode)
+
     switch mode {
     case .install:
       try await installArtifact(launchApp: launch)
@@ -406,6 +409,47 @@ struct VaporizeCLI: AsyncParsableCommand {
     case .app:
       try await installApp(launchApp: launch)
     }
+  }
+
+  /// Fail closed before any canonical build/install/test/run dispatch reaches
+  /// SwiftPM or Xcode. Both build systems consume the same i18n-owned AST gate.
+  private func enforceI18nSourcePolicy(for mode: Mode) throws {
+    let selectedArtifact: ArtifactKind
+    let selectedPackagePath: String
+    let selectedProduct: String
+
+    switch mode {
+    case .install, .build, .test, .run:
+      selectedArtifact = artifact
+      selectedPackagePath = try requirePackagePath()
+      selectedProduct = artifact == .cli ? try requireCLIProduct() : try requireProduct()
+    case .cli:
+      selectedArtifact = .cli
+      selectedPackagePath = try requirePackagePath()
+      selectedProduct = try requireCLIProduct()
+    case .app:
+      selectedArtifact = .app
+      selectedPackagePath = try requirePackagePath()
+      selectedProduct = try requireProduct()
+    case .selfUpdate:
+      selectedArtifact = .cli
+      selectedPackagePath = try requireSelfUpdatePackagePath()
+      selectedProduct = "vaporize.cli@wrkstrm-core.clia.sh"
+    default:
+      return
+    }
+
+    let gateEnforcement: TranslateSourceGateEnforcement =
+      configuration.rawValue.lowercased() == "release" ? .release : .development
+    let result = try VaporizeI18nSourceGate.enforce(
+      productDirectory: URL(fileURLWithPath: selectedPackagePath, isDirectory: true),
+      productName: selectedProduct,
+      surfaceKind: selectedArtifact == .app ? .app : .cli,
+      enforcement: gateEnforcement
+    )
+    print(
+      "vaporize: i18n source gate passed for \(selectedProduct) · receipt \(result.receiptURL.path)"
+    )
   }
 
   private func installArtifact(launchApp: Bool) async throws {

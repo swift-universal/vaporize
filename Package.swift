@@ -34,6 +34,9 @@ let pklSwiftDependency = Package.Dependency.package(
   url: "https://github.com/apple/pkl-swift",
   from: "0.8.2"
 )
+let translateSourceGateDependency = Package.Dependency.package(
+  path: "../../../../../i18n-universal/private/universal/domain/catalogs/spm/TranslateCatalogCore"
+)
 
 let package = Package(
   name: "vaporize@wrkstrm-core-cli",
@@ -53,6 +56,7 @@ let package = Package(
     swiftCLIInstallerDependency,
     swiftJSONFormatterDependency,
     pklSwiftDependency,
+    translateSourceGateDependency,
     .package(url: "https://github.com/apple/swift-argument-parser", from: "1.6.0"),
     .package(url: "https://github.com/jpsim/Yams", from: "5.1.0"),
   ],
@@ -89,6 +93,7 @@ let package = Package(
         .product(name: "CommonProcess", package: "common-process"),
         .product(name: "CommonProcessExecutionKit", package: "common-process"),
         .product(name: "SwiftJSONFormatter", package: "swift-json-formatter"),
+        .product(name: "TranslateSourceGate", package: "TranslateCatalogCore"),
         .product(name: "ArgumentParser", package: "swift-argument-parser"),
       ],
       path: "sources/vaporize-cli"
