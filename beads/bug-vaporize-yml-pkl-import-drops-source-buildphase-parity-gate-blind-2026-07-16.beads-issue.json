@@ -1,0 +1,14 @@
+{
+  "id": "bug-vaporize-yml-pkl-import-drops-source-buildphase-parity-gate-blind-2026-07-16",
+  "title": "yml→pkl import silently drops source buildPhase and the parity gate is structurally blind to it",
+  "status": "open",
+  "priority": 1,
+  "issueType": "bug",
+  "description": "During the hello-world-google.demo project.yml → project.pkl upgrade (2026-07-16), the source entry for the HelloWorldGoogle.help folder carried `buildPhase: resources` in project.yml, but the generated project.pkl Source has only `path` + `type = \"folder\"` — the buildPhase is gone. Worse, `compare-project-yml-pkl` reported `matched mismatches=0` and `upgrade-project-yml-to-pkl` reported `parity matched`: the parity gate cannot see the loss because NEITHER side of the comparison models the field — `class Source` in Pkl/AppleProjectSpec.pkl has only `path`/`type`, and the owned yml read-model (inspect-project-yml --format json) contains no buildPhase either. A gate that is blind on both sides passes structurally lossy conversions. If the yml is ever retired (--apply) and the .xcodeproj is regenerated from pkl, the help book folder's resources-phase placement could be lost in the built product.",
+  "design": "Two-part fix, in order: (1) add buildPhase to the owned yml read-model AND to `class Source` in AppleProjectSpec.pkl (+ Swift AppleProjectSpec model + renderer + importer), so the field round-trips; (2) add a parity-gate meta-check that diffs the RAW yml key set against the keys the read-model consumed, so any future unmodeled yml key fails the gate loudly as `unmodeled-key` instead of vanishing. Part (2) is the load-bearing fix — it converts this whole bug class from silent to loud.",
+  "acceptanceCriteria": "hello-world-google.demo upgrade round-trips buildPhase byte-identically; a fixture project.yml containing any key unknown to the read-model makes compare-project-yml-pkl and upgrade-project-yml-to-pkl exit non-zero naming the key; existing parity proving-ground suites stay green.",
+  "notes": "Found by the hello-world pkl-exemplar slice under beads/FR-CLI-SPARKLE-SELF-UPDATE-VAPORIZE-PKL-SCAFFOLDER-2026-07-14 (mono root). Instance of the tooling-silent-fallback-to-wrong-state-not-error-loud pattern: the gate reported success while being unable to observe the failure. The two generated project.pkl files were left in place (yml NOT retired) precisely because of this finding.",
+  "createdAt": "2026-07-16",
+  "createdBy": "claude (hulk)",
+  "labels": ["pkl", "parity-gate", "silent-data-loss", "yml-import"]
+}

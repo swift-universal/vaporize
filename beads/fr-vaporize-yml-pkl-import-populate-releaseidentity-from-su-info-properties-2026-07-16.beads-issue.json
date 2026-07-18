@@ -1,0 +1,14 @@
+{
+  "id": "fr-vaporize-yml-pkl-import-populate-releaseidentity-from-su-info-properties-2026-07-16",
+  "title": "yml→pkl importer should lift SUFeedURL/SUPublicEDKey info properties into typed ReleaseIdentity",
+  "status": "open",
+  "priority": 2,
+  "issueType": "feature",
+  "description": "Both hello-world demo upgrades (2026-07-16) produced project.pkl files where the Sparkle facts survive ONLY as untyped Info.plist properties (targets[...].info.properties SUFeedURL / SUPublicEDKey / SUEnableAutomaticChecks / SUScheduledCheckInterval) while `releaseIdentity` evaluates to null. The schema's typed home for exactly these facts (ReleaseIdentity.sparkleFeedURL / .sparklePublicEDKey, AppleProjectSpec.pkl class ReleaseIdentity) exists but the importer never populates it. Consequence: the pkl exemplar of the fully proven Sparkle pipeline carries its update identity outside the typed contract, and generate-sparkle-config (which reads releaseIdentity) cannot operate on imported app manifests. Sparkle truth should live once, typed, and project the INFOPLIST_KEY_SU* build settings from there.",
+  "design": "Importer maps SUFeedURL → releaseIdentity.sparkleFeedURL and SUPublicEDKey → releaseIdentity.sparklePublicEDKey (plus shortVersion from MARKETING_VERSION when present). Decide the single-source rule: either the importer REMOVES the lifted SU* keys from info.properties (generator re-emits them from releaseIdentity, as it already does for app targets), or it keeps both and the generator asserts they agree — pick the first unless parity constraints force the second, and gate disagreement loudly either way.",
+  "acceptanceCriteria": "Re-running the hello-world.demo upgrade yields releaseIdentity.sparkleFeedURL == \"https://vapor-wares.pages.dev/appcast/hello-world.xml\" and the matching public key, with generate-xcodeproj output settings unchanged (parity suites green); a manifest where info.properties and releaseIdentity disagree is a loud typed error.",
+  "notes": "Found by the hello-world pkl-exemplar slice under beads/FR-CLI-SPARKLE-SELF-UPDATE-VAPORIZE-PKL-SCAFFOLDER-2026-07-14 (mono root). Related: that umbrella's descoped Stage-Appcast-Draft stub replacement also reads releaseIdentity — this lift is its prerequisite for imported manifests.",
+  "createdAt": "2026-07-16",
+  "createdBy": "claude (hulk)",
+  "labels": ["pkl", "release-identity", "sparkle", "yml-import"]
+}

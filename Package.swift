@@ -25,6 +25,19 @@ let swiftCLIInstallerDependency = localOrRemote(
   url: "https://github.com/swift-universal/swift-cli-installer.git",
   from: "0.0.1"
 )
+// Consume/verify half of CLI Sparkle (appcast parse, SemanticVersion compare,
+// EdDSA verify, atomic replace) — consumed, not reimplemented, per
+// FR-CLI-SPARKLE-SELF-UPDATE-VAPORIZE-PKL-SCAFFOLDER-2026-07-14 component C.
+let swiftCLIUpdaterDependency = localOrRemote(
+  path: "../../../../../swift-universal/private/universal/domain/tooling/spm/swift-cli-updater",
+  url: "https://github.com/swift-universal/swift-cli-updater.git",
+  from: "0.0.1"
+)
+let swiftlyDependency = localOrRemote(
+  path: "../../../../../../maintainers/swiftlang/public/universal/tooling/swift/swiftly",
+  url: "https://github.com/swiftlang/swiftly.git",
+  from: "1.1.3"
+)
 let swiftJSONFormatterDependency = localOrRemote(
   path: "../../../../../swift-universal/private/universal/domain/tooling/spm/swift-json-formatter",
   url: "https://github.com/swift-universal/swift-json-formatter.git",
@@ -33,6 +46,10 @@ let swiftJSONFormatterDependency = localOrRemote(
 let pklSwiftDependency = Package.Dependency.package(
   url: "https://github.com/apple/pkl-swift",
   from: "0.8.2"
+)
+let swiftIssueReportingDependency = Package.Dependency.package(
+  url: "https://github.com/pointfreeco/swift-issue-reporting",
+  exact: "2.0.0"
 )
 let translateSourceGateDependency = Package.Dependency.package(
   path: "../../../../../i18n-universal/private/universal/domain/catalogs/spm/TranslateCatalogCore"
@@ -45,6 +62,7 @@ let package = Package(
   ],
   products: [
     .library(name: "AppleProjectSpecCore", targets: ["AppleProjectSpecCore"]),
+    .library(name: "VaporizeIssueReporting", targets: ["VaporizeIssueReporting"]),
     // SwiftCLIInstaller library LIFTED to swift-universal/.../tooling/spm/swift-cli-installer/
     // (CEO decision 2026-06-14). Consumers now import via swiftCLIInstallerDependency.
     .library(name: "SwiftAppInstaller", targets: ["SwiftAppInstaller"]),
@@ -54,8 +72,11 @@ let package = Package(
     commonProcessDependency,
     commonShellDependency,
     swiftCLIInstallerDependency,
+    swiftCLIUpdaterDependency,
+    swiftlyDependency,
     swiftJSONFormatterDependency,
     pklSwiftDependency,
+    swiftIssueReportingDependency,
     translateSourceGateDependency,
     .package(url: "https://github.com/apple/swift-argument-parser", from: "1.6.0"),
     .package(url: "https://github.com/jpsim/Yams", from: "5.1.0"),
@@ -87,7 +108,10 @@ let package = Package(
       name: "VaporizeCLI",
       dependencies: [
         "AppleProjectSpecCore",
+        "VaporizeIssueReporting",
         .product(name: "SwiftCLIInstaller", package: "swift-cli-installer"),
+        .product(name: "SwiftCLIUpdater", package: "swift-cli-updater"),
+        .product(name: "swiftly", package: "swiftly"),
         "SwiftAppInstaller",
         .product(name: "CommonShell", package: "common-shell"),
         .product(name: "CommonProcess", package: "common-process"),
@@ -102,6 +126,22 @@ let package = Package(
       name: "VaporizeTestSupport",
       dependencies: ["AppleProjectSpecCore"],
       path: "tests/vaporize-test-support"
+    ),
+    .target(
+      name: "VaporizeIssueReporting",
+      dependencies: [
+        .product(name: "IssueReporting", package: "swift-issue-reporting"),
+      ],
+      path: "sources/vaporize-issue-reporting"
+    ),
+    .testTarget(
+      name: "VaporizeIssueReportingTests",
+      dependencies: [
+        "VaporizeIssueReporting",
+        "VaporizeCLI",
+        .product(name: "IssueReporting", package: "swift-issue-reporting"),
+      ],
+      path: "tests/issue-reporting"
     ),
     .testTarget(
       name: "VaporizeCUJ01SwiftPMCLITests",
@@ -127,6 +167,11 @@ let package = Package(
       name: "VaporizeCUJ03PassThroughTests",
       dependencies: ["VaporizeCLI"],
       path: "tests/cuj-03-pass-through"
+    ),
+    .testTarget(
+      name: "VaporizeSwiftUIImportGateTests",
+      dependencies: ["VaporizeCLI"],
+      path: "tests/swiftui-import-gate"
     ),
     .testTarget(
       name: "VaporizeCUJ04CommonProcessUseTests",
@@ -306,6 +351,36 @@ let package = Package(
         .product(name: "ArgumentParser", package: "swift-argument-parser"),
       ],
       path: "tests/cuj-27-project-coverage-ledger"
+    ),
+    .testTarget(
+      name: "VaporizeCUJ28SparkleConfigGenerationTests",
+      dependencies: [
+        "AppleProjectSpecCore",
+        "VaporizeCLI",
+        "VaporizeTestSupport",
+        .product(name: "ArgumentParser", package: "swift-argument-parser"),
+      ],
+      path: "tests/cuj-28-sparkle-config-generation"
+    ),
+    .testTarget(
+      name: "VaporizeCUJ29ProductSelfUpdateTests",
+      dependencies: [
+        "VaporizeCLI",
+        .product(name: "SwiftCLIInstaller", package: "swift-cli-installer"),
+        .product(name: "SwiftCLIUpdater", package: "swift-cli-updater"),
+        .product(name: "ArgumentParser", package: "swift-argument-parser"),
+      ],
+      path: "tests/cuj-29-product-self-update"
+    ),
+    .testTarget(
+      name: "VaporizeCUJ30FleetStatusTests",
+      dependencies: [
+        "VaporizeCLI",
+        .product(name: "SwiftCLIInstaller", package: "swift-cli-installer"),
+        .product(name: "SwiftCLIUpdater", package: "swift-cli-updater"),
+        .product(name: "ArgumentParser", package: "swift-argument-parser"),
+      ],
+      path: "tests/cuj-30-fleet-status"
     ),
     .testTarget(
       name: "VaporizeCUJ12PackageGraphTests",

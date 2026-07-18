@@ -8,6 +8,7 @@ import SwiftAppInstaller
 import SwiftCLIInstaller
 import SwiftJSONFormatter
 import TranslateSourceGate
+import VaporizeIssueReporting
 
 @main
 struct VaporizeCLI: AsyncParsableCommand {
@@ -36,10 +37,15 @@ struct VaporizeCLI: AsyncParsableCommand {
       import-project-yml emits a Pkl parity specimen from legacy YAML; \
       generate-project-yml emits transitional AppleProjectSpec YAML from Pkl \
       with receipts; generate-xcodeproj emits first-slice .xcodeproj \
-      world-state from evaluated AppleProjectSpec Pkl; list-targets discovers \
+      world-state from evaluated AppleProjectSpec Pkl; \
+      generate-sparkle-config emits a compiled-in SparkleConfig.swift for a \
+      CLI tool target from its project.pkl releaseIdentity; list-targets discovers \
       project targets, packages, and schemes for parity/build routing; \
       list-schemes asks xcodebuild for live .xcworkspace schemes; \
       release-doctor audits the release spine before claims are trusted. \
+      fleet-status reports every installed bin-directory tool with its \
+      sidecar-recorded version and appcast feed currency \
+      (current/behind/critical-behind/feed-unreachable/no-sidecar). \
       `inventory` discovers Package.swift, .xcodeproj, .xcworkspace, \
       project.yml, and project.pkl surfaces by domain, product line, and \
       ownership scope. `cuj-audit` inventories CUJ definitions, proof \
@@ -80,6 +86,7 @@ struct VaporizeCLI: AsyncParsableCommand {
     case upgradeProjectYMLToPkl = "upgrade-project-yml-to-pkl"
     case generateProjectYML = "generate-project-yml"
     case generateXcodeProject = "generate-xcodeproj"
+    case generateSparkleConfig = "generate-sparkle-config"
     case listTargets = "list-targets"
     case listSchemes = "list-schemes"
     case releaseDoctor = "release-doctor"
@@ -101,6 +108,10 @@ struct VaporizeCLI: AsyncParsableCommand {
 
     /// Self-maintenance.
     case selfUpdate = "self-update"
+
+    /// Fleet operation: every installed bin-directory tool × sidecar version
+    /// × feed currency (the Fleet Yard's data spine).
+    case fleetStatus = "fleet-status"
   }
 
   enum ArtifactKind: String, ExpressibleByArgument {
@@ -113,7 +124,7 @@ struct VaporizeCLI: AsyncParsableCommand {
     case fail
   }
 
-  @Argument(help: "Mode: install, uninstall, build, test, run, pass, use, toolchain, setup, status, warehouse, validate-json, validate-json-schema, inspect-project-yml, inspect-target-features, compare-project-yml-pkl, import-project-yml, generate-project-yml, generate-xcodeproj, list-targets, list-schemes, release-doctor, inventory, cuj-audit, domains, self-update, or graph (forwards to package-graph@wrkstrm.cli).")
+  @Argument(help: "Mode: install, uninstall, build, test, run, pass, use, toolchain, setup, status, warehouse, validate-json, validate-json-schema, inspect-project-yml, inspect-target-features, compare-project-yml-pkl, import-project-yml, generate-project-yml, generate-xcodeproj, generate-sparkle-config, list-targets, list-schemes, release-doctor, inventory, cuj-audit, domains, self-update, fleet-status, or graph (forwards to package-graph@wrkstrm.cli).")
   var mode: Mode?
 
   @Flag(help: "Prints the tool name, version, and build metadata and exits.")
@@ -147,6 +158,18 @@ struct VaporizeCLI: AsyncParsableCommand {
     name: .customLong("product-build-date"),
     help: "Build date recorded in the installed CLI metadata Info.plist.")
   var productBuildDate: String?
+
+  @Option(
+    name: .customLong("su-feed-url"),
+    help:
+      "Sparkle appcast URL recorded as SUFeedURL in the installed CLI metadata Info.plist sidecar (requires --su-public-ed-key).")
+  var suFeedURL: String?
+
+  @Option(
+    name: .customLong("su-public-ed-key"),
+    help:
+      "Base64 ed25519 public key recorded as SUPublicEDKey in the installed CLI metadata Info.plist sidecar (requires --su-feed-url).")
+  var suPublicEDKey: String?
 
   @Option(
     name: .customLong("app-bundle-name"),
@@ -191,7 +214,7 @@ struct VaporizeCLI: AsyncParsableCommand {
 
   @Option(
     name: .customLong("target"),
-    help: "Target name for inspect-target-features mode.")
+    help: "Target name for inspect-target-features or generate-sparkle-config mode.")
   var targetName: String?
 
   @Option(
@@ -231,12 +254,12 @@ struct VaporizeCLI: AsyncParsableCommand {
 
   @Flag(
     name: .customLong("analyze"),
-    help: "Emit a JSON execution receipt for pass or use mode.")
+    help: "Emit a JSON execution receipt for test, pass, or use mode.")
   var analyzeExecution: Bool = false
 
   @Option(
     name: .customLong("receipt-path"),
-    help: "Write the pass-through, use, inventory, or CUJ audit JSON receipt to this path.")
+    help: "Write the test, pass-through, use, inventory, or CUJ audit JSON receipt to this path.")
   var receiptPath: String?
 
   @Option(
@@ -314,6 +337,11 @@ struct VaporizeCLI: AsyncParsableCommand {
     help: "Output path for import-project-yml, generate-project-yml, or generate-xcodeproj mode.")
   var generatedOutputPath: String?
 
+  @Option(
+    name: .customLong("output"),
+    help: "Output path for the generated SparkleConfig.swift in generate-sparkle-config mode.")
+  var sparkleConfigOutputPath: String?
+
   @Flag(
     name: .customLong("apply"),
     help: "For upgrade-project-yml-to-pkl mode: retire the project.yml after a parity-verified upgrade. Without it the upgrade is a dry-run preview.")
@@ -321,8 +349,13 @@ struct VaporizeCLI: AsyncParsableCommand {
 
   @Option(
     name: .customLong("format"),
-    help: "Output format for status, inventory, cuj-audit, domains, inspect-project-yml, inspect-target-features, compare-project-yml-pkl, import-project-yml, generate-project-yml, generate-xcodeproj, list-targets, list-schemes, or release-doctor mode: text (default) or json.")
+    help: "Output format for status, inventory, cuj-audit, domains, inspect-project-yml, inspect-target-features, compare-project-yml-pkl, import-project-yml, generate-project-yml, generate-xcodeproj, list-targets, list-schemes, release-doctor, or fleet-status mode: text (default) or json.")
   var vaporOutputFormat: VaporOutputFormatArgument = .text
+
+  @Option(
+    name: .customLong("bin-dir"),
+    help: "Install bin directory scanned by fleet-status (default ~/.swiftpm/bin).")
+  var fleetBinDirectory: String?
 
   @Option(name: .customLong("domain"), help: "Tool domain for install/uninstall/run and domain path shaping (for example build).")
   var toolDomain: String?
@@ -346,6 +379,7 @@ struct VaporizeCLI: AsyncParsableCommand {
     }
 
     try enforceI18nSourcePolicy(for: mode)
+    try enforceSwiftUIImportPolicy(for: mode)
 
     switch mode {
     case .install:
@@ -388,6 +422,8 @@ struct VaporizeCLI: AsyncParsableCommand {
       try await generateProjectYML()
     case .generateXcodeProject:
       try await generateXcodeProject()
+    case .generateSparkleConfig:
+      try await generateSparkleConfig()
     case .listTargets:
       try await listTargets()
     case .listSchemes:
@@ -402,6 +438,8 @@ struct VaporizeCLI: AsyncParsableCommand {
       try await runDomains()
     case .selfUpdate:
       try await selfUpdate()
+    case .fleetStatus:
+      try await fleetStatus()
     case .graph:
       try await runGraph()
     case .cli:
@@ -432,6 +470,10 @@ struct VaporizeCLI: AsyncParsableCommand {
       selectedPackagePath = try requirePackagePath()
       selectedProduct = try requireProduct()
     case .selfUpdate:
+      // With --product, self-update swaps an already-published signed binary
+      // for ANOTHER tool from its appcast — no source is built here, so the
+      // source-level i18n gate has nothing to inspect.
+      if product != nil { return }
       selectedArtifact = .cli
       selectedPackagePath = try requireSelfUpdatePackagePath()
       selectedProduct = "vaporize.cli@wrkstrm-core.clia.sh"
@@ -448,7 +490,44 @@ struct VaporizeCLI: AsyncParsableCommand {
       enforcement: gateEnforcement
     )
     print(
-      "vaporize: i18n source gate passed for \(selectedProduct) · receipt \(result.receiptURL.path)"
+      "vaporize: \(result.report.standard.title) v\(result.report.standard.version) passed for \(selectedProduct) · receipt \(result.receiptURL.path)"
+    )
+  }
+
+  private func enforceSwiftUIImportPolicy(for mode: Mode) throws {
+    let selectedPackagePath: String
+    let selectedProduct: String
+
+    switch mode {
+    case .install, .build, .test, .run:
+      selectedPackagePath = try requirePackagePath()
+      selectedProduct = artifact == .cli ? try requireCLIProduct() : try requireProduct()
+    case .cli:
+      selectedPackagePath = try requirePackagePath()
+      selectedProduct = try requireCLIProduct()
+    case .app:
+      selectedPackagePath = try requirePackagePath()
+      selectedProduct = try requireProduct()
+    case .selfUpdate:
+      // Same skip as the i18n gate: --product updates another tool's
+      // installed binary from its feed; no source build to gate.
+      if product != nil { return }
+      selectedPackagePath = try requireSelfUpdatePackagePath()
+      selectedProduct = "vaporize.cli@wrkstrm-core.clia.sh"
+    default:
+      return
+    }
+
+    let enforcement =
+      configuration.rawValue.lowercased() == "release" ? "release" : "development"
+    // The receipt (a typed record) is the durable truth surface, and an
+    // adopted-package violation throws loudly from enforce(); no console
+    // logging is needed or wanted here (print is banned; CommonLog adoption
+    // for the whole vaporize CLI is a separate migration at its home).
+    _ = try VaporizeSwiftUIImportGate.enforce(
+      packageDirectory: URL(fileURLWithPath: selectedPackagePath, isDirectory: true),
+      productName: selectedProduct,
+      enforcement: enforcement
     )
   }
 
@@ -471,6 +550,22 @@ struct VaporizeCLI: AsyncParsableCommand {
   }
 
   private func selfUpdate() async throws {
+    // Generalized verb: `vaporize self-update --product <name>` updates ANY
+    // installed ~/.swiftpm/bin tool from its signed appcast via its metadata
+    // sidecar (SUFeedURL/SUPublicEDKey/CFBundleShortVersionString) — download,
+    // EdDSA-verify, atomic install. No re-exec: vaporize is updating another
+    // tool, not itself. Refusals (missing sidecar, missing/bad signature) are
+    // loud typed errors.
+    if let product, !product.isEmpty {
+      try await ProductSelfUpdate.run(
+        product: product,
+        binDirectory: installedCLIBinDirectory()
+      )
+      return
+    }
+
+    // Without --product: the original vaporize-updates-itself behavior,
+    // preserved exactly (rebuild from source and force-reinstall).
     let packagePath = try requireSelfUpdatePackagePath()
     let product = "vaporize.cli@wrkstrm-core.clia.sh"
     let updateDomain = inferredDomain(for: product, packagePath: packagePath)
@@ -489,6 +584,46 @@ struct VaporizeCLI: AsyncParsableCommand {
     )
     try await SwiftCLIInstaller(request: request).run()
     try publishInstalledCLI(toDomain: updateDomain, product: product)
+  }
+
+  private func fleetStatus() async throws {
+    // The Fleet Yard's data spine: every installed tool × sidecar version ×
+    // feed currency. Sidecar-less tools are LISTED (absence of update
+    // identity is a finding, not a skip); per-tool degradation is a typed
+    // row status, never an aborted scan.
+    let binDirectory =
+      fleetBinDirectory.map { absoluteURL(for: $0) } ?? installedCLIBinDirectory()
+    let report = try await FleetStatus.report(binDirectory: binDirectory)
+    try emitReceiptIfRequested(report)
+
+    switch vaporOutputFormat {
+    case .text:
+      print(FleetStatus.renderTable(report))
+    case .json:
+      let encoder = JSONEncoder()
+      encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
+      let data = try encoder.encode(report)
+      FileHandle.standardOutput.write(data)
+      FileHandle.standardOutput.write(Data("\n".utf8))
+    }
+  }
+
+  /// Resolve the optional Sparkle self-update identity to record in the
+  /// install sidecar. Both flags or neither: a lone flag is a loud error, and
+  /// a malformed feed URL never silently degrades to "no identity".
+  func resolvedSelfUpdateIdentity() throws -> SelfUpdateIdentity? {
+    let feed = suFeedURL?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+    let key = suPublicEDKey?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+    if feed.isEmpty, key.isEmpty { return nil }
+    guard !feed.isEmpty, !key.isEmpty else {
+      throw ValidationError(
+        "--su-feed-url and --su-public-ed-key must be provided together to record a self-update identity."
+      )
+    }
+    guard let feedURL = URL(string: feed), feedURL.scheme != nil else {
+      throw ValidationError("--su-feed-url is not a valid URL: \(feed)")
+    }
+    return SelfUpdateIdentity(feedURL: feedURL, publicEDKeyBase64: key)
   }
 
   private func buildArtifact() async throws {
@@ -510,7 +645,7 @@ struct VaporizeCLI: AsyncParsableCommand {
   private func testArtifact() async throws {
     switch artifact {
     case .cli:
-      try await runSwift(arguments: try swiftTestArguments())
+      try await runSwiftTests()
     case .app:
       throw ValidationError("test mode currently supports SwiftPM package tests only; use --artifact cli.")
     }
@@ -547,7 +682,8 @@ struct VaporizeCLI: AsyncParsableCommand {
       productBuildDate: resolvedProductBuildDate(for: product),
       installerVersion: Self.vaporizeVersion,
       installerBuild: Self.buildIdentifier,
-      developerDirectory: developerDirectory
+      developerDirectory: developerDirectory,
+      selfUpdateIdentity: try resolvedSelfUpdateIdentity()
     )
     try await SwiftCLIInstaller(request: request).run()
     // Post-install presence check: the installer must have landed an executable at the
@@ -648,12 +784,14 @@ struct VaporizeCLI: AsyncParsableCommand {
     let packagePath = try requirePackagePath()
     let product = try requireCLIProduct()
     let uninstallDomain = inferredDomain(for: product, packagePath: packagePath)
-    try await runSwiftPackage(arguments: [
-      "package",
-      "--package-path", packagePath,
-      "experimental-uninstall",
-      product,
-    ])
+    let request = SwiftCLIInstaller.Request(
+      packagePath: packagePath,
+      product: product,
+      configuration: .init(rawValue: configuration.rawValue) ?? .release,
+      forceReinstall: false,
+      developerDirectory: developerDirectory
+    )
+    try await SwiftCLIInstaller(request: request).uninstall()
     try removePublishedCLI(fromDomain: uninstallDomain, product: product)
   }
 
@@ -1895,6 +2033,36 @@ struct VaporizeCLI: AsyncParsableCommand {
     }
   }
 
+  /// Emit the compiled-in SparkleConfig.swift for a CLI tool target from its
+  /// project.pkl releaseIdentity (the single typed source for the tool's
+  /// self-update identity). Generation only — wiring the generated file into
+  /// the install/run lane and the self-update verb is a separate component.
+  private func generateSparkleConfig() async throws {
+    guard let pklPath, !pklPath.isEmpty else {
+      throw ValidationError("--pkl-path is required for generate-sparkle-config mode.")
+    }
+    guard let targetName, !targetName.isEmpty else {
+      throw ValidationError("--target is required for generate-sparkle-config mode.")
+    }
+    guard let sparkleConfigOutputPath, !sparkleConfigOutputPath.isEmpty else {
+      throw ValidationError("--output is required for generate-sparkle-config mode.")
+    }
+
+    let spec = try await AppleProjectPklLoader.load(url: URL(fileURLWithPath: pklPath))
+    let data = try AppleProjectSparkleConfigRenderer.renderData(
+      spec: spec,
+      targetName: targetName,
+      sourcePath: pklPath
+    )
+    let outputURL = URL(fileURLWithPath: sparkleConfigOutputPath)
+    try FileManager.default.createDirectory(
+      at: outputURL.deletingLastPathComponent(),
+      withIntermediateDirectories: true
+    )
+    try data.write(to: outputURL)
+    print(outputURL.path)
+  }
+
   private func listTargets() async throws {
     let requestId = "vaporize-list-targets-\(UUID().uuidString)"
     let productCacheOptions = AppleProjectProductCacheDiscoveryOptions(
@@ -2174,6 +2342,111 @@ struct VaporizeCLI: AsyncParsableCommand {
       sourceTag: "vaporize-swift",
       environment: developerDirectoryEnvironment()
     )
+  }
+
+  private func runSwiftTests() async throws {
+    let arguments = try swiftTestArguments()
+    try await validateXcodeSelectedSwiftCompatibility(arguments: arguments)
+
+    let packagePath = try requirePackagePath()
+    let product = try requireCLIProduct()
+    let requestId = "vaporize-test-\(UUID().uuidString)"
+    let issueSinkURL = testIssueSinkURL(requestId: requestId)
+    let preservesIssueSink = receiptPath != nil
+    try prepareTestIssueSink(at: issueSinkURL)
+    defer {
+      if !preservesIssueSink {
+        try? FileManager.default.removeItem(at: issueSinkURL)
+      }
+    }
+
+    var environmentUpdates = developerDirectoryEnvironment() ?? [:]
+    environmentUpdates[VaporizeIssueReporting.sinkPathEnvironmentKey] = issueSinkURL.path
+    environmentUpdates[VaporizeIssueReporting.requestIdEnvironmentKey] = requestId
+    environmentUpdates[VaporizeIssueReporting.executionPhaseEnvironmentKey] =
+      VaporizeIssueEvent.ExecutionPhase.test.rawValue
+
+    let command = CommandSpec(
+      executable: .name("xcrun"),
+      args: Self.xcodeSelectedSwiftArguments(arguments),
+      env: .inherit(updating: environmentUpdates),
+      workingDirectory: FileManager.default.currentDirectoryPath,
+      logOptions: .init(
+        exposure: .none,
+        tags: [
+          "source": "vaporize-test",
+          "canonicalSource": "vaporize-test",
+          "tool": "swift",
+        ]
+      ),
+      requestId: requestId,
+      runnerKind: .auto,
+      streamingMode: .buffered
+    )
+    try command.validateOrThrow()
+
+    let output = try await RunnerControllerFactory.run(command: command)
+    FileHandle.standardOutput.write(output.stdout)
+    FileHandle.standardError.write(output.stderr)
+
+    let ingestion = VaporizeTestIssueEventIngestor.ingest(from: issueSinkURL)
+    let receipt = VaporizeTestReceipt(
+      packagePath: packagePath,
+      product: product,
+      arguments: arguments,
+      requestId: requestId,
+      runnerKind: "auto",
+      succeeded: output.isSuccess,
+      exitCode: output.exitStatus.exitCode,
+      signal: output.exitStatus.signal,
+      stdoutBytes: output.stdout.count,
+      stderrBytes: output.stderr.count,
+      processIdentifier: output.processIdentifier,
+      processOutcome: VaporizeTestProcessOutcome(
+        succeeded: output.isSuccess,
+        exitCode: output.exitStatus.exitCode,
+        signal: output.exitStatus.signal
+      ),
+      testAssertionOutcome: VaporizeTestOutputClassifier.assertionOutcome(
+        stdout: output.stdout,
+        stderr: output.stderr
+      ),
+      issueSinkState: ingestion.state,
+      issueSinkPath: preservesIssueSink ? issueSinkURL.path : nil,
+      issueIngestionError: ingestion.error,
+      issueEvents: ingestion.events
+    )
+    try emitReceiptIfRequested(receipt)
+
+    guard ingestion.state != .malformed else {
+      throw ValidationError(
+        "Vaporize test issue evidence was malformed; inspect the test receipt before trusting issue counts."
+      )
+    }
+    guard output.isSuccess else {
+      if let exitCode = output.exitStatus.exitCode {
+        throw ExitCode(Int32(exitCode))
+      }
+      throw ExitCode.failure
+    }
+  }
+
+  func testIssueSinkURL(requestId: String) -> URL {
+    if let receiptPath, !receiptPath.isEmpty {
+      return absoluteURL(for: receiptPath).appendingPathExtension("issues.jsonl")
+    }
+    return FileManager.default.temporaryDirectory
+      .appendingPathComponent("vaporize-test-issue-events", isDirectory: true)
+      .appendingPathComponent("\(requestId).jsonl")
+  }
+
+  private func prepareTestIssueSink(at url: URL) throws {
+    guard FileManager.default.fileExists(atPath: url.path) else { return }
+    let values = try url.resourceValues(forKeys: [.isDirectoryKey])
+    guard values.isDirectory != true else {
+      throw ValidationError("Vaporize test issue sink path is a directory: \(url.path)")
+    }
+    try FileManager.default.removeItem(at: url)
   }
 
   private func runSwiftPackage(arguments: [String]) async throws {

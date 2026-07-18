@@ -1,0 +1,21 @@
+{
+  "id": "MIGRATION-SPARKLE-VERBS-CODE-PERSISTENCE-WRKSTRM-CORE-2026-07-17",
+  "title": "Persist the 2026-07-17 vaporize Sparkle verbs (generate-sparkle-config, self-update --product, fleet-status) into wrkstrm-core",
+  "status": "in_progress",
+  "priority": 2,
+  "issueType": "task",
+  "description": "Boundary-local persistence bead for wrkstrm-core in the app-state/sparkle software-modification cascade. Vaporize code landed: AppleProjectSparkleConfigRenderer + generate-sparkle-config verb (cuj-28 10/10), ProductSelfUpdate + generalized self-update --product (cuj-29 14/14 + product-self-update-e2e), FleetStatus + fleet-status verb (cuj-30 12/12), the main.swift mode registrations + Package.swift target/dep additions, and the two yml->pkl importer beads. Scoped to EXACTLY this session's vaporize files; pre-existing/parallel vaporize work (ReleaseDoctor.swift, SwiftUIImportGate.swift, cuj-09/cuj-17) is explicitly EXCLUDED and left to its owners.",
+  "acceptanceCriteria": [
+    "The three Sparkle verbs' source + tests + mode registrations are committed.",
+    "No parallel vaporize files (ReleaseDoctor, SwiftUIImportGate, cuj-09/17) are swept in.",
+    "Cites the app-state/sparkle software-modification workflow instance as workflow-ref."
+  ],
+  "relatedPaths": [
+    "private/apple/spm/vaporize@wrkstrm-core.cli/sources/vaporize-cli",
+    "private/apple/spm/vaporize@wrkstrm-core.cli/sources/apple-project-spec-core/AppleProjectSparkleConfigRenderer.swift"
+  ],
+  "notes": "app-state/sparkle session commit cascade (2026-07-17). main.swift/Package.swift were in MM (staged) state from the workspace auto-commit hook; --files scoping commits only the vetted vaporize paths. workflow-ref: software-modification-workstream-capture-2026-07-17-app-state-sparkle-backbone.",
+  "createdAt": "2026-07-17",
+  "createdBy": "claude (hulk)",
+  "labels": ["persistence", "wrkstrm-core", "vaporize", "sparkle", "fleet-status"]
+}
