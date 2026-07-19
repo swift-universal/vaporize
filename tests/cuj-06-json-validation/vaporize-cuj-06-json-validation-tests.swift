@@ -85,6 +85,25 @@ private func fixturePath(_ name: String) throws -> String {
   try workstreamSchemaFamilyRoot().appendingPathComponent("fixtures/\(name)").path
 }
 
+private func validateSchemaLiteral(
+  _ schema: String,
+  fixture: String
+) throws -> JSONSchemaValidation.Outcome {
+  let scratch = FileManager.default.temporaryDirectory
+    .appendingPathComponent("cuj-06-schema-keywords-\(UUID().uuidString)")
+  try FileManager.default.createDirectory(at: scratch, withIntermediateDirectories: true)
+  defer { try? FileManager.default.removeItem(at: scratch) }
+
+  let schemaURL = scratch.appendingPathComponent("schema.json")
+  try Data(schema.utf8).write(to: schemaURL)
+  let fixtureURL = scratch.appendingPathComponent("fixture.json")
+  try Data(fixture.utf8).write(to: fixtureURL)
+  return try JSONSchemaValidation.validate(
+    schemaPath: schemaURL.path,
+    fixturePath: fixtureURL.path
+  )
+}
+
 @Test("CUJ-06 schema validation passes an expected-pass workstream fixture")
 func schemaValidationPassesExpectedPassFixture() throws {
   let outcome = try JSONSchemaValidation.validate(
@@ -256,4 +275,110 @@ func schemaValidationEnforcesNumericMaximum() throws {
   #expect(matchingString.valid)
   #expect(!nonmatchingString.valid)
   #expect(nonmatchingString.diagnostics.contains { $0.contains("pattern") })
+}
+
+@Test("CUJ-06 schema validation enforces uniqueItems with deep JSON equality")
+func schemaValidationEnforcesDeepUniqueItems() throws {
+  let unique = try validateSchemaLiteral(
+    #"{"type":"array","uniqueItems":true}"#,
+    fixture: #"[{"value":[1,true]},{"value":[true,1]}]"#
+  )
+  #expect(unique.valid)
+
+  let duplicate = try validateSchemaLiteral(
+    #"{"type":"array","uniqueItems":true}"#,
+    fixture:
+      #"[{"nested":{"proof":[1,true]},"other":null},{"other":null,"nested":{"proof":[1.0,true]}}]"#
+  )
+  #expect(!duplicate.valid)
+  #expect(duplicate.diagnostics.contains { $0.contains("uniqueItems") })
+  #expect(duplicate.diagnostics.contains { $0.contains("indexes 0 and 1") })
+
+  let booleanAndNumber = try validateSchemaLiteral(
+    #"{"type":"array","uniqueItems":true}"#,
+    fixture: "[true,1,false,0]"
+  )
+  #expect(booleanAndNumber.valid)
+
+  let integersBeyondBinary64Precision = try validateSchemaLiteral(
+    #"{"type":"array","uniqueItems":true}"#,
+    fixture: "[9007199254740992,9007199254740993]"
+  )
+  #expect(integersBeyondBinary64Precision.valid)
+
+  let equalExponentAndExpandedNumber = try validateSchemaLiteral(
+    #"{"type":"array","uniqueItems":true}"#,
+    fixture: "[1e20,100000000000000000000]"
+  )
+  #expect(!equalExponentAndExpandedNumber.valid)
+
+  let disabled = try validateSchemaLiteral(
+    #"{"type":"array","uniqueItems":false}"#,
+    fixture: #"[{"proof":true},{"proof":true}]"#
+  )
+  #expect(disabled.valid)
+}
+
+@Test("CUJ-06 schema validation enforces exact array cardinality")
+func schemaValidationEnforcesArrayCardinality() throws {
+  let schema = #"{"type":"array","minItems":2,"maxItems":2}"#
+  let exact = try validateSchemaLiteral(schema, fixture: #"["report","reconciliation"]"#)
+  let tooFew = try validateSchemaLiteral(schema, fixture: #"["report"]"#)
+  let tooMany = try validateSchemaLiteral(
+    schema,
+    fixture: #"["report","reconciliation","issue"]"#
+  )
+
+  #expect(exact.valid)
+  #expect(!tooFew.valid)
+  #expect(tooFew.diagnostics.contains { $0.contains("minItems") })
+  #expect(!tooMany.valid)
+  #expect(tooMany.diagnostics.contains { $0.contains("maxItems") })
+}
+
+@Test("CUJ-06 schema validation accepts only RFC 3339 date-time strings")
+func schemaValidationEnforcesRFC3339DateTimeFormat() throws {
+  let schema = #"{"format":"date-time"}"#
+  let validValues = [
+    #""1963-06-19T08:30:06.283185Z""#,
+    #""1937-01-01T12:00:27.87+00:20""#,
+    #""1963-06-19t08:30:06z""#,
+    #""1998-12-31T15:59:60.123-08:00""#,
+    "12",
+  ]
+  for value in validValues {
+    let outcome = try validateSchemaLiteral(schema, fixture: value)
+    #expect(outcome.valid)
+  }
+
+  let invalidValues = [
+    #""1990-02-31T15:59:59.123-08:00""#,
+    #""1990-12-31T24:00:00Z""#,
+    #""1990-12-31T10:00:00+10:60""#,
+    #""1998-12-31T23:58:60Z""#,
+    #""2013-350T01:01:01Z""#,
+    #""+11963-06-19T08:30:06Z""#,
+  ]
+  for value in invalidValues {
+    let outcome = try validateSchemaLiteral(schema, fixture: value)
+    #expect(!outcome.valid)
+    #expect(outcome.diagnostics.contains { $0.contains("RFC 3339 date-time") })
+  }
+}
+
+@Test("CUJ-06 schema validation fails loudly for unsupported formats")
+func schemaValidationRejectsUnsupportedFormat() throws {
+  do {
+    _ = try validateSchemaLiteral(
+      #"{"format":"uuid"}"#,
+      fixture: #""346d9d9a-6c83-4533-9974-37d29d2294a8""#
+    )
+    #expect(Bool(false))
+  } catch let error as JSONSchemaValidation.EngineError {
+    guard case .unsupportedSchemaFeature(let detail) = error else {
+      #expect(Bool(false))
+      return
+    }
+    #expect(detail.contains("format 'uuid'"))
+  }
 }

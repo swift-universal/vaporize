@@ -21,7 +21,7 @@
     "noFlagReason": "The change modifies public-disclosure ownership, release evidence, and release-doctor validation, not runtime product behavior."
   },
   "changedBehavior": [
-    "Carrie CMO (cmo-chief-marketing-officer-carrie@wrkstrm.occupations.org) is assigned as the consumer-facing publication gate owner for Vaporize public-disclosure surfaces.",
+    "Carrie CMO (cmo-chief-marketing-officer@wrkstrm.jobs.org) is assigned as the consumer-facing publication gate owner for Vaporize public-disclosure surfaces.",
     "The CMO owner-home bead is the primary maintenance handle for the public-disclosure gate ownership correction.",
     "wrkstrm-core remains the implementation evidence and release-doctor mechanics owner for the Vaporize release packet.",
     "Public brochure, public brochure HTML, user manual, public changelog, audience packet, release gates, launch review, and provenance evidence name the Carrie CMO ownership boundary.",

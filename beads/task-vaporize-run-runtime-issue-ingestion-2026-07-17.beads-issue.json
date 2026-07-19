@@ -1,0 +1,46 @@
+{
+  "BeadsIssue": "0.1.0",
+  "schemaVersion": "0.1.0",
+  "id": "task-vaporize-run-runtime-issue-ingestion-2026-07-17",
+  "title": "Ingest launched application issue events into Vaporize run receipts",
+  "status": "open",
+  "priority": 1,
+  "issueType": "task",
+  "labels": [
+    "vaporize",
+    "issue-reporting",
+    "app-launch",
+    "runtime-ingestion",
+    "run-receipt",
+    "request-correlation"
+  ],
+  "createdAt": "2026-07-18T04:02:57Z",
+  "createdBy": "codex@loom after proving that Vaporize currently launches applications through open without runtime-issue ingestion",
+  "historicalContent": {
+    "slug": "task-vaporize-run-runtime-issue-ingestion-2026-07-17",
+    "kind": "bead-task",
+    "assignee": "wrkstrm-core",
+    "severity": "high",
+    "componentHome": "private/apple/spm/vaporize@wrkstrm-core.cli",
+    "parentBead": "fr-vaporize-issue-reporting-recoverable-invariant-visibility-2026-07-17",
+    "description": "Create a request-scoped launch envelope that supplies the Vaporize request id and issue-event sink to an installed application, then ingests the resulting events into the run receipt. The current open-based launch is detached and captures no application runtime stream, so lifecycle and collection completion must be explicit.",
+    "acceptanceCriteria": [
+      "Vaporize creates a unique issue-event sink and request id before launching an instrumented app.",
+      "The launched process receives correlation and sink configuration without writing global mutable configuration.",
+      "A fixture app reports one recoverable invariant, preserves its containment behavior, and produces one correlated run-receipt event.",
+      "The default Apple runtime warning remains active while the structured reporter is installed.",
+      "The receipt states whether collection completed, timed out, remained detached, or was not supported by the product.",
+      "A run with no issue reports records runtimeIssueExecution as run and unexpectedIssueCount as zero.",
+      "A compile-only build records runtimeIssueExecution as not-run and never reuses a prior run's events.",
+      "Event artifacts are redacted, bounded, and cleaned or retained according to an explicit receipt policy."
+    ],
+    "dependsOn": [
+      "task-vaporize-issue-reporting-package-adoption-and-policy-2026-07-17",
+      "task-vaporize-structured-issue-event-reporter-2026-07-17"
+    ]
+  },
+  "composesWith": [
+    "fr-vaporize-issue-reporting-recoverable-invariant-visibility-2026-07-17",
+    "vaporize-tool-call-observability"
+  ]
+}

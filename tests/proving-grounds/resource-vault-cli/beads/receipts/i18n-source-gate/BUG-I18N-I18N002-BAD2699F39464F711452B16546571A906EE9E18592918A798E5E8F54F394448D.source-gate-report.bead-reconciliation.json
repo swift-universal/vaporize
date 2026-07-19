@@ -1,0 +1,51 @@
+{
+  "actions" : [
+    {
+      "beadCoordinate" : "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/tests/proving-grounds/resource-vault-cli/beads/BUG-I18N-I18N002-BAD2699F39464F711452B16546571A906EE9E18592918A798E5E8F54F394448D.beads-issue.json",
+      "beadID" : "BUG-I18N-I18N002-BAD2699F39464F711452B16546571A906EE9E18592918A798E5E8F54F394448D",
+      "evidenceCoordinate" : "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/tests/proving-grounds/resource-vault-cli/beads/BUG-I18N-I18N002-BAD2699F39464F711452B16546571A906EE9E18592918A798E5E8F54F394448D.i18n-source-gate-evidence.json",
+      "kind" : "no-op",
+      "previousStatus" : "open",
+      "projectionCoordinate" : "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/tests/proving-grounds/resource-vault-cli/beads/BUG-I18N-I18N002-BAD2699F39464F711452B16546571A906EE9E18592918A798E5E8F54F394448D.bead-world-projection.json",
+      "reason" : "finding-still-present",
+      "resultStatus" : "open",
+      "rule" : "I18N002",
+      "sourceCoordinate" : "sources/resource-vault-cli/main.swift",
+      "spawnCastCoordinate" : "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/tests/proving-grounds/resource-vault-cli/beads/BUG-I18N-I18N002-BAD2699F39464F711452B16546571A906EE9E18592918A798E5E8F54F394448D.beads-spawn-cast.json"
+    }
+  ],
+  "detector" : {
+    "detectorID" : "translate-source-gate",
+    "implementation" : "TranslateSourceGate",
+    "implementationVersion" : "0.3.0"
+  },
+  "findingCount" : 2,
+  "kind" : "i18n-source-gate-bead-reconciliation-receipt",
+  "mode" : "write",
+  "ownerID" : "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/tests/proving-grounds/resource-vault-cli",
+  "owningHome" : "/Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/tests/proving-grounds/resource-vault-cli",
+  "parentEpicID" : "EPIC-I18N-SOURCE-CONSUMPTION-ENFORCEMENT-ADOPTION-2026-07-18",
+  "recordedAt" : "2026-07-18T12:28:19Z",
+  "scanCompleteness" : "complete",
+  "scannedFiles" : [
+    "sources/resource-vault-cli/main.swift"
+  ],
+  "schemaVersion" : "0.2.0",
+  "standard" : {
+    "canonicalRef" : "private/universal/substrate/collectives/i18n-universal/private/universal/contracts/enforce-i18n-source-consumption.contract.md",
+    "owner" : "i18n-universal",
+    "slug" : "i18n-source-consumption-enforcement",
+    "title" : "i18n Source Consumption Enforcement",
+    "version" : "0.1.0"
+  },
+  "summary" : {
+    "closed" : 0,
+    "created" : 0,
+    "noOp" : 1,
+    "reopened" : 0,
+    "updated" : 0
+  },
+  "targetName" : "resource-vault.cli-vaporize-tests.clia.sh",
+  "uniqueFindingCount" : 1,
+  "writesApplied" : false
+}

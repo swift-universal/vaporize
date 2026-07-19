@@ -83,7 +83,7 @@ chat memory.
 - `public-brochure.html` exists as the static marketing-site surface for the
   public-disclosure draft, while `public-brochure.md` remains the Markdown
   companion and `public-changelog.md` remains the release-note companion.
-- Carrie CMO (`cmo-chief-marketing-officer-carrie@wrkstrm.occupations.org`)
+- Carrie CMO (`cmo-chief-marketing-officer@wrkstrm.jobs.org`)
   owns the consumer-facing publication gate for the public-disclosure surfaces;
   wrkstrm-core owns Vaporize implementation evidence and release-doctor
   mechanics.

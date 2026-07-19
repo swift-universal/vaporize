@@ -55,6 +55,9 @@ func launchReviewPacketIsValidJSONAndInternalEssential() throws {
   let evidenceRefs = try #require(packet["evidenceRefs"] as? [[String: Any]])
   let gateResults = try #require(packet["gateResults"] as? [[String: Any]])
   let consumerFacingGateOwnership = try #require(packet["consumerFacingGateOwnership"] as? [String: Any])
+  let ownerRef = try #require(consumerFacingGateOwnership["ownerRef"] as? [String: Any])
+  let ownerRefMetadata = try #require(ownerRef["m"] as? [[String: Any]])
+  let ownerRefTargets = try #require(ownerRef["tg"] as? [[String: Any]])
   let signoffs = try #require(packet["signoffs"] as? [String: Any])
   let humanReviewPolicy = try #require(packet["humanReviewPolicy"] as? [String: Any])
   let gateStatuses = gateResults.compactMap { $0["status"] as? String }
@@ -107,8 +110,16 @@ func launchReviewPacketIsValidJSONAndInternalEssential() throws {
   #expect(consumerFacingGateOwnership["ownerStatus"] as? String == "assigned-not-signed-off")
   #expect(consumerFacingGateOwnership["ownerName"] as? String == "Carrie CMO")
   #expect(
-    consumerFacingGateOwnership["ownerOccupationSlug"] as? String
-      == "cmo-chief-marketing-officer-carrie@wrkstrm.occupations.org"
+    consumerFacingGateOwnership["ownerJobIdentitySlug"] as? String
+      == "cmo-chief-marketing-officer@wrkstrm.jobs.org"
+  )
+  #expect(ownerRefMetadata.contains { $0["lane"] as? String == "kind" && $0["v"] as? String == "org-job" })
+  #expect(ownerRefMetadata.contains { $0["lane"] as? String == "slug" && $0["v"] as? String == "cmo-chief-marketing-officer" })
+  #expect(
+    ownerRefTargets.contains {
+      $0["v"] as? String
+        == "private/universal/substrate/collectives/wrkstrm/private/universal/jobs/cmo-chief-marketing-officer.org-job.json"
+    }
   )
   #expect(signoffs["audienceApproverSignoffRef"] as? NSNull != nil)
   #expect(signoffs["founderSignoffRef"] as? NSNull != nil)
@@ -237,12 +248,12 @@ func productDefinitionContractPrecedesBuildWork() throws {
   #expect(audiencePacket.contains("discredulous"))
   #expect(audiencePacket.contains("not approved for publication"))
   #expect(audiencePacket.contains("Carrie CMO"))
-  #expect(audiencePacket.contains("cmo-chief-marketing-officer-carrie@wrkstrm.occupations.org"))
+  #expect(audiencePacket.contains("cmo-chief-marketing-officer@wrkstrm.jobs.org"))
   #expect(audiencePacket.contains("Sparkle appcast generation, update signing, or public update delivery"))
   #expect(publicBrochure.contains("external public disclosure surface"))
   #expect(publicBrochure.contains("Feature Brochure"))
   #expect(publicBrochure.contains("Carrie CMO"))
-  #expect(publicBrochure.contains("cmo-chief-marketing-officer-carrie@wrkstrm.occupations.org"))
+  #expect(publicBrochure.contains("cmo-chief-marketing-officer@wrkstrm.jobs.org"))
   #expect(publicBrochure.contains("public-brochure.html"))
   #expect(publicBrochure.contains("audience-packet.su.json"))
   #expect(publicBrochure.contains("user-manual.md"))
@@ -255,12 +266,12 @@ func productDefinitionContractPrecedesBuildWork() throws {
   #expect(userManual.contains("## Core Commands"))
   #expect(userManual.contains("ReleaseIdentity And Sparkle Boundary"))
   #expect(userManual.contains("Carrie CMO"))
-  #expect(userManual.contains("cmo-chief-marketing-officer-carrie@wrkstrm.occupations.org"))
+  #expect(userManual.contains("cmo-chief-marketing-officer@wrkstrm.jobs.org"))
   #expect(userManual.contains("evidence/audience-packet.su.json"))
   #expect(publicBrochureHTML.contains("Build proof for assistant-run software work"))
   #expect(publicBrochureHTML.contains("public-disclosure draft; Carrie CMO gate owner; not approved for publication"))
   #expect(publicBrochureHTML.contains("Carrie CMO"))
-  #expect(publicBrochureHTML.contains("cmo-chief-marketing-officer-carrie@wrkstrm.occupations.org"))
+  #expect(publicBrochureHTML.contains("cmo-chief-marketing-officer@wrkstrm.jobs.org"))
   #expect(publicBrochureHTML.contains("Tool release identity"))
   #expect(publicBrochureHTML.contains("releaseIdentity"))
   #expect(publicBrochureHTML.contains("Sparkle Info.plist keys"))
@@ -273,7 +284,7 @@ func productDefinitionContractPrecedesBuildWork() throws {
   #expect(publicChangelog.contains("external release-note companion"))
   #expect(publicChangelog.contains("public-brochure.html"))
   #expect(publicChangelog.contains("Carrie CMO"))
-  #expect(publicChangelog.contains("cmo-chief-marketing-officer-carrie@wrkstrm.occupations.org"))
+  #expect(publicChangelog.contains("cmo-chief-marketing-officer@wrkstrm.jobs.org"))
   #expect(publicChangelog.contains("audience-packet.su.json"))
   #expect(publicChangelog.contains("user-manual.md"))
   #expect(publicChangelog.contains("GATE-38-public-disclosure-surfaces"))
@@ -299,11 +310,12 @@ func productDefinitionContractPrecedesBuildWork() throws {
   #expect(gates.contains("Every brochure must have an audience packet and user manual"))
   #expect(gates.contains("owning bead"))
   #expect(gates.contains("Carrie CMO"))
-  #expect(gates.contains("cmo-chief-marketing-officer-carrie@wrkstrm.occupations.org"))
+  #expect(gates.contains("cmo-chief-marketing-officer@wrkstrm.jobs.org"))
   #expect(engineeringDocs.contains("wrkstrm.com/engineering"))
   #expect(engineeringDocs.contains("The package-local engineering catalog explains the system. The release packet"))
   #expect(engineeringDocs.contains("pre-code-prd-review"))
   #expect(engineeringDocs.contains("feature-catalog"))
+  #expect(engineeringDocs.contains("command-ownership-map"))
   #expect(engineeringDocs.contains("modularity-and-ownership-boundaries"))
   #expect(engineeringDocs.contains("vaporware-modification-request-discipline"))
   #expect(engineeringDocs.contains("cuj-state-testing-methodology"))
@@ -313,7 +325,7 @@ func productDefinitionContractPrecedesBuildWork() throws {
   #expect(featureCatalog.contains("SwiftPM CLI lifecycle"))
   #expect(featureCatalog.contains("Apple app lifecycle"))
   #expect(featureCatalog.contains("CommonProcess invocation"))
-  #expect(featureCatalog.contains("Xcode-selected Swift toolchain"))
+  #expect(featureCatalog.contains("Independent Swift and Xcode selection"))
   #expect(featureCatalog.contains("Shared Xcode workspace product cache"))
   #expect(featureCatalog.contains("Target feature inspection"))
   #expect(featureCatalog.contains("Feature-scoped test lifecycle"))

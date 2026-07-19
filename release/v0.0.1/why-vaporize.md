@@ -53,20 +53,21 @@ for SwiftPM package work.
 Vaporize adds:
 
 - A stable CLI contract for assistants and runbooks.
-- Toolchain selection through `toolchain -- swift ...` when the Xcode-selected
-  Swift route is required.
+- Independent Swift/Xcode selection through `toolchain-selection`, plus
+  Xcode-selected Swift execution in `build`, `test`, and `run` through the
+  macOS-only `--swift-source xcode` option.
 - Install/uninstall/run wrappers for CLI and app artifacts.
 - Receipt emission and release evidence integration.
 - JSON validation, inventory scanning, CommonProcess `use`, and Apple project
   migration modes.
 - App build/install composition that Swift alone does not own.
 
-Current direct Swift comparison:
+Historical direct Swift comparison (captured before the selection split):
 
-- On this host at `2026-06-13T21:39:03Z`, bare `swift --version` and
-  `vaporize toolchain -- swift --version` both reported Apple Swift 6.4.
+- On this host at `2026-06-13T21:39:03Z`, bare `swift --version` and the former
+  `vaporize toolchain xcode -- swift --version` route both reported Apple Swift 6.4.
 - A warm focused CUJ-15 test run took `6.80s` through bare `swift test` and
-  `6.80s` through `vaporize toolchain -- swift test`.
+  `6.80s` through the former `vaporize toolchain xcode -- swift test` route.
 - Therefore the current claim is not that Vaporize is faster than Swift for
   normal SwiftPM tests. The claim is that Vaporize makes the route stable,
   reviewable, policy-compliant, and composable with app/install/release work.
@@ -95,13 +96,15 @@ Vaporize adds:
 - A policy boundary: assistants use Vaporize; Vaporize may invoke `xcodebuild`
   internally.
 
-`xcrun` is the low-level tool selector. Vaporize's `toolchain` mode keeps that
-tool selection inside the release surface and currently narrows it to Swift.
-That prevents `toolchain` from becoming a generic native-tool bypass.
+`xcrun` is a low-level execution resolver, not a selection responsibility.
+`toolchain-selection xcode` owns only `xcode-select` print/switch/reset state;
+artifact-aware Xcode Swift execution belongs to `build`, `test`, or `run` with
+`--swift-source xcode`. Generic inspection remains an explicit command gap.
 
 ## Performance Benchmarks
 
-These are current local baseline numbers, not final fleet benchmarks.
+These are historical local baseline numbers, not final fleet benchmarks or
+proof of the current command split.
 
 Environment:
 
@@ -111,27 +114,27 @@ Environment:
 - State: warm local SwiftPM build state, no clean build purge, no fleet
   DerivedData purge
 
-| Benchmark | Command shape | Result |
+| Benchmark | Historical command shape | Result |
 | --- | --- | ---: |
 | JSON validation | `vaporize validate-json --path launch-review-packet.json` | `0.03s real` |
-| Xcode-selected Swift version | `vaporize toolchain -- swift --version` | `0.25s real` |
+| Xcode-selected Swift version | `vaporize toolchain xcode -- swift --version` | `0.25s real` |
 | Bare Swift version comparison | `swift --version` | `0.17s real` |
 | Focused CUJ-15 through bare Swift | `swift test --filter VaporizeCUJ15XcodeProductCacheTests` | `6.80s real` |
-| Focused CUJ-15 through Vaporize toolchain | `vaporize toolchain -- swift test --filter VaporizeCUJ15XcodeProductCacheTests` | `6.80s real` |
-| Full Vaporize suite through Vaporize toolchain | `vaporize toolchain -- swift test` | Latest coverage model: 196 tests across 26 CUJ bundles, including CUJ-25 portfolio audit, CUJ-26 automated-proof ledger, and CUJ-27 project coverage ledger; earlier `/usr/bin/time` baseline: `15.57s real`, 82 tests |
-| Focused CUJ-09 with SwiftPM coverage enabled | `vaporize toolchain -- swift test --filter VaporizeCUJ09ReleaseReviewTests --enable-code-coverage` | `29.38s real`, 5 tests, SwiftPM codecov JSON verified |
+| Focused CUJ-15 through the Xcode lane | `vaporize toolchain xcode -- swift test --filter VaporizeCUJ15XcodeProductCacheTests` | `6.80s real` |
+| Full Vaporize suite through the Xcode lane | `vaporize toolchain xcode -- swift test` | Latest coverage model: 196 tests across 26 CUJ bundles, including CUJ-25 portfolio audit, CUJ-26 automated-proof ledger, and CUJ-27 project coverage ledger; earlier `/usr/bin/time` baseline: `15.57s real`, 82 tests |
+| Focused CUJ-09 with SwiftPM coverage enabled | `vaporize toolchain xcode -- swift test --filter VaporizeCUJ09ReleaseReviewTests --enable-code-coverage` | `29.38s real`, 5 tests, SwiftPM codecov JSON verified |
 
 Interpretation:
 
-- Vaporize wrapper overhead is not visible at focused SwiftPM test scale in the
+- The former Vaporize wrapper overhead was not visible at focused SwiftPM test scale in the
   warm CUJ-15 comparison; both routes measured `6.80s`.
-- For a trivial version command, Vaporize's wrapper/toolchain route added about
+- For a trivial version command, the former wrapper route added about
   `0.08s real` in this run.
 - The performance win Vaporize is positioned for is not raw compiler speed. It
   is avoiding repeated local app rebuilds, avoiding wrong toolchain runs,
   eliminating manual setup mistakes, and keeping evidence attached to the run.
-- The CUJ-09 coverage run proves that Vaporize can stay on its owned toolchain
-  route while SwiftPM emits native coverage artifacts: code coverage JSON,
+- The CUJ-09 coverage run proves that Vaporize could retain SwiftPM native
+  coverage artifacts on the historical route: code coverage JSON,
   raw `.profraw` files, and merged `default.profdata`.
 
 Runtime sample boundary:
@@ -238,7 +241,7 @@ Good ergonomics:
 - One command family instead of remembering `swift`, `xcodebuild`, `xcrun`,
   `open`, install paths, JSON validation, and project migration utilities.
 - Commands read like user intent: `build`, `install`, `run`, `use`,
-  `toolchain`, `validate-json`, `inspect-project-yml`, `import-project-yml`,
+  `toolchain-selection`, `validate-json`, `inspect-project-yml`, `import-project-yml`,
   `generate-xcodeproj`, `list-targets`, `list-schemes`,
   `inspect-target-features`.
 - Failure modes are named early: missing scheme, ambiguous project/workspace,

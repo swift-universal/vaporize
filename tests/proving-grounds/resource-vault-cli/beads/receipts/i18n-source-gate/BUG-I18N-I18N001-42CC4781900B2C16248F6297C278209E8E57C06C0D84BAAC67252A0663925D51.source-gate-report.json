@@ -1,0 +1,52 @@
+{
+  "approvedImports" : [
+
+  ],
+  "enforcement" : "development",
+  "findings" : [
+    {
+      "location" : {
+        "column" : 9,
+        "file" : "sources/resource-vault-cli/main.swift",
+        "line" : 44
+      },
+      "message" : "Target 'resource-vault.cli-vaporize-tests.clia.sh' uses user-facing strings but imports none of its approved i18n copy packages: ApprovedCopy_v000_000_001, KeikoWorldCopy_v000_000_001, SubstrateCLICopy_v000_000_001, TranslateCopy_v000_000_001, WrkstrmWorldCopy_v000_000_001.",
+      "rule" : "I18N001",
+      "sink" : "target-import",
+      "structuralAnchor" : "target-import"
+    },
+    {
+      "location" : {
+        "column" : 9,
+        "file" : "sources/resource-vault-cli/main.swift",
+        "line" : 44
+      },
+      "message" : "User-facing string literal must come from an approved generated i18n copy package.",
+      "rule" : "I18N002",
+      "sink" : "Swift.print",
+      "structuralAnchor" : "sha256:1a15fad357c37536f4185303e464c25828a3c31ba76fe9908be5f4325a2470ea"
+    }
+  ],
+  "formatVersion" : "0.3.0",
+  "imports" : [
+    "Darwin",
+    "Foundation"
+  ],
+  "passed" : false,
+  "placeholders" : [
+
+  ],
+  "scannedFileCount" : 1,
+  "scannedFiles" : [
+    "sources/resource-vault-cli/main.swift"
+  ],
+  "standard" : {
+    "canonicalRef" : "private/universal/substrate/collectives/i18n-universal/private/universal/contracts/enforce-i18n-source-consumption.contract.md",
+    "owner" : "i18n-universal",
+    "slug" : "i18n-source-consumption-enforcement",
+    "title" : "i18n Source Consumption Enforcement",
+    "version" : "0.1.0"
+  },
+  "surfaceKind" : "cli",
+  "targetName" : "resource-vault.cli-vaporize-tests.clia.sh"
+}

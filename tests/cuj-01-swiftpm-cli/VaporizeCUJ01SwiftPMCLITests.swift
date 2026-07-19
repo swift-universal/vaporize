@@ -10,6 +10,36 @@ func exposesCanonicalVaporizeCommandIdentity() {
   #expect(VaporizeCLI.configuration.commandName == "vaporize.cli@wrkstrm-core.clia.sh")
 }
 
+@Test("CUJ-01 ships a generated section-1 manual with command aliases")
+func shipsGeneratedSectionOneManual() throws {
+  let packageDirectory = URL(fileURLWithPath: #filePath)
+    .deletingLastPathComponent()
+    .deletingLastPathComponent()
+    .deletingLastPathComponent()
+  let manualDirectory = packageDirectory
+    .appendingPathComponent("Documentation/man/man1", isDirectory: true)
+  let product = "vaporize.cli@wrkstrm-core.clia.sh"
+  let canonicalPage = manualDirectory.appendingPathComponent("\(product).1")
+  let manual = try String(contentsOf: canonicalPage, encoding: .utf8)
+
+  #expect(manual.contains(".Dt VAPORIZE.CLI@WRKSTRM-CORE.CLIA.SH 1"))
+  #expect(manual.contains(".Sh SYNOPSIS"))
+  #expect(!manual.contains(".Ar subcommand"))
+  #expect(manual.contains("toolchain-selection"))
+  #expect(!manual.contains("vaporize toolchain swift"))
+  #if os(macOS)
+    #expect(manual.contains("vaporize toolchain-selection xcode -- select"))
+  #endif
+
+  for alias in ["vaporize.1", "vaporize@wrkstrm-core.cli.1"] {
+    let directive = try String(
+      contentsOf: manualDirectory.appendingPathComponent(alias),
+      encoding: .utf8
+    )
+    #expect(directive == ".so man1/\(product).1\n")
+  }
+}
+
 @Test("CUJ-01 parses SwiftPM CLI build mode")
 func parsesSwiftPMCLIBuildMode() throws {
   let command = try VaporizeCLI.parse([
@@ -47,15 +77,16 @@ func buildsSwiftPMPackageBuildArguments() throws {
     "debug",
   ])
 
-  #expect(try command.swiftBuildArguments() == [
-    "build",
-    "--package-path",
-    "/workspace/tool",
-    "-c",
-    "debug",
-    "--product",
-    "tool.cli@org.clia.sh",
-  ])
+  #expect(
+    try command.swiftBuildArguments() == [
+      "build",
+      "--package-path",
+      "/workspace/tool",
+      "-c",
+      "debug",
+      "--product",
+      "tool.cli@org.clia.sh",
+    ])
 }
 
 @Test("CUJ-01 rejects noncanonical SwiftPM CLI build products")
@@ -99,7 +130,9 @@ func invalidProductCanaryFailuresIncludeActionability() throws {
 
 @Test("CUJ-01 parses domains mode")
 func parsesSwiftPMCLIDomainsMode() throws {
-  let command = try VaporizeCLI.parse(["domains", "--tools-collection", "/tmp/tools", "--format", "json"])
+  let command = try VaporizeCLI.parse([
+    "domains", "--tools-collection", "/tmp/tools", "--format", "json",
+  ])
   #expect(command.mode == .domains)
   #expect(command.toolsCollectionPath == "/tmp/tools")
   #expect(command.vaporOutputFormat == .json)
@@ -149,24 +182,30 @@ func parsesInstalledCLIProductMetadataFlags() throws {
   #expect(command.productBuildDate == "2026-07-03T00:00:00Z")
 }
 
-@Test("CUJ-01 forwards developer directory to SwiftPM CLI operations")
-func forwardsDeveloperDirectoryToSwiftPMCLIOperations() throws {
-  let command = try VaporizeCLI.parse([
-    "install",
-    "--artifact",
-    "cli",
-    "--package-path",
-    "/workspace/tool",
-    "--product",
-    "tool.cli@org.clia.sh",
-    "--developer-dir",
-    "/Applications/Xcode.app/Contents/Developer",
-  ])
+#if os(macOS)
+  @Test("CUJ-01 forwards developer directory only on the explicit Xcode Swift source")
+  func forwardsDeveloperDirectoryToExplicitXcodeSwiftSource() throws {
+    let command = try VaporizeCLI.parse([
+      "install",
+      "--artifact",
+      "cli",
+      "--package-path",
+      "/workspace/tool",
+      "--product",
+      "tool.cli@org.clia.sh",
+      "--swift-source",
+      "xcode",
+      "--developer-dir",
+      "/Applications/Xcode.app/Contents/Developer",
+    ])
 
-  #expect(command.developerDirectoryEnvironment() == [
-    "DEVELOPER_DIR": "/Applications/Xcode.app/Contents/Developer",
-  ])
-}
+    #expect(command.swiftToolchainSource == .xcode)
+    #expect(
+      command.swiftCommandEnvironment() == [
+        "DEVELOPER_DIR": "/Applications/Xcode.app/Contents/Developer"
+      ])
+  }
+#endif
 
 @Test("CUJ-01 orders installed CLI candidates by inferred domain before flat bin")
 func ordersInstalledCLICandidatesByInferredDomainBeforeFlatBin() throws {
@@ -183,7 +222,8 @@ func ordersInstalledCLICandidatesByInferredDomainBeforeFlatBin() throws {
     product: "savepoint.cli@kura-org.clia.sh"
   )
 
-  #expect(candidates.contains { $0.hasSuffix("/.swiftpm/bin/domain/scm/savepoint.cli@kura-org.clia.sh") })
+  #expect(
+    candidates.contains { $0.hasSuffix("/.swiftpm/bin/domain/scm/savepoint.cli@kura-org.clia.sh") })
   #expect(candidates.last?.hasSuffix("/.swiftpm/bin/savepoint.cli@kura-org.clia.sh") == true)
 }
 
@@ -202,7 +242,8 @@ func ordersExplicitDomainCandidateBeforeFlatBin() throws {
 
   let candidates = command.installedCLIExecutableCandidatePaths(product: "tool.cli@org.clia.sh")
 
-  #expect(candidates.first?.hasSuffix("/.swiftpm/bin/domain/domain/scm/tool.cli@org.clia.sh") == true)
+  #expect(
+    candidates.first?.hasSuffix("/.swiftpm/bin/domain/domain/scm/tool.cli@org.clia.sh") == true)
   #expect(candidates.last?.hasSuffix("/.swiftpm/bin/tool.cli@org.clia.sh") == true)
 }
 
@@ -240,49 +281,94 @@ func buildsSwiftPMPackageTestArguments() throws {
   ])
 
   #expect(command.mode == .test)
-  #expect(try command.swiftTestArguments() == [
-    "test",
-    "--package-path",
-    "/workspace/tool",
-    "-c",
-    "debug",
-    "--filter",
-    "IdentityProfileType",
-  ])
+  #expect(
+    try command.swiftTestArguments() == [
+      "test",
+      "--package-path",
+      "/workspace/tool",
+      "-c",
+      "debug",
+      "--filter",
+      "IdentityProfileType",
+    ])
 }
 
-@Test("CUJ-01 routes SwiftPM package commands through Xcode-selected Swift")
-func routesSwiftPMPackageCommandsThroughXcodeSelectedSwift() {
-  #expect(VaporizeCLI.xcodeSelectedSwiftArguments([
-    "test",
-    "--package-path",
-    "/workspace/tool",
-  ]) == [
-    "swift",
+@Test("CUJ-01 routes SwiftPM package commands through the default Swift on PATH")
+func routesSwiftPMPackageCommandsThroughDefaultSwift() throws {
+  let command = try VaporizeCLI.parse(["build"])
+  let invocation = try command.swiftCommandInvocation(arguments: [
     "test",
     "--package-path",
     "/workspace/tool",
   ])
+
+  switch invocation.executable.ref {
+  case .name(let name):
+    #expect(name == "swift")
+  default:
+    Issue.record("expected default Swift through PATH")
+  }
+  #expect(invocation.arguments == ["test", "--package-path", "/workspace/tool"])
+  #expect(invocation.resolver == "default-swift")
+}
+
+#if os(macOS)
+  @Test("CUJ-01 routes SwiftPM package commands through Xcode only when requested")
+  func routesSwiftPMPackageCommandsThroughExplicitXcodeSwift() throws {
+    let command = try VaporizeCLI.parse(["build", "--swift-source", "xcode"])
+    let invocation = try command.swiftCommandInvocation(arguments: [
+      "test",
+      "--package-path",
+      "/workspace/tool",
+    ])
+
+    switch invocation.executable.ref {
+    case .path(let path):
+      #expect(path == "/usr/bin/xcrun")
+    default:
+      Issue.record("expected the fixed macOS xcrun path")
+    }
+    #expect(invocation.arguments == ["swift", "test", "--package-path", "/workspace/tool"])
+    #expect(invocation.resolver == "xcrun-xcode-select")
+  }
+#endif
+
+@Test("CUJ-01 rejects developer-dir on the independent default Swift lane")
+func rejectsDeveloperDirectoryOnDefaultSwiftLane() throws {
+  let command = try VaporizeCLI.parse([
+    "build",
+    "--developer-dir",
+    "/Applications/Xcode.app/Contents/Developer",
+  ])
+
+  #expect(throws: Error.self) {
+    _ = try command.swiftCommandInvocation(arguments: ["--version"])
+  }
 }
 
 @Test("CUJ-01 parses Swift tools and compiler versions for 6.4 preflight")
 func parsesSwiftToolsAndCompilerVersionsForPreflight() {
-  #expect(VaporizeCLI.swiftPackagePath(in: [
-    "test",
-    "--package-path",
-    "/workspace/tool",
-    "-c",
-    "release",
-  ]) == "/workspace/tool")
-  #expect(VaporizeCLI.swiftToolsVersion(
-    fromPackageManifest: "// swift-tools-version:6.4\nimport PackageDescription"
-  ) == SwiftToolchainVersion("6.4"))
-  #expect(VaporizeCLI.swiftCompilerVersion(
-    from: "swift-driver version: 1.167 Apple Swift version 6.4 (swiftlang-6.4.0.20.104 clang-2100.3.20.102)"
-  ) == SwiftToolchainVersion("6.4"))
-  #expect(VaporizeCLI.swiftCompilerVersion(
-    from: "Apple Swift version 6.3.2 (swift-6.3.2-RELEASE)"
-  ) == SwiftToolchainVersion("6.3.2"))
+  #expect(
+    VaporizeCLI.swiftPackagePath(in: [
+      "test",
+      "--package-path",
+      "/workspace/tool",
+      "-c",
+      "release",
+    ]) == "/workspace/tool")
+  #expect(
+    VaporizeCLI.swiftToolsVersion(
+      fromPackageManifest: "// swift-tools-version:6.4\nimport PackageDescription"
+    ) == SwiftToolchainVersion("6.4"))
+  #expect(
+    VaporizeCLI.swiftCompilerVersion(
+      from:
+        "swift-driver version: 1.167 Apple Swift version 6.4 (swiftlang-6.4.0.20.104 clang-2100.3.20.102)"
+    ) == SwiftToolchainVersion("6.4"))
+  #expect(
+    VaporizeCLI.swiftCompilerVersion(
+      from: "Apple Swift version 6.3.2 (swift-6.3.2-RELEASE)"
+    ) == SwiftToolchainVersion("6.3.2"))
   #expect(SwiftToolchainVersion("6.4")! > SwiftToolchainVersion("6.3.2")!)
 }
 
@@ -309,16 +395,31 @@ func buildsSwiftPackageInstallArguments() {
     )
   )
 
-  #expect(installer.installArguments() == [
-    "package",
-    "experimental-install",
-    "--package-path",
-    "/workspace/tool",
-    "-c",
-    "release",
-    "--product",
-    "tool.cli@org.clia.sh",
-  ])
+  #expect(
+    installer.installArguments() == [
+      "package",
+      "experimental-install",
+      "--package-path",
+      "/workspace/tool",
+      "-c",
+      "release",
+      "--product",
+      "tool.cli@org.clia.sh",
+    ])
+  #expect(
+    installer.installedArtifactBuildArguments() == [
+      "build",
+      "--package-path",
+      "/workspace/tool",
+      "-c",
+      "release",
+      "--product",
+      "tool.cli@org.clia.sh",
+      "-Xlinker",
+      "-rpath",
+      "-Xlinker",
+      "@executable_path/tool.cli@org.clia.sh.support/Frameworks",
+    ])
 }
 
 @Test("CUJ-01 builds Swift package uninstall arguments")
@@ -332,13 +433,14 @@ func buildsSwiftPackageUninstallArguments() {
     )
   )
 
-  #expect(installer.uninstallArguments() == [
-    "package",
-    "experimental-uninstall",
-    "--package-path",
-    "/workspace/tool",
-    "tool.cli@org.clia.sh",
-  ])
+  #expect(
+    installer.uninstallArguments() == [
+      "package",
+      "experimental-uninstall",
+      "--package-path",
+      "/workspace/tool",
+      "tool.cli@org.clia.sh",
+    ])
 }
 
 @Test("CUJ-01 raw experimental-install omits resource bundles and Vaporize carries them")
@@ -372,7 +474,8 @@ func rawExperimentalInstallOmitsResourceBundlesAndVaporizeCarriesThem() async th
     try? fileManager.removeItem(at: installedBinary)
     try? fileManager.removeItem(at: installedMetadata)
     for bundleName in cleanupBundleNames {
-      try? fileManager.removeItem(at: installBin.appendingPathComponent(bundleName, isDirectory: true))
+      try? fileManager.removeItem(
+        at: installBin.appendingPathComponent(bundleName, isDirectory: true))
     }
   }
 
@@ -437,12 +540,15 @@ func rawExperimentalInstallOmitsResourceBundlesAndVaporizeCarriesThem() async th
       productBuildSha: "abc123",
       productBuildDate: "2026-07-03T00:00:00Z",
       installerVersion: "0.1.0",
-      installerBuild: "test"
+      installerBuild: "test",
+      swiftToolchainSource: .xcode
     )
   )
   try await installer.run()
   #expect(fileManager.fileExists(atPath: installedBinary.path))
-  #expect(try installedResourceBundles(in: installBin, matching: builtBundleNames).count == builtBundleNames.count)
+  #expect(
+    try installedResourceBundles(in: installBin, matching: builtBundleNames).count
+      == builtBundleNames.count)
   #expect(fileManager.fileExists(atPath: installedInfoPlist.path))
 
   let installedInfo = try readPlist(installedInfoPlist)
@@ -584,7 +690,9 @@ private func readPlist(_ url: URL) throws -> [String: Any] {
   return try #require(object as? [String: Any])
 }
 
-private func installedResourceBundles(in installBin: URL, matching bundleNames: [String]) throws -> [URL] {
+private func installedResourceBundles(in installBin: URL, matching bundleNames: [String]) throws
+  -> [URL]
+{
   guard FileManager.default.fileExists(atPath: installBin.path) else { return [] }
   let bundleNameSet = Set(bundleNames)
   return try FileManager.default.contentsOfDirectory(

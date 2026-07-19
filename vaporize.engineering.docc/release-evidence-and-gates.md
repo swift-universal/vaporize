@@ -56,7 +56,7 @@ scheme-listing first slice, shared workspace cache first slice, target feature
 inspection first slice, CUJ-state coverage, SwiftPM CLI resource-bundle install
 preservation, product proving-ground passports, release-doctor spine audit,
 pre-code PRD review policy, and
-package test execution through Vaporize's owned toolchain route.
+package test execution through Vaporize's owned `test` operation.
 
 That evidence does not pass a gate by itself. Gate approval requires a
 gate-level human review record. Until that exists, supported gates remain

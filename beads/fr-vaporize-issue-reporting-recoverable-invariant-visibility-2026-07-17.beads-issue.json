@@ -1,0 +1,64 @@
+{
+  "BeadsIssue": "0.1.0",
+  "schemaVersion": "0.1.0",
+  "id": "fr-vaporize-issue-reporting-recoverable-invariant-visibility-2026-07-17",
+  "title": "Make recoverable invariant violations visible in Vaporize tests and launched runs",
+  "status": "open",
+  "priority": 1,
+  "issueType": "feature",
+  "labels": [
+    "vaporize",
+    "issue-reporting",
+    "recoverable-invariant",
+    "runtime-observability",
+    "typed-receipt",
+    "pointfreeco"
+  ],
+  "createdAt": "2026-07-18T04:02:57Z",
+  "createdBy": "codex@loom from operator direction to use swift-issue-reporting and create a bead family around Vaporize visibility",
+  "historicalContent": {
+    "slug": "fr-vaporize-issue-reporting-recoverable-invariant-visibility-2026-07-17",
+    "kind": "bead-feature-request",
+    "assignee": "wrkstrm-core",
+    "severity": "high",
+    "componentHome": "private/apple/spm/vaporize@wrkstrm-core.cli",
+    "sourceType": "operator-requested-adoption",
+    "operatorDirection": "Use Point-Free swift-issue-reporting and create beads around making recoverable invariant visibility show up through Vaporize.",
+    "problem": "Vaporize can compile a product and forward test process output, but it has no first-class runtime-issue event or receipt model. A compile-only build cannot execute reportIssue, tests expose unexpected reports only as framework failures, and app launch delegates to open without ingesting the Apple runtime-issue stream. The dependency and the runtime evidence therefore need separate, explicit adoption steps.",
+    "desiredState": "Vaporize preserves IssueReporting's default developer experience while also collecting structured, redacted issue events for test and launched-run receipts. Build diagnostics remain a distinct category and no receipt claims that runtime invariants were exercised during compilation.",
+    "policy": [
+      "Expected domain, user, network, and validation failures remain typed errors or operational recovery, not reported invariants.",
+      "A recoverable invariant report must name a deterministic containment action; reporting must not silently alter control flow.",
+      "Unsafe continuation remains a precondition or fatal boundary.",
+      "The default Xcode runtime warning and native test-failure behavior remain enabled when the Vaporize reporter is appended.",
+      "Production escalation is configured separately from development and test failure policy."
+    ],
+    "childBeads": [
+      "task-vaporize-issue-reporting-package-adoption-and-policy-2026-07-17",
+      "task-vaporize-structured-issue-event-reporter-2026-07-17",
+      "task-vaporize-test-issue-receipt-integration-2026-07-17",
+      "task-vaporize-run-runtime-issue-ingestion-2026-07-17",
+      "fr-wrkstrm-core-irc-issue-reporting-recoverable-invariant-pilot-2026-07-17"
+    ],
+    "acceptanceCriteria": [
+      "The Vaporize package resolves one IssueReporting module implementation at an exact accepted release line.",
+      "A severity and containment policy distinguishes expected errors, recoverable invariants, unsafe continuation, and external operational failures.",
+      "A Sendable custom reporter emits typed, redacted Vaporize issue events without replacing the default reporter.",
+      "Unexpected reports in tests fail the test and appear as structured evidence in the Vaporize test receipt.",
+      "A launched fixture app can emit a recoverable invariant that appears in a Vaporize run receipt with source location and request correlation.",
+      "Compile-only build receipts explicitly report runtimeIssueExecution as not-run rather than zero-proven.",
+      "The IRC state-machine pilot proves reporting plus deterministic containment at a real consumer seam."
+    ],
+    "outOfScope": [
+      "Turning IssueReporting into CommonLog or a substrate-wide logging facade.",
+      "Treating every thrown error, failed command, or user input problem as an invariant violation.",
+      "Replacing fatal or precondition failures where continuation is unsafe.",
+      "Claiming a build exercised runtime code merely because IssueReporting compiled into the product."
+    ]
+  },
+  "composesWith": [
+    "vaporize-tool-call-observability",
+    "FR-VAPORIZE-PRODUCT-PROVING-GROUNDS-2026-07-05",
+    "FR-VAPORIZE-CUJ-PORTFOLIO-AUDIT-AUTOMATED-PROOF-LEDGER-2026-07-10"
+  ]
+}

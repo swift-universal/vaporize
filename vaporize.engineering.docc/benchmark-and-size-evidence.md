@@ -19,12 +19,13 @@ samples and artifact receipts.
 Current measured claims are limited:
 
 - JSON validation is fast on the local launch-review packet baseline.
-- `vaporize toolchain -- swift --version` adds small wrapper overhead compared
-  to bare `swift --version` on this host.
-- Focused CUJ-15 SwiftPM tests measured the same through bare Swift and
-  Vaporize's toolchain route once warm.
-- The full Vaporize test suite has passed through the Vaporize toolchain route
-  with 107 executable tests.
+- A historical pre-split baseline measured the former overloaded
+  `vaporize toolchain swift -- --version` route against bare `swift --version`.
+- Historical focused CUJ-15 SwiftPM tests measured the same through bare Swift
+  and that former route once warm.
+- Current build/test benchmarks belong to `build` and `test`; selection timing
+  belongs to `toolchain-selection`. Historical measurements must not be
+  relabeled as proof of the new command boundary.
 
 The current product claim is not "Vaporize compiles faster than Swift." The
 claim is that Vaporize makes the route stable, reviewable, policy-compliant,

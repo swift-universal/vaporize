@@ -1,0 +1,46 @@
+{
+  "commitScope" : [
+    "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/sources/vaporize-cli/main.swift"
+  ],
+  "doNotList" : [
+    "Do not edit outside commitScope or the declared owningBoundary.",
+    "Do not rewrite generated copy-package output or invent replacement wording.",
+    "Do not manufacture detector evidence, verification receipts, or Bead state.",
+    "Do not treat machine absence proof as copy, localization, or Launch Review approval.",
+    "Do not delete dispatcher assignee, comments, claim, lease, gate, or writeback metadata.",
+    "Do not close the Bead manually; a complete clean source-gate report owns closure.",
+    "Do not infer Package.resolved or any dependency-wiring path outside commitScope."
+  ],
+  "evidenceRefs" : [
+    "private/universal/substrate/collectives/i18n-universal/private/universal/contracts/enforce-i18n-source-consumption.contract.md",
+    "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N002-523908686FCB9E51C050EF9F84E38838154716E444FA82527DBE5A9F8F47026E.i18n-source-gate-evidence.json",
+    "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N002-523908686FCB9E51C050EF9F84E38838154716E444FA82527DBE5A9F8F47026E.bead-world-projection.json",
+    "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/receipts/i18n-source-gate/BUG-I18N-I18N002-523908686FCB9E51C050EF9F84E38838154716E444FA82527DBE5A9F8F47026E.source-gate-report.json",
+    "sha256:fd6ba36533dff19a6a17cb50affe3775064ab8bc6c0555260316221c11963176"
+  ],
+  "exactCommand" : "translate.cli@i18n-universal.clia.sh gate swift-source --source-root sources/apple-project-spec-core/AppleProjectPklUpgradePlanner.swift --source-root sources/apple-project-spec-core/AppleProjectSparkleConfigRenderer.swift --source-root sources/apple-project-spec-core/AppleProjectSpec.swift --source-root sources/apple-project-spec-core/AppleProjectTargetDiscovery.swift --source-root sources/apple-project-spec-core/AppleProjectXcodeProjectGenerator.swift --source-root sources/apple-project-spec-core/VaporizeTargetFeaturesInspector.swift --source-root sources/swift-app-installer/SwiftAppInstaller.swift --source-root sources/swift-app-installer/XcodeAppInputResolver.swift --source-root sources/vaporize-cli/CUJAutomatedProofLedger.swift --source-root sources/vaporize-cli/CUJImplementationProjectCoverageLedger.swift --source-root sources/vaporize-cli/CUJPortfolioAudit.swift --source-root sources/vaporize-cli/FleetStatus.swift --source-root sources/vaporize-cli/I18nSourceGatePreflight.swift --source-root sources/vaporize-cli/JSONSchemaValidation.swift --source-root sources/vaporize-cli/OwnedSurfaceInventory.swift --source-root sources/vaporize-cli/ProductSelfUpdate.swift --source-root sources/vaporize-cli/ReleaseDoctor.swift --source-root sources/vaporize-cli/SwiftUIImportGate.swift --source-root sources/vaporize-cli/VaporInventory.swift --source-root sources/vaporize-cli/VaporInventoryRenderer.swift --source-root sources/vaporize-cli/VaporizeTestReceipt.swift --source-root sources/vaporize-cli/XcodeWorkspaceSchemes.swift --source-root sources/vaporize-cli/main.swift --source-root sources/vaporize-issue-reporting/VaporizeIssueEvent.swift --source-root sources/vaporize-issue-reporting/VaporizeIssueReporter.swift --catalog-root ../../../../../i18n-universal/private/universal/domain/catalogs/spm --target vaporize@wrkstrm-core.cli --surface cli --enforcement release --beads write --owning-home . --owner-id private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli --only-bead BUG-I18N-I18N002-523908686FCB9E51C050EF9F84E38838154716E444FA82527DBE5A9F8F47026E --scan-completeness complete --receipt beads/receipts/i18n-source-gate/BUG-I18N-I18N002-523908686FCB9E51C050EF9F84E38838154716E444FA82527DBE5A9F8F47026E.source-gate-report.json --bead-receipt beads/receipts/i18n-source-gate/BUG-I18N-I18N002-523908686FCB9E51C050EF9F84E38838154716E444FA82527DBE5A9F8F47026E.source-gate-report.bead-reconciliation.json",
+  "issueId" : "BUG-I18N-I18N002-523908686FCB9E51C050EF9F84E38838154716E444FA82527DBE5A9F8F47026E",
+  "kind" : "beads-spawn-cast",
+  "mission" : "Repair I18N002 in vaporize@wrkstrm-core.cli through approved i18n source consumption.",
+  "owningBoundary" : "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli",
+  "preResolvedTargetOrBlocked" : {
+    "rule" : "I18N002",
+    "state" : "target-resolved",
+    "structuralAnchor" : "sha256:1c764f813437e98de2cd1974d5b83d6a96849cfe4d69212c7294d6a41cc8d896",
+    "target" : "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/sources/vaporize-cli/main.swift",
+    "targetName" : "vaporize@wrkstrm-core.cli"
+  },
+  "requiredCapabilityClass" : "frontier",
+  "schemaVersion" : "0.1.0",
+  "spawnReady" : true,
+  "verificationOutputScope" : [
+    "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N002-523908686FCB9E51C050EF9F84E38838154716E444FA82527DBE5A9F8F47026E.bead-world-projection.json",
+    "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N002-523908686FCB9E51C050EF9F84E38838154716E444FA82527DBE5A9F8F47026E.beads-issue.json",
+    "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N002-523908686FCB9E51C050EF9F84E38838154716E444FA82527DBE5A9F8F47026E.beads-spawn-cast.json",
+    "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N002-523908686FCB9E51C050EF9F84E38838154716E444FA82527DBE5A9F8F47026E.i18n-source-gate-evidence.json",
+    "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/receipts/i18n-source-gate/BUG-I18N-I18N002-523908686FCB9E51C050EF9F84E38838154716E444FA82527DBE5A9F8F47026E.source-gate-report.bead-reconciliation.json",
+    "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/receipts/i18n-source-gate/BUG-I18N-I18N002-523908686FCB9E51C050EF9F84E38838154716E444FA82527DBE5A9F8F47026E.source-gate-report.json"
+  ],
+  "verifyCheck" : "translate.cli@i18n-universal.clia.sh gate swift-source --source-root sources/apple-project-spec-core/AppleProjectPklUpgradePlanner.swift --source-root sources/apple-project-spec-core/AppleProjectSparkleConfigRenderer.swift --source-root sources/apple-project-spec-core/AppleProjectSpec.swift --source-root sources/apple-project-spec-core/AppleProjectTargetDiscovery.swift --source-root sources/apple-project-spec-core/AppleProjectXcodeProjectGenerator.swift --source-root sources/apple-project-spec-core/VaporizeTargetFeaturesInspector.swift --source-root sources/swift-app-installer/SwiftAppInstaller.swift --source-root sources/swift-app-installer/XcodeAppInputResolver.swift --source-root sources/vaporize-cli/CUJAutomatedProofLedger.swift --source-root sources/vaporize-cli/CUJImplementationProjectCoverageLedger.swift --source-root sources/vaporize-cli/CUJPortfolioAudit.swift --source-root sources/vaporize-cli/FleetStatus.swift --source-root sources/vaporize-cli/I18nSourceGatePreflight.swift --source-root sources/vaporize-cli/JSONSchemaValidation.swift --source-root sources/vaporize-cli/OwnedSurfaceInventory.swift --source-root sources/vaporize-cli/ProductSelfUpdate.swift --source-root sources/vaporize-cli/ReleaseDoctor.swift --source-root sources/vaporize-cli/SwiftUIImportGate.swift --source-root sources/vaporize-cli/VaporInventory.swift --source-root sources/vaporize-cli/VaporInventoryRenderer.swift --source-root sources/vaporize-cli/VaporizeTestReceipt.swift --source-root sources/vaporize-cli/XcodeWorkspaceSchemes.swift --source-root sources/vaporize-cli/main.swift --source-root sources/vaporize-issue-reporting/VaporizeIssueEvent.swift --source-root sources/vaporize-issue-reporting/VaporizeIssueReporter.swift --catalog-root ../../../../../i18n-universal/private/universal/domain/catalogs/spm --target vaporize@wrkstrm-core.cli --surface cli --enforcement release --beads write --owning-home . --owner-id private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli --only-bead BUG-I18N-I18N002-523908686FCB9E51C050EF9F84E38838154716E444FA82527DBE5A9F8F47026E --scan-completeness complete --receipt beads/receipts/i18n-source-gate/BUG-I18N-I18N002-523908686FCB9E51C050EF9F84E38838154716E444FA82527DBE5A9F8F47026E.source-gate-report.json --bead-receipt beads/receipts/i18n-source-gate/BUG-I18N-I18N002-523908686FCB9E51C050EF9F84E38838154716E444FA82527DBE5A9F8F47026E.source-gate-report.bead-reconciliation.json",
+  "why" : "The source gate observed a user-facing string invariant violation that blocks the release boundary."
+}

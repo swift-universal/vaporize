@@ -305,7 +305,7 @@ enum VaporizeReleaseDoctor {
         roots: roots,
         scope: .releaseRoot,
         relativePath: "release-gates.md",
-        token: "cmo-chief-marketing-officer-carrie@wrkstrm.occupations.org",
+        token: "cmo-chief-marketing-officer@wrkstrm.jobs.org",
         name: "gate-public-disclosure-carrie-cmo-owner"
       )
     )
@@ -332,7 +332,7 @@ enum VaporizeReleaseDoctor {
         roots: roots,
         scope: .releaseRoot,
         relativePath: "public-brochure.md",
-        token: "cmo-chief-marketing-officer-carrie@wrkstrm.occupations.org",
+        token: "cmo-chief-marketing-officer@wrkstrm.jobs.org",
         name: "public-brochure-carrie-cmo-owner"
       )
     )
@@ -359,7 +359,7 @@ enum VaporizeReleaseDoctor {
         roots: roots,
         scope: .releaseRoot,
         relativePath: "public-brochure.html",
-        token: "cmo-chief-marketing-officer-carrie@wrkstrm.occupations.org",
+        token: "cmo-chief-marketing-officer@wrkstrm.jobs.org",
         name: "public-brochure-html-carrie-cmo-owner"
       )
     )
@@ -386,7 +386,7 @@ enum VaporizeReleaseDoctor {
         roots: roots,
         scope: .releaseRoot,
         relativePath: "evidence/audience-packet.su.json",
-        token: "cmo-chief-marketing-officer-carrie@wrkstrm.occupations.org",
+        token: "cmo-chief-marketing-officer@wrkstrm.jobs.org",
         name: "audience-packet-carrie-cmo-owner"
       )
     )
@@ -413,7 +413,7 @@ enum VaporizeReleaseDoctor {
         roots: roots,
         scope: .releaseRoot,
         relativePath: "user-manual.md",
-        token: "cmo-chief-marketing-officer-carrie@wrkstrm.occupations.org",
+        token: "cmo-chief-marketing-officer@wrkstrm.jobs.org",
         name: "user-manual-carrie-cmo-owner"
       )
     )
@@ -440,7 +440,7 @@ enum VaporizeReleaseDoctor {
         roots: roots,
         scope: .releaseRoot,
         relativePath: "public-changelog.md",
-        token: "cmo-chief-marketing-officer-carrie@wrkstrm.occupations.org",
+        token: "cmo-chief-marketing-officer@wrkstrm.jobs.org",
         name: "public-changelog-carrie-cmo-owner"
       )
     )
@@ -794,8 +794,8 @@ enum VaporizeReleaseDoctor {
         name: "launch-review-carrie-cmo-owner",
         category: "launch-review",
         path: url.path,
-        passed: consumerFacingGateOwnership["ownerOccupationSlug"] as? String
-          == "cmo-chief-marketing-officer-carrie@wrkstrm.occupations.org",
+        passed: consumerFacingGateOwnership["ownerJobIdentitySlug"] as? String
+          == "cmo-chief-marketing-officer@wrkstrm.jobs.org",
         detail: "Launch-review packet must assign the consumer-facing public-disclosure gate to Carrie CMO."
       ),
       check(

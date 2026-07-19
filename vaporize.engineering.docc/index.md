@@ -35,6 +35,7 @@ and explicit disposition of remaining XcodeGen surfaces.
 - <doc:modularity-and-ownership-boundaries>
 - <doc:vaporware-modification-request-discipline>
 - <doc:command-and-artifact-architecture>
+- <doc:command-ownership-map>
 - <doc:swiftpm-cli-resource-bundle-installs>
 - <doc:project-generation-and-migration>
 - <doc:release-evidence-and-gates>
@@ -42,6 +43,7 @@ and explicit disposition of remaining XcodeGen surfaces.
 - <doc:benchmark-and-size-evidence>
 - <doc:target-feature-inspection>
 - <doc:feature-test-lifecycle>
+- <doc:recoverable-invariant-reporting>
 - <doc:cuj-state-testing-methodology>
 - <doc:product-proving-grounds>
 - <doc:release-doctor>

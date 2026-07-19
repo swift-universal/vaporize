@@ -1,0 +1,79 @@
+{
+  "BeadsIssue": "0.1.0",
+  "schemaVersion": "0.1.0",
+  "id": "task-vaporize-structured-issue-event-reporter-2026-07-17",
+  "title": "Implement a structured Vaporize IssueReporter without replacing the default reporter",
+  "status": "implemented-awaiting-savepoint",
+  "priority": 1,
+  "issueType": "task",
+  "labels": [
+    "vaporize",
+    "issue-reporter",
+    "jsonl",
+    "runtime-event",
+    "redaction",
+    "sendable"
+  ],
+  "createdAt": "2026-07-18T04:02:57Z",
+  "createdBy": "codex@loom from the Vaporize runtime visibility gap",
+  "historicalContent": {
+    "slug": "task-vaporize-structured-issue-event-reporter-2026-07-17",
+    "kind": "bead-task",
+    "assignee": "wrkstrm-core",
+    "severity": "high",
+    "componentHome": "private/apple/spm/vaporize@wrkstrm-core.cli",
+    "parentBead": "fr-vaporize-issue-reporting-recoverable-invariant-visibility-2026-07-17",
+    "description": "Define VaporizeIssueEvent and a Sendable IssueReporter that appends one event per report to a request-scoped sink. Register it alongside IssueReporter.default so Xcode runtime warnings and native test failures continue to work.",
+    "eventContract": {
+      "schemaVersion": "0.1.0",
+      "requiredFields": [
+        "eventId",
+        "occurredAt",
+        "severity",
+        "message",
+        "fileId",
+        "filePath",
+        "line",
+        "column",
+        "executionPhase",
+        "vaporizeRequestId",
+        "product",
+        "processId",
+        "expected",
+        "redactionSummary"
+      ],
+      "executionPhases": [
+        "test",
+        "run"
+      ]
+    },
+    "acceptanceCriteria": [
+      "VaporizeIssueEvent is Codable, Sendable, versioned, and stable under round-trip tests.",
+      "The reporter performs concurrency-safe JSONL append with one complete record per issue.",
+      "Registration appends the Vaporize reporter to the existing reporters rather than replacing IssueReporter.default.",
+      "Reporter sink failure uses a non-recursive stderr fallback and cannot crash the consumer process.",
+      "Message and source-path redaction rules are explicit and tested before events enter durable receipts.",
+      "Expected and unexpected issue events remain distinguishable.",
+      "No production fatality policy is embedded in the reporter; escalation remains caller or environment policy."
+    ],
+    "implementationEvidence": {
+      "implementedAt": "2026-07-18T05:11:09Z",
+      "sourceFiles": [
+        "sources/vaporize-issue-reporting/VaporizeIssueEvent.swift",
+        "sources/vaporize-issue-reporting/VaporizeIssueReporter.swift"
+      ],
+      "testFile": "tests/issue-reporting/VaporizeIssueReporterTests.swift",
+      "testProof": "Vaporize toolchain swift test --filter VaporizeIssueReporterTests passed 7 tests in 1 suite, including 32 concurrent reports and the non-recursive sink-failure fallback.",
+      "registrationProof": "The install and scoped APIs append VaporizeIssueReporter to IssueReporters.current rather than replacing Point-Free's default reporter.",
+      "expectedIssueBoundary": "Swift Testing native known-issue state is paired with VaporizeIssueReporting.withExpectedReporter because upstream expectation state is not propagated to appended custom reporters.",
+      "ingestionBoundary": "This reporter emits request-scoped JSONL. Vaporize test receipt ingestion is implemented; run launch ingestion and the IRC consumer pilot remain separate open beads."
+    },
+    "dependsOn": [
+      "task-vaporize-issue-reporting-package-adoption-and-policy-2026-07-17"
+    ]
+  },
+  "composesWith": [
+    "fr-vaporize-issue-reporting-recoverable-invariant-visibility-2026-07-17",
+    "vaporize-tool-call-observability"
+  ]
+}

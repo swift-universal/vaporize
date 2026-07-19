@@ -10,7 +10,7 @@
 Vaporize exists because assistant-run engineering needs a stable product
 boundary, not a pile of remembered shell snippets.
 
-The product claim is narrow: when a build, test, install, toolchain, app,
+The product claim is narrow: when a build, test, install, toolchain selection, app,
 project-generation, validation, or release-evidence run must become durable
 world-state, Vaporize is the owned interface. It wraps lower-level engines with
 typed options, receipts, release gates, and policy boundaries.
@@ -20,8 +20,8 @@ typed options, receipts, release gates, and policy boundaries.
 Vaporize is:
 
 - A build/test/install/run gate for SwiftPM CLIs and Apple app bundles.
-- A toolchain gate for Swift and Swift-DocC commands through environment-owned
-  resolver choices.
+- A selection gate for the default Swift and, on macOS, the independently
+  selected Xcode developer directory.
 - A JSON validation gate for release packets and schema fixtures.
 - A CommonProcess-style invocation gate through `use`.
 - A project migration gate for `project.yml`, Pkl, generated YAML, and
@@ -43,22 +43,27 @@ native tool invocation inside a first-party command surface.
 
 The current policy boundary is:
 
-- Use `vaporize toolchain -- swift ...` for Swift runs that need the owned
-  toolchain route.
-- Use `vaporize toolchain -- swift package generate-documentation ...` for
-  Swift package API documentation when a package carries the Swift-DocC Plugin.
+- Use `vaporize toolchain-selection swift -- use ...` only to report or change
+  the default Swift selection.
+- On macOS, use `vaporize toolchain-selection xcode -- select ...` only to
+  report or change the Xcode developer-directory selection. This selection is
+  independent from default Swift.
+- Use `build`, `test`, or `run` for artifact-aware Swift execution; add
+  `--swift-source xcode` on macOS when that operation requires Xcode-selected
+  Swift.
+- Use `vaporize pass -- swift package generate-documentation ...` for generic
+  Swift package API documentation invocation when a package carries the
+  Swift-DocC Plugin.
 - Use `docc.cli@swift-universal.clia.sh export ...` as the canonical
   Swift Universal product route for standalone `.docc` catalog export once that
   product is installed in the runtime environment.
 - Use `docc-preview.cli@swift-universal.clia.sh` and
   `docc-validator.cli@swift-universal.clia.sh` for preview and validation
   product surfaces.
-- Treat `vaporize toolchain -- docc convert ...` as the lower-level
-  Swift-DocC compiler fallback so documentation builds still stay inside the
-  Vaporize receipt boundary when the canonical product route is unavailable.
-- Let Vaporize choose the Swift-DocC compiler resolver from the environment:
-  Swift toolchain `docc` when present, Xcode DocC as macOS fallback, and direct
-  `docc` lookup on non-macOS Swift toolchain hosts.
+- Treat `vaporize pass -- docc convert ...` as the lower-level Swift-DocC
+  compiler fallback when the canonical product route is unavailable.
+- Do not add toolchain acquisition, lifecycle, inspection, or execution to
+  `toolchain-selection`; those behaviors require their own operation owners.
 - Use `vaporize validate-json --path <file>` for JSON validation in this lane.
 - Use Vaporize's app/project/workspace options instead of direct `xcodebuild`
   choreography in release runbooks.

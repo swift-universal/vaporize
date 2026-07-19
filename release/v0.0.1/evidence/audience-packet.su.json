@@ -29,7 +29,7 @@
   "consumerFacingGateOwner": {
     "ownerStatus": "assigned-not-signed-off",
     "ownerName": "Carrie CMO",
-    "ownerOccupationSlug": "cmo-chief-marketing-officer-carrie@wrkstrm.occupations.org",
+    "ownerJobIdentitySlug": "cmo-chief-marketing-officer@wrkstrm.jobs.org",
     "ownerRoleSlug": "cmo-chief-marketing-officer",
     "scope": [
       "audience packet approval-readiness",
@@ -270,7 +270,7 @@
     },
     {
       "slug": "carrie-cmo-before-publication",
-      "rule": "The release packet must name Carrie CMO (cmo-chief-marketing-officer-carrie@wrkstrm.occupations.org) as the consumer-facing gate owner before the site can leave draft state."
+      "rule": "The release packet must name Carrie CMO (cmo-chief-marketing-officer@wrkstrm.jobs.org) as the consumer-facing gate owner before the site can leave draft state."
     }
   ],
   "sourceRefs": [

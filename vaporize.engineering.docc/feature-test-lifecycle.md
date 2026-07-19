@@ -22,7 +22,7 @@ For a major feature:
    `GO`, `GO-WITH-NOTES`, or `NO-GO` decision.
 3. Add a targetable SwiftPM test bundle for that feature.
 4. Add tests to the feature bundle before changing or deleting older coverage.
-5. Run the feature bundle directly through Vaporize's toolchain route.
+5. Run the feature bundle directly through Vaporize's `test` operation.
 6. Update the CUJ coverage artifact and release packet counts.
 7. Delete or retire older duplicate tests only after the replacement bundle,
    receipt, and CUJ count name the behavior being migrated.
@@ -33,9 +33,10 @@ coverage migration, not as cleanup detached from release evidence.
 ## Command Shape
 
 ```sh
-vaporize toolchain -- swift test \
+vaporize test \
   --package-path private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli \
-  --filter <FeatureBundleName>
+  --configuration debug \
+  -- --filter <FeatureBundleName>
 ```
 
 The full package suite still matters before release, but feature work should

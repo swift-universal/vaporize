@@ -109,20 +109,24 @@ Failure truth:
 - Invalid specs fail at validation before execution.
 - Non-zero process exits propagate as non-zero Vaporize exits.
 
-## CUJ-05 - Assistant Uses Xcode-Selected Swift Without Direct xcrun
+## CUJ-05 - Assistant Selects Swift Or Xcode Independently
 
-1. Assistant needs the Xcode-selected Swift toolchain because bare `swift` is not
-   the required toolchain.
-2. Assistant runs `vaporize toolchain -- swift <args>`.
-3. Vaporize invokes `xcrun swift <args>` internally.
-4. Vaporize preserves stdout, stderr, and exit semantics.
-5. Vaporize can emit a `vaporize-toolchain` receipt when requested.
+1. Assistant needs to report or change the active default Swift selection.
+2. Assistant runs `vaporize toolchain-selection swift -- use [options] [selector]`.
+3. On macOS, Xcode developer-directory selection remains independent and uses
+   `vaporize toolchain-selection xcode -- select <args>`.
+4. Vaporize invokes its compiled Swiftly `use` implementation or
+   `/usr/bin/xcode-select`; it does not launch an installed Swiftly CLI.
+5. Vaporize can emit a `vaporize-toolchain-selection` receipt when requested.
 
 Success:
 
-- The assistant does not call `xcrun` directly.
-- Unsupported Xcode tools fail at Vaporize's parser boundary instead of turning
-  `toolchain` into a general bypass for restricted native tools.
+- Swift selection does not mutate Xcode selection, and Xcode selection does not
+  mutate default Swift selection.
+- Lifecycle, inspection, and execution requests fail at the selection parser
+  boundary instead of turning selection into a generic toolchain command.
+- Xcode-selected Swift execution, when needed for a package operation, remains
+  under `build`, `test`, or `run` with the macOS-only `--swift-source xcode`.
 
 ## CUJ-06 - Assistant Validates Release Packet JSON Without jq
 

@@ -1,0 +1,46 @@
+{
+  "commitScope" : [
+    "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/tests/proving-grounds/resource-vault-cli/sources/resource-vault-cli/main.swift"
+  ],
+  "doNotList" : [
+    "Do not edit outside commitScope or the declared owningBoundary.",
+    "Do not rewrite generated copy-package output or invent replacement wording.",
+    "Do not manufacture detector evidence, verification receipts, or Bead state.",
+    "Do not treat machine absence proof as copy, localization, or Launch Review approval.",
+    "Do not delete dispatcher assignee, comments, claim, lease, gate, or writeback metadata.",
+    "Do not close the Bead manually; a complete clean source-gate report owns closure.",
+    "Do not infer Package.resolved or any dependency-wiring path outside commitScope."
+  ],
+  "evidenceRefs" : [
+    "private/universal/substrate/collectives/i18n-universal/private/universal/contracts/enforce-i18n-source-consumption.contract.md",
+    "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/tests/proving-grounds/resource-vault-cli/beads/BUG-I18N-I18N002-BAD2699F39464F711452B16546571A906EE9E18592918A798E5E8F54F394448D.i18n-source-gate-evidence.json",
+    "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/tests/proving-grounds/resource-vault-cli/beads/BUG-I18N-I18N002-BAD2699F39464F711452B16546571A906EE9E18592918A798E5E8F54F394448D.bead-world-projection.json",
+    "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/tests/proving-grounds/resource-vault-cli/beads/receipts/i18n-source-gate/BUG-I18N-I18N002-BAD2699F39464F711452B16546571A906EE9E18592918A798E5E8F54F394448D.source-gate-report.json",
+    "sha256:da658e9a403ca2d5e385d4a415b6e95bd1102ab9a640d0943a9015be42346298"
+  ],
+  "exactCommand" : "translate.cli@i18n-universal.clia.sh gate swift-source --source-root sources/resource-vault-cli/main.swift --catalog-root ../../../../../../../../i18n-universal/private/universal/domain/catalogs/spm --target resource-vault.cli-vaporize-tests.clia.sh --surface cli --enforcement development --beads write --owning-home . --owner-id private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/tests/proving-grounds/resource-vault-cli --only-bead BUG-I18N-I18N002-BAD2699F39464F711452B16546571A906EE9E18592918A798E5E8F54F394448D --scan-completeness complete --receipt beads/receipts/i18n-source-gate/BUG-I18N-I18N002-BAD2699F39464F711452B16546571A906EE9E18592918A798E5E8F54F394448D.source-gate-report.json --bead-receipt beads/receipts/i18n-source-gate/BUG-I18N-I18N002-BAD2699F39464F711452B16546571A906EE9E18592918A798E5E8F54F394448D.source-gate-report.bead-reconciliation.json",
+  "issueId" : "BUG-I18N-I18N002-BAD2699F39464F711452B16546571A906EE9E18592918A798E5E8F54F394448D",
+  "kind" : "beads-spawn-cast",
+  "mission" : "Repair I18N002 in resource-vault.cli-vaporize-tests.clia.sh through approved i18n source consumption.",
+  "owningBoundary" : "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/tests/proving-grounds/resource-vault-cli",
+  "preResolvedTargetOrBlocked" : {
+    "rule" : "I18N002",
+    "state" : "target-resolved",
+    "structuralAnchor" : "sha256:1a15fad357c37536f4185303e464c25828a3c31ba76fe9908be5f4325a2470ea",
+    "target" : "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/tests/proving-grounds/resource-vault-cli/sources/resource-vault-cli/main.swift",
+    "targetName" : "resource-vault.cli-vaporize-tests.clia.sh"
+  },
+  "requiredCapabilityClass" : "frontier",
+  "schemaVersion" : "0.1.0",
+  "spawnReady" : true,
+  "verificationOutputScope" : [
+    "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/tests/proving-grounds/resource-vault-cli/beads/BUG-I18N-I18N002-BAD2699F39464F711452B16546571A906EE9E18592918A798E5E8F54F394448D.bead-world-projection.json",
+    "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/tests/proving-grounds/resource-vault-cli/beads/BUG-I18N-I18N002-BAD2699F39464F711452B16546571A906EE9E18592918A798E5E8F54F394448D.beads-issue.json",
+    "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/tests/proving-grounds/resource-vault-cli/beads/BUG-I18N-I18N002-BAD2699F39464F711452B16546571A906EE9E18592918A798E5E8F54F394448D.beads-spawn-cast.json",
+    "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/tests/proving-grounds/resource-vault-cli/beads/BUG-I18N-I18N002-BAD2699F39464F711452B16546571A906EE9E18592918A798E5E8F54F394448D.i18n-source-gate-evidence.json",
+    "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/tests/proving-grounds/resource-vault-cli/beads/receipts/i18n-source-gate/BUG-I18N-I18N002-BAD2699F39464F711452B16546571A906EE9E18592918A798E5E8F54F394448D.source-gate-report.bead-reconciliation.json",
+    "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/tests/proving-grounds/resource-vault-cli/beads/receipts/i18n-source-gate/BUG-I18N-I18N002-BAD2699F39464F711452B16546571A906EE9E18592918A798E5E8F54F394448D.source-gate-report.json"
+  ],
+  "verifyCheck" : "translate.cli@i18n-universal.clia.sh gate swift-source --source-root sources/resource-vault-cli/main.swift --catalog-root ../../../../../../../../i18n-universal/private/universal/domain/catalogs/spm --target resource-vault.cli-vaporize-tests.clia.sh --surface cli --enforcement development --beads write --owning-home . --owner-id private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/tests/proving-grounds/resource-vault-cli --only-bead BUG-I18N-I18N002-BAD2699F39464F711452B16546571A906EE9E18592918A798E5E8F54F394448D --scan-completeness complete --receipt beads/receipts/i18n-source-gate/BUG-I18N-I18N002-BAD2699F39464F711452B16546571A906EE9E18592918A798E5E8F54F394448D.source-gate-report.json --bead-receipt beads/receipts/i18n-source-gate/BUG-I18N-I18N002-BAD2699F39464F711452B16546571A906EE9E18592918A798E5E8F54F394448D.source-gate-report.bead-reconciliation.json",
+  "why" : "The source gate observed a user-facing string invariant violation that blocks the development boundary."
+}

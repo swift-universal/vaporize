@@ -1,0 +1,64 @@
+{
+  "BeadsIssue": "0.1.0",
+  "schemaVersion": "0.1.0",
+  "id": "task-vaporize-test-issue-receipt-integration-2026-07-17",
+  "title": "Attach IssueReporting failures and expected issues to Vaporize test receipts",
+  "status": "open",
+  "priority": 1,
+  "issueType": "task",
+  "labels": [
+    "vaporize",
+    "issue-reporting",
+    "swift-testing",
+    "test-receipt",
+    "cuj"
+  ],
+  "createdAt": "2026-07-18T04:02:57Z",
+  "createdBy": "codex@loom from the requirement that IssueReporting be visible through Vaporize tests",
+  "historicalContent": {
+    "slug": "task-vaporize-test-issue-receipt-integration-2026-07-17",
+    "kind": "bead-task",
+    "assignee": "wrkstrm-core",
+    "severity": "high",
+    "componentHome": "private/apple/spm/vaporize@wrkstrm-core.cli",
+    "parentBead": "fr-vaporize-issue-reporting-recoverable-invariant-visibility-2026-07-17",
+    "description": "Extend the Vaporize test execution envelope so unexpected reportIssue calls remain native test failures and also produce structured issue evidence correlated to the test receipt. Preserve raw stdout and stderr forwarding while adding semantic counts and event references.",
+    "acceptanceCriteria": [
+      "A fixture using Swift Testing calls reportIssue and causes Vaporize test to exit nonzero with one unexpected issue event in its receipt.",
+      "The Swift Testing unexpected-issue fixture records exactly one event without duplicate accounting.",
+      "An explicitly expected issue passes and is recorded as expected rather than unexpected.",
+      "A green test run with no reports records runtimeIssueExecution as run and unexpectedIssueCount as zero.",
+      "The receipt distinguishes process failure, test assertion failure, unexpected issue, and expected issue.",
+      "Vaporize continues forwarding the underlying test stdout and stderr unchanged.",
+      "The proof surface uses Swift Testing exclusively and introduces no legacy test-framework target or import.",
+      "CUJ proof covers absent sink, malformed sink, concurrent reports, and redaction."
+    ],
+    "implementationEvidence": {
+      "implementedAt": "2026-07-18T05:41:28Z",
+      "executionBoundary": "Vaporize test uses the owned buffered CommonProcess runner, forwards captured stdout and stderr to their original descriptors, ingests request-scoped JSONL, emits the receipt, and then preserves the child exit outcome.",
+      "receiptKind": "vaporize-test-execution",
+      "receiptFields": [
+        "processOutcome",
+        "testAssertionOutcome",
+        "runtimeIssueExecution",
+        "issueSinkState",
+        "unexpectedIssueCount",
+        "expectedIssueCount",
+        "issueEvents"
+      ],
+      "testProof": "The earlier 9-test proof is invalid because it included a prohibited test framework. After removal, the Swift Testing-only suite contains 8 tests, but verification currently stops before test execution: local dependency mode resolves swift-subprocess 0.5.0 against a swiftly checkout expecting older APIs, while remote dependency mode cannot fetch the private swift-universal packages.",
+      "staticPolicyProof": "The staged adoption diff and its implementation, fixture, test, bead, and doctrine paths contain no legacy test-framework target, import, classifier branch, acceptance language, or proof claim.",
+      "integrityProof": "Focused tests cover malformed JSONL refusal, absent sink, duplicate event identifiers, outcome separation, 32 concurrent reporter writes, message truncation, home/source redaction, and non-recursive sink failure.",
+      "fixtureHome": "tests/issue-reporting-fixtures",
+      "remainingBoundary": "The Swift Testing-only focused suite must execute green after the dependency graph blocker is resolved. Run launch ingestion and the IRC consumer pilot also remain open and are not implied by this test receipt integration."
+    },
+    "dependsOn": [
+      "task-vaporize-issue-reporting-package-adoption-and-policy-2026-07-17",
+      "task-vaporize-structured-issue-event-reporter-2026-07-17"
+    ]
+  },
+  "composesWith": [
+    "fr-vaporize-issue-reporting-recoverable-invariant-visibility-2026-07-17",
+    "FR-VAPORIZE-PRODUCT-PROVING-GROUNDS-2026-07-05"
+  ]
+}

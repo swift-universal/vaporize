@@ -6,12 +6,13 @@ import Foundation
 ///
 /// Supported vocabulary: `type`, `properties`, `required`,
 /// `additionalProperties`, `const`, `enum`, `allOf`, `anyOf`, `oneOf`,
-/// `if`/`then`/`else`, `items`, `minItems`, `minProperties`, `minLength`,
-/// `pattern`, `minimum`, `maximum`, `$defs`,
+/// `if`/`then`/`else`, `items`, `minItems`, `maxItems`, `uniqueItems`, `minProperties`,
+/// `minLength`, `pattern`, `format` (`date-time`), `minimum`, `maximum`, `$defs`,
 /// and `$ref` for internal pointers (`#/$defs/...`) plus local relative-file
 /// refs resolved against the referring schema file's directory. Remote
-/// `http(s)` refs are an explicit non-goal and raise an actionable
-/// unsupported-schema-feature error instead of silently passing.
+/// `http(s)` refs and unimplemented format names are explicit non-goals and
+/// raise actionable unsupported-schema-feature errors instead of silently
+/// passing.
 enum JSONSchemaValidation {
 
   /// Structured engine result. The engine reports validity plus
@@ -43,10 +44,64 @@ enum JSONSchemaValidation {
 
   /// JSON value model with explicit null so `const`/`enum` comparisons
   /// against JSON null stay honest.
+  struct Number: Equatable {
+    var renderedValue: String
+    var equivalenceKey: String
+    var floatingPointValue: Double
+
+    init(_ number: NSNumber) {
+      renderedValue = number.stringValue
+      equivalenceKey = Self.equivalenceKey(for: renderedValue)
+      floatingPointValue = number.doubleValue
+    }
+
+    static func == (lhs: Self, rhs: Self) -> Bool {
+      lhs.equivalenceKey == rhs.equivalenceKey
+    }
+
+    /// Normalizes decimal and exponent spellings into an exact structural
+    /// equality key. This keeps `1`, `1.0`, `1e20`, and their expanded
+    /// decimal equivalents mathematically aligned without binary floating-
+    /// point coercion.
+    private static func equivalenceKey(for rendered: String) -> String {
+      var significand = rendered
+      var exponent = 0
+      if let exponentIndex = significand.firstIndex(where: { $0 == "e" || $0 == "E" }) {
+        exponent = Int(significand[significand.index(after: exponentIndex)...]) ?? 0
+        significand = String(significand[..<exponentIndex])
+      }
+
+      let isNegative = significand.first == "-"
+      if isNegative || significand.first == "+" {
+        significand.removeFirst()
+      }
+
+      let decimalParts = significand.split(
+        separator: ".",
+        maxSplits: 1,
+        omittingEmptySubsequences: false
+      )
+      var digits = String(decimalParts[0])
+      let fractionalDigitCount = decimalParts.count == 2 ? decimalParts[1].count : 0
+      if decimalParts.count == 2 {
+        digits += decimalParts[1]
+      }
+      while digits.first == "0" { digits.removeFirst() }
+      guard !digits.isEmpty else { return "0" }
+
+      exponent -= fractionalDigitCount
+      while digits.last == "0" {
+        digits.removeLast()
+        exponent += 1
+      }
+      return "\(isNegative ? "-" : "")\(digits)e\(exponent)"
+    }
+  }
+
   indirect enum Value: Equatable {
     case null
     case bool(Bool)
-    case number(Double)
+    case number(Number)
     case string(String)
     case array([Value])
     case object([String: Value])
@@ -69,7 +124,7 @@ enum JSONSchemaValidation {
         if CFGetTypeID(number) == CFBooleanGetTypeID() {
           self = .bool(number.boolValue)
         } else {
-          self = .number(number.doubleValue)
+          self = .number(Number(number))
         }
       case let string as String:
         self = .string(string)
@@ -154,7 +209,8 @@ enum JSONSchemaValidation {
     private static let handledKeywords: Set<String> = [
       "$ref", "type", "properties", "required", "additionalProperties",
       "const", "enum", "allOf", "anyOf", "oneOf", "if", "then", "else",
-      "items", "minItems", "minProperties", "minLength", "pattern", "minimum", "maximum",
+      "items", "minItems", "maxItems", "uniqueItems", "minProperties", "minLength", "pattern",
+      "format", "minimum", "maximum",
     ]
     private static let ignoredAnnotationKeywords: Set<String> = [
       "$schema", "$id", "$defs", "title", "description", "$comment",
@@ -389,10 +445,10 @@ enum JSONSchemaValidation {
       }
 
       if case .number(let minProperties)? = keywords["minProperties"],
-        members.count < Int(minProperties)
+        members.count < Int(minProperties.floatingPointValue)
       {
         diagnostics.append(
-          "\(pointer): minProperties — expected at least \(Int(minProperties)) properties, got \(members.count)"
+          "\(pointer): minProperties — expected at least \(Int(minProperties.floatingPointValue)) properties, got \(members.count)"
         )
         valid = false
       }
@@ -424,21 +480,52 @@ enum JSONSchemaValidation {
           }
         }
         if case .number(let minItems)? = keywords["minItems"],
-          elements.count < Int(minItems)
+          elements.count < Int(minItems.floatingPointValue)
         {
           diagnostics.append(
-            "\(pointer): minItems — expected at least \(Int(minItems)) items, got \(elements.count)"
+            "\(pointer): minItems — expected at least \(Int(minItems.floatingPointValue)) items, got \(elements.count)"
           )
           valid = false
         }
+        if case .number(let maxItems)? = keywords["maxItems"],
+          elements.count > Int(maxItems.floatingPointValue)
+        {
+          diagnostics.append(
+            "\(pointer): maxItems — expected at most \(Int(maxItems.floatingPointValue)) items, got \(elements.count)"
+          )
+          valid = false
+        }
+
+        if let uniqueItemsKeyword = keywords["uniqueItems"] {
+          guard case .bool(let requiresUniqueItems) = uniqueItemsKeyword else {
+            throw JSONSchemaValidation.EngineError.schemaParseFailure(
+              "'uniqueItems' in \(context.documentPath) must be a boolean")
+          }
+          if requiresUniqueItems,
+            let duplicateIndexes = firstDeeplyEqualPair(in: elements)
+          {
+            diagnostics.append(
+              "\(pointer): uniqueItems — items at indexes \(duplicateIndexes.first) and \(duplicateIndexes.second) are deeply equal"
+            )
+            valid = false
+          }
+        }
+      } else if let uniqueItemsKeyword = keywords["uniqueItems"],
+        case .bool = uniqueItemsKeyword
+      {
+        // `uniqueItems` only applies to arrays. Its schema value is still
+        // checked below so malformed schemas fail loudly for every instance.
+      } else if keywords["uniqueItems"] != nil {
+        throw JSONSchemaValidation.EngineError.schemaParseFailure(
+          "'uniqueItems' in \(context.documentPath) must be a boolean")
       }
 
       if case .string(let stringValue) = instance,
         case .number(let minLength)? = keywords["minLength"],
-        stringValue.count < Int(minLength)
+        stringValue.count < Int(minLength.floatingPointValue)
       {
         diagnostics.append(
-          "\(pointer): minLength — expected at least \(Int(minLength)) characters, got \(stringValue.count)"
+          "\(pointer): minLength — expected at least \(Int(minLength.floatingPointValue)) characters, got \(stringValue.count)"
         )
         valid = false
       }
@@ -461,23 +548,141 @@ enum JSONSchemaValidation {
         }
       }
 
+      if let formatKeyword = keywords["format"] {
+        guard case .string(let formatName) = formatKeyword else {
+          throw JSONSchemaValidation.EngineError.schemaParseFailure(
+            "'format' in \(context.documentPath) must be a string")
+        }
+        switch formatName {
+        case "date-time":
+          if case .string(let stringValue) = instance,
+            !isRFC3339DateTime(stringValue)
+          {
+            diagnostics.append(
+              "\(pointer): format — value is not a valid RFC 3339 date-time")
+            valid = false
+          }
+        default:
+          throw JSONSchemaValidation.EngineError.unsupportedSchemaFeature(
+            "format '\(formatName)' in \(context.documentPath) (instance path \(pointer))")
+        }
+      }
+
       if case .number(let numberValue) = instance,
         case .number(let minimum)? = keywords["minimum"],
-        numberValue < minimum
+        numberValue.floatingPointValue < minimum.floatingPointValue
       {
-        diagnostics.append("\(pointer): minimum — \(numberValue) is less than \(minimum)")
+        diagnostics.append(
+          "\(pointer): minimum — \(numberValue.renderedValue) is less than \(minimum.renderedValue)"
+        )
         valid = false
       }
 
       if case .number(let numberValue) = instance,
         case .number(let maximum)? = keywords["maximum"],
-        numberValue > maximum
+        numberValue.floatingPointValue > maximum.floatingPointValue
       {
-        diagnostics.append("\(pointer): maximum - \(numberValue) is greater than \(maximum)")
+        diagnostics.append(
+          "\(pointer): maximum - \(numberValue.renderedValue) is greater than \(maximum.renderedValue)"
+        )
         valid = false
       }
 
       return valid
+    }
+
+    /// JSON Schema equality is structural: object member order is ignored,
+    /// nested arrays and objects compare recursively, mathematically equal
+    /// JSON numbers compare equal, and booleans never coerce to numbers.
+    /// ``Value`` models those rules directly, so pairwise equality avoids
+    /// lossy stringification or hash canonicalization.
+    private func firstDeeplyEqualPair(in elements: [Value]) -> (first: Int, second: Int)? {
+      guard elements.count > 1 else { return nil }
+      for secondIndex in elements.indices.dropFirst() {
+        for firstIndex in elements.indices where firstIndex < secondIndex {
+          if elements[firstIndex] == elements[secondIndex] {
+            return (firstIndex, secondIndex)
+          }
+        }
+      }
+      return nil
+    }
+
+    /// Validates the RFC 3339 `date-time` production used by JSON Schema.
+    /// This intentionally accepts lower-case `t`/`z`, fractional seconds of
+    /// arbitrary precision, numeric offsets, and leap seconds at the UTC
+    /// 23:59 boundary while rejecting ISO 8601 extensions outside RFC 3339.
+    private func isRFC3339DateTime(_ value: String) -> Bool {
+      let pattern =
+        #"^([0-9]{4})-([0-9]{2})-([0-9]{2})[Tt]([0-9]{2}):([0-9]{2}):([0-9]{2})(?:\.([0-9]+))?(?:[Zz]|([+-])([0-9]{2}):([0-9]{2}))$"#
+      guard let expression = try? NSRegularExpression(pattern: pattern) else { return false }
+      let fullRange = NSRange(value.startIndex..<value.endIndex, in: value)
+      guard let match = expression.firstMatch(in: value, range: fullRange),
+        match.range == fullRange
+      else {
+        return false
+      }
+
+      let bridgedValue = value as NSString
+      func integerCapture(_ index: Int) -> Int? {
+        let range = match.range(at: index)
+        guard range.location != NSNotFound else { return nil }
+        return Int(bridgedValue.substring(with: range))
+      }
+
+      guard let year = integerCapture(1),
+        let month = integerCapture(2),
+        let day = integerCapture(3),
+        let hour = integerCapture(4),
+        let minute = integerCapture(5),
+        let second = integerCapture(6),
+        (1...12).contains(month),
+        (1...daysInMonth(year: year, month: month)).contains(day),
+        (0...23).contains(hour),
+        (0...59).contains(minute),
+        (0...60).contains(second)
+      else {
+        return false
+      }
+
+      let offsetMinutes: Int
+      let signRange = match.range(at: 8)
+      if signRange.location == NSNotFound {
+        offsetMinutes = 0
+      } else {
+        guard let offsetHour = integerCapture(9),
+          let offsetMinute = integerCapture(10),
+          (0...23).contains(offsetHour),
+          (0...59).contains(offsetMinute)
+        else {
+          return false
+        }
+        let magnitude = offsetHour * 60 + offsetMinute
+        offsetMinutes = bridgedValue.substring(with: signRange) == "+" ? magnitude : -magnitude
+      }
+
+      guard second == 60 else { return true }
+
+      // A leap second is the extra second following 23:59 UTC. Numeric
+      // offsets shift the local clock spelling of that same boundary.
+      var utcMinuteOfDay = hour * 60 + minute - offsetMinutes
+      if utcMinuteOfDay < 0 { utcMinuteOfDay += 24 * 60 }
+      if utcMinuteOfDay >= 24 * 60 { utcMinuteOfDay -= 24 * 60 }
+      return utcMinuteOfDay == 23 * 60 + 59
+    }
+
+    private func daysInMonth(year: Int, month: Int) -> Int {
+      switch month {
+      case 2:
+        let isLeapYear =
+          year.isMultiple(of: 4)
+          && (!year.isMultiple(of: 100) || year.isMultiple(of: 400))
+        return isLeapYear ? 29 : 28
+      case 4, 6, 9, 11:
+        return 30
+      default:
+        return 31
+      }
     }
 
     private func validateCombinators(
@@ -708,7 +913,7 @@ enum JSONSchemaValidation {
         return false
       case "integer":
         if case .number(let value) = instance {
-          return value.truncatingRemainder(dividingBy: 1) == 0
+          return value.floatingPointValue.truncatingRemainder(dividingBy: 1) == 0
         }
         return false
       case "array":

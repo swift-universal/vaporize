@@ -263,18 +263,18 @@ private func makeReleaseDoctorFixture(
       \(markdownFollowUpList(fixtureReleaseGateKnownFollowUps))
       """
       contents = includeGate33
-        ? "GATE-33-release-doctor GATE-34-project-target-discovery GATE-35-workspace-product-cache-discovery GATE-36-xcode-workspace-scheme-listing GATE-37-cuj-state-coverage GATE-38-public-disclosure-surfaces GATE-39-resource-cli-install GATE-40-product-proving-grounds Every brochure must have an audience packet and user manual owning bead cmo-chief-marketing-officer-carrie@wrkstrm.occupations.org\(followUpSection)"
-        : "GATE-32 GATE-34-project-target-discovery GATE-35-workspace-product-cache-discovery GATE-36-xcode-workspace-scheme-listing GATE-37-cuj-state-coverage GATE-38-public-disclosure-surfaces GATE-39-resource-cli-install GATE-40-product-proving-grounds Every brochure must have an audience packet and user manual owning bead cmo-chief-marketing-officer-carrie@wrkstrm.occupations.org\(followUpSection)"
+        ? "GATE-33-release-doctor GATE-34-project-target-discovery GATE-35-workspace-product-cache-discovery GATE-36-xcode-workspace-scheme-listing GATE-37-cuj-state-coverage GATE-38-public-disclosure-surfaces GATE-39-resource-cli-install GATE-40-product-proving-grounds Every brochure must have an audience packet and user manual owning bead cmo-chief-marketing-officer@wrkstrm.jobs.org\(followUpSection)"
+        : "GATE-32 GATE-34-project-target-discovery GATE-35-workspace-product-cache-discovery GATE-36-xcode-workspace-scheme-listing GATE-37-cuj-state-coverage GATE-38-public-disclosure-surfaces GATE-39-resource-cli-install GATE-40-product-proving-grounds Every brochure must have an audience packet and user manual owning bead cmo-chief-marketing-officer@wrkstrm.jobs.org\(followUpSection)"
     case "release/v0.0.1/public-brochure.md":
-      contents = "external public disclosure surface Claims Not Yet Allowed cmo-chief-marketing-officer-carrie@wrkstrm.occupations.org"
+      contents = "external public disclosure surface Claims Not Yet Allowed cmo-chief-marketing-officer@wrkstrm.jobs.org"
     case "release/v0.0.1/public-brochure.html":
-      contents = "Build proof for assistant-run software work not approved for publication cmo-chief-marketing-officer-carrie@wrkstrm.occupations.org"
+      contents = "Build proof for assistant-run software work not approved for publication cmo-chief-marketing-officer@wrkstrm.jobs.org"
     case "release/v0.0.1/user-manual.md":
-      contents = "## Brochure Companion Contract\n## Quick Start\ncmo-chief-marketing-officer-carrie@wrkstrm.occupations.org"
+      contents = "## Brochure Companion Contract\n## Quick Start\ncmo-chief-marketing-officer@wrkstrm.jobs.org"
     case "release/v0.0.1/public-changelog.md":
-      contents = "external release-note companion GATE-38-public-disclosure-surfaces cmo-chief-marketing-officer-carrie@wrkstrm.occupations.org"
+      contents = "external release-note companion GATE-38-public-disclosure-surfaces cmo-chief-marketing-officer@wrkstrm.jobs.org"
     case "release/v0.0.1/evidence/audience-packet.su.json":
-      contents = #"{"AudienceProfileStackModel":"0.1.0","status":"not approved for publication","ownerOccupationSlug":"cmo-chief-marketing-officer-carrie@wrkstrm.occupations.org"}"#
+      contents = #"{"AudienceProfileStackModel":"0.1.0","status":"not approved for publication","ownerJobIdentitySlug":"cmo-chief-marketing-officer@wrkstrm.jobs.org"}"#
     case "vaporize.engineering.docc/feature-catalog.md":
       contents = "Release doctor Project target discovery Workspace product-cache discovery Xcode workspace scheme listing SwiftPM CLI resource-bundle installs Vaporware product proving grounds"
     case "vaporize.engineering.docc/vaporware-modification-request-discipline.md":
@@ -328,7 +328,7 @@ private func makeReleaseDoctorFixture(
       "consumerFacingGateOwnership": {
         "ownerStatus": "assigned-not-signed-off",
         "ownerName": "Carrie CMO",
-        "ownerOccupationSlug": "cmo-chief-marketing-officer-carrie@wrkstrm.occupations.org"
+        "ownerJobIdentitySlug": "cmo-chief-marketing-officer@wrkstrm.jobs.org"
       },
       "signoffs": {
         "audienceApproverSignoffRef": null,

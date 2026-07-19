@@ -7,10 +7,22 @@ import Foundation
 import SwiftAppInstaller
 import SwiftCLIInstaller
 import SwiftJSONFormatter
+import Swiftly
 import TranslateSourceGate
 import VaporizeIssueReporting
 
 @main
+enum VaporizeExecutable {
+  static func main() async throws {
+    if VaporizeInvocation.isToolchainProxy(arguments: CommandLine.arguments) {
+      try await SwiftlyProxy.main(includesSystemToolchains: false)
+      return
+    }
+
+    await VaporizeCLI.main()
+  }
+}
+
 struct VaporizeCLI: AsyncParsableCommand {
   /// Hard-coded for Phase 0 - see ``FR-CRAZE-VAPORWARE-AWARENESS`` Phase 0 scope.
   /// Phase 1+ will derive this from Package.swift via a build-time plugin.
@@ -20,6 +32,23 @@ struct VaporizeCLI: AsyncParsableCommand {
     ?? "local"
   static let buildSha = ProcessInfo.processInfo.environment["VAPORIZE_BUILD_SHA"]
   static let buildDate = ProcessInfo.processInfo.environment["VAPORIZE_BUILD_DATE"]
+  #if os(macOS)
+    static let platformToolchainSelectionAbstract = " On macOS, the independent `toolchain-selection xcode` provider compiles in the xcode-select selection surface."
+    static let toolchainSelectionDiscussion = """
+      Toolchain selection structure:
+        vaporize toolchain-selection swift -- use [swiftly-use-options] [selector]
+        vaporize toolchain-selection xcode -- select <xcode-select-options>
+      Swift and Xcode are independent selection domains. Selection does not own
+      toolchain lifecycle, general inspection, or execution.
+      """
+  #else
+    static let platformToolchainSelectionAbstract = ""
+    static let toolchainSelectionDiscussion = """
+      Toolchain selection structure:
+        vaporize toolchain-selection swift -- use [swiftly-use-options] [selector]
+      Selection does not own toolchain lifecycle, general inspection, or execution.
+      """
+  #endif
 
   static let configuration = CommandConfiguration(
     commandName: "vaporize.cli@wrkstrm-core.clia.sh",
@@ -27,8 +56,11 @@ struct VaporizeCLI: AsyncParsableCommand {
       Substrate-canonical vaporware-collapse gate. vaporize transmutes typed \
       substrate-vaporware into world-state: binaries land, .app installs, \
       processes run, receipts emit. Modes: install, uninstall, build, test, run, \
-      pass, use, toolchain, setup. Toolchain mode bridges Swift toolchain tools \
-      such as swift and docc through the owned Vaporize receipt boundary. \
+      pass, use, toolchain-selection, setup. Toolchain selection compiles \
+      swiftlang/swiftly's `use` operation into this executable for default Swift \
+      selection.\(platformToolchainSelectionAbstract) Vaporize does not locate \
+      or launch an installed swiftly CLI. Toolchain lifecycle, general \
+      inspection, and execution remain separate responsibilities. \
       Vaporware-awareness modes: status + warehouse enumerate and \
       store vaporware at a path per the `x-vaporize-collapse-path` annotation \
       convention. Project-generation bridge mode: inspect-project-yml reads \
@@ -60,10 +92,11 @@ struct VaporizeCLI: AsyncParsableCommand {
       Target feature inspection mode: inspect-target-features reads a project.yml \
       target, its configFiles wiring, release-features.json, generated xcconfigs, \
       and ReleaseFeatures.swift provenance.
-      """
+      """,
+    discussion: toolchainSelectionDiscussion
   )
 
-  enum Mode: String, ExpressibleByArgument {
+  enum Mode: String, ExpressibleByArgument, CaseIterable {
     case install
     case uninstall
     case build
@@ -71,7 +104,7 @@ struct VaporizeCLI: AsyncParsableCommand {
     case run
     case pass
     case use
-    case toolchain
+    case toolchainSelection = "toolchain-selection"
     case setup
 
     // Phase 0 vaporware-awareness modes.
@@ -124,7 +157,8 @@ struct VaporizeCLI: AsyncParsableCommand {
     case fail
   }
 
-  @Argument(help: "Mode: install, uninstall, build, test, run, pass, use, toolchain, setup, status, warehouse, validate-json, validate-json-schema, inspect-project-yml, inspect-target-features, compare-project-yml-pkl, import-project-yml, generate-project-yml, generate-xcodeproj, generate-sparkle-config, list-targets, list-schemes, release-doctor, inventory, cuj-audit, domains, self-update, fleet-status, or graph (forwards to package-graph@wrkstrm.cli).")
+  @Argument(
+    help: "Mode: install, uninstall, build, test, run, pass, use, toolchain-selection, setup, status, warehouse, validate-json, validate-json-schema, inspect-project-yml, inspect-target-features, compare-project-yml-pkl, import-project-yml, upgrade-project-yml-to-pkl, generate-project-yml, generate-xcodeproj, generate-sparkle-config, list-targets, list-schemes, release-doctor, inventory, cuj-audit, domains, self-update, fleet-status, graph (forwards to package-graph@wrkstrm.cli), or the deprecated cli and app compatibility spellings.")
   var mode: Mode?
 
   @Flag(help: "Prints the tool name, version, and build metadata and exits.")
@@ -254,12 +288,12 @@ struct VaporizeCLI: AsyncParsableCommand {
 
   @Flag(
     name: .customLong("analyze"),
-    help: "Emit a JSON execution receipt for test, pass, or use mode.")
+    help: "Emit a JSON receipt for test, pass, use, or toolchain-selection mode.")
   var analyzeExecution: Bool = false
 
   @Option(
     name: .customLong("receipt-path"),
-    help: "Write the test, pass-through, use, inventory, or CUJ audit JSON receipt to this path.")
+    help: "Write the test, pass-through, use, toolchain-selection, inventory, or CUJ audit JSON receipt to this path.")
   var receiptPath: String?
 
   @Option(
@@ -294,8 +328,13 @@ struct VaporizeCLI: AsyncParsableCommand {
 
   @Option(
     name: .customLong("developer-dir"),
-    help: "DEVELOPER_DIR override for toolchain mode and SwiftPM CLI build/install/test.")
+    help: "DEVELOPER_DIR override for SwiftPM CLI build/install/test with --swift-source xcode; it does not change the xcode-select selection.")
   var developerDirectory: String?
+
+  @Option(
+    name: .customLong("swift-source"),
+    help: "Swift executable source for SwiftPM CLI build/install/test: default uses the selected Swift on PATH; xcode is available only on macOS and uses xcrun without changing the default Swift selection.")
+  var swiftToolchainSource: SwiftCLIInstaller.SwiftToolchainSource = .defaultSwift
 
   @Option(
     name: .customLong("xcode-component"),
@@ -363,7 +402,7 @@ struct VaporizeCLI: AsyncParsableCommand {
   @Option(name: .customLong("tools-collection"), help: "Kura tools collection directory for domains mode.")
   var toolsCollectionPath: String?
 
-  @Argument(parsing: .remaining, help: "Arguments forwarded to test, run, pass, or toolchain mode.")
+  @Argument(parsing: .remaining, help: "Arguments forwarded to test, run, pass, or toolchain-selection mode.")
   var forwardedArguments: [String] = []
 
   mutating func run() async throws {
@@ -396,8 +435,8 @@ struct VaporizeCLI: AsyncParsableCommand {
       try await passThrough()
     case .use:
       try await useCommonProcessSpec()
-    case .toolchain:
-      try await runToolchain()
+    case .toolchainSelection:
+      try await runToolchainSelection()
     case .setup:
       try await setup()
     case .status:
@@ -580,6 +619,7 @@ struct VaporizeCLI: AsyncParsableCommand {
       productBuildDate: Self.buildDate,
       installerVersion: Self.vaporizeVersion,
       installerBuild: Self.buildIdentifier,
+      swiftToolchainSource: swiftToolchainSource,
       developerDirectory: developerDirectory
     )
     try await SwiftCLIInstaller(request: request).run()
@@ -682,6 +722,7 @@ struct VaporizeCLI: AsyncParsableCommand {
       productBuildDate: resolvedProductBuildDate(for: product),
       installerVersion: Self.vaporizeVersion,
       installerBuild: Self.buildIdentifier,
+      swiftToolchainSource: swiftToolchainSource,
       developerDirectory: developerDirectory,
       selfUpdateIdentity: try resolvedSelfUpdateIdentity()
     )
@@ -789,6 +830,7 @@ struct VaporizeCLI: AsyncParsableCommand {
       product: product,
       configuration: .init(rawValue: configuration.rawValue) ?? .release,
       forceReinstall: false,
+      swiftToolchainSource: swiftToolchainSource,
       developerDirectory: developerDirectory
     )
     try await SwiftCLIInstaller(request: request).uninstall()
@@ -1278,12 +1320,78 @@ struct VaporizeCLI: AsyncParsableCommand {
     }
   }
 
-  private func runToolchain() async throws {
-    let request = try SwiftToolchainRequest(arguments: forwardedArguments)
-    let requestId = "vaporize-toolchain-\(UUID().uuidString)"
-    let workingDirectory = passWorkingDirectory ?? FileManager.default.currentDirectoryPath
-    let environmentUpdates = developerDirectory.map { ["DEVELOPER_DIR": $0] }
-    let invocation = try request.invocation()
+  private func runToolchainSelection() async throws {
+    guard developerDirectory == nil else {
+      throw ValidationError(
+        "--developer-dir is a process-local Xcode execution override; select the active Xcode with `toolchain-selection xcode -- select --switch <developer-directory>`."
+      )
+    }
+
+    let request = try ToolchainSelectionRequest(arguments: forwardedArguments)
+    switch request.operation {
+    case .swiftUse(let arguments):
+      try await runSwiftToolchainSelection(arguments: arguments)
+    #if os(macOS)
+      case .xcodeSelect(let xcodeRequest):
+        try await runXcodeToolchainSelection(xcodeRequest)
+    #endif
+    }
+  }
+
+  /// Runs Swiftly's selection implementation in this process. Swiftly remains
+  /// an implementation dependency, not a Vaporize command name or subprocess.
+  private func runSwiftToolchainSelection(arguments: [String]) async throws {
+    let rootCommandName = Self.configuration.commandName
+      ?? "vaporize.cli@wrkstrm-core.clia.sh"
+    try await SwiftlyCommandRunner.run(
+      arguments: ["use"] + arguments,
+      commandName: "\(rootCommandName) toolchain-selection swift --",
+      proxyExecutablePath: VaporizeInvocation.executablePath(),
+      includesSystemToolchains: false
+    )
+
+    try emitReceiptIfRequested(
+      ToolchainSelectionReceipt(
+        provider: "swift",
+        operation: "use",
+        arguments: arguments,
+        workingDirectory: FileManager.default.currentDirectoryPath,
+        requestId: "vaporize-toolchain-selection-\(UUID().uuidString)",
+        runnerKind: "in-process",
+        executableRef: "embedded:swiftlang/swiftly",
+        resolver: "embedded-swiftly",
+        outputCapture: "in-process-unmeasured",
+        succeeded: true,
+        exitCode: 0,
+        signal: nil,
+        stdoutBytes: nil,
+        stderrBytes: nil,
+        processIdentifier: nil
+      )
+    )
+  }
+
+  #if os(macOS)
+    private func runXcodeToolchainSelection(_ request: XcodeSelectionRequest) async throws {
+      try await runToolchainSelectionInvocation(
+        provider: "xcode",
+        operation: "select",
+        arguments: request.arguments,
+        invocation: request.invocation(),
+        environmentUpdates: nil
+      )
+    }
+  #endif
+
+  private func runToolchainSelectionInvocation(
+    provider: String,
+    operation: String,
+    arguments: [String],
+    invocation: ToolchainInvocation,
+    environmentUpdates: [String: String]?
+  ) async throws {
+    let requestId = "vaporize-toolchain-selection-\(UUID().uuidString)"
+    let workingDirectory = FileManager.default.currentDirectoryPath
     let command = CommandSpec(
       executable: invocation.executable,
       args: invocation.arguments,
@@ -1292,10 +1400,11 @@ struct VaporizeCLI: AsyncParsableCommand {
       logOptions: .init(
         exposure: .none,
         tags: [
-          "source": "vaporize-toolchain",
-          "canonicalSource": "vaporize-toolchain",
-          "tool": request.tool.rawValue,
-          "toolchainResolver": invocation.resolver,
+          "source": "vaporize-toolchain-selection",
+          "canonicalSource": "vaporize-toolchain-selection",
+          "provider": provider,
+          "operation": operation,
+          "selectionResolver": invocation.resolver,
         ]
       ),
       requestId: requestId,
@@ -1308,15 +1417,16 @@ struct VaporizeCLI: AsyncParsableCommand {
     FileHandle.standardOutput.write(output.stdout)
     FileHandle.standardError.write(output.stderr)
 
-    let receipt = ToolchainReceipt(
-      tool: request.tool.rawValue,
-      arguments: request.arguments,
+    let receipt = ToolchainSelectionReceipt(
+      provider: provider,
+      operation: operation,
+      arguments: arguments,
       workingDirectory: workingDirectory,
       requestId: requestId,
       runnerKind: "auto",
-      developerDirectorySet: developerDirectory != nil,
       executableRef: invocation.executableRef,
       resolver: invocation.resolver,
+      outputCapture: "buffered",
       succeeded: output.isSuccess,
       exitCode: output.exitStatus.exitCode,
       signal: output.exitStatus.signal,
@@ -2335,18 +2445,20 @@ struct VaporizeCLI: AsyncParsableCommand {
   }
 
   private func runSwift(arguments: [String]) async throws {
-    try await validateXcodeSelectedSwiftCompatibility(arguments: arguments)
+    try await validateSelectedSwiftCompatibility(arguments: arguments)
+    let invocation = try swiftCommandInvocation(arguments: arguments)
     try await runExecutable(
-      executable: .name("xcrun"),
-      arguments: Self.xcodeSelectedSwiftArguments(arguments),
+      executable: invocation.executable,
+      arguments: invocation.arguments,
       sourceTag: "vaporize-swift",
-      environment: developerDirectoryEnvironment()
+      environment: swiftCommandEnvironment()
     )
   }
 
   private func runSwiftTests() async throws {
     let arguments = try swiftTestArguments()
-    try await validateXcodeSelectedSwiftCompatibility(arguments: arguments)
+    try await validateSelectedSwiftCompatibility(arguments: arguments)
+    let invocation = try swiftCommandInvocation(arguments: arguments)
 
     let packagePath = try requirePackagePath()
     let product = try requireCLIProduct()
@@ -2360,15 +2472,15 @@ struct VaporizeCLI: AsyncParsableCommand {
       }
     }
 
-    var environmentUpdates = developerDirectoryEnvironment() ?? [:]
+    var environmentUpdates = swiftCommandEnvironment() ?? [:]
     environmentUpdates[VaporizeIssueReporting.sinkPathEnvironmentKey] = issueSinkURL.path
     environmentUpdates[VaporizeIssueReporting.requestIdEnvironmentKey] = requestId
     environmentUpdates[VaporizeIssueReporting.executionPhaseEnvironmentKey] =
       VaporizeIssueEvent.ExecutionPhase.test.rawValue
 
     let command = CommandSpec(
-      executable: .name("xcrun"),
-      args: Self.xcodeSelectedSwiftArguments(arguments),
+      executable: invocation.executable,
+      args: invocation.arguments,
       env: .inherit(updating: environmentUpdates),
       workingDirectory: FileManager.default.currentDirectoryPath,
       logOptions: .init(
@@ -2377,6 +2489,7 @@ struct VaporizeCLI: AsyncParsableCommand {
           "source": "vaporize-test",
           "canonicalSource": "vaporize-test",
           "tool": "swift",
+          "toolchainResolver": invocation.resolver,
         ]
       ),
       requestId: requestId,
@@ -2450,34 +2563,69 @@ struct VaporizeCLI: AsyncParsableCommand {
   }
 
   private func runSwiftPackage(arguments: [String]) async throws {
-    try await validateXcodeSelectedSwiftCompatibility(arguments: arguments)
+    try await validateSelectedSwiftCompatibility(arguments: arguments)
+    let invocation = try swiftCommandInvocation(arguments: arguments)
     try await runExecutable(
-      executable: .name("xcrun"),
-      arguments: Self.xcodeSelectedSwiftArguments(arguments),
+      executable: invocation.executable,
+      arguments: invocation.arguments,
       sourceTag: "vaporize-swift-package",
-      environment: developerDirectoryEnvironment()
+      environment: swiftCommandEnvironment()
     )
   }
 
-  static func xcodeSelectedSwiftArguments(_ arguments: [String]) -> [String] {
-    ["swift"] + arguments
+  func swiftCommandInvocation(arguments: [String]) throws -> ToolchainInvocation {
+    guard developerDirectory == nil || swiftToolchainSource != .defaultSwift else {
+      throw ValidationError(
+        "--developer-dir selects Xcode and requires `--swift-source xcode`; the default Swift selection is independent of Xcode."
+      )
+    }
+
+    switch swiftToolchainSource {
+    case .defaultSwift:
+      return ToolchainInvocation(
+        executable: .name("swift"),
+        arguments: arguments,
+        executableRef: "name:swift",
+        resolver: "default-swift"
+      )
+    #if os(macOS)
+      case .xcode:
+        return ToolchainInvocation(
+          executable: .path("/usr/bin/xcrun"),
+          arguments: ["swift"] + arguments,
+          executableRef: "path:/usr/bin/xcrun",
+          resolver: "xcrun-xcode-select"
+        )
+    #endif
+    }
   }
 
-  private func validateXcodeSelectedSwiftCompatibility(arguments: [String]) async throws {
+  func swiftCommandEnvironment() -> [String: String]? {
+    #if os(macOS)
+      guard swiftToolchainSource == .xcode else { return nil }
+      return developerDirectoryEnvironment()
+    #else
+      return nil
+    #endif
+  }
+
+  private func validateSelectedSwiftCompatibility(arguments: [String]) async throws {
     guard let packagePath = Self.swiftPackagePath(in: arguments),
       let requiredVersion = try Self.swiftToolsVersion(packagePath: packagePath)
     else { return }
 
+    let invocation = try swiftCommandInvocation(arguments: ["--version"])
     let command = CommandSpec(
-      executable: .name("xcrun"),
-      args: Self.xcodeSelectedSwiftArguments(["--version"]),
-      env: .inherit(updating: developerDirectoryEnvironment()),
+      executable: invocation.executable,
+      args: invocation.arguments,
+      env: .inherit(updating: swiftCommandEnvironment()),
       logOptions: .init(
         exposure: .none,
         tags: [
           "source": "vaporize-swift-toolchain-preflight",
           "canonicalSource": "vaporize-swift-toolchain-preflight",
           "tool": "swift",
+          "toolchainResolver": invocation.resolver,
         ]
       ),
       requestId: "vaporize-swift-toolchain-preflight-\(UUID().uuidString)",
@@ -2490,14 +2638,16 @@ struct VaporizeCLI: AsyncParsableCommand {
     let versionOutput = (String(data: output.stdout, encoding: .utf8) ?? "")
       + (String(data: output.stderr, encoding: .utf8) ?? "")
     guard output.isSuccess else {
-      throw ValidationError("Vaporize could not resolve Xcode-selected Swift via `xcrun swift --version`: \(versionOutput)")
+      throw ValidationError(
+        "Vaporize could not resolve Swift via \(invocation.executableRef): \(versionOutput)"
+      )
     }
     guard let actualVersion = Self.swiftCompilerVersion(from: versionOutput) else {
       throw ValidationError("Vaporize could not parse Xcode-selected Swift version from: \(versionOutput)")
     }
     guard actualVersion >= requiredVersion else {
       throw ValidationError(
-        "Vaporize resolved Swift \(actualVersion), but package at \(packagePath) requires Swift tools \(requiredVersion). Select a Swift \(requiredVersion) or newer Xcode toolchain before running Vaporize."
+        "Vaporize resolved Swift \(actualVersion) from \(invocation.resolver), but package at \(packagePath) requires Swift tools \(requiredVersion). Select a default Swift \(requiredVersion) or newer, or on macOS opt into `--swift-source xcode` independently."
       )
     }
   }
@@ -2608,100 +2758,159 @@ enum CommonProcessSpecLoader {
   }
 }
 
-enum SwiftToolchainTool: String, Codable, Equatable {
-  case swift
-  case docc
+enum VaporizeInvocation {
+  private static let canonicalExecutableNames: Set<String> = [
+    "vaporize.cli@wrkstrm-core.clia.sh",
+    "vaporize@wrkstrm-core.cli",
+    "vaporize",
+  ]
+
+  static func isToolchainProxy(arguments: [String]) -> Bool {
+    guard let executable = arguments.first, !executable.isEmpty else { return false }
+    let executableName = URL(fileURLWithPath: executable).lastPathComponent
+    return !canonicalExecutableNames.contains(executableName)
+  }
+
+  static func executablePath(
+    arguments: [String] = CommandLine.arguments,
+    currentDirectory: String = FileManager.default.currentDirectoryPath,
+    environmentPath: String? = ProcessInfo.processInfo.environment["PATH"]
+  ) -> String? {
+    guard let executable = arguments.first, !executable.isEmpty else { return nil }
+
+    if executable.contains("/") {
+      return URL(
+        fileURLWithPath: executable,
+        relativeTo: URL(fileURLWithPath: currentDirectory, isDirectory: true)
+      ).standardizedFileURL.path
+    }
+
+    for directory in (environmentPath ?? "").split(separator: ":", omittingEmptySubsequences: false) {
+      let baseDirectory = directory.isEmpty ? currentDirectory : String(directory)
+      let candidate = URL(fileURLWithPath: baseDirectory, isDirectory: true)
+        .appendingPathComponent(executable)
+        .standardizedFileURL.path
+      if FileManager.default.isExecutableFile(atPath: candidate) {
+        return candidate
+      }
+    }
+
+    return Bundle.main.executableURL?.standardizedFileURL.path
+  }
 }
 
-struct SwiftToolchainRequest: Equatable {
-  var tool: SwiftToolchainTool
-  var arguments: [String]
+struct ToolchainSelectionRequest: Equatable {
+  enum Provider: String, CaseIterable, Equatable {
+    case swift
+    #if os(macOS)
+      case xcode
+    #endif
 
-  var xcrunArguments: [String] {
-    [tool.rawValue] + arguments
+    static var expectedDescription: String {
+      #if os(macOS)
+        "`swift` or `xcode`"
+      #else
+        "`swift`"
+      #endif
+    }
   }
+
+  enum Operation: Equatable {
+    case swiftUse([String])
+    #if os(macOS)
+      case xcodeSelect(XcodeSelectionRequest)
+    #endif
+  }
+
+  var operation: Operation
 
   init(arguments rawArguments: [String]) throws {
     var tokens = rawArguments
     while tokens.first == "--" {
       tokens.removeFirst()
     }
-    guard let rawTool = tokens.first, !rawTool.isEmpty else {
-      throw ValidationError("toolchain mode requires a Swift toolchain tool, for example: vaporize toolchain -- swift --version.")
-    }
-    guard let tool = SwiftToolchainTool(rawValue: rawTool) else {
-      throw ValidationError("toolchain mode currently supports swift and docc; got \(rawTool).")
+    guard let rawProvider = tokens.first,
+      let provider = Provider(rawValue: rawProvider)
+    else {
+      throw ValidationError(
+        "toolchain-selection requires a provider compiled for this host: \(Provider.expectedDescription)."
+      )
     }
     tokens.removeFirst()
-    if tokens.first == "--" {
+    while tokens.first == "--" {
       tokens.removeFirst()
     }
-    self.tool = tool
-    self.arguments = tokens
-  }
 
-  func invocation(
-    environment: ToolchainResolutionEnvironment = .current()
-  ) throws -> ToolchainInvocation {
-    if tool == .docc, let swiftToolchainDocCPath = environment.swiftToolchainDocCPath {
-      return ToolchainInvocation(
-        executable: .path(swiftToolchainDocCPath),
-        arguments: arguments,
-        executableRef: "path:\(swiftToolchainDocCPath)",
-        resolver: "swift-toolchain"
-      )
-    }
-
-    if environment.platform == .macOS {
-      return ToolchainInvocation(
-        executable: .name("xcrun"),
-        arguments: xcrunArguments,
-        executableRef: "name:xcrun",
-        resolver: "xcrun"
-      )
-    }
-
-    return ToolchainInvocation(
-      executable: .name(tool.rawValue),
-      arguments: arguments,
-      executableRef: "name:\(tool.rawValue)",
-      resolver: "path"
-    )
-  }
-}
-
-struct ToolchainResolutionEnvironment: Equatable {
-  enum Platform: Equatable {
-    case macOS
-    case other
-  }
-
-  var platform: Platform
-  var swiftToolchainDocCPath: String?
-
-  static func current(
-    fileManager: FileManager = .default,
-    environment: [String: String] = ProcessInfo.processInfo.environment
-  ) -> ToolchainResolutionEnvironment {
-    let homeDirectory = environment["HOME"] ?? NSHomeDirectory()
-    let knownSwiftToolchainDocCPath = URL(fileURLWithPath: homeDirectory)
-      .appendingPathComponent(".swiftly/bin/docc")
-      .path
-
+    switch provider {
+    case .swift:
+      guard tokens.first == "use" else {
+        throw ValidationError(
+          "toolchain-selection swift owns only active Swift selection; use `toolchain-selection swift -- use [options] [selector]`. Swift lifecycle, inspection, and execution belong to other commands."
+        )
+      }
+      tokens.removeFirst()
+      try SwiftSelectionPolicy.validate(arguments: tokens)
+      operation = .swiftUse(tokens)
     #if os(macOS)
-      let platform = Platform.macOS
-    #else
-      let platform = Platform.other
+      case .xcode:
+        guard tokens.first == "select" else {
+          throw ValidationError(
+            "toolchain-selection xcode owns only the active Xcode developer-directory selection; use `toolchain-selection xcode -- select <xcode-select-options>`. Xcode inspection and execution belong to other commands."
+          )
+        }
+        tokens.removeFirst()
+        operation = .xcodeSelect(try XcodeSelectionRequest(arguments: tokens))
     #endif
-
-    return ToolchainResolutionEnvironment(
-      platform: platform,
-      swiftToolchainDocCPath: fileManager.isExecutableFile(atPath: knownSwiftToolchainDocCPath)
-        ? knownSwiftToolchainDocCPath
-        : nil
-    )
+    }
   }
 }
+
+enum SwiftSelectionPolicy {
+  static func validate(arguments: [String]) throws {
+    guard !arguments.contains("xcode") else {
+      throw ValidationError(
+        "Swift and Xcode are independent selection domains. Select a Swift version with `toolchain-selection swift -- use <version>`; on macOS select Xcode with `toolchain-selection xcode -- select --switch <developer-directory>`."
+      )
+    }
+  }
+}
+
+#if os(macOS)
+  struct XcodeSelectionRequest: Equatable {
+    var arguments: [String]
+
+    init(arguments rawArguments: [String]) throws {
+      var tokens = rawArguments
+      while tokens.first == "--" {
+        tokens.removeFirst()
+      }
+
+      let singleArgumentOperations: Set<String> = [
+        "--print-path", "-p", "--reset", "-r", "--help", "-h",
+      ]
+      let isSingleArgumentOperation = tokens.count == 1
+        && singleArgumentOperations.contains(tokens[0])
+      let isSwitchOperation = tokens.count == 2
+        && ["--switch", "-s"].contains(tokens[0])
+        && !tokens[1].isEmpty
+      guard isSingleArgumentOperation || isSwitchOperation else {
+        throw ValidationError(
+          "toolchain-selection xcode accepts selection-state operations only: `select --print-path`, `select --switch <developer-directory>`, or `select --reset`."
+        )
+      }
+      self.arguments = tokens
+    }
+
+    func invocation() -> ToolchainInvocation {
+      return ToolchainInvocation(
+        executable: .path("/usr/bin/xcode-select"),
+        arguments: arguments,
+        executableRef: "path:/usr/bin/xcode-select",
+        resolver: "xcode-select"
+      )
+    }
+  }
+#endif
 
 struct ToolchainInvocation {
   var executable: Executable
@@ -2896,22 +3105,23 @@ struct PassThroughReceipt: Codable, Equatable {
   var processIdentifier: String?
 }
 
-struct ToolchainReceipt: Codable, Equatable {
+struct ToolchainSelectionReceipt: Codable, Equatable {
   var schemaVersion = "0.1.0"
-  var receiptKind = "vaporize-toolchain"
-  var tool: String
+  var receiptKind = "vaporize-toolchain-selection"
+  var provider: String
+  var operation: String
   var arguments: [String]
   var workingDirectory: String
   var requestId: String
   var runnerKind: String
-  var developerDirectorySet: Bool
   var executableRef: String
   var resolver: String
+  var outputCapture: String
   var succeeded: Bool
   var exitCode: Int?
   var signal: Int?
-  var stdoutBytes: Int
-  var stderrBytes: Int
+  var stdoutBytes: Int?
+  var stderrBytes: Int?
   var processIdentifier: String?
 }
 

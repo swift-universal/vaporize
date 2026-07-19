@@ -130,7 +130,7 @@
         {
           "k": "rp",
           "rt": "mono",
-          "v": "private/universal/substrate/collectives/spaces-universal/private/universal/kura-spaces/roles/occupations/cmo-chief-marketing-officer-carrie.org-occupation.json"
+          "v": "private/universal/substrate/collectives/wrkstrm/private/universal/jobs/cmo-chief-marketing-officer.org-job.json"
         }
       ]
     },
@@ -1647,7 +1647,7 @@
     {
       "gateRef": "GATE-38-public-disclosure-surfaces",
       "status": "EVIDENCE-READY-PENDING-HUMAN-REVIEW",
-      "rationale": "Every brochure must have an audience packet and user manual. Carrie CMO (cmo-chief-marketing-officer-carrie@wrkstrm.occupations.org) owns the consumer-facing publication gate for public-disclosure surfaces; wrkstrm-core owns Vaporize implementation evidence and release-doctor mechanics. public-brochure.html, evidence/audience-packet.su.json, user-manual.md, public-brochure.md, and public-changelog.md define the external public disclosure draft surface, remain constrained by performance-marketing-claims.md, and preserve the blocked release/publication boundary. This proves packet shape, not public launch approval or Sparkle appcast/signing readiness.",
+      "rationale": "Every brochure must have an audience packet and user manual. Carrie CMO (cmo-chief-marketing-officer@wrkstrm.jobs.org) owns the consumer-facing publication gate for public-disclosure surfaces; wrkstrm-core owns Vaporize implementation evidence and release-doctor mechanics. public-brochure.html, evidence/audience-packet.su.json, user-manual.md, public-brochure.md, and public-changelog.md define the external public disclosure draft surface, remain constrained by performance-marketing-claims.md, and preserve the blocked release/publication boundary. This proves packet shape, not public launch approval or Sparkle appcast/signing readiness.",
       "evidenceStatus": "PASS-WITH-NOTE",
       "humanReviewRequired": true,
       "humanReviewRef": null
@@ -1691,27 +1691,27 @@
   "consumerFacingGateOwnership": {
     "ownerStatus": "assigned-not-signed-off",
     "ownerName": "Carrie CMO",
-    "ownerOccupationSlug": "cmo-chief-marketing-officer-carrie@wrkstrm.occupations.org",
+    "ownerJobIdentitySlug": "cmo-chief-marketing-officer@wrkstrm.jobs.org",
     "ownerRoleSlug": "cmo-chief-marketing-officer",
     "ownerRef": {
       "LinkRefModel": "0.5.0",
       "m": [
         {
           "lane": "kind",
-          "v": "org-occupation"
+          "v": "org-job"
         },
         {
           "lane": "slug",
-          "v": "cmo-chief-marketing-officer-carrie"
+          "v": "cmo-chief-marketing-officer"
         }
       ],
       "sv": "0.5.0",
-      "t": "Carrie Wrkstrm Chief Marketing Officer Assignment",
+      "t": "Carrie Wrkstrm Chief Marketing Officer Job",
       "tg": [
         {
           "k": "rp",
           "rt": "mono",
-          "v": "private/universal/substrate/collectives/spaces-universal/private/universal/kura-spaces/roles/occupations/cmo-chief-marketing-officer-carrie.org-occupation.json"
+          "v": "private/universal/substrate/collectives/wrkstrm/private/universal/jobs/cmo-chief-marketing-officer.org-job.json"
         }
       ]
     },
@@ -1761,7 +1761,7 @@
     "x-prd-review-session": "prd-review-session.md defines the required Engineering, QA, and Marketing review before major coding starts. Engineering owns buildability and proof surface, QA owns testability and acceptance, and Marketing owns claim language and prohibited promises. v0.0.1 is backfilled; future major slices require the session before implementation.",
     "x-vaporware-modification-request-discipline": "vaporware-modification-request-discipline.md distinguishes vaporware feature requests as product input from vaporware modification requests as the controlled engineering execution unit, leaving room for future hardware or other material-domain request families. Vaporware modification requests are release work: behavior-changing changes must create or attach to a feature flag, feature status record, or release-feature cohort; add or update targetable tests; run the smallest feature-scoped proof; update release evidence and schema fixtures when affected; and record no-flag exceptions explicitly.",
     "x-performance-marketing-claims": "performance-marketing-claims.md provides approved copy examples and guardrails: do not say Vaporize is faster than Swift, do not claim 2x Xcode builds, and do not claim N GB disk savings until dedicated benchmark receipts exist; every claim must trace to product-definition.md.",
-    "x-public-disclosure-surfaces": "public-brochure.html, evidence/audience-packet.su.json, user-manual.md, public-brochure.md, and public-changelog.md are the draft external public disclosure surfaces. Every brochure must have an audience packet and user manual. Carrie CMO (cmo-chief-marketing-officer-carrie@wrkstrm.occupations.org) owns the consumer-facing publication gate; wrkstrm-core owns the Vaporize implementation evidence and release-doctor mechanics. They are downstream from product-definition.md, why-vaporize.md, performance-marketing-claims.md, release-gates.md, and launch-review evidence, and they cannot approve publication while release gates remain blocked.",
+    "x-public-disclosure-surfaces": "public-brochure.html, evidence/audience-packet.su.json, user-manual.md, public-brochure.md, and public-changelog.md are the draft external public disclosure surfaces. Every brochure must have an audience packet and user manual. Carrie CMO (cmo-chief-marketing-officer@wrkstrm.jobs.org) owns the consumer-facing publication gate; wrkstrm-core owns the Vaporize implementation evidence and release-doctor mechanics. They are downstream from product-definition.md, why-vaporize.md, performance-marketing-claims.md, release-gates.md, and launch-review evidence, and they cannot approve publication while release gates remain blocked.",
     "x-engineering-docc": "vaporize.engineering.docc is the package-local engineering documentation catalog intended for future wrkstrm.com/engineering publication. It is the human narrative; release/v0.0.1/evidence remains the proof corpus.",
     "x-feature-catalog": "vaporize.engineering.docc/feature-catalog.md is the canonical human-readable feature list and explanation surface for Vaporize. It names each major feature, user problem, current surface, and proof boundary; PRD, CUJs, tests, release gates, receipts, and schema fixtures remain the proof surfaces.",
     "x-modularity-ownership-boundaries": "vaporize.engineering.docc/modularity-and-ownership-boundaries.md records the package ownership and growth rule: genuinely Swift Universal primitives belong in swift-universal, Apple/Xcode/app/release orchestration belongs in wrkstrm-core, and Vaporize should add feature modules rather than concentrating feature bodies in the CLI router.",

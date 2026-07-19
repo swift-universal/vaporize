@@ -1,0 +1,774 @@
+{
+  "schemaVersion": "0.0.1",
+  "model": "DagModel",
+  "title": "Vaporize command ownership DAG",
+  "nodes": [
+    {
+      "id": "product.vaporize",
+      "label": "vaporize",
+      "rank": 0,
+      "lane": 0,
+      "status": "neutral",
+      "borderStyle": "double",
+      "color": "blue"
+    },
+    {
+      "id": "family.artifact-lifecycle",
+      "label": "Artifact lifecycle",
+      "rank": 1,
+      "lane": 0,
+      "status": "neutral",
+      "borderStyle": "double",
+      "color": "blue"
+    },
+    {
+      "id": "mode.install",
+      "label": "install",
+      "rank": 2,
+      "lane": 0,
+      "status": "neutral",
+      "borderStyle": "rounded",
+      "color": "green"
+    },
+    {
+      "id": "mode.uninstall",
+      "label": "uninstall",
+      "rank": 2,
+      "lane": 1,
+      "status": "neutral",
+      "borderStyle": "rounded",
+      "color": "green"
+    },
+    {
+      "id": "mode.build",
+      "label": "build",
+      "rank": 2,
+      "lane": 2,
+      "status": "neutral",
+      "borderStyle": "rounded",
+      "color": "green"
+    },
+    {
+      "id": "mode.test",
+      "label": "test",
+      "rank": 2,
+      "lane": 3,
+      "status": "neutral",
+      "borderStyle": "rounded",
+      "color": "green"
+    },
+    {
+      "id": "mode.run",
+      "label": "run",
+      "rank": 2,
+      "lane": 4,
+      "status": "neutral",
+      "borderStyle": "rounded",
+      "color": "green"
+    },
+    {
+      "id": "family.controlled-execution",
+      "label": "Controlled execution",
+      "rank": 3,
+      "lane": 0,
+      "status": "neutral",
+      "borderStyle": "double",
+      "color": "blue"
+    },
+    {
+      "id": "mode.pass",
+      "label": "pass",
+      "rank": 4,
+      "lane": 0,
+      "status": "neutral",
+      "borderStyle": "rounded",
+      "color": "green"
+    },
+    {
+      "id": "mode.use",
+      "label": "use",
+      "rank": 4,
+      "lane": 1,
+      "status": "neutral",
+      "borderStyle": "rounded",
+      "color": "green"
+    },
+    {
+      "id": "family.toolchain-selection",
+      "label": "Toolchain selection",
+      "rank": 5,
+      "lane": 0,
+      "status": "neutral",
+      "borderStyle": "double",
+      "color": "blue"
+    },
+    {
+      "id": "mode.toolchain-selection",
+      "label": "toolchain-selection",
+      "rank": 6,
+      "lane": 0,
+      "status": "neutral",
+      "borderStyle": "rounded",
+      "color": "green"
+    },
+    {
+      "id": "family.host-provisioning",
+      "label": "Host provisioning",
+      "rank": 10,
+      "lane": 0,
+      "status": "neutral",
+      "borderStyle": "double",
+      "color": "blue"
+    },
+    {
+      "id": "mode.setup",
+      "label": "setup",
+      "rank": 11,
+      "lane": 0,
+      "status": "neutral",
+      "borderStyle": "rounded",
+      "color": "green"
+    },
+    {
+      "id": "family.vaporware-state",
+      "label": "Vaporware state",
+      "rank": 13,
+      "lane": 0,
+      "status": "neutral",
+      "borderStyle": "double",
+      "color": "blue"
+    },
+    {
+      "id": "mode.status",
+      "label": "status",
+      "rank": 14,
+      "lane": 0,
+      "status": "neutral",
+      "borderStyle": "rounded",
+      "color": "green"
+    },
+    {
+      "id": "mode.warehouse",
+      "label": "warehouse",
+      "rank": 14,
+      "lane": 1,
+      "status": "neutral",
+      "borderStyle": "rounded",
+      "color": "green"
+    },
+    {
+      "id": "family.validation",
+      "label": "Validation",
+      "rank": 15,
+      "lane": 0,
+      "status": "neutral",
+      "borderStyle": "double",
+      "color": "blue"
+    },
+    {
+      "id": "mode.validate-json",
+      "label": "validate-json",
+      "rank": 16,
+      "lane": 0,
+      "status": "neutral",
+      "borderStyle": "rounded",
+      "color": "green"
+    },
+    {
+      "id": "mode.validate-json-schema",
+      "label": "validate-json-schema",
+      "rank": 16,
+      "lane": 1,
+      "status": "neutral",
+      "borderStyle": "rounded",
+      "color": "green"
+    },
+    {
+      "id": "family.project-inspection",
+      "label": "Project inspection",
+      "rank": 17,
+      "lane": 0,
+      "status": "neutral",
+      "borderStyle": "double",
+      "color": "blue"
+    },
+    {
+      "id": "mode.inspect-project-yml",
+      "label": "inspect-project-yml",
+      "rank": 18,
+      "lane": 0,
+      "status": "neutral",
+      "borderStyle": "rounded",
+      "color": "green"
+    },
+    {
+      "id": "mode.inspect-target-features",
+      "label": "inspect-target-features",
+      "rank": 18,
+      "lane": 1,
+      "status": "neutral",
+      "borderStyle": "rounded",
+      "color": "green"
+    },
+    {
+      "id": "mode.compare-project-yml-pkl",
+      "label": "compare-project-yml-pkl",
+      "rank": 18,
+      "lane": 2,
+      "status": "neutral",
+      "borderStyle": "rounded",
+      "color": "green"
+    },
+    {
+      "id": "mode.list-targets",
+      "label": "list-targets",
+      "rank": 18,
+      "lane": 3,
+      "status": "neutral",
+      "borderStyle": "rounded",
+      "color": "green"
+    },
+    {
+      "id": "mode.list-schemes",
+      "label": "list-schemes",
+      "rank": 18,
+      "lane": 4,
+      "status": "neutral",
+      "borderStyle": "rounded",
+      "color": "green"
+    },
+    {
+      "id": "family.project-transformation",
+      "label": "Project transformation",
+      "rank": 19,
+      "lane": 0,
+      "status": "neutral",
+      "borderStyle": "double",
+      "color": "blue"
+    },
+    {
+      "id": "mode.import-project-yml",
+      "label": "import-project-yml",
+      "rank": 20,
+      "lane": 0,
+      "status": "neutral",
+      "borderStyle": "rounded",
+      "color": "green"
+    },
+    {
+      "id": "mode.upgrade-project-yml-to-pkl",
+      "label": "upgrade-project-yml-to-pkl",
+      "rank": 20,
+      "lane": 1,
+      "status": "neutral",
+      "borderStyle": "rounded",
+      "color": "green"
+    },
+    {
+      "id": "mode.generate-project-yml",
+      "label": "generate-project-yml",
+      "rank": 20,
+      "lane": 2,
+      "status": "neutral",
+      "borderStyle": "rounded",
+      "color": "green"
+    },
+    {
+      "id": "mode.generate-xcodeproj",
+      "label": "generate-xcodeproj",
+      "rank": 20,
+      "lane": 3,
+      "status": "neutral",
+      "borderStyle": "rounded",
+      "color": "green"
+    },
+    {
+      "id": "mode.generate-sparkle-config",
+      "label": "generate-sparkle-config",
+      "rank": 20,
+      "lane": 4,
+      "status": "neutral",
+      "borderStyle": "rounded",
+      "color": "green"
+    },
+    {
+      "id": "family.release-audit",
+      "label": "Release and coverage audit",
+      "rank": 21,
+      "lane": 0,
+      "status": "neutral",
+      "borderStyle": "double",
+      "color": "blue"
+    },
+    {
+      "id": "mode.release-doctor",
+      "label": "release-doctor",
+      "rank": 22,
+      "lane": 0,
+      "status": "neutral",
+      "borderStyle": "rounded",
+      "color": "green"
+    },
+    {
+      "id": "mode.cuj-audit",
+      "label": "cuj-audit",
+      "rank": 22,
+      "lane": 1,
+      "status": "neutral",
+      "borderStyle": "rounded",
+      "color": "green"
+    },
+    {
+      "id": "family.portfolio-observation",
+      "label": "Portfolio observation",
+      "rank": 23,
+      "lane": 0,
+      "status": "neutral",
+      "borderStyle": "double",
+      "color": "blue"
+    },
+    {
+      "id": "mode.inventory",
+      "label": "inventory",
+      "rank": 24,
+      "lane": 0,
+      "status": "neutral",
+      "borderStyle": "rounded",
+      "color": "green"
+    },
+    {
+      "id": "mode.domains",
+      "label": "domains",
+      "rank": 24,
+      "lane": 1,
+      "status": "neutral",
+      "borderStyle": "rounded",
+      "color": "green"
+    },
+    {
+      "id": "mode.fleet-status",
+      "label": "fleet-status",
+      "rank": 24,
+      "lane": 2,
+      "status": "neutral",
+      "borderStyle": "rounded",
+      "color": "green"
+    },
+    {
+      "id": "mode.graph",
+      "label": "graph",
+      "rank": 24,
+      "lane": 3,
+      "status": "neutral",
+      "borderStyle": "rounded",
+      "color": "green"
+    },
+    {
+      "id": "family.product-maintenance",
+      "label": "Product maintenance",
+      "rank": 25,
+      "lane": 0,
+      "status": "neutral",
+      "borderStyle": "double",
+      "color": "blue"
+    },
+    {
+      "id": "mode.self-update",
+      "label": "self-update",
+      "rank": 26,
+      "lane": 0,
+      "status": "neutral",
+      "borderStyle": "rounded",
+      "color": "green"
+    },
+    {
+      "id": "family.compatibility-debt",
+      "label": "Compatibility debt",
+      "rank": 27,
+      "lane": 0,
+      "status": "pending",
+      "borderStyle": "dashed",
+      "color": "red"
+    },
+    {
+      "id": "mode.cli",
+      "label": "cli",
+      "rank": 28,
+      "lane": 0,
+      "status": "pending",
+      "borderStyle": "dashed",
+      "color": "red"
+    },
+    {
+      "id": "mode.app",
+      "label": "app",
+      "rank": 28,
+      "lane": 1,
+      "status": "pending",
+      "borderStyle": "dashed",
+      "color": "red"
+    },
+    {
+      "id": "provider.swift",
+      "label": "swift (all supported hosts)",
+      "rank": 7,
+      "lane": 0,
+      "status": "neutral",
+      "borderStyle": "rounded",
+      "color": "blue"
+    },
+    {
+      "id": "provider.xcode",
+      "label": "xcode (#if os(macOS))",
+      "rank": 7,
+      "lane": 1,
+      "status": "neutral",
+      "borderStyle": "dashed",
+      "color": "blue"
+    },
+    {
+      "id": "operation.swift-use",
+      "label": "use",
+      "rank": 8,
+      "lane": 0,
+      "status": "neutral",
+      "borderStyle": "rounded",
+      "color": "green"
+    },
+    {
+      "id": "operation.xcode-select",
+      "label": "select",
+      "rank": 8,
+      "lane": 1,
+      "status": "neutral",
+      "borderStyle": "dashed",
+      "color": "green"
+    },
+    {
+      "id": "argument.swift-selector",
+      "label": "[swiftly-use-options] [selector]",
+      "rank": 9,
+      "lane": 0,
+      "status": "neutral",
+      "borderStyle": "rounded",
+      "color": "green"
+    },
+    {
+      "id": "option.xcode-print-path",
+      "label": "--print-path",
+      "rank": 9,
+      "lane": 1,
+      "status": "neutral",
+      "borderStyle": "dashed",
+      "color": "green"
+    },
+    {
+      "id": "option.xcode-switch",
+      "label": "--switch <developer-directory>",
+      "rank": 9,
+      "lane": 2,
+      "status": "neutral",
+      "borderStyle": "dashed",
+      "color": "green"
+    },
+    {
+      "id": "option.xcode-reset",
+      "label": "--reset",
+      "rank": 9,
+      "lane": 3,
+      "status": "neutral",
+      "borderStyle": "dashed",
+      "color": "green"
+    },
+    {
+      "id": "option.xcode-help",
+      "label": "--help",
+      "rank": 9,
+      "lane": 4,
+      "status": "neutral",
+      "borderStyle": "dashed",
+      "color": "green"
+    },
+    {
+      "id": "option.xcode-component",
+      "label": "--xcode-component <component>",
+      "rank": 12,
+      "lane": 0,
+      "status": "neutral",
+      "borderStyle": "dashed",
+      "color": "green"
+    }
+  ],
+  "edges": [
+    {
+      "from": "product.vaporize",
+      "to": "family.artifact-lifecycle",
+      "kind": "sequential"
+    },
+    {
+      "from": "family.artifact-lifecycle",
+      "to": "mode.install",
+      "kind": "sequential"
+    },
+    {
+      "from": "family.artifact-lifecycle",
+      "to": "mode.uninstall",
+      "kind": "sequential"
+    },
+    {
+      "from": "family.artifact-lifecycle",
+      "to": "mode.build",
+      "kind": "sequential"
+    },
+    {
+      "from": "family.artifact-lifecycle",
+      "to": "mode.test",
+      "kind": "sequential"
+    },
+    {
+      "from": "family.artifact-lifecycle",
+      "to": "mode.run",
+      "kind": "sequential"
+    },
+    {
+      "from": "product.vaporize",
+      "to": "family.controlled-execution",
+      "kind": "sequential"
+    },
+    {
+      "from": "family.controlled-execution",
+      "to": "mode.pass",
+      "kind": "sequential"
+    },
+    {
+      "from": "family.controlled-execution",
+      "to": "mode.use",
+      "kind": "sequential"
+    },
+    {
+      "from": "product.vaporize",
+      "to": "family.toolchain-selection",
+      "kind": "sequential"
+    },
+    {
+      "from": "family.toolchain-selection",
+      "to": "mode.toolchain-selection",
+      "kind": "sequential"
+    },
+    {
+      "from": "product.vaporize",
+      "to": "family.host-provisioning",
+      "kind": "sequential"
+    },
+    {
+      "from": "family.host-provisioning",
+      "to": "mode.setup",
+      "kind": "sequential"
+    },
+    {
+      "from": "product.vaporize",
+      "to": "family.vaporware-state",
+      "kind": "sequential"
+    },
+    {
+      "from": "family.vaporware-state",
+      "to": "mode.status",
+      "kind": "sequential"
+    },
+    {
+      "from": "family.vaporware-state",
+      "to": "mode.warehouse",
+      "kind": "sequential"
+    },
+    {
+      "from": "product.vaporize",
+      "to": "family.validation",
+      "kind": "sequential"
+    },
+    {
+      "from": "family.validation",
+      "to": "mode.validate-json",
+      "kind": "sequential"
+    },
+    {
+      "from": "family.validation",
+      "to": "mode.validate-json-schema",
+      "kind": "sequential"
+    },
+    {
+      "from": "product.vaporize",
+      "to": "family.project-inspection",
+      "kind": "sequential"
+    },
+    {
+      "from": "family.project-inspection",
+      "to": "mode.inspect-project-yml",
+      "kind": "sequential"
+    },
+    {
+      "from": "family.project-inspection",
+      "to": "mode.inspect-target-features",
+      "kind": "sequential"
+    },
+    {
+      "from": "family.project-inspection",
+      "to": "mode.compare-project-yml-pkl",
+      "kind": "sequential"
+    },
+    {
+      "from": "family.project-inspection",
+      "to": "mode.list-targets",
+      "kind": "sequential"
+    },
+    {
+      "from": "family.project-inspection",
+      "to": "mode.list-schemes",
+      "kind": "sequential"
+    },
+    {
+      "from": "product.vaporize",
+      "to": "family.project-transformation",
+      "kind": "sequential"
+    },
+    {
+      "from": "family.project-transformation",
+      "to": "mode.import-project-yml",
+      "kind": "sequential"
+    },
+    {
+      "from": "family.project-transformation",
+      "to": "mode.upgrade-project-yml-to-pkl",
+      "kind": "sequential"
+    },
+    {
+      "from": "family.project-transformation",
+      "to": "mode.generate-project-yml",
+      "kind": "sequential"
+    },
+    {
+      "from": "family.project-transformation",
+      "to": "mode.generate-xcodeproj",
+      "kind": "sequential"
+    },
+    {
+      "from": "family.project-transformation",
+      "to": "mode.generate-sparkle-config",
+      "kind": "sequential"
+    },
+    {
+      "from": "product.vaporize",
+      "to": "family.release-audit",
+      "kind": "sequential"
+    },
+    {
+      "from": "family.release-audit",
+      "to": "mode.release-doctor",
+      "kind": "sequential"
+    },
+    {
+      "from": "family.release-audit",
+      "to": "mode.cuj-audit",
+      "kind": "sequential"
+    },
+    {
+      "from": "product.vaporize",
+      "to": "family.portfolio-observation",
+      "kind": "sequential"
+    },
+    {
+      "from": "family.portfolio-observation",
+      "to": "mode.inventory",
+      "kind": "sequential"
+    },
+    {
+      "from": "family.portfolio-observation",
+      "to": "mode.domains",
+      "kind": "sequential"
+    },
+    {
+      "from": "family.portfolio-observation",
+      "to": "mode.fleet-status",
+      "kind": "sequential"
+    },
+    {
+      "from": "family.portfolio-observation",
+      "to": "mode.graph",
+      "kind": "sequential"
+    },
+    {
+      "from": "product.vaporize",
+      "to": "family.product-maintenance",
+      "kind": "sequential"
+    },
+    {
+      "from": "family.product-maintenance",
+      "to": "mode.self-update",
+      "kind": "sequential"
+    },
+    {
+      "from": "product.vaporize",
+      "to": "family.compatibility-debt",
+      "kind": "sequential"
+    },
+    {
+      "from": "family.compatibility-debt",
+      "to": "mode.cli",
+      "kind": "sequential"
+    },
+    {
+      "from": "family.compatibility-debt",
+      "to": "mode.app",
+      "kind": "sequential"
+    },
+    {
+      "from": "mode.toolchain-selection",
+      "to": "provider.swift",
+      "kind": "sequential"
+    },
+    {
+      "from": "mode.toolchain-selection",
+      "to": "provider.xcode",
+      "kind": "sequential"
+    },
+    {
+      "from": "provider.swift",
+      "to": "operation.swift-use",
+      "kind": "sequential"
+    },
+    {
+      "from": "provider.xcode",
+      "to": "operation.xcode-select",
+      "kind": "sequential"
+    },
+    {
+      "from": "operation.swift-use",
+      "to": "argument.swift-selector",
+      "kind": "sequential"
+    },
+    {
+      "from": "operation.xcode-select",
+      "to": "option.xcode-print-path",
+      "kind": "sequential"
+    },
+    {
+      "from": "operation.xcode-select",
+      "to": "option.xcode-switch",
+      "kind": "sequential"
+    },
+    {
+      "from": "operation.xcode-select",
+      "to": "option.xcode-reset",
+      "kind": "sequential"
+    },
+    {
+      "from": "operation.xcode-select",
+      "to": "option.xcode-help",
+      "kind": "sequential"
+    },
+    {
+      "from": "mode.setup",
+      "to": "option.xcode-component",
+      "kind": "sequential"
+    }
+  ]
+}

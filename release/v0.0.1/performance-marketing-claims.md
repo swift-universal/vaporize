@@ -44,7 +44,7 @@ artifacts, typed records, queryable samples, and gates before claims.
 | Vaporize does not replace Swift; it wraps the same engine with policy and evidence | Measured/behavioral | "Same Swift engine, owned proof surface." | `why-vaporize.md`; focused CUJ-15 bare Swift and Vaporize both measured `6.80s` warm |
 | Vaporize wrapper overhead was not visible at focused SwiftPM test scale in the current warm baseline | Measured | "In our warm CUJ-15 baseline, Vaporize matched direct Swift at second-level timing." | `why-vaporize.md` benchmark table |
 | Vaporize keeps performance proof inside release evidence | Behavioral | "Build proof you can review later." | PRD, CUJ-09, launch-review packet, provenance artifact |
-| Vaporize can run SwiftPM coverage on the owned toolchain route | Provisional measured | "Coverage stays on the owned route." | Backfilled Kura runtime sample; SwiftPM code coverage JSON/profile data and build-size metrics verified |
+| Vaporize can retain SwiftPM coverage on its owned test route | Provisional measured | "Coverage stays on the owned route." | Historical backfilled Kura runtime sample; SwiftPM code coverage JSON/profile data and build-size metrics verified; current command split requires refreshed timing evidence |
 | Vaporize avoids direct `xcodebuild` and `xcrun` choreography for assistants | Behavioral | "One command surface instead of native-tool choreography." | CUJ-02, CUJ-05, CUJ-15 |
 | Shared workspace product-cache reuse can skip a local rebuild when the requested `.app` already exists in the warm workspace DerivedData | Behavioral | "Install from the warm workspace product when it already exists." | CUJ-15 cache-first lookup test |
 | Shared workspace DerivedData is designed to reduce duplicate per-project build caches | Theoretical | "Designed to consolidate build products into the maintained workspace cache." | CUJ-15; disk-savings formula in `why-vaporize.md` |
@@ -87,7 +87,7 @@ Assistant ergonomics version:
 Benchmark version:
 
 > In the current warm local baseline, focused CUJ-15 testing measured `6.80s`
-> through direct Swift and `6.80s` through `vaporize toolchain`. That supports
+> through direct Swift and `6.80s` through the former `vaporize toolchain`. That supports
 > the claim that Vaporize preserves the Swift engine while adding policy and
 > evidence; it does not support a claim that Vaporize is faster than Swift.
 
@@ -140,7 +140,7 @@ swift test --filter VaporizeCUJ15XcodeProductCacheTests
 After, the proof stays inside the release-owned route:
 
 ```bash
-vaporize toolchain -- swift test --filter VaporizeCUJ15XcodeProductCacheTests
+vaporize test --package-path <package> --swift-source xcode -- --filter VaporizeCUJ15XcodeProductCacheTests
 ```
 
 ## Claims Not Yet Allowed

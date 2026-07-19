@@ -6,7 +6,7 @@
 **Marketing site:** `release/v0.0.1/public-brochure.html`
 **Audience packet:** `release/v0.0.1/evidence/audience-packet.su.json`
 **User manual:** `release/v0.0.1/user-manual.md`
-**Public gate owner:** Carrie CMO (`cmo-chief-marketing-officer-carrie@wrkstrm.occupations.org`)
+**Public gate owner:** Carrie CMO (`cmo-chief-marketing-officer@wrkstrm.jobs.org`)
 **Disclosure boundary:** This brochure is the external public disclosure surface. Carrie CMO owns the consumer-facing publication gate; wrkstrm-core owns the Vaporize implementation evidence and release-doctor mechanics. It is claim-limited by `performance-marketing-claims.md`, release-gated by `release-gates.md`, and blocked from publication until Carrie CMO signoff, required founder signoff, and any board/publication approvals are recorded.
 
 ## What Vaporize Is
@@ -81,7 +81,7 @@ The current v0.0.1 packet remains blocked for internal-essential release until t
 - Claim matrix: `release/v0.0.1/performance-marketing-claims.md`
 - Launch-review packet: `release/v0.0.1/evidence/launch-review-packet.json`
 - Release doctor receipt: `release/v0.0.1/evidence/vaporize-v0.0.1-release-doctor.receipt.json`
-- Consumer-facing public gate owner: `cmo-chief-marketing-officer-carrie@wrkstrm.occupations.org`
+- Consumer-facing public gate owner: `cmo-chief-marketing-officer@wrkstrm.jobs.org`
 - Marketing-site modification receipt: `release/v0.0.1/evidence/vaporize-public-brochure-marketing-site-modification.receipt.json`
 - Audience-packet modification receipt: `release/v0.0.1/evidence/vaporize-public-brochure-audience-packet-modification.receipt.json`
 - User-manual modification receipt: `release/v0.0.1/evidence/vaporize-public-brochure-user-manual-modification.receipt.json`

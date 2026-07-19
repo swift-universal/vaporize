@@ -51,7 +51,10 @@ vaporize run --artifact cli --package-path <package> --product <product> --confi
 vaporize run --artifact app --package-path <package> --product <app-product> --configuration release --force
 vaporize pass -- swift --version
 vaporize use --common-process-spec <spec.json> --receipt-path <receipt.json>
-vaporize toolchain -- swift test
+vaporize toolchain-selection swift -- use 6.4.x-snapshot
+# macOS only; Xcode selection is independent from default Swift selection:
+vaporize toolchain-selection xcode -- select --print-path
+vaporize test --package-path <package> --swift-source xcode --configuration debug
 vaporize validate-json --path <packet.json>
 vaporize inspect-project-yml --path <project.yml> --format json --receipt-path <receipt.json>
 vaporize inspect-target-features --path <project.yml> --target <target> --format json --receipt-path <receipt.json>
@@ -63,6 +66,66 @@ vaporize list-schemes --xcode-workspace <workspace.xcworkspace> --format json --
 vaporize setup --xcode-component MetalToolchain
 vaporize status --path <records> --format text
 vaporize warehouse --path <records> --receipt-path <receipt.json>
+```
+
+## Command grammar and manual pages
+
+Vaporize currently has a flat mode dispatcher. The live grammar is:
+
+```text
+vaporize [options] [mode] [-- forwarded-arguments...]
+```
+
+`mode` is one of `install`, `uninstall`, `build`, `test`, `run`, `pass`,
+`use`, `toolchain-selection`, `setup`, `status`, `warehouse`, `validate-json`,
+`validate-json-schema`, `inspect-project-yml`, `inspect-target-features`,
+`compare-project-yml-pkl`, `import-project-yml`, `upgrade-project-yml-to-pkl`,
+`generate-project-yml`, `generate-xcodeproj`, `generate-sparkle-config`,
+`list-targets`, `list-schemes`, `release-doctor`, `inventory`, `cuj-audit`,
+`graph`, `domains`, `self-update`, or `fleet-status`. Options are parsed by the
+root command and validated by the selected mode; they are not separate
+ArgumentParser subcommands yet. The deprecated compatibility spellings `cli`
+and `app` are also still accepted by the current parser.
+
+`toolchain-selection` requires an explicit, compiled provider and owns only
+active selection state:
+
+```text
+vaporize toolchain-selection swift -- use [swiftly-use-options] [selector]
+vaporize toolchain-selection xcode -- select <xcode-select-options>  # macOS only
+```
+
+The `swift` provider exists on every supported platform and compiles Swiftly's
+`use` implementation into Vaporize. The sibling `xcode` provider and its
+`xcode-select` implementation are compiled only on macOS, so a Linux build
+exposes no Xcode selection provider. Swiftly lifecycle/inspection/execution and
+arbitrary `xcrun` execution are deliberately outside this command.
+
+The checked-in section-1 manual is generated from ArgumentParser help, so the
+manual and executable share one option source:
+
+```bash
+scripts/regenerate-manual.sh
+man -M "$PWD/Documentation/man" vaporize
+```
+
+The generator uses the default `swift` on `PATH`. On macOS, an explicit Xcode
+Swift generation lane is available without changing the default Swift
+selection:
+
+```bash
+VAPORIZE_USE_XCODE_SWIFT=1 scripts/regenerate-manual.sh
+```
+
+CLI installation now treats checked-in manuals as installed artifacts. A
+package that provides
+`Documentation/man/man1/<canonical-product>.1` has that page and its `.so`
+aliases installed under `~/.swiftpm/share/man/man1`; uninstall removes the
+recorded pages. For Vaporize, both of these lookups resolve the same manual:
+
+```bash
+man vaporize
+man vaporize.cli@wrkstrm-core.clia.sh
 ```
 
 ## CLI install and uninstall
@@ -287,14 +350,45 @@ vaporize use \
 The spec is decoded before execution, invalid executable refs are rejected, and
 receipts record the process result without serializing environment values.
 
-## Toolchain and JSON validation
+## Toolchain selection and JSON validation
 
-Toolchain mode is the owned route for Xcode-selected Swift. Assistants should
-use it instead of calling `xcrun` directly:
+Toolchain selection compiles Swiftly's `use` operation into Vaporize. It reports
+or changes the selected default Swift without launching an installed `swiftly`
+CLI:
 
 ```bash
-vaporize toolchain -- swift test
+vaporize toolchain-selection swift -- use
+vaporize toolchain-selection swift -- use 6.4.x-snapshot
+vaporize toolchain-selection swift -- use --global-default 6.4.x-snapshot
 ```
+
+Until Swift 6.4 has a stable Swift.org release, `6.4.x-snapshot` selects the
+latest installed release-branch snapshot. Selection does not install it;
+toolchain acquisition remains a separate provisioning responsibility.
+
+On macOS, Xcode is an independent selection domain. Its provider owns only the
+selection-state portion of `/usr/bin/xcode-select`; it does not own Xcode
+version inspection or arbitrary tool execution:
+
+```bash
+vaporize toolchain-selection xcode -- select --print-path
+vaporize toolchain-selection xcode -- select --switch /Applications/Xcode.app/Contents/Developer
+vaporize toolchain-selection xcode -- select --reset
+```
+
+SwiftPM CLI build, install, and test operations follow the same rule. They use
+default Swift unless the macOS-only Xcode source is requested explicitly:
+
+```bash
+vaporize build --artifact cli --package-path <package> --product <product> --skip-install
+vaporize build --artifact cli --package-path <package> --product <product> --swift-source xcode --skip-install
+vaporize test --package-path <package> --swift-source xcode --configuration debug
+```
+
+The full mode-and-option responsibility map is documented in
+`vaporize.engineering.docc/command-ownership-map.md`. Swift toolchain lifecycle
+and generic Xcode inspection remain explicit command-design gaps; they are not
+smuggled into selection.
 
 Release packet JSON validation also stays inside Vaporize:
 

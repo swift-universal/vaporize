@@ -7,24 +7,45 @@ func localOrRemote(path: String, url: String, from version: Version) -> Package.
   return .package(url: url, from: version)
 }
 
-let commonShellDependency = localOrRemote(
-  path: "../../../../../swift-universal/private/universal/domain/dispatch/spm/common-shell",
-  url: "https://github.com/swift-universal/common-shell.git",
-  from: "0.0.1"
-)
-let commonProcessDependency = localOrRemote(
-  path: "../../../../../swift-universal/private/universal/domain/dispatch/spm/common-process",
-  url: "https://github.com/swift-universal/common-process.git",
-  from: "0.3.5"
-)
+let commonShellDependency: Package.Dependency = if ProcessInfo.useLocalDeps {
+  .package(
+    path: "../../../../../swift-universal/private/universal/domain/dispatch/spm/common-shell",
+    traits: []
+  )
+} else {
+  .package(
+    url: "https://github.com/swift-universal/common-shell.git",
+    from: "0.0.1",
+    traits: []
+  )
+}
+let commonProcessDependency: Package.Dependency = if ProcessInfo.useLocalDeps {
+  .package(
+    path: "../../../../../swift-universal/private/universal/domain/dispatch/spm/common-process",
+    traits: []
+  )
+} else {
+  .package(
+    url: "https://github.com/swift-universal/common-process.git",
+    from: "0.3.5",
+    traits: []
+  )
+}
 // swift-cli-installer LIFTED 2026-06-14 from sources/swift-cli-installer to
 // swift-universal/private/universal/domain/tooling/spm/swift-cli-installer/
 // per CEO decision + [[no-code-gets-left-behind]] doctrine.
-let swiftCLIInstallerDependency = localOrRemote(
-  path: "../../../../../swift-universal/private/universal/domain/tooling/spm/swift-cli-installer",
-  url: "https://github.com/swift-universal/swift-cli-installer.git",
-  from: "0.0.1"
-)
+let swiftCLIInstallerDependency: Package.Dependency = if ProcessInfo.useLocalDeps {
+  .package(
+    path: "../../../../../swift-universal/private/universal/domain/tooling/spm/swift-cli-installer",
+    traits: []
+  )
+} else {
+  .package(
+    url: "https://github.com/swift-universal/swift-cli-installer.git",
+    from: "0.0.1",
+    traits: []
+  )
+}
 // Consume/verify half of CLI Sparkle (appcast parse, SemanticVersion compare,
 // EdDSA verify, atomic replace) — consumed, not reimplemented, per
 // FR-CLI-SPARKLE-SELF-UPDATE-VAPORIZE-PKL-SCAFFOLDER-2026-07-14 component C.
@@ -111,7 +132,7 @@ let package = Package(
         "VaporizeIssueReporting",
         .product(name: "SwiftCLIInstaller", package: "swift-cli-installer"),
         .product(name: "SwiftCLIUpdater", package: "swift-cli-updater"),
-        .product(name: "swiftly", package: "swiftly"),
+        .product(name: "SwiftlyCommands", package: "swiftly"),
         "SwiftAppInstaller",
         .product(name: "CommonShell", package: "common-shell"),
         .product(name: "CommonProcess", package: "common-process"),

@@ -3,7 +3,7 @@
 **Status:** public-disclosure draft; not approved for publication
 **Audience:** external technical evaluators, future customers, board-approved public readers
 **Component:** `vaporize@wrkstrm-core.cli`
-**Public gate owner:** Carrie CMO (`cmo-chief-marketing-officer-carrie@wrkstrm.occupations.org`)
+**Public gate owner:** Carrie CMO (`cmo-chief-marketing-officer@wrkstrm.jobs.org`)
 **Disclosure boundary:** This changelog is the external release-note companion to `public-brochure.html`, `public-brochure.md`, `user-manual.md`, and `evidence/audience-packet.su.json`. Carrie CMO owns the consumer-facing publication gate; wrkstrm-core owns the Vaporize implementation evidence and release-doctor mechanics. It is safe to review as a draft public surface, but it is not a publication approval and cannot override blocked release gates.
 
 ## v0.0.1 Release-Prep Highlights
@@ -37,7 +37,7 @@ Vaporize v0.0.1 has matured from a command wrapper into a release-spine tool for
 - CUJ-09 release-review tests require the public brochure marketing site, audience packet, user manual, Markdown brochure, public changelog, and public-disclosure launch-review gate.
 - CUJ-17 release-doctor tests require the live release spine and fixture release spine to include the public-disclosure gate.
 - The launch-review packet records `GATE-38-public-disclosure-surfaces`.
-- Release Doctor checks the Carrie CMO owner token, `cmo-chief-marketing-officer-carrie@wrkstrm.occupations.org`, across the public-disclosure packet.
+- Release Doctor checks the Carrie CMO owner token, `cmo-chief-marketing-officer@wrkstrm.jobs.org`, across the public-disclosure packet.
 
 ### Blocked
 

@@ -5,7 +5,7 @@
 **Component:** `vaporize@wrkstrm-core.cli`
 **Companion brochure:** `release/v0.0.1/public-brochure.html`
 **Audience packet:** `release/v0.0.1/evidence/audience-packet.su.json`
-**Public gate owner:** Carrie CMO (`cmo-chief-marketing-officer-carrie@wrkstrm.occupations.org`)
+**Public gate owner:** Carrie CMO (`cmo-chief-marketing-officer@wrkstrm.jobs.org`)
 **Disclosure boundary:** This manual explains how to operate the current
 Vaporize surfaces in the release packet. Carrie CMO owns the consumer-facing
 publication gate; wrkstrm-core owns the implementation evidence and
@@ -113,7 +113,7 @@ Before trusting the brochure:
 - Confirm the launch-review packet references the brochure, user manual, and
   audience packet.
 - Confirm the release gates and launch-review packet name Carrie CMO
-  (`cmo-chief-marketing-officer-carrie@wrkstrm.occupations.org`) as the
+  (`cmo-chief-marketing-officer@wrkstrm.jobs.org`) as the
   consumer-facing gate owner without recording publication signoff.
 - Confirm blocked claims remain blocked in `performance-marketing-claims.md`
   and `release-gates.md`.

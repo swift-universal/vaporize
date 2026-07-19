@@ -19,7 +19,8 @@ can be referenced later.
 The current v0.0.1 command surface includes these families:
 
 - `install`, `uninstall`, `build`, `test`, and `run` for CLI and app artifacts.
-- `pass`, `use`, and `toolchain` for bounded command invocation.
+- `pass` and `use` for bounded command invocation.
+- `toolchain-selection` for independent Swift and macOS Xcode selection state.
 - `validate-json` for JSON validation through the Swift Universal json-formatter package.
 - `status` and `warehouse` for vaporware inventory.
 - `inspect-project-yml`, `compare-project-yml-pkl`, `import-project-yml`,
@@ -32,23 +33,39 @@ Each family narrows a lower-level tool into a product-owned lane. That narrowing
 is the engineering value: fewer ambient assumptions, more typed inputs, and
 better receipts.
 
-## Toolchain Bridge
+## Toolchain Selection
 
-Toolchain mode is the Vaporize-owned route for Swift documentation and
-toolchain commands whose resolver differs by host environment.
-
-Swift commands that need the Apple build lane use Xcode's selected toolchain on
-macOS:
+Toolchain selection is state selection, not a generic toolchain bridge. The
+provider is explicit and the two selection domains are independent:
 
 ```text
-vaporize toolchain -- swift test
+vaporize toolchain-selection swift -- use [swiftly-use-options] [selector]
+vaporize toolchain-selection xcode -- select <xcode-select-options>  # macOS only
+```
+
+The Swift provider compiles Swiftly's `use` implementation into Vaporize. The
+Xcode provider is omitted outside macOS and owns only the `xcode-select`
+selection-state operations: print, switch, and reset.
+
+Toolchain acquisition, lifecycle, general inspection, and execution do not
+belong to this command. The complete reasoning and current ownership gaps are
+recorded in <doc:command-ownership-map>.
+
+## Swift And Documentation Execution
+
+Normal Swift package operations use the independently selected default Swift
+through their operation command:
+
+```text
+vaporize test --package-path <package> --configuration debug
 ```
 
 For Swift package API documentation, the modern Swift-facing surface is the
-Swift-DocC Plugin command:
+Swift-DocC Plugin command. Until Vaporize has a documentation-specific mode,
+generic invocation belongs to `pass`:
 
 ```text
-vaporize toolchain -- swift package generate-documentation
+vaporize pass -- swift package generate-documentation
 ```
 
 For standalone `.docc` catalog export in our stack, the modern owned tool name
@@ -65,25 +82,23 @@ docc-preview.cli@swift-universal.clia.sh serve --bundle Product.docc
 docc-validator.cli@swift-universal.clia.sh workspace /workspace
 ```
 
-The lower-level Swift-DocC Documentation Compiler executable is the fallback
-compiler boundary, not the product name:
+The lower-level Swift-DocC Documentation Compiler executable remains a fallback
+compiler boundary, not a toolchain-selection behavior:
 
 ```text
-vaporize toolchain -- docc convert Product.docc --output-path /tmp/Product.doccarchive
+vaporize pass -- docc convert Product.docc --output-path /tmp/Product.doccarchive
 ```
 
-If a Swift toolchain-provided `docc` executable is available, Vaporize uses
-that compiler directly. If not, Vaporize falls back to Xcode DocC on macOS.
-Outside macOS, Vaporize invokes `docc` by name so Linux Swift toolchains can
-provide the compiler on `PATH`:
+Xcode-selected Swift package build and test execution is explicit on macOS and
+does not change the default Swift selection:
 
 ```text
-docc convert ...
-swift test ...
+vaporize test --package-path <package> --swift-source xcode
 ```
 
-The receipt records the tool, arguments, resolver, executable ref, developer
-directory boundary, and the environment-owned resolver decision.
+The owning execution command records its own operation and resolver boundary.
+`toolchain-selection` receipts instead record the provider, selection
+operation, arguments, embedded or system resolver, and executable reference.
 
 For the canonical feature-by-feature explanation, see <doc:feature-catalog>.
 This page explains the architecture; the feature catalog names the user problem,

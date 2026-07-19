@@ -16,7 +16,7 @@ than treating the current test count as self-justifying.
 
 Each major Vaporize feature should have a targetable SwiftPM test bundle. New
 feature work first adds tests to the feature bundle, then runs that bundle
-directly with `vaporize toolchain -- swift test --filter <FeatureBundle>`.
+directly with `vaporize test --package-path <package> -- --filter <FeatureBundle>`.
 After the feature bundle proves the behavior and the coverage artifact is
 updated, duplicate older/general tests may be deleted in the same change. Test
 deletion is allowed only as coverage migration: the replacement bundle, receipt,
@@ -41,7 +41,7 @@ and CUJ count must already name the behavior being retired from the old location
 | CUJ-02 | `VaporizeCUJ02MacAppTests` | 26 |
 | CUJ-03 | `VaporizeCUJ03PassThroughTests` | 4 |
 | CUJ-04 | `VaporizeCUJ04CommonProcessUseTests` | 4 |
-| CUJ-05 | `VaporizeCUJ05ToolchainTests` | 11 |
+| CUJ-05 | `VaporizeCUJ05ToolchainTests` | 15 |
 | CUJ-06 | `VaporizeCUJ06JSONValidationTests` | 9 |
 | CUJ-07 | `VaporizeCUJ07VaporInventoryTests` | 18 |
 | CUJ-08 | `VaporizeCUJ08ProjectYMLInspectionTests` | 5 |
@@ -76,7 +76,7 @@ CUJ-02 and 3 attributed to CUJ-24's install-integrity slice.
 | CUJ-02 | FR-003, FR-004, FR-015 | 9 | App install parsing, Xcode invocation, derived data, bundle-name resolution, invalid Xcode config |
 | CUJ-03 | FR-005 | 4 | Pass-through parser normalization and receipt shape |
 | CUJ-04 | FR-006 | 4 | CommonProcess decode, file load, validation rejection, receipt shape |
-| CUJ-05 | FR-010 | 11 | Toolchain parser normalization, swift-toolchain DocC routing, macOS fallback routing, non-macOS direct lookup, unsupported/empty rejection, receipt shape |
+| CUJ-05 | FR-010 | 11 | Selection parser normalization, embedded Swiftly use routing, host-compiled provider split, macOS xcode-select print/switch/reset routing, non-selection rejection, receipt shape |
 | CUJ-06 | FR-011 | 3 | Valid and invalid Swift Universal json-formatter-backed validation plus formatter coverage; validate-json-schema engine expected-pass, expected-fail, expectation-mismatch, remote-$ref rejection, and actionable-failure coverage against workstream-schemas v0.0.4 fixtures |
 | CUJ-07 | FR-007, FR-008 | 10 | Scanner status classification, legacy key, malformed JSON, path errors, text/JSON renderer |
 | CUJ-08 | FR-015 | 5 | Concourse and multi-target YAML parsing, value/source decoding, read-only bridge evidence |

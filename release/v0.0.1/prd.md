@@ -144,8 +144,8 @@ future hardware or other material-domain request families.
 - Keep direct `xcodebuild` use inside Vaporize as an implementation detail.
 - Provide analyzable `pass` execution for Swift commands through CommonProcess.
 - Provide `use` execution for caller-supplied CommonProcess `CommandSpec` JSON.
-- Provide `toolchain` execution for Xcode-selected Swift through Vaporize-owned
-  `xcrun` invocation.
+- Provide `toolchain-selection swift|xcode` for independent active selection
+  state; keep lifecycle, inspection, and execution in their owning commands.
 - Provide `validate-json` so release packets validate through Vaporize rather
   than direct `jq`.
 - Provide `inspect-project-yml` so legacy XcodeGen project specs can be parsed
@@ -244,7 +244,7 @@ Supporting audiences:
 | FR-007 | Vaporware inventory | `status` and `warehouse` scan JSON records for `x-vaporize-collapse-path`, classify vapor state, and emit text or JSON receipts. |
 | FR-008 | Compatibility inventory | Legacy `x-craze-collapse-path` annotations remain readable for classification only. |
 | FR-009 | Package graph forwarder | `graph` forwards to `package-graph@wrkstrm.cli` from the same canonical Vaporize surface. |
-| FR-010 | Xcode-selected toolchain route | `toolchain -- swift <args>` invokes `xcrun swift <args>` inside Vaporize and rejects unsupported tools. |
+| FR-010 | Host-compiled toolchain selection providers | `toolchain-selection swift -- use [options] [selector]` compiles Swiftly's selection implementation on every supported host; macOS builds additionally expose `toolchain-selection xcode -- select <args>` through `xcode-select`, while non-macOS builds contain no Xcode provider. The command rejects toolchain lifecycle, general inspection, and execution. |
 | FR-011 | JSON validation route | `validate-json --path <json>` validates JSON through the Swift Universal json-formatter package and can emit a receipt. |
 | FR-012 | Release packet | PRD, CUJs, release gates, and launch-review packet exist under `release/v0.0.1/`. |
 | FR-013 | Internal essential tool classification | Release evidence names Vaporize as `internal-essential-tool` and records which assistant workflows it blocks when absent. |
@@ -275,7 +275,7 @@ Supporting audiences:
 ## Release Criteria
 
 - Vaporize's package test suite passes with the Swift 6.4 toolchain:
-  `vaporize toolchain -- swift test --package-path private/apple/spm/vaporize@wrkstrm-core.cli`.
+  `vaporize test --package-path private/apple/spm/vaporize@wrkstrm-core.cli --configuration debug`.
   Current proof: the CUJ-derived coverage floor requires 132 Swift test
   obligations plus 14 release evidence checks; the executable suite passes 196
   tests across 26 implemented CUJ targets, including the CUJ-14 expanded
@@ -300,7 +300,7 @@ Supporting audiences:
   before release-ready status.
 - CUJ test coverage is recorded in
   `release/v0.0.1/evidence/cuj-test-coverage.json`.
-- CLI help advertises `use`, `toolchain`, `validate-json`,
+- CLI help advertises `use`, `toolchain-selection`, `validate-json`,
   `inspect-project-yml`, `compare-project-yml-pkl`, `import-project-yml`,
   `generate-project-yml`, `generate-xcodeproj`, `inspect-target-features`,
   `list-targets`, `list-schemes`, `release-doctor`, `--common-process-spec`,

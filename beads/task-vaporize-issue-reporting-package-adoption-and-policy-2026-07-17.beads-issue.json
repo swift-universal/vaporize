@@ -1,0 +1,58 @@
+{
+  "BeadsIssue": "0.1.0",
+  "schemaVersion": "0.1.0",
+  "id": "task-vaporize-issue-reporting-package-adoption-and-policy-2026-07-17",
+  "title": "Adopt swift-issue-reporting in Vaporize with an explicit severity and containment policy",
+  "status": "implemented-awaiting-savepoint",
+  "priority": 1,
+  "issueType": "task",
+  "labels": [
+    "vaporize",
+    "issue-reporting",
+    "swiftpm",
+    "dependency-graph",
+    "severity-policy"
+  ],
+  "createdAt": "2026-07-18T04:02:57Z",
+  "createdBy": "codex@loom from the IssueReporting adoption discussion",
+  "historicalContent": {
+    "slug": "task-vaporize-issue-reporting-package-adoption-and-policy-2026-07-17",
+    "kind": "bead-task",
+    "assignee": "wrkstrm-core",
+    "severity": "high",
+    "componentHome": "private/apple/spm/vaporize@wrkstrm-core.cli",
+    "parentBead": "fr-vaporize-issue-reporting-recoverable-invariant-visibility-2026-07-17",
+    "description": "Add the accepted swift-issue-reporting release to the narrow Vaporize targets that implement and test runtime issue capture. Record the recoverable-invariant severity ladder before converting any production seam, and prove that SwiftPM resolves one IssueReporting implementation.",
+    "dependencyRule": "Use swift-issue-reporting 2.0.0 directly in the Vaporize graph. Do not introduce swift-case-paths or legacy compatibility-overlay package identities into this graph as part of this task. Save `swift package show-dependencies` evidence with one IssueReporting module implementation.",
+    "severityLadder": [
+      "Expected domain or user failure: typed error, Result, validation, or user-facing state.",
+      "Recoverable internal invariant: reportIssue followed by an explicit return, quarantine, discard, or known fallback.",
+      "Unsafe continuation: preconditionFailure or fatalError.",
+      "External operational failure: structured log, telemetry, retry, or user-facing recovery."
+    ],
+    "acceptanceCriteria": [
+      "Package.swift pins swift-issue-reporting from the accepted 2.0.0 release line and only the required targets import IssueReporting.",
+      "Package.resolved and show-dependencies prove one IssueReporting implementation and no accidental compatibility-overlay identity.",
+      "The Vaporize engineering DocC states that build, test, and run have different runtime-issue semantics.",
+      "The policy requires every report site to state invariant, containment, reporter behavior, and proof.",
+      "A clean Vaporize build and focused dependency tests pass through the installed Vaporize toolchain lane.",
+      "Removing the dependency and reporter target is documented as the rollback."
+    ],
+    "implementationEvidence": {
+      "implementedAt": "2026-07-18T05:11:09Z",
+      "packagePin": "swift-issue-reporting 2.0.0 at d6adc8bc81e8ba37d3ecd094b78450853738a89f",
+      "graphProof": "Vaporize toolchain show-dependencies emitted exactly one swift-issue-reporting node at 2.0.0 and no legacy compatibility-overlay node; Package.resolved contains the same single pin.",
+      "buildProof": [
+        "Vaporize toolchain swift build --product VaporizeIssueReporting passed.",
+        "Vaporize toolchain swift build --product vaporize.cli@wrkstrm-core.clia.sh passed."
+      ],
+      "testProof": "Vaporize toolchain previously passed 7 structured reporter tests. The prior receipt-suite proof was invalidated because it included a prohibited test framework; its corrected Swift Testing-only verification remains tracked by the open test-receipt task.",
+      "policyDoc": "vaporize.engineering.docc/recoverable-invariant-reporting.md",
+      "rollback": "Remove the swift-issue-reporting dependency, VaporizeIssueReporting product and target, focused test target, consumer installation calls, and the package pin."
+    },
+    "dependsOn": []
+  },
+  "composesWith": [
+    "fr-vaporize-issue-reporting-recoverable-invariant-visibility-2026-07-17"
+  ]
+}

@@ -2,21 +2,35 @@ import Foundation
 import TranslateSourceGate
 
 enum VaporizeI18nSourceGateError: Error, LocalizedError {
-  case blocked(report: TranslateSourceGateReport, receiptPath: String)
+  case blocked(
+    report: TranslateSourceGateReport,
+    imprintReceipt: I18nSourceGateBeadImprintReceipt,
+    receiptPath: String,
+    imprintReceiptPath: String
+  )
+  case beadImprintFailed(
+    report: TranslateSourceGateReport,
+    receiptPath: String,
+    failure: String
+  )
 
   var errorDescription: String? {
     switch self {
-    case .blocked(let report, let receiptPath):
-      let findings = report.findings.prefix(12).map { finding in
-        "\(finding.rule.rawValue) \(finding.location.file):\(finding.location.line):\(finding.location.column) [\(finding.sink)]"
-      }
-      let remaining = report.findings.count - findings.count
-      let tail = remaining > 0 ? "\n... \(remaining) more blocking findings" : ""
+    case .blocked(let report, let imprintReceipt, let receiptPath, let imprintReceiptPath):
       return """
-        i18n source gate blocked \(report.targetName).
-        \(findings.joined(separator: "\n"))\(tail)
-        Receipt: \(receiptPath)
-        User-facing app and CLI copy must come from an approved i18n-universal word package.
+        \(report.standard.title) v\(report.standard.version) blocked \(report.targetName).
+        \(I18nSourceGateAssistantRenderer.render(
+          report: report,
+          receipt: imprintReceipt,
+          reportReceiptPath: receiptPath,
+          beadReceiptPath: imprintReceiptPath
+        ))
+        """
+    case .beadImprintFailed(let report, let receiptPath, let failure):
+      return """
+        \(report.standard.title) v\(report.standard.version) completed for \(report.targetName), but owner-local Bead reconciliation failed.
+        Report receipt: \(receiptPath)
+        Bead reconciliation error: \(failure)
         """
     }
   }
@@ -68,10 +82,41 @@ enum VaporizeI18nSourceGate {
     )
     try report.jsonData().write(to: receiptURL, options: .atomic)
 
+    let imprintReceipt: I18nSourceGateBeadImprintReceipt
+    let imprintReceiptURL: URL
+    do {
+      let resolvedOwnerID = try I18nSourceGateBeadImprint.resolvedOwnerID(
+        owningHome: productDirectory,
+        targetName: productName,
+        fallbackOwnerID: productName
+      )
+      imprintReceipt = try I18nSourceGateBeadImprint.reconcile(
+        report: report,
+        owningHome: productDirectory,
+        ownerID: resolvedOwnerID,
+        reportReceiptURL: receiptURL,
+        mode: .write,
+        scanCompleteness: .complete,
+        observedAt: Date()
+      )
+      imprintReceiptURL = receiptURL.deletingLastPathComponent().appendingPathComponent(
+        "\(receiptURL.deletingPathExtension().lastPathComponent).bead-imprint.json"
+      )
+      try imprintReceipt.jsonData().write(to: imprintReceiptURL, options: .atomic)
+    } catch {
+      throw VaporizeI18nSourceGateError.beadImprintFailed(
+        report: report,
+        receiptPath: receiptURL.path,
+        failure: error.localizedDescription
+      )
+    }
+
     guard report.passed else {
       throw VaporizeI18nSourceGateError.blocked(
         report: report,
-        receiptPath: receiptURL.path
+        imprintReceipt: imprintReceipt,
+        receiptPath: receiptURL.path,
+        imprintReceiptPath: imprintReceiptURL.path
       )
     }
     return Result(report: report, receiptURL: receiptURL)
