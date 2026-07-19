@@ -40,7 +40,7 @@
     "ownerID" : "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli",
     "reportFormatVersion" : "0.3.0",
     "reportReceiptRef" : "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/receipts/i18n-source-gate/BUG-I18N-I18N002-7A7927F0C1E1C51BB6EE1018390FB756130A7FF5648C8552C0F326603E46B36F.source-gate-report.json",
-    "reportReceiptSHA256" : "fd6ba36533dff19a6a17cb50affe3775064ab8bc6c0555260316221c11963176",
+    "reportReceiptSHA256" : "e540a54124d38ed8758b67835813cec08078c55a6c1f083468910769c78afeb5",
     "rule" : "I18N002",
     "sink" : "ArgumentParser.@Option.help",
     "sourceCoordinate" : "sources/vaporize-cli/main.swift",
@@ -56,7 +56,7 @@
     "sources/vaporize-cli/main.swift",
     "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N002-7A7927F0C1E1C51BB6EE1018390FB756130A7FF5648C8552C0F326603E46B36F.bead-world-projection.json",
     "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/receipts/i18n-source-gate/BUG-I18N-I18N002-7A7927F0C1E1C51BB6EE1018390FB756130A7FF5648C8552C0F326603E46B36F.source-gate-report.json",
-    "sha256:fd6ba36533dff19a6a17cb50affe3775064ab8bc6c0555260316221c11963176"
+    "sha256:e540a54124d38ed8758b67835813cec08078c55a6c1f083468910769c78afeb5"
   ],
   "issueId" : "BUG-I18N-I18N002-7A7927F0C1E1C51BB6EE1018390FB756130A7FF5648C8552C0F326603E46B36F",
   "kind" : "i18n-source-gate-bead-evidence",
@@ -99,6 +99,41 @@
       ],
       "sourceCoordinate" : "sources/vaporize-cli/main.swift",
       "timestamp" : "2026-07-19T14:35:38Z"
+    },
+    {
+      "action" : "update",
+      "reportReceiptRef" : "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/receipts/i18n-source-gate/BUG-I18N-I18N002-7A7927F0C1E1C51BB6EE1018390FB756130A7FF5648C8552C0F326603E46B36F.source-gate-report.json",
+      "reportReceiptSHA256" : "e540a54124d38ed8758b67835813cec08078c55a6c1f083468910769c78afeb5",
+      "rule" : "I18N002",
+      "scanScope" : [
+        "sources/apple-project-spec-core/AppleProjectPklUpgradePlanner.swift",
+        "sources/apple-project-spec-core/AppleProjectSparkleConfigRenderer.swift",
+        "sources/apple-project-spec-core/AppleProjectSpec.swift",
+        "sources/apple-project-spec-core/AppleProjectTargetDiscovery.swift",
+        "sources/apple-project-spec-core/AppleProjectXcodeProjectGenerator.swift",
+        "sources/apple-project-spec-core/VaporizeTargetFeaturesInspector.swift",
+        "sources/swift-app-installer/SwiftAppInstaller.swift",
+        "sources/swift-app-installer/XcodeAppInputResolver.swift",
+        "sources/vaporize-cli/CUJAutomatedProofLedger.swift",
+        "sources/vaporize-cli/CUJImplementationProjectCoverageLedger.swift",
+        "sources/vaporize-cli/CUJPortfolioAudit.swift",
+        "sources/vaporize-cli/FleetStatus.swift",
+        "sources/vaporize-cli/I18nSourceGatePreflight.swift",
+        "sources/vaporize-cli/JSONSchemaValidation.swift",
+        "sources/vaporize-cli/OwnedSurfaceInventory.swift",
+        "sources/vaporize-cli/ProductSelfUpdate.swift",
+        "sources/vaporize-cli/ReleaseDoctor.swift",
+        "sources/vaporize-cli/SwiftUIImportGate.swift",
+        "sources/vaporize-cli/VaporInventory.swift",
+        "sources/vaporize-cli/VaporInventoryRenderer.swift",
+        "sources/vaporize-cli/VaporizeTestReceipt.swift",
+        "sources/vaporize-cli/XcodeWorkspaceSchemes.swift",
+        "sources/vaporize-cli/main.swift",
+        "sources/vaporize-issue-reporting/VaporizeIssueEvent.swift",
+        "sources/vaporize-issue-reporting/VaporizeIssueReporter.swift"
+      ],
+      "sourceCoordinate" : "sources/vaporize-cli/main.swift",
+      "timestamp" : "2026-07-19T15:29:58Z"
     }
   ]
 }

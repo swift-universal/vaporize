@@ -24,24 +24,13 @@
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
       "sink" : "LocalizedError.errorDescription",
-      "structuralAnchor" : "sha256:7a8765e257593a4aacd0d2f81b58497e9a42ff766af7d97a33d6d5283db28a8a"
-    },
-    {
-      "location" : {
-        "column" : 38,
-        "file" : "sources/vaporize-cli/I18nSourceGatePreflight.swift",
-        "line" : 22
-      },
-      "message" : "User-facing string literal must come from an approved generated i18n copy package.",
-      "rule" : "I18N002",
-      "sink" : "LocalizedError.errorDescription",
-      "structuralAnchor" : "sha256:42a703f6fd8f69ff8ad002ebcfc2dd02c96112a4af20fd229aff74371e4b748d"
+      "structuralAnchor" : "sha256:78585adcb6689b0f224af8003e72c7075a75da02db491380296036a4fa6f376a"
     },
     {
       "location" : {
         "column" : 14,
         "file" : "sources/vaporize-cli/I18nSourceGatePreflight.swift",
-        "line" : 27
+        "line" : 30
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
