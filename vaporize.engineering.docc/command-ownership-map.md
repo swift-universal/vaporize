@@ -33,17 +33,21 @@ behavior to the nearest existing command.
 ## Canonical Graph Artifact
 
 The machine-readable ownership source is
-`vaporize-command-ownership.dag.json`. It conforms to schema-universal's
-`DagModel` v0.0.1 contract and is rendered through the wrkstrm-components
-`dag-viz` family:
+`architecture/vaporize.public-surface.dag.json`. Its canonical home and suffix
+follow the spawn-vaporware public-surface contract. It conforms to
+schema-universal's `DagModel` v0.0.1 contract and is rendered through the
+wrkstrm-components `dag-viz` family:
 
 ```sh
-dag-viz-tui@wrkstrm-components.cli --plain dag-model vaporize.engineering.docc/vaporize-command-ownership.dag.json
+dag-viz-tui@wrkstrm-components.cli --plain dag-model architecture/vaporize.public-surface.dag.json
 ```
 
 The Markdown tables explain the ontology; they do not own it. Product tests
 compare every `VaporizeCLI.Mode` raw value with the graph's `mode.*` nodes,
-so a public mode cannot be added or removed without updating the graph.
+so a public mode cannot be added or removed without updating the graph. A
+second verifier compares every long option in the checked-in generated man
+page with the option ownership map below. Shared parser flags remain mapped
+parameters rather than being flattened into peer command nodes.
 
 ## Complete Mode Map
 

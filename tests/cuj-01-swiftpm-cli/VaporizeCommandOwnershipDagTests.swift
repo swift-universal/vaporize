@@ -21,17 +21,50 @@ private struct VaporizeCommandDag: Decodable {
   let edges: [Edge]
 }
 
+private func vaporizePackageDirectory() -> URL {
+  URL(fileURLWithPath: #filePath)
+    .deletingLastPathComponent()
+    .deletingLastPathComponent()
+    .deletingLastPathComponent()
+}
+
 private func vaporizeCommandDag() throws -> VaporizeCommandDag {
-  let packageDirectory = URL(fileURLWithPath: #filePath)
-    .deletingLastPathComponent()
-    .deletingLastPathComponent()
-    .deletingLastPathComponent()
-  let url = packageDirectory
-    .appendingPathComponent("vaporize.engineering.docc", isDirectory: true)
-    .appendingPathComponent("vaporize-command-ownership.dag.json")
+  let url = vaporizePackageDirectory()
+    .appendingPathComponent("architecture", isDirectory: true)
+    .appendingPathComponent("vaporize.public-surface.dag.json")
   return try JSONDecoder().decode(
     VaporizeCommandDag.self,
     from: Data(contentsOf: url)
+  )
+}
+
+private func generatedManualLongOptions() throws -> Set<String> {
+  let url = vaporizePackageDirectory()
+    .appendingPathComponent("Documentation/man/man1", isDirectory: true)
+    .appendingPathComponent("vaporize.cli@wrkstrm-core.clia.sh.1")
+  let manual = try String(contentsOf: url, encoding: .utf8)
+  let synopsisPrefix = ".Op Fl -"
+  return Set(
+    manual.split(separator: "\n").compactMap { line in
+      guard line.hasPrefix(synopsisPrefix) else { return nil }
+      let remainder = line.dropFirst(synopsisPrefix.count)
+      let name = remainder.prefix { !$0.isWhitespace }
+      return name.isEmpty ? nil : "--\(name)"
+    }
+  )
+}
+
+private func ownershipMapLongOptions() throws -> Set<String> {
+  let url = vaporizePackageDirectory()
+    .appendingPathComponent("vaporize.engineering.docc", isDirectory: true)
+    .appendingPathComponent("command-ownership-map.md")
+  let map = try String(contentsOf: url, encoding: .utf8)
+  let expression = try NSRegularExpression(pattern: #"--[a-z0-9][a-z0-9-]*"#)
+  let range = NSRange(map.startIndex..<map.endIndex, in: map)
+  return Set(
+    expression.matches(in: map, range: range).compactMap { match in
+      Range(match.range, in: map).map { String(map[$0]) }
+    }
   )
 }
 
@@ -80,6 +113,16 @@ func commandOwnershipGraphIsStructurallyADag() throws {
   }
 
   #expect(visited == ids.count)
+}
+
+@Test("Vaporize ownership map covers every generated man-page long option")
+func ownershipMapCoversGeneratedManualOptions() throws {
+  let manualOptions = try generatedManualLongOptions()
+  let mappedOptions = try ownershipMapLongOptions()
+  let missingOptions = manualOptions.subtracting(mappedOptions)
+
+  #expect(!manualOptions.isEmpty)
+  #expect(missingOptions.isEmpty)
 }
 
 #if os(macOS)
