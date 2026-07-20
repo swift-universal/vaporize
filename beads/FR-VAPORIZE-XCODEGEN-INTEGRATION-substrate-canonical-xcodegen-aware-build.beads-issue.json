@@ -146,7 +146,7 @@
     ],
     "linkedTypedRecords": {
       "memoryPointer": "~/.claude/memory/.docc/feedback_vaporize-is-the-substrate-canonical-tool-for-modification.md",
-      "siblingBead_listTargets": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/FR-VAPORIZE-LIST-TARGETS-substrate-canonical-target-discovery.issue.json",
+      "siblingBead_listTargets": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/FR-CRAZE-LIST-TARGETS-substrate-canonical-target-discovery.beads-issue.json",
       "siblingBead_productReleaseRename": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/FR-VAPORIZE-PRODUCT-RELEASE-DIR-RENAME-MODE.issue.json",
       "triggeringWorkflowEvidence": "2026-06-12 concourse rebuild session — multi-step vaporize invocations 4/5 blocked at xcodebuild compile until /opt/homebrew/bin/xcodegen was invoked out-of-band."
     },

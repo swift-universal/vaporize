@@ -59,8 +59,13 @@ enum VaporizeI18nSourceGate {
       try catalogRoot.map {
         try ApprovedCopyPackageReceiptDiscovery.discover(below: [$0])
       } ?? []
+    let identity = try I18nSourceGateBeadImprint.resolvedIdentity(
+      owningHome: productDirectory,
+      requestedTargetName: productName,
+      fallbackOwnerID: productName
+    )
     let policy = TranslateSourceGatePolicy(
-      targetName: productName,
+      targetName: identity.targetName,
       surfaceKind: surfaceKind,
       enforcement: enforcement,
       approvedCopyPackages: approvedPackages
@@ -85,15 +90,10 @@ enum VaporizeI18nSourceGate {
     let imprintReceipt: I18nSourceGateBeadImprintReceipt
     let imprintReceiptURL: URL
     do {
-      let resolvedOwnerID = try I18nSourceGateBeadImprint.resolvedOwnerID(
-        owningHome: productDirectory,
-        targetName: productName,
-        fallbackOwnerID: productName
-      )
       imprintReceipt = try I18nSourceGateBeadImprint.reconcile(
         report: report,
         owningHome: productDirectory,
-        ownerID: resolvedOwnerID,
+        ownerID: identity.ownerID,
         reportReceiptURL: receiptURL,
         mode: .write,
         scanCompleteness: .complete,

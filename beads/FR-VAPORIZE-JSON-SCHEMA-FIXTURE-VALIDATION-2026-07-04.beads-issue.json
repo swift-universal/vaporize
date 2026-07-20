@@ -50,7 +50,7 @@
       "audiovisualBriefing": "private/universal/substrate/collectives/spaces-universal/private/universal/kura-spaces/board-meetings/2026-07-04-vaporize-json-schema-fixture-validation/video.html",
       "readthroughVoiceReceipt": "private/universal/substrate/collectives/spaces-universal/private/universal/kura-spaces/board-meetings/2026-07-04-vaporize-json-schema-fixture-validation/readthrough-voice-receipt.json",
       "vaporwareModificationDiscipline": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/vaporize.engineering.docc/vaporware-modification-request-discipline.md",
-      "relatedValidateJsonMultiplePathsBug": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/vaporize-validate-json-multiple-paths.beads-issue.json"
+      "relatedValidateJsonMultiplePathsBug": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/VAPORIZE-VALIDATE-JSON-MULTIPLE-PATHS.beads-issue.json"
     },
     "knownSeparations": [
       "This bead owns the Vaporize command and release proof lane, not the schema-universal workstream schema semantics.",

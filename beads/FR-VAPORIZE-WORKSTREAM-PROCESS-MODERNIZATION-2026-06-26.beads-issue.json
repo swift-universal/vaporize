@@ -45,8 +45,8 @@
       "proposal": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/agenda/proposals/vaporize-workstream-process-modernization-2026-06-26.md",
       "roleManifest": "private/universal/substrate/collectives/spaces-universal/private/universal/kura-spaces/roles/vaporize-workstream-modernization-steward/private/universal/identity/vaporize-workstream-modernization-steward.role-surface-manifest.json",
       "cujStateHarnessBead": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/FR-VAPORIZE-CUJ-STATE-HARNESS-2026-06-26.beads-issue.json",
-      "existingRealizeBead": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/vaporize-realize-typed-vaporware-unit.beads-issue.json",
-      "existingValidateJsonBead": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/vaporize-validate-json-multiple-paths.beads-issue.json"
+      "existingRealizeBead": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/FR-VAPORIZE-REALIZE-typed-vaporware-unit.beads-issue.json",
+      "existingValidateJsonBead": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/VAPORIZE-VALIDATE-JSON-MULTIPLE-PATHS.beads-issue.json"
     }
   },
   "composesWith": [

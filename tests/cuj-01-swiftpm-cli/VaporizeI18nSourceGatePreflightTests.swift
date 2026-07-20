@@ -119,3 +119,67 @@ func sourceGateBlockedErrorIsAssistantActionable() throws {
     Issue.record("Unexpected error: \(error)")
   }
 }
+
+@Test("Vaporize reuses the complete established identity after a product display rename")
+func sourceGateReusesEstablishedCompleteIdentity() throws {
+  let root = FileManager.default.temporaryDirectory.appendingPathComponent(
+    "vaporize-i18n-complete-identity-\(UUID().uuidString)",
+    isDirectory: true
+  )
+  defer { try? FileManager.default.removeItem(at: root) }
+  try FileManager.default.createDirectory(
+    at: root.appendingPathComponent("Sources/App", isDirectory: true),
+    withIntermediateDirectories: true
+  )
+  try """
+  import Foundation
+
+  print("Hello")
+  """.write(
+    to: root.appendingPathComponent("Sources/App/main.swift"),
+    atomically: true,
+    encoding: .utf8
+  )
+
+  var firstTarget: String?
+  do {
+    _ = try VaporizeI18nSourceGate.enforce(
+      productDirectory: root,
+      productName: "EstablishedProduct",
+      surfaceKind: .cli,
+      enforcement: .release
+    )
+  } catch let error as VaporizeI18nSourceGateError {
+    if case .blocked(let report, _, _, _) = error { firstTarget = report.targetName }
+  }
+  let beads = root.appendingPathComponent("beads", isDirectory: true)
+  let firstIssueNames = try FileManager.default.contentsOfDirectory(
+    at: beads,
+    includingPropertiesForKeys: nil
+  ).filter { $0.lastPathComponent.hasSuffix(".beads-issue.json") }
+    .map(\.lastPathComponent)
+    .sorted()
+
+  var secondTarget: String?
+  do {
+    _ = try VaporizeI18nSourceGate.enforce(
+      productDirectory: root,
+      productName: "RenamedDisplayProduct",
+      surfaceKind: .cli,
+      enforcement: .release
+    )
+  } catch let error as VaporizeI18nSourceGateError {
+    if case .blocked(let report, _, _, _) = error { secondTarget = report.targetName }
+  }
+  let secondIssueNames = try FileManager.default.contentsOfDirectory(
+    at: beads,
+    includingPropertiesForKeys: nil
+  ).filter { $0.lastPathComponent.hasSuffix(".beads-issue.json") }
+    .map(\.lastPathComponent)
+    .sorted()
+
+  #expect(firstTarget == "EstablishedProduct")
+  #expect(secondTarget == "EstablishedProduct")
+  #expect(!firstIssueNames.isEmpty)
+  #expect(secondIssueNames == firstIssueNames)
+}
