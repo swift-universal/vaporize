@@ -13,6 +13,7 @@
   ],
   "description" : "translate-source-gate observed I18N002 at the stable source coordinate sources/vaporize-cli/main.swift. Diagnostic line and column are evidence, not identity.",
   "externalRef" : "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N002-03043771E6C63F966555C169FD36DE5E54045B79CABA9D352B29CFE995A93B3B.beads-spawn-cast.json",
+  "firstObservedAt" : "2026-07-19T09:49:26Z",
   "id" : "BUG-I18N-I18N002-03043771E6C63F966555C169FD36DE5E54045B79CABA9D352B29CFE995A93B3B",
   "issueType" : "bug",
   "labels" : [
@@ -23,8 +24,11 @@
     "i18n002",
     "spawn-ready"
   ],
+  "lastObservedAt" : "2026-07-19T09:49:26Z",
+  "observationCount" : 1,
   "owner" : "vaporize.cli@wrkstrm-core.clia.sh",
   "priority" : 2,
+  "recurrenceCount" : 0,
   "sourceLocation" : "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N002-03043771E6C63F966555C169FD36DE5E54045B79CABA9D352B29CFE995A93B3B.i18n-source-gate-evidence.json",
   "sourceSystem" : "translate-source-gate",
   "sourceType" : "i18n-source-gate-finding",

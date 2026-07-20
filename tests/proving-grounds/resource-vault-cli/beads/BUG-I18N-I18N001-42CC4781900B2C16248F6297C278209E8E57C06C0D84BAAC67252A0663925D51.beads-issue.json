@@ -13,6 +13,7 @@
   ],
   "description" : "translate-source-gate observed I18N001 at the stable source coordinate target-import. Diagnostic line and column are evidence, not identity.",
   "externalRef" : "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/tests/proving-grounds/resource-vault-cli/beads/BUG-I18N-I18N001-42CC4781900B2C16248F6297C278209E8E57C06C0D84BAAC67252A0663925D51.beads-spawn-cast.json",
+  "firstObservedAt" : "2026-07-18T11:01:20Z",
   "id" : "BUG-I18N-I18N001-42CC4781900B2C16248F6297C278209E8E57C06C0D84BAAC67252A0663925D51",
   "issueType" : "bug",
   "labels" : [
@@ -23,8 +24,11 @@
     "i18n001",
     "spawn-ready"
   ],
+  "lastObservedAt" : "2026-07-18T11:01:20Z",
+  "observationCount" : 1,
   "owner" : "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/tests/proving-grounds/resource-vault-cli",
   "priority" : 2,
+  "recurrenceCount" : 0,
   "sourceLocation" : "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/tests/proving-grounds/resource-vault-cli/beads/BUG-I18N-I18N001-42CC4781900B2C16248F6297C278209E8E57C06C0D84BAAC67252A0663925D51.i18n-source-gate-evidence.json",
   "sourceSystem" : "translate-source-gate",
   "sourceType" : "i18n-source-gate-finding",
