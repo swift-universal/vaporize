@@ -6,6 +6,11 @@
   "result": "pass-with-notes",
   "requestRef": "private/universal/substrate/collectives/spaces-universal/private/universal/kura-spaces/workflows/software-modification-workstream-capture/v0.1.0/requests/2026-07-20-vaporize-parallel-swift-xcode-command-families.vaporware-modification-request.su.json",
   "owningBeadRef": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/fr-vaporize-parallel-swift-xcode-command-families-2026-07-20.beads-issue.json",
+  "workflowInstanceRefs": [
+    "private/universal/substrate/collectives/spaces-universal/private/universal/kura-spaces/workflows/software-modification-workstream-capture/v0.1.0/software-modification-workstream-capture-2026-07-20-vaporize-parallel-swift-xcode-command-families.workflow-instance.su.json",
+    "private/universal/substrate/collectives/spaces-universal/private/universal/kura-spaces/workflows/vaporware-modernization-workstream/v0.0.2/instances/vaporize-parallel-swift-xcode-command-families-2026-07-20.workflow-instance.su.json",
+    "private/universal/substrate/collectives/spaces-universal/private/universal/kura-spaces/workflows/vaporize-launch-review-burn-down/v0.1.0/vaporize-launch-review-burn-down-2026-07-20-parallel-swift-xcode-command-families.workflow-instance.su.json"
+  ],
   "implementedContract": {
     "macOS": [
       "vaporize install swift|xcode",
@@ -101,6 +106,12 @@
       "The installed runtime was not refreshed: install swift is blocked by the package's separate approved-copy migration, including 133 pre-existing source-consumption findings and two new validation messages that require a catalog workflow because no matching accessor exists.",
       "Human launch approval is not granted by this receipt."
     ]
+  },
+  "persistence": {
+    "wrkstrmCoreCommit": "72695bf440061f96edcaf68bc5fb1aaf4a649450",
+    "spacesUniversalCaptureCommit": "8c2e3587604355d94cd36f61d8b7a3bb22adf72e",
+    "publicationStatus": "pending-boundary-safe-publication",
+    "publicationLimit": "wrkstrm-core and spaces-universal had unrelated commits ahead of origin/main before this workstream; no wholesale push or parent gitlink advance is claimed."
   },
   "humanReview": {
     "required": true,

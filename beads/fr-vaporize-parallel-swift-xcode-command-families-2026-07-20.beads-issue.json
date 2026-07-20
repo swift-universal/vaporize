@@ -3,7 +3,7 @@
   "schemaVersion": "0.1.0",
   "id": "fr-vaporize-parallel-swift-xcode-command-families-2026-07-20",
   "title": "Remodel Vaporize core commands as parallel pure-Swift and Xcode-assisted families",
-  "status": "in-progress",
+  "status": "closed",
   "priority": 0,
   "issueType": "feature",
   "labels": [
@@ -18,6 +18,20 @@
   ],
   "createdAt": "2026-07-20T09:02:34Z",
   "createdBy": "codex after operator authorization",
+  "closedAt": "2026-07-20T10:30:00Z",
+  "delivery": {
+    "result": "implemented-tested-and-savepointed-with-explicit-launch-limits",
+    "wrkstrmCoreCommit": "72695bf440061f96edcaf68bc5fb1aaf4a649450",
+    "spacesUniversalCaptureCommit": "8c2e3587604355d94cd36f61d8b7a3bb22adf72e",
+    "releaseDoctor": "149 of 149 checks passed with zero failures and zero warnings",
+    "remainingLimits": [
+      "Installed-runtime refresh is blocked by the separate approved-copy source-consumption migration.",
+      "Actual Linux runtime execution was not performed in this macOS session.",
+      "The full-graph Xcode diagnostic remains nonzero and is not green release proof.",
+      "Warehouse reports the modernization artifacts as unannotated.",
+      "Human launch approval remains pending."
+    ]
+  },
   "historicalContent": {
     "slug": "fr-vaporize-parallel-swift-xcode-command-families-2026-07-20",
     "kind": "bead-feature-request",

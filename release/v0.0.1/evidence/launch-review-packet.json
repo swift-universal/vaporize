@@ -10,7 +10,7 @@
   "packetStatus": "evidence-ready-pending-human-review-blocked-for-internal-release",
   "emittedAt": "2026-07-05T00:00:00Z",
   "emittedBy": "codex-crisie",
-  "updatedAt": "2026-07-20T09:25:00Z",
+  "updatedAt": "2026-07-20T10:30:00Z",
   "lifecycleStage": "internal-cli-release-prep",
   "releaseTarget": {
     "currentTarget": "internal-essential-substrate-cli",
@@ -69,6 +69,54 @@
           "k": "rp",
           "rt": "mono",
           "v": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/evidence/vaporize-core-command-authority-modernization.receipt.json"
+        }
+      ]
+    },
+    {
+      "LinkRefModel": "0.3.0",
+      "s": [
+        "vaporize",
+        "v0.0.1",
+        "core-command-authority-modification-workflow"
+      ],
+      "t": "Core command authority software-modification workflow instance",
+      "tg": [
+        {
+          "k": "rp",
+          "rt": "mono",
+          "v": "private/universal/substrate/collectives/spaces-universal/private/universal/kura-spaces/workflows/software-modification-workstream-capture/v0.1.0/software-modification-workstream-capture-2026-07-20-vaporize-parallel-swift-xcode-command-families.workflow-instance.su.json"
+        }
+      ]
+    },
+    {
+      "LinkRefModel": "0.3.0",
+      "s": [
+        "vaporize",
+        "v0.0.1",
+        "core-command-authority-modernization-workflow"
+      ],
+      "t": "Core command authority modernization workflow instance",
+      "tg": [
+        {
+          "k": "rp",
+          "rt": "mono",
+          "v": "private/universal/substrate/collectives/spaces-universal/private/universal/kura-spaces/workflows/vaporware-modernization-workstream/v0.0.2/instances/vaporize-parallel-swift-xcode-command-families-2026-07-20.workflow-instance.su.json"
+        }
+      ]
+    },
+    {
+      "LinkRefModel": "0.3.0",
+      "s": [
+        "vaporize",
+        "v0.0.1",
+        "core-command-authority-launch-review-workflow"
+      ],
+      "t": "Core command authority launch-review workflow instance",
+      "tg": [
+        {
+          "k": "rp",
+          "rt": "mono",
+          "v": "private/universal/substrate/collectives/spaces-universal/private/universal/kura-spaces/workflows/vaporize-launch-review-burn-down/v0.1.0/vaporize-launch-review-burn-down-2026-07-20-parallel-swift-xcode-command-families.workflow-instance.su.json"
         }
       ]
     },
@@ -1401,6 +1449,7 @@
     "coreCommandReceiptSuite": "PASS: VaporizeTestReceiptTests passed 8 Swift Testing tests through test swift in 520.071329209s total, with 11.548187500s maintainer preparation, 519.475333875s measured process execution including nested fixture runs, and 0.001280708s dependency restoration. The outer classifier detected the deliberately failing nested fixture text while the outer process succeeded with zero unexpected issue events.",
     "coreCommandFullGraphDiagnostic": "NONZERO-DIAGNOSTIC: combined Xcode CUJ-01 plus IssueReporting run took 540.537021375s total, including 198.514934709s maintainer preparation and a 341.875184000s test-process interval, then reported one nested negative-path receipt fixture without a child receipt. A direct rerun of that child emitted the expected nonzero 0.3.0 receipt. This diagnostic is retained for attribution, not green suite proof.",
     "coreCommandInstalledRuntime": "BLOCKED: install swift reached the package's approved-copy source-consumption gate and was refused. The separate i18n migration reports 133 existing findings; this change also introduces two validation messages for which no approved accessor exists, so a catalog workflow is required before installation can be claimed.",
+    "coreCommandPersistence": "LOCAL-SAVEPOINT-PASS-PUBLICATION-PENDING: wrkstrm-core implementation commit 72695bf440061f96edcaf68bc5fb1aaf4a649450 and spaces-universal capture commit 8c2e3587604355d94cd36f61d8b7a3bb22adf72e are locally durable. Both repositories had unrelated commits ahead of origin/main before this workstream, so no wholesale push or parent gitlink advance is claimed.",
     "productDefinitionContract": "PASS: release/v0.0.1/product-definition.md defines the product, primary users, product-level journeys, choice argument, non-choice cases, and build implications before further build work is accepted.",
     "prdReviewSession": "PASS-WITH-NOTE: release/v0.0.1/prd-review-session.md defines the Engineering, QA, and Marketing PRD review session before major coding starts. v0.0.1 is backfilled because this release-prep lane was already in flight; future major Vaporize coding slices require the review before implementation begins.",
     "vaporwareModificationRequestDiscipline": "PASS-WITH-NOTE: vaporize.engineering.docc/vaporware-modification-request-discipline.md distinguishes vaporware feature requests as product input from vaporware modification requests as controlled engineering execution, leaves room for future hardware or other material-domain request families, and defines behavior-changing vaporware modification requests as release work requiring a feature flag or feature-status story, targetable tests, release evidence, CUJ coverage updates when affected, and explicit no-flag exceptions.",
