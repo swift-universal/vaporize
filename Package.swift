@@ -71,6 +71,10 @@ let swiftPackageOutputPolicyDependency = Package.Dependency.package(
   name: "swift-package-output-policy",
   path: "../../../../../swift-universal/private/universal/domain/build/spm/swift-package-output-policy"
 )
+let vaporizeJSONSchemaValidationDependency = Package.Dependency.package(
+  name: "vaporize-json-schema-validation",
+  path: "../vaporize-json-schema-validation@wrkstrm-core.cli"
+)
 
 let package = Package(
   name: "vaporize@wrkstrm-core-cli",
@@ -96,6 +100,7 @@ let package = Package(
     swiftIssueReportingDependency,
     translateSourceGateDependency,
     swiftPackageOutputPolicyDependency,
+    vaporizeJSONSchemaValidationDependency,
     .package(url: "https://github.com/apple/swift-argument-parser", from: "1.6.0"),
     .package(url: "https://github.com/jpsim/Yams", from: "5.1.0"),
   ],
@@ -127,6 +132,7 @@ let package = Package(
       dependencies: [
         "AppleProjectSpecCore",
         "VaporizeIssueReporting",
+        .product(name: "VaporizeJSONSchemaValidation", package: "vaporize-json-schema-validation"),
         .product(name: "SwiftCLIInstaller", package: "swift-cli-installer"),
         .product(name: "SwiftCLIUpdater", package: "swift-cli-updater"),
         .product(name: "SwiftlyCommands", package: "swiftly"),

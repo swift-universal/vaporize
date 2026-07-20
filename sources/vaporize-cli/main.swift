@@ -10,6 +10,7 @@ import SwiftJSONFormatter
 import Swiftly
 import TranslateSourceGate
 import VaporizeIssueReporting
+import VaporizeJSONSchemaValidation
 
 @main
 enum VaporizeExecutable {

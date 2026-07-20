@@ -90,6 +90,16 @@
           "vaporize.cli@wrkstrm-core.clia.sh validate-json-schema --schema <contains-const-SwiftUI-schema> --fixture <nonmatching-array> --expect pass: expected mismatch with '/: contains — expected at least one array item to match the contained schema'",
           "xcrun swiftc -parse tests/cuj-06-json-validation/vaporize-cuj-06-json-validation-tests.swift: pass"
         ]
+      },
+      {
+        "at": "2026-07-20",
+        "by": "codex",
+        "note": "Rehomed the Foundation-only JSON Schema engine and its contract tests into the sibling VaporizeJSONSchemaValidation package at a kebab-case filesystem home. VaporizeCLI imports that library, while its CUJ-06 target retains only CLI formatter, receipt, and actionability coverage. This removes the false promise that a SwiftPM filter within the monolithic Vaporize package is a focused build lane.",
+        "evidence": [
+          "xcrun swift test --package-path private/apple/spm/vaporize-json-schema-validation@wrkstrm-core.cli: 10 tests passed",
+          "xcrun swift build --product vaporize.cli@wrkstrm-core.clia.sh --package-path private/apple/spm/vaporize@wrkstrm-core.cli: pass",
+          "built Vaporize CLI validate-json-schema against the owned Ontology Inspector Spawn request --expect pass: pass"
+        ]
       }
     ]
   },
