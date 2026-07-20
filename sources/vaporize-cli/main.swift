@@ -1270,6 +1270,7 @@ struct VaporizeCLI: AsyncParsableCommand {
       packageResolutionRestored: true,
       elapsedNanoseconds: elapsed
     )
+    try emitReceiptIfRequested(receipt)
     let encoder = JSONEncoder()
     encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
     FileHandle.standardOutput.write(try encoder.encode(receipt))
