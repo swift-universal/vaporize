@@ -12,6 +12,11 @@ Vaporize v0.0.1 has matured from a command wrapper into a release-spine tool for
 
 ### Added
 
+- Adjacent `swift` and `xcode` authorities for macOS `install`, `build`,
+  `test`, and `run`, with naturally collapsed pure-Swift commands on hosts
+  without Xcode.
+- Immediate core-command phase output, `studio.laussat.vaporize` signposts,
+  typed timing fields, and exact sibling retry commands.
 - Static marketing-site brochure at `public-brochure.html`, with a Markdown companion at `public-brochure.md`, for external disclosure review.
 - Audience packet at `evidence/audience-packet.su.json` for the brochure's technical evaluator, future customer, board-approved public reader, operator, and adversarial reviewer profiles.
 - User manual at `user-manual.md` so the brochure sits beside an operational review path.

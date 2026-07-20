@@ -37,24 +37,24 @@ classify; the canonical write key is `x-vaporize-collapse-path`.
 
 ## Requirements
 
-- macOS 26.0+
 - Swift 6.4+
+- macOS 26.0+ for the Xcode-assisted execution authority
 
 ## Canonical installed command
 
 ```bash
-vaporize install --artifact cli --package-path <package> --product <product> --configuration release --force
+vaporize install swift --artifact cli --package-path <package> --product <product> --configuration release --force
 vaporize uninstall --artifact cli --package-path <package> --product <product>
-vaporize build --artifact cli --package-path <package> --product <product> --configuration release
-vaporize test --package-path <package> --configuration debug -- --filter <test-filter>
-vaporize run --artifact cli --package-path <package> --product <product> --configuration release -- <arguments>
-vaporize run --artifact app --package-path <package> --product <app-product> --configuration release --force
+vaporize build swift --artifact cli --package-path <package> --product <product> --configuration release
+vaporize test swift --package-path <package> --configuration debug -- --filter <test-filter>
+vaporize run swift --artifact cli --package-path <package> --product <product> --configuration release -- <arguments>
+vaporize run xcode --artifact app --package-path <package> --product <app-product> --configuration release --force
 vaporize pass -- swift --version
 vaporize use --common-process-spec <spec.json> --receipt-path <receipt.json>
 vaporize toolchain-selection swift -- use 6.4.x-snapshot
 # macOS only; Xcode selection is independent from default Swift selection:
 vaporize toolchain-selection xcode -- select --print-path
-vaporize test --package-path <package> --swift-source xcode --configuration debug
+vaporize test xcode --package-path <package> --configuration debug
 vaporize validate-json --path <packet.json>
 vaporize inspect-project-yml --path <project.yml> --format json --receipt-path <receipt.json>
 vaporize inspect-target-features --path <project.yml> --target <target> --format json --receipt-path <receipt.json>
@@ -100,6 +100,19 @@ The `swift` provider exists on every supported platform and compiles Swiftly's
 `xcode-select` implementation are compiled only on macOS, so a Linux build
 exposes no Xcode selection provider. Swiftly lifecycle/inspection/execution and
 arbitrary `xcrun` execution are deliberately outside this command.
+
+On macOS the four core execution commands expose adjacent authority siblings:
+
+```text
+vaporize install <swift|xcode> [options]
+vaporize build <swift|xcode> [options]
+vaporize test <swift|xcode> [options]
+vaporize run <swift|xcode> [options]
+```
+
+On Linux and other hosts without Xcode, the authority token is absent and the
+same commands collapse to their Swift implementation: `vaporize build`,
+`vaporize test`, and so on.
 
 The checked-in section-1 manual is generated from ArgumentParser help, so the
 manual and executable share one option source:
@@ -376,13 +389,14 @@ vaporize toolchain-selection xcode -- select --switch /Applications/Xcode.app/Co
 vaporize toolchain-selection xcode -- select --reset
 ```
 
-SwiftPM CLI build, install, and test operations follow the same rule. They use
-default Swift unless the macOS-only Xcode source is requested explicitly:
+SwiftPM CLI build, install, test, and run operations follow the same rule. On
+macOS the adjacent authority is explicit, so a failure can name the exact
+sibling command without reconstructing the invocation:
 
 ```bash
-vaporize build --artifact cli --package-path <package> --product <product> --skip-install
-vaporize build --artifact cli --package-path <package> --product <product> --swift-source xcode --skip-install
-vaporize test --package-path <package> --swift-source xcode --configuration debug
+vaporize build swift --artifact cli --package-path <package> --product <product> --skip-install
+vaporize build xcode --artifact cli --package-path <package> --product <product> --skip-install
+vaporize test xcode --package-path <package> --configuration debug
 ```
 
 The full mode-and-option responsibility map is documented in

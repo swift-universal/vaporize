@@ -25,8 +25,7 @@ how to operate or review the advertised surface.
 
 | Feature | Public-safe description | Proof boundary |
 | --- | --- | --- |
-| Owned SwiftPM lifecycle | Runs package build and test work through the Vaporize command surface so assistant actions can produce consistent receipts. | Proved by CUJ SwiftPM tests; does not claim faster compilation. |
-| Xcode-selected Swift toolchain | Uses the Xcode-selected Swift route for assistant-controlled toolchain execution. | Proves route ownership; host PATH drift can still exist outside Vaporize. |
+| Adjacent SwiftPM execution authorities | On macOS, keeps pure-Swift and Xcode-assisted build/test/install/run routes beside one another; hosts without Xcode expose the collapsed Swift command. | Both routes pass a dependency-free Swift Testing proving ground and emit authority/timing receipts; this does not claim faster compilation generally. |
 | JSON release packet validation | Validates release evidence and typed packets through a dedicated command instead of ad hoc terminal parsing. | Proves JSON parseability; schema maturity remains per packet family. |
 | CommonProcess use mode | Executes CommonProcess specs through a typed Vaporize surface with receipt support. | Proves invocation discipline; higher-level product wrappers remain separate. |
 | Apple project migration intake | Reads legacy project YAML and Pkl-backed AppleProjectSpec records for migration and comparison work. | Proves read, comparison, import, and first-slice generation paths; fleet build parity remains blocked. |
@@ -58,6 +57,8 @@ These statements are safe for this draft:
 
 - Vaporize gives assistant-run builds an owned proof surface.
 - Vaporize wraps Swift and Xcode workflows with release evidence and typed receipts.
+- Vaporize can name the exact adjacent macOS authority retry and attribute time
+  to dependency preparation, subprocess execution, and restoration.
 - Vaporize can validate JSON release evidence, inspect Apple project records, generate first-slice Xcode project world-state, and audit its own release spine.
 - Vaporize has first-slice support for Pkl-backed Apple project generation, tool release identity projection, target discovery, workspace product-cache candidate discovery, and Xcode workspace scheme listing.
 - Vaporize verifies that a reported-success install actually landed the artifact: CLI installs fail loud if no binary lands, and app installs swap atomically so an aborted copy never leaves a missing install (simulated by CUJ-24).

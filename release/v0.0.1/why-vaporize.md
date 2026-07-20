@@ -54,8 +54,9 @@ Vaporize adds:
 
 - A stable CLI contract for assistants and runbooks.
 - Independent Swift/Xcode selection through `toolchain-selection`, plus
-  Xcode-selected Swift execution in `build`, `test`, and `run` through the
-  macOS-only `--swift-source xcode` option.
+  adjacent `swift` and `xcode` execution authorities for `install`, `build`,
+  `test`, and `run` on macOS. Hosts without Xcode expose the collapsed Swift
+  command only.
 - Install/uninstall/run wrappers for CLI and app artifacts.
 - Receipt emission and release evidence integration.
 - JSON validation, inventory scanning, CommonProcess `use`, and Apple project
@@ -99,7 +100,8 @@ Vaporize adds:
 `xcrun` is a low-level execution resolver, not a selection responsibility.
 `toolchain-selection xcode` owns only `xcode-select` print/switch/reset state;
 artifact-aware Xcode Swift execution belongs to `build`, `test`, or `run` with
-`--swift-source xcode`. Generic inspection remains an explicit command gap.
+the adjacent `xcode` authority. Generic inspection remains an explicit command
+gap.
 
 ## Performance Benchmarks
 

@@ -57,7 +57,7 @@ Normal Swift package operations use the independently selected default Swift
 through their operation command:
 
 ```text
-vaporize test --package-path <package> --configuration debug
+vaporize test swift --package-path <package> --configuration debug
 ```
 
 For Swift package API documentation, the modern Swift-facing surface is the
@@ -89,12 +89,15 @@ compiler boundary, not a toolchain-selection behavior:
 vaporize pass -- docc convert Product.docc --output-path /tmp/Product.doccarchive
 ```
 
-Xcode-selected Swift package build and test execution is explicit on macOS and
+Xcode-selected Swift package execution is an adjacent authority on macOS and
 does not change the default Swift selection:
 
 ```text
-vaporize test --package-path <package> --swift-source xcode
+vaporize test xcode --package-path <package>
 ```
+
+The sibling is `vaporize test swift`. On hosts without Xcode, the public
+command collapses to `vaporize test --package-path <package>`.
 
 The owning execution command records its own operation and resolver boundary.
 `toolchain-selection` receipts instead record the provider, selection

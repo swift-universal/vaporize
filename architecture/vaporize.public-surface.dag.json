@@ -382,6 +382,15 @@
       "color": "green"
     },
     {
+      "id": "mode.maintainer-dependencies",
+      "label": "maintainer-dependencies",
+      "rank": 26,
+      "lane": 1,
+      "status": "neutral",
+      "borderStyle": "rounded",
+      "color": "green"
+    },
+    {
       "id": "family.compatibility-debt",
       "label": "Compatibility debt",
       "rank": 27,
@@ -703,6 +712,11 @@
     {
       "from": "family.product-maintenance",
       "to": "mode.self-update",
+      "kind": "sequential"
+    },
+    {
+      "from": "family.product-maintenance",
+      "to": "mode.maintainer-dependencies",
       "kind": "sequential"
     },
     {

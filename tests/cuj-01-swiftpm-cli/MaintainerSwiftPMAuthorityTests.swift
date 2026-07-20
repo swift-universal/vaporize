@@ -197,13 +197,17 @@ struct MaintainerSwiftPMAuthorityTests {
 
   @Test("Swift Testing builds productless package arguments")
   func swiftTestingBuildsProductlessPackageArguments() throws {
-    let command = try VaporizeCLI.parse([
-      "test",
+    var arguments = ["test"]
+    #if os(macOS)
+      arguments.append("swift")
+    #endif
+    arguments += [
       "--package-path", "/workspace/package",
       "--configuration", "debug",
       "--",
       "--filter", "MaintainerSwiftPMAuthorityTests",
-    ])
+    ]
+    let command = try VaporizeCLI.parse(arguments)
 
     #expect(command.mode == .test)
     #expect(command.product == nil)

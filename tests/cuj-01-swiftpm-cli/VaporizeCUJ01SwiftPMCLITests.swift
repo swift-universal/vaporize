@@ -10,6 +10,107 @@ func exposesCanonicalVaporizeCommandIdentity() {
   #expect(VaporizeCLI.configuration.commandName == "vaporize.cli@wrkstrm-core.clia.sh")
 }
 
+@Test(
+  "CUJ-01 models every core operation as adjacent Swift and Xcode authorities on macOS",
+  arguments: VaporizeCoreOperation.allCases,
+  [VaporizeCoreExecutionAuthority.swift, .xcode]
+)
+func modelsParallelMacOSCoreCommandAuthorities(
+  operation: VaporizeCoreOperation,
+  authority: VaporizeCoreExecutionAuthority
+) throws {
+  let plan = try VaporizeCoreExecutionPlan.resolve(
+    operation: operation,
+    arguments: [authority.rawValue, "--fixture-argument"],
+    platform: .macOS
+  )
+
+  #expect(plan.operation == operation)
+  #expect(plan.executionAuthority == authority)
+  #expect(plan.forwardedArguments == ["--fixture-argument"])
+  #expect(!plan.commandCollapsed)
+  #expect(
+    plan.alternateCommandPrefix
+      == "vaporize.cli@wrkstrm-core.clia.sh \(operation.rawValue) \(authority.alternate.rawValue)"
+  )
+}
+
+@Test(
+  "CUJ-01 collapses every non-macOS core command to pure Swift",
+  arguments: VaporizeCoreOperation.allCases
+)
+func collapsesNonMacOSCoreCommandsToPureSwift(operation: VaporizeCoreOperation) throws {
+  let plan = try VaporizeCoreExecutionPlan.resolve(
+    operation: operation,
+    arguments: ["--filter", "Fixture"],
+    platform: .nonMacOS
+  )
+
+  #expect(plan.executionAuthority == .swift)
+  #expect(plan.forwardedArguments == ["--filter", "Fixture"])
+  #expect(plan.commandCollapsed)
+  #expect(plan.alternateCommandPrefix == nil)
+  #expect(throws: Error.self) {
+    _ = try VaporizeCoreExecutionPlan.resolve(
+      operation: operation,
+      arguments: ["swift"],
+      platform: .nonMacOS
+    )
+  }
+  #expect(throws: Error.self) {
+    _ = try VaporizeCoreExecutionPlan.resolve(
+      operation: operation,
+      arguments: ["xcode"],
+      platform: .nonMacOS
+    )
+  }
+}
+
+@Test("CUJ-01 requires an explicit authority on macOS")
+func requiresExplicitMacOSCoreCommandAuthority() {
+  #expect(throws: Error.self) {
+    _ = try VaporizeCoreExecutionPlan.resolve(
+      operation: .build,
+      arguments: [],
+      platform: .macOS
+    )
+  }
+}
+
+@Test("CUJ-01 derives the exact adjacent authority retry without losing options")
+func derivesExactAdjacentAuthorityRetry() throws {
+  let plan = try VaporizeCoreExecutionPlan.resolve(
+    operation: .test,
+    arguments: ["swift", "--filter", "A B"],
+    platform: .macOS
+  )
+
+  #expect(
+    plan.alternateCommand(
+      invocation: [
+        "/tmp/vaporize",
+        "test",
+        "swift",
+        "--package-path",
+        "/workspace/tool",
+        "--",
+        "--filter",
+        "A B",
+      ]
+    )
+      == "vaporize.cli@wrkstrm-core.clia.sh test xcode --package-path /workspace/tool -- --filter 'A B'"
+  )
+}
+
+@Test("CUJ-01 removes the global swift-source compatibility option")
+func removesSwiftSourceCompatibilityOption() {
+  #expect(throws: Error.self) {
+    _ = try VaporizeCLI.parse(coreCommandArguments(.build, [
+      "--swift-source", "xcode",
+    ]))
+  }
+}
+
 @Test("CUJ-01 ships a generated section-1 manual with command aliases")
 func shipsGeneratedSectionOneManual() throws {
   let packageDirectory = URL(fileURLWithPath: #filePath)
@@ -42,8 +143,7 @@ func shipsGeneratedSectionOneManual() throws {
 
 @Test("CUJ-01 parses SwiftPM CLI build mode")
 func parsesSwiftPMCLIBuildMode() throws {
-  let command = try VaporizeCLI.parse([
-    "build",
+  let command = try VaporizeCLI.parse(coreCommandArguments(.build, [
     "--artifact",
     "cli",
     "--package-path",
@@ -53,7 +153,7 @@ func parsesSwiftPMCLIBuildMode() throws {
     "--configuration",
     "debug",
     "--skip-install",
-  ])
+  ]))
 
   #expect(command.mode == .build)
   #expect(command.artifact == .cli)
@@ -65,8 +165,7 @@ func parsesSwiftPMCLIBuildMode() throws {
 
 @Test("CUJ-01 builds SwiftPM package build arguments")
 func buildsSwiftPMPackageBuildArguments() throws {
-  let command = try VaporizeCLI.parse([
-    "build",
+  let command = try VaporizeCLI.parse(coreCommandArguments(.build, [
     "--artifact",
     "cli",
     "--package-path",
@@ -75,7 +174,7 @@ func buildsSwiftPMPackageBuildArguments() throws {
     "tool.cli@org.clia.sh",
     "--configuration",
     "debug",
-  ])
+  ]))
 
   #expect(
     try command.swiftBuildArguments() == [
@@ -91,8 +190,7 @@ func buildsSwiftPMPackageBuildArguments() throws {
 
 @Test("CUJ-01 rejects noncanonical SwiftPM CLI build products")
 func rejectsNoncanonicalSwiftPMCLIBuildProducts() throws {
-  let command = try VaporizeCLI.parse([
-    "build",
+  let command = try VaporizeCLI.parse(coreCommandArguments(.build, [
     "--artifact",
     "cli",
     "--package-path",
@@ -101,7 +199,7 @@ func rejectsNoncanonicalSwiftPMCLIBuildProducts() throws {
     "git@swift-universal.clia.sh",
     "--configuration",
     "release",
-  ])
+  ]))
 
   do {
     _ = try command.swiftBuildArguments()
@@ -140,15 +238,14 @@ func parsesSwiftPMCLIDomainsMode() throws {
 
 @Test("CUJ-01 parses domain flag")
 func parsesDomainFlagForInstallMode() throws {
-  let command = try VaporizeCLI.parse([
-    "install",
+  let command = try VaporizeCLI.parse(coreCommandArguments(.install, [
     "--package-path",
     "/workspace/domain/build/spm/tool",
     "--product",
     "build-tool.cli@domain.clia.sh",
     "--domain",
     "build",
-  ])
+  ]))
   #expect(command.mode == .install)
   #expect(command.toolDomain == "build")
   #expect(command.packagePath == "/workspace/domain/build/spm/tool")
@@ -157,8 +254,7 @@ func parsesDomainFlagForInstallMode() throws {
 
 @Test("CUJ-01 parses installed CLI product metadata flags")
 func parsesInstalledCLIProductMetadataFlags() throws {
-  let command = try VaporizeCLI.parse([
-    "install",
+  let command = try VaporizeCLI.parse(coreCommandArguments(.install, [
     "--artifact",
     "cli",
     "--package-path",
@@ -173,7 +269,7 @@ func parsesInstalledCLIProductMetadataFlags() throws {
     "abc123",
     "--product-build-date",
     "2026-07-03T00:00:00Z",
-  ])
+  ]))
 
   #expect(command.mode == .install)
   #expect(command.productVersion == "1.2.3")
@@ -183,23 +279,20 @@ func parsesInstalledCLIProductMetadataFlags() throws {
 }
 
 #if os(macOS)
-  @Test("CUJ-01 forwards developer directory only on the explicit Xcode Swift source")
-  func forwardsDeveloperDirectoryToExplicitXcodeSwiftSource() throws {
-    let command = try VaporizeCLI.parse([
-      "install",
+  @Test("CUJ-01 forwards developer directory only on the explicit Xcode authority")
+  func forwardsDeveloperDirectoryToExplicitXcodeAuthority() throws {
+    let command = try VaporizeCLI.parse(coreCommandArguments(.install, authority: .xcode, [
       "--artifact",
       "cli",
       "--package-path",
       "/workspace/tool",
       "--product",
       "tool.cli@org.clia.sh",
-      "--swift-source",
-      "xcode",
       "--developer-dir",
       "/Applications/Xcode.app/Contents/Developer",
-    ])
+    ]))
 
-    #expect(command.swiftToolchainSource == .xcode)
+    #expect(try command.selectedSwiftToolchainSource() == .xcode)
     #expect(
       command.swiftCommandEnvironment() == [
         "DEVELOPER_DIR": "/Applications/Xcode.app/Contents/Developer"
@@ -209,14 +302,13 @@ func parsesInstalledCLIProductMetadataFlags() throws {
 
 @Test("CUJ-01 orders installed CLI candidates by inferred domain before flat bin")
 func ordersInstalledCLICandidatesByInferredDomainBeforeFlatBin() throws {
-  let command = try VaporizeCLI.parse([
-    "run",
+  let command = try VaporizeCLI.parse(coreCommandArguments(.run, [
     "--package-path",
     "/workspace/private/universal/domain/scm/tools/savepoint.cli",
     "--product",
     "savepoint.cli@kura-org.clia.sh",
     "--skip-install",
-  ])
+  ]))
 
   let candidates = command.installedCLIExecutableCandidatePaths(
     product: "savepoint.cli@kura-org.clia.sh"
@@ -229,8 +321,7 @@ func ordersInstalledCLICandidatesByInferredDomainBeforeFlatBin() throws {
 
 @Test("CUJ-01 orders explicit domain candidate before flat bin")
 func ordersExplicitDomainCandidateBeforeFlatBin() throws {
-  let command = try VaporizeCLI.parse([
-    "run",
+  let command = try VaporizeCLI.parse(coreCommandArguments(.run, [
     "--package-path",
     "/workspace/tool",
     "--product",
@@ -238,7 +329,7 @@ func ordersExplicitDomainCandidateBeforeFlatBin() throws {
     "--domain",
     "domain/scm",
     "--skip-install",
-  ])
+  ]))
 
   let candidates = command.installedCLIExecutableCandidatePaths(product: "tool.cli@org.clia.sh")
 
@@ -269,8 +360,7 @@ func parsesVersionFlag() throws {
 
 @Test("CUJ-01 builds SwiftPM package test arguments")
 func buildsSwiftPMPackageTestArguments() throws {
-  let command = try VaporizeCLI.parse([
-    "test",
+  let command = try VaporizeCLI.parse(coreCommandArguments(.test, [
     "--package-path",
     "/workspace/tool",
     "--configuration",
@@ -278,7 +368,7 @@ func buildsSwiftPMPackageTestArguments() throws {
     "--",
     "--filter",
     "IdentityProfileType",
-  ])
+  ]))
 
   #expect(command.mode == .test)
   #expect(
@@ -295,7 +385,7 @@ func buildsSwiftPMPackageTestArguments() throws {
 
 @Test("CUJ-01 routes SwiftPM package commands through the default Swift on PATH")
 func routesSwiftPMPackageCommandsThroughDefaultSwift() throws {
-  let command = try VaporizeCLI.parse(["build"])
+  let command = try VaporizeCLI.parse(coreCommandArguments(.build))
   let invocation = try command.swiftCommandInvocation(arguments: [
     "test",
     "--package-path",
@@ -315,7 +405,7 @@ func routesSwiftPMPackageCommandsThroughDefaultSwift() throws {
 #if os(macOS)
   @Test("CUJ-01 routes SwiftPM package commands through Xcode only when requested")
   func routesSwiftPMPackageCommandsThroughExplicitXcodeSwift() throws {
-    let command = try VaporizeCLI.parse(["build", "--swift-source", "xcode"])
+    let command = try VaporizeCLI.parse(coreCommandArguments(.build, authority: .xcode))
     let invocation = try command.swiftCommandInvocation(arguments: [
       "test",
       "--package-path",
@@ -333,18 +423,19 @@ func routesSwiftPMPackageCommandsThroughDefaultSwift() throws {
   }
 #endif
 
-@Test("CUJ-01 rejects developer-dir on the independent default Swift lane")
-func rejectsDeveloperDirectoryOnDefaultSwiftLane() throws {
-  let command = try VaporizeCLI.parse([
-    "build",
-    "--developer-dir",
-    "/Applications/Xcode.app/Contents/Developer",
-  ])
+#if os(macOS)
+  @Test("CUJ-01 rejects developer-dir on the independent pure-Swift authority")
+  func rejectsDeveloperDirectoryOnPureSwiftAuthority() throws {
+    let command = try VaporizeCLI.parse(coreCommandArguments(.build, [
+      "--developer-dir",
+      "/Applications/Xcode.app/Contents/Developer",
+    ]))
 
-  #expect(throws: Error.self) {
-    _ = try command.swiftCommandInvocation(arguments: ["--version"])
+    #expect(throws: Error.self) {
+      _ = try command.swiftCommandInvocation(arguments: ["--version"])
+    }
   }
-}
+#endif
 
 @Test("CUJ-01 parses Swift tools and compiler versions for 6.4 preflight")
 func parsesSwiftToolsAndCompilerVersionsForPreflight() {
@@ -724,8 +815,7 @@ private func restoreBuildDirectory(package: URL, from hiddenBuild: URL) throws {
 }
 
 private func productValidationMessage(for product: String) throws -> String {
-  let command = try VaporizeCLI.parse([
-    "build",
+  let command = try VaporizeCLI.parse(coreCommandArguments(.build, [
     "--artifact",
     "cli",
     "--package-path",
@@ -734,7 +824,7 @@ private func productValidationMessage(for product: String) throws -> String {
     product,
     "--configuration",
     "release",
-  ])
+  ]))
 
   do {
     _ = try command.swiftBuildArguments()
@@ -775,4 +865,17 @@ private func assertActionableVaporizeProductValidationError(
     message.contains("digikoma-cli-error-triage.spec.json"),
     sourceLocation: sourceLocation
   )
+}
+
+private func coreCommandArguments(
+  _ operation: VaporizeCoreOperation,
+  authority: VaporizeCoreExecutionAuthority = .swift,
+  _ arguments: [String] = []
+) -> [String] {
+  #if os(macOS)
+    [operation.rawValue, authority.rawValue] + arguments
+  #else
+    precondition(authority == .swift, "Xcode authority is not part of the non-macOS CLI surface")
+    [operation.rawValue] + arguments
+  #endif
 }

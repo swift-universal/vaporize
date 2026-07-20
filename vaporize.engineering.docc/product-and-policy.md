@@ -48,9 +48,9 @@ The current policy boundary is:
 - On macOS, use `vaporize toolchain-selection xcode -- select ...` only to
   report or change the Xcode developer-directory selection. This selection is
   independent from default Swift.
-- Use `build`, `test`, or `run` for artifact-aware Swift execution; add
-  `--swift-source xcode` on macOS when that operation requires Xcode-selected
-  Swift.
+- Use `install`, `build`, `test`, or `run` for artifact-aware Swift execution.
+  On macOS, choose its adjacent `swift` or `xcode` authority explicitly. On
+  hosts without Xcode, omit the authority and the command collapses to Swift.
 - Use `vaporize pass -- swift package generate-documentation ...` for generic
   Swift package API documentation invocation when a package carries the
   Swift-DocC Plugin.

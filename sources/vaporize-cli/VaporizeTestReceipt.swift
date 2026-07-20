@@ -90,13 +90,21 @@ enum VaporizeTestOutputClassifier {
 }
 
 struct VaporizeTestReceipt: Codable, Equatable, Sendable {
-  var schemaVersion = "0.1.0"
+  var schemaVersion = "0.3.0"
   var receiptKind = "vaporize-test-execution"
   var packagePath: String
   /// Present when the test run names an installable product. Library-only
   /// package tests are intentionally productless.
   var product: String?
   var arguments: [String]
+  var operation: String
+  var executionAuthority: String
+  var toolchainResolver: String
+  var alternateCommand: String?
+  var commandElapsedNanoseconds: UInt64
+  var dependencyPreparationNanoseconds: UInt64
+  var dependencyRestoreNanoseconds: UInt64
+  var processExecutionNanoseconds: UInt64
   var requestId: String
   var runnerKind: String
   var succeeded: Bool
@@ -119,6 +127,14 @@ struct VaporizeTestReceipt: Codable, Equatable, Sendable {
     packagePath: String,
     product: String?,
     arguments: [String],
+    operation: String,
+    executionAuthority: String,
+    toolchainResolver: String,
+    alternateCommand: String?,
+    commandElapsedNanoseconds: UInt64,
+    dependencyPreparationNanoseconds: UInt64,
+    dependencyRestoreNanoseconds: UInt64,
+    processExecutionNanoseconds: UInt64,
     requestId: String,
     runnerKind: String,
     succeeded: Bool,
@@ -137,6 +153,14 @@ struct VaporizeTestReceipt: Codable, Equatable, Sendable {
     self.packagePath = packagePath
     self.product = product
     self.arguments = arguments
+    self.operation = operation
+    self.executionAuthority = executionAuthority
+    self.toolchainResolver = toolchainResolver
+    self.alternateCommand = alternateCommand
+    self.commandElapsedNanoseconds = commandElapsedNanoseconds
+    self.dependencyPreparationNanoseconds = dependencyPreparationNanoseconds
+    self.dependencyRestoreNanoseconds = dependencyRestoreNanoseconds
+    self.processExecutionNanoseconds = processExecutionNanoseconds
     self.requestId = requestId
     self.runnerKind = runnerKind
     self.succeeded = succeeded

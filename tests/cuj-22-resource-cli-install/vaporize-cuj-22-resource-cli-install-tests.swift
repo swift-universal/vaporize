@@ -377,12 +377,11 @@ struct VaporizeCUJ22ResourceCLIInstallTests {
     _ fixture: ResourceProbeFixture,
     scenario: VaporizeSimulationProvingGroundScenario
   ) async throws -> VaporizeSimulationProvingGroundReceipt {
-    var command = try VaporizeCLI.parse([
-      "install",
+    var command = try VaporizeCLI.parse(coreInstallArguments([
       "--package-path", fixture.packageRoot.path,
       "--product", fixture.product,
       "--configuration", "debug",
-    ])
+    ]))
     try await command.run()
 
     let installedResourceBundleNames = fixture.installedResourceBundleNames()
@@ -410,12 +409,11 @@ struct VaporizeCUJ22ResourceCLIInstallTests {
     _ fixture: CheckedInResourceVaultFixture,
     scenario: VaporizeSimulationProvingGroundScenario
   ) async throws -> VaporizeSimulationProvingGroundReceipt {
-    var command = try VaporizeCLI.parse([
-      "install",
+    var command = try VaporizeCLI.parse(coreInstallArguments([
       "--package-path", fixture.packageRoot.path,
       "--product", fixture.product,
       "--configuration", "debug",
-    ])
+    ]))
     try await command.run()
 
     let installedResourceBundleNames = fixture.installedResourceBundleNames()
@@ -446,12 +444,11 @@ struct VaporizeCUJ22ResourceCLIInstallTests {
     var stderr = ""
     var status = "fail"
 
-    var command = try VaporizeCLI.parse([
-      "install",
+    var command = try VaporizeCLI.parse(coreInstallArguments([
       "--package-path", probe.packageRoot.path,
       "--product", probe.product,
       "--configuration", "debug",
-    ])
+    ]))
 
     do {
       try await command.run()
@@ -959,4 +956,12 @@ private func writeText(_ text: String, to url: URL) throws {
     withIntermediateDirectories: true
   )
   try text.write(to: url, atomically: true, encoding: .utf8)
+}
+
+private func coreInstallArguments(_ arguments: [String]) -> [String] {
+  #if os(macOS)
+    ["install", "swift"] + arguments
+  #else
+    ["install"] + arguments
+  #endif
 }

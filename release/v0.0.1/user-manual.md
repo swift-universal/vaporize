@@ -56,7 +56,7 @@ open private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/public-brochure.
 ### Build or test a SwiftPM package
 
 ```bash
-/Users/sonoma/.swiftpm/bin/vaporize.cli@wrkstrm-core.clia.sh test \
+/Users/sonoma/.swiftpm/bin/vaporize.cli@wrkstrm-core.clia.sh test swift \
   --package-path private/apple/spm/vaporize@wrkstrm-core.cli \
   --configuration debug
 ```
@@ -64,11 +64,18 @@ open private/apple/spm/vaporize@wrkstrm-core.cli/release/v0.0.1/public-brochure.
 Focused proof runs can pass Swift Testing filters after `--`:
 
 ```bash
-/Users/sonoma/.swiftpm/bin/vaporize.cli@wrkstrm-core.clia.sh test \
+/Users/sonoma/.swiftpm/bin/vaporize.cli@wrkstrm-core.clia.sh test xcode \
   --package-path private/apple/spm/vaporize@wrkstrm-core.cli \
   --configuration debug \
   -- --filter CUJ-09
 ```
+
+On macOS, `install`, `build`, `test`, and `run` require `swift` or `xcode`
+immediately after the operation. If one fails, Vaporize prints the complete
+sibling command. On Linux and other hosts without Xcode, omit the authority
+token. Phase lines report maintainer preparation, subprocess execution, and
+restoration; on macOS the same intervals are available in Instruments under
+the `studio.laussat.vaporize` signpost subsystem.
 
 ### Validate release JSON
 

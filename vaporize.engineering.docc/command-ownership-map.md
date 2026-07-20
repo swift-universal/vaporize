@@ -63,7 +63,7 @@ parameters rather than being flattened into peer command nodes.
 | Project transformation | `import-project-yml`, `upgrade-project-yml-to-pkl`, `generate-project-yml`, `generate-xcodeproj`, `generate-sparkle-config` | Import, upgrade, or generate a named project representation or source artifact. |
 | Release and coverage audit | `release-doctor`, `cuj-audit` | Audit release or CUJ proof state. |
 | Portfolio observation | `inventory`, `domains`, `fleet-status`, `graph` | Report owned project, domain, installed-tool, or package-graph state. |
-| Product maintenance | `self-update` | Update Vaporize itself. |
+| Product maintenance | `self-update`, `maintainer-dependencies` | Update Vaporize itself or materialize its maintainer-selected SwiftPM dependency authority. |
 | Compatibility debt | `cli`, `app` | Deprecated spellings retained by the existing artifact lifecycle parser. They are not command-family precedents. |
 
 ## Toolchain Selection Contract
@@ -90,8 +90,10 @@ and Swift or DocC execution are not owned by `toolchain-selection`.
 
 Use the existing execution owners instead:
 
-- `build`, `test`, and `run` own artifact-aware execution. On macOS,
-  `--swift-source xcode` makes the Xcode-selected Swift source explicit.
+- `install`, `build`, `test`, and `run` own artifact-aware execution. On
+  macOS, each requires the adjacent `swift` or `xcode` execution authority.
+  On hosts without Xcode, the same command collapses to its Swift authority
+  and the authority token is absent.
 - `pass` owns untyped forwarded execution.
 - `use` owns typed CommonProcess execution.
 
@@ -117,7 +119,6 @@ subcommands and per-command man pages.
 | `--working-directory` | `pass`. |
 | `--common-process-spec` | `use`. |
 | `--developer-dir` | macOS Apple build/test execution. It does not choose the globally selected Xcode developer directory. |
-| `--swift-source` | SwiftPM CLI artifact build/install/test source selection; `xcode` exists only on macOS. |
 | `--xcode-component` | `setup`. |
 | `--path` | Status, warehouse, inventory, CUJ audit, validation, inspection, comparison, import, and target discovery as enumerated by the option help. |
 | `--schema`, `--fixture`, `--expect` | JSON Schema validation. |

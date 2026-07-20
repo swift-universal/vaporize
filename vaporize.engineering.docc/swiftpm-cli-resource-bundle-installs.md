@@ -67,7 +67,7 @@ The sidecar also records install/build facts Vaporize can prove for every CLI:
 CLI package authors can provide product identity at install time:
 
 ```text
-vaporize.cli@wrkstrm-core.clia.sh install \
+vaporize.cli@wrkstrm-core.clia.sh install swift \
   --artifact cli \
   --package-path <package> \
   --product <product> \
@@ -187,19 +187,19 @@ The durable proof is a simulation proving ground CUJ:
 The focused test is:
 
 ```text
-vaporize.cli@wrkstrm-core.clia.sh test --package-path private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli --configuration debug -- --filter VaporizeCUJ22ResourceCLIInstallTests
+vaporize.cli@wrkstrm-core.clia.sh test swift --package-path private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli --configuration debug -- --filter VaporizeCUJ22ResourceCLIInstallTests
 ```
 
 The broader SwiftPM CLI surface is:
 
 ```text
-vaporize.cli@wrkstrm-core.clia.sh test --package-path private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli --configuration debug -- --filter VaporizeCUJ01SwiftPMCLITests
+vaporize.cli@wrkstrm-core.clia.sh test swift --package-path private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli --configuration debug -- --filter VaporizeCUJ01SwiftPMCLITests
 ```
 
 The shared installer unit tests are:
 
 ```text
-xcrun swift test --package-path private/universal/substrate/collectives/swift-universal/private/universal/domain/tooling/spm/swift-cli-installer --filter SwiftCLIInstallerTests
+vaporize.cli@wrkstrm-core.clia.sh test xcode --package-path private/universal/substrate/collectives/swift-universal/private/universal/domain/tooling/spm/swift-cli-installer -- --filter SwiftCLIInstallerTests
 ```
 
 ## Implementation Surface
@@ -226,7 +226,7 @@ for resource-bearing CLI installs.
 For a live resource-bearing CLI, the operator check is:
 
 ```text
-vaporize.cli@wrkstrm-core.clia.sh install --package-path <package> --product <product> --configuration release --force
+vaporize.cli@wrkstrm-core.clia.sh install swift --package-path <package> --product <product> --configuration release --force
 <installed-product> <resource-reading-command>
 ```
 

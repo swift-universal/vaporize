@@ -11,6 +11,7 @@ import VaporizeTestSupport
 func parsesAppInstallModeWithXcodeBuildOptions() throws {
   let command = try VaporizeCLI.parse([
     "install",
+    "xcode",
     "--artifact",
     "app",
     "--package-path",

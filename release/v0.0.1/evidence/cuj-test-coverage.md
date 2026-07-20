@@ -16,7 +16,8 @@ than treating the current test count as self-justifying.
 
 Each major Vaporize feature should have a targetable SwiftPM test bundle. New
 feature work first adds tests to the feature bundle, then runs that bundle
-directly with `vaporize test --package-path <package> -- --filter <FeatureBundle>`.
+directly with `vaporize test swift --package-path <package> -- --filter <FeatureBundle>`
+on macOS, or the collapsed `vaporize test` command on non-Xcode hosts.
 After the feature bundle proves the behavior and the coverage artifact is
 updated, duplicate older/general tests may be deleted in the same change. Test
 deletion is allowed only as coverage migration: the replacement bundle, receipt,

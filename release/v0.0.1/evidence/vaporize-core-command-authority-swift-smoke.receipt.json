@@ -1,0 +1,39 @@
+{
+  "alternateCommand" : "vaporize.cli@wrkstrm-core.clia.sh test xcode --package-path tests\/proving-grounds\/core-command-authority --configuration debug --receipt-path release\/v0.0.1\/evidence\/vaporize-core-command-authority-swift-smoke.receipt.json",
+  "arguments" : [
+    "test",
+    "--config-path",
+    "\/Users\/sonoma\/Library\/Caches\/studio.laussat.vaporize\/swiftpm\/37459302e7339935",
+    "--package-path",
+    "tests\/proving-grounds\/core-command-authority",
+    "-c",
+    "debug"
+  ],
+  "commandElapsedNanoseconds" : 22780021667,
+  "dependencyPreparationNanoseconds" : 0,
+  "dependencyRestoreNanoseconds" : 0,
+  "executionAuthority" : "swift",
+  "exitCode" : 0,
+  "expectedIssueCount" : 0,
+  "issueEvents" : [
+
+  ],
+  "issueSinkPath" : "\/Users\/sonoma\/mono\/private\/universal\/substrate\/collectives\/wrkstrm-core\/private\/apple\/spm\/vaporize@wrkstrm-core.cli\/release\/v0.0.1\/evidence\/vaporize-core-command-authority-swift-smoke.receipt.json.issues.jsonl",
+  "issueSinkState" : "absent",
+  "operation" : "test",
+  "packagePath" : "tests\/proving-grounds\/core-command-authority",
+  "processExecutionNanoseconds" : 21450712542,
+  "processIdentifier" : "21149",
+  "processOutcome" : "succeeded",
+  "receiptKind" : "vaporize-test-execution",
+  "requestId" : "vaporize-test-5B11EED8-73A6-460F-971D-79E6570993C8",
+  "runnerKind" : "auto",
+  "runtimeIssueExecution" : "run",
+  "schemaVersion" : "0.3.0",
+  "stderrBytes" : 726,
+  "stdoutBytes" : 531,
+  "succeeded" : true,
+  "testAssertionOutcome" : "not-detected",
+  "toolchainResolver" : "default-swift",
+  "unexpectedIssueCount" : 0
+}

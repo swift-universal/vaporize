@@ -34,7 +34,10 @@ one product-level journey.
 ## CUJ-01 - Assistant Builds And Installs A SwiftPM CLI
 
 1. Assistant receives a concrete SwiftPM package path and product name.
-2. Assistant runs `vaporize build --artifact cli --package-path <package> --product <product>`.
+2. On macOS, assistant runs `vaporize build swift --artifact cli
+   --package-path <package> --product <product>` or its adjacent `build xcode`
+   sibling. On hosts without Xcode, assistant runs the collapsed
+   `vaporize build --artifact cli ...` command.
 3. Vaporize builds the product in the requested configuration.
 4. Unless `--skip-install` is present, Vaporize installs the CLI through the
    owned Swift package install lane.
@@ -44,6 +47,10 @@ Success:
 
 - The assistant does not hand-compose `swift build` plus install commands.
 - The build/install route is repeatable and uses one Vaporize invocation chain.
+- A failed macOS authority prints the exact sibling retry without losing the
+  original options.
+- Phase output and the typed test receipt distinguish maintainer preparation,
+  subprocess execution, and package restoration.
 
 Failure truth:
 
@@ -53,7 +60,7 @@ Failure truth:
 ## CUJ-02 - Assistant Builds And Launches A Mac App
 
 1. Assistant receives a Mac app package or project home.
-2. Assistant runs `vaporize install --artifact app` with the package path,
+2. Assistant runs `vaporize install xcode --artifact app` with the package path,
    product, project or workspace, scheme, destination, and build settings.
 3. Vaporize performs the build through its app installer route.
 4. Vaporize installs the app bundle at the requested destination.
@@ -126,7 +133,12 @@ Success:
 - Lifecycle, inspection, and execution requests fail at the selection parser
   boundary instead of turning selection into a generic toolchain command.
 - Xcode-selected Swift execution, when needed for a package operation, remains
-  under `build`, `test`, or `run` with the macOS-only `--swift-source xcode`.
+  under `install`, `build`, `test`, or `run` with its adjacent macOS-only
+  `xcode` authority; hosts without Xcode expose the collapsed Swift command.
+- `tests/proving-grounds/core-command-authority` passes through both macOS
+  authorities with Swift Testing. Retained receipts name `default-swift` and
+  `xcrun-xcode-select`, preserve exact sibling commands, and report phase
+  timings. This proves authority routing, not a general compiler-speed claim.
 
 ## CUJ-06 - Assistant Validates Release Packet JSON Without jq
 
@@ -346,7 +358,7 @@ Failure truth:
 
 1. Assistant knows the target app also exists in a large Xcode workspace that
    is kept warm by regular builds.
-2. Assistant runs `vaporize install --artifact app` with the normal app
+2. Assistant runs `vaporize install xcode --artifact app` with the normal app
    package/project identity plus `--xcode-product-cache-workspace` and
    `--xcode-product-cache-derived-data-path`.
 3. Vaporize checks the shared DerivedData product path before local DerivedData

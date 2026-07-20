@@ -16,7 +16,7 @@ commands executed, vaporware inventories emitted, and receipts captured.
 This release prepares Vaporize v0.0.1 as a usable internal command surface for
 assistants. It should reduce direct shell and direct `xcodebuild` choreography by
 putting build, install, run, open, pass-through, CommonProcess invocation,
-Xcode-selected Swift execution, JSON validation, warehouse inventory, read-only
+adjacent pure-Swift and Xcode-assisted execution, JSON validation, warehouse inventory, read-only
 legacy Apple project YAML inspection, and package graph access behind one
 recognizable gate.
 
@@ -137,6 +137,13 @@ future hardware or other material-domain request families.
 - Classify Vaporize as an internal essential tool for assistant build,
   install, launch, and release-proof workflows.
 - Support SwiftPM CLI build, install, uninstall, and run flows.
+- On macOS, expose `swift` and `xcode` as adjacent authorities for every core
+  `install`, `build`, `test`, and `run` command; on hosts without Xcode,
+  collapse each command to the pure-Swift implementation without an authority
+  token.
+- Emit immediate phase transitions, macOS Instruments signposts, and typed
+  timing fields so maintainer preparation, subprocess execution, and package
+  restoration do not appear as undifferentiated terminal lag.
 - Preserve SwiftPM CLI target resource bundles during install without turning
   CLIs into app bundles.
 - Support Apple app build, install, uninstall, and launch flows for SwiftPM,
@@ -236,7 +243,7 @@ Supporting audiences:
 | ID | Requirement | Acceptance |
 | --- | --- | --- |
 | FR-001 | Canonical command identity | CLI help and release docs name `vaporize@wrkstrm-core.cli` as the canonical surface. |
-| FR-002 | SwiftPM CLI operations | `install`, `uninstall`, `build`, and `run` support `--artifact cli`, `--package-path`, `--product`, and release/debug configuration. |
+| FR-002 | SwiftPM CLI operations and execution authorities | `install`, `build`, `test`, and `run` support `--artifact cli`, `--package-path`, `--product`, and release/debug configuration. On macOS each command requires the adjacent `swift` or `xcode` authority, derives an exact sibling retry, and records authority, resolver, phase timing, and alternate command in test receipts. Non-macOS builds expose the collapsed pure-Swift command and compile no Xcode/developer-directory vocabulary. `uninstall` remains authority-free because it executes no build toolchain. |
 | FR-003 | Apple app operations | `install`, `uninstall`, and `run` support `--artifact app`, app bundle naming, destination, launch, Xcode project/workspace, scheme, derived data, destination, SDK, result bundle, and build settings. |
 | FR-004 | Restricted native tool boundary | Assistant-facing docs route app build/install/open/run through Vaporize; direct `xcodebuild` is an implementation detail. |
 | FR-005 | CommonProcess pass-through | `pass` runs Swift commands through CommonProcess, preserves stdout/stderr/exit code, and can emit a JSON receipt with `--analyze` or `--receipt-path`. |
@@ -275,7 +282,9 @@ Supporting audiences:
 ## Release Criteria
 
 - Vaporize's package test suite passes with the Swift 6.4 toolchain:
-  `vaporize test --package-path private/apple/spm/vaporize@wrkstrm-core.cli --configuration debug`.
+  `vaporize test swift --package-path private/apple/spm/vaporize@wrkstrm-core.cli --configuration debug`
+  on macOS, or the same command without `swift` on hosts where the command is
+  collapsed.
   Current proof: the CUJ-derived coverage floor requires 132 Swift test
   obligations plus 14 release evidence checks; the executable suite passes 196
   tests across 26 implemented CUJ targets, including the CUJ-14 expanded

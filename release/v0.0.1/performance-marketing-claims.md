@@ -140,7 +140,7 @@ swift test --filter VaporizeCUJ15XcodeProductCacheTests
 After, the proof stays inside the release-owned route:
 
 ```bash
-vaporize test --package-path <package> --swift-source xcode -- --filter VaporizeCUJ15XcodeProductCacheTests
+vaporize test xcode --package-path <package> -- --filter VaporizeCUJ15XcodeProductCacheTests
 ```
 
 ## Claims Not Yet Allowed

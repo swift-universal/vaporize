@@ -1,0 +1,55 @@
+{
+  "BeadsIssue": "0.1.0",
+  "schemaVersion": "0.1.0",
+  "id": "fr-vaporize-parallel-swift-xcode-command-families-2026-07-20",
+  "title": "Remodel Vaporize core commands as parallel pure-Swift and Xcode-assisted families",
+  "status": "in-progress",
+  "priority": 0,
+  "issueType": "feature",
+  "labels": [
+    "vaporize",
+    "command-model",
+    "pure-swift",
+    "xcode-assisted",
+    "linux-collapse",
+    "vaporware-modification",
+    "vaporware-modernization-workstream",
+    "launch-review"
+  ],
+  "createdAt": "2026-07-20T09:02:34Z",
+  "createdBy": "codex after operator authorization",
+  "historicalContent": {
+    "slug": "fr-vaporize-parallel-swift-xcode-command-families-2026-07-20",
+    "kind": "bead-feature-request",
+    "createdAt": "2026-07-20T09:02:34Z",
+    "createdBy": "codex",
+    "assignee": "wrkstrm-core",
+    "severity": "critical",
+    "sourceType": "operator-directed-vaporware-modification",
+    "sourceLocation": "Codex session 2026-07-20: operator directed the core Vaporize remodel through modification, modernization, and launch-review workstreams.",
+    "description": "Vaporize currently hides Swift execution authority behind --swift-source. Replace that option with adjacent command families: build/test/install/run each select pure Swift or Xcode assistance explicitly on macOS, while Linux compiles no Xcode mirror and exposes the naturally collapsed operation. Both authorities share one typed plan and receipt contract. A failed lane must surface the exact sibling retry command. No --swift-source compatibility route remains.",
+    "acceptanceCriteria": [
+      "macOS exposes build/test/install/run with explicit swift and xcode authorities.",
+      "The xcode authority uses xcrun swift plus optional process-local DEVELOPER_DIR for SwiftPM operations; it does not silently change xcode-select.",
+      "The swift authority resolves swift from PATH and rejects Xcode-only options.",
+      "Non-macOS exposes a collapsed pure-Swift build/test/install/run surface and no Xcode authority or developer-directory option.",
+      "--swift-source is removed from parsing, help, docs, and tests.",
+      "Every authority-aware failure can name an exact sibling retry command derived from the shared plan.",
+      "Typed test receipts record operation, authority, resolver, and alternate command.",
+      "PRD, CUJ, public documentation, proving grounds, release evidence, and launch-review packet match the implemented grammar.",
+      "Focused tests and Release Doctor pass through Vaporize, or remaining blockers are retained explicitly.",
+      "Automation prepares launch-review evidence but does not mark human gates approved."
+    ],
+    "linkedTypedRecords": {
+      "modificationRequest": "private/universal/substrate/collectives/spaces-universal/private/universal/kura-spaces/workflows/software-modification-workstream-capture/v0.1.0/requests/2026-07-20-vaporize-parallel-swift-xcode-command-families.vaporware-modification-request.su.json",
+      "modificationWorkflow": "private/universal/substrate/collectives/spaces-universal/private/universal/kura-spaces/workflows/software-modification-workstream-capture/v0.1.0/software-modification-workstream-capture.workflow.su.json",
+      "modernizationWorkflow": "private/universal/substrate/collectives/spaces-universal/private/universal/kura-spaces/workflows/vaporware-modernization-workstream/v0.0.2/vaporware-modernization-workstream.workflow.su.json",
+      "launchReviewWorkflow": "private/universal/substrate/collectives/spaces-universal/private/universal/kura-spaces/workflows/vaporize-launch-review-burn-down/v0.1.0/vaporize-launch-review-burn-down.workflow.su.json"
+    }
+  },
+  "composesWith": [
+    "[[software-modification-is-maintain-software-not-symptom-patch]]",
+    "[[vaporize-builds-vaporware-warehouse-stores-vaporware]]",
+    "[[human-review-gates-require-human-signoff]]"
+  ]
+}

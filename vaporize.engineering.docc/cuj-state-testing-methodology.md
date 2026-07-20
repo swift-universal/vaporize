@@ -100,14 +100,16 @@ The flow is intentionally small:
    `cuj-state.coverage.json`.
 6. Keep database-engine, network, and storehouse-specific claims out of the
    receipt unless the test is explicitly proving that integration layer.
-7. Run the focused target through `vaporize.cli@wrkstrm-core.clia.sh test`.
+7. On macOS, run the focused target through
+   `vaporize.cli@wrkstrm-core.clia.sh test swift`; on non-Xcode hosts use the
+   collapsed `test` command.
 8. Link the command receipt to the relevant workflow instance, bead, board
    packet, or release packet.
 
 The current proof command is:
 
 ```sh
-vaporize.cli@wrkstrm-core.clia.sh test \
+vaporize.cli@wrkstrm-core.clia.sh test swift \
   --package-path private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli \
   --configuration debug \
   -- \

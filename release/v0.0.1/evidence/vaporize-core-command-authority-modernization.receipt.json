@@ -1,0 +1,111 @@
+{
+  "schemaVersion": "0.1.0",
+  "receiptKind": "vaporize-core-command-authority-modernization",
+  "receiptId": "vaporize-core-command-authority-modernization-2026-07-20",
+  "status": "evidence-ready-pending-human-review",
+  "result": "pass-with-notes",
+  "requestRef": "private/universal/substrate/collectives/spaces-universal/private/universal/kura-spaces/workflows/software-modification-workstream-capture/v0.1.0/requests/2026-07-20-vaporize-parallel-swift-xcode-command-families.vaporware-modification-request.su.json",
+  "owningBeadRef": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/fr-vaporize-parallel-swift-xcode-command-families-2026-07-20.beads-issue.json",
+  "implementedContract": {
+    "macOS": [
+      "vaporize install swift|xcode",
+      "vaporize build swift|xcode",
+      "vaporize test swift|xcode",
+      "vaporize run swift|xcode"
+    ],
+    "nonMacOS": [
+      "vaporize install",
+      "vaporize build",
+      "vaporize test",
+      "vaporize run"
+    ],
+    "compatibilityRoutesRemoved": [
+      "--swift-source"
+    ],
+    "uninstallAuthority": "none; uninstall executes no build toolchain"
+  },
+  "instrumentation": {
+    "terminalPhases": [
+      "core-command",
+      "dependency-preparation",
+      "process-execution",
+      "dependency-restore"
+    ],
+    "macOSSignpostSubsystem": "studio.laussat.vaporize",
+    "macOSSignpostCategory": "core-execution",
+    "receiptSchemaVersion": "0.3.0",
+    "receiptTimingFields": [
+      "commandElapsedNanoseconds",
+      "dependencyPreparationNanoseconds",
+      "dependencyRestoreNanoseconds",
+      "processExecutionNanoseconds"
+    ]
+  },
+  "greenAuthorityProofs": [
+    {
+      "authority": "swift",
+      "resolver": "default-swift",
+      "command": "vaporize.cli@wrkstrm-core.clia.sh test swift --package-path tests/proving-grounds/core-command-authority --configuration debug --receipt-path release/v0.0.1/evidence/vaporize-core-command-authority-swift-smoke.receipt.json",
+      "receiptRef": "release/v0.0.1/evidence/vaporize-core-command-authority-swift-smoke.receipt.json",
+      "result": "pass",
+      "swiftTestingTestCount": 1,
+      "commandElapsedNanoseconds": 22780021667,
+      "processExecutionNanoseconds": 21450712542
+    },
+    {
+      "authority": "xcode",
+      "resolver": "xcrun-xcode-select",
+      "command": "vaporize.cli@wrkstrm-core.clia.sh test xcode --package-path tests/proving-grounds/core-command-authority --configuration debug --receipt-path release/v0.0.1/evidence/vaporize-core-command-authority-xcode-smoke.receipt.json",
+      "receiptRef": "release/v0.0.1/evidence/vaporize-core-command-authority-xcode-smoke.receipt.json",
+      "result": "pass",
+      "swiftTestingTestCount": 1,
+      "commandElapsedNanoseconds": 26506479625,
+      "processExecutionNanoseconds": 25804740250
+    }
+  ],
+  "fullGraphDiagnostics": [
+    {
+      "authority": "swift",
+      "result": "pass",
+      "swiftTestingTestCount": 8,
+      "receiptRef": "release/v0.0.1/evidence/vaporize-core-command-authority-swift-test.receipt.json",
+      "commandElapsedNanoseconds": 520071329209,
+      "dependencyPreparationNanoseconds": 11548187500,
+      "dependencyRestoreNanoseconds": 1280708,
+      "processExecutionNanoseconds": 519475333875,
+      "note": "The serialized VaporizeTestReceiptTests suite passed all eight tests, including three nested positive and negative Swift Testing fixture runs. The outer classifier detected the deliberately failing nested fixture text while processOutcome remained succeeded and unexpectedIssueCount remained zero; those fields must be interpreted together."
+    },
+    {
+      "authority": "xcode",
+      "result": "nonzero-diagnostic",
+      "receiptRef": "release/v0.0.1/evidence/vaporize-core-command-authority-xcode-test.receipt.json",
+      "commandElapsedNanoseconds": 540537021375,
+      "dependencyPreparationNanoseconds": 198514934709,
+      "dependencyRestoreNanoseconds": 1346042,
+      "processExecutionNanoseconds": 540086125542,
+      "testSubprocessIntervalNanoseconds": 341875184000,
+      "note": "The combined CUJ-01 plus IssueReporting run reported one nested negative-path fixture with no child receipt. A direct rerun of that child produced the expected nonzero 0.3.0 receipt with one unexpected IssueReporting event. This run is retained for attribution, not green release proof."
+    }
+  ],
+  "claims": {
+    "proved": [
+      "Both macOS authorities launch the same dependency-free Swift Testing proving ground through Vaporize.",
+      "The authority, resolver, exact alternate command, process outcome, and timing fields are retained in typed receipts.",
+      "CUJ-01 Swift Testing covers all four operations under both macOS authorities and the non-macOS collapsed policy.",
+      "Fresh macOS help contains the mirrored grammar and no --swift-source option."
+    ],
+    "notProved": [
+      "No actual Linux Vaporize binary was executed in this macOS proof session; non-macOS collapse is policy-tested through the shared plan.",
+      "The measurements do not prove Vaporize or either authority is generally faster than Swift, Xcode, or another build tool.",
+      "The failed full-graph Xcode diagnostic is not a green package-suite receipt.",
+      "The installed runtime was not refreshed: install swift is blocked by the package's separate approved-copy migration, including 133 pre-existing source-consumption findings and two new validation messages that require a catalog workflow because no matching accessor exists.",
+      "Human launch approval is not granted by this receipt."
+    ]
+  },
+  "humanReview": {
+    "required": true,
+    "status": "pending",
+    "humanReviewRef": null,
+    "signedByAutomation": false
+  }
+}

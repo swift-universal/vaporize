@@ -35,7 +35,20 @@ struct VaporizeCLI: AsyncParsableCommand {
   static let buildDate = ProcessInfo.processInfo.environment["VAPORIZE_BUILD_DATE"]
   #if os(macOS)
     static let platformToolchainSelectionAbstract = " On macOS, the independent `toolchain-selection xcode` provider compiles in the xcode-select selection surface."
+    static let coreCommandAuthorityDiscussion = """
+      Core execution commands on macOS:
+        vaporize build swift|xcode [options]
+        vaporize test swift|xcode [options] [-- test-options]
+        vaporize install swift|xcode [options]
+        vaporize run swift|xcode [options] [-- product-arguments]
+      The `swift` and `xcode` authorities are adjacent mirrors. `swift` resolves
+      the selected Swift from PATH. `xcode` resolves Swift through xcrun and the
+      active xcode-select state, with optional process-local --developer-dir.
+      When one lane fails, Vaporize prints the exact sibling retry command.
+      """
     static let toolchainSelectionDiscussion = """
+      \(coreCommandAuthorityDiscussion)
+
       Toolchain selection structure:
         vaporize toolchain-selection swift -- use [swiftly-use-options] [selector]
         vaporize toolchain-selection xcode -- select <xcode-select-options>
@@ -44,7 +57,17 @@ struct VaporizeCLI: AsyncParsableCommand {
       """
   #else
     static let platformToolchainSelectionAbstract = ""
+    static let coreCommandAuthorityDiscussion = """
+      Core execution commands on this platform are collapsed pure-Swift commands:
+        vaporize build [options]
+        vaporize test [options] [-- test-options]
+        vaporize install [options]
+        vaporize run [options] [-- product-arguments]
+      No Xcode-assisted mirror or Xcode-only option is compiled into this surface.
+      """
     static let toolchainSelectionDiscussion = """
+      \(coreCommandAuthorityDiscussion)
+
       Toolchain selection structure:
         vaporize toolchain-selection swift -- use [swiftly-use-options] [selector]
       Selection does not own toolchain lifecycle, general inspection, or execution.
@@ -59,7 +82,8 @@ struct VaporizeCLI: AsyncParsableCommand {
       processes run, receipts emit. Modes: install, uninstall, build, test, run, \
       pass, use, toolchain-selection, setup. Toolchain selection compiles \
       swiftlang/swiftly's `use` operation into this executable for default Swift \
-      selection.\(platformToolchainSelectionAbstract) Vaporize does not locate \
+      selection. Core build, test, install, and run commands use the platform \
+      authority grammar documented below.\(platformToolchainSelectionAbstract) Vaporize does not locate \
       or launch an installed swiftly CLI. Toolchain lifecycle, general \
       inspection, and execution remain separate responsibilities. \
       Vaporware-awareness modes: status + warehouse enumerate and \
@@ -333,15 +357,12 @@ struct VaporizeCLI: AsyncParsableCommand {
     help: "Path to a CommonProcess CommandSpec JSON for use mode. Use '-' for stdin.")
   var commonProcessSpecPath: String?
 
-  @Option(
-    name: .customLong("developer-dir"),
-    help: "DEVELOPER_DIR override for SwiftPM CLI build/install/test with --swift-source xcode; it does not change the xcode-select selection.")
-  var developerDirectory: String?
-
-  @Option(
-    name: .customLong("swift-source"),
-    help: "Swift executable source for SwiftPM CLI build/install/test: default uses the selected Swift on PATH; xcode is available only on macOS and uses xcrun without changing the default Swift selection.")
-  var swiftToolchainSource: SwiftCLIInstaller.SwiftToolchainSource = .defaultSwift
+  #if os(macOS)
+    @Option(
+      name: .customLong("developer-dir"),
+      help: "Process-local DEVELOPER_DIR override for an explicit xcode authority or another Xcode command; it does not change xcode-select selection.")
+    var developerDirectory: String?
+  #endif
 
   @Option(
     name: .customLong("xcode-component"),
@@ -424,32 +445,20 @@ struct VaporizeCLI: AsyncParsableCommand {
       )
     }
 
+    let coreExecutionPlan = try coreExecutionPlan(for: mode)
     try enforceI18nSourcePolicy(for: mode)
     try enforceSwiftUIImportPolicy(for: mode)
 
+    if let coreExecutionPlan {
+      try await runCoreCommand(mode: mode, plan: coreExecutionPlan)
+      return
+    }
+
     switch mode {
-    case .install:
-      try await withMaintainerDependencyAuthority(packagePath: try requirePackagePath()) {
-        try await installArtifact(launchApp: launch)
-      }
     case .uninstall:
       try await uninstallArtifact()
-    case .build:
-      try await withMaintainerDependencyAuthority(packagePath: try requirePackagePath()) {
-        try await buildArtifact()
-      }
-    case .test:
-      try await withMaintainerDependencyAuthority(packagePath: try requirePackagePath()) {
-        try await testArtifact()
-      }
-    case .run:
-      if skipInstall {
-        try await runArtifact()
-      } else {
-        try await withMaintainerDependencyAuthority(packagePath: try requirePackagePath()) {
-          try await runArtifact()
-        }
-      }
+    case .install, .build, .test, .run:
+      preconditionFailure("core execution commands return before general dispatch")
     case .pass:
       try await passThrough()
     case .use:
@@ -519,6 +528,130 @@ struct VaporizeCLI: AsyncParsableCommand {
         try await installApp(launchApp: launch)
       }
     }
+  }
+
+  private func runCoreCommand(
+    mode: Mode,
+    plan: VaporizeCoreExecutionPlan
+  ) async throws {
+    let recorder = VaporizeCoreExecutionRecorder(plan: plan)
+    try await VaporizeCoreExecutionInstrumentation.$current.withValue(recorder) {
+      do {
+        try await recorder.measure(.coreCommand) {
+          do {
+            try validateArtifactAuthority(plan)
+            switch mode {
+            case .install:
+              try await withMaintainerDependencyAuthority(packagePath: try requirePackagePath()) {
+                try await installArtifact(launchApp: launch)
+              }
+            case .build:
+              try await withMaintainerDependencyAuthority(packagePath: try requirePackagePath()) {
+                try await buildArtifact()
+              }
+            case .test:
+              try await withMaintainerDependencyAuthority(packagePath: try requirePackagePath()) {
+                try await testArtifact()
+              }
+            case .run:
+              if skipInstall {
+                try await runArtifact()
+              } else {
+                try await withMaintainerDependencyAuthority(packagePath: try requirePackagePath()) {
+                  try await runArtifact()
+                }
+              }
+            default:
+              preconditionFailure("non-core mode reached core command dispatch")
+            }
+          } catch {
+            if let alternate = plan.alternateCommand(invocation: CommandLine.arguments) {
+              FileHandle.standardError.write(
+                Data("vaporize: adjacent authority retry: \(alternate)\n".utf8)
+              )
+            }
+            throw error
+          }
+        }
+      } catch {
+        try emitRetainedTestReceipt(from: recorder)
+        throw error
+      }
+      try emitRetainedTestReceipt(from: recorder)
+    }
+  }
+
+  private func emitRetainedTestReceipt(
+    from recorder: VaporizeCoreExecutionRecorder
+  ) throws {
+    guard let receipt = recorder.takeFinalizedTestReceipt() else { return }
+    try emitReceiptIfRequested(receipt)
+  }
+
+  func coreExecutionPlan(for mode: Mode) throws -> VaporizeCoreExecutionPlan? {
+    let operation: VaporizeCoreOperation
+    switch mode {
+    case .install: operation = .install
+    case .build: operation = .build
+    case .test: operation = .test
+    case .run: operation = .run
+    default: return nil
+    }
+
+    let plan = try VaporizeCoreExecutionPlan.resolve(
+      operation: operation,
+      arguments: forwardedArguments
+    )
+    if resolvedDeveloperDirectory != nil, plan.executionAuthority != .xcode {
+      throw ValidationError(
+        "--developer-dir belongs to the `\(operation.rawValue) xcode` authority; the pure-Swift sibling is independent of Xcode."
+      )
+    }
+    return plan
+  }
+
+  private func validateArtifactAuthority(_ plan: VaporizeCoreExecutionPlan) throws {
+    guard artifact == .app, plan.executionAuthority != .xcode else { return }
+    #if os(macOS)
+      throw ValidationError(
+        "Vaporize app artifacts require the Xcode-assisted command. Use `\(plan.operation.rawValue) xcode --artifact app`; pure Swift remains available for CLI and package operations."
+      )
+    #else
+      throw ValidationError(
+        "Vaporize app artifacts require Xcode and are unavailable on this platform; the collapsed command supports pure-Swift CLI and package operations."
+      )
+    #endif
+  }
+
+  private var resolvedDeveloperDirectory: String? {
+    #if os(macOS)
+      developerDirectory
+    #else
+      nil
+    #endif
+  }
+
+  func selectedSwiftToolchainSource() throws -> SwiftCLIInstaller.SwiftToolchainSource {
+    guard let mode, let plan = try coreExecutionPlan(for: mode) else {
+      return .defaultSwift
+    }
+    switch plan.executionAuthority {
+    case .swift:
+      return .defaultSwift
+    case .xcode:
+      #if os(macOS)
+        return .xcode
+      #else
+        throw ValidationError("The Xcode-assisted Swift authority is unavailable on this platform.")
+      #endif
+    }
+  }
+
+  func coreForwardedArguments() throws -> [String] {
+    guard let mode, let plan = try coreExecutionPlan(for: mode) else {
+      return forwardedArguments
+    }
+    return plan.forwardedArguments
   }
 
   /// Fail closed before any canonical build/install/test/run dispatch reaches
@@ -666,8 +799,8 @@ struct VaporizeCLI: AsyncParsableCommand {
       productBuildDate: Self.buildDate,
       installerVersion: Self.vaporizeVersion,
       installerBuild: Self.buildIdentifier,
-      swiftToolchainSource: swiftToolchainSource,
-      developerDirectory: developerDirectory,
+      swiftToolchainSource: try selectedSwiftToolchainSource(),
+      developerDirectory: resolvedDeveloperDirectory,
       swiftPMConfigPath: try resolvedSwiftPMConfigurationPath(packagePath: packagePath)
     )
     try await SwiftCLIInstaller(request: request).run()
@@ -770,12 +903,14 @@ struct VaporizeCLI: AsyncParsableCommand {
       productBuildDate: resolvedProductBuildDate(for: product),
       installerVersion: Self.vaporizeVersion,
       installerBuild: Self.buildIdentifier,
-      swiftToolchainSource: swiftToolchainSource,
-      developerDirectory: developerDirectory,
+      swiftToolchainSource: try selectedSwiftToolchainSource(),
+      developerDirectory: resolvedDeveloperDirectory,
       swiftPMConfigPath: try resolvedSwiftPMConfigurationPath(packagePath: packagePath),
       selfUpdateIdentity: try resolvedSelfUpdateIdentity()
     )
-    try await SwiftCLIInstaller(request: request).run()
+    try await measureCoreProcess {
+      try await SwiftCLIInstaller(request: request).run()
+    }
     // Post-install presence check: the installer must have landed an executable at the
     // flat install path. `swift package experimental-install` removes any prior binary
     // before writing the new one, so an aborted/failed copy leaves the destination
@@ -866,9 +1001,12 @@ struct VaporizeCLI: AsyncParsableCommand {
       xcodeSDK: xcodeSDK,
       xcodeResultBundlePath: xcodeResultBundlePath,
       xcodeBuildSettings: xcodeBuildSettings,
-      swiftPMConfigPath: try resolvedSwiftPMConfigurationPath(packagePath: packagePath)
+      swiftPMConfigPath: try resolvedSwiftPMConfigurationPath(packagePath: packagePath),
+      developerDirectory: resolvedDeveloperDirectory
     )
-    try await SwiftAppInstaller(request: request).run()
+    try await measureCoreProcess {
+      try await SwiftAppInstaller(request: request).run()
+    }
   }
 
   private func uninstallCLI() async throws {
@@ -880,8 +1018,8 @@ struct VaporizeCLI: AsyncParsableCommand {
       product: product,
       configuration: .init(rawValue: configuration.rawValue) ?? .release,
       forceReinstall: false,
-      swiftToolchainSource: swiftToolchainSource,
-      developerDirectory: developerDirectory,
+      swiftToolchainSource: try selectedSwiftToolchainSource(),
+      developerDirectory: resolvedDeveloperDirectory,
       swiftPMConfigPath: try resolvedSwiftPMConfigurationPath(packagePath: packagePath)
     )
     try await SwiftCLIInstaller(request: request).uninstall()
@@ -919,9 +1057,12 @@ struct VaporizeCLI: AsyncParsableCommand {
       xcodeSDK: xcodeSDK,
       xcodeResultBundlePath: xcodeResultBundlePath,
       xcodeBuildSettings: xcodeBuildSettings,
-      swiftPMConfigPath: try resolvedSwiftPMConfigurationPath(packagePath: packagePath)
+      swiftPMConfigPath: try resolvedSwiftPMConfigurationPath(packagePath: packagePath),
+      developerDirectory: resolvedDeveloperDirectory
     )
-    try await SwiftAppInstaller(request: request).buildOnly()
+    try await measureCoreProcess {
+      try await SwiftAppInstaller(request: request).buildOnly()
+    }
   }
 
   private func runInstalledCLI() async throws {
@@ -929,7 +1070,7 @@ struct VaporizeCLI: AsyncParsableCommand {
     let executablePath = try installedCLIExecutablePath(product: product)
     try await runExecutable(
       executable: .path(executablePath),
-      arguments: forwardedArguments,
+      arguments: try coreForwardedArguments(),
       sourceTag: "vaporize-run-cli"
     )
   }
@@ -1202,7 +1343,7 @@ struct VaporizeCLI: AsyncParsableCommand {
       "--package-path", packagePath,
       "-c", configuration.rawValue,
     ]
-    arguments.append(contentsOf: forwardedArguments)
+    arguments.append(contentsOf: try coreForwardedArguments())
     return arguments
   }
 
@@ -1233,26 +1374,45 @@ struct VaporizeCLI: AsyncParsableCommand {
 
     let snapshot = try PackageResolutionSnapshot.capture(packagePath: packagePath)
     do {
-      let configurationArguments = try swiftPMConfigurationArguments(
-        packagePath: packagePath
-      )
-      for dependency in dependencies where dependency.requiresEdit {
-        try await runSwiftPackage(
-          arguments: ["package"] + configurationArguments + [
-            "--package-path", packagePath,
-            "edit",
-            "--path", dependency.checkoutPath,
-            dependency.identity,
-          ]
+      let prepare = {
+        let configurationArguments = try swiftPMConfigurationArguments(
+          packagePath: packagePath
         )
+        for dependency in dependencies where dependency.requiresEdit {
+          try await runSwiftPackage(
+            arguments: ["package"] + configurationArguments + [
+              "--package-path", packagePath,
+              "edit",
+              "--path", dependency.checkoutPath,
+              dependency.identity,
+            ]
+          )
+        }
+      }
+      if let recorder = VaporizeCoreExecutionInstrumentation.current {
+        try await recorder.measure(.dependencyPreparation, operation: prepare)
+      } else {
+        try await prepare()
       }
       let result = try await operation()
-      try snapshot.restore()
+      if let recorder = VaporizeCoreExecutionInstrumentation.current {
+        try await recorder.measure(.dependencyRestore) {
+          try snapshot.restore()
+        }
+      } else {
+        try snapshot.restore()
+      }
       return result
     } catch {
       let operationError = error
       do {
-        try snapshot.restore()
+        if let recorder = VaporizeCoreExecutionInstrumentation.current {
+          try await recorder.measure(.dependencyRestore) {
+            try snapshot.restore()
+          }
+        } else {
+          try snapshot.restore()
+        }
       } catch {
         throw ValidationError(
           "Vaporize could not restore Package.resolved at \(snapshot.url.path) after maintainer authority preparation: \(error.localizedDescription)"
@@ -1293,7 +1453,9 @@ struct VaporizeCLI: AsyncParsableCommand {
   }
 
   func developerDirectoryEnvironment() -> [String: String]? {
-    guard let developerDirectory, !developerDirectory.isEmpty else { return nil }
+    guard let developerDirectory = resolvedDeveloperDirectory, !developerDirectory.isEmpty else {
+      return nil
+    }
     return ["DEVELOPER_DIR": developerDirectory]
   }
 
@@ -1367,7 +1529,9 @@ struct VaporizeCLI: AsyncParsableCommand {
     )
     try command.validateOrThrow()
 
-    let output = try await RunnerControllerFactory.run(command: command)
+    let output = try await measureCoreProcess {
+      try await RunnerControllerFactory.run(command: command)
+    }
     FileHandle.standardOutput.write(output.stdout)
     FileHandle.standardError.write(output.stderr)
 
@@ -1457,7 +1621,7 @@ struct VaporizeCLI: AsyncParsableCommand {
   }
 
   private func runToolchainSelection() async throws {
-    guard developerDirectory == nil else {
+    guard resolvedDeveloperDirectory == nil else {
       throw ValidationError(
         "--developer-dir is a process-local Xcode execution override; select the active Xcode with `toolchain-selection xcode -- select --switch <developer-directory>`."
       )
@@ -2377,7 +2541,7 @@ struct VaporizeCLI: AsyncParsableCommand {
     let request = try XcodeWorkspaceSchemeListRequest(workspacePath: xcodeWorkspace)
     let requestId = "vaporize-list-schemes-\(UUID().uuidString)"
     let workingDirectory = passWorkingDirectory ?? FileManager.default.currentDirectoryPath
-    let environmentUpdates = developerDirectory.map { ["DEVELOPER_DIR": $0] }
+    let environmentUpdates = resolvedDeveloperDirectory.map { ["DEVELOPER_DIR": $0] }
     let command = CommandSpec(
       executable: .name("xcodebuild"),
       args: request.xcodebuildArguments,
@@ -2407,7 +2571,7 @@ struct VaporizeCLI: AsyncParsableCommand {
         workingDirectory: workingDirectory,
         requestId: requestId,
         runnerKind: "auto",
-        developerDirectorySet: developerDirectory != nil,
+        developerDirectorySet: resolvedDeveloperDirectory != nil,
         succeeded: false,
         exitCode: output.exitStatus.exitCode,
         signal: output.exitStatus.signal,
@@ -2432,7 +2596,7 @@ struct VaporizeCLI: AsyncParsableCommand {
       workingDirectory: workingDirectory,
       requestId: requestId,
       runnerKind: "auto",
-      developerDirectorySet: developerDirectory != nil,
+      developerDirectorySet: resolvedDeveloperDirectory != nil,
       succeeded: true,
       exitCode: output.exitStatus.exitCode,
       signal: output.exitStatus.signal,
@@ -2585,11 +2749,19 @@ struct VaporizeCLI: AsyncParsableCommand {
   private func runSwift(arguments: [String]) async throws {
     try await validateSelectedSwiftCompatibility(arguments: arguments)
     let invocation = try swiftCommandInvocation(arguments: arguments)
+    let plan = try mode.flatMap { try coreExecutionPlan(for: $0) }
     try await runExecutable(
       executable: invocation.executable,
       arguments: invocation.arguments,
       sourceTag: "vaporize-swift",
-      environment: swiftCommandEnvironment()
+      environment: swiftCommandEnvironment(),
+      additionalTags: plan.map {
+        [
+          "operation": $0.operation.rawValue,
+          "executionAuthority": $0.executionAuthority.rawValue,
+          "toolchainResolver": invocation.resolver,
+        ]
+      } ?? [:]
     )
   }
 
@@ -2597,6 +2769,9 @@ struct VaporizeCLI: AsyncParsableCommand {
     let arguments = try swiftTestArguments()
     try await validateSelectedSwiftCompatibility(arguments: arguments)
     let invocation = try swiftCommandInvocation(arguments: arguments)
+    guard let executionPlan = try coreExecutionPlan(for: .test) else {
+      preconditionFailure("test execution requires a core execution plan")
+    }
 
     let packagePath = try requirePackagePath()
     let product = self.product
@@ -2627,6 +2802,8 @@ struct VaporizeCLI: AsyncParsableCommand {
           "source": "vaporize-test",
           "canonicalSource": "vaporize-test",
           "tool": "swift",
+          "operation": executionPlan.operation.rawValue,
+          "executionAuthority": executionPlan.executionAuthority.rawValue,
           "toolchainResolver": invocation.resolver,
         ]
       ),
@@ -2636,15 +2813,32 @@ struct VaporizeCLI: AsyncParsableCommand {
     )
     try command.validateOrThrow()
 
-    let output = try await RunnerControllerFactory.run(command: command)
+    let output = try await measureCoreProcess {
+      try await RunnerControllerFactory.run(command: command)
+    }
     FileHandle.standardOutput.write(output.stdout)
     FileHandle.standardError.write(output.stderr)
 
     let ingestion = VaporizeTestIssueEventIngestor.ingest(from: issueSinkURL)
+    let timing = VaporizeCoreExecutionInstrumentation.current?.snapshot()
+      ?? VaporizeCoreExecutionTimingSnapshot(
+        commandElapsedNanoseconds: 0,
+        dependencyPreparationNanoseconds: 0,
+        dependencyRestoreNanoseconds: 0,
+        processExecutionNanoseconds: 0
+      )
     let receipt = VaporizeTestReceipt(
       packagePath: packagePath,
       product: product,
       arguments: arguments,
+      operation: executionPlan.operation.rawValue,
+      executionAuthority: executionPlan.executionAuthority.rawValue,
+      toolchainResolver: invocation.resolver,
+      alternateCommand: executionPlan.alternateCommand(invocation: CommandLine.arguments),
+      commandElapsedNanoseconds: timing.commandElapsedNanoseconds,
+      dependencyPreparationNanoseconds: timing.dependencyPreparationNanoseconds,
+      dependencyRestoreNanoseconds: timing.dependencyRestoreNanoseconds,
+      processExecutionNanoseconds: timing.processExecutionNanoseconds,
       requestId: requestId,
       runnerKind: "auto",
       succeeded: output.isSuccess,
@@ -2667,7 +2861,11 @@ struct VaporizeCLI: AsyncParsableCommand {
       issueIngestionError: ingestion.error,
       issueEvents: ingestion.events
     )
-    try emitReceiptIfRequested(receipt)
+    if let recorder = VaporizeCoreExecutionInstrumentation.current {
+      recorder.retain(receipt)
+    } else {
+      try emitReceiptIfRequested(receipt)
+    }
 
     guard ingestion.state != .malformed else {
       throw ValidationError(
@@ -2703,22 +2901,24 @@ struct VaporizeCLI: AsyncParsableCommand {
   private func runSwiftPackage(arguments: [String]) async throws {
     try await validateSelectedSwiftCompatibility(arguments: arguments)
     let invocation = try swiftCommandInvocation(arguments: arguments)
+    let plan = try mode.flatMap { try coreExecutionPlan(for: $0) }
     try await runExecutable(
       executable: invocation.executable,
       arguments: invocation.arguments,
       sourceTag: "vaporize-swift-package",
-      environment: swiftCommandEnvironment()
+      environment: swiftCommandEnvironment(),
+      additionalTags: plan.map {
+        [
+          "operation": $0.operation.rawValue,
+          "executionAuthority": $0.executionAuthority.rawValue,
+          "toolchainResolver": invocation.resolver,
+        ]
+      } ?? [:]
     )
   }
 
   func swiftCommandInvocation(arguments: [String]) throws -> ToolchainInvocation {
-    guard developerDirectory == nil || swiftToolchainSource != .defaultSwift else {
-      throw ValidationError(
-        "--developer-dir selects Xcode and requires `--swift-source xcode`; the default Swift selection is independent of Xcode."
-      )
-    }
-
-    switch swiftToolchainSource {
+    switch try selectedSwiftToolchainSource() {
     case .defaultSwift:
       return ToolchainInvocation(
         executable: .name("swift"),
@@ -2740,7 +2940,9 @@ struct VaporizeCLI: AsyncParsableCommand {
 
   func swiftCommandEnvironment() -> [String: String]? {
     #if os(macOS)
-      guard swiftToolchainSource == .xcode else { return nil }
+      guard let source = try? selectedSwiftToolchainSource(), source == .xcode else {
+        return nil
+      }
       return developerDirectoryEnvironment()
     #else
       return nil
@@ -2785,7 +2987,7 @@ struct VaporizeCLI: AsyncParsableCommand {
     }
     guard actualVersion >= requiredVersion else {
       throw ValidationError(
-        "Vaporize resolved Swift \(actualVersion) from \(invocation.resolver), but package at \(packagePath) requires Swift tools \(requiredVersion). Select a default Swift \(requiredVersion) or newer, or on macOS opt into `--swift-source xcode` independently."
+        "Vaporize resolved Swift \(actualVersion) from \(invocation.resolver), but package at \(packagePath) requires Swift tools \(requiredVersion). Select a pure Swift \(requiredVersion) or newer, or on macOS retry the same core operation with its adjacent `xcode` authority."
       )
     }
   }
@@ -2829,22 +3031,36 @@ struct VaporizeCLI: AsyncParsableCommand {
     executable: Executable,
     arguments: [String],
     sourceTag: String,
-    environment: [String: String]? = nil
+    environment: [String: String]? = nil,
+    additionalTags: [String: String] = [:]
   ) async throws {
     var shell = CommonShell()
+    var tags = ["source": sourceTag, "level": "L1"]
+    tags.merge(additionalTags) { _, new in new }
     shell.logOptions = .init(
       exposure: .summary,
-      tags: ["source": sourceTag, "level": "L1"]
+      tags: tags
     )
-    let output = try await shell.run(
-      host: .direct,
-      executable: executable,
-      arguments: arguments,
-      environment: environment,
-      runnerKind: .auto
-    )
+    let output = try await measureCoreProcess {
+      try await shell.run(
+        host: .direct,
+        executable: executable,
+        arguments: arguments,
+        environment: environment,
+        runnerKind: .auto
+      )
+    }
     guard !output.isEmpty else { return }
     print(output, terminator: output.hasSuffix("\n") ? "" : "\n")
+  }
+
+  private func measureCoreProcess<Result>(
+    _ operation: () async throws -> Result
+  ) async rethrows -> Result {
+    if let recorder = VaporizeCoreExecutionInstrumentation.current {
+      return try await recorder.measure(.processExecution, operation: operation)
+    }
+    return try await operation()
   }
 }
 

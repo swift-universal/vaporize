@@ -9,6 +9,7 @@ import Testing
 func parsesXcodeWorkspaceProductCacheOptions() throws {
   let command = try VaporizeCLI.parse([
     "install",
+    "xcode",
     "--artifact",
     "app",
     "--package-path",

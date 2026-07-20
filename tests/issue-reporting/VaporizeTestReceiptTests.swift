@@ -154,15 +154,19 @@ struct VaporizeTestReceiptTests {
     defer { try? FileManager.default.removeItem(at: outputDirectory) }
     let receiptURL = outputDirectory.appendingPathComponent("test.receipt.json")
 
-    var command = try VaporizeCLI.parse([
-      "test",
+    var commandArguments = ["test"]
+    #if os(macOS)
+      commandArguments.append("swift")
+    #endif
+    commandArguments += [
       "--package-path", fixturePackageURL.path,
       "--product", "fixture.cli@vaporize-tests.clia.sh",
       "--configuration", "debug",
       "--receipt-path", receiptURL.path,
       "--",
       "--filter", filter,
-    ])
+    ]
+    var command = try VaporizeCLI.parse(commandArguments)
     var failed = false
     do {
       try await command.run()
@@ -172,7 +176,30 @@ struct VaporizeTestReceiptTests {
     #expect(failed == expectsProcessFailure)
 
     let data = try Data(contentsOf: receiptURL)
-    return try JSONDecoder().decode(VaporizeTestReceipt.self, from: data)
+    let receipt = try JSONDecoder().decode(VaporizeTestReceipt.self, from: data)
+    #expect(receipt.schemaVersion == "0.3.0")
+    #expect(receipt.operation == "test")
+    #expect(receipt.executionAuthority == "swift")
+    #expect(receipt.toolchainResolver == "default-swift")
+    #expect(receipt.commandElapsedNanoseconds > 0)
+    #expect(receipt.processExecutionNanoseconds > 0)
+    #expect(
+      receipt.commandElapsedNanoseconds
+        >= receipt.dependencyPreparationNanoseconds
+    )
+    #expect(
+      receipt.commandElapsedNanoseconds
+        >= receipt.dependencyRestoreNanoseconds
+    )
+    #if os(macOS)
+      #expect(
+        receipt.alternateCommand
+          == "vaporize.cli@wrkstrm-core.clia.sh test xcode"
+      )
+    #else
+      #expect(receipt.alternateCommand == nil)
+    #endif
+    return receipt
   }
 
   private var fixturePackageURL: URL {
@@ -222,6 +249,14 @@ private struct ReceiptFixture {
       packagePath: "/workspace/fixture",
       product: "fixture.cli@vaporize-tests.clia.sh",
       arguments: ["test"],
+      operation: "test",
+      executionAuthority: "swift",
+      toolchainResolver: "default-swift",
+      alternateCommand: "vaporize.cli@wrkstrm-core.clia.sh test xcode",
+      commandElapsedNanoseconds: 400,
+      dependencyPreparationNanoseconds: 100,
+      dependencyRestoreNanoseconds: 50,
+      processExecutionNanoseconds: 250,
       requestId: "request-1",
       runnerKind: "auto",
       succeeded: succeeded,

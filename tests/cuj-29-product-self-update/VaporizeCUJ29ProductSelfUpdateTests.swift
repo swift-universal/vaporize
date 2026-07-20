@@ -124,13 +124,12 @@ func parsesSelfUpdateWithProduct() throws {
 
 @Test("CUJ-29 parses install-time self-update identity flags")
 func parsesInstallIdentityFlags() throws {
-  let command = try VaporizeCLI.parse([
-    "install",
+  let command = try VaporizeCLI.parse(coreInstallArguments([
     "--package-path", "/workspace/tool",
     "--product", "tool.cli@org.clia.sh",
     "--su-feed-url", "https://vapor-wares.pages.dev/appcast/tool.xml",
     "--su-public-ed-key", "AAAA",
-  ])
+  ]))
   let identity = try #require(try command.resolvedSelfUpdateIdentity())
   #expect(identity.feedURL.absoluteString == "https://vapor-wares.pages.dev/appcast/tool.xml")
   #expect(identity.publicEDKeyBase64 == "AAAA")
@@ -138,15 +137,15 @@ func parsesInstallIdentityFlags() throws {
 
 @Test("CUJ-29 a lone identity flag is a loud error; neither flag is a nil no-op")
 func identityFlagsAreBothOrNeither() throws {
-  let neither = try VaporizeCLI.parse([
-    "install", "--package-path", "/w", "--product", "t.cli@o.clia.sh",
-  ])
+  let neither = try VaporizeCLI.parse(coreInstallArguments([
+    "--package-path", "/w", "--product", "t.cli@o.clia.sh",
+  ]))
   #expect(try neither.resolvedSelfUpdateIdentity() == nil)
 
-  let lone = try VaporizeCLI.parse([
-    "install", "--package-path", "/w", "--product", "t.cli@o.clia.sh",
+  let lone = try VaporizeCLI.parse(coreInstallArguments([
+    "--package-path", "/w", "--product", "t.cli@o.clia.sh",
     "--su-feed-url", "https://example.com/appcast.xml",
-  ])
+  ]))
   #expect(throws: (any Error).self) {
     _ = try lone.resolvedSelfUpdateIdentity()
   }
@@ -315,4 +314,12 @@ func missingBinaryRefuses() async throws {
       binDirectory: fixture.binDirectory,
       log: { _ in })
   }
+}
+
+private func coreInstallArguments(_ arguments: [String]) -> [String] {
+  #if os(macOS)
+    ["install", "swift"] + arguments
+  #else
+    ["install"] + arguments
+  #endif
 }

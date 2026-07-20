@@ -28,6 +28,7 @@ public struct SwiftAppInstaller: Sendable {
     public var xcodeResultBundlePath: String?
     public var xcodeBuildSettings: [String]
     public var swiftPMConfigPath: String?
+    public var developerDirectory: String?
 
     public init(
       packagePath: String,
@@ -48,7 +49,8 @@ public struct SwiftAppInstaller: Sendable {
       xcodeSDK: String? = nil,
       xcodeResultBundlePath: String? = nil,
       xcodeBuildSettings: [String] = [],
-      swiftPMConfigPath: String? = nil
+      swiftPMConfigPath: String? = nil,
+      developerDirectory: String? = nil
     ) {
       self.packagePath = packagePath
       self.product = product
@@ -69,6 +71,7 @@ public struct SwiftAppInstaller: Sendable {
       self.xcodeResultBundlePath = xcodeResultBundlePath
       self.xcodeBuildSettings = xcodeBuildSettings
       self.swiftPMConfigPath = swiftPMConfigPath
+      self.developerDirectory = developerDirectory
     }
 
     var swiftPMConfigurationArguments: [String] {
@@ -124,6 +127,7 @@ public struct SwiftAppInstaller: Sendable {
         host: .direct,
         executable: .name("xcodebuild"),
         arguments: invocation.arguments,
+        environment: request.developerDirectoryEnvironment,
         runnerKind: .auto
       )
     } else {
@@ -141,6 +145,7 @@ public struct SwiftAppInstaller: Sendable {
           "--product", request.product,
           "--build-system", "xcode"  // ensures app bundle generation on Apple platforms
         ],
+        environment: request.developerDirectoryEnvironment,
         runnerKind: .auto
       )
     }
@@ -313,6 +318,11 @@ extension SwiftAppInstaller.Request {
       || xcodeSDK != nil
       || xcodeResultBundlePath != nil
       || !xcodeBuildSettings.isEmpty
+  }
+
+  var developerDirectoryEnvironment: [String: String]? {
+    guard let developerDirectory, !developerDirectory.isEmpty else { return nil }
+    return ["DEVELOPER_DIR": developerDirectory]
   }
 
   func xcodeBuildInvocation() throws -> SwiftAppInstaller.XcodeBuildInvocation {
