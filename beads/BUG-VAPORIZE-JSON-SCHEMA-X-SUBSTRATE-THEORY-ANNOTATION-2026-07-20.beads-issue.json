@@ -1,0 +1,44 @@
+{
+  "BeadsIssue": "0.1.0",
+  "schemaVersion": "0.1.0",
+  "id": "BUG-VAPORIZE-JSON-SCHEMA-X-SUBSTRATE-THEORY-ANNOTATION-2026-07-20",
+  "title": "validate-json-schema rejects the LinkRef x-substrate-theory annotation",
+  "createdAt": "2026-07-20T09:41:04Z",
+  "createdBy": "codex",
+  "issueType": "bug",
+  "status": "open",
+  "priority": 2,
+  "labels": [
+    "vaporize",
+    "json-schema",
+    "custom-annotation",
+    "link-ref-v0.0.5",
+    "capture-step-3-5"
+  ],
+  "description": "The Root/fleet workflow instance initially validated through Vaporize. After the live LinkRef v0.0.5 schema gained x-substrate-theory, the same instance revalidation stopped at /beadTrackingRefs/0 with unsupported schema feature. x-substrate-theory is substrate metadata, not an assertion keyword. Vaporize needs an explicit annotation-extension policy that preserves loud refusal for unknown behavioral constraints while allowing declared non-assertive x- annotations.",
+  "acceptanceCriteria": [
+    "A schema containing the declared x-substrate-theory annotation validates instances without treating the annotation as an unsupported assertion.",
+    "Vaporize preserves the annotation in diagnostics or schema provenance when useful but does not let it change the validation verdict.",
+    "A counterexample with a genuinely unsupported assertion keyword still refuses loudly.",
+    "The Root/fleet workflow instance validates against role-workflow-schemas v0.0.8 and the current LinkRef v0.0.5 schema.",
+    "Tests distinguish supported custom annotations from unsupported validation behavior."
+  ],
+  "relatedTypedRecords": [
+    {
+      "LinkRefModel": "0.5.0",
+      "sv": "0.5.0",
+      "t": "Root and fleet sync-context capture instance",
+      "m": [
+        { "lane": "kind", "v": "workflow-instance" },
+        { "lane": "slug", "v": "assistant-sync-context-materialization-2026-07-20-root-fleet-conformance" }
+      ],
+      "tg": [
+        {
+          "k": "rp",
+          "rt": "mono",
+          "v": "private/universal/substrate/collectives/spaces-universal/private/universal/kura-spaces/workflows/assistant-sync-context-materialization/v0.2.0/assistant-sync-context-materialization-2026-07-20-root-fleet-conformance.workflow-instance.su.json"
+        }
+      ]
+    }
+  ]
+}
