@@ -170,6 +170,11 @@ struct VaporizeCLI: AsyncParsableCommand {
   @Option(name: .customLong("package-path"), help: "Path to the Swift package.")
   var packagePath: String?
 
+  @Option(
+    name: .customLong("swiftpm-config-path"),
+    help: "SwiftPM configuration directory. When omitted, Vaporize discovers the substrate maintainer authority registry and materializes portable local mirrors automatically.")
+  var swiftPMConfigurationPathOverride: String?
+
   @Option(name: .customLong("product"), help: "Product name (binary or app bundle).")
   var product: String?
 
@@ -620,7 +625,8 @@ struct VaporizeCLI: AsyncParsableCommand {
       installerVersion: Self.vaporizeVersion,
       installerBuild: Self.buildIdentifier,
       swiftToolchainSource: swiftToolchainSource,
-      developerDirectory: developerDirectory
+      developerDirectory: developerDirectory,
+      swiftPMConfigPath: try resolvedSwiftPMConfigurationPath(packagePath: packagePath)
     )
     try await SwiftCLIInstaller(request: request).run()
     try publishInstalledCLI(toDomain: updateDomain, product: product)
@@ -724,6 +730,7 @@ struct VaporizeCLI: AsyncParsableCommand {
       installerBuild: Self.buildIdentifier,
       swiftToolchainSource: swiftToolchainSource,
       developerDirectory: developerDirectory,
+      swiftPMConfigPath: try resolvedSwiftPMConfigurationPath(packagePath: packagePath),
       selfUpdateIdentity: try resolvedSelfUpdateIdentity()
     )
     try await SwiftCLIInstaller(request: request).run()
@@ -816,7 +823,8 @@ struct VaporizeCLI: AsyncParsableCommand {
       xcodeDestinations: xcodeDestinations,
       xcodeSDK: xcodeSDK,
       xcodeResultBundlePath: xcodeResultBundlePath,
-      xcodeBuildSettings: xcodeBuildSettings
+      xcodeBuildSettings: xcodeBuildSettings,
+      swiftPMConfigPath: try resolvedSwiftPMConfigurationPath(packagePath: packagePath)
     )
     try await SwiftAppInstaller(request: request).run()
   }
@@ -831,7 +839,8 @@ struct VaporizeCLI: AsyncParsableCommand {
       configuration: .init(rawValue: configuration.rawValue) ?? .release,
       forceReinstall: false,
       swiftToolchainSource: swiftToolchainSource,
-      developerDirectory: developerDirectory
+      developerDirectory: developerDirectory,
+      swiftPMConfigPath: try resolvedSwiftPMConfigurationPath(packagePath: packagePath)
     )
     try await SwiftCLIInstaller(request: request).uninstall()
     try removePublishedCLI(fromDomain: uninstallDomain, product: product)
@@ -867,7 +876,8 @@ struct VaporizeCLI: AsyncParsableCommand {
       xcodeDestinations: xcodeDestinations,
       xcodeSDK: xcodeSDK,
       xcodeResultBundlePath: xcodeResultBundlePath,
-      xcodeBuildSettings: xcodeBuildSettings
+      xcodeBuildSettings: xcodeBuildSettings,
+      swiftPMConfigPath: try resolvedSwiftPMConfigurationPath(packagePath: packagePath)
     )
     try await SwiftAppInstaller(request: request).buildOnly()
   }
@@ -1137,8 +1147,7 @@ struct VaporizeCLI: AsyncParsableCommand {
   func swiftBuildArguments() throws -> [String] {
     let packagePath = try requirePackagePath()
     let product = try requireCLIProduct()
-    return [
-      "build",
+    return ["build"] + (try swiftPMConfigurationArguments(packagePath: packagePath)) + [
       "--package-path", packagePath,
       "-c", configuration.rawValue,
       "--product", product,
@@ -1147,13 +1156,26 @@ struct VaporizeCLI: AsyncParsableCommand {
 
   func swiftTestArguments() throws -> [String] {
     let packagePath = try requirePackagePath()
-    var arguments = [
-      "test",
+    var arguments = ["test"] + (try swiftPMConfigurationArguments(packagePath: packagePath)) + [
       "--package-path", packagePath,
       "-c", configuration.rawValue,
     ]
     arguments.append(contentsOf: forwardedArguments)
     return arguments
+  }
+
+  private func swiftPMConfigurationArguments(packagePath: String) throws -> [String] {
+    guard let path = try resolvedSwiftPMConfigurationPath(packagePath: packagePath) else {
+      return []
+    }
+    return ["--config-path", path]
+  }
+
+  private func resolvedSwiftPMConfigurationPath(packagePath: String) throws -> String? {
+    try MaintainerSwiftPMConfiguration.resolve(
+      explicitPath: swiftPMConfigurationPathOverride,
+      packagePath: packagePath
+    )
   }
 
   func developerDirectoryEnvironment() -> [String: String]? {

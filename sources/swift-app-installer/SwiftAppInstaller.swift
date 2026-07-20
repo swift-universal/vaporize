@@ -27,6 +27,7 @@ public struct SwiftAppInstaller: Sendable {
     public var xcodeSDK: String?
     public var xcodeResultBundlePath: String?
     public var xcodeBuildSettings: [String]
+    public var swiftPMConfigPath: String?
 
     public init(
       packagePath: String,
@@ -46,7 +47,8 @@ public struct SwiftAppInstaller: Sendable {
       xcodeDestinations: [String] = [],
       xcodeSDK: String? = nil,
       xcodeResultBundlePath: String? = nil,
-      xcodeBuildSettings: [String] = []
+      xcodeBuildSettings: [String] = [],
+      swiftPMConfigPath: String? = nil
     ) {
       self.packagePath = packagePath
       self.product = product
@@ -66,6 +68,12 @@ public struct SwiftAppInstaller: Sendable {
       self.xcodeSDK = xcodeSDK
       self.xcodeResultBundlePath = xcodeResultBundlePath
       self.xcodeBuildSettings = xcodeBuildSettings
+      self.swiftPMConfigPath = swiftPMConfigPath
+    }
+
+    var swiftPMConfigurationArguments: [String] {
+      guard let swiftPMConfigPath, !swiftPMConfigPath.isEmpty else { return [] }
+      return ["--config-path", swiftPMConfigPath]
     }
   }
 
@@ -127,8 +135,7 @@ public struct SwiftAppInstaller: Sendable {
       _ = try await localShell.run(
         host: .direct,
         executable: .name("xcrun"),
-        arguments: ["swift"] + [
-          "build",
+        arguments: ["swift", "build"] + request.swiftPMConfigurationArguments + [
           "--package-path", request.packagePath,
           "-c", request.configuration.rawValue,
           "--product", request.product,
