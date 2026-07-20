@@ -103,7 +103,7 @@
       "No actual Linux Vaporize binary was executed in this macOS proof session; non-macOS collapse is policy-tested through the shared plan.",
       "The measurements do not prove Vaporize or either authority is generally faster than Swift, Xcode, or another build tool.",
       "The failed full-graph Xcode diagnostic is not a green package-suite receipt.",
-      "The installed runtime was not refreshed: install swift is blocked by the package's separate approved-copy migration, including 133 pre-existing source-consumption findings and two new validation messages that require a catalog workflow because no matching accessor exists.",
+      "The installed runtime was not refreshed: install swift is blocked by an approved-copy source-consumption report containing 145 total findings (1 I18N001 and 144 I18N002). Two I18N002 findings are the new execution-plan validation messages and require a catalog workflow because no matching accessor exists.",
       "Human launch approval is not granted by this receipt."
     ]
   },
