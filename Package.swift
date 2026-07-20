@@ -67,6 +67,10 @@ let swiftIssueReportingDependency = Package.Dependency.package(
 let translateSourceGateDependency = Package.Dependency.package(
   path: "../../../../../i18n-universal/private/universal/domain/catalogs/spm/TranslateCatalogCore"
 )
+let swiftPackageOutputPolicyDependency = Package.Dependency.package(
+  name: "swift-package-output-policy",
+  path: "../../../../../swift-universal/private/universal/domain/build/spm/swift-package-output-policy"
+)
 
 let package = Package(
   name: "vaporize@wrkstrm-core-cli",
@@ -91,6 +95,7 @@ let package = Package(
     pklSwiftDependency,
     swiftIssueReportingDependency,
     translateSourceGateDependency,
+    swiftPackageOutputPolicyDependency,
     .package(url: "https://github.com/apple/swift-argument-parser", from: "1.6.0"),
     .package(url: "https://github.com/jpsim/Yams", from: "5.1.0"),
   ],
@@ -163,7 +168,10 @@ let package = Package(
         "VaporizeCLI",
         .product(name: "ArgumentParser", package: "swift-argument-parser"),
       ],
-      path: "tests/cuj-01-swiftpm-cli"
+      path: "tests/cuj-01-swiftpm-cli",
+      plugins: [
+        .plugin(name: "CommonLogOutputPolicyPlugin", package: "swift-package-output-policy"),
+      ]
     ),
     .testTarget(
       name: "VaporizeCUJ02MacAppTests",

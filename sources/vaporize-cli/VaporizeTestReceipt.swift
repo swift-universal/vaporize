@@ -93,7 +93,9 @@ struct VaporizeTestReceipt: Codable, Equatable, Sendable {
   var schemaVersion = "0.1.0"
   var receiptKind = "vaporize-test-execution"
   var packagePath: String
-  var product: String
+  /// Present when the test run names an installable product. Library-only
+  /// package tests are intentionally productless.
+  var product: String?
   var arguments: [String]
   var requestId: String
   var runnerKind: String
@@ -115,7 +117,7 @@ struct VaporizeTestReceipt: Codable, Equatable, Sendable {
 
   init(
     packagePath: String,
-    product: String,
+    product: String?,
     arguments: [String],
     requestId: String,
     runnerKind: String,

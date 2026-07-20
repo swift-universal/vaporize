@@ -528,7 +528,15 @@ struct VaporizeCLI: AsyncParsableCommand {
     let selectedProduct: String
 
     switch mode {
-    case .install, .build, .test, .run:
+    case .install, .build, .run:
+      selectedArtifact = artifact
+      selectedPackagePath = try requirePackagePath()
+      selectedProduct = artifact == .cli ? try requireCLIProduct() : try requireProduct()
+    case .test:
+      // A SwiftPM test run may exercise a library-only schema package. It has
+      // no installable CLI product, so there is no product source gate to run.
+      // When a product is supplied, retain the normal executable gate.
+      guard product?.isEmpty == false else { return }
       selectedArtifact = artifact
       selectedPackagePath = try requirePackagePath()
       selectedProduct = artifact == .cli ? try requireCLIProduct() : try requireProduct()
@@ -570,7 +578,13 @@ struct VaporizeCLI: AsyncParsableCommand {
     let selectedProduct: String
 
     switch mode {
-    case .install, .build, .test, .run:
+    case .install, .build, .run:
+      selectedPackagePath = try requirePackagePath()
+      selectedProduct = artifact == .cli ? try requireCLIProduct() : try requireProduct()
+    case .test:
+      // Library-only package tests do not name or ship a SwiftUI surface.
+      // Preserve the import gate whenever a product is explicitly supplied.
+      guard product?.isEmpty == false else { return }
       selectedPackagePath = try requirePackagePath()
       selectedProduct = artifact == .cli ? try requireCLIProduct() : try requireProduct()
     case .cli:
@@ -2584,7 +2598,7 @@ struct VaporizeCLI: AsyncParsableCommand {
     let invocation = try swiftCommandInvocation(arguments: arguments)
 
     let packagePath = try requirePackagePath()
-    let product = try requireCLIProduct()
+    let product = self.product
     let requestId = "vaporize-test-\(UUID().uuidString)"
     let issueSinkURL = testIssueSinkURL(requestId: requestId)
     let preservesIssueSink = receiptPath != nil
