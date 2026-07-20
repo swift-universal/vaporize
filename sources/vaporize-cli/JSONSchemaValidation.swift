@@ -7,7 +7,7 @@ import Foundation
 /// Supported vocabulary: `type`, `properties`, `required`,
 /// `additionalProperties`, `const`, `enum`, `allOf`, `anyOf`, `oneOf`,
 /// `if`/`then`/`else`, `items`, `minItems`, `maxItems`, `uniqueItems`, `minProperties`,
-/// `minLength`, `pattern`, `format` (`date-time`), `minimum`, `maximum`, `$defs`,
+/// `minLength`, `pattern`, `format` (`date-time`), `minimum`, `maximum`, `contains`, `$defs`,
 /// and `$ref` for internal pointers (`#/$defs/...`) plus local relative-file
 /// refs resolved against the referring schema file's directory. Remote
 /// `http(s)` refs and unimplemented format names are explicit non-goals and
@@ -209,7 +209,7 @@ enum JSONSchemaValidation {
     private static let handledKeywords: Set<String> = [
       "$ref", "type", "properties", "required", "additionalProperties",
       "const", "enum", "allOf", "anyOf", "oneOf", "if", "then", "else",
-      "items", "minItems", "maxItems", "uniqueItems", "minProperties", "minLength", "pattern",
+      "items", "minItems", "maxItems", "uniqueItems", "contains", "minProperties", "minLength", "pattern",
       "format", "minimum", "maximum",
     ]
     private static let ignoredAnnotationKeywords: Set<String> = [
@@ -506,6 +506,28 @@ enum JSONSchemaValidation {
           {
             diagnostics.append(
               "\(pointer): uniqueItems — items at indexes \(duplicateIndexes.first) and \(duplicateIndexes.second) are deeply equal"
+            )
+            valid = false
+          }
+        }
+
+        if let containsKeyword = keywords["contains"] {
+          var matchingIndexes: [Int] = []
+          for (index, element) in elements.enumerated() {
+            var candidateDiagnostics: [String] = []
+            if try validate(
+              schema: containsKeyword,
+              instance: element,
+              context: context,
+              instancePath: "\(instancePath)/\(index)",
+              diagnostics: &candidateDiagnostics
+            ) {
+              matchingIndexes.append(index)
+            }
+          }
+          if matchingIndexes.isEmpty {
+            diagnostics.append(
+              "\(pointer): contains — expected at least one array item to match the contained schema"
             )
             valid = false
           }

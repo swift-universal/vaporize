@@ -85,6 +85,18 @@ private func fixturePath(_ name: String) throws -> String {
   try workstreamSchemaFamilyRoot().appendingPathComponent("fixtures/\(name)").path
 }
 
+private func spawnRequestSchemaPath() throws -> String {
+  try monoRoot().appendingPathComponent(
+    "private/universal/substrate/collectives/schema-universal/private/universal/domain/platforms/schema-families/spawn-vaporware-packet-schemas/v0.0.5/json/spawn-vaporware-packet-schemas-v000-000-005/schemas/spawn-request-packet/spawn-request-packet.schema.json"
+  ).path
+}
+
+private func ontologyInspectorSpawnRequestPath() throws -> String {
+  try monoRoot().appendingPathComponent(
+    "private/universal/substrate/collectives/wrkstrm/private/universal/kura-spaces/workstream/formula/spawn-vaporware/instances/schema-universal-ontology-inspector.spawn-request-packet.json"
+  ).path
+}
+
 private func validateSchemaLiteral(
   _ schema: String,
   fixture: String
@@ -334,6 +346,24 @@ func schemaValidationEnforcesArrayCardinality() throws {
   #expect(tooFew.diagnostics.contains { $0.contains("minItems") })
   #expect(!tooMany.valid)
   #expect(tooMany.diagnostics.contains { $0.contains("maxItems") })
+}
+
+@Test("CUJ-06 schema validation enforces contains and accepts the owned Spawn request")
+func schemaValidationEnforcesContains() throws {
+  let schema = #"{"type":"array","contains":{"const":"SwiftUI"}}"#
+  let matching = try validateSchemaLiteral(schema, fixture: #"["Foundation","SwiftUI"]"#)
+  let missing = try validateSchemaLiteral(schema, fixture: #"["Foundation","Darwin"]"#)
+
+  #expect(matching.valid)
+  #expect(!missing.valid)
+  #expect(missing.diagnostics.contains { $0.contains("contains") })
+
+  let spawnRequest = try JSONSchemaValidation.validate(
+    schemaPath: try spawnRequestSchemaPath(),
+    fixturePath: try ontologyInspectorSpawnRequestPath()
+  )
+  #expect(spawnRequest.valid)
+  #expect(spawnRequest.diagnostics.isEmpty)
 }
 
 @Test("CUJ-06 schema validation accepts only RFC 3339 date-time strings")

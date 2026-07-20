@@ -79,6 +79,17 @@
         "at": "2026-07-05",
         "by": "claude",
         "note": "Release evidence: cuj-test-coverage.json/.md updated (VaporizeCUJ06JSONValidationTests 3 -> 8, currentExecutableSwiftTestCount 155 -> 160) and the CUJ-09 counter expectation updated to 160; the CUJ-09 coverage-contract test passes. NOT done yet: release-gates/release-doctor enforcement naming the schema-backed fixture validation obligation (acceptance criterion 8) is still pending, and the prior validate-json multiple --path bug remains open in its own bead. Pre-existing unrelated failure noted honestly: CUJ-09 'product definition contract precedes build work' fails at HEAD because feature-catalog.md no longer contains 'Xcode-selected Swift toolchain' (removed by commit a223620d in the FR-VAPORIZE-DOCC-TOOLCHAIN-BRIDGE-2026-07-05 workstream); not caused by and not force-fixed in this slice."
+      },
+      {
+        "at": "2026-07-20",
+        "by": "codex",
+        "note": "Attached the Schema Universal Ontology Inspector Spawn-request correction to this existing governed validation cohort. JSONSchemaValidation now enforces array contains. The current-source Vaporize executable accepted the owned v0.0.5 Spawn request, including its SwiftUI and pixel-spec contains commitments, and rejected an independent nonmatching array with the contains diagnostic. CUJ-06 gained a durable contains pass/fail case. The focused SwiftPM test target was invoked but did not reach the test because SwiftPM materialized the package-wide test-bundle graph, exhausted the local volume, and hit an unrelated Xcode code-signing subsystem error; no test-pass claim is made from that attempt.",
+        "evidence": [
+          "xcrun swift build --scratch-path <isolated-cache> --product vaporize.cli@wrkstrm-core.clia.sh: pass",
+          "vaporize.cli@wrkstrm-core.clia.sh validate-json-schema --schema <spawn-request-v0.0.5-schema> --fixture <ontology-inspector-spawn-request> --expect pass: pass",
+          "vaporize.cli@wrkstrm-core.clia.sh validate-json-schema --schema <contains-const-SwiftUI-schema> --fixture <nonmatching-array> --expect pass: expected mismatch with '/: contains — expected at least one array item to match the contained schema'",
+          "xcrun swiftc -parse tests/cuj-06-json-validation/vaporize-cuj-06-json-validation-tests.swift: pass"
+        ]
       }
     ]
   },
