@@ -125,6 +125,7 @@ struct VaporizeCLI: AsyncParsableCommand {
     case releaseDoctor = "release-doctor"
     case inventory
     case cujAudit = "cuj-audit"
+    case maintainerDependencies = "maintainer-dependencies"
 
     /// Substrate package-graph subfunction. Forwards remaining arguments to
     /// `package-graph@wrkstrm.cli` (a sibling SPM binary at
@@ -158,7 +159,7 @@ struct VaporizeCLI: AsyncParsableCommand {
   }
 
   @Argument(
-    help: "Mode: install, uninstall, build, test, run, pass, use, toolchain-selection, setup, status, warehouse, validate-json, validate-json-schema, inspect-project-yml, inspect-target-features, compare-project-yml-pkl, import-project-yml, upgrade-project-yml-to-pkl, generate-project-yml, generate-xcodeproj, generate-sparkle-config, list-targets, list-schemes, release-doctor, inventory, cuj-audit, domains, self-update, fleet-status, graph (forwards to package-graph@wrkstrm.cli), or the deprecated cli and app compatibility spellings.")
+    help: "Mode: install, uninstall, build, test, run, pass, use, toolchain-selection, setup, status, warehouse, validate-json, validate-json-schema, inspect-project-yml, inspect-target-features, compare-project-yml-pkl, import-project-yml, upgrade-project-yml-to-pkl, generate-project-yml, generate-xcodeproj, generate-sparkle-config, list-targets, list-schemes, release-doctor, inventory, cuj-audit, maintainer-dependencies, domains, self-update, fleet-status, graph (forwards to package-graph@wrkstrm.cli), or the deprecated cli and app compatibility spellings.")
   var mode: Mode?
 
   @Flag(help: "Prints the tool name, version, and build metadata and exits.")
@@ -427,15 +428,27 @@ struct VaporizeCLI: AsyncParsableCommand {
 
     switch mode {
     case .install:
-      try await installArtifact(launchApp: launch)
+      try await withMaintainerDependencyAuthority(packagePath: try requirePackagePath()) {
+        try await installArtifact(launchApp: launch)
+      }
     case .uninstall:
       try await uninstallArtifact()
     case .build:
-      try await buildArtifact()
+      try await withMaintainerDependencyAuthority(packagePath: try requirePackagePath()) {
+        try await buildArtifact()
+      }
     case .test:
-      try await testArtifact()
+      try await withMaintainerDependencyAuthority(packagePath: try requirePackagePath()) {
+        try await testArtifact()
+      }
     case .run:
-      try await runArtifact()
+      if skipInstall {
+        try await runArtifact()
+      } else {
+        try await withMaintainerDependencyAuthority(packagePath: try requirePackagePath()) {
+          try await runArtifact()
+        }
+      }
     case .pass:
       try await passThrough()
     case .use:
@@ -478,18 +491,32 @@ struct VaporizeCLI: AsyncParsableCommand {
       try await runOwnedSurfaceInventory()
     case .cujAudit:
       try await runCUJPortfolioAudit()
+    case .maintainerDependencies:
+      try await prepareMaintainerDependencies()
     case .domains:
       try await runDomains()
     case .selfUpdate:
-      try await selfUpdate()
+      if product != nil {
+        try await selfUpdate()
+      } else {
+        try await withMaintainerDependencyAuthority(
+          packagePath: try requireSelfUpdatePackagePath()
+        ) {
+          try await selfUpdate()
+        }
+      }
     case .fleetStatus:
       try await fleetStatus()
     case .graph:
       try await runGraph()
     case .cli:
-      try await installCLI()
+      try await withMaintainerDependencyAuthority(packagePath: try requirePackagePath()) {
+        try await installCLI()
+      }
     case .app:
-      try await installApp(launchApp: launch)
+      try await withMaintainerDependencyAuthority(packagePath: try requirePackagePath()) {
+        try await installApp(launchApp: launch)
+      }
     }
   }
 
@@ -1178,6 +1205,77 @@ struct VaporizeCLI: AsyncParsableCommand {
     )
   }
 
+  private func withMaintainerDependencyAuthority<Result>(
+    packagePath: String,
+    operation: () async throws -> Result
+  ) async throws -> Result {
+    let dependencies = try MaintainerSwiftPMConfiguration.editableDependencies(
+      packagePath: packagePath
+    )
+    guard !dependencies.isEmpty else {
+      return try await operation()
+    }
+
+    let snapshot = try PackageResolutionSnapshot.capture(packagePath: packagePath)
+    do {
+      let configurationArguments = try swiftPMConfigurationArguments(
+        packagePath: packagePath
+      )
+      for dependency in dependencies where dependency.requiresEdit {
+        try await runSwiftPackage(
+          arguments: ["package"] + configurationArguments + [
+            "--package-path", packagePath,
+            "edit",
+            "--path", dependency.checkoutPath,
+            dependency.identity,
+          ]
+        )
+      }
+      let result = try await operation()
+      try snapshot.restore()
+      return result
+    } catch {
+      let operationError = error
+      do {
+        try snapshot.restore()
+      } catch {
+        throw ValidationError(
+          "Vaporize could not restore Package.resolved at \(snapshot.url.path) after maintainer authority preparation: \(error.localizedDescription)"
+        )
+      }
+      throw operationError
+    }
+  }
+
+  private func prepareMaintainerDependencies() async throws {
+    let packagePath = try requirePackagePath()
+    let before = try MaintainerSwiftPMConfiguration.editableDependencies(
+      packagePath: packagePath
+    )
+    let started = DispatchTime.now().uptimeNanoseconds
+    try await withMaintainerDependencyAuthority(packagePath: packagePath) {}
+    let elapsed = DispatchTime.now().uptimeNanoseconds &- started
+    let active = try MaintainerSwiftPMConfiguration.editableDependencies(
+      packagePath: packagePath
+    )
+    let receipt = MaintainerDependencyAuthorityReceipt(
+      packagePath: absoluteURL(for: packagePath).standardizedFileURL.path,
+      swiftPMConfigurationPath: try resolvedSwiftPMConfigurationPath(
+        packagePath: packagePath
+      ),
+      preparedDependencyCount: before.filter(\.requiresEdit).count,
+      activeDependencies: active.map {
+        .init(identity: $0.identity, checkoutPath: $0.checkoutPath)
+      },
+      packageResolutionRestored: true,
+      elapsedNanoseconds: elapsed
+    )
+    let encoder = JSONEncoder()
+    encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
+    FileHandle.standardOutput.write(try encoder.encode(receipt))
+    FileHandle.standardOutput.write(Data("\n".utf8))
+  }
+
   func developerDirectoryEnvironment() -> [String: String]? {
     guard let developerDirectory, !developerDirectory.isEmpty else { return nil }
     return ["DEVELOPER_DIR": developerDirectory]
@@ -1708,7 +1806,9 @@ struct VaporizeCLI: AsyncParsableCommand {
       "package-graph@wrkstrm.cli",
     ]
     swiftArgs.append(contentsOf: forwardedArguments)
-    try await runSwift(arguments: swiftArgs)
+    try await withMaintainerDependencyAuthority(packagePath: packageGraphPath) {
+      try await runSwift(arguments: swiftArgs)
+    }
   }
 
   /// Resolve where the substrate-canonical `package-graph@wrkstrm.cli` SPM
