@@ -13,11 +13,7 @@ let commonShellDependency: Package.Dependency = if ProcessInfo.useLocalDeps {
     traits: []
   )
 } else {
-  .package(
-    url: "https://github.com/swift-universal/common-shell.git",
-    from: "0.0.1",
-    traits: []
-  )
+  .package(name: "common-shell", path: "../../../../../swift-universal/private/universal/domain/dispatch/spm/common-shell")
 }
 let commonProcessDependency: Package.Dependency = if ProcessInfo.useLocalDeps {
   .package(
@@ -25,11 +21,7 @@ let commonProcessDependency: Package.Dependency = if ProcessInfo.useLocalDeps {
     traits: []
   )
 } else {
-  .package(
-    url: "https://github.com/swift-universal/common-process.git",
-    from: "0.3.5",
-    traits: []
-  )
+  .package(name: "common-process", path: "../../../../../swift-universal/private/universal/domain/dispatch/spm/common-process")
 }
 // swift-cli-installer LIFTED 2026-06-14 from sources/swift-cli-installer to
 // swift-universal/private/universal/domain/tooling/spm/swift-cli-installer/
