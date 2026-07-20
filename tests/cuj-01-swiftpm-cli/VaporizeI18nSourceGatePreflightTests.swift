@@ -16,14 +16,14 @@ func sourceGateImprintFailurePreservesReportReceipt() throws {
     withIntermediateDirectories: true
   )
   try """
-    import Foundation
+  import Foundation
 
-    print("Hello")
-    """.write(
-      to: root.appendingPathComponent("Sources/App/main.swift"),
-      atomically: true,
-      encoding: .utf8
-    )
+  print("Hello")
+  """.write(
+    to: root.appendingPathComponent("Sources/App/main.swift"),
+    atomically: true,
+    encoding: .utf8
+  )
 
   let beadsDirectory = root.appendingPathComponent("beads", isDirectory: true)
   try FileManager.default.createDirectory(
@@ -72,14 +72,14 @@ func sourceGateBlockedErrorIsAssistantActionable() throws {
     withIntermediateDirectories: true
   )
   try """
-    import Foundation
+  import Foundation
 
-    print("Hello")
-    """.write(
-      to: root.appendingPathComponent("Sources/App/main.swift"),
-      atomically: true,
-      encoding: .utf8
-    )
+  print("Hello")
+  """.write(
+    to: root.appendingPathComponent("Sources/App/main.swift"),
+    atomically: true,
+    encoding: .utf8
+  )
 
   do {
     _ = try VaporizeI18nSourceGate.enforce(
@@ -161,6 +161,8 @@ func sourceGateReusesEstablishedCompleteIdentity() throws {
     .sorted()
 
   var secondTarget: String?
+  var secondObservedCount: Int?
+  var secondRenderedError: String?
   do {
     _ = try VaporizeI18nSourceGate.enforce(
       productDirectory: root,
@@ -169,7 +171,11 @@ func sourceGateReusesEstablishedCompleteIdentity() throws {
       enforcement: .release
     )
   } catch let error as VaporizeI18nSourceGateError {
-    if case .blocked(let report, _, _, _) = error { secondTarget = report.targetName }
+    if case .blocked(let report, let receipt, _, _) = error {
+      secondTarget = report.targetName
+      secondObservedCount = receipt.summary.observed
+      secondRenderedError = error.localizedDescription
+    }
   }
   let secondIssueNames = try FileManager.default.contentsOfDirectory(
     at: beads,
@@ -182,4 +188,14 @@ func sourceGateReusesEstablishedCompleteIdentity() throws {
   #expect(secondTarget == "EstablishedProduct")
   #expect(!firstIssueNames.isEmpty)
   #expect(secondIssueNames == firstIssueNames)
+  #expect(secondObservedCount == firstIssueNames.count)
+  #expect(secondRenderedError?.contains("Signal: PERSISTING") == true)
+  #expect(secondRenderedError?.contains("observed 2 times") == true)
+
+  for issueURL in secondIssueNames.map({ beads.appendingPathComponent($0) }) {
+    let data = try Data(contentsOf: issueURL)
+    let issue = try #require(JSONSerialization.jsonObject(with: data) as? [String: Any])
+    #expect(issue["observationCount"] as? Int == 2)
+    #expect(issue["recurrenceCount"] as? Int == 0)
+  }
 }
