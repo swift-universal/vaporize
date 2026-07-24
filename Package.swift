@@ -23,6 +23,10 @@ let commonProcessDependency: Package.Dependency = if ProcessInfo.useLocalDeps {
 } else {
   .package(name: "common-process", path: "../../../../../swift-universal/private/universal/domain/dispatch/spm/common-process")
 }
+let commonLogDependency = Package.Dependency.package(
+  name: "common-log",
+  path: "../../../../../swift-universal/private/universal/spm/domain/system/common-log"
+)
 // swift-cli-installer LIFTED 2026-06-14 from sources/swift-cli-installer to
 // swift-universal/private/universal/domain/tooling/spm/swift-cli-installer/
 // per CEO decision + [[no-code-gets-left-behind]] doctrine.
@@ -47,7 +51,7 @@ let swiftCLIUpdaterDependency = localOrRemote(
   from: "0.0.1"
 )
 let swiftlyDependency = localOrRemote(
-  path: "../../../../../../maintainers/swiftlang/public/universal/tooling/swift/swiftly",
+  path: "../../../../../../upstreams/swiftlang/public/universal/tooling/swift/swiftly",
   url: "https://github.com/swiftlang/swiftly.git",
   from: "1.1.3"
 )
@@ -90,6 +94,7 @@ let package = Package(
     .executable(name: "vaporize.cli@wrkstrm-core.clia.sh", targets: ["VaporizeCLI"]),
   ],
   dependencies: [
+    commonLogDependency,
     commonProcessDependency,
     commonShellDependency,
     swiftCLIInstallerDependency,
@@ -132,6 +137,7 @@ let package = Package(
       dependencies: [
         "AppleProjectSpecCore",
         "VaporizeIssueReporting",
+        .product(name: "CommonLog", package: "common-log"),
         .product(name: "VaporizeJSONSchemaValidation", package: "vaporize-json-schema-validation"),
         .product(name: "SwiftCLIInstaller", package: "swift-cli-installer"),
         .product(name: "SwiftCLIUpdater", package: "swift-cli-updater"),
@@ -157,6 +163,14 @@ let package = Package(
         .product(name: "IssueReporting", package: "swift-issue-reporting"),
       ],
       path: "sources/vaporize-issue-reporting"
+    ),
+    .testTarget(
+      name: "VaporizeLoggingTests",
+      dependencies: [
+        "VaporizeCLI",
+        .product(name: "CommonLog", package: "common-log"),
+      ],
+      path: "tests/logging"
     ),
     .testTarget(
       name: "VaporizeIssueReportingTests",
