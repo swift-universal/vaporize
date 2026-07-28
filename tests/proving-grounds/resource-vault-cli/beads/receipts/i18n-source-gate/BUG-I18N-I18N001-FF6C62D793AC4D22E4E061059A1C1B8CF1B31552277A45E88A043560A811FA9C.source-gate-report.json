@@ -1,0 +1,31 @@
+{
+  "approvedImports" : [
+
+  ],
+  "enforcement" : "release",
+  "findings" : [
+
+  ],
+  "formatVersion" : "0.3.0",
+  "imports" : [
+    "Darwin",
+    "Foundation"
+  ],
+  "passed" : true,
+  "placeholders" : [
+
+  ],
+  "scannedFileCount" : 1,
+  "scannedFiles" : [
+    "sources/resource-vault-cli/main.swift"
+  ],
+  "standard" : {
+    "canonicalRef" : "private/universal/substrate/collectives/i18n-universal/private/universal/contracts/enforce-i18n-source-consumption.contract.md",
+    "owner" : "i18n-universal",
+    "slug" : "i18n-source-consumption-enforcement",
+    "title" : "i18n Source Consumption Enforcement",
+    "version" : "0.1.0"
+  },
+  "surfaceKind" : "cli",
+  "targetName" : "resource-vault.cli@vaporize-tests.clia.sh"
+}

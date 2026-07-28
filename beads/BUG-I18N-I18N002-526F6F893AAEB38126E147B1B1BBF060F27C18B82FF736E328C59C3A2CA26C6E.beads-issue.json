@@ -1,0 +1,33 @@
+{
+  "acceptanceCriteria" : "- The structural law break no longer appears at this source coordinate.\n- A complete i18n Source Consumption Enforcement scan confirms the repair before closure.\n- The canonical Bead, detector evidence, spawn cast, and strict Bead World projection remain decodable.",
+  "createdAt" : "2026-07-24T12:32:33Z",
+  "createdBy" : "translate-source-gate",
+  "dependencies" : [
+    {
+      "createdAt" : "2026-07-24T12:32:33Z",
+      "createdBy" : "translate-source-gate",
+      "dependsOnId" : "EPIC-I18N-SOURCE-CONSUMPTION-ENFORCEMENT-ADOPTION-2026-07-18",
+      "issueId" : "BUG-I18N-I18N002-526F6F893AAEB38126E147B1B1BBF060F27C18B82FF736E328C59C3A2CA26C6E",
+      "type" : "parent-child"
+    }
+  ],
+  "description" : "translate-source-gate observed I18N002 at the stable source coordinate sources/vaporize-cli/main.swift. Diagnostic line and column are evidence, not identity.",
+  "externalRef" : "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N002-526F6F893AAEB38126E147B1B1BBF060F27C18B82FF736E328C59C3A2CA26C6E.beads-spawn-cast.json",
+  "id" : "BUG-I18N-I18N002-526F6F893AAEB38126E147B1B1BBF060F27C18B82FF736E328C59C3A2CA26C6E",
+  "issueType" : "bug",
+  "labels" : [
+    "bug",
+    "detector-authored",
+    "i18n-universal",
+    "i18n-source-consumption-enforcement",
+    "i18n002",
+    "spawn-ready"
+  ],
+  "owner" : "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli",
+  "priority" : 2,
+  "sourceLocation" : "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N002-526F6F893AAEB38126E147B1B1BBF060F27C18B82FF736E328C59C3A2CA26C6E.i18n-source-gate-evidence.json",
+  "sourceSystem" : "translate-source-gate",
+  "sourceType" : "i18n-source-gate-finding",
+  "status" : "open",
+  "title" : "Resolve I18N002 at sources/vaporize-cli/main.swift"
+}

@@ -190,6 +190,12 @@ struct VaporizeCLI: AsyncParsableCommand {
   @Flag(help: "Prints the tool name, version, and build metadata and exits.")
   var version: Bool = false
 
+  @Option(
+    name: .customLong("log-level"),
+    help: "Diagnostic exposure: trace, debug, info, notice, warning, error, or critical. Command results remain on stdout."
+  )
+  var logLevel: VaporizeLogLevel = .info
+
   @Option(name: .customLong("artifact"), help: "Artifact kind: cli or app.")
   var artifact: ArtifactKind = .cli
 
@@ -434,6 +440,8 @@ struct VaporizeCLI: AsyncParsableCommand {
   var forwardedArguments: [String] = []
 
   mutating func run() async throws {
+    VaporizeLogging.configure(level: logLevel)
+
     if version {
       printVersionMetadata()
       return
@@ -535,6 +543,9 @@ struct VaporizeCLI: AsyncParsableCommand {
     plan: VaporizeCoreExecutionPlan
   ) async throws {
     let recorder = VaporizeCoreExecutionRecorder(plan: plan)
+    VaporizeLogging.command.info(
+      "operation=\(plan.operation.rawValue) authority=\(plan.executionAuthority.rawValue) resolver=\(plan.toolchainResolver) state=begin"
+    )
     try await VaporizeCoreExecutionInstrumentation.$current.withValue(recorder) {
       do {
         try await recorder.measure(.coreCommand) {
@@ -566,10 +577,13 @@ struct VaporizeCLI: AsyncParsableCommand {
             }
           } catch {
             if let alternate = plan.alternateCommand(invocation: CommandLine.arguments) {
-              FileHandle.standardError.write(
-                Data("vaporize: adjacent authority retry: \(alternate)\n".utf8)
+              VaporizeLogging.command.warning(
+                "adjacent-authority-retry command=\(VaporizeLogging.redacted(alternate))"
               )
             }
+            VaporizeLogging.command.error(
+              "operation=\(plan.operation.rawValue) state=failed error=\(VaporizeLogging.redacted(String(describing: error)))"
+            )
             throw error
           }
         }
@@ -579,6 +593,9 @@ struct VaporizeCLI: AsyncParsableCommand {
       }
       try emitRetainedTestReceipt(from: recorder)
     }
+    VaporizeLogging.command.info(
+      "operation=\(plan.operation.rawValue) authority=\(plan.executionAuthority.rawValue) state=end"
+    )
   }
 
   private func emitRetainedTestReceipt(

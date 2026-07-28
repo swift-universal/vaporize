@@ -100,12 +100,17 @@ final class VaporizeCoreExecutionRecorder: @unchecked Sendable {
     state: String,
     elapsedNanoseconds: UInt64?
   ) {
-    let elapsed = elapsedNanoseconds.map {
-      String(format: " elapsed-ms=%.3f", Double($0) / 1_000_000)
-    } ?? ""
-    let line =
-      "vaporize: phase=\(phase.rawValue) state=\(state) operation=\(operation.rawValue) authority=\(authority.rawValue) resolver=\(resolver)\(elapsed)\n"
-    FileHandle.standardError.write(Data(line.utf8))
+    let elapsed =
+      elapsedNanoseconds.map {
+        String(format: " elapsed-ms=%.3f", Double($0) / 1_000_000)
+      } ?? ""
+    let message =
+      "phase=\(phase.rawValue) state=\(state) operation=\(operation.rawValue) authority=\(authority.rawValue) resolver=\(resolver)\(elapsed)"
+    if state == "begin" {
+      VaporizeLogging.coreExecution.trace(message)
+    } else {
+      VaporizeLogging.coreExecution.debug(message)
+    }
 
     #if os(macOS)
       let signpostType: OSSignpostType = state == "begin" ? .begin : .end

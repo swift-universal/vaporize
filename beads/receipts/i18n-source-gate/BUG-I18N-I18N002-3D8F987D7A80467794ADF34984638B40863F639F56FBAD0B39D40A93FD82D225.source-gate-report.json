@@ -10,7 +10,7 @@
         "file" : "sources/vaporize-cli/I18nSourceGatePreflight.swift",
         "line" : 20
       },
-      "message" : "Target 'vaporize.cli@wrkstrm-core.clia.sh' uses user-facing strings but imports none of its approved i18n copy packages: ApprovedCopy_v000_000_001, ConcourseCopy_v000_000_001, KeikoWorldCopy_v000_000_001, SubstrateCLICopy_v000_000_001, TranslateCopy_v000_000_001, WrkstrmWorldCopy_v000_000_001.",
+      "message" : "Target 'vaporize.cli@wrkstrm-core.clia.sh' uses user-facing strings but imports none of its approved i18n copy packages: ApprovedCopy_v000_000_001, ConcourseCopy_v000_000_001, DiskCleanerCopy_v000_000_001, HarnessCLICopy_v000_000_001, KeikoWorldCopy_v000_000_001, RismayMeCopy_v000_000_001, SubstrateCLICopy_v000_000_001, TranslateCopy_v000_000_001, WrkstrmWorldCopy_v000_000_001.",
       "rule" : "I18N001",
       "sink" : "target-import",
       "structuralAnchor" : "target-import"
@@ -24,24 +24,13 @@
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
       "sink" : "LocalizedError.errorDescription",
-      "structuralAnchor" : "sha256:7a8765e257593a4aacd0d2f81b58497e9a42ff766af7d97a33d6d5283db28a8a"
-    },
-    {
-      "location" : {
-        "column" : 38,
-        "file" : "sources/vaporize-cli/I18nSourceGatePreflight.swift",
-        "line" : 22
-      },
-      "message" : "User-facing string literal must come from an approved generated i18n copy package.",
-      "rule" : "I18N002",
-      "sink" : "LocalizedError.errorDescription",
-      "structuralAnchor" : "sha256:42a703f6fd8f69ff8ad002ebcfc2dd02c96112a4af20fd229aff74371e4b748d"
+      "structuralAnchor" : "sha256:78585adcb6689b0f224af8003e72c7075a75da02db491380296036a4fa6f376a"
     },
     {
       "location" : {
         "column" : 14,
         "file" : "sources/vaporize-cli/I18nSourceGatePreflight.swift",
-        "line" : 27
+        "line" : 30
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -50,9 +39,108 @@
     },
     {
       "location" : {
+        "column" : 14,
+        "file" : "sources/vaporize-cli/MaintainerSwiftPMConfiguration.swift",
+        "line" : 313
+      },
+      "message" : "User-facing string literal must come from an approved generated i18n copy package.",
+      "rule" : "I18N002",
+      "sink" : "LocalizedError.errorDescription",
+      "structuralAnchor" : "sha256:efd61ab9f39f2885dbd968fb1fc5e4ab3ef5f8d6282b65509be250b23e6e2ce5"
+    },
+    {
+      "location" : {
+        "column" : 14,
+        "file" : "sources/vaporize-cli/MaintainerSwiftPMConfiguration.swift",
+        "line" : 315
+      },
+      "message" : "User-facing string literal must come from an approved generated i18n copy package.",
+      "rule" : "I18N002",
+      "sink" : "LocalizedError.errorDescription",
+      "structuralAnchor" : "sha256:10449defd9ae455dce93777c80affc6f8fdcfef3130c218b5d605a5711dc365a"
+    },
+    {
+      "location" : {
+        "column" : 14,
+        "file" : "sources/vaporize-cli/MaintainerSwiftPMConfiguration.swift",
+        "line" : 317
+      },
+      "message" : "User-facing string literal must come from an approved generated i18n copy package.",
+      "rule" : "I18N002",
+      "sink" : "LocalizedError.errorDescription",
+      "structuralAnchor" : "sha256:4152f32e3934a40b6ce8293bb3331935d70bcf40e6b929a1d0f97744b51e5779"
+    },
+    {
+      "location" : {
+        "column" : 14,
+        "file" : "sources/vaporize-cli/MaintainerSwiftPMConfiguration.swift",
+        "line" : 319
+      },
+      "message" : "User-facing string literal must come from an approved generated i18n copy package.",
+      "rule" : "I18N002",
+      "sink" : "LocalizedError.errorDescription",
+      "structuralAnchor" : "sha256:06f7eb78266efb238b3179e40559d95c02f214117193a4eb9874858f1d18f009"
+    },
+    {
+      "location" : {
+        "column" : 14,
+        "file" : "sources/vaporize-cli/MaintainerSwiftPMConfiguration.swift",
+        "line" : 321
+      },
+      "message" : "User-facing string literal must come from an approved generated i18n copy package.",
+      "rule" : "I18N002",
+      "sink" : "LocalizedError.errorDescription",
+      "structuralAnchor" : "sha256:fc229c065bb1290df8c07a3edcff4555bb8643abc1f5ab624909b166a1369e3a"
+    },
+    {
+      "location" : {
+        "column" : 14,
+        "file" : "sources/vaporize-cli/MaintainerSwiftPMConfiguration.swift",
+        "line" : 323
+      },
+      "message" : "User-facing string literal must come from an approved generated i18n copy package.",
+      "rule" : "I18N002",
+      "sink" : "LocalizedError.errorDescription",
+      "structuralAnchor" : "sha256:2e02713abdbe2001e1cdb379843a94abdbd9cb3ff682aeacc802209038cdff77"
+    },
+    {
+      "location" : {
+        "column" : 14,
+        "file" : "sources/vaporize-cli/MaintainerSwiftPMConfiguration.swift",
+        "line" : 325
+      },
+      "message" : "User-facing string literal must come from an approved generated i18n copy package.",
+      "rule" : "I18N002",
+      "sink" : "LocalizedError.errorDescription",
+      "structuralAnchor" : "sha256:501ed4ac70e02640cf4092d472fa0251ffd058fc5b83d8232a01288222e86e51"
+    },
+    {
+      "location" : {
+        "column" : 11,
+        "file" : "sources/vaporize-cli/VaporizeCoreExecutionPlan.swift",
+        "line" : 65
+      },
+      "message" : "User-facing string literal must come from an approved generated i18n copy package.",
+      "rule" : "I18N002",
+      "sink" : "ArgumentParser.ValidationError",
+      "structuralAnchor" : "sha256:bfe35b48cfc4b37d287404666bd27f33f27607f2ffbb187269a76876a9a2ba8c"
+    },
+    {
+      "location" : {
+        "column" : 11,
+        "file" : "sources/vaporize-cli/VaporizeCoreExecutionPlan.swift",
+        "line" : 80
+      },
+      "message" : "User-facing string literal must come from an approved generated i18n copy package.",
+      "rule" : "I18N002",
+      "sink" : "ArgumentParser.ValidationError",
+      "structuralAnchor" : "sha256:5941d55e69c910b17b759311792ba7bbcff2624c4121be2d19f95595f9c373bf"
+    },
+    {
+      "location" : {
         "column" : 15,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 55
+        "line" : 79
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -63,18 +151,18 @@
       "location" : {
         "column" : 11,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 161
+        "line" : 187
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
       "sink" : "ArgumentParser.@Argument.help",
-      "structuralAnchor" : "sha256:8fe7a4bb711f77be65dd6dfc62335169d293a90fb21bc3641679883a210690c9"
+      "structuralAnchor" : "sha256:a5bd25b920c146dc8c109922e004b8069b4ea7b0c20161cf734b6cde4b49e2ee"
     },
     {
       "location" : {
         "column" : 15,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 164
+        "line" : 190
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -83,20 +171,31 @@
     },
     {
       "location" : {
-        "column" : 48,
+        "column" : 11,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 167
+        "line" : 195
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
       "sink" : "ArgumentParser.@Option.help",
-      "structuralAnchor" : "sha256:6e5a9d4ea55acec5696754c6ea46055d9c4e5261df9cb9684b9c15bf0b360220"
+      "structuralAnchor" : "sha256:e4660028a38b85453402090c9f2d0c12f415932ed5eadd7bde28c93b98937597"
+    },
+    {
+      "location" : {
+        "column" : 48,
+        "file" : "sources/vaporize-cli/main.swift",
+        "line" : 199
+      },
+      "message" : "User-facing string literal must come from an approved generated i18n copy package.",
+      "rule" : "I18N002",
+      "sink" : "ArgumentParser.@Option.help",
+      "structuralAnchor" : "sha256:c2610ee906982310550d1d34c5a5ceb24e34ef1fa1cafb6045f94d6dce19aa69"
     },
     {
       "location" : {
         "column" : 52,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 170
+        "line" : 202
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -105,20 +204,31 @@
     },
     {
       "location" : {
-        "column" : 47,
+        "column" : 11,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 173
+        "line" : 207
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
       "sink" : "ArgumentParser.@Option.help",
-      "structuralAnchor" : "sha256:1c764f813437e98de2cd1974d5b83d6a96849cfe4d69212c7294d6a41cc8d896"
+      "structuralAnchor" : "sha256:dc546c6b7466341ed36694103dde1fb7eecceb436c03cd314ce271488a65d3f4"
+    },
+    {
+      "location" : {
+        "column" : 47,
+        "file" : "sources/vaporize-cli/main.swift",
+        "line" : 210
+      },
+      "message" : "User-facing string literal must come from an approved generated i18n copy package.",
+      "rule" : "I18N002",
+      "sink" : "ArgumentParser.@Option.help",
+      "structuralAnchor" : "sha256:fca3af135461c27816e8aa0b8d98b240f2c86a45e5b8be2861d4d54f8f1436ff"
     },
     {
       "location" : {
         "column" : 11,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 178
+        "line" : 215
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -129,7 +239,7 @@
       "location" : {
         "column" : 11,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 183
+        "line" : 220
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -140,7 +250,7 @@
       "location" : {
         "column" : 11,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 188
+        "line" : 225
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -151,7 +261,7 @@
       "location" : {
         "column" : 11,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 193
+        "line" : 230
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -162,7 +272,7 @@
       "location" : {
         "column" : 7,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 199
+        "line" : 236
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -173,7 +283,7 @@
       "location" : {
         "column" : 7,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 205
+        "line" : 242
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -184,7 +294,7 @@
       "location" : {
         "column" : 11,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 210
+        "line" : 247
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -195,7 +305,7 @@
       "location" : {
         "column" : 53,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 213
+        "line" : 250
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -206,7 +316,7 @@
       "location" : {
         "column" : 11,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 219
+        "line" : 256
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -217,7 +327,7 @@
       "location" : {
         "column" : 43,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 222
+        "line" : 259
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -228,7 +338,7 @@
       "location" : {
         "column" : 48,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 225
+        "line" : 262
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -239,7 +349,7 @@
       "location" : {
         "column" : 50,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 228
+        "line" : 265
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -250,7 +360,7 @@
       "location" : {
         "column" : 44,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 231
+        "line" : 268
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -261,7 +371,7 @@
       "location" : {
         "column" : 11,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 236
+        "line" : 273
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -272,7 +382,7 @@
       "location" : {
         "column" : 11,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 241
+        "line" : 278
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -283,7 +393,7 @@
       "location" : {
         "column" : 11,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 246
+        "line" : 283
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -294,7 +404,7 @@
       "location" : {
         "column" : 11,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 251
+        "line" : 288
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -305,7 +415,7 @@
       "location" : {
         "column" : 11,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 256
+        "line" : 293
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -316,7 +426,7 @@
       "location" : {
         "column" : 11,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 261
+        "line" : 298
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -327,7 +437,7 @@
       "location" : {
         "column" : 11,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 266
+        "line" : 303
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -338,7 +448,7 @@
       "location" : {
         "column" : 11,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 271
+        "line" : 308
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -349,7 +459,7 @@
       "location" : {
         "column" : 11,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 276
+        "line" : 313
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -360,7 +470,7 @@
       "location" : {
         "column" : 11,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 281
+        "line" : 318
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -371,7 +481,7 @@
       "location" : {
         "column" : 11,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 286
+        "line" : 323
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -382,7 +492,7 @@
       "location" : {
         "column" : 11,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 291
+        "line" : 328
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -393,7 +503,7 @@
       "location" : {
         "column" : 11,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 296
+        "line" : 333
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -404,7 +514,7 @@
       "location" : {
         "column" : 11,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 301
+        "line" : 338
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -415,7 +525,7 @@
       "location" : {
         "column" : 11,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 306
+        "line" : 343
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -426,7 +536,7 @@
       "location" : {
         "column" : 11,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 311
+        "line" : 348
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -437,7 +547,7 @@
       "location" : {
         "column" : 11,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 316
+        "line" : 353
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -448,7 +558,7 @@
       "location" : {
         "column" : 11,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 321
+        "line" : 358
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -459,7 +569,7 @@
       "location" : {
         "column" : 11,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 326
+        "line" : 363
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -468,31 +578,20 @@
     },
     {
       "location" : {
-        "column" : 11,
+        "column" : 13,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 331
+        "line" : 369
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
       "sink" : "ArgumentParser.@Option.help",
-      "structuralAnchor" : "sha256:bb870d72ef1e16aa777820c72808d3a5c26f78f80b5fec36108957d58b678071"
+      "structuralAnchor" : "sha256:80b106db5a7cc8ccb1f6e72a74dc2f5fa9d7ab140377bded2c95d17c4e06b90a"
     },
     {
       "location" : {
         "column" : 11,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 336
-      },
-      "message" : "User-facing string literal must come from an approved generated i18n copy package.",
-      "rule" : "I18N002",
-      "sink" : "ArgumentParser.@Option.help",
-      "structuralAnchor" : "sha256:4cf673e394238a1e72588c17cf77153f41b03d14b91c83df0e47af478d8847a2"
-    },
-    {
-      "location" : {
-        "column" : 11,
-        "file" : "sources/vaporize-cli/main.swift",
-        "line" : 341
+        "line" : 375
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -503,7 +602,7 @@
       "location" : {
         "column" : 11,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 346
+        "line" : 380
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -514,7 +613,7 @@
       "location" : {
         "column" : 11,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 351
+        "line" : 385
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -525,7 +624,7 @@
       "location" : {
         "column" : 11,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 356
+        "line" : 390
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -536,7 +635,7 @@
       "location" : {
         "column" : 11,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 361
+        "line" : 395
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -547,7 +646,7 @@
       "location" : {
         "column" : 11,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 366
+        "line" : 400
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -558,7 +657,7 @@
       "location" : {
         "column" : 11,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 371
+        "line" : 405
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -569,7 +668,7 @@
       "location" : {
         "column" : 11,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 376
+        "line" : 410
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -580,7 +679,7 @@
       "location" : {
         "column" : 11,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 381
+        "line" : 415
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -591,7 +690,7 @@
       "location" : {
         "column" : 11,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 386
+        "line" : 420
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -602,7 +701,7 @@
       "location" : {
         "column" : 11,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 391
+        "line" : 425
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -613,7 +712,7 @@
       "location" : {
         "column" : 11,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 396
+        "line" : 430
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -624,7 +723,7 @@
       "location" : {
         "column" : 46,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 399
+        "line" : 433
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -635,7 +734,7 @@
       "location" : {
         "column" : 56,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 402
+        "line" : 436
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -646,7 +745,7 @@
       "location" : {
         "column" : 40,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 405
+        "line" : 439
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -657,7 +756,7 @@
       "location" : {
         "column" : 9,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 416
+        "line" : 452
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -666,9 +765,53 @@
     },
     {
       "location" : {
+        "column" : 9,
+        "file" : "sources/vaporize-cli/main.swift",
+        "line" : 624
+      },
+      "message" : "User-facing string literal must come from an approved generated i18n copy package.",
+      "rule" : "I18N002",
+      "sink" : "ArgumentParser.ValidationError",
+      "structuralAnchor" : "sha256:292f793af634a9685f5bb38736e8a0c83e5b70235db87212a5e1b65f5efa328a"
+    },
+    {
+      "location" : {
+        "column" : 9,
+        "file" : "sources/vaporize-cli/main.swift",
+        "line" : 634
+      },
+      "message" : "User-facing string literal must come from an approved generated i18n copy package.",
+      "rule" : "I18N002",
+      "sink" : "ArgumentParser.ValidationError",
+      "structuralAnchor" : "sha256:eb4d95c8c7c4e9e905cdd781b671d1d62cd6fae850c552298f67d36a9f9070a6"
+    },
+    {
+      "location" : {
+        "column" : 9,
+        "file" : "sources/vaporize-cli/main.swift",
+        "line" : 638
+      },
+      "message" : "User-facing string literal must come from an approved generated i18n copy package.",
+      "rule" : "I18N002",
+      "sink" : "ArgumentParser.ValidationError",
+      "structuralAnchor" : "sha256:339296f3cf5b1a34e7a0037a5f972c18da3ce253a3822fc39ff893426d6091d5"
+    },
+    {
+      "location" : {
+        "column" : 31,
+        "file" : "sources/vaporize-cli/main.swift",
+        "line" : 662
+      },
+      "message" : "User-facing string literal must come from an approved generated i18n copy package.",
+      "rule" : "I18N002",
+      "sink" : "ArgumentParser.ValidationError",
+      "structuralAnchor" : "sha256:bd18ad8a3e5b17bdb70aef88b80d78fb8be87d05f598119ccf91e5cda70d39fb"
+    },
+    {
+      "location" : {
         "column" : 7,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 532
+        "line" : 723
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -679,7 +822,7 @@
       "location" : {
         "column" : 9,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 660
+        "line" : 858
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -690,7 +833,7 @@
       "location" : {
         "column" : 29,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 664
+        "line" : 862
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -701,7 +844,7 @@
       "location" : {
         "column" : 29,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 690
+        "line" : 888
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -712,7 +855,7 @@
       "location" : {
         "column" : 9,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 740
+        "line" : 941
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -723,7 +866,7 @@
       "location" : {
         "column" : 11,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 754
+        "line" : 955
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -734,7 +877,7 @@
       "location" : {
         "column" : 7,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 968
+        "line" : 1178
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -743,9 +886,20 @@
     },
     {
       "location" : {
+        "column" : 11,
+        "file" : "sources/vaporize-cli/main.swift",
+        "line" : 1435
+      },
+      "message" : "User-facing string literal must come from an approved generated i18n copy package.",
+      "rule" : "I18N002",
+      "sink" : "ArgumentParser.ValidationError",
+      "structuralAnchor" : "sha256:ea6025524ed104b5db304cafb3eb7d1559e982490a8c5ed3181c45dbdb4c3d02"
+    },
+    {
+      "location" : {
         "column" : 29,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 1166
+        "line" : 1481
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -756,7 +910,7 @@
       "location" : {
         "column" : 9,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 1182
+        "line" : 1497
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -767,7 +921,7 @@
       "location" : {
         "column" : 29,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 1191
+        "line" : 1506
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -778,7 +932,7 @@
       "location" : {
         "column" : 11,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 1279
+        "line" : 1596
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -789,7 +943,7 @@
       "location" : {
         "column" : 13,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 1281
+        "line" : 1598
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -800,7 +954,7 @@
       "location" : {
         "column" : 13,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 1284
+        "line" : 1601
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -811,7 +965,7 @@
       "location" : {
         "column" : 29,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 1290
+        "line" : 1607
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -822,18 +976,18 @@
       "location" : {
         "column" : 9,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 1326
+        "line" : 1643
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
       "sink" : "ArgumentParser.ValidationError",
-      "structuralAnchor" : "sha256:c483ffb039f55970b1b334a8888e696a66d9b6563c0d36bfd9cf91fae620ec51"
+      "structuralAnchor" : "sha256:29d49a8c0fbce6460b3dea43a04db8a13c07a86fe34a4c1d9e726afc6a295338"
     },
     {
       "location" : {
         "column" : 29,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 1447
+        "line" : 1766
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -844,7 +998,7 @@
       "location" : {
         "column" : 9,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 1637
+        "line" : 1956
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -855,7 +1009,7 @@
       "location" : {
         "column" : 29,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 1738
+        "line" : 2059
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -866,7 +1020,7 @@
       "location" : {
         "column" : 29,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 1746
+        "line" : 2067
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -877,7 +1031,7 @@
       "location" : {
         "column" : 13,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 1758
+        "line" : 2079
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -888,7 +1042,7 @@
       "location" : {
         "column" : 29,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 1768
+        "line" : 2089
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -899,7 +1053,7 @@
       "location" : {
         "column" : 29,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 1774
+        "line" : 2095
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -910,7 +1064,7 @@
       "location" : {
         "column" : 29,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 1777
+        "line" : 2098
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -921,7 +1075,7 @@
       "location" : {
         "column" : 9,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 1834
+        "line" : 2155
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -932,7 +1086,7 @@
       "location" : {
         "column" : 29,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 1867
+        "line" : 2188
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -943,7 +1097,7 @@
       "location" : {
         "column" : 9,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 1882
+        "line" : 2203
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -954,7 +1108,7 @@
       "location" : {
         "column" : 29,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 1895
+        "line" : 2216
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -965,7 +1119,7 @@
       "location" : {
         "column" : 9,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 1910
+        "line" : 2231
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -976,7 +1130,7 @@
       "location" : {
         "column" : 15,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 1913
+        "line" : 2234
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -987,7 +1141,7 @@
       "location" : {
         "column" : 29,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 1924
+        "line" : 2245
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -998,7 +1152,7 @@
       "location" : {
         "column" : 29,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 1930
+        "line" : 2251
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -1009,7 +1163,7 @@
       "location" : {
         "column" : 29,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 1933
+        "line" : 2254
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -1020,7 +1174,7 @@
       "location" : {
         "column" : 13,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 1951
+        "line" : 2272
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -1031,7 +1185,7 @@
       "location" : {
         "column" : 15,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 1954
+        "line" : 2275
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -1042,7 +1196,7 @@
       "location" : {
         "column" : 29,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 1966
+        "line" : 2287
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -1053,7 +1207,7 @@
       "location" : {
         "column" : 29,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 1972
+        "line" : 2293
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -1064,7 +1218,7 @@
       "location" : {
         "column" : 29,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 1975
+        "line" : 2296
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -1075,7 +1229,7 @@
       "location" : {
         "column" : 9,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 1996
+        "line" : 2317
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -1086,7 +1240,7 @@
       "location" : {
         "column" : 29,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 2015
+        "line" : 2336
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -1097,7 +1251,7 @@
       "location" : {
         "column" : 29,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 2019
+        "line" : 2340
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -1108,7 +1262,7 @@
       "location" : {
         "column" : 29,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 2084
+        "line" : 2405
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -1119,7 +1273,7 @@
       "location" : {
         "column" : 29,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 2087
+        "line" : 2408
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -1130,7 +1284,7 @@
       "location" : {
         "column" : 9,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 2101
+        "line" : 2422
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -1141,7 +1295,7 @@
       "location" : {
         "column" : 29,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 2115
+        "line" : 2436
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -1152,7 +1306,7 @@
       "location" : {
         "column" : 29,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 2118
+        "line" : 2439
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -1163,7 +1317,7 @@
       "location" : {
         "column" : 9,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 2132
+        "line" : 2453
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -1174,7 +1328,7 @@
       "location" : {
         "column" : 29,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 2150
+        "line" : 2471
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -1185,7 +1339,7 @@
       "location" : {
         "column" : 29,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 2153
+        "line" : 2474
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -1196,7 +1350,7 @@
       "location" : {
         "column" : 29,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 2156
+        "line" : 2477
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -1207,7 +1361,7 @@
       "location" : {
         "column" : 29,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 2201
+        "line" : 2522
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -1218,7 +1372,7 @@
       "location" : {
         "column" : 9,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 2208
+        "line" : 2529
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -1229,7 +1383,7 @@
       "location" : {
         "column" : 15,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 2212
+        "line" : 2533
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -1240,7 +1394,7 @@
       "location" : {
         "column" : 11,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 2216
+        "line" : 2537
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -1251,7 +1405,7 @@
       "location" : {
         "column" : 17,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 2219
+        "line" : 2540
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -1262,7 +1416,7 @@
       "location" : {
         "column" : 29,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 2234
+        "line" : 2555
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -1273,7 +1427,7 @@
       "location" : {
         "column" : 13,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 2307
+        "line" : 2628
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -1284,7 +1438,7 @@
       "location" : {
         "column" : 15,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 2309
+        "line" : 2630
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -1295,7 +1449,7 @@
       "location" : {
         "column" : 9,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 2333
+        "line" : 2654
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -1306,7 +1460,7 @@
       "location" : {
         "column" : 15,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 2336
+        "line" : 2657
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -1317,7 +1471,7 @@
       "location" : {
         "column" : 29,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 2347
+        "line" : 2668
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -1328,7 +1482,7 @@
       "location" : {
         "column" : 31,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 2357
+        "line" : 2678
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -1339,7 +1493,7 @@
       "location" : {
         "column" : 7,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 2388
+        "line" : 2709
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -1350,7 +1504,7 @@
       "location" : {
         "column" : 9,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 2534
+        "line" : 2889
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -1361,7 +1515,7 @@
       "location" : {
         "column" : 29,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 2558
+        "line" : 2913
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -1372,18 +1526,7 @@
       "location" : {
         "column" : 9,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 2577
-      },
-      "message" : "User-facing string literal must come from an approved generated i18n copy package.",
-      "rule" : "I18N002",
-      "sink" : "ArgumentParser.ValidationError",
-      "structuralAnchor" : "sha256:969c1469145be5a14d75b7c52a3ac619283dc63aa651b87d5873647cf34d4920"
-    },
-    {
-      "location" : {
-        "column" : 9,
-        "file" : "sources/vaporize-cli/main.swift",
-        "line" : 2640
+        "line" : 2999
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -1394,7 +1537,7 @@
       "location" : {
         "column" : 29,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 2644
+        "line" : 3003
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -1405,18 +1548,18 @@
       "location" : {
         "column" : 9,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 2648
+        "line" : 3007
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
       "sink" : "ArgumentParser.ValidationError",
-      "structuralAnchor" : "sha256:1954d39c4beda35d9d00a07b396c33971e89d7bcff21385d8d903a4dd628d7f8"
+      "structuralAnchor" : "sha256:b62f69da61bf9b61267937fffeb20815fa3c367a822026958481047b0cb4c304"
     },
     {
       "location" : {
         "column" : 9,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 2834
+        "line" : 3207
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -1427,7 +1570,7 @@
       "location" : {
         "column" : 11,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 2846
+        "line" : 3219
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -1438,7 +1581,7 @@
       "location" : {
         "column" : 13,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 2856
+        "line" : 3229
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -1449,7 +1592,7 @@
       "location" : {
         "column" : 9,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 2870
+        "line" : 3243
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -1460,7 +1603,7 @@
       "location" : {
         "column" : 11,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 2896
+        "line" : 3269
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -1472,6 +1615,7 @@
   "imports" : [
     "AppleProjectSpecCore",
     "ArgumentParser",
+    "CommonLog",
     "CommonProcess",
     "CommonProcessExecutionKit",
     "CommonShell",
@@ -1485,13 +1629,15 @@
     "Swiftly",
     "TranslateSourceGate",
     "VaporizeIssueReporting",
-    "Yams"
+    "VaporizeJSONSchemaValidation",
+    "Yams",
+    "os"
   ],
   "passed" : false,
   "placeholders" : [
 
   ],
-  "scannedFileCount" : 25,
+  "scannedFileCount" : 28,
   "scannedFiles" : [
     "sources/apple-project-spec-core/AppleProjectPklUpgradePlanner.swift",
     "sources/apple-project-spec-core/AppleProjectSparkleConfigRenderer.swift",
@@ -1506,13 +1652,16 @@
     "sources/vaporize-cli/CUJPortfolioAudit.swift",
     "sources/vaporize-cli/FleetStatus.swift",
     "sources/vaporize-cli/I18nSourceGatePreflight.swift",
-    "sources/vaporize-cli/JSONSchemaValidation.swift",
+    "sources/vaporize-cli/MaintainerSwiftPMConfiguration.swift",
     "sources/vaporize-cli/OwnedSurfaceInventory.swift",
     "sources/vaporize-cli/ProductSelfUpdate.swift",
     "sources/vaporize-cli/ReleaseDoctor.swift",
     "sources/vaporize-cli/SwiftUIImportGate.swift",
     "sources/vaporize-cli/VaporInventory.swift",
     "sources/vaporize-cli/VaporInventoryRenderer.swift",
+    "sources/vaporize-cli/VaporizeCoreExecutionInstrumentation.swift",
+    "sources/vaporize-cli/VaporizeCoreExecutionPlan.swift",
+    "sources/vaporize-cli/VaporizeLogging.swift",
     "sources/vaporize-cli/VaporizeTestReceipt.swift",
     "sources/vaporize-cli/XcodeWorkspaceSchemes.swift",
     "sources/vaporize-cli/main.swift",

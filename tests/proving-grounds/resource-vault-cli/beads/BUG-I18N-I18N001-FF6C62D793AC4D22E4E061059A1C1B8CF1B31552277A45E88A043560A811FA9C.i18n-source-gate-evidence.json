@@ -1,0 +1,67 @@
+{
+  "beadWorldProjectionRef" : "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/tests/proving-grounds/resource-vault-cli/beads/BUG-I18N-I18N001-FF6C62D793AC4D22E4E061059A1C1B8CF1B31552277A45E88A043560A811FA9C.bead-world-projection.json",
+  "detectorEvidence" : {
+    "column" : 9,
+    "detector" : {
+      "detectorID" : "translate-source-gate",
+      "implementation" : "TranslateSourceGate",
+      "implementationVersion" : "0.3.0"
+    },
+    "enforcement" : "release",
+    "findingScanScope" : [
+      "sources/resource-vault-cli/main.swift"
+    ],
+    "line" : 44,
+    "message" : "Target 'resource-vault.cli@vaporize-tests.clia.sh' uses user-facing strings but imports none of its approved i18n copy packages: ApprovedCopy_v000_000_001, ConcourseCopy_v000_000_001, DiskCleanerCopy_v000_000_001, HarnessCLICopy_v000_000_001, KeikoWorldCopy_v000_000_001, RismayMeCopy_v000_000_001, SubstrateCLICopy_v000_000_001, TranslateCopy_v000_000_001, WrkstrmWorldCopy_v000_000_001.",
+    "ownerID" : "resource-vault.cli@vaporize-tests.clia.sh",
+    "reportFormatVersion" : "0.3.0",
+    "reportReceiptRef" : "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/tests/proving-grounds/resource-vault-cli/beads/receipts/i18n-source-gate/BUG-I18N-I18N001-FF6C62D793AC4D22E4E061059A1C1B8CF1B31552277A45E88A043560A811FA9C.source-gate-report.json",
+    "reportReceiptSHA256" : "684fc46cf9cd817a4748968f4d4651c73c93cee0eb97c30f2078f46544ad8cde",
+    "rule" : "I18N001",
+    "sink" : "target-import",
+    "sourceCoordinate" : "target-import",
+    "standardRef" : "private/universal/substrate/collectives/i18n-universal/private/universal/contracts/enforce-i18n-source-consumption.contract.md",
+    "standardSlug" : "i18n-source-consumption-enforcement",
+    "standardVersion" : "0.1.0",
+    "structuralAnchor" : "target-import",
+    "surfaceKind" : "cli",
+    "targetName" : "resource-vault.cli@vaporize-tests.clia.sh"
+  },
+  "evidenceRefs" : [
+    "private/universal/substrate/collectives/i18n-universal/private/universal/contracts/enforce-i18n-source-consumption.contract.md",
+    "target-import",
+    "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/tests/proving-grounds/resource-vault-cli/beads/BUG-I18N-I18N001-FF6C62D793AC4D22E4E061059A1C1B8CF1B31552277A45E88A043560A811FA9C.bead-world-projection.json",
+    "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/tests/proving-grounds/resource-vault-cli/beads/receipts/i18n-source-gate/BUG-I18N-I18N001-FF6C62D793AC4D22E4E061059A1C1B8CF1B31552277A45E88A043560A811FA9C.source-gate-report.json",
+    "sha256:684fc46cf9cd817a4748968f4d4651c73c93cee0eb97c30f2078f46544ad8cde"
+  ],
+  "issueId" : "BUG-I18N-I18N001-FF6C62D793AC4D22E4E061059A1C1B8CF1B31552277A45E88A043560A811FA9C",
+  "kind" : "i18n-source-gate-bead-evidence",
+  "observationState" : "absent-from-complete-scan",
+  "parentEpicId" : "EPIC-I18N-SOURCE-CONSUMPTION-ENFORCEMENT-ADOPTION-2026-07-18",
+  "schemaVersion" : "0.1.0",
+  "spawnCastRef" : "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/tests/proving-grounds/resource-vault-cli/beads/BUG-I18N-I18N001-FF6C62D793AC4D22E4E061059A1C1B8CF1B31552277A45E88A043560A811FA9C.beads-spawn-cast.json",
+  "worldline" : [
+    {
+      "action" : "create",
+      "reportReceiptRef" : "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/tests/proving-grounds/resource-vault-cli/beads/receipts/i18n-source-gate/BUG-I18N-I18N001-FF6C62D793AC4D22E4E061059A1C1B8CF1B31552277A45E88A043560A811FA9C.source-gate-report.json",
+      "reportReceiptSHA256" : "62ff432a8376a5c26e82210a8043340218e9f1baa6661a46b896a86694f5d34d",
+      "rule" : "I18N001",
+      "scanScope" : [
+        "sources/resource-vault-cli/main.swift"
+      ],
+      "sourceCoordinate" : "target-import",
+      "timestamp" : "2026-07-27T08:22:49Z"
+    },
+    {
+      "action" : "close",
+      "reportReceiptRef" : "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/tests/proving-grounds/resource-vault-cli/beads/receipts/i18n-source-gate/BUG-I18N-I18N001-FF6C62D793AC4D22E4E061059A1C1B8CF1B31552277A45E88A043560A811FA9C.source-gate-report.json",
+      "reportReceiptSHA256" : "684fc46cf9cd817a4748968f4d4651c73c93cee0eb97c30f2078f46544ad8cde",
+      "rule" : "I18N001",
+      "scanScope" : [
+        "sources/resource-vault-cli/main.swift"
+      ],
+      "sourceCoordinate" : "target-import",
+      "timestamp" : "2026-07-27T08:25:30Z"
+    }
+  ]
+}

@@ -1,0 +1,53 @@
+{
+  "effects": [
+    "The maintainers tree is treated as a governed third-party source depot rather than a social roster or recursive dependency mirror.",
+    "Each admitted package receives an independently inspectable governance record even when packages share an upstream organization.",
+    "Each package declares an upstream tracking channel, and Vaporize refreshes the newest eligible candidate independently of the revision admitted to consumers.",
+    "Vaporize owns read-only inventory, source collision detection, compatibility cohorts, advancement proof, and retirement proof.",
+    "Local modifications are modeled as bounded light forks with exact upstream bases, patch budgets, verification matrices, and exit conditions.",
+    "Multiple versions require explicit cohort-level exceptions and never imply that one SwiftPM leaf graph can load two versions of one identity."
+  ],
+  "followUps": [
+    "Define and validate the governed package record schema.",
+    "Add a read-only Vaporize depot inventory command before any mutation command.",
+    "Add automated depot refresh, freshness status, and stale-candidate diagnostics with a declared freshness service level.",
+    "Use swiftlang/swift-subprocess as the north-star package for continuous upstream freshness, identity convergence, consumer inventory, and gated adoption.",
+    "Materialize Swiftly as the first light-fork fixture without sealing its current working-tree candidate.",
+    "Add compatibility-cohort and multiple-version-exception records after inventory truth is proven.",
+    "Require receipts for admission, advancement, patch rebase, and retirement workflows."
+  ],
+  "id": "edr-0001-govern-third-party-source-as-a-package-depot",
+  "kind": "engineering-decision",
+  "occurredAt": "2026-07-22",
+  "rationale": [
+    "Package managers solve leaf resolution but do not provide fleet-wide source authority, patch, consumer, or retirement governance.",
+    "Organization directories are useful provenance groups but are too broad to be dependency approval boundaries.",
+    "Recursively admitting every transitive dependency would allow the resolver graph to define substrate ontology and create unbounded false ownership.",
+    "The existing MaintainerSwiftPMConfiguration already establishes Vaporize as the operational authority for mirrors and editable maintainer checkouts.",
+    "A small explicit fork is cheaper to operate than hidden working-tree divergence when its base, budget, proof, and exit are durable."
+  ],
+  "summary": "Accept a Google-style governed third-party package depot, operated by Vaporize, with fresh upstream candidates, gated consumer adoption, package-level records, non-recursive admission, explicit light forks, and bounded multiple-version exceptions.",
+  "supportingDocuments": [
+    {
+      "title": "Governed third-party depot doctrine",
+      "url": "private/universal/substrate/maintainers/.docc/governed-third-party-depot.md"
+    },
+    {
+      "title": "Swiftlang governed source home",
+      "url": "private/universal/substrate/maintainers/swiftlang/.docc/index.md"
+    },
+    {
+      "title": "Swiftly light-fork specimen",
+      "url": "private/universal/substrate/maintainers/swiftlang/.docc/swiftly-light-fork-specimen.md"
+    },
+    {
+      "title": "Third-party depot engineering design",
+      "url": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/third-party-depot.engineering.docc/index.md"
+    },
+    {
+      "title": "Existing Vaporize maintainer SwiftPM authority",
+      "url": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/sources/vaporize-cli/MaintainerSwiftPMConfiguration.swift"
+    }
+  ],
+  "title": "Govern third-party source as a package depot"
+}

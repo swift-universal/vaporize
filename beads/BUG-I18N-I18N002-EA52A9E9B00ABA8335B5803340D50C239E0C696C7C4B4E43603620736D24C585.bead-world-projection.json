@@ -1,0 +1,54 @@
+{
+  "beadRef" : {
+    "coordinate" : "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N002-EA52A9E9B00ABA8335B5803340D50C239E0C696C7C4B4E43603620736D24C585.beads-issue.json",
+    "id" : "BUG-I18N-I18N002-EA52A9E9B00ABA8335B5803340D50C239E0C696C7C4B4E43603620736D24C585",
+    "kind" : "bead"
+  },
+  "kind" : "bead-world-projection",
+  "laws" : {
+    "graduationRequiredForResidencyOrAuthorityChange" : true,
+    "reachabilityDoesNotGrantAdmission" : true,
+    "transitDoesNotGrantResidency" : true
+  },
+  "lens" : "thread",
+  "portals" : [
+    {
+      "admission" : "denied",
+      "authorityChange" : false,
+      "destination" : {
+        "coordinate" : "private/universal/substrate/collectives/i18n-universal/private/universal/contracts/enforce-i18n-source-consumption.contract.md",
+        "id" : "i18n-source-consumption-enforcement",
+        "kind" : "substrate"
+      },
+      "kind" : "observation",
+      "reachability" : "reachable",
+      "residencyChange" : false,
+      "slug" : "observe-i18n-standard",
+      "transit" : "none"
+    },
+    {
+      "admission" : "admitted",
+      "authorityChange" : false,
+      "destination" : {
+        "coordinate" : "bead-world://epic-i18n-source-consumption-enforcement-adoption-2026-07-18",
+        "id" : "EPIC-I18N-SOURCE-CONSUMPTION-ENFORCEMENT-ADOPTION-2026-07-18",
+        "kind" : "bead-world"
+      },
+      "kind" : "return",
+      "reachability" : "reachable",
+      "residencyChange" : false,
+      "slug" : "return-to-adoption-epic",
+      "transit" : "completed"
+    }
+  ],
+  "schemaVersion" : "0.1.0",
+  "slug" : "bug-i18n-i18n002-ea52a9e9b00aba8335b5803340d50c239e0c696c7c4b4e43603620736d24c585",
+  "workPoem" : {
+    "boundary" : "Detector reachability records evidence; it does not grant ownership, remediation authority, or approval.",
+    "meaning" : "Preserve one recoverable, durable work identity for this structural i18n violation.",
+    "move" : "Repair the violating sink through approved i18n source consumption and rerun the detector.",
+    "proof" : "Only absence from a complete i18n-source-consumption-enforcement v0.1.0 scan closes this world.",
+    "world" : "One private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli source coordinate contains an observed I18N002 law break."
+  },
+  "worldRole" : "bug"
+}

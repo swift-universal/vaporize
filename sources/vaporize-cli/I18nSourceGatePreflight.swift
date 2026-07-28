@@ -68,7 +68,11 @@ enum VaporizeI18nSourceGate {
       targetName: identity.targetName,
       surfaceKind: surfaceKind,
       enforcement: enforcement,
-      approvedCopyPackages: approvedPackages
+      approvedCopyPackages: approvedPackages,
+      // A generated package can be shared by several product targets. This
+      // gate proves this target consumes approved copy; the package-wide
+      // declared-versus-used inventory belongs to `translate census`.
+      enforceDeclaredUsedKeyEquality: false
     )
     let report = try TranslateSourceGate.evaluate(
       sourceURLs: sources,

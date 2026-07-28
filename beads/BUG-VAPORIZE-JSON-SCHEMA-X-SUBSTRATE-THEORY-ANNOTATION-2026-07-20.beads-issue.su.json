@@ -1,0 +1,44 @@
+{
+  "BeadsIssue": "0.1.0",
+  "schemaVersion": "0.1.0",
+  "id": "BUG-VAPORIZE-JSON-SCHEMA-X-SUBSTRATE-THEORY-ANNOTATION-2026-07-20",
+  "title": "validate-json-schema rejects the LinkRef x-substrate-theory annotation",
+  "createdAt": "2026-07-20T09:41:04Z",
+  "createdBy": "codex",
+  "issueType": "bug",
+  "status": "obsolete",
+  "priority": 2,
+  "labels": [
+    "vaporize",
+    "json-schema",
+    "obsolete-extension-approach",
+    "link-ref-v0.0.5",
+    "capture-step-3-5"
+  ],
+  "description": "Obsolete by operator correction on 2026-07-20: substrate schemas do not use x- extension keywords. The LinkRef theory claims were rehomed into standard JSON Schema $comment annotations, and Vaporize remains strict about unknown keywords.",
+  "acceptanceCriteria": [
+    "LinkRef v0.0.5 contains no x- extension keyword.",
+    "Theory claims survive under standard JSON Schema $comment annotations.",
+    "Vaporize continues to refuse genuinely unsupported keywords loudly.",
+    "The Root/fleet workflow instance validates against role-workflow-schemas v0.0.8 and the current LinkRef v0.0.5 schema.",
+    "Schema-theory audit reads the standard $comment markers."
+  ],
+  "relatedTypedRecords": [
+    {
+      "LinkRefModel": "0.5.0",
+      "sv": "0.5.0",
+      "t": "Root and fleet sync-context capture instance",
+      "m": [
+        { "lane": "kind", "v": "workflow-instance" },
+        { "lane": "slug", "v": "assistant-sync-context-materialization-2026-07-20-root-fleet-conformance" }
+      ],
+      "tg": [
+        {
+          "k": "rp",
+          "rt": "mono",
+          "v": "private/universal/substrate/collectives/spaces-universal/private/universal/kura-spaces/workflows/assistant-sync-context-materialization/v0.2.0/assistant-sync-context-materialization-2026-07-20-root-fleet-conformance.workflow-instance.su.json"
+        }
+      ]
+    }
+  ]
+}
