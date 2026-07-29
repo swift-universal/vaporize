@@ -5,7 +5,7 @@ import Testing
 
 @Suite("Maintainer SwiftPM authority")
 struct MaintainerSwiftPMAuthorityTests {
-  @Test("registry materializes deterministic file mirrors for maintainer checkouts")
+  @Test("registry materializes deterministic file mirrors for upstream checkouts")
   func registryMaterializesDeterministicFileMirrors() throws {
     let fixture = try MaintainerAuthorityFixture(
       authorities: [
@@ -227,7 +227,7 @@ private struct MaintainerAuthorityFixture {
     let identity: String
 
     var maintainerPath: String {
-      "maintainers/apple/public/swift/\(identity)"
+      "upstreams/apple/public/swift/\(identity)"
     }
 
     var originals: [String] {
@@ -252,7 +252,7 @@ private struct MaintainerAuthorityFixture {
 
   init(authorities: [Authority]) throws {
     root = FileManager.default.temporaryDirectory.appendingPathComponent(
-      "vaporize-maintainer-authority-\(UUID().uuidString)",
+      "vaporize-upstream-authority-\(UUID().uuidString)",
       isDirectory: true
     )
     substrate = root.appendingPathComponent("substrate", isDirectory: true)
@@ -294,7 +294,7 @@ private struct MaintainerAuthorityFixture {
       },
     ]
     let registryURL = substrate.appendingPathComponent(
-      "maintainers/swiftpm-authorities.json"
+      "upstreams/swiftpm-authorities.json"
     )
     try FileManager.default.createDirectory(
       at: registryURL.deletingLastPathComponent(),
@@ -306,7 +306,7 @@ private struct MaintainerAuthorityFixture {
 
   func checkout(for identity: String) -> URL {
     substrate.appendingPathComponent(
-      "maintainers/apple/public/swift/\(identity)",
+      "upstreams/apple/public/swift/\(identity)",
       isDirectory: true
     ).standardizedFileURL
   }

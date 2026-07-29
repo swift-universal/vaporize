@@ -9,16 +9,14 @@ func localOrRemote(path: String, url: String, from version: Version) -> Package.
 
 let commonShellDependency: Package.Dependency = if ProcessInfo.useLocalDeps {
   .package(
-    path: "../../../../../swift-universal/private/universal/domain/dispatch/spm/common-shell",
-    traits: []
+    path: "../../../../../swift-universal/private/universal/domain/dispatch/spm/common-shell"
   )
 } else {
   .package(name: "common-shell", path: "../../../../../swift-universal/private/universal/domain/dispatch/spm/common-shell")
 }
 let commonProcessDependency: Package.Dependency = if ProcessInfo.useLocalDeps {
   .package(
-    path: "../../../../../swift-universal/private/universal/domain/dispatch/spm/common-process",
-    traits: []
+    path: "../../../../../swift-universal/private/universal/domain/dispatch/spm/common-process"
   )
 } else {
   .package(name: "common-process", path: "../../../../../swift-universal/private/universal/domain/dispatch/spm/common-process")
@@ -32,14 +30,12 @@ let commonLogDependency = Package.Dependency.package(
 // per CEO decision + [[no-code-gets-left-behind]] doctrine.
 let swiftCLIInstallerDependency: Package.Dependency = if ProcessInfo.useLocalDeps {
   .package(
-    path: "../../../../../swift-universal/private/universal/domain/tooling/spm/swift-cli-installer",
-    traits: []
+    path: "../../../../../swift-universal/private/universal/domain/tooling/spm/swift-cli-installer"
   )
 } else {
   .package(
     url: "https://github.com/swift-universal/swift-cli-installer.git",
-    from: "0.0.1",
-    traits: []
+    from: "0.0.1"
   )
 }
 // Consume/verify half of CLI Sparkle (appcast parse, SemanticVersion compare,
