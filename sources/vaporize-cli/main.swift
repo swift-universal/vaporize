@@ -175,7 +175,12 @@ struct VaporizeCLI: AsyncParsableCommand {
 
   enum ArtifactKind: String, ExpressibleByArgument {
     case cli
+    case tui
     case app
+
+    var isTerminalExecutable: Bool {
+      self != .app
+    }
   }
 
   enum ExpectOutcome: String, ExpressibleByArgument {
@@ -196,7 +201,7 @@ struct VaporizeCLI: AsyncParsableCommand {
   )
   var logLevel: VaporizeLogLevel = .info
 
-  @Option(name: .customLong("artifact"), help: "Artifact kind: cli or app.")
+  @Option(name: .customLong("artifact"), help: "Artifact kind: cli, tui, or app.")
   var artifact: ArtifactKind = .cli
 
   @Option(name: .customLong("package-path"), help: "Path to the Swift package.")
@@ -682,7 +687,7 @@ struct VaporizeCLI: AsyncParsableCommand {
     case .install, .build, .run:
       selectedArtifact = artifact
       selectedPackagePath = try requirePackagePath()
-      selectedProduct = artifact == .cli ? try requireCLIProduct() : try requireProduct()
+      selectedProduct = artifact.isTerminalExecutable ? try requireCLIProduct() : try requireProduct()
     case .test:
       // A SwiftPM test run may exercise a library-only schema package. It has
       // no installable CLI product, so there is no product source gate to run.
@@ -690,7 +695,7 @@ struct VaporizeCLI: AsyncParsableCommand {
       guard product?.isEmpty == false else { return }
       selectedArtifact = artifact
       selectedPackagePath = try requirePackagePath()
-      selectedProduct = artifact == .cli ? try requireCLIProduct() : try requireProduct()
+      selectedProduct = artifact.isTerminalExecutable ? try requireCLIProduct() : try requireProduct()
     case .cli:
       selectedArtifact = .cli
       selectedPackagePath = try requirePackagePath()
@@ -713,10 +718,16 @@ struct VaporizeCLI: AsyncParsableCommand {
 
     let gateEnforcement: TranslateSourceGateEnforcement =
       configuration.rawValue.lowercased() == "release" ? .release : .development
+    let selectedSurfaceKind: TranslateSourceSurfaceKind
+    switch selectedArtifact {
+    case .app: selectedSurfaceKind = .app
+    case .cli: selectedSurfaceKind = .cli
+    case .tui: selectedSurfaceKind = .tui
+    }
     let result = try VaporizeI18nSourceGate.enforce(
       productDirectory: URL(fileURLWithPath: selectedPackagePath, isDirectory: true),
       productName: selectedProduct,
-      surfaceKind: selectedArtifact == .app ? .app : .cli,
+      surfaceKind: selectedSurfaceKind,
       enforcement: gateEnforcement
     )
     print(
@@ -731,13 +742,13 @@ struct VaporizeCLI: AsyncParsableCommand {
     switch mode {
     case .install, .build, .run:
       selectedPackagePath = try requirePackagePath()
-      selectedProduct = artifact == .cli ? try requireCLIProduct() : try requireProduct()
+      selectedProduct = artifact.isTerminalExecutable ? try requireCLIProduct() : try requireProduct()
     case .test:
       // Library-only package tests do not name or ship a SwiftUI surface.
       // Preserve the import gate whenever a product is explicitly supplied.
       guard product?.isEmpty == false else { return }
       selectedPackagePath = try requirePackagePath()
-      selectedProduct = artifact == .cli ? try requireCLIProduct() : try requireProduct()
+      selectedProduct = artifact.isTerminalExecutable ? try requireCLIProduct() : try requireProduct()
     case .cli:
       selectedPackagePath = try requirePackagePath()
       selectedProduct = try requireCLIProduct()
@@ -769,7 +780,7 @@ struct VaporizeCLI: AsyncParsableCommand {
 
   private func installArtifact(launchApp: Bool) async throws {
     switch artifact {
-    case .cli:
+    case .cli, .tui:
       try await installCLI()
     case .app:
       try await installApp(launchApp: launchApp)
@@ -778,7 +789,7 @@ struct VaporizeCLI: AsyncParsableCommand {
 
   private func uninstallArtifact() async throws {
     switch artifact {
-    case .cli:
+    case .cli, .tui:
       try await uninstallCLI()
     case .app:
       try uninstallApp()
@@ -866,7 +877,7 @@ struct VaporizeCLI: AsyncParsableCommand {
 
   private func buildArtifact() async throws {
     switch artifact {
-    case .cli:
+    case .cli, .tui:
       try await runSwift(arguments: try swiftBuildArguments())
       if !skipInstall {
         try await installCLI()
@@ -882,7 +893,7 @@ struct VaporizeCLI: AsyncParsableCommand {
 
   private func testArtifact() async throws {
     switch artifact {
-    case .cli:
+    case .cli, .tui:
       try await runSwiftTests()
     case .app:
       throw ValidationError("test mode currently supports SwiftPM package tests only; use --artifact cli.")
@@ -891,7 +902,7 @@ struct VaporizeCLI: AsyncParsableCommand {
 
   private func runArtifact() async throws {
     switch artifact {
-    case .cli:
+    case .cli, .tui:
       if !skipInstall {
         try await installCLI()
       }

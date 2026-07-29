@@ -188,6 +188,33 @@ func buildsSwiftPMPackageBuildArguments() throws {
     ])
 }
 
+@Test("CUJ-01 keeps TUI as a distinct artifact over shared SwiftPM machinery")
+func buildsSwiftPMTUIArtifactArguments() throws {
+  let command = try VaporizeCLI.parse(coreCommandArguments(.build, [
+    "--artifact",
+    "tui",
+    "--package-path",
+    "/workspace/roster-tui",
+    "--product",
+    "roster.tui@clia-org.clia.sh",
+    "--configuration",
+    "debug",
+    "--skip-install",
+  ]))
+
+  #expect(command.artifact == .tui)
+  #expect(
+    try command.swiftBuildArguments() == [
+      "build",
+      "--package-path",
+      "/workspace/roster-tui",
+      "-c",
+      "debug",
+      "--product",
+      "roster.tui@clia-org.clia.sh",
+    ])
+}
+
 @Test("CUJ-01 rejects noncanonical SwiftPM CLI build products")
 func rejectsNoncanonicalSwiftPMCLIBuildProducts() throws {
   let command = try VaporizeCLI.parse(coreCommandArguments(.build, [
