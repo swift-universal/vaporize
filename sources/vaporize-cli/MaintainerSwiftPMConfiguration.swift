@@ -77,10 +77,9 @@ enum MaintainerSwiftPMConfiguration {
     guard let substrateRoot = substrateRoot(containing: packagePath, fileManager: fileManager) else {
       return nil
     }
-    let registryURL = substrateRoot
-      .appendingPathComponent("maintainers", isDirectory: true)
-      .appendingPathComponent("swiftpm-authorities.json")
-    guard fileManager.fileExists(atPath: registryURL.path) else { return nil }
+    guard let registryURL = registryURL(in: substrateRoot, fileManager: fileManager) else {
+      return nil
+    }
 
     let registry = try JSONDecoder().decode(
       Registry.self,
@@ -131,10 +130,9 @@ enum MaintainerSwiftPMConfiguration {
       return []
     }
 
-    let registryURL = substrateRoot
-      .appendingPathComponent("maintainers", isDirectory: true)
-      .appendingPathComponent("swiftpm-authorities.json")
-    guard fileManager.fileExists(atPath: registryURL.path) else { return [] }
+    guard let registryURL = registryURL(in: substrateRoot, fileManager: fileManager) else {
+      return []
+    }
     let registry = try JSONDecoder().decode(
       Registry.self,
       from: Data(contentsOf: registryURL)
@@ -256,6 +254,24 @@ enum MaintainerSwiftPMConfiguration {
         return candidate
       }
       candidate.deleteLastPathComponent()
+    }
+    return nil
+  }
+
+  private static func registryURL(
+    in substrateRoot: URL,
+    fileManager: FileManager
+  ) -> URL? {
+    // Upstream source governance moved from `maintainers` to `upstreams` in
+    // July 2026. Keep the former location as a read-only compatibility lane
+    // for older substrate snapshots, but always prefer the canonical depot.
+    for directory in ["upstreams", "maintainers"] {
+      let candidate = substrateRoot
+        .appendingPathComponent(directory, isDirectory: true)
+        .appendingPathComponent("swiftpm-authorities.json")
+      if fileManager.fileExists(atPath: candidate.path) {
+        return candidate
+      }
     }
     return nil
   }
