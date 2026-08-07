@@ -18,6 +18,29 @@ struct VaporizeCoreExecutionTimingSnapshot: Equatable, Sendable {
   var processExecutionNanoseconds: UInt64
 }
 
+/// Durable timing evidence for build, install, and run. Test execution keeps
+/// its richer assertion and issue-ingestion receipt; these operations need a
+/// compact outcome record without pretending they executed tests.
+struct VaporizeCoreExecutionReceipt: Codable, Equatable, Sendable {
+  var schemaVersion = "0.1.0"
+  var receiptKind = "vaporize-core-execution"
+  var operation: String
+  var executionAuthority: String
+  var toolchainResolver: String
+  var packagePath: String
+  var product: String?
+  var configuration: String
+  var startedAt: Date
+  var finishedAt: Date
+  var commandElapsedNanoseconds: UInt64
+  var dependencyPreparationNanoseconds: UInt64
+  var dependencyRestoreNanoseconds: UInt64
+  var processExecutionNanoseconds: UInt64
+  var succeeded: Bool
+  var artifactPath: String?
+  var failureDescription: String?
+}
+
 enum VaporizeCoreExecutionInstrumentation {
   @TaskLocal static var current: VaporizeCoreExecutionRecorder?
 }
@@ -30,6 +53,7 @@ final class VaporizeCoreExecutionRecorder: @unchecked Sendable {
   let operation: VaporizeCoreOperation
   let authority: VaporizeCoreExecutionAuthority
   let resolver: String
+  let startedAt = Date()
 
   private let commandStarted = DispatchTime.now().uptimeNanoseconds
   private let lock = NSLock()
@@ -73,6 +97,34 @@ final class VaporizeCoreExecutionRecorder: @unchecked Sendable {
       dependencyPreparationNanoseconds: durations[.dependencyPreparation, default: 0],
       dependencyRestoreNanoseconds: durations[.dependencyRestore, default: 0],
       processExecutionNanoseconds: durations[.processExecution, default: 0]
+    )
+  }
+
+  func receipt(
+    packagePath: String,
+    product: String?,
+    configuration: String,
+    succeeded: Bool,
+    artifactPath: String?,
+    failureDescription: String?
+  ) -> VaporizeCoreExecutionReceipt {
+    let timing = snapshot()
+    return .init(
+      operation: operation.rawValue,
+      executionAuthority: authority.rawValue,
+      toolchainResolver: resolver,
+      packagePath: packagePath,
+      product: product,
+      configuration: configuration,
+      startedAt: startedAt,
+      finishedAt: Date(),
+      commandElapsedNanoseconds: timing.commandElapsedNanoseconds,
+      dependencyPreparationNanoseconds: timing.dependencyPreparationNanoseconds,
+      dependencyRestoreNanoseconds: timing.dependencyRestoreNanoseconds,
+      processExecutionNanoseconds: timing.processExecutionNanoseconds,
+      succeeded: succeeded,
+      artifactPath: artifactPath,
+      failureDescription: failureDescription
     )
   }
 

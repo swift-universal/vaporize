@@ -1,5 +1,6 @@
 import Foundation
 import TranslateSourceGate
+import VaporizeCLICopy_v000_000_001
 
 enum VaporizeI18nSourceGateError: Error, LocalizedError {
   case blocked(
@@ -17,21 +18,14 @@ enum VaporizeI18nSourceGateError: Error, LocalizedError {
   var errorDescription: String? {
     switch self {
     case .blocked(let report, let imprintReceipt, let receiptPath, let imprintReceiptPath):
-      return """
-        \(report.standard.title) v\(report.standard.version) blocked \(report.targetName).
-        \(I18nSourceGateAssistantRenderer.render(
-          report: report,
-          receipt: imprintReceipt,
-          reportReceiptPath: receiptPath,
-          beadReceiptPath: imprintReceiptPath
-        ))
-        """
+      return vaporizeCopyFill(VaporizeCLICopy_v000_000_001.CLI.vaporizeA1VA2BlockedA3A4, [String(describing: report.standard.title), String(describing: report.standard.version), String(describing: report.targetName), String(describing: I18nSourceGateAssistantRenderer.render(
+  report: report,
+  receipt: imprintReceipt,
+  reportReceiptPath: receiptPath,
+  beadReceiptPath: imprintReceiptPath
+))])
     case .beadImprintFailed(let report, let receiptPath, let failure):
-      return """
-        \(report.standard.title) v\(report.standard.version) completed for \(report.targetName), but owner-local Bead reconciliation failed.
-        Report receipt: \(receiptPath)
-        Bead reconciliation error: \(failure)
-        """
+      return vaporizeCopyFill(VaporizeCLICopy_v000_000_001.CLI.vaporizeA1VA2CompletedForA3, [String(describing: report.standard.title), String(describing: report.standard.version), String(describing: report.targetName), String(describing: receiptPath), String(describing: failure)])
     }
   }
 }

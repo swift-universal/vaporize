@@ -1,5 +1,5 @@
-import ArgumentParser
 import AppleProjectSpecCore
+import ArgumentParser
 import CommonProcess
 import CommonProcessExecutionKit
 import CommonShell
@@ -9,6 +9,7 @@ import SwiftCLIInstaller
 import SwiftJSONFormatter
 import Swiftly
 import TranslateSourceGate
+import VaporizeCLICopy_v000_000_001
 import VaporizeIssueReporting
 import VaporizeJSONSchemaValidation
 
@@ -27,14 +28,24 @@ enum VaporizeExecutable {
 struct VaporizeCLI: AsyncParsableCommand {
   /// Hard-coded for Phase 0 - see ``FR-CRAZE-VAPORWARE-AWARENESS`` Phase 0 scope.
   /// Phase 1+ will derive this from Package.swift via a build-time plugin.
-  static let vaporizeVersion = "0.1.0"
-  static let buildIdentifier = ProcessInfo.processInfo.environment["VAPORIZE_BUILD_NUMBER"]
+  static let vaporizeVersion = "0.0.1"
+  static let buildIdentifier =
+    ProcessInfo.processInfo.environment["VAPORIZE_BUILD_NUMBER"]
     ?? ProcessInfo.processInfo.environment["VAPORIZE_BUILD_ID"]
     ?? "local"
   static let buildSha = ProcessInfo.processInfo.environment["VAPORIZE_BUILD_SHA"]
   static let buildDate = ProcessInfo.processInfo.environment["VAPORIZE_BUILD_DATE"]
+  static var reportedBuildMetadata: VaporizeRuntimeBuildMetadata {
+    VaporizeBuildMetadataResolver.resolve(
+      fallbackBuildNumber: buildIdentifier,
+      fallbackBuildSHA: buildSha,
+      fallbackBuildDate: buildDate
+    )
+  }
+  static var reportedBuildIdentifier: String { reportedBuildMetadata.buildNumber }
   #if os(macOS)
-    static let platformToolchainSelectionAbstract = " On macOS, the independent `toolchain-selection xcode` provider compiles in the xcode-select selection surface."
+    static let platformToolchainSelectionAbstract =
+      " On macOS, the independent `toolchain-selection xcode` provider compiles in the xcode-select selection surface."
     static let coreCommandAuthorityDiscussion = """
       Core execution commands on macOS:
         vaporize build swift|xcode [options]
@@ -76,48 +87,9 @@ struct VaporizeCLI: AsyncParsableCommand {
 
   static let configuration = CommandConfiguration(
     commandName: "vaporize.cli@wrkstrm-core.clia.sh",
-    abstract: """
-      Substrate-canonical vaporware-collapse gate. vaporize transmutes typed \
-      substrate-vaporware into world-state: binaries land, .app installs, \
-      processes run, receipts emit. Modes: install, uninstall, build, test, run, \
-      pass, use, toolchain-selection, setup. Toolchain selection compiles \
-      swiftlang/swiftly's `use` operation into this executable for default Swift \
-      selection. Core build, test, install, and run commands use the platform \
-      authority grammar documented below.\(platformToolchainSelectionAbstract) Vaporize does not locate \
-      or launch an installed swiftly CLI. Toolchain lifecycle, general \
-      inspection, and execution remain separate responsibilities. \
-      Vaporware-awareness modes: status + warehouse enumerate and \
-      store vaporware at a path per the `x-vaporize-collapse-path` annotation \
-      convention. Project-generation bridge mode: inspect-project-yml reads \
-      legacy XcodeGen YAML into an owned Swift model without rewriting it; \
-      compare-project-yml-pkl compares that model with a Pkl parity specimen; \
-      import-project-yml emits a Pkl parity specimen from legacy YAML; \
-      generate-project-yml emits transitional AppleProjectSpec YAML from Pkl \
-      with receipts; generate-xcodeproj emits first-slice .xcodeproj \
-      world-state from evaluated AppleProjectSpec Pkl; \
-      generate-sparkle-config emits a compiled-in SparkleConfig.swift for a \
-      CLI tool target from its project.pkl releaseIdentity; list-targets discovers \
-      project targets, packages, and schemes for parity/build routing; \
-      list-schemes asks xcodebuild for live .xcworkspace schemes; \
-      release-doctor audits the release spine before claims are trusted. \
-      fleet-status reports every installed bin-directory tool with its \
-      sidecar-recorded version and appcast feed currency \
-      (current/behind/critical-behind/feed-unreachable/no-sidecar). \
-      `inventory` discovers Package.swift, .xcodeproj, .xcworkspace, \
-      project.yml, and project.pkl surfaces by domain, product line, and \
-      ownership scope. `cuj-audit` inventories CUJ definitions, proof \
-      bindings, canonical product homes, and active-owned implementation \
-      coverage without conflating fixtures, matrices, receipts, or tests; \
-      `--proof-ledger-path` writes the canonical cross-portfolio proof index \
-      while `--project-ledger-path` and `--project-ledger-csv-path` write one \
-      fine-grained coverage row per active-owned implementation project. \
-      Executable tests and green receipts remain in their owning homes. \
-      `domains` lists available tool domains from the tools collection. \
-      Legacy `x-craze-collapse-path` remains a compatibility alias during migration.
-      Target feature inspection mode: inspect-target-features reads a project.yml \
-      target, its configFiles wiring, release-features.json, generated xcconfigs, \
-      and ReleaseFeatures.swift provenance.
-      """,
+    abstract: vaporizeCopyFill(
+      VaporizeCLICopy_v000_000_001.CLI.vaporizeSubstrateCanonicalVaporwareCollapseGateVaporize,
+      ["\(platformToolchainSelectionAbstract)"]),
     discussion: toolchainSelectionDiscussion
   )
 
@@ -148,6 +120,8 @@ struct VaporizeCLI: AsyncParsableCommand {
     case listTargets = "list-targets"
     case listSchemes = "list-schemes"
     case releaseDoctor = "release-doctor"
+    case versionStatus = "version-status"
+    case homebrewStatus = "homebrew-status"
     case inventory
     case cujAudit = "cuj-audit"
     case maintainerDependencies = "maintainer-dependencies"
@@ -189,259 +163,314 @@ struct VaporizeCLI: AsyncParsableCommand {
   }
 
   @Argument(
-    help: "Mode: install, uninstall, build, test, run, pass, use, toolchain-selection, setup, status, warehouse, validate-json, validate-json-schema, inspect-project-yml, inspect-target-features, compare-project-yml-pkl, import-project-yml, upgrade-project-yml-to-pkl, generate-project-yml, generate-xcodeproj, generate-sparkle-config, list-targets, list-schemes, release-doctor, inventory, cuj-audit, maintainer-dependencies, domains, self-update, fleet-status, graph (forwards to package-graph@wrkstrm.cli), or the deprecated cli and app compatibility spellings.")
+    help: ArgumentHelp(VaporizeCLICopy_v000_000_001.CLI.vaporizeModeInstallUninstallBuildTestRun))
   var mode: Mode?
 
-  @Flag(help: "Prints the tool name, version, and build metadata and exits.")
+  @Flag(help: ArgumentHelp(VaporizeCLICopy_v000_000_001.CLI.vaporizePrintsTheToolNameVersionAnd))
   var version: Bool = false
 
   @Option(
     name: .customLong("log-level"),
-    help: "Diagnostic exposure: trace, debug, info, notice, warning, error, or critical. Command results remain on stdout."
+    help: ArgumentHelp(
+      VaporizeCLICopy_v000_000_001.CLI.vaporizeDiagnosticExposureTraceDebugInfoNotice)
   )
   var logLevel: VaporizeLogLevel = .info
 
-  @Option(name: .customLong("artifact"), help: "Artifact kind: cli, tui, or app.")
+  @Option(
+    name: .customLong("artifact"),
+    help: ArgumentHelp(VaporizeCLICopy_v000_000_001.CLI.vaporizeArtifactKindCliTuiOrApp))
   var artifact: ArtifactKind = .cli
 
-  @Option(name: .customLong("package-path"), help: "Path to the Swift package.")
+  @Option(
+    name: .customLong("package-path"),
+    help: ArgumentHelp(VaporizeCLICopy_v000_000_001.CLI.vaporizePathToTheSwiftPackage))
   var packagePath: String?
 
   @Option(
     name: .customLong("swiftpm-config-path"),
-    help: "SwiftPM configuration directory. When omitted, Vaporize discovers the substrate maintainer authority registry and materializes portable local mirrors automatically.")
+    help: ArgumentHelp(
+      VaporizeCLICopy_v000_000_001.CLI.vaporizeSwiftpmConfigurationDirectoryWhenOmittedVaporize))
   var swiftPMConfigurationPathOverride: String?
 
-  @Option(name: .customLong("product"), help: "Product name (binary or app bundle).")
+  @Option(
+    name: .customLong("product"),
+    help: ArgumentHelp(VaporizeCLICopy_v000_000_001.CLI.vaporizeProductNameBinaryOrAppBundle))
   var product: String?
 
   @Option(
     name: .customLong("product-version"),
-    help: "Version recorded as CFBundleShortVersionString in the installed CLI metadata Info.plist.")
+    help: ArgumentHelp(
+      VaporizeCLICopy_v000_000_001.CLI.vaporizeVersionRecordedAsCfbundleshortversionstringInThe))
   var productVersion: String?
 
   @Option(
     name: .customLong("product-build"),
-    help: "Build recorded as CFBundleVersion in the installed CLI metadata Info.plist.")
+    help: ArgumentHelp(VaporizeCLICopy_v000_000_001.CLI.vaporizeBuildRecordedAsCfbundleversionInThe)
+  )
   var productBuild: String?
 
   @Option(
     name: .customLong("product-build-sha"),
-    help: "Source revision recorded in the installed CLI metadata Info.plist.")
+    help: ArgumentHelp(
+      VaporizeCLICopy_v000_000_001.CLI.vaporizeSourceRevisionRecordedInTheInstalled))
   var productBuildSha: String?
 
   @Option(
     name: .customLong("product-build-date"),
-    help: "Build date recorded in the installed CLI metadata Info.plist.")
+    help: ArgumentHelp(VaporizeCLICopy_v000_000_001.CLI.vaporizeBuildDateRecordedInTheInstalled))
   var productBuildDate: String?
 
   @Option(
     name: .customLong("su-feed-url"),
     help:
-      "Sparkle appcast URL recorded as SUFeedURL in the installed CLI metadata Info.plist sidecar (requires --su-public-ed-key).")
+      ArgumentHelp(VaporizeCLICopy_v000_000_001.CLI.vaporizeSparkleAppcastUrlRecordedAsSufeedurl))
   var suFeedURL: String?
 
   @Option(
     name: .customLong("su-public-ed-key"),
     help:
-      "Base64 ed25519 public key recorded as SUPublicEDKey in the installed CLI metadata Info.plist sidecar (requires --su-feed-url).")
+      ArgumentHelp(VaporizeCLICopy_v000_000_001.CLI.vaporizeBase64Ed25519PublicKeyRecordedAs))
   var suPublicEDKey: String?
 
   @Option(
     name: .customLong("app-bundle-name"),
-    help: "Built .app bundle name when it differs from --product (app mode).")
+    help: ArgumentHelp(VaporizeCLICopy_v000_000_001.CLI.vaporizeBuiltAppBundleNameWhenIt))
   var appBundleName: String?
 
-  @Option(name: .customLong("configuration"), help: "Build configuration.")
+  @Option(
+    name: .customLong("configuration"),
+    help: ArgumentHelp(VaporizeCLICopy_v000_000_001.CLI.vaporizeBuildConfiguration))
   var configuration: SwiftAppInstaller.Configuration = .release
 
   // App-only
   @Option(
     name: .customLong("destination"),
-    help: "Destination directory for app install (default /Applications).")
+    help: ArgumentHelp(
+      VaporizeCLICopy_v000_000_001.CLI.vaporizeDestinationDirectoryForAppInstallDefault))
   var destination: String = "/Applications"
 
-  @Flag(name: .customLong("force"), help: "Replace existing install.")
+  @Flag(
+    name: .customLong("force"),
+    help: ArgumentHelp(VaporizeCLICopy_v000_000_001.CLI.vaporizeReplaceExistingInstall))
   var forceReinstall: Bool = false
 
-  @Flag(name: .customLong("skip-build"), help: "Skip build (app mode only).")
+  @Flag(
+    name: .customLong("skip-build"),
+    help: ArgumentHelp(VaporizeCLICopy_v000_000_001.CLI.vaporizeSkipBuildAppModeOnly))
   var skipBuild: Bool = false
 
-  @Flag(name: .customLong("skip-install"), help: "Skip the default install step for build or run mode.")
+  @Flag(
+    name: .customLong("skip-install"),
+    help: ArgumentHelp(VaporizeCLICopy_v000_000_001.CLI.vaporizeSkipTheDefaultInstallStepFor))
   var skipInstall: Bool = false
 
-  @Flag(name: .customLong("launch"), help: "Launch app after install (app mode).")
+  @Flag(
+    name: .customLong("launch"),
+    help: ArgumentHelp(VaporizeCLICopy_v000_000_001.CLI.vaporizeLaunchAppAfterInstallAppMode))
   var launch: Bool = false
 
   @Option(
     name: .customLong("xcode-project"),
-    help: "Path to .xcodeproj when building with xcodebuild (app mode).")
+    help: ArgumentHelp(VaporizeCLICopy_v000_000_001.CLI.vaporizePathToXcodeprojWhenBuildingWith))
   var xcodeProject: String?
 
   @Option(
     name: .customLong("xcode-workspace"),
-    help: "Path to .xcworkspace when building with xcodebuild (app mode) or listing workspace schemes.")
+    help: ArgumentHelp(VaporizeCLICopy_v000_000_001.CLI.vaporizePathToXcworkspaceWhenBuildingWith))
   var xcodeWorkspace: String?
 
   @Option(
     name: .customLong("scheme"),
-    help: "Scheme to build with xcodebuild (requires --xcode-project or --xcode-workspace).")
+    help: ArgumentHelp(VaporizeCLICopy_v000_000_001.CLI.vaporizeSchemeToBuildWithXcodebuildRequires)
+  )
   var xcodeScheme: String?
 
   @Option(
     name: .customLong("target"),
-    help: "Target name for inspect-target-features or generate-sparkle-config mode.")
+    help: ArgumentHelp(VaporizeCLICopy_v000_000_001.CLI.vaporizeTargetNameForInspectTargetFeatures))
   var targetName: String?
 
   @Option(
     name: .customLong("derived-data-path"),
-    help: "Derived data path to use with xcodebuild; also searched for the built .app bundle.")
+    help: ArgumentHelp(VaporizeCLICopy_v000_000_001.CLI.vaporizeDerivedDataPathToUseWith))
   var derivedDataPath: String?
 
   @Option(
     name: .customLong("xcode-product-cache-workspace"),
-    help: "Shared .xcworkspace whose warm product cache should be queried before per-project app build outputs.")
+    help: ArgumentHelp(
+      VaporizeCLICopy_v000_000_001.CLI.vaporizeSharedXcworkspaceWhoseWarmProductCache))
   var xcodeProductCacheWorkspace: String?
 
   @Option(
     name: .customLong("xcode-product-cache-derived-data-path"),
-    help: "DerivedData root for --xcode-product-cache-workspace; Vaporize searches Build/Products/<configuration>/<app>.app there first.")
+    help: ArgumentHelp(VaporizeCLICopy_v000_000_001.CLI.vaporizeDeriveddataRootForXcodeProductCache)
+  )
   var xcodeProductCacheDerivedDataPath: String?
 
   @Option(
     name: .customLong("xcode-destination"),
-    help: "Typed xcodebuild destination. Repeat for multiple destinations. Defaults to macOS arm64 when using xcodebuild.")
+    help: ArgumentHelp(
+      VaporizeCLICopy_v000_000_001.CLI.vaporizeTypedXcodebuildDestinationRepeatForMultiple))
   var xcodeDestinations: [String] = []
 
   @Option(
     name: .customLong("xcode-sdk"),
-    help: "SDK passed to xcodebuild with -sdk.")
+    help: ArgumentHelp(VaporizeCLICopy_v000_000_001.CLI.vaporizeSdkPassedToXcodebuildWithSdk))
   var xcodeSDK: String?
 
   @Option(
     name: .customLong("xcode-result-bundle-path"),
-    help: "Result bundle path passed to xcodebuild with -resultBundlePath.")
+    help: ArgumentHelp(VaporizeCLICopy_v000_000_001.CLI.vaporizeResultBundlePathPassedToXcodebuild))
   var xcodeResultBundlePath: String?
 
   @Option(
     name: .customLong("xcode-build-setting"),
-    help: "Build setting passed to xcodebuild as KEY=VALUE. Repeat for multiple settings.")
+    help: ArgumentHelp(VaporizeCLICopy_v000_000_001.CLI.vaporizeBuildSettingPassedToXcodebuildAs))
   var xcodeBuildSettings: [String] = []
 
   @Flag(
     name: .customLong("analyze"),
-    help: "Emit a JSON receipt for test, pass, use, or toolchain-selection mode.")
+    help: ArgumentHelp(VaporizeCLICopy_v000_000_001.CLI.vaporizeEmitAJsonReceiptForTest))
   var analyzeExecution: Bool = false
 
   @Option(
     name: .customLong("receipt-path"),
-    help: "Write the test, pass-through, use, toolchain-selection, inventory, or CUJ audit JSON receipt to this path.")
+    help: ArgumentHelp(VaporizeCLICopy_v000_000_001.CLI.vaporizeWriteTheTestPassThroughUse))
   var receiptPath: String?
 
   @Option(
     name: .customLong("report-path"),
-    help: "Write the CUJ audit Markdown report to this path.")
+    help: ArgumentHelp(VaporizeCLICopy_v000_000_001.CLI.vaporizeWriteTheCujAuditMarkdownReport))
   var reportPath: String?
 
   @Option(
     name: .customLong("proof-ledger-path"),
-    help: "Write the canonical CUJ automated-proof ledger to this path.")
+    help: ArgumentHelp(VaporizeCLICopy_v000_000_001.CLI.vaporizeWriteTheCanonicalCujAutomatedProof))
   var proofLedgerPath: String?
 
   @Option(
     name: .customLong("project-ledger-path"),
-    help: "Write the fine-grained active-owned implementation project CUJ coverage ledger to this path.")
+    help: ArgumentHelp(VaporizeCLICopy_v000_000_001.CLI.vaporizeWriteTheFineGrainedActiveOwned))
   var projectLedgerPath: String?
 
   @Option(
     name: .customLong("project-ledger-csv-path"),
-    help: "Write the fine-grained implementation project CUJ coverage ledger as CSV to this path.")
+    help: ArgumentHelp(
+      VaporizeCLICopy_v000_000_001.CLI.vaporizeWriteTheFineGrainedImplementationProject))
   var projectLedgerCSVPath: String?
 
   @Option(
     name: .customLong("working-directory"),
-    help: "Working directory for pass mode. Defaults to the current directory.")
+    help: ArgumentHelp(VaporizeCLICopy_v000_000_001.CLI.vaporizeWorkingDirectoryForPassModeDefaults)
+  )
   var passWorkingDirectory: String?
 
   @Option(
     name: .customLong("common-process-spec"),
-    help: "Path to a CommonProcess CommandSpec JSON for use mode. Use '-' for stdin.")
+    help: ArgumentHelp(VaporizeCLICopy_v000_000_001.CLI.vaporizePathToACommonprocessCommandspecJson)
+  )
   var commonProcessSpecPath: String?
 
   #if os(macOS)
     @Option(
       name: .customLong("developer-dir"),
-      help: "Process-local DEVELOPER_DIR override for an explicit xcode authority or another Xcode command; it does not change xcode-select selection.")
+      help: ArgumentHelp(
+        VaporizeCLICopy_v000_000_001.CLI.vaporizeProcessLocalDeveloperDirOverrideFor))
     var developerDirectory: String?
   #endif
 
   @Option(
     name: .customLong("xcode-component"),
-    help: "Xcode component to download in setup mode, for example MetalToolchain.")
+    help: ArgumentHelp(VaporizeCLICopy_v000_000_001.CLI.vaporizeXcodeComponentToDownloadInSetup))
   var xcodeComponent: String?
 
   @Option(
     name: .customLong("path"),
-    help: "Path for status, warehouse, inventory, cuj-audit, validate-json, inspect-project-yml, inspect-target-features, compare-project-yml-pkl, import-project-yml, or list-targets modes.")
+    help: ArgumentHelp(VaporizeCLICopy_v000_000_001.CLI.vaporizePathForStatusWarehouseVersionStatus)
+  )
   var vaporScanPath: String?
 
   @Option(
     name: .customLong("schema"),
-    help: "JSON Schema file path for validate-json-schema mode.")
+    help: ArgumentHelp(VaporizeCLICopy_v000_000_001.CLI.vaporizeJsonSchemaFilePathForValidate))
   var jsonSchemaPath: String?
 
   @Option(
     name: .customLong("fixture"),
-    help: "Fixture JSON instance path validated against --schema in validate-json-schema mode.")
+    help: ArgumentHelp(
+      VaporizeCLICopy_v000_000_001.CLI.vaporizeFixtureJsonInstancePathValidatedAgainst))
   var jsonSchemaFixturePath: String?
 
   @Option(
     name: .customLong("expect"),
-    help: "Expected validate-json-schema outcome: pass or fail. Exit is nonzero when the actual outcome differs.")
+    help: ArgumentHelp(
+      VaporizeCLICopy_v000_000_001.CLI.vaporizeExpectedValidateJsonSchemaOutcomePass))
   var jsonSchemaExpectedOutcome: ExpectOutcome?
 
   @Option(
     name: .customLong("pkl-path"),
-    help: "Path to an AppleProjectSpec Pkl record for compare-project-yml-pkl, generate-project-yml, generate-xcodeproj, or list-targets mode.")
+    help: ArgumentHelp(VaporizeCLICopy_v000_000_001.CLI.vaporizePathToAnAppleprojectspecPklRecord))
   var pklPath: String?
 
   @Option(
     name: .customLong("pkl-schema-path"),
-    help: "Path to AppleProjectSpec.pkl for import-project-yml mode. Defaults to Vaporize's package schema when discoverable.")
+    help: ArgumentHelp(VaporizeCLICopy_v000_000_001.CLI.vaporizePathToAppleprojectspecPklForImport))
   var pklSchemaPath: String?
 
   @Option(
     name: .customLong("output-path"),
-    help: "Output path for import-project-yml, generate-project-yml, or generate-xcodeproj mode.")
+    help: ArgumentHelp(VaporizeCLICopy_v000_000_001.CLI.vaporizeOutputPathForImportProjectYml))
   var generatedOutputPath: String?
 
   @Option(
     name: .customLong("output"),
-    help: "Output path for the generated SparkleConfig.swift in generate-sparkle-config mode.")
+    help: ArgumentHelp(
+      VaporizeCLICopy_v000_000_001.CLI.vaporizeOutputPathForTheGeneratedSparkleconfig))
   var sparkleConfigOutputPath: String?
 
   @Flag(
     name: .customLong("apply"),
-    help: "For upgrade-project-yml-to-pkl mode: retire the project.yml after a parity-verified upgrade. Without it the upgrade is a dry-run preview.")
+    help: ArgumentHelp(VaporizeCLICopy_v000_000_001.CLI.vaporizeForUpgradeProjectYmlToPkl))
   var applyUpgrade: Bool = false
 
   @Option(
     name: .customLong("format"),
-    help: "Output format for status, inventory, cuj-audit, domains, inspect-project-yml, inspect-target-features, compare-project-yml-pkl, import-project-yml, generate-project-yml, generate-xcodeproj, list-targets, list-schemes, release-doctor, or fleet-status mode: text (default) or json.")
+    help: ArgumentHelp(VaporizeCLICopy_v000_000_001.CLI.vaporizeOutputFormatForStatusVersionStatus))
   var vaporOutputFormat: VaporOutputFormatArgument = .text
 
   @Option(
     name: .customLong("bin-dir"),
-    help: "Install bin directory scanned by fleet-status (default ~/.swiftpm/bin).")
+    help: ArgumentHelp(VaporizeCLICopy_v000_000_001.CLI.vaporizeInstallBinDirectoryScannedByFleet))
   var fleetBinDirectory: String?
 
-  @Option(name: .customLong("domain"), help: "Tool domain for install/uninstall/run and domain path shaping (for example build).")
+  @Option(
+    name: .customLong("homebrew-formula"),
+    help: ArgumentHelp(
+      VaporizeCLICopy_v000_000_001.CLI.vaporizeFormulaTokenInspectedByHomebrewStatus)
+  )
+  var homebrewFormula: String?
+
+  @Option(
+    name: .customLong("homebrew-tap-root"),
+    help: ArgumentHelp(
+      VaporizeCLICopy_v000_000_001.CLI.vaporizeOwningHomebrewTapRootContainingFormula)
+  )
+  var homebrewTapRoot: String?
+
+  @Option(
+    name: .customLong("domain"),
+    help: ArgumentHelp(VaporizeCLICopy_v000_000_001.CLI.vaporizeToolDomainForInstallUninstallRun))
   var toolDomain: String?
 
-  @Option(name: .customLong("tools-collection"), help: "Kura tools collection directory for domains mode.")
+  @Option(
+    name: .customLong("tools-collection"),
+    help: ArgumentHelp(
+      VaporizeCLICopy_v000_000_001.CLI.vaporizeKuraToolsCollectionDirectoryForDomains))
   var toolsCollectionPath: String?
 
-  @Argument(parsing: .remaining, help: "Arguments forwarded to test, run, pass, or toolchain-selection mode.")
+  @Argument(
+    parsing: .remaining,
+    help: ArgumentHelp(VaporizeCLICopy_v000_000_001.CLI.vaporizeArgumentsForwardedToTestRunPass))
   var forwardedArguments: [String] = []
 
   mutating func run() async throws {
@@ -454,7 +483,7 @@ struct VaporizeCLI: AsyncParsableCommand {
 
     guard let mode else {
       throw ValidationError(
-        "missing expected argument <mode>. Run with --help for valid modes, or --version to print build metadata."
+        VaporizeCLICopy_v000_000_001.CLI.vaporizeMissingExpectedArgumentModeRunWith
       )
     }
 
@@ -510,6 +539,10 @@ struct VaporizeCLI: AsyncParsableCommand {
       try await listSchemes()
     case .releaseDoctor:
       try await releaseDoctor()
+    case .versionStatus:
+      try await runSourceVersionStatus()
+    case .homebrewStatus:
+      try await runHomebrewStatus()
     case .inventory:
       try await runOwnedSurfaceInventory()
     case .cujAudit:
@@ -593,10 +626,16 @@ struct VaporizeCLI: AsyncParsableCommand {
           }
         }
       } catch {
+        try? await emitCoreExecutionReceipt(
+          from: recorder,
+          succeeded: false,
+          failureDescription: String(describing: error)
+        )
         try emitRetainedTestReceipt(from: recorder)
         throw error
       }
       try emitRetainedTestReceipt(from: recorder)
+      try await emitCoreExecutionReceipt(from: recorder, succeeded: true, failureDescription: nil)
     }
     VaporizeLogging.command.info(
       "operation=\(plan.operation.rawValue) authority=\(plan.executionAuthority.rawValue) state=end"
@@ -608,6 +647,43 @@ struct VaporizeCLI: AsyncParsableCommand {
   ) throws {
     guard let receipt = recorder.takeFinalizedTestReceipt() else { return }
     try emitReceiptIfRequested(receipt)
+  }
+
+  private func emitCoreExecutionReceipt(
+    from recorder: VaporizeCoreExecutionRecorder,
+    succeeded: Bool,
+    failureDescription: String?
+  ) async throws {
+    // Tests retain their richer dedicated receipt. Build/install/run receive
+    // the shared timing record requested through --analyze or --receipt-path.
+    guard recorder.operation != .test else { return }
+    let packagePath = try requirePackagePath()
+    let product = product?.trimmingCharacters(in: .whitespacesAndNewlines)
+    let artifactPath: String?
+    switch artifact {
+    case .cli, .tui:
+      artifactPath = product.map { installedCLIPath(product: $0) }
+    case .app:
+      if let product {
+        let bundleName = await resolvedAppBundleName(product: product) ?? product
+        artifactPath =
+          URL(fileURLWithPath: destination, isDirectory: true)
+          .appendingPathComponent("\(bundleName).app", isDirectory: true)
+          .path
+      } else {
+        artifactPath = nil
+      }
+    }
+    try emitReceiptIfRequested(
+      recorder.receipt(
+        packagePath: packagePath,
+        product: product,
+        configuration: configuration.rawValue,
+        succeeded: succeeded,
+        artifactPath: artifactPath,
+        failureDescription: failureDescription
+      )
+    )
   }
 
   func coreExecutionPlan(for mode: Mode) throws -> VaporizeCoreExecutionPlan? {
@@ -626,7 +702,9 @@ struct VaporizeCLI: AsyncParsableCommand {
     )
     if resolvedDeveloperDirectory != nil, plan.executionAuthority != .xcode {
       throw ValidationError(
-        "--developer-dir belongs to the `\(operation.rawValue) xcode` authority; the pure-Swift sibling is independent of Xcode."
+        vaporizeCopyFill(
+          VaporizeCLICopy_v000_000_001.CLI.vaporizeDeveloperDirBelongsToTheA1,
+          ["\(operation.rawValue)"])
       )
     }
     return plan
@@ -636,11 +714,13 @@ struct VaporizeCLI: AsyncParsableCommand {
     guard artifact == .app, plan.executionAuthority != .xcode else { return }
     #if os(macOS)
       throw ValidationError(
-        "Vaporize app artifacts require the Xcode-assisted command. Use `\(plan.operation.rawValue) xcode --artifact app`; pure Swift remains available for CLI and package operations."
+        vaporizeCopyFill(
+          VaporizeCLICopy_v000_000_001.CLI.vaporizeVaporizeAppArtifactsRequireTheXcode,
+          ["\(plan.operation.rawValue)"])
       )
     #else
       throw ValidationError(
-        "Vaporize app artifacts require Xcode and are unavailable on this platform; the collapsed command supports pure-Swift CLI and package operations."
+        VaporizeCLICopy_v000_000_001.CLI.vaporizeVaporizeAppArtifactsRequireXcodeAnd
       )
     #endif
   }
@@ -664,7 +744,8 @@ struct VaporizeCLI: AsyncParsableCommand {
       #if os(macOS)
         return .xcode
       #else
-        throw ValidationError("The Xcode-assisted Swift authority is unavailable on this platform.")
+        throw ValidationError(
+          VaporizeCLICopy_v000_000_001.CLI.vaporizeTheXcodeAssistedSwiftAuthorityIs)
       #endif
     }
   }
@@ -687,7 +768,8 @@ struct VaporizeCLI: AsyncParsableCommand {
     case .install, .build, .run:
       selectedArtifact = artifact
       selectedPackagePath = try requirePackagePath()
-      selectedProduct = artifact.isTerminalExecutable ? try requireCLIProduct() : try requireProduct()
+      selectedProduct =
+        artifact.isTerminalExecutable ? try requireCLIProduct() : try requireProduct()
     case .test:
       // A SwiftPM test run may exercise a library-only schema package. It has
       // no installable CLI product, so there is no product source gate to run.
@@ -695,7 +777,8 @@ struct VaporizeCLI: AsyncParsableCommand {
       guard product?.isEmpty == false else { return }
       selectedArtifact = artifact
       selectedPackagePath = try requirePackagePath()
-      selectedProduct = artifact.isTerminalExecutable ? try requireCLIProduct() : try requireProduct()
+      selectedProduct =
+        artifact.isTerminalExecutable ? try requireCLIProduct() : try requireProduct()
     case .cli:
       selectedArtifact = .cli
       selectedPackagePath = try requirePackagePath()
@@ -731,7 +814,12 @@ struct VaporizeCLI: AsyncParsableCommand {
       enforcement: gateEnforcement
     )
     print(
-      "vaporize: \(result.report.standard.title) v\(result.report.standard.version) passed for \(selectedProduct) · receipt \(result.receiptURL.path)"
+      vaporizeCopyFill(
+        VaporizeCLICopy_v000_000_001.CLI.vaporizeVaporizeA1VA2PassedFor,
+        [
+          "\(result.report.standard.title)", "\(result.report.standard.version)",
+          "\(selectedProduct)", "\(result.receiptURL.path)",
+        ])
     )
   }
 
@@ -742,13 +830,15 @@ struct VaporizeCLI: AsyncParsableCommand {
     switch mode {
     case .install, .build, .run:
       selectedPackagePath = try requirePackagePath()
-      selectedProduct = artifact.isTerminalExecutable ? try requireCLIProduct() : try requireProduct()
+      selectedProduct =
+        artifact.isTerminalExecutable ? try requireCLIProduct() : try requireProduct()
     case .test:
       // Library-only package tests do not name or ship a SwiftUI surface.
       // Preserve the import gate whenever a product is explicitly supplied.
       guard product?.isEmpty == false else { return }
       selectedPackagePath = try requirePackagePath()
-      selectedProduct = artifact.isTerminalExecutable ? try requireCLIProduct() : try requireProduct()
+      selectedProduct =
+        artifact.isTerminalExecutable ? try requireCLIProduct() : try requireProduct()
     case .cli:
       selectedPackagePath = try requirePackagePath()
       selectedProduct = try requireCLIProduct()
@@ -822,11 +912,11 @@ struct VaporizeCLI: AsyncParsableCommand {
       configuration: .init(rawValue: configuration.rawValue) ?? .release,
       forceReinstall: true,
       productVersion: Self.vaporizeVersion,
-      productBuild: Self.buildIdentifier,
+      productBuild: Self.reportedBuildIdentifier,
       productBuildSha: Self.buildSha,
       productBuildDate: Self.buildDate,
       installerVersion: Self.vaporizeVersion,
-      installerBuild: Self.buildIdentifier,
+      installerBuild: Self.reportedBuildIdentifier,
       swiftToolchainSource: try selectedSwiftToolchainSource(),
       developerDirectory: resolvedDeveloperDirectory,
       swiftPMConfigPath: try resolvedSwiftPMConfigurationPath(packagePath: packagePath)
@@ -866,11 +956,12 @@ struct VaporizeCLI: AsyncParsableCommand {
     if feed.isEmpty, key.isEmpty { return nil }
     guard !feed.isEmpty, !key.isEmpty else {
       throw ValidationError(
-        "--su-feed-url and --su-public-ed-key must be provided together to record a self-update identity."
+        VaporizeCLICopy_v000_000_001.CLI.vaporizeSuFeedUrlAndSuPublic
       )
     }
     guard let feedURL = URL(string: feed), feedURL.scheme != nil else {
-      throw ValidationError("--su-feed-url is not a valid URL: \(feed)")
+      throw ValidationError(
+        vaporizeCopyFill(VaporizeCLICopy_v000_000_001.CLI.vaporizeSuFeedUrlIsNotA, ["\(feed)"]))
     }
     return SelfUpdateIdentity(feedURL: feedURL, publicEDKeyBase64: key)
   }
@@ -896,7 +987,8 @@ struct VaporizeCLI: AsyncParsableCommand {
     case .cli, .tui:
       try await runSwiftTests()
     case .app:
-      throw ValidationError("test mode currently supports SwiftPM package tests only; use --artifact cli.")
+      throw ValidationError(
+        VaporizeCLICopy_v000_000_001.CLI.vaporizeTestModeCurrentlySupportsSwiftpmPackage)
     }
   }
 
@@ -930,7 +1022,7 @@ struct VaporizeCLI: AsyncParsableCommand {
       productBuildSha: resolvedProductBuildSha(for: product),
       productBuildDate: resolvedProductBuildDate(for: product),
       installerVersion: Self.vaporizeVersion,
-      installerBuild: Self.buildIdentifier,
+      installerBuild: Self.reportedBuildIdentifier,
       swiftToolchainSource: try selectedSwiftToolchainSource(),
       developerDirectory: resolvedDeveloperDirectory,
       swiftPMConfigPath: try resolvedSwiftPMConfigurationPath(packagePath: packagePath),
@@ -949,21 +1041,19 @@ struct VaporizeCLI: AsyncParsableCommand {
     let installedPath = installedCLIPath(product: product)
     guard FileManager.default.isExecutableFile(atPath: installedPath) else {
       throw ValidationError(
-        """
-        Install reported success but no executable landed for product `\(product)`.
-        Expected an executable at:
-          \(installedPath)
-        This guards the remove-then-copy failure mode where the prior binary is removed
-        but the new one is never written (leaving nothing, or only a stale .bak). Re-run
-        the build; if it recurs, inspect the `swift package experimental-install` copy step.
-        """
+        vaporizeCopyFill(
+          VaporizeCLICopy_v000_000_001.CLI.vaporizeInstallReportedSuccessButNoExecutable,
+          ["\(product)", "\(installedPath)"])
       )
     }
     try publishInstalledCLI(toDomain: installDomain, product: product)
     // Positive presence confirmation: name the verified path so a multi-binary suite
     // reinstall (one invocation per product) emits one confirmation each — any single
     // missing binary surfaces immediately rather than hiding behind a silent success.
-    print("vaporize: verified \(product) installed at \(installedPath)")
+    print(
+      vaporizeCopyFill(
+        VaporizeCLICopy_v000_000_001.CLI.vaporizeVaporizeVerifiedA1InstalledAtA2,
+        ["\(product)", "\(installedPath)"]))
   }
 
   /// Resolve the Xcode build inputs for app mode so an Xcode-project app builds
@@ -981,7 +1071,7 @@ struct VaporizeCLI: AsyncParsableCommand {
   ///   against a non-SPM directory (the silent-fallback-to-wrong-state failure
   ///   this method exists to kill).
   private func resolvedXcodeAppInputs(packagePath: String, product: String) throws
-    -> (project: String?, workspace: String?, scheme: String?)
+    -> XcodeAppInputResolver.Inputs
   {
     // Gather the filesystem facts here; the routing decision itself lives in the
     // filesystem-free XcodeAppInputResolver so it can be swept in the proving
@@ -1000,7 +1090,7 @@ struct VaporizeCLI: AsyncParsableCommand {
         hasPackageSwift: hasPackageSwift,
         entries: entries,
         product: product)
-      return (inputs.project, inputs.workspace, inputs.scheme)
+      return inputs
     } catch let error as XcodeAppInputResolver.NoBuildableProject {
       throw ValidationError(error.description)
     }
@@ -1013,7 +1103,7 @@ struct VaporizeCLI: AsyncParsableCommand {
     let request = SwiftAppInstaller.Request(
       packagePath: packagePath,
       product: product,
-      appBundleName: resolvedAppBundleName(product: product),
+      appBundleName: await resolvedAppBundleName(product: product, xcodeInputs: xcodeInputs),
       configuration: configuration,
       destination: destination,
       forceReinstall: forceReinstall,
@@ -1069,7 +1159,7 @@ struct VaporizeCLI: AsyncParsableCommand {
     let request = SwiftAppInstaller.Request(
       packagePath: packagePath,
       product: product,
-      appBundleName: resolvedAppBundleName(product: product),
+      appBundleName: await resolvedAppBundleName(product: product, xcodeInputs: xcodeInputs),
       configuration: configuration,
       destination: destination,
       forceReinstall: forceReinstall,
@@ -1112,55 +1202,44 @@ struct VaporizeCLI: AsyncParsableCommand {
     )
   }
 
-  private func resolvedAppBundleName(product: String) -> String? {
+  func resolvedAppBundleName(
+    product: String,
+    xcodeInputs providedInputs: XcodeAppInputResolver.Inputs? = nil
+  ) async -> String? {
     if let appBundleName, !appBundleName.isEmpty {
       return appBundleName
     }
-    guard xcodeProject != nil || xcodeWorkspace != nil else {
+
+    let xcodeInputs: XcodeAppInputResolver.Inputs
+    if let providedInputs {
+      xcodeInputs = providedInputs
+    } else {
+      guard let packagePath,
+        let resolvedInputs = try? resolvedXcodeAppInputs(
+          packagePath: packagePath,
+          product: product
+        )
+      else {
+        return nil
+      }
+      xcodeInputs = resolvedInputs
+    }
+
+    guard xcodeInputs.project != nil || xcodeInputs.workspace != nil else {
       return nil
     }
 
-    for url in candidateProjectYMLURLs() where FileManager.default.fileExists(atPath: url.path) {
-      guard let spec = try? AppleProjectYMLReader.load(url: url) else {
-        continue
-      }
-      let targetName = xcodeScheme ?? product
-      if let resolved = AppleProjectAppBundleNameResolver.appBundleName(
-        in: spec,
-        targetName: targetName,
-        configuration: configuration.rawValue.capitalized
-      ) {
-        return resolved
-      }
-    }
-
-    return nil
-  }
-
-  private func candidateProjectYMLURLs() -> [URL] {
-    var candidates: [URL] = []
-    if let xcodeProject {
-      candidates.append(projectYMLURL(nextTo: xcodeProject))
-    }
-    if let xcodeWorkspace {
-      candidates.append(projectYMLURL(nextTo: xcodeWorkspace))
-    }
-    if let packagePath {
-      candidates.append(absoluteURL(for: packagePath).appendingPathComponent("project.yml"))
-    }
-    var seen: Set<String> = []
-    return candidates.filter { url in
-      let path = url.standardizedFileURL.path
-      if seen.contains(path) { return false }
-      seen.insert(path)
-      return true
-    }
-  }
-
-  private func projectYMLURL(nextTo path: String) -> URL {
-    absoluteURL(for: path)
-      .deletingLastPathComponent()
-      .appendingPathComponent("project.yml")
+    return await XcodeAppBundleIdentityResolver.resolve(
+      .init(
+        explicitPklPath: pklPath,
+        xcodeProjectPath: xcodeInputs.project,
+        xcodeWorkspacePath: xcodeInputs.workspace,
+        sourceRootPath: packagePath,
+        targetName: xcodeInputs.scheme ?? product,
+        configuration: configuration.rawValue.capitalized,
+        workingDirectoryURL: URL(fileURLWithPath: FileManager.default.currentDirectoryPath)
+      )
+    )
   }
 
   private func absoluteURL(for path: String) -> URL {
@@ -1186,11 +1265,9 @@ struct VaporizeCLI: AsyncParsableCommand {
       return path
     }
     throw ValidationError(
-      """
-      Executable product `\(product)` is not installed or is not executable.
-      Checked:
-      \(candidates.map { "  - \($0)" }.joined(separator: "\n"))
-      """
+      vaporizeCopyFill(
+        VaporizeCLICopy_v000_000_001.CLI.vaporizeExecutableProductA1IsNotInstalled,
+        ["\(product)", "\(candidates.map { "  - \($0)" }.joined(separator: "\n"))"])
     )
   }
 
@@ -1205,7 +1282,7 @@ struct VaporizeCLI: AsyncParsableCommand {
     }
 
     if let packagePath,
-       let domain = inferredDomain(for: product, packagePath: packagePath)
+      let domain = inferredDomain(for: product, packagePath: packagePath)
     {
       append(domainSpecificCLIPath(product: product, domain: domain))
     }
@@ -1256,11 +1333,13 @@ struct VaporizeCLI: AsyncParsableCommand {
     let base = installedCLIBinDirectory().appendingPathComponent("domain", isDirectory: true)
     let fileManager = FileManager.default
     guard fileManager.fileExists(atPath: base.path) else { return [] }
-    guard let enumerator = fileManager.enumerator(
-      at: base,
-      includingPropertiesForKeys: [.isRegularFileKey, .isSymbolicLinkKey],
-      options: [.skipsHiddenFiles]
-    ) else {
+    guard
+      let enumerator = fileManager.enumerator(
+        at: base,
+        includingPropertiesForKeys: [.isRegularFileKey, .isSymbolicLinkKey],
+        options: [.skipsHiddenFiles]
+      )
+    else {
       return []
     }
 
@@ -1275,7 +1354,8 @@ struct VaporizeCLI: AsyncParsableCommand {
   }
 
   private func domainPath(forComponents components: [String]) -> URL {
-    components.reduce(installedCLIBinDirectory().appendingPathComponent("domain")) { path, component in
+    components.reduce(installedCLIBinDirectory().appendingPathComponent("domain")) {
+      path, component in
       path.appendingPathComponent(sanitizePathComponent(component), isDirectory: true)
     }
   }
@@ -1323,7 +1403,10 @@ struct VaporizeCLI: AsyncParsableCommand {
     let base = installedCLIBinDirectory().appendingPathComponent("domain")
     let fileManager = FileManager.default
     guard fileManager.fileExists(atPath: base.path) else { return }
-    guard let enumerator = fileManager.enumerator(at: base, includingPropertiesForKeys: [.isRegularFileKey]) else {
+    guard
+      let enumerator = fileManager.enumerator(
+        at: base, includingPropertiesForKeys: [.isRegularFileKey])
+    else {
       return
     }
     for case let url as URL in enumerator {
@@ -1367,10 +1450,11 @@ struct VaporizeCLI: AsyncParsableCommand {
 
   func swiftTestArguments() throws -> [String] {
     let packagePath = try requirePackagePath()
-    var arguments = ["test"] + (try swiftPMConfigurationArguments(packagePath: packagePath)) + [
-      "--package-path", packagePath,
-      "-c", configuration.rawValue,
-    ]
+    var arguments =
+      ["test"] + (try swiftPMConfigurationArguments(packagePath: packagePath)) + [
+        "--package-path", packagePath,
+        "-c", configuration.rawValue,
+      ]
     arguments.append(contentsOf: try coreForwardedArguments())
     return arguments
   }
@@ -1443,7 +1527,9 @@ struct VaporizeCLI: AsyncParsableCommand {
         }
       } catch {
         throw ValidationError(
-          "Vaporize could not restore Package.resolved at \(snapshot.url.path) after maintainer authority preparation: \(error.localizedDescription)"
+          vaporizeCopyFill(
+            VaporizeCLICopy_v000_000_001.CLI.vaporizeVaporizeCouldNotRestorePackageResolved,
+            ["\(snapshot.url.path)", "\(error.localizedDescription)"])
         )
       }
       throw operationError
@@ -1489,7 +1575,8 @@ struct VaporizeCLI: AsyncParsableCommand {
 
   private func requirePackagePath() throws -> String {
     guard let packagePath, !packagePath.isEmpty else {
-      throw ValidationError("--package-path is required for operation mode.")
+      throw ValidationError(
+        VaporizeCLICopy_v000_000_001.CLI.vaporizePackagePathIsRequiredForOperation)
     }
     return packagePath
   }
@@ -1505,7 +1592,7 @@ struct VaporizeCLI: AsyncParsableCommand {
       .path
     guard FileManager.default.fileExists(atPath: manifestPath) else {
       throw ValidationError(
-        "--package-path is required for self-update unless run from a package root."
+        VaporizeCLICopy_v000_000_001.CLI.vaporizePackagePathIsRequiredForSelf
       )
     }
 
@@ -1514,7 +1601,8 @@ struct VaporizeCLI: AsyncParsableCommand {
 
   private func requireProduct() throws -> String {
     guard let product, !product.isEmpty else {
-      throw ValidationError("--product is required for operation mode.")
+      throw ValidationError(
+        VaporizeCLICopy_v000_000_001.CLI.vaporizeProductIsRequiredForOperationMode)
     }
     return product
   }
@@ -1592,7 +1680,7 @@ struct VaporizeCLI: AsyncParsableCommand {
   }
 
   private func resolvedProductBuild(for product: String) -> String? {
-    productBuild ?? (product == Self.configuration.commandName ? Self.buildIdentifier : nil)
+    productBuild ?? (product == Self.configuration.commandName ? Self.reportedBuildIdentifier : nil)
   }
 
   private func resolvedProductBuildSha(for product: String) -> String? {
@@ -1604,18 +1692,33 @@ struct VaporizeCLI: AsyncParsableCommand {
   }
 
   private func printVersionMetadata() {
-    print("vaporize.cli@wrkstrm-core.clia.sh \(Self.vaporizeVersion) (build \(Self.buildIdentifier))")
-    if let buildSha = Self.buildSha {
-      print("build-sha: \(buildSha)")
+    let metadata = Self.reportedBuildMetadata
+    print(
+      vaporizeCopyFill(
+        VaporizeCLICopy_v000_000_001.CLI.vaporizeVaporizeCliWrkstrmCoreCliaSh,
+        ["\(Self.vaporizeVersion)", "\(metadata.buildNumber)"]))
+    print(
+      vaporizeCopyFill(
+        VaporizeCLICopy_v000_000_001.CLI.vaporizeBuildAuthorityA1,
+        ["\(metadata.authority.rawValue)"]))
+    if let sidecarVersion = metadata.sidecarVersion, sidecarVersion != Self.vaporizeVersion {
+      print(
+        vaporizeCopyFill(
+          VaporizeCLICopy_v000_000_001.CLI.vaporizeMetadataVersionA1DoesNotMatch,
+          ["\(sidecarVersion)"]))
     }
-    if let buildDate = Self.buildDate {
-      print("build-date: \(buildDate)")
+    if let buildSha = metadata.buildSHA {
+      print(vaporizeCopyFill(VaporizeCLICopy_v000_000_001.CLI.vaporizeBuildShaA1, ["\(buildSha)"]))
+    }
+    if let buildDate = metadata.buildDate {
+      print(
+        vaporizeCopyFill(VaporizeCLICopy_v000_000_001.CLI.vaporizeBuildDateA1, ["\(buildDate)"]))
     }
   }
 
   private func useCommonProcessSpec() async throws {
     guard let commonProcessSpecPath, !commonProcessSpecPath.isEmpty else {
-      throw ValidationError("--common-process-spec is required for use mode.")
+      throw ValidationError(VaporizeCLICopy_v000_000_001.CLI.vaporizeCommonProcessSpecIsRequiredFor)
     }
 
     let command = try CommonProcessSpecLoader.load(path: commonProcessSpecPath)
@@ -1651,7 +1754,7 @@ struct VaporizeCLI: AsyncParsableCommand {
   private func runToolchainSelection() async throws {
     guard resolvedDeveloperDirectory == nil else {
       throw ValidationError(
-        "--developer-dir is a process-local Xcode execution override; select the active Xcode with `toolchain-selection xcode -- select --switch <developer-directory>`."
+        VaporizeCLICopy_v000_000_001.CLI.vaporizeDeveloperDirIsAProcessLocal
       )
     }
 
@@ -1669,7 +1772,8 @@ struct VaporizeCLI: AsyncParsableCommand {
   /// Runs Swiftly's selection implementation in this process. Swiftly remains
   /// an implementation dependency, not a Vaporize command name or subprocess.
   private func runSwiftToolchainSelection(arguments: [String]) async throws {
-    let rootCommandName = Self.configuration.commandName
+    let rootCommandName =
+      Self.configuration.commandName
       ?? "vaporize.cli@wrkstrm-core.clia.sh"
     try await SwiftlyCommandRunner.run(
       arguments: ["use"] + arguments,
@@ -1774,7 +1878,8 @@ struct VaporizeCLI: AsyncParsableCommand {
 
   private func setup() async throws {
     guard let xcodeComponent, !xcodeComponent.isEmpty else {
-      throw ValidationError("--xcode-component is required for setup mode.")
+      throw ValidationError(
+        VaporizeCLICopy_v000_000_001.CLI.vaporizeXcodeComponentIsRequiredForSetup)
     }
     try await runExecutable(
       executable: .name("xcodebuild"),
@@ -1842,6 +1947,85 @@ struct VaporizeCLI: AsyncParsableCommand {
     case .json:
       FileHandle.standardOutput.write(data)
       FileHandle.standardOutput.write(Data("\n".utf8))
+    }
+  }
+
+  private func runSourceVersionStatus() async throws {
+    let scanPath = try ownedSurfaceInventoryPath()
+    let scanner = SourceVersionStatusScanner()
+    let result = try scanner.scan(path: scanPath)
+    let receipt = scanner.receipt(
+      from: result,
+      reporterVersion: Self.vaporizeVersion,
+      reporterBuildNumber: Self.reportedBuildIdentifier
+    )
+    let data = try SourceVersionStatusRenderer.renderJSON(receipt)
+
+    if let receiptPath {
+      let url = URL(fileURLWithPath: receiptPath)
+      try FileManager.default.createDirectory(
+        at: url.deletingLastPathComponent(),
+        withIntermediateDirectories: true
+      )
+      try data.write(to: url)
+    }
+
+    switch vaporOutputFormat {
+    case .text:
+      print(SourceVersionStatusRenderer.renderText(receipt))
+    case .json:
+      FileHandle.standardOutput.write(data)
+      FileHandle.standardOutput.write(Data("\n".utf8))
+    }
+  }
+
+  private func runHomebrewStatus() async throws {
+    guard let homebrewFormula, !homebrewFormula.isEmpty else {
+      throw ValidationError(
+        VaporizeCLICopy_v000_000_001.CLI.vaporizeHomebrewFormulaIsRequiredForHomebrew)
+    }
+    guard let homebrewTapRoot, !homebrewTapRoot.isEmpty else {
+      throw ValidationError(VaporizeCLICopy_v000_000_001.CLI.vaporizeHomebrewTapRootIsRequiredFor)
+    }
+    let command = CommandSpec(
+      executable: .name("brew"),
+      args: ["info", "--json=v2", homebrewFormula],
+      env: .inherit(updating: nil),
+      workingDirectory: FileManager.default.currentDirectoryPath,
+      logOptions: .init(exposure: .none, tags: ["source": "vaporize-homebrew-status"]),
+      requestId: "vaporize-homebrew-status-\(UUID().uuidString)",
+      runnerKind: .auto,
+      streamingMode: .buffered
+    )
+    try command.validateOrThrow()
+    let output = try await RunnerControllerFactory.run(command: command)
+    guard output.isSuccess else {
+      let detail = String(data: output.stderr, encoding: .utf8) ?? "brew info failed"
+      throw ValidationError(
+        vaporizeCopyFill(
+          VaporizeCLICopy_v000_000_001.CLI.vaporizeHomebrewStatusCouldNotReadBrew,
+          ["\(homebrewFormula)", "\(detail)"]))
+    }
+    let receipt = try HomebrewStatusScanner().receipt(
+      formulaName: homebrewFormula,
+      tapRoot: absoluteURL(for: homebrewTapRoot),
+      brewInfoData: output.stdout
+    )
+    let data = try HomebrewStatusRenderer.renderJSON(receipt)
+    if let receiptPath {
+      let url = absoluteURL(for: receiptPath)
+      try FileManager.default.createDirectory(
+        at: url.deletingLastPathComponent(),
+        withIntermediateDirectories: true
+      )
+      try data.write(to: url)
+    }
+    switch vaporOutputFormat {
+    case .json:
+      FileHandle.standardOutput.write(data)
+      FileHandle.standardOutput.write(Data("\n".utf8))
+    case .text:
+      print(HomebrewStatusRenderer.renderText(receipt))
     }
   }
 
@@ -1964,7 +2148,7 @@ struct VaporizeCLI: AsyncParsableCommand {
     )
     guard FileManager.default.fileExists(atPath: defaultCollection.path) else {
       throw ValidationError(
-        "could not resolve tool collection path for domains mode. Pass --tools-collection or run from a mono root."
+        VaporizeCLICopy_v000_000_001.CLI.vaporizeCouldNotResolveToolCollectionPath
       )
     }
     return defaultCollection
@@ -1972,11 +2156,13 @@ struct VaporizeCLI: AsyncParsableCommand {
 
   private func loadToolManifests(from collectionPath: URL) throws -> [ToolManifestRecord] {
     let fileManager = FileManager.default
-    guard let enumerator = fileManager.enumerator(
-      at: collectionPath,
-      includingPropertiesForKeys: [.isRegularFileKey],
-      options: [.skipsHiddenFiles]
-    ) else {
+    guard
+      let enumerator = fileManager.enumerator(
+        at: collectionPath,
+        includingPropertiesForKeys: [.isRegularFileKey],
+        options: [.skipsHiddenFiles]
+      )
+    else {
       return []
     }
     return enumerator.compactMap { item in
@@ -2067,7 +2253,7 @@ struct VaporizeCLI: AsyncParsableCommand {
 
   private func scanForVapor() throws -> VaporScanResult {
     guard let vaporScanPath, !vaporScanPath.isEmpty else {
-      throw ValidationError("--path is required for this operation.")
+      throw ValidationError(VaporizeCLICopy_v000_000_001.CLI.vaporizePathIsRequiredForThisOperation)
     }
     let scanner = VaporInventoryScanner()
     return try scanner.scan(path: vaporScanPath)
@@ -2075,7 +2261,7 @@ struct VaporizeCLI: AsyncParsableCommand {
 
   private func validateJSON() async throws {
     guard let vaporScanPath, !vaporScanPath.isEmpty else {
-      throw ValidationError("--path is required for validate-json mode.")
+      throw ValidationError(VaporizeCLICopy_v000_000_001.CLI.vaporizePathIsRequiredForValidateJson)
     }
 
     let requestId = "vaporize-validate-json-\(UUID().uuidString)"
@@ -2087,7 +2273,9 @@ struct VaporizeCLI: AsyncParsableCommand {
         requestId: requestId
       )
       try emitReceiptIfRequested(receipt)
-      print("valid JSON: \(vaporScanPath)")
+      print(
+        vaporizeCopyFill(VaporizeCLICopy_v000_000_001.CLI.vaporizeValidJsonA1, ["\(vaporScanPath)"])
+      )
     } catch {
       let receipt = JSONValidationReceipt(
         path: vaporScanPath,
@@ -2097,16 +2285,21 @@ struct VaporizeCLI: AsyncParsableCommand {
         errorMessage: String(describing: error)
       )
       try emitReceiptIfRequested(receipt)
-      throw ValidationError("invalid JSON at \(vaporScanPath): \(error)")
+      throw ValidationError(
+        vaporizeCopyFill(
+          VaporizeCLICopy_v000_000_001.CLI.vaporizeInvalidJsonAtA1A2,
+          ["\(vaporScanPath)", "\(error)"]))
     }
   }
 
   private func validateJSONSchema() async throws {
     guard let jsonSchemaPath, !jsonSchemaPath.isEmpty else {
-      throw ValidationError("--schema is required for validate-json-schema mode.")
+      throw ValidationError(
+        VaporizeCLICopy_v000_000_001.CLI.vaporizeSchemaIsRequiredForValidateJson)
     }
     guard let jsonSchemaFixturePath, !jsonSchemaFixturePath.isEmpty else {
-      throw ValidationError("--fixture is required for validate-json-schema mode.")
+      throw ValidationError(
+        VaporizeCLICopy_v000_000_001.CLI.vaporizeFixtureIsRequiredForValidateJson)
     }
 
     let requestId = "vaporize-validate-json-schema-\(UUID().uuidString)"
@@ -2163,7 +2356,9 @@ struct VaporizeCLI: AsyncParsableCommand {
     if succeeded {
       let expectationSuffix = expectedLabel.map { " (expected \($0))" } ?? ""
       print(
-        "schema validation \(actual)\(expectationSuffix): \(jsonSchemaFixturePath) against \(jsonSchemaPath)"
+        vaporizeCopyFill(
+          VaporizeCLICopy_v000_000_001.CLI.vaporizeSchemaValidationA1A2A3Against,
+          ["\(actual)", "\(expectationSuffix)", "\(jsonSchemaFixturePath)", "\(jsonSchemaPath)"])
       )
       return
     }
@@ -2196,7 +2391,8 @@ struct VaporizeCLI: AsyncParsableCommand {
 
   private func inspectProjectYML() async throws {
     guard let vaporScanPath, !vaporScanPath.isEmpty else {
-      throw ValidationError("--path is required for inspect-project-yml mode.")
+      throw ValidationError(
+        VaporizeCLICopy_v000_000_001.CLI.vaporizePathIsRequiredForInspectProject)
     }
 
     let requestId = "vaporize-inspect-project-yml-\(UUID().uuidString)"
@@ -2211,7 +2407,12 @@ struct VaporizeCLI: AsyncParsableCommand {
     switch vaporOutputFormat {
     case .text:
       print(
-        "project.yml: \(receipt.projectName) targets=\(receipt.targetCount) packages=\(receipt.packageCount) schemes=\(receipt.schemeCount)"
+        vaporizeCopyFill(
+          VaporizeCLICopy_v000_000_001.CLI.vaporizeProjectYmlA1TargetsA2Packages,
+          [
+            "\(receipt.projectName)", "\(receipt.targetCount)", "\(receipt.packageCount)",
+            "\(receipt.schemeCount)",
+          ])
       )
     case .json:
       let encoder = JSONEncoder()
@@ -2224,7 +2425,7 @@ struct VaporizeCLI: AsyncParsableCommand {
 
   private func inspectTargetFeatures() async throws {
     guard let vaporScanPath, !vaporScanPath.isEmpty else {
-      throw ValidationError("--path is required for inspect-target-features mode.")
+      throw ValidationError(VaporizeCLICopy_v000_000_001.CLI.vaporizePathIsRequiredForInspectTarget)
     }
 
     let requestId = "vaporize-inspect-target-features-\(UUID().uuidString)"
@@ -2239,10 +2440,18 @@ struct VaporizeCLI: AsyncParsableCommand {
     case .text:
       let configs = receipt.declaredBuildConfigurations.map(\.name).joined(separator: ", ")
       print(
-        "target features: \(receipt.targetName) status=\(receipt.overallStatus) configs=[\(configs)] tiers=\(receipt.releaseFeatureManifest.tierCount)"
+        vaporizeCopyFill(
+          VaporizeCLICopy_v000_000_001.CLI.vaporizeTargetFeaturesA1StatusA2Configs,
+          [
+            "\(receipt.targetName)", "\(receipt.overallStatus)", "\(configs)",
+            "\(receipt.releaseFeatureManifest.tierCount)",
+          ])
       )
       for minimum in receipt.minimums where minimum.status != "pass" {
-        print("\(minimum.status): \(minimum.name) - \(minimum.detail)")
+        print(
+          vaporizeCopyFill(
+            VaporizeCLICopy_v000_000_001.CLI.vaporizeA1A2A3,
+            ["\(minimum.status)", "\(minimum.name)", "\(minimum.detail)"]))
       }
     case .json:
       let encoder = JSONEncoder()
@@ -2253,16 +2462,20 @@ struct VaporizeCLI: AsyncParsableCommand {
     }
 
     guard receipt.overallStatus == "pass" else {
-      throw ValidationError("target feature inspection failed for \(receipt.targetName).")
+      throw ValidationError(
+        vaporizeCopyFill(
+          VaporizeCLICopy_v000_000_001.CLI.vaporizeTargetFeatureInspectionFailedForA1,
+          ["\(receipt.targetName)"]))
     }
   }
 
   private func compareProjectYMLPkl() async throws {
     guard let vaporScanPath, !vaporScanPath.isEmpty else {
-      throw ValidationError("--path is required for compare-project-yml-pkl mode.")
+      throw ValidationError(
+        VaporizeCLICopy_v000_000_001.CLI.vaporizePathIsRequiredForCompareProject)
     }
     guard let pklPath, !pklPath.isEmpty else {
-      throw ValidationError("--pkl-path is required for compare-project-yml-pkl mode.")
+      throw ValidationError(VaporizeCLICopy_v000_000_001.CLI.vaporizePklPathIsRequiredForCompare)
     }
 
     let requestId = "vaporize-compare-project-yml-pkl-\(UUID().uuidString)"
@@ -2280,10 +2493,15 @@ struct VaporizeCLI: AsyncParsableCommand {
     switch vaporOutputFormat {
     case .text:
       let status = receipt.matched ? "matched" : "mismatched"
-      print("project.yml <-> project.pkl: \(status) mismatches=\(receipt.mismatchCount)")
+      print(
+        vaporizeCopyFill(
+          VaporizeCLICopy_v000_000_001.CLI.vaporizeProjectYmlProjectPklA1Mismatches,
+          ["\(status)", "\(receipt.mismatchCount)"]))
       if !receipt.mismatches.isEmpty {
         let joinedMismatches = receipt.mismatches.joined(separator: ", ")
-        print("mismatches: \(joinedMismatches)")
+        print(
+          vaporizeCopyFill(
+            VaporizeCLICopy_v000_000_001.CLI.vaporizeMismatchesA1, ["\(joinedMismatches)"]))
       }
     case .json:
       let encoder = JSONEncoder()
@@ -2295,16 +2513,19 @@ struct VaporizeCLI: AsyncParsableCommand {
 
     guard receipt.matched else {
       let joinedMismatches = receipt.mismatches.joined(separator: ", ")
-      throw ValidationError("project.yml and project.pkl differ: \(joinedMismatches)")
+      throw ValidationError(
+        vaporizeCopyFill(
+          VaporizeCLICopy_v000_000_001.CLI.vaporizeProjectYmlAndProjectPklDiffer,
+          ["\(joinedMismatches)"]))
     }
   }
 
   private func importProjectYML() async throws {
     guard let vaporScanPath, !vaporScanPath.isEmpty else {
-      throw ValidationError("--path is required for import-project-yml mode.")
+      throw ValidationError(VaporizeCLICopy_v000_000_001.CLI.vaporizePathIsRequiredForImportProject)
     }
     guard let generatedOutputPath, !generatedOutputPath.isEmpty else {
-      throw ValidationError("--output-path is required for import-project-yml mode.")
+      throw ValidationError(VaporizeCLICopy_v000_000_001.CLI.vaporizeOutputPathIsRequiredForImport)
     }
 
     let outputURL = URL(fileURLWithPath: generatedOutputPath).standardizedFileURL
@@ -2325,7 +2546,12 @@ struct VaporizeCLI: AsyncParsableCommand {
     switch vaporOutputFormat {
     case .text:
       print(
-        "project.yml -> project.pkl: \(receipt.projectName) targets=\(receipt.targetCount) packages=\(receipt.packageCount) bytes=\(receipt.generatedByteCount)"
+        vaporizeCopyFill(
+          VaporizeCLICopy_v000_000_001.CLI.vaporizeProjectYmlProjectPklA1Targets,
+          [
+            "\(receipt.projectName)", "\(receipt.targetCount)", "\(receipt.packageCount)",
+            "\(receipt.generatedByteCount)",
+          ])
       )
       print(receipt.boundary)
     case .json:
@@ -2344,11 +2570,14 @@ struct VaporizeCLI: AsyncParsableCommand {
   /// filesystem-free AppleProjectPklUpgradePlanner (see its proving ground).
   private func upgradeProjectYMLToPkl() async throws {
     guard let vaporScanPath, !vaporScanPath.isEmpty else {
-      throw ValidationError("--path is required for upgrade-project-yml-to-pkl mode (the project.yml).")
+      throw ValidationError(
+        VaporizeCLICopy_v000_000_001.CLI.vaporizePathIsRequiredForUpgradeProject)
     }
     let ymlURL = URL(fileURLWithPath: vaporScanPath).standardizedFileURL
     guard FileManager.default.fileExists(atPath: ymlURL.path) else {
-      throw ValidationError("upgrade-project-yml-to-pkl: no project.yml at \(ymlURL.path).")
+      throw ValidationError(
+        vaporizeCopyFill(
+          VaporizeCLICopy_v000_000_001.CLI.vaporizeUpgradeProjectYmlToPklNo, ["\(ymlURL.path)"]))
     }
     // Default the pkl output beside the yml (project.pkl) unless --output-path given.
     let pklURL: URL = {
@@ -2413,10 +2642,11 @@ struct VaporizeCLI: AsyncParsableCommand {
 
   private func generateProjectYML() async throws {
     guard let pklPath, !pklPath.isEmpty else {
-      throw ValidationError("--pkl-path is required for generate-project-yml mode.")
+      throw ValidationError(VaporizeCLICopy_v000_000_001.CLI.vaporizePklPathIsRequiredForGenerate)
     }
     guard let generatedOutputPath, !generatedOutputPath.isEmpty else {
-      throw ValidationError("--output-path is required for generate-project-yml mode.")
+      throw ValidationError(
+        VaporizeCLICopy_v000_000_001.CLI.vaporizeOutputPathIsRequiredForGenerate)
     }
 
     let requestId = "vaporize-generate-project-yml-\(UUID().uuidString)"
@@ -2430,7 +2660,12 @@ struct VaporizeCLI: AsyncParsableCommand {
     switch vaporOutputFormat {
     case .text:
       print(
-        "project.pkl -> project.yml: \(receipt.projectName) targets=\(receipt.targetCount) packages=\(receipt.packageCount) bytes=\(receipt.generatedByteCount)"
+        vaporizeCopyFill(
+          VaporizeCLICopy_v000_000_001.CLI.vaporizeProjectPklProjectYmlA1Targets,
+          [
+            "\(receipt.projectName)", "\(receipt.targetCount)", "\(receipt.packageCount)",
+            "\(receipt.generatedByteCount)",
+          ])
       )
       print(receipt.boundary)
     case .json:
@@ -2444,10 +2679,11 @@ struct VaporizeCLI: AsyncParsableCommand {
 
   private func generateXcodeProject() async throws {
     guard let pklPath, !pklPath.isEmpty else {
-      throw ValidationError("--pkl-path is required for generate-xcodeproj mode.")
+      throw ValidationError(VaporizeCLICopy_v000_000_001.CLI.vaporizePklPathIsRequiredForGenerate2)
     }
     guard let generatedOutputPath, !generatedOutputPath.isEmpty else {
-      throw ValidationError("--output-path is required for generate-xcodeproj mode.")
+      throw ValidationError(
+        VaporizeCLICopy_v000_000_001.CLI.vaporizeOutputPathIsRequiredForGenerate2)
     }
 
     let requestId = "vaporize-generate-xcodeproj-\(UUID().uuidString)"
@@ -2461,7 +2697,12 @@ struct VaporizeCLI: AsyncParsableCommand {
     switch vaporOutputFormat {
     case .text:
       print(
-        "project.pkl -> xcodeproj: \(receipt.projectName) targets=\(receipt.targetCount) sources=\(receipt.sourceFileCount) resources=\(receipt.resourceFileCount) bytes=\(receipt.generatedByteCount)"
+        vaporizeCopyFill(
+          VaporizeCLICopy_v000_000_001.CLI.vaporizeProjectPklXcodeprojA1TargetsA2,
+          [
+            "\(receipt.projectName)", "\(receipt.targetCount)", "\(receipt.sourceFileCount)",
+            "\(receipt.resourceFileCount)", "\(receipt.generatedByteCount)",
+          ])
       )
       print(receipt.boundary)
     case .json:
@@ -2479,13 +2720,15 @@ struct VaporizeCLI: AsyncParsableCommand {
   /// the install/run lane and the self-update verb is a separate component.
   private func generateSparkleConfig() async throws {
     guard let pklPath, !pklPath.isEmpty else {
-      throw ValidationError("--pkl-path is required for generate-sparkle-config mode.")
+      throw ValidationError(VaporizeCLICopy_v000_000_001.CLI.vaporizePklPathIsRequiredForGenerate3)
     }
     guard let targetName, !targetName.isEmpty else {
-      throw ValidationError("--target is required for generate-sparkle-config mode.")
+      throw ValidationError(
+        VaporizeCLICopy_v000_000_001.CLI.vaporizeTargetIsRequiredForGenerateSparkle)
     }
     guard let sparkleConfigOutputPath, !sparkleConfigOutputPath.isEmpty else {
-      throw ValidationError("--output is required for generate-sparkle-config mode.")
+      throw ValidationError(
+        VaporizeCLICopy_v000_000_001.CLI.vaporizeOutputIsRequiredForGenerateSparkle)
     }
 
     let spec = try await AppleProjectPklLoader.load(url: URL(fileURLWithPath: pklPath))
@@ -2530,25 +2773,45 @@ struct VaporizeCLI: AsyncParsableCommand {
         productCacheOptions: productCacheOptions
       )
     } else {
-      throw ValidationError("--path, --pkl-path, or --package-path is required for list-targets mode.")
+      throw ValidationError(VaporizeCLICopy_v000_000_001.CLI.vaporizePathPklPathOrPackagePath)
     }
     try emitReceiptIfRequested(receipt)
 
     switch vaporOutputFormat {
     case .text:
       print(
-        "targets: \(receipt.projectName) input=\(receipt.inputKind) targets=\(receipt.targetCount) buildable=\(receipt.buildableTargetNames.count) schemes=\(receipt.schemeCount) packages=\(receipt.packageCount)"
+        vaporizeCopyFill(
+          VaporizeCLICopy_v000_000_001.CLI.vaporizeTargetsA1InputA2TargetsA3,
+          [
+            "\(receipt.projectName)", "\(receipt.inputKind)", "\(receipt.targetCount)",
+            "\(receipt.buildableTargetNames.count)", "\(receipt.schemeCount)",
+            "\(receipt.packageCount)",
+          ])
       )
       for target in receipt.targets {
         let buildable = target.isBuildableCandidate ? " buildable" : ""
-        print("- \(target.name): type=\(target.type ?? "<nil>") platform=\(target.platform ?? "<nil>") product=\(target.productName)\(buildable)")
+        print(
+          vaporizeCopyFill(
+            VaporizeCLICopy_v000_000_001.CLI.vaporizeA1TypeA2PlatformA3Product,
+            [
+              "\(target.name)", "\(target.type ?? "<nil>")", "\(target.platform ?? "<nil>")",
+              "\(target.productName)", "\(buildable)",
+            ]))
       }
       if receipt.productCacheCandidateCount > 0 {
         print(
-          "product-cache: candidates=\(receipt.productCacheCandidateCount) warm=\(receipt.warmProductCacheCandidateCount) configuration=\(receipt.productCacheConfigurationName ?? "<nil>")"
+          vaporizeCopyFill(
+            VaporizeCLICopy_v000_000_001.CLI.vaporizeProductCacheCandidatesA1WarmA2,
+            [
+              "\(receipt.productCacheCandidateCount)", "\(receipt.warmProductCacheCandidateCount)",
+              "\(receipt.productCacheConfigurationName ?? "<nil>")",
+            ])
         )
         for candidate in receipt.productCacheCandidates {
-          print("- cache \(candidate.status): \(candidate.targetName) -> \(candidate.appBundlePath)")
+          print(
+            vaporizeCopyFill(
+              VaporizeCLICopy_v000_000_001.CLI.vaporizeCacheA1A2A3,
+              ["\(candidate.status)", "\(candidate.targetName)", "\(candidate.appBundlePath)"]))
         }
       }
       print(receipt.boundaries[0])
@@ -2563,7 +2826,8 @@ struct VaporizeCLI: AsyncParsableCommand {
 
   private func listSchemes() async throws {
     guard let xcodeWorkspace, !xcodeWorkspace.isEmpty else {
-      throw ValidationError("--xcode-workspace is required for list-schemes mode.")
+      throw ValidationError(
+        VaporizeCLICopy_v000_000_001.CLI.vaporizeXcodeWorkspaceIsRequiredForList)
     }
 
     let request = try XcodeWorkspaceSchemeListRequest(workspacePath: xcodeWorkspace)
@@ -2636,9 +2900,12 @@ struct VaporizeCLI: AsyncParsableCommand {
 
     switch vaporOutputFormat {
     case .text:
-      print("workspace schemes: \(receipt.workspaceName ?? "<unknown>") schemes=\(receipt.schemeCount)")
+      print(
+        vaporizeCopyFill(
+          VaporizeCLICopy_v000_000_001.CLI.vaporizeWorkspaceSchemesA1SchemesA2,
+          ["\(receipt.workspaceName ?? "<unknown>")", "\(receipt.schemeCount)"]))
       for scheme in receipt.schemes {
-        print("- \(scheme)")
+        print(vaporizeCopyFill(VaporizeCLICopy_v000_000_001.CLI.vaporizeA1, ["\(scheme)"]))
       }
       print(receipt.boundaries[0])
     case .json:
@@ -2662,10 +2929,18 @@ struct VaporizeCLI: AsyncParsableCommand {
     switch vaporOutputFormat {
     case .text:
       print(
-        "release doctor: \(receipt.subjectAppSlug) \(receipt.subjectReleaseSlug) status=\(receipt.overallStatus) checks=\(receipt.passedCheckCount)/\(receipt.checkCount)"
+        vaporizeCopyFill(
+          VaporizeCLICopy_v000_000_001.CLI.vaporizeReleaseDoctorA1A2StatusA3,
+          [
+            "\(receipt.subjectAppSlug)", "\(receipt.subjectReleaseSlug)",
+            "\(receipt.overallStatus)", "\(receipt.passedCheckCount)", "\(receipt.checkCount)",
+          ])
       )
       for check in receipt.checks where check.status != "pass" {
-        print("\(check.status): \(check.name) - \(check.detail)")
+        print(
+          vaporizeCopyFill(
+            VaporizeCLICopy_v000_000_001.CLI.vaporizeA1A2A3,
+            ["\(check.status)", "\(check.name)", "\(check.detail)"]))
       }
     case .json:
       let encoder = JSONEncoder()
@@ -2676,7 +2951,10 @@ struct VaporizeCLI: AsyncParsableCommand {
     }
 
     guard receipt.overallStatus == "pass" else {
-      throw ValidationError("release doctor failed with \(receipt.failedCheckCount) failing checks.")
+      throw ValidationError(
+        vaporizeCopyFill(
+          VaporizeCLICopy_v000_000_001.CLI.vaporizeReleaseDoctorFailedWithA1Failing,
+          ["\(receipt.failedCheckCount)"]))
     }
   }
 
@@ -2686,7 +2964,10 @@ struct VaporizeCLI: AsyncParsableCommand {
     if let pklSchemaPath, !pklSchemaPath.isEmpty {
       let url = URL(fileURLWithPath: pklSchemaPath).standardizedFileURL
       guard fileManager.fileExists(atPath: url.path) else {
-        throw ValidationError("--pkl-schema-path does not exist: \(pklSchemaPath)")
+        throw ValidationError(
+          vaporizeCopyFill(
+            VaporizeCLICopy_v000_000_001.CLI.vaporizePklSchemaPathDoesNotExist, ["\(pklSchemaPath)"]
+          ))
       }
       return url
     }
@@ -2710,14 +2991,15 @@ struct VaporizeCLI: AsyncParsableCommand {
     )
 
     let currentDirectory = URL(fileURLWithPath: fileManager.currentDirectoryPath)
-    candidates.append(currentDirectory.appendingPathComponent("Pkl/AppleProjectSpec.pkl").standardizedFileURL)
+    candidates.append(
+      currentDirectory.appendingPathComponent("Pkl/AppleProjectSpec.pkl").standardizedFileURL)
 
     for candidate in candidates where fileManager.fileExists(atPath: candidate.path) {
       return candidate
     }
 
     throw ValidationError(
-      "--pkl-schema-path is required for import-project-yml mode when Vaporize cannot locate Pkl/AppleProjectSpec.pkl."
+      VaporizeCLICopy_v000_000_001.CLI.vaporizePklSchemaPathIsRequiredFor
     )
   }
 
@@ -2848,7 +3130,8 @@ struct VaporizeCLI: AsyncParsableCommand {
     FileHandle.standardError.write(output.stderr)
 
     let ingestion = VaporizeTestIssueEventIngestor.ingest(from: issueSinkURL)
-    let timing = VaporizeCoreExecutionInstrumentation.current?.snapshot()
+    let timing =
+      VaporizeCoreExecutionInstrumentation.current?.snapshot()
       ?? VaporizeCoreExecutionTimingSnapshot(
         commandElapsedNanoseconds: 0,
         dependencyPreparationNanoseconds: 0,
@@ -2897,7 +3180,7 @@ struct VaporizeCLI: AsyncParsableCommand {
 
     guard ingestion.state != .malformed else {
       throw ValidationError(
-        "Vaporize test issue evidence was malformed; inspect the test receipt before trusting issue counts."
+        VaporizeCLICopy_v000_000_001.CLI.vaporizeVaporizeTestIssueEvidenceWasMalformed
       )
     }
     guard output.isSuccess else {
@@ -2921,7 +3204,9 @@ struct VaporizeCLI: AsyncParsableCommand {
     guard FileManager.default.fileExists(atPath: url.path) else { return }
     let values = try url.resourceValues(forKeys: [.isDirectoryKey])
     guard values.isDirectory != true else {
-      throw ValidationError("Vaporize test issue sink path is a directory: \(url.path)")
+      throw ValidationError(
+        vaporizeCopyFill(
+          VaporizeCLICopy_v000_000_001.CLI.vaporizeVaporizeTestIssueSinkPathIs, ["\(url.path)"]))
     }
     try FileManager.default.removeItem(at: url)
   }
@@ -3003,19 +3288,30 @@ struct VaporizeCLI: AsyncParsableCommand {
     try command.validateOrThrow()
 
     let output = try await RunnerControllerFactory.run(command: command)
-    let versionOutput = (String(data: output.stdout, encoding: .utf8) ?? "")
+    let versionOutput =
+      (String(data: output.stdout, encoding: .utf8) ?? "")
       + (String(data: output.stderr, encoding: .utf8) ?? "")
     guard output.isSuccess else {
       throw ValidationError(
-        "Vaporize could not resolve Swift via \(invocation.executableRef): \(versionOutput)"
+        vaporizeCopyFill(
+          VaporizeCLICopy_v000_000_001.CLI.vaporizeVaporizeCouldNotResolveSwiftVia,
+          ["\(invocation.executableRef)", "\(versionOutput)"])
       )
     }
     guard let actualVersion = Self.swiftCompilerVersion(from: versionOutput) else {
-      throw ValidationError("Vaporize could not parse Xcode-selected Swift version from: \(versionOutput)")
+      throw ValidationError(
+        vaporizeCopyFill(
+          VaporizeCLICopy_v000_000_001.CLI.vaporizeVaporizeCouldNotParseXcodeSelected,
+          ["\(versionOutput)"]))
     }
     guard actualVersion >= requiredVersion else {
       throw ValidationError(
-        "Vaporize resolved Swift \(actualVersion) from \(invocation.resolver), but package at \(packagePath) requires Swift tools \(requiredVersion). Select a pure Swift \(requiredVersion) or newer, or on macOS retry the same core operation with its adjacent `xcode` authority."
+        vaporizeCopyFill(
+          VaporizeCLICopy_v000_000_001.CLI.vaporizeVaporizeResolvedSwiftA1FromA2,
+          [
+            "\(actualVersion)", "\(invocation.resolver)", "\(packagePath)", "\(requiredVersion)",
+            "\(requiredVersion)",
+          ])
       )
     }
   }
@@ -3098,7 +3394,8 @@ struct SwiftToolchainVersion: Comparable, CustomStringConvertible, Equatable, Se
   var patch: Int
 
   init?(_ rawValue: String) {
-    let parts = rawValue
+    let parts =
+      rawValue
       .split(separator: ".", omittingEmptySubsequences: false)
       .prefix(3)
       .map(String.init)
@@ -3167,7 +3464,8 @@ enum VaporizeInvocation {
       ).standardizedFileURL.path
     }
 
-    for directory in (environmentPath ?? "").split(separator: ":", omittingEmptySubsequences: false) {
+    for directory in (environmentPath ?? "").split(separator: ":", omittingEmptySubsequences: false)
+    {
       let baseDirectory = directory.isEmpty ? currentDirectory : String(directory)
       let candidate = URL(fileURLWithPath: baseDirectory, isDirectory: true)
         .appendingPathComponent(executable)
@@ -3215,7 +3513,9 @@ struct ToolchainSelectionRequest: Equatable {
       let provider = Provider(rawValue: rawProvider)
     else {
       throw ValidationError(
-        "toolchain-selection requires a provider compiled for this host: \(Provider.expectedDescription)."
+        vaporizeCopyFill(
+          VaporizeCLICopy_v000_000_001.CLI.vaporizeToolchainSelectionRequiresAProviderCompiled,
+          ["\(Provider.expectedDescription)"])
       )
     }
     tokens.removeFirst()
@@ -3227,7 +3527,7 @@ struct ToolchainSelectionRequest: Equatable {
     case .swift:
       guard tokens.first == "use" else {
         throw ValidationError(
-          "toolchain-selection swift owns only active Swift selection; use `toolchain-selection swift -- use [options] [selector]`. Swift lifecycle, inspection, and execution belong to other commands."
+          VaporizeCLICopy_v000_000_001.CLI.vaporizeToolchainSelectionSwiftOwnsOnlyActive
         )
       }
       tokens.removeFirst()
@@ -3237,7 +3537,7 @@ struct ToolchainSelectionRequest: Equatable {
       case .xcode:
         guard tokens.first == "select" else {
           throw ValidationError(
-            "toolchain-selection xcode owns only the active Xcode developer-directory selection; use `toolchain-selection xcode -- select <xcode-select-options>`. Xcode inspection and execution belong to other commands."
+            VaporizeCLICopy_v000_000_001.CLI.vaporizeToolchainSelectionXcodeOwnsOnlyThe
           )
         }
         tokens.removeFirst()
@@ -3251,7 +3551,7 @@ enum SwiftSelectionPolicy {
   static func validate(arguments: [String]) throws {
     guard !arguments.contains("xcode") else {
       throw ValidationError(
-        "Swift and Xcode are independent selection domains. Select a Swift version with `toolchain-selection swift -- use <version>`; on macOS select Xcode with `toolchain-selection xcode -- select --switch <developer-directory>`."
+        VaporizeCLICopy_v000_000_001.CLI.vaporizeSwiftAndXcodeAreIndependentSelection
       )
     }
   }
@@ -3270,14 +3570,16 @@ enum SwiftSelectionPolicy {
       let singleArgumentOperations: Set<String> = [
         "--print-path", "-p", "--reset", "-r", "--help", "-h",
       ]
-      let isSingleArgumentOperation = tokens.count == 1
+      let isSingleArgumentOperation =
+        tokens.count == 1
         && singleArgumentOperations.contains(tokens[0])
-      let isSwitchOperation = tokens.count == 2
+      let isSwitchOperation =
+        tokens.count == 2
         && ["--switch", "-s"].contains(tokens[0])
         && !tokens[1].isEmpty
       guard isSingleArgumentOperation || isSwitchOperation else {
         throw ValidationError(
-          "toolchain-selection xcode accepts selection-state operations only: `select --print-path`, `select --switch <developer-directory>`, or `select --reset`."
+          VaporizeCLICopy_v000_000_001.CLI.vaporizeToolchainSelectionXcodeAcceptsSelectionState
         )
       }
       self.arguments = tokens
@@ -3302,10 +3604,14 @@ struct ToolchainInvocation {
 }
 
 enum VaporizeCLIActionability {
-  static let policyRef = "private/universal/substrate/collectives/spaces-universal/private/universal/kura-spaces/policies/cli-error-actionability/v0.1.0/cli-error-actionability.policy.su.json"
-  static let procedureRef = "private/universal/substrate/collectives/spaces-universal/private/universal/kura-spaces/operating-protocols/cli-error-actionability/v0.1.0/cli-error-actionability.operating-protocol.su.json"
-  static let digikomaRef = "private/universal/substrate/collectives/spaces-universal/private/universal/kura-spaces/digikoma/specs/digikoma-cli-error-triage.spec.json"
-  static let digikomaPackagePath = "private/universal/substrate/collectives/kura-org/private/universal/domain/tooling/digikoma/cli-error-triage.digikoma.clia"
+  static let policyRef =
+    "private/universal/substrate/collectives/spaces-universal/private/universal/kura-spaces/policies/cli-error-actionability/v0.1.0/cli-error-actionability.policy.su.json"
+  static let procedureRef =
+    "private/universal/substrate/collectives/spaces-universal/private/universal/kura-spaces/operating-protocols/cli-error-actionability/v0.1.0/cli-error-actionability.operating-protocol.su.json"
+  static let digikomaRef =
+    "private/universal/substrate/collectives/spaces-universal/private/universal/kura-spaces/digikoma/specs/digikoma-cli-error-triage.spec.json"
+  static let digikomaPackagePath =
+    "private/universal/substrate/collectives/kura-org/private/universal/domain/tooling/digikoma/cli-error-triage.digikoma.clia"
 
   static func productValidationMessage(errorDescription: String, product: String) -> String {
     """
@@ -3368,14 +3674,16 @@ enum VaporizeCLIActionability {
     let originalCommand = shellSingleQuoted(
       "vaporize.cli@wrkstrm-core.clia.sh validate-json-schema --schema \(schemaPath) --fixture \(fixturePath)\(expectSuffix)"
     )
-    return "vaporize.cli@wrkstrm-core.clia.sh run --package-path \(digikomaPackagePath) --product cli-error-triage.digikoma@kura-org.clia.sh --configuration debug -- --error-file <path-to-full-error.txt> --command \(originalCommand) --working-directory <repo-root>"
+    return
+      "vaporize.cli@wrkstrm-core.clia.sh run --package-path \(digikomaPackagePath) --product cli-error-triage.digikoma@kura-org.clia.sh --configuration debug -- --error-file <path-to-full-error.txt> --command \(originalCommand) --working-directory <repo-root>"
   }
 
   private static func productValidationDigikomaCommand(product: String) -> String {
     let originalCommand = shellSingleQuoted(
       "vaporize.cli@wrkstrm-core.clia.sh run --product \(product)"
     )
-    return "vaporize.cli@wrkstrm-core.clia.sh run --package-path \(digikomaPackagePath) --product cli-error-triage.digikoma@kura-org.clia.sh --configuration debug -- --error-file <path-to-full-error.txt> --command \(originalCommand) --working-directory <repo-root>"
+    return
+      "vaporize.cli@wrkstrm-core.clia.sh run --package-path \(digikomaPackagePath) --product cli-error-triage.digikoma@kura-org.clia.sh --configuration debug -- --error-file <path-to-full-error.txt> --command \(originalCommand) --working-directory <repo-root>"
   }
 
   private static func shellSingleQuoted(_ value: String) -> String {
@@ -3384,7 +3692,8 @@ enum VaporizeCLIActionability {
 }
 
 enum JSONValidation {
-  static func validate(data: Data, path: String, requestId: String) throws -> JSONValidationReceipt {
+  static func validate(data: Data, path: String, requestId: String) throws -> JSONValidationReceipt
+  {
     _ = try SwiftJSONFormatter.parseJSONObject(from: data)
     return JSONValidationReceipt(
       path: path,

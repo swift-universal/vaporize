@@ -67,6 +67,9 @@ let swiftIssueReportingDependency = Package.Dependency.package(
 let translateSourceGateDependency = Package.Dependency.package(
   path: "../../../../../i18n-universal/private/universal/domain/catalogs/spm/TranslateCatalogCore"
 )
+let vaporizeCLICopyDependency = Package.Dependency.package(
+  path: "../../../../../i18n-universal/private/universal/domain/catalogs/spm/VaporizeCLICopy_v000_000_001"
+)
 let swiftPackageOutputPolicyDependency = Package.Dependency.package(
   name: "swift-package-output-policy",
   path: "../../../../../swift-universal/private/universal/domain/build/spm/swift-package-output-policy"
@@ -100,6 +103,7 @@ let package = Package(
     pklSwiftDependency,
     swiftIssueReportingDependency,
     translateSourceGateDependency,
+    vaporizeCLICopyDependency,
     swiftPackageOutputPolicyDependency,
     vaporizeJSONSchemaValidationDependency,
     .package(url: "https://github.com/apple/swift-argument-parser", from: "1.6.0"),
@@ -144,6 +148,7 @@ let package = Package(
         .product(name: "CommonProcessExecutionKit", package: "common-process"),
         .product(name: "SwiftJSONFormatter", package: "swift-json-formatter"),
         .product(name: "TranslateSourceGate", package: "TranslateCatalogCore"),
+        .product(name: "VaporizeCLICopy_v000_000_001", package: "VaporizeCLICopy_v000_000_001"),
         .product(name: "ArgumentParser", package: "swift-argument-parser"),
       ],
       path: "sources/vaporize-cli"
@@ -289,6 +294,14 @@ let package = Package(
       path: "tests/cuj-14-pkl-xcodeproj-generation"
     ),
     .testTarget(
+      name: "VaporizeCUJ14RemotePackageGenerationTests",
+      dependencies: [
+        "AppleProjectSpecCore",
+        "VaporizeTestSupport",
+      ],
+      path: "tests/cuj-14-remote-package-generation"
+    ),
+    .testTarget(
       name: "VaporizeCUJ15XcodeProductCacheTests",
       dependencies: [
         "SwiftAppInstaller",
@@ -418,6 +431,14 @@ let package = Package(
         .product(name: "ArgumentParser", package: "swift-argument-parser"),
       ],
       path: "tests/cuj-30-fleet-status"
+    ),
+    .testTarget(
+      name: "VaporizeCUJ31HomebrewStatusTests",
+      dependencies: [
+        "VaporizeCLI",
+        .product(name: "ArgumentParser", package: "swift-argument-parser"),
+      ],
+      path: "tests/cuj-31-homebrew-status"
     ),
     .testTarget(
       name: "VaporizeCUJ12PackageGraphTests",

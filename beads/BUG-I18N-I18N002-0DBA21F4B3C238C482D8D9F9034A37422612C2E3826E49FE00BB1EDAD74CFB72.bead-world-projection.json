@@ -1,0 +1,54 @@
+{
+  "beadRef" : {
+    "coordinate" : "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N002-0DBA21F4B3C238C482D8D9F9034A37422612C2E3826E49FE00BB1EDAD74CFB72.beads-issue.json",
+    "id" : "BUG-I18N-I18N002-0DBA21F4B3C238C482D8D9F9034A37422612C2E3826E49FE00BB1EDAD74CFB72",
+    "kind" : "bead"
+  },
+  "kind" : "bead-world-projection",
+  "laws" : {
+    "graduationRequiredForResidencyOrAuthorityChange" : true,
+    "reachabilityDoesNotGrantAdmission" : true,
+    "transitDoesNotGrantResidency" : true
+  },
+  "lens" : "thread",
+  "portals" : [
+    {
+      "admission" : "denied",
+      "authorityChange" : false,
+      "destination" : {
+        "coordinate" : "private/universal/substrate/collectives/i18n-universal/private/universal/contracts/enforce-i18n-source-consumption.contract.md",
+        "id" : "i18n-source-consumption-enforcement",
+        "kind" : "substrate"
+      },
+      "kind" : "observation",
+      "reachability" : "reachable",
+      "residencyChange" : false,
+      "slug" : "observe-i18n-standard",
+      "transit" : "none"
+    },
+    {
+      "admission" : "admitted",
+      "authorityChange" : false,
+      "destination" : {
+        "coordinate" : "bead-world://epic-i18n-source-consumption-enforcement-adoption-2026-07-18",
+        "id" : "EPIC-I18N-SOURCE-CONSUMPTION-ENFORCEMENT-ADOPTION-2026-07-18",
+        "kind" : "bead-world"
+      },
+      "kind" : "return",
+      "reachability" : "reachable",
+      "residencyChange" : false,
+      "slug" : "return-to-adoption-epic",
+      "transit" : "completed"
+    }
+  ],
+  "schemaVersion" : "0.0.1",
+  "slug" : "bug-i18n-i18n002-0dba21f4b3c238c482d8d9f9034a37422612c2e3826e49fe00bb1edad74cfb72",
+  "workPoem" : {
+    "boundary" : "Repair the reported source coordinate and only the predeclared catalog or dependency scope; do not invent replacement wording in product code.",
+    "meaning" : "Raw product copy bypasses the approved catalog, so wording can drift and cannot be localized consistently.",
+    "move" : "Replace the literal with the matching accessor from the approved generated copy package; add catalog copy through the catalog workflow when no accessor exists.",
+    "proof" : "Rerun the exact complete source-gate verifier from the Bead spawn cast. Only authoritative complete absence permits automatic closure.",
+    "world" : "User-facing string literal must come from an approved generated i18n copy package."
+  },
+  "worldRole" : "bug"
+}

@@ -5,6 +5,7 @@ public enum AppleProjectXcodeProjectGenerationError: Error, CustomStringConverti
   case unsupportedTargetType(targetName: String, type: String?)
   case missingSourcePath(targetName: String, path: String)
   case unknownTargetDependency(targetName: String, dependencyTargetName: String)
+  case unsupportedRemotePackageRequirement(packageName: String)
 
   public var description: String {
     switch self {
@@ -16,6 +17,8 @@ public enum AppleProjectXcodeProjectGenerationError: Error, CustomStringConverti
       return "Target \(targetName) source path does not exist: \(path)"
     case .unknownTargetDependency(let targetName, let dependencyTargetName):
       return "Target \(targetName) depends on unknown target \(dependencyTargetName)."
+    case .unsupportedRemotePackageRequirement(let packageName):
+      return "Remote package \(packageName) needs one of from, branch, exact, or revision."
     }
   }
 }
@@ -182,7 +185,7 @@ private struct RenderContext {
   ) throws {
     self.spec = spec
     self.projectDirectory = projectDirectory.standardizedFileURL
-    self.packageRecords = spec.packages.keys.sorted().compactMap { packageName in
+    let packageRecords: [PackageRecord] = spec.packages.keys.sorted().compactMap { packageName -> PackageRecord? in
       guard let package = spec.packages[packageName] else { return nil }
       return PackageRecord(
         name: packageName,
@@ -191,6 +194,12 @@ private struct RenderContext {
         groupFileID: stableID("package-group-file-\(packageName)")
       )
     }
+    if let package = packageRecords.first(where: \.hasUnsupportedRemoteRequirement) {
+      throw AppleProjectXcodeProjectGenerationError.unsupportedRemotePackageRequirement(
+        packageName: package.name
+      )
+    }
+    self.packageRecords = packageRecords
 
     var targetRecords: [TargetRecord] = []
     var fileRecords: [FileRecord] = []
@@ -224,7 +233,11 @@ private struct RenderContext {
           ? stableID("embed-frameworks-phase-\(targetName)")
           : nil,
         configListID: stableID("target-config-list-\(targetName)"),
-        sourceGroupID: stableID("source-group-\(targetName)")
+        sourceGroupID: stableID("source-group-\(targetName)"),
+        sourceGroupPath: Self.sourceGroupPath(
+          target: target,
+          projectDirectory: self.projectDirectory
+        )
       )
       targetRecords.append(targetRecord)
 
@@ -332,6 +345,7 @@ private struct RenderContext {
     appendXCBuildConfigurations(to: &lines)
     appendXCConfigurationLists(to: &lines)
     appendXCLocalSwiftPackageReferences(to: &lines)
+    appendXCRemoteSwiftPackageReferences(to: &lines)
     appendXCSwiftPackageProductDependencies(to: &lines)
     lines.append("\t};")
     lines.append("\trootObject = \(projectID) /* Project object */;")
@@ -699,11 +713,12 @@ private struct RenderContext {
 
   private func appendPBXGroups(to lines: inout [String]) {
     lines.append("/* Begin PBXGroup section */")
-    if !packageRecords.isEmpty {
+    let localPackages = packageRecords.filter(\.isLocal)
+    if !localPackages.isEmpty {
       lines.append("\t\t\(packagesGroupID) /* Packages */ = {")
       lines.append("\t\t\tisa = PBXGroup;")
       lines.append("\t\t\tchildren = (")
-      for package in packageRecords where package.package.path != nil {
+      for package in localPackages {
         lines.append("\t\t\t\t\(package.groupFileID) /* \(package.displayName) */,")
       }
       lines.append("\t\t\t);")
@@ -725,7 +740,7 @@ private struct RenderContext {
     lines.append("\t\t\(rootGroupID) = {")
     lines.append("\t\t\tisa = PBXGroup;")
     lines.append("\t\t\tchildren = (")
-    if !packageRecords.isEmpty {
+    if !localPackages.isEmpty {
       lines.append("\t\t\t\t\(packagesGroupID) /* Packages */,")
     }
     lines.append("\t\t\t\t\(sourcesGroupID) /* Sources */,")
@@ -823,10 +838,11 @@ private struct RenderContext {
     lines.append("\t\t\t);")
     lines.append("\t\t\tmainGroup = \(rootGroupID);")
     lines.append("\t\t\tminimizedProjectReferenceProxies = 1;")
-    if !packageRecords.isEmpty {
+    let referencedPackages = packageRecords.filter(\.hasXcodeReference)
+    if !referencedPackages.isEmpty {
       lines.append("\t\t\tpackageReferences = (")
-      for package in packageRecords where package.package.path != nil {
-        lines.append("\t\t\t\t\(package.id) /* XCLocalSwiftPackageReference \(pbxComment(package.package.path ?? package.name)) */,")
+      for package in referencedPackages {
+        lines.append("\t\t\t\t\(package.id) /* \(package.referenceComment) */,")
       }
       lines.append("\t\t\t);")
     }
@@ -994,7 +1010,7 @@ private struct RenderContext {
   }
 
   private func appendXCLocalSwiftPackageReferences(to lines: inout [String]) {
-    let localPackages = packageRecords.filter { $0.package.path != nil }
+    let localPackages = packageRecords.filter(\.isLocal)
     guard !localPackages.isEmpty else { return }
     lines.append("/* Begin XCLocalSwiftPackageReference section */")
     for package in localPackages {
@@ -1007,14 +1023,34 @@ private struct RenderContext {
     lines.append("")
   }
 
+  private func appendXCRemoteSwiftPackageReferences(to lines: inout [String]) {
+    let remotePackages = packageRecords.filter(\.isRemote)
+    guard !remotePackages.isEmpty else { return }
+    lines.append("/* Begin XCRemoteSwiftPackageReference section */")
+    for package in remotePackages {
+      guard let url = package.remoteURL, let requirement = package.remoteRequirement else { continue }
+      lines.append("\t\t\(package.id) /* \(package.referenceComment) */ = {")
+      lines.append("\t\t\tisa = XCRemoteSwiftPackageReference;")
+      lines.append("\t\t\trepositoryURL = \(pbxValue(url));")
+      lines.append("\t\t\trequirement = {")
+      requirement.appendPBXFields(to: &lines, indent: "\t\t\t\t")
+      lines.append("\t\t\t};")
+      lines.append("\t\t};")
+    }
+    lines.append("/* End XCRemoteSwiftPackageReference section */")
+    lines.append("")
+  }
+
   private func appendXCSwiftPackageProductDependencies(to lines: inout [String]) {
     guard !productRecords.isEmpty else { return }
     lines.append("/* Begin XCSwiftPackageProductDependency section */")
     for product in productRecords {
       lines.append("\t\t\(product.id) /* \(product.productName) */ = {")
       lines.append("\t\t\tisa = XCSwiftPackageProductDependency;")
-      if let packageID = packageRecords.first(where: { $0.name == product.packageName })?.id {
-        lines.append("\t\t\tpackage = \(packageID) /* XCLocalSwiftPackageReference \(product.packageName) */;")
+      if let package = packageRecords.first(where: { $0.name == product.packageName }),
+        package.hasXcodeReference
+      {
+        lines.append("\t\t\tpackage = \(package.id) /* \(package.referenceComment) */;")
       }
       lines.append("\t\t\tproductName = \(pbxValue(product.productName));")
       lines.append("\t\t};")
@@ -1250,6 +1286,10 @@ private struct RenderContext {
     let fileManager = FileManager.default
     let infoPath = target.infoPath
     var discovered: [DiscoveredFile] = []
+    let sourceGroupRoot = sourceGroupRoot(
+      target: target,
+      projectDirectory: projectDirectory
+    )
     var seen = Set<String>()
 
     for source in target.sources ?? [] {
@@ -1263,12 +1303,11 @@ private struct RenderContext {
           path: source.path
         )
       }
-      let sourceRoot = isDirectory.boolValue ? sourceURL : sourceURL.deletingLastPathComponent()
       let fileURLs = try collectFileURLs(at: sourceURL)
       for fileURL in fileURLs {
-        let relativePath = relativePath(from: sourceRoot, to: fileURL)
+        let relativePath = relativePath(from: sourceGroupRoot, to: fileURL)
         let kind = FileKind(path: relativePath, sourcePath: source.path, infoPath: infoPath)
-        let key = "\(source.path)/\(relativePath)"
+        let key = fileURL.standardizedFileURL.path
         guard seen.insert(key).inserted else { continue }
         discovered.append(
           DiscoveredFile(
@@ -1279,12 +1318,12 @@ private struct RenderContext {
       }
     }
 
-    if let infoPath, !seen.contains(infoPath) {
+    if let infoPath {
       let infoURL = projectDirectory.appendingPathComponent(infoPath).standardizedFileURL
-      if fileManager.fileExists(atPath: infoURL.path) {
+      if fileManager.fileExists(atPath: infoURL.path), !seen.contains(infoURL.path) {
         discovered.append(
           DiscoveredFile(
-            relativePath: infoPath,
+            relativePath: relativePath(from: sourceGroupRoot, to: infoURL),
             kind: .infoPlist
           )
         )
@@ -1292,6 +1331,33 @@ private struct RenderContext {
     }
 
     return discovered.sorted { $0.relativePath < $1.relativePath }
+  }
+
+  private static func sourceGroupRoot(
+    target: AppleProjectTarget,
+    projectDirectory: URL
+  ) -> URL {
+    let firstSource = target.sources?.first?.path ?? "Sources"
+    let firstSourceURL = projectDirectory.appendingPathComponent(firstSource).standardizedFileURL
+    var isDirectory: ObjCBool = false
+    guard
+      FileManager.default.fileExists(atPath: firstSourceURL.path, isDirectory: &isDirectory),
+      !isDirectory.boolValue
+    else {
+      return firstSourceURL
+    }
+    return firstSourceURL.deletingLastPathComponent().standardizedFileURL
+  }
+
+  private static func sourceGroupPath(
+    target: AppleProjectTarget,
+    projectDirectory: URL
+  ) -> String {
+    let sourcesRoot = projectDirectory.appendingPathComponent("Sources", isDirectory: true)
+      .standardizedFileURL
+    let groupRoot = sourceGroupRoot(target: target, projectDirectory: projectDirectory)
+    let path = relativePath(from: sourcesRoot, to: groupRoot)
+    return path.isEmpty ? "." : path
   }
 
   private static func collectFileURLs(at url: URL) throws -> [URL] {
@@ -1340,15 +1406,7 @@ private struct TargetRecord {
   var embedFrameworksPhaseID: String?
   var configListID: String
   var sourceGroupID: String
-
-  var sourceGroupPath: String {
-    let firstSource = target.sources?.first?.path ?? "Sources"
-    let components = firstSource.split(separator: "/").map(String.init)
-    if components.first == "Sources", components.count > 1 {
-      return components.dropFirst().joined(separator: "/")
-    }
-    return firstSource
-  }
+  var sourceGroupPath: String
 
   var isApplication: Bool {
     target.normalizedType == "application"
@@ -1424,11 +1482,82 @@ private struct PackageRecord {
   var id: String
   var groupFileID: String
 
+  var isLocal: Bool {
+    package.path != nil
+  }
+
+  var remoteURL: String? {
+    guard !isLocal else { return nil }
+    return package.url
+  }
+
+  var remoteRequirement: RemoteSwiftPackageRequirement? {
+    guard remoteURL != nil else { return nil }
+    return RemoteSwiftPackageRequirement(package: package)
+  }
+
+  var isRemote: Bool {
+    remoteURL != nil && remoteRequirement != nil
+  }
+
+  var hasUnsupportedRemoteRequirement: Bool {
+    remoteURL != nil && remoteRequirement == nil
+  }
+
+  var hasXcodeReference: Bool {
+    isLocal || isRemote
+  }
+
+  var referenceComment: String {
+    if let path = package.path {
+      return "XCLocalSwiftPackageReference \(pbxComment(path))"
+    }
+    return "XCRemoteSwiftPackageReference \(pbxComment(remoteURL ?? name))"
+  }
+
   var displayName: String {
     if let path = package.path {
       return URL(fileURLWithPath: path).lastPathComponent
     }
     return name
+  }
+}
+
+private enum RemoteSwiftPackageRequirement {
+  case upToNextMajorVersion(String)
+  case branch(String)
+  case exactVersion(String)
+  case revision(String)
+
+  init?(package: AppleProjectPackage) {
+    if let from = package.from {
+      self = .upToNextMajorVersion(from)
+    } else if let branch = package.branch {
+      self = .branch(branch)
+    } else if let exact = package.exact {
+      self = .exactVersion(exact)
+    } else if let revision = package.revision {
+      self = .revision(revision)
+    } else {
+      return nil
+    }
+  }
+
+  func appendPBXFields(to lines: inout [String], indent: String) {
+    switch self {
+    case .upToNextMajorVersion(let version):
+      lines.append("\(indent)kind = upToNextMajorVersion;")
+      lines.append("\(indent)minimumVersion = \(pbxValue(version));")
+    case .branch(let branch):
+      lines.append("\(indent)branch = \(pbxValue(branch));")
+      lines.append("\(indent)kind = branch;")
+    case .exactVersion(let version):
+      lines.append("\(indent)kind = exactVersion;")
+      lines.append("\(indent)version = \(pbxValue(version));")
+    case .revision(let revision):
+      lines.append("\(indent)kind = revision;")
+      lines.append("\(indent)revision = \(pbxValue(revision));")
+    }
   }
 }
 

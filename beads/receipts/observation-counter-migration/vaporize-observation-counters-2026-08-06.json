@@ -1,0 +1,1345 @@
+{
+  "current" : 0,
+  "kind" : "beads-observation-counter-fleet-migration-receipt",
+  "migrated" : 147,
+  "ownerHomes" : 1,
+  "receipts" : [
+    {
+      "current" : 0,
+      "items" : [
+        {
+          "action" : "migrate",
+          "firstObservedAt" : "2026-07-28T08:41:20Z",
+          "issueId" : "BUG-I18N-I18N001-36B2B5A97685DDEBF07CDB829406BD0E9975444B997B736D538074F186186691",
+          "issuePath" : "/Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N001-36B2B5A97685DDEBF07CDB829406BD0E9975444B997B736D538074F186186691.beads-issue.json",
+          "lastObservedAt" : "2026-07-28T08:41:20Z",
+          "observationCount" : 1,
+          "recurrenceCount" : 0
+        },
+        {
+          "action" : "migrate",
+          "firstObservedAt" : "2026-07-28T08:41:20Z",
+          "issueId" : "BUG-I18N-I18N002-03FC8B76F05F6E27923505CDAE196CD0299737CD80E83294008FC6B1E6496A29",
+          "issuePath" : "/Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N002-03FC8B76F05F6E27923505CDAE196CD0299737CD80E83294008FC6B1E6496A29.beads-issue.json",
+          "lastObservedAt" : "2026-07-28T08:41:20Z",
+          "observationCount" : 1,
+          "recurrenceCount" : 0
+        },
+        {
+          "action" : "migrate",
+          "firstObservedAt" : "2026-07-28T08:41:20Z",
+          "issueId" : "BUG-I18N-I18N002-07CEF1B6D3E4FFF2DB1F49F3D81B9F342A3EE4AFBDA82694B614FC93297EC5E9",
+          "issuePath" : "/Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N002-07CEF1B6D3E4FFF2DB1F49F3D81B9F342A3EE4AFBDA82694B614FC93297EC5E9.beads-issue.json",
+          "lastObservedAt" : "2026-07-28T08:41:20Z",
+          "observationCount" : 1,
+          "recurrenceCount" : 0
+        },
+        {
+          "action" : "migrate",
+          "firstObservedAt" : "2026-07-28T08:41:20Z",
+          "issueId" : "BUG-I18N-I18N002-097A128C1AAC7276B7FDDB2C495C76A385590F8BBF7E48F2D5FA2E8594C1626B",
+          "issuePath" : "/Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N002-097A128C1AAC7276B7FDDB2C495C76A385590F8BBF7E48F2D5FA2E8594C1626B.beads-issue.json",
+          "lastObservedAt" : "2026-07-28T08:41:20Z",
+          "observationCount" : 1,
+          "recurrenceCount" : 0
+        },
+        {
+          "action" : "migrate",
+          "firstObservedAt" : "2026-07-28T08:41:20Z",
+          "issueId" : "BUG-I18N-I18N002-0A06A93B9CACB005B7814AB2CD04EECEDB58C9D22C7806A15577E81B8673FCAC",
+          "issuePath" : "/Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N002-0A06A93B9CACB005B7814AB2CD04EECEDB58C9D22C7806A15577E81B8673FCAC.beads-issue.json",
+          "lastObservedAt" : "2026-07-28T08:41:20Z",
+          "observationCount" : 1,
+          "recurrenceCount" : 0
+        },
+        {
+          "action" : "migrate",
+          "firstObservedAt" : "2026-07-28T08:41:20Z",
+          "issueId" : "BUG-I18N-I18N002-0D0CD630659EE2678B6F75C159F26EE8F264AA9B99156E82C7C009DB40991ABA",
+          "issuePath" : "/Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N002-0D0CD630659EE2678B6F75C159F26EE8F264AA9B99156E82C7C009DB40991ABA.beads-issue.json",
+          "lastObservedAt" : "2026-07-28T08:41:20Z",
+          "observationCount" : 1,
+          "recurrenceCount" : 0
+        },
+        {
+          "action" : "migrate",
+          "firstObservedAt" : "2026-07-28T08:41:20Z",
+          "issueId" : "BUG-I18N-I18N002-0DCFFA1CECB6A087C5AE1E797950D00C70B967BE81900FAEBEF3FA36508B3566",
+          "issuePath" : "/Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N002-0DCFFA1CECB6A087C5AE1E797950D00C70B967BE81900FAEBEF3FA36508B3566.beads-issue.json",
+          "lastObservedAt" : "2026-07-28T08:41:20Z",
+          "observationCount" : 1,
+          "recurrenceCount" : 0
+        },
+        {
+          "action" : "migrate",
+          "firstObservedAt" : "2026-07-29T19:08:37Z",
+          "issueId" : "BUG-I18N-I18N002-0E87BE47492369F93D8A1BB140149F1B7C1516FDD4ECED6F5D70A4879479A221",
+          "issuePath" : "/Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N002-0E87BE47492369F93D8A1BB140149F1B7C1516FDD4ECED6F5D70A4879479A221.beads-issue.json",
+          "lastObservedAt" : "2026-07-29T19:08:37Z",
+          "observationCount" : 1,
+          "recurrenceCount" : 0
+        },
+        {
+          "action" : "migrate",
+          "firstObservedAt" : "2026-07-28T08:41:20Z",
+          "issueId" : "BUG-I18N-I18N002-112534135647B1113F5AE4906B6CFC68FDFA7175054D33019BA8168B53914D87",
+          "issuePath" : "/Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N002-112534135647B1113F5AE4906B6CFC68FDFA7175054D33019BA8168B53914D87.beads-issue.json",
+          "lastObservedAt" : "2026-07-28T08:41:20Z",
+          "observationCount" : 1,
+          "recurrenceCount" : 0
+        },
+        {
+          "action" : "migrate",
+          "firstObservedAt" : "2026-07-28T08:41:20Z",
+          "issueId" : "BUG-I18N-I18N002-11DDB15A243AC8448564334E0ADF5A48B8025ED85FC54C3C19716A135303109F",
+          "issuePath" : "/Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N002-11DDB15A243AC8448564334E0ADF5A48B8025ED85FC54C3C19716A135303109F.beads-issue.json",
+          "lastObservedAt" : "2026-07-28T08:41:20Z",
+          "observationCount" : 1,
+          "recurrenceCount" : 0
+        },
+        {
+          "action" : "migrate",
+          "firstObservedAt" : "2026-07-28T08:41:20Z",
+          "issueId" : "BUG-I18N-I18N002-1560E39B22AE030E6B99F57B2EC068A0CAFCE5545BF06403F9995620FEBAA82D",
+          "issuePath" : "/Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N002-1560E39B22AE030E6B99F57B2EC068A0CAFCE5545BF06403F9995620FEBAA82D.beads-issue.json",
+          "lastObservedAt" : "2026-07-28T08:41:20Z",
+          "observationCount" : 1,
+          "recurrenceCount" : 0
+        },
+        {
+          "action" : "migrate",
+          "firstObservedAt" : "2026-07-28T08:41:20Z",
+          "issueId" : "BUG-I18N-I18N002-191777622984019BC117494BA6BC1A91ECD9EA0341FCE55BFAB3D96FA4064B0E",
+          "issuePath" : "/Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N002-191777622984019BC117494BA6BC1A91ECD9EA0341FCE55BFAB3D96FA4064B0E.beads-issue.json",
+          "lastObservedAt" : "2026-07-28T08:41:20Z",
+          "observationCount" : 1,
+          "recurrenceCount" : 0
+        },
+        {
+          "action" : "migrate",
+          "firstObservedAt" : "2026-07-28T08:41:20Z",
+          "issueId" : "BUG-I18N-I18N002-1A59C81F289723462E4C1748182030131415C9F614764BEF8FB26F9A27F3B66D",
+          "issuePath" : "/Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N002-1A59C81F289723462E4C1748182030131415C9F614764BEF8FB26F9A27F3B66D.beads-issue.json",
+          "lastObservedAt" : "2026-07-28T08:41:20Z",
+          "observationCount" : 1,
+          "recurrenceCount" : 0
+        },
+        {
+          "action" : "migrate",
+          "firstObservedAt" : "2026-07-28T08:41:20Z",
+          "issueId" : "BUG-I18N-I18N002-1E9237FCD7A84EF2DCD4EC411916D57D8C14E7AA476C77313A5BFC7FE4390916",
+          "issuePath" : "/Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N002-1E9237FCD7A84EF2DCD4EC411916D57D8C14E7AA476C77313A5BFC7FE4390916.beads-issue.json",
+          "lastObservedAt" : "2026-07-28T08:41:20Z",
+          "observationCount" : 1,
+          "recurrenceCount" : 0
+        },
+        {
+          "action" : "migrate",
+          "firstObservedAt" : "2026-07-28T08:41:20Z",
+          "issueId" : "BUG-I18N-I18N002-211CB08074F92B013984AF1ADDEF8A9A7D43176CFE0966325EAB0F3A3D86A9A6",
+          "issuePath" : "/Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N002-211CB08074F92B013984AF1ADDEF8A9A7D43176CFE0966325EAB0F3A3D86A9A6.beads-issue.json",
+          "lastObservedAt" : "2026-07-28T08:41:20Z",
+          "observationCount" : 1,
+          "recurrenceCount" : 0
+        },
+        {
+          "action" : "migrate",
+          "firstObservedAt" : "2026-07-28T08:41:20Z",
+          "issueId" : "BUG-I18N-I18N002-2284E317A37EA25455633185959B2CEF232142CC9959C32A63E943A6B8E95106",
+          "issuePath" : "/Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N002-2284E317A37EA25455633185959B2CEF232142CC9959C32A63E943A6B8E95106.beads-issue.json",
+          "lastObservedAt" : "2026-07-28T08:41:20Z",
+          "observationCount" : 1,
+          "recurrenceCount" : 0
+        },
+        {
+          "action" : "migrate",
+          "firstObservedAt" : "2026-07-28T08:41:20Z",
+          "issueId" : "BUG-I18N-I18N002-29BD1A6BACFB828DE64407CB952527F623E75DDA621DF6AB70C3FFA904EF524D",
+          "issuePath" : "/Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N002-29BD1A6BACFB828DE64407CB952527F623E75DDA621DF6AB70C3FFA904EF524D.beads-issue.json",
+          "lastObservedAt" : "2026-07-28T08:41:20Z",
+          "observationCount" : 1,
+          "recurrenceCount" : 0
+        },
+        {
+          "action" : "migrate",
+          "firstObservedAt" : "2026-07-28T08:41:20Z",
+          "issueId" : "BUG-I18N-I18N002-2CB5244C5A41C349F85AAF6363D1767000E27554D7F9A91C75B19882B60AB9B2",
+          "issuePath" : "/Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N002-2CB5244C5A41C349F85AAF6363D1767000E27554D7F9A91C75B19882B60AB9B2.beads-issue.json",
+          "lastObservedAt" : "2026-07-28T08:41:20Z",
+          "observationCount" : 1,
+          "recurrenceCount" : 0
+        },
+        {
+          "action" : "migrate",
+          "firstObservedAt" : "2026-07-28T08:41:20Z",
+          "issueId" : "BUG-I18N-I18N002-2D0EFFD09A2A3E2BC69581CB2631C44C88BDE4ED6B6E77351EA6107D810BAC71",
+          "issuePath" : "/Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N002-2D0EFFD09A2A3E2BC69581CB2631C44C88BDE4ED6B6E77351EA6107D810BAC71.beads-issue.json",
+          "lastObservedAt" : "2026-07-28T08:41:20Z",
+          "observationCount" : 1,
+          "recurrenceCount" : 0
+        },
+        {
+          "action" : "migrate",
+          "firstObservedAt" : "2026-07-28T08:41:20Z",
+          "issueId" : "BUG-I18N-I18N002-2E07A6ADE81B76ABB6CA18BBE91B4C5FE7D2B29ED7C97C75933057933983C739",
+          "issuePath" : "/Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N002-2E07A6ADE81B76ABB6CA18BBE91B4C5FE7D2B29ED7C97C75933057933983C739.beads-issue.json",
+          "lastObservedAt" : "2026-07-28T08:41:20Z",
+          "observationCount" : 1,
+          "recurrenceCount" : 0
+        },
+        {
+          "action" : "migrate",
+          "firstObservedAt" : "2026-07-28T08:41:20Z",
+          "issueId" : "BUG-I18N-I18N002-2F04F7292D4757844E1C8F1C61A4DDA9740CE193D6D803A80ED58C38C5DDC6D5",
+          "issuePath" : "/Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N002-2F04F7292D4757844E1C8F1C61A4DDA9740CE193D6D803A80ED58C38C5DDC6D5.beads-issue.json",
+          "lastObservedAt" : "2026-07-28T08:41:20Z",
+          "observationCount" : 1,
+          "recurrenceCount" : 0
+        },
+        {
+          "action" : "migrate",
+          "firstObservedAt" : "2026-07-28T08:41:20Z",
+          "issueId" : "BUG-I18N-I18N002-2FA3DC5B79632D9EE81823F423624DC14931B74C992F4BF3AAD138DC0E60424D",
+          "issuePath" : "/Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N002-2FA3DC5B79632D9EE81823F423624DC14931B74C992F4BF3AAD138DC0E60424D.beads-issue.json",
+          "lastObservedAt" : "2026-07-28T08:41:20Z",
+          "observationCount" : 1,
+          "recurrenceCount" : 0
+        },
+        {
+          "action" : "migrate",
+          "firstObservedAt" : "2026-07-28T08:41:20Z",
+          "issueId" : "BUG-I18N-I18N002-38242E1CE454F1A9E35C8B3B41C4FA6E67BB202584EEE299064F426BE5CB3A4E",
+          "issuePath" : "/Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N002-38242E1CE454F1A9E35C8B3B41C4FA6E67BB202584EEE299064F426BE5CB3A4E.beads-issue.json",
+          "lastObservedAt" : "2026-07-28T08:41:20Z",
+          "observationCount" : 1,
+          "recurrenceCount" : 0
+        },
+        {
+          "action" : "migrate",
+          "firstObservedAt" : "2026-07-28T08:41:20Z",
+          "issueId" : "BUG-I18N-I18N002-3914BD707573191DBBE4FBFEF428F755C6A44AAE739009A251E513D62E7590A6",
+          "issuePath" : "/Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N002-3914BD707573191DBBE4FBFEF428F755C6A44AAE739009A251E513D62E7590A6.beads-issue.json",
+          "lastObservedAt" : "2026-07-28T08:41:20Z",
+          "observationCount" : 1,
+          "recurrenceCount" : 0
+        },
+        {
+          "action" : "migrate",
+          "firstObservedAt" : "2026-07-28T08:41:20Z",
+          "issueId" : "BUG-I18N-I18N002-3A61C4C54FE8C730C91A411DBCD6ED5EB28EEC8FE343375055A3560EF2EED607",
+          "issuePath" : "/Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N002-3A61C4C54FE8C730C91A411DBCD6ED5EB28EEC8FE343375055A3560EF2EED607.beads-issue.json",
+          "lastObservedAt" : "2026-07-28T08:41:20Z",
+          "observationCount" : 1,
+          "recurrenceCount" : 0
+        },
+        {
+          "action" : "migrate",
+          "firstObservedAt" : "2026-07-28T08:41:20Z",
+          "issueId" : "BUG-I18N-I18N002-3B8E0E7B99506DEA8AD2A4DA57EAB164BF4010D49C6D407DAD1D43F56E02743D",
+          "issuePath" : "/Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N002-3B8E0E7B99506DEA8AD2A4DA57EAB164BF4010D49C6D407DAD1D43F56E02743D.beads-issue.json",
+          "lastObservedAt" : "2026-07-28T08:41:20Z",
+          "observationCount" : 1,
+          "recurrenceCount" : 0
+        },
+        {
+          "action" : "migrate",
+          "firstObservedAt" : "2026-07-28T08:41:20Z",
+          "issueId" : "BUG-I18N-I18N002-3C4383934CA699BA608CC87D0F205AF72B82E66DE8F4B67929FD288424D47D0A",
+          "issuePath" : "/Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N002-3C4383934CA699BA608CC87D0F205AF72B82E66DE8F4B67929FD288424D47D0A.beads-issue.json",
+          "lastObservedAt" : "2026-07-28T08:41:20Z",
+          "observationCount" : 1,
+          "recurrenceCount" : 0
+        },
+        {
+          "action" : "migrate",
+          "firstObservedAt" : "2026-07-28T08:41:20Z",
+          "issueId" : "BUG-I18N-I18N002-3D4FCECAA19371B6D88184206165263ED7DC66398DE004444693A22D16EC0A7D",
+          "issuePath" : "/Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N002-3D4FCECAA19371B6D88184206165263ED7DC66398DE004444693A22D16EC0A7D.beads-issue.json",
+          "lastObservedAt" : "2026-07-28T08:41:20Z",
+          "observationCount" : 1,
+          "recurrenceCount" : 0
+        },
+        {
+          "action" : "migrate",
+          "firstObservedAt" : "2026-07-28T08:41:20Z",
+          "issueId" : "BUG-I18N-I18N002-3D8F987D7A80467794ADF34984638B40863F639F56FBAD0B39D40A93FD82D225",
+          "issuePath" : "/Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N002-3D8F987D7A80467794ADF34984638B40863F639F56FBAD0B39D40A93FD82D225.beads-issue.json",
+          "lastObservedAt" : "2026-07-28T08:41:20Z",
+          "observationCount" : 1,
+          "recurrenceCount" : 0
+        },
+        {
+          "action" : "migrate",
+          "firstObservedAt" : "2026-07-28T08:41:20Z",
+          "issueId" : "BUG-I18N-I18N002-456FA73912A263A5B8EA12F5B983860F4A333B7F10DBC725544449B32ED31242",
+          "issuePath" : "/Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N002-456FA73912A263A5B8EA12F5B983860F4A333B7F10DBC725544449B32ED31242.beads-issue.json",
+          "lastObservedAt" : "2026-07-28T08:41:20Z",
+          "observationCount" : 1,
+          "recurrenceCount" : 0
+        },
+        {
+          "action" : "migrate",
+          "firstObservedAt" : "2026-07-28T08:41:20Z",
+          "issueId" : "BUG-I18N-I18N002-46259D92B568FC389F4BC8FCEB5E18E398BDA49671A221186D56E8CAE0DE4996",
+          "issuePath" : "/Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N002-46259D92B568FC389F4BC8FCEB5E18E398BDA49671A221186D56E8CAE0DE4996.beads-issue.json",
+          "lastObservedAt" : "2026-07-28T08:41:20Z",
+          "observationCount" : 1,
+          "recurrenceCount" : 0
+        },
+        {
+          "action" : "migrate",
+          "firstObservedAt" : "2026-07-28T08:41:20Z",
+          "issueId" : "BUG-I18N-I18N002-463DAD43803EAD05AB7E4A103A1D2E780FC14FCE4169E8149EC1851D910CCB1F",
+          "issuePath" : "/Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N002-463DAD43803EAD05AB7E4A103A1D2E780FC14FCE4169E8149EC1851D910CCB1F.beads-issue.json",
+          "lastObservedAt" : "2026-07-28T08:41:20Z",
+          "observationCount" : 1,
+          "recurrenceCount" : 0
+        },
+        {
+          "action" : "migrate",
+          "firstObservedAt" : "2026-07-28T08:41:20Z",
+          "issueId" : "BUG-I18N-I18N002-47D4DD1A3CF7491E832C638EDDCB15D453CE417409030F113B89D28E8D38B8B7",
+          "issuePath" : "/Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N002-47D4DD1A3CF7491E832C638EDDCB15D453CE417409030F113B89D28E8D38B8B7.beads-issue.json",
+          "lastObservedAt" : "2026-07-28T08:41:20Z",
+          "observationCount" : 1,
+          "recurrenceCount" : 0
+        },
+        {
+          "action" : "migrate",
+          "firstObservedAt" : "2026-07-28T08:41:20Z",
+          "issueId" : "BUG-I18N-I18N002-48E123511222C754F34483EC84ED6FBCBF4702D637168CF6645C0185CD18FC5D",
+          "issuePath" : "/Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N002-48E123511222C754F34483EC84ED6FBCBF4702D637168CF6645C0185CD18FC5D.beads-issue.json",
+          "lastObservedAt" : "2026-07-28T08:41:20Z",
+          "observationCount" : 1,
+          "recurrenceCount" : 0
+        },
+        {
+          "action" : "migrate",
+          "firstObservedAt" : "2026-07-28T08:41:20Z",
+          "issueId" : "BUG-I18N-I18N002-4AFD5E3FA73B28CAEE73907A79B6C8278DFE867D6E1F146F2AADEC2513EF2A0E",
+          "issuePath" : "/Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N002-4AFD5E3FA73B28CAEE73907A79B6C8278DFE867D6E1F146F2AADEC2513EF2A0E.beads-issue.json",
+          "lastObservedAt" : "2026-07-28T08:41:20Z",
+          "observationCount" : 1,
+          "recurrenceCount" : 0
+        },
+        {
+          "action" : "migrate",
+          "firstObservedAt" : "2026-07-28T08:41:20Z",
+          "issueId" : "BUG-I18N-I18N002-4C1F3A3B3A2C8EA33B98502913C5B8E13A070BA7CB85496A0BB458564B7CC4C0",
+          "issuePath" : "/Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N002-4C1F3A3B3A2C8EA33B98502913C5B8E13A070BA7CB85496A0BB458564B7CC4C0.beads-issue.json",
+          "lastObservedAt" : "2026-07-28T08:41:20Z",
+          "observationCount" : 1,
+          "recurrenceCount" : 0
+        },
+        {
+          "action" : "migrate",
+          "firstObservedAt" : "2026-07-28T08:41:20Z",
+          "issueId" : "BUG-I18N-I18N002-4CCADD1DB3D8E1F1803CB326547BB108A91413632DDFCC1A3CC213F79A03D381",
+          "issuePath" : "/Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N002-4CCADD1DB3D8E1F1803CB326547BB108A91413632DDFCC1A3CC213F79A03D381.beads-issue.json",
+          "lastObservedAt" : "2026-07-28T08:41:20Z",
+          "observationCount" : 1,
+          "recurrenceCount" : 0
+        },
+        {
+          "action" : "migrate",
+          "firstObservedAt" : "2026-07-28T08:41:20Z",
+          "issueId" : "BUG-I18N-I18N002-4D49534AF7ABC77F587C0E3F0E062BEF010B2F55C2E3765C103CF9FC713EAA41",
+          "issuePath" : "/Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N002-4D49534AF7ABC77F587C0E3F0E062BEF010B2F55C2E3765C103CF9FC713EAA41.beads-issue.json",
+          "lastObservedAt" : "2026-07-28T08:41:20Z",
+          "observationCount" : 1,
+          "recurrenceCount" : 0
+        },
+        {
+          "action" : "migrate",
+          "firstObservedAt" : "2026-07-28T08:41:20Z",
+          "issueId" : "BUG-I18N-I18N002-4D8D1894614A5E664D1E5C586304311503F8998D34BD7087375E23F28B6E4CD7",
+          "issuePath" : "/Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N002-4D8D1894614A5E664D1E5C586304311503F8998D34BD7087375E23F28B6E4CD7.beads-issue.json",
+          "lastObservedAt" : "2026-07-28T08:41:20Z",
+          "observationCount" : 1,
+          "recurrenceCount" : 0
+        },
+        {
+          "action" : "migrate",
+          "firstObservedAt" : "2026-07-28T08:41:20Z",
+          "issueId" : "BUG-I18N-I18N002-51541FA0A580C869754DFA97D57749709E150E336004DAEC395249A597080F6B",
+          "issuePath" : "/Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N002-51541FA0A580C869754DFA97D57749709E150E336004DAEC395249A597080F6B.beads-issue.json",
+          "lastObservedAt" : "2026-07-28T08:41:20Z",
+          "observationCount" : 1,
+          "recurrenceCount" : 0
+        },
+        {
+          "action" : "migrate",
+          "firstObservedAt" : "2026-07-28T08:41:20Z",
+          "issueId" : "BUG-I18N-I18N002-515DA1A3B8E4C0C87C183BFF09CF565C4862C9C323E8C1541D45CBE128650355",
+          "issuePath" : "/Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N002-515DA1A3B8E4C0C87C183BFF09CF565C4862C9C323E8C1541D45CBE128650355.beads-issue.json",
+          "lastObservedAt" : "2026-07-28T08:41:20Z",
+          "observationCount" : 1,
+          "recurrenceCount" : 0
+        },
+        {
+          "action" : "migrate",
+          "firstObservedAt" : "2026-07-28T08:41:20Z",
+          "issueId" : "BUG-I18N-I18N002-51C19F6301546349329DD0DD0DDF85DA48AFCB35952A5B08295BC55C7A6256F8",
+          "issuePath" : "/Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N002-51C19F6301546349329DD0DD0DDF85DA48AFCB35952A5B08295BC55C7A6256F8.beads-issue.json",
+          "lastObservedAt" : "2026-07-28T08:41:20Z",
+          "observationCount" : 1,
+          "recurrenceCount" : 0
+        },
+        {
+          "action" : "migrate",
+          "firstObservedAt" : "2026-07-28T08:41:20Z",
+          "issueId" : "BUG-I18N-I18N002-58BC057D8D378EE1A62391B3C49E85BEB6607721CA05A6F6417D048618CBD55D",
+          "issuePath" : "/Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N002-58BC057D8D378EE1A62391B3C49E85BEB6607721CA05A6F6417D048618CBD55D.beads-issue.json",
+          "lastObservedAt" : "2026-07-28T08:41:20Z",
+          "observationCount" : 1,
+          "recurrenceCount" : 0
+        },
+        {
+          "action" : "migrate",
+          "firstObservedAt" : "2026-07-28T08:41:20Z",
+          "issueId" : "BUG-I18N-I18N002-5AD5CD09EFE9108A0504F42DA74C722E249547648036AFD02707C554476AD93B",
+          "issuePath" : "/Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N002-5AD5CD09EFE9108A0504F42DA74C722E249547648036AFD02707C554476AD93B.beads-issue.json",
+          "lastObservedAt" : "2026-07-28T08:41:20Z",
+          "observationCount" : 1,
+          "recurrenceCount" : 0
+        },
+        {
+          "action" : "migrate",
+          "firstObservedAt" : "2026-07-28T08:41:20Z",
+          "issueId" : "BUG-I18N-I18N002-5AE0DB556507B9AA952ADE07096260DD5705B889CE77833C905014496021C0FE",
+          "issuePath" : "/Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N002-5AE0DB556507B9AA952ADE07096260DD5705B889CE77833C905014496021C0FE.beads-issue.json",
+          "lastObservedAt" : "2026-07-28T08:41:20Z",
+          "observationCount" : 1,
+          "recurrenceCount" : 0
+        },
+        {
+          "action" : "migrate",
+          "firstObservedAt" : "2026-07-28T08:41:20Z",
+          "issueId" : "BUG-I18N-I18N002-5CB7CB0736B46EFFD000C988A03595BA3B2FC124B4956C2C8B493D0154612161",
+          "issuePath" : "/Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N002-5CB7CB0736B46EFFD000C988A03595BA3B2FC124B4956C2C8B493D0154612161.beads-issue.json",
+          "lastObservedAt" : "2026-07-28T08:41:20Z",
+          "observationCount" : 1,
+          "recurrenceCount" : 0
+        },
+        {
+          "action" : "migrate",
+          "firstObservedAt" : "2026-07-28T08:41:20Z",
+          "issueId" : "BUG-I18N-I18N002-5F61CD9CD33FDA7B77C8BEFDB298BBC9327B455403A08DD326F9B3B510CB2BEB",
+          "issuePath" : "/Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N002-5F61CD9CD33FDA7B77C8BEFDB298BBC9327B455403A08DD326F9B3B510CB2BEB.beads-issue.json",
+          "lastObservedAt" : "2026-07-28T08:41:20Z",
+          "observationCount" : 1,
+          "recurrenceCount" : 0
+        },
+        {
+          "action" : "migrate",
+          "firstObservedAt" : "2026-07-28T08:41:20Z",
+          "issueId" : "BUG-I18N-I18N002-5FB5DE18BD044D12BE274A93CCEE9598407A83293D29DFFA9E02F97F48CCBE15",
+          "issuePath" : "/Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N002-5FB5DE18BD044D12BE274A93CCEE9598407A83293D29DFFA9E02F97F48CCBE15.beads-issue.json",
+          "lastObservedAt" : "2026-07-28T08:41:20Z",
+          "observationCount" : 1,
+          "recurrenceCount" : 0
+        },
+        {
+          "action" : "migrate",
+          "firstObservedAt" : "2026-07-28T08:41:20Z",
+          "issueId" : "BUG-I18N-I18N002-62345A08A8378E01AB9567F74331DC376B16E6341144ED65BD35CA238015AFE3",
+          "issuePath" : "/Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N002-62345A08A8378E01AB9567F74331DC376B16E6341144ED65BD35CA238015AFE3.beads-issue.json",
+          "lastObservedAt" : "2026-07-28T08:41:20Z",
+          "observationCount" : 1,
+          "recurrenceCount" : 0
+        },
+        {
+          "action" : "migrate",
+          "firstObservedAt" : "2026-07-28T08:41:20Z",
+          "issueId" : "BUG-I18N-I18N002-63E5BD7455AE0421768976A144B30B31470EDDC37356762A95A03E3C934F3327",
+          "issuePath" : "/Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N002-63E5BD7455AE0421768976A144B30B31470EDDC37356762A95A03E3C934F3327.beads-issue.json",
+          "lastObservedAt" : "2026-07-28T08:41:20Z",
+          "observationCount" : 1,
+          "recurrenceCount" : 0
+        },
+        {
+          "action" : "migrate",
+          "firstObservedAt" : "2026-07-28T08:41:20Z",
+          "issueId" : "BUG-I18N-I18N002-640A414270F4CE86C791690E9B6D6F5D5FACA31CD63E2A45EE9F684F4945BE47",
+          "issuePath" : "/Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N002-640A414270F4CE86C791690E9B6D6F5D5FACA31CD63E2A45EE9F684F4945BE47.beads-issue.json",
+          "lastObservedAt" : "2026-07-28T08:41:20Z",
+          "observationCount" : 1,
+          "recurrenceCount" : 0
+        },
+        {
+          "action" : "migrate",
+          "firstObservedAt" : "2026-07-28T08:41:20Z",
+          "issueId" : "BUG-I18N-I18N002-6597D62C08CC26B882B9696657A454E2053138DCC74046B7081845066710E923",
+          "issuePath" : "/Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N002-6597D62C08CC26B882B9696657A454E2053138DCC74046B7081845066710E923.beads-issue.json",
+          "lastObservedAt" : "2026-07-28T08:41:20Z",
+          "observationCount" : 1,
+          "recurrenceCount" : 0
+        },
+        {
+          "action" : "migrate",
+          "firstObservedAt" : "2026-07-28T08:41:20Z",
+          "issueId" : "BUG-I18N-I18N002-665B0AF658990DC76C599E70E60188DCE23CAAD97B0CB0657B60FB26E0B7A73E",
+          "issuePath" : "/Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N002-665B0AF658990DC76C599E70E60188DCE23CAAD97B0CB0657B60FB26E0B7A73E.beads-issue.json",
+          "lastObservedAt" : "2026-07-28T08:41:20Z",
+          "observationCount" : 1,
+          "recurrenceCount" : 0
+        },
+        {
+          "action" : "migrate",
+          "firstObservedAt" : "2026-07-28T08:41:20Z",
+          "issueId" : "BUG-I18N-I18N002-66EEC5C3E332C57FAC8A1F0A66BC2B587FE95DE87E0C38C07F54C4CF4A14ABF0",
+          "issuePath" : "/Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N002-66EEC5C3E332C57FAC8A1F0A66BC2B587FE95DE87E0C38C07F54C4CF4A14ABF0.beads-issue.json",
+          "lastObservedAt" : "2026-07-28T08:41:20Z",
+          "observationCount" : 1,
+          "recurrenceCount" : 0
+        },
+        {
+          "action" : "migrate",
+          "firstObservedAt" : "2026-07-28T08:41:20Z",
+          "issueId" : "BUG-I18N-I18N002-67E9F5B8BEBED22E39C21BFFF676EACED172359E9C1DEB67BDDDA53AE2963380",
+          "issuePath" : "/Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N002-67E9F5B8BEBED22E39C21BFFF676EACED172359E9C1DEB67BDDDA53AE2963380.beads-issue.json",
+          "lastObservedAt" : "2026-07-28T08:41:20Z",
+          "observationCount" : 1,
+          "recurrenceCount" : 0
+        },
+        {
+          "action" : "migrate",
+          "firstObservedAt" : "2026-07-28T08:41:20Z",
+          "issueId" : "BUG-I18N-I18N002-6C34FAD5D34CD0D5DF5D7F6E9C604B993CE4A605C9A88F22E5198A3272770F67",
+          "issuePath" : "/Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N002-6C34FAD5D34CD0D5DF5D7F6E9C604B993CE4A605C9A88F22E5198A3272770F67.beads-issue.json",
+          "lastObservedAt" : "2026-07-28T08:41:20Z",
+          "observationCount" : 1,
+          "recurrenceCount" : 0
+        },
+        {
+          "action" : "migrate",
+          "firstObservedAt" : "2026-07-28T08:41:20Z",
+          "issueId" : "BUG-I18N-I18N002-6D8B703F304A4D46C6A10EDE6D9754639AC9F45DA9241E70F15911ED602BEE13",
+          "issuePath" : "/Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N002-6D8B703F304A4D46C6A10EDE6D9754639AC9F45DA9241E70F15911ED602BEE13.beads-issue.json",
+          "lastObservedAt" : "2026-07-28T08:41:20Z",
+          "observationCount" : 1,
+          "recurrenceCount" : 0
+        },
+        {
+          "action" : "migrate",
+          "firstObservedAt" : "2026-07-28T08:41:20Z",
+          "issueId" : "BUG-I18N-I18N002-6F1EB4641B143116DF06D791A0B7B80735CC4BC00DE4B8DA44781D62C22F59C4",
+          "issuePath" : "/Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N002-6F1EB4641B143116DF06D791A0B7B80735CC4BC00DE4B8DA44781D62C22F59C4.beads-issue.json",
+          "lastObservedAt" : "2026-07-28T08:41:20Z",
+          "observationCount" : 1,
+          "recurrenceCount" : 0
+        },
+        {
+          "action" : "migrate",
+          "firstObservedAt" : "2026-07-28T08:41:20Z",
+          "issueId" : "BUG-I18N-I18N002-70434C0A33377AB5C6B1FF855EE353594C8EE3B76AB5FA3A5D508D7F10F80354",
+          "issuePath" : "/Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N002-70434C0A33377AB5C6B1FF855EE353594C8EE3B76AB5FA3A5D508D7F10F80354.beads-issue.json",
+          "lastObservedAt" : "2026-07-28T08:41:20Z",
+          "observationCount" : 1,
+          "recurrenceCount" : 0
+        },
+        {
+          "action" : "migrate",
+          "firstObservedAt" : "2026-07-28T08:41:20Z",
+          "issueId" : "BUG-I18N-I18N002-71C32E11A24DC21001309D8B243106ED43DA000FE9F28B6A3D4D6EDCFF71510A",
+          "issuePath" : "/Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N002-71C32E11A24DC21001309D8B243106ED43DA000FE9F28B6A3D4D6EDCFF71510A.beads-issue.json",
+          "lastObservedAt" : "2026-07-28T08:41:20Z",
+          "observationCount" : 1,
+          "recurrenceCount" : 0
+        },
+        {
+          "action" : "migrate",
+          "firstObservedAt" : "2026-07-28T08:41:20Z",
+          "issueId" : "BUG-I18N-I18N002-7258193D3578E78D8C4EB852B162B5C1FB534B4B1442707E739BD727615D93EB",
+          "issuePath" : "/Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N002-7258193D3578E78D8C4EB852B162B5C1FB534B4B1442707E739BD727615D93EB.beads-issue.json",
+          "lastObservedAt" : "2026-07-28T08:41:20Z",
+          "observationCount" : 1,
+          "recurrenceCount" : 0
+        },
+        {
+          "action" : "migrate",
+          "firstObservedAt" : "2026-07-28T08:41:20Z",
+          "issueId" : "BUG-I18N-I18N002-72790FF166DDDC27F07C32A6F691F9C80594C1F699B09DB132EB90CCA46C9FC5",
+          "issuePath" : "/Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N002-72790FF166DDDC27F07C32A6F691F9C80594C1F699B09DB132EB90CCA46C9FC5.beads-issue.json",
+          "lastObservedAt" : "2026-07-28T08:41:20Z",
+          "observationCount" : 1,
+          "recurrenceCount" : 0
+        },
+        {
+          "action" : "migrate",
+          "firstObservedAt" : "2026-07-28T08:41:20Z",
+          "issueId" : "BUG-I18N-I18N002-756BC4CE0381BCEEA52E62A0DDFFEA43B007B51BD29D468CAD0C1F4CBD974136",
+          "issuePath" : "/Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N002-756BC4CE0381BCEEA52E62A0DDFFEA43B007B51BD29D468CAD0C1F4CBD974136.beads-issue.json",
+          "lastObservedAt" : "2026-07-28T08:41:20Z",
+          "observationCount" : 1,
+          "recurrenceCount" : 0
+        },
+        {
+          "action" : "migrate",
+          "firstObservedAt" : "2026-07-28T08:41:20Z",
+          "issueId" : "BUG-I18N-I18N002-7674FBBE81BBD60D7B6A01A3C665F66EF8B38E8493F181DC58E73EF71EDD3BDB",
+          "issuePath" : "/Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N002-7674FBBE81BBD60D7B6A01A3C665F66EF8B38E8493F181DC58E73EF71EDD3BDB.beads-issue.json",
+          "lastObservedAt" : "2026-07-28T08:41:20Z",
+          "observationCount" : 1,
+          "recurrenceCount" : 0
+        },
+        {
+          "action" : "migrate",
+          "firstObservedAt" : "2026-07-28T08:41:20Z",
+          "issueId" : "BUG-I18N-I18N002-769D51F3D124652CE54F57B917418A9821C9F0FBA29A0191D2E521783D7023DE",
+          "issuePath" : "/Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N002-769D51F3D124652CE54F57B917418A9821C9F0FBA29A0191D2E521783D7023DE.beads-issue.json",
+          "lastObservedAt" : "2026-07-28T08:41:20Z",
+          "observationCount" : 1,
+          "recurrenceCount" : 0
+        },
+        {
+          "action" : "migrate",
+          "firstObservedAt" : "2026-07-28T08:41:20Z",
+          "issueId" : "BUG-I18N-I18N002-76CF4C45D78239F0B5440098003445007825A5E8C775FC655A4E1B6B539CFCB4",
+          "issuePath" : "/Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N002-76CF4C45D78239F0B5440098003445007825A5E8C775FC655A4E1B6B539CFCB4.beads-issue.json",
+          "lastObservedAt" : "2026-07-28T08:41:20Z",
+          "observationCount" : 1,
+          "recurrenceCount" : 0
+        },
+        {
+          "action" : "migrate",
+          "firstObservedAt" : "2026-07-28T08:41:20Z",
+          "issueId" : "BUG-I18N-I18N002-775FC0176F5A7476AF2069CD1263DBEA58443FF1FB32382AFF40E042602A40A0",
+          "issuePath" : "/Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N002-775FC0176F5A7476AF2069CD1263DBEA58443FF1FB32382AFF40E042602A40A0.beads-issue.json",
+          "lastObservedAt" : "2026-07-28T08:41:20Z",
+          "observationCount" : 1,
+          "recurrenceCount" : 0
+        },
+        {
+          "action" : "migrate",
+          "firstObservedAt" : "2026-07-28T08:41:20Z",
+          "issueId" : "BUG-I18N-I18N002-7C40A298C78B4906443DBCEC48E30CC194FD0E3CCCF3132783AEAD701D29C851",
+          "issuePath" : "/Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N002-7C40A298C78B4906443DBCEC48E30CC194FD0E3CCCF3132783AEAD701D29C851.beads-issue.json",
+          "lastObservedAt" : "2026-07-28T08:41:20Z",
+          "observationCount" : 1,
+          "recurrenceCount" : 0
+        },
+        {
+          "action" : "migrate",
+          "firstObservedAt" : "2026-07-28T08:41:20Z",
+          "issueId" : "BUG-I18N-I18N002-7CAC02B407CAD661686E1DE55342CB338EF860A100AFDB2B44FBE54094D3F380",
+          "issuePath" : "/Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N002-7CAC02B407CAD661686E1DE55342CB338EF860A100AFDB2B44FBE54094D3F380.beads-issue.json",
+          "lastObservedAt" : "2026-07-28T08:41:20Z",
+          "observationCount" : 1,
+          "recurrenceCount" : 0
+        },
+        {
+          "action" : "migrate",
+          "firstObservedAt" : "2026-07-28T08:41:20Z",
+          "issueId" : "BUG-I18N-I18N002-7E4B1EBF1DFEB37CFD11A6387FBBBA93C199B7B333821F8D9E227625C285B28A",
+          "issuePath" : "/Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N002-7E4B1EBF1DFEB37CFD11A6387FBBBA93C199B7B333821F8D9E227625C285B28A.beads-issue.json",
+          "lastObservedAt" : "2026-07-28T08:41:20Z",
+          "observationCount" : 1,
+          "recurrenceCount" : 0
+        },
+        {
+          "action" : "migrate",
+          "firstObservedAt" : "2026-07-28T08:41:20Z",
+          "issueId" : "BUG-I18N-I18N002-8112DF0057FCC04C7C028A7DCB04D32AD5C186C9AE1DDD3B59D3E44A169FC5C5",
+          "issuePath" : "/Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N002-8112DF0057FCC04C7C028A7DCB04D32AD5C186C9AE1DDD3B59D3E44A169FC5C5.beads-issue.json",
+          "lastObservedAt" : "2026-07-28T08:41:20Z",
+          "observationCount" : 1,
+          "recurrenceCount" : 0
+        },
+        {
+          "action" : "migrate",
+          "firstObservedAt" : "2026-07-28T08:41:20Z",
+          "issueId" : "BUG-I18N-I18N002-812075382A7B792279D46BC8BBA2EFF2F07D49A7267A07E6E46364A96EBF055A",
+          "issuePath" : "/Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N002-812075382A7B792279D46BC8BBA2EFF2F07D49A7267A07E6E46364A96EBF055A.beads-issue.json",
+          "lastObservedAt" : "2026-07-28T08:41:20Z",
+          "observationCount" : 1,
+          "recurrenceCount" : 0
+        },
+        {
+          "action" : "migrate",
+          "firstObservedAt" : "2026-07-28T08:41:20Z",
+          "issueId" : "BUG-I18N-I18N002-8163C9B71C985CAA5A429B6448778F9DCC0F6617D43A9B688B685DB89DCC5B3E",
+          "issuePath" : "/Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N002-8163C9B71C985CAA5A429B6448778F9DCC0F6617D43A9B688B685DB89DCC5B3E.beads-issue.json",
+          "lastObservedAt" : "2026-07-28T08:41:20Z",
+          "observationCount" : 1,
+          "recurrenceCount" : 0
+        },
+        {
+          "action" : "migrate",
+          "firstObservedAt" : "2026-07-28T08:41:20Z",
+          "issueId" : "BUG-I18N-I18N002-82E5AB657C91D2C5D6A2E840D5029ED775DA6AC81591F844CAB265BE670BAD84",
+          "issuePath" : "/Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N002-82E5AB657C91D2C5D6A2E840D5029ED775DA6AC81591F844CAB265BE670BAD84.beads-issue.json",
+          "lastObservedAt" : "2026-07-28T08:41:20Z",
+          "observationCount" : 1,
+          "recurrenceCount" : 0
+        },
+        {
+          "action" : "migrate",
+          "firstObservedAt" : "2026-07-28T08:41:20Z",
+          "issueId" : "BUG-I18N-I18N002-856F8E86D3BFACF2C5644A1D8AF523ECFA47E22C611410BF0DF31EE6B5D68AFB",
+          "issuePath" : "/Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N002-856F8E86D3BFACF2C5644A1D8AF523ECFA47E22C611410BF0DF31EE6B5D68AFB.beads-issue.json",
+          "lastObservedAt" : "2026-07-28T08:41:20Z",
+          "observationCount" : 1,
+          "recurrenceCount" : 0
+        },
+        {
+          "action" : "migrate",
+          "firstObservedAt" : "2026-07-28T08:41:20Z",
+          "issueId" : "BUG-I18N-I18N002-89FBDFEAB0A83EB78FE5F1088F7C6BD243024F154874F67B8FB129C4BE0514F3",
+          "issuePath" : "/Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N002-89FBDFEAB0A83EB78FE5F1088F7C6BD243024F154874F67B8FB129C4BE0514F3.beads-issue.json",
+          "lastObservedAt" : "2026-07-28T08:41:20Z",
+          "observationCount" : 1,
+          "recurrenceCount" : 0
+        },
+        {
+          "action" : "migrate",
+          "firstObservedAt" : "2026-07-28T08:41:20Z",
+          "issueId" : "BUG-I18N-I18N002-8A5505D1C9C345BA8112EB7DE28CE91AA8EE371C84DE29032EE33984D7B38578",
+          "issuePath" : "/Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N002-8A5505D1C9C345BA8112EB7DE28CE91AA8EE371C84DE29032EE33984D7B38578.beads-issue.json",
+          "lastObservedAt" : "2026-07-28T08:41:20Z",
+          "observationCount" : 1,
+          "recurrenceCount" : 0
+        },
+        {
+          "action" : "migrate",
+          "firstObservedAt" : "2026-07-28T08:41:20Z",
+          "issueId" : "BUG-I18N-I18N002-8F01CE3139CABBCA3EE0F30AD3EA98155B16F7B0B2DCF51F80B90C2CE656AAC2",
+          "issuePath" : "/Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N002-8F01CE3139CABBCA3EE0F30AD3EA98155B16F7B0B2DCF51F80B90C2CE656AAC2.beads-issue.json",
+          "lastObservedAt" : "2026-07-28T08:41:20Z",
+          "observationCount" : 1,
+          "recurrenceCount" : 0
+        },
+        {
+          "action" : "migrate",
+          "firstObservedAt" : "2026-07-28T08:41:20Z",
+          "issueId" : "BUG-I18N-I18N002-8F27822389B97BE5DA3517CC5F9C3510E8692A7D89AAE62B6A63D27F1989D478",
+          "issuePath" : "/Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N002-8F27822389B97BE5DA3517CC5F9C3510E8692A7D89AAE62B6A63D27F1989D478.beads-issue.json",
+          "lastObservedAt" : "2026-07-28T08:41:20Z",
+          "observationCount" : 1,
+          "recurrenceCount" : 0
+        },
+        {
+          "action" : "migrate",
+          "firstObservedAt" : "2026-07-28T08:41:20Z",
+          "issueId" : "BUG-I18N-I18N002-8F4492B0909BC249536D3B1803FF889457B4081CEB3F9B37273E7D7409DE0F4F",
+          "issuePath" : "/Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N002-8F4492B0909BC249536D3B1803FF889457B4081CEB3F9B37273E7D7409DE0F4F.beads-issue.json",
+          "lastObservedAt" : "2026-07-28T08:41:20Z",
+          "observationCount" : 1,
+          "recurrenceCount" : 0
+        },
+        {
+          "action" : "migrate",
+          "firstObservedAt" : "2026-07-28T08:41:20Z",
+          "issueId" : "BUG-I18N-I18N002-920A7728B7F929B4A7658F995A81FB53BEAF96752A22A08EA298583042E01208",
+          "issuePath" : "/Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N002-920A7728B7F929B4A7658F995A81FB53BEAF96752A22A08EA298583042E01208.beads-issue.json",
+          "lastObservedAt" : "2026-07-28T08:41:20Z",
+          "observationCount" : 1,
+          "recurrenceCount" : 0
+        },
+        {
+          "action" : "migrate",
+          "firstObservedAt" : "2026-07-28T08:41:20Z",
+          "issueId" : "BUG-I18N-I18N002-936FC51CE796D0B21B7E191192A368BB8559005B28E1C2F84E10645D407501AE",
+          "issuePath" : "/Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N002-936FC51CE796D0B21B7E191192A368BB8559005B28E1C2F84E10645D407501AE.beads-issue.json",
+          "lastObservedAt" : "2026-07-28T08:41:20Z",
+          "observationCount" : 1,
+          "recurrenceCount" : 0
+        },
+        {
+          "action" : "migrate",
+          "firstObservedAt" : "2026-07-28T08:41:20Z",
+          "issueId" : "BUG-I18N-I18N002-96F3BF71DE9280BA1AB10B05B209A7E9D5D38A544A5EF163EE6E0499FCF20E68",
+          "issuePath" : "/Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N002-96F3BF71DE9280BA1AB10B05B209A7E9D5D38A544A5EF163EE6E0499FCF20E68.beads-issue.json",
+          "lastObservedAt" : "2026-07-28T08:41:20Z",
+          "observationCount" : 1,
+          "recurrenceCount" : 0
+        },
+        {
+          "action" : "migrate",
+          "firstObservedAt" : "2026-07-28T08:41:20Z",
+          "issueId" : "BUG-I18N-I18N002-97EFF799440F77990A980AABD01BD20286FC61A303417ACB006710C30B2001B5",
+          "issuePath" : "/Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N002-97EFF799440F77990A980AABD01BD20286FC61A303417ACB006710C30B2001B5.beads-issue.json",
+          "lastObservedAt" : "2026-07-28T08:41:20Z",
+          "observationCount" : 1,
+          "recurrenceCount" : 0
+        },
+        {
+          "action" : "migrate",
+          "firstObservedAt" : "2026-07-28T08:41:20Z",
+          "issueId" : "BUG-I18N-I18N002-98C9F951A43F655D23466E2175E8520CE4D7F37B073896514256A5F3361A8685",
+          "issuePath" : "/Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N002-98C9F951A43F655D23466E2175E8520CE4D7F37B073896514256A5F3361A8685.beads-issue.json",
+          "lastObservedAt" : "2026-07-28T08:41:20Z",
+          "observationCount" : 1,
+          "recurrenceCount" : 0
+        },
+        {
+          "action" : "migrate",
+          "firstObservedAt" : "2026-07-28T08:41:20Z",
+          "issueId" : "BUG-I18N-I18N002-9CE23EC4ACCB8C77634472E2CAE80EA2EAD810F54D0DC8BF967C7A1A651C3FB0",
+          "issuePath" : "/Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N002-9CE23EC4ACCB8C77634472E2CAE80EA2EAD810F54D0DC8BF967C7A1A651C3FB0.beads-issue.json",
+          "lastObservedAt" : "2026-07-28T08:41:20Z",
+          "observationCount" : 1,
+          "recurrenceCount" : 0
+        },
+        {
+          "action" : "migrate",
+          "firstObservedAt" : "2026-07-28T08:41:20Z",
+          "issueId" : "BUG-I18N-I18N002-9D99949FD538FD426DD2851E6DCABC54C68F76EB30F5EC5D92FEBF865DB77256",
+          "issuePath" : "/Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N002-9D99949FD538FD426DD2851E6DCABC54C68F76EB30F5EC5D92FEBF865DB77256.beads-issue.json",
+          "lastObservedAt" : "2026-07-28T08:41:20Z",
+          "observationCount" : 1,
+          "recurrenceCount" : 0
+        },
+        {
+          "action" : "migrate",
+          "firstObservedAt" : "2026-07-28T08:41:20Z",
+          "issueId" : "BUG-I18N-I18N002-9DC90BAAB5B40CEE4C55FF11FE50B6E1E4B6B21A701E1D3C5B325A9A43D06D7A",
+          "issuePath" : "/Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N002-9DC90BAAB5B40CEE4C55FF11FE50B6E1E4B6B21A701E1D3C5B325A9A43D06D7A.beads-issue.json",
+          "lastObservedAt" : "2026-07-28T08:41:20Z",
+          "observationCount" : 1,
+          "recurrenceCount" : 0
+        },
+        {
+          "action" : "migrate",
+          "firstObservedAt" : "2026-07-28T08:41:20Z",
+          "issueId" : "BUG-I18N-I18N002-9F7C9CF375E3284C2053301DC9761851341F1940ECD8F54ED87F3CA4E2433816",
+          "issuePath" : "/Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N002-9F7C9CF375E3284C2053301DC9761851341F1940ECD8F54ED87F3CA4E2433816.beads-issue.json",
+          "lastObservedAt" : "2026-07-28T08:41:20Z",
+          "observationCount" : 1,
+          "recurrenceCount" : 0
+        },
+        {
+          "action" : "migrate",
+          "firstObservedAt" : "2026-07-28T08:41:20Z",
+          "issueId" : "BUG-I18N-I18N002-A01C2CE67AD578F8137870490E393C16CAE0DF26F01300B68DB02F471E325436",
+          "issuePath" : "/Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N002-A01C2CE67AD578F8137870490E393C16CAE0DF26F01300B68DB02F471E325436.beads-issue.json",
+          "lastObservedAt" : "2026-07-28T08:41:20Z",
+          "observationCount" : 1,
+          "recurrenceCount" : 0
+        },
+        {
+          "action" : "migrate",
+          "firstObservedAt" : "2026-07-28T08:41:20Z",
+          "issueId" : "BUG-I18N-I18N002-A0CE9092E498B72AD0DDE9D65420FD54983DD4D4A28C3D76792A8AD8C65A9038",
+          "issuePath" : "/Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N002-A0CE9092E498B72AD0DDE9D65420FD54983DD4D4A28C3D76792A8AD8C65A9038.beads-issue.json",
+          "lastObservedAt" : "2026-07-28T08:41:20Z",
+          "observationCount" : 1,
+          "recurrenceCount" : 0
+        },
+        {
+          "action" : "migrate",
+          "firstObservedAt" : "2026-07-28T08:41:20Z",
+          "issueId" : "BUG-I18N-I18N002-A2A090EB4420DFB23C45790A196B9530A2C6E007C530BE3F58056A03A4A075AD",
+          "issuePath" : "/Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N002-A2A090EB4420DFB23C45790A196B9530A2C6E007C530BE3F58056A03A4A075AD.beads-issue.json",
+          "lastObservedAt" : "2026-07-28T08:41:20Z",
+          "observationCount" : 1,
+          "recurrenceCount" : 0
+        },
+        {
+          "action" : "migrate",
+          "firstObservedAt" : "2026-07-28T08:41:20Z",
+          "issueId" : "BUG-I18N-I18N002-A43752C478CC6E9F4A7A3589B131AC9293B712016681A462E6EB4E604656B246",
+          "issuePath" : "/Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N002-A43752C478CC6E9F4A7A3589B131AC9293B712016681A462E6EB4E604656B246.beads-issue.json",
+          "lastObservedAt" : "2026-07-28T08:41:20Z",
+          "observationCount" : 1,
+          "recurrenceCount" : 0
+        },
+        {
+          "action" : "migrate",
+          "firstObservedAt" : "2026-07-28T08:41:20Z",
+          "issueId" : "BUG-I18N-I18N002-A43DF91FF3A135D034A2740DE95D531866CD545315556975899BB1479DC66AA3",
+          "issuePath" : "/Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N002-A43DF91FF3A135D034A2740DE95D531866CD545315556975899BB1479DC66AA3.beads-issue.json",
+          "lastObservedAt" : "2026-07-28T08:41:20Z",
+          "observationCount" : 1,
+          "recurrenceCount" : 0
+        },
+        {
+          "action" : "migrate",
+          "firstObservedAt" : "2026-07-28T08:41:20Z",
+          "issueId" : "BUG-I18N-I18N002-A5CE19562F8C9066230E9F23627D838D3E09462DC926B40339F9F4643C26E3F4",
+          "issuePath" : "/Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N002-A5CE19562F8C9066230E9F23627D838D3E09462DC926B40339F9F4643C26E3F4.beads-issue.json",
+          "lastObservedAt" : "2026-07-28T08:41:20Z",
+          "observationCount" : 1,
+          "recurrenceCount" : 0
+        },
+        {
+          "action" : "migrate",
+          "firstObservedAt" : "2026-07-28T08:41:20Z",
+          "issueId" : "BUG-I18N-I18N002-A5D787813631A1B7B550553E44CC79301073E4DA3CA960FC2D49CEB96E72C507",
+          "issuePath" : "/Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N002-A5D787813631A1B7B550553E44CC79301073E4DA3CA960FC2D49CEB96E72C507.beads-issue.json",
+          "lastObservedAt" : "2026-07-28T08:41:20Z",
+          "observationCount" : 1,
+          "recurrenceCount" : 0
+        },
+        {
+          "action" : "migrate",
+          "firstObservedAt" : "2026-07-28T08:41:20Z",
+          "issueId" : "BUG-I18N-I18N002-A64ACA1C7DAC36E61A2A6401D559D3F3174779B70D85751E5CED64FFAD8C9A07",
+          "issuePath" : "/Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N002-A64ACA1C7DAC36E61A2A6401D559D3F3174779B70D85751E5CED64FFAD8C9A07.beads-issue.json",
+          "lastObservedAt" : "2026-07-28T08:41:20Z",
+          "observationCount" : 1,
+          "recurrenceCount" : 0
+        },
+        {
+          "action" : "migrate",
+          "firstObservedAt" : "2026-07-28T08:41:20Z",
+          "issueId" : "BUG-I18N-I18N002-A6B4D84506B2B6E2DD32C363B3769BDBB44CAAAD6C942DFEC5F3DAB3D1814D20",
+          "issuePath" : "/Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N002-A6B4D84506B2B6E2DD32C363B3769BDBB44CAAAD6C942DFEC5F3DAB3D1814D20.beads-issue.json",
+          "lastObservedAt" : "2026-07-28T08:41:20Z",
+          "observationCount" : 1,
+          "recurrenceCount" : 0
+        },
+        {
+          "action" : "migrate",
+          "firstObservedAt" : "2026-07-28T08:41:20Z",
+          "issueId" : "BUG-I18N-I18N002-A920E8FC70530AB4BD81D4E87FD68EB60C8BAA1586F77A93658DC14E2A9EA20A",
+          "issuePath" : "/Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N002-A920E8FC70530AB4BD81D4E87FD68EB60C8BAA1586F77A93658DC14E2A9EA20A.beads-issue.json",
+          "lastObservedAt" : "2026-07-28T08:41:20Z",
+          "observationCount" : 1,
+          "recurrenceCount" : 0
+        },
+        {
+          "action" : "migrate",
+          "firstObservedAt" : "2026-07-28T08:41:20Z",
+          "issueId" : "BUG-I18N-I18N002-A988EAFBDB01B4E54A61B91432AB67E008D698F1A502B3FEBA4E1608EFF4EFBD",
+          "issuePath" : "/Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N002-A988EAFBDB01B4E54A61B91432AB67E008D698F1A502B3FEBA4E1608EFF4EFBD.beads-issue.json",
+          "lastObservedAt" : "2026-07-28T08:41:20Z",
+          "observationCount" : 1,
+          "recurrenceCount" : 0
+        },
+        {
+          "action" : "migrate",
+          "firstObservedAt" : "2026-07-28T08:41:20Z",
+          "issueId" : "BUG-I18N-I18N002-AA2417FFA4CC0C64DDA549AF87737B80AF86A27D1D07DAB83B8A855E73D65419",
+          "issuePath" : "/Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N002-AA2417FFA4CC0C64DDA549AF87737B80AF86A27D1D07DAB83B8A855E73D65419.beads-issue.json",
+          "lastObservedAt" : "2026-07-28T08:41:20Z",
+          "observationCount" : 1,
+          "recurrenceCount" : 0
+        },
+        {
+          "action" : "migrate",
+          "firstObservedAt" : "2026-07-28T08:41:20Z",
+          "issueId" : "BUG-I18N-I18N002-ABC614B551ADF4239A67E05E3E2822FAA50307601B808F3393BFCAC8E8E5EAB1",
+          "issuePath" : "/Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N002-ABC614B551ADF4239A67E05E3E2822FAA50307601B808F3393BFCAC8E8E5EAB1.beads-issue.json",
+          "lastObservedAt" : "2026-07-28T08:41:20Z",
+          "observationCount" : 1,
+          "recurrenceCount" : 0
+        },
+        {
+          "action" : "migrate",
+          "firstObservedAt" : "2026-07-28T08:41:20Z",
+          "issueId" : "BUG-I18N-I18N002-AC01D42394525E34B254EEE2264EC0364D3CD8D655114ED62F9D16C7925A956C",
+          "issuePath" : "/Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N002-AC01D42394525E34B254EEE2264EC0364D3CD8D655114ED62F9D16C7925A956C.beads-issue.json",
+          "lastObservedAt" : "2026-07-28T08:41:20Z",
+          "observationCount" : 1,
+          "recurrenceCount" : 0
+        },
+        {
+          "action" : "migrate",
+          "firstObservedAt" : "2026-07-28T08:41:20Z",
+          "issueId" : "BUG-I18N-I18N002-ACC255ECBCE0BBCE5650B960FB25B800DA8710199D72AA74079B967D899D47F1",
+          "issuePath" : "/Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N002-ACC255ECBCE0BBCE5650B960FB25B800DA8710199D72AA74079B967D899D47F1.beads-issue.json",
+          "lastObservedAt" : "2026-07-28T08:41:20Z",
+          "observationCount" : 1,
+          "recurrenceCount" : 0
+        },
+        {
+          "action" : "migrate",
+          "firstObservedAt" : "2026-07-28T08:41:20Z",
+          "issueId" : "BUG-I18N-I18N002-B0A2D10BCC38A2D457BC575D62B34448E5B14924192D97611C65F90267C5199E",
+          "issuePath" : "/Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N002-B0A2D10BCC38A2D457BC575D62B34448E5B14924192D97611C65F90267C5199E.beads-issue.json",
+          "lastObservedAt" : "2026-07-28T08:41:20Z",
+          "observationCount" : 1,
+          "recurrenceCount" : 0
+        },
+        {
+          "action" : "migrate",
+          "firstObservedAt" : "2026-07-28T08:41:20Z",
+          "issueId" : "BUG-I18N-I18N002-B2910983086F94136AAE4BD2B8F0192ABE2372D6B8AA4D18A36F7D2ADFD7F1F0",
+          "issuePath" : "/Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N002-B2910983086F94136AAE4BD2B8F0192ABE2372D6B8AA4D18A36F7D2ADFD7F1F0.beads-issue.json",
+          "lastObservedAt" : "2026-07-28T08:41:20Z",
+          "observationCount" : 1,
+          "recurrenceCount" : 0
+        },
+        {
+          "action" : "migrate",
+          "firstObservedAt" : "2026-07-28T08:41:20Z",
+          "issueId" : "BUG-I18N-I18N002-B7389BCD630F6F52A0136B51314DEDDCE7DB972D9C5FB31C8F76784335080777",
+          "issuePath" : "/Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N002-B7389BCD630F6F52A0136B51314DEDDCE7DB972D9C5FB31C8F76784335080777.beads-issue.json",
+          "lastObservedAt" : "2026-07-28T08:41:20Z",
+          "observationCount" : 1,
+          "recurrenceCount" : 0
+        },
+        {
+          "action" : "migrate",
+          "firstObservedAt" : "2026-07-28T08:41:20Z",
+          "issueId" : "BUG-I18N-I18N002-BAC48E63707787DE24A9274157C6434DDF098730195C1971863353D0138275B8",
+          "issuePath" : "/Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N002-BAC48E63707787DE24A9274157C6434DDF098730195C1971863353D0138275B8.beads-issue.json",
+          "lastObservedAt" : "2026-07-28T08:41:20Z",
+          "observationCount" : 1,
+          "recurrenceCount" : 0
+        },
+        {
+          "action" : "migrate",
+          "firstObservedAt" : "2026-07-28T08:41:20Z",
+          "issueId" : "BUG-I18N-I18N002-BC98F0137B8248CA13FE1C9F6C3690F999DB9E04D0DF1C04AC3F3E42D652941F",
+          "issuePath" : "/Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N002-BC98F0137B8248CA13FE1C9F6C3690F999DB9E04D0DF1C04AC3F3E42D652941F.beads-issue.json",
+          "lastObservedAt" : "2026-07-28T08:41:20Z",
+          "observationCount" : 1,
+          "recurrenceCount" : 0
+        },
+        {
+          "action" : "migrate",
+          "firstObservedAt" : "2026-07-28T08:41:20Z",
+          "issueId" : "BUG-I18N-I18N002-BCB2FB307DEAAB5A3F4C52331226607E48518995ABAD396B95E0986DE1A44C8C",
+          "issuePath" : "/Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N002-BCB2FB307DEAAB5A3F4C52331226607E48518995ABAD396B95E0986DE1A44C8C.beads-issue.json",
+          "lastObservedAt" : "2026-07-28T08:41:20Z",
+          "observationCount" : 1,
+          "recurrenceCount" : 0
+        },
+        {
+          "action" : "migrate",
+          "firstObservedAt" : "2026-07-28T08:41:20Z",
+          "issueId" : "BUG-I18N-I18N002-BD94B82A2F4BC50807F1E9D08C418178D598D9B2E032D4E63C993BEEC0620ABE",
+          "issuePath" : "/Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N002-BD94B82A2F4BC50807F1E9D08C418178D598D9B2E032D4E63C993BEEC0620ABE.beads-issue.json",
+          "lastObservedAt" : "2026-07-28T08:41:20Z",
+          "observationCount" : 1,
+          "recurrenceCount" : 0
+        },
+        {
+          "action" : "migrate",
+          "firstObservedAt" : "2026-07-28T08:41:20Z",
+          "issueId" : "BUG-I18N-I18N002-BDE221386E77A5F909A29EC3C86A26EA114F906CF835058547198EF8337F5667",
+          "issuePath" : "/Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N002-BDE221386E77A5F909A29EC3C86A26EA114F906CF835058547198EF8337F5667.beads-issue.json",
+          "lastObservedAt" : "2026-07-28T08:41:20Z",
+          "observationCount" : 1,
+          "recurrenceCount" : 0
+        },
+        {
+          "action" : "migrate",
+          "firstObservedAt" : "2026-07-28T08:41:20Z",
+          "issueId" : "BUG-I18N-I18N002-BE6A226301C2A4D6E31FDB21815F46DBD02D622AEB27ED5BE74DE661D50F874A",
+          "issuePath" : "/Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N002-BE6A226301C2A4D6E31FDB21815F46DBD02D622AEB27ED5BE74DE661D50F874A.beads-issue.json",
+          "lastObservedAt" : "2026-07-28T08:41:20Z",
+          "observationCount" : 1,
+          "recurrenceCount" : 0
+        },
+        {
+          "action" : "migrate",
+          "firstObservedAt" : "2026-07-28T08:41:20Z",
+          "issueId" : "BUG-I18N-I18N002-BEEDF64D9FE38377C3EF408A44CA46AEF94E04E118C9C2EF36D8A1E2D8ABB602",
+          "issuePath" : "/Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N002-BEEDF64D9FE38377C3EF408A44CA46AEF94E04E118C9C2EF36D8A1E2D8ABB602.beads-issue.json",
+          "lastObservedAt" : "2026-07-28T08:41:20Z",
+          "observationCount" : 1,
+          "recurrenceCount" : 0
+        },
+        {
+          "action" : "migrate",
+          "firstObservedAt" : "2026-07-28T08:41:20Z",
+          "issueId" : "BUG-I18N-I18N002-C1D9150539FA0786D1E95932FE93A54C412E6F0361E04CEE3A83652965BFE663",
+          "issuePath" : "/Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N002-C1D9150539FA0786D1E95932FE93A54C412E6F0361E04CEE3A83652965BFE663.beads-issue.json",
+          "lastObservedAt" : "2026-07-28T08:41:20Z",
+          "observationCount" : 1,
+          "recurrenceCount" : 0
+        },
+        {
+          "action" : "migrate",
+          "firstObservedAt" : "2026-07-28T08:41:20Z",
+          "issueId" : "BUG-I18N-I18N002-C310CC3993B80D592D338BEB5C959051C0420B035028EE33DA6FC93220FAFD43",
+          "issuePath" : "/Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N002-C310CC3993B80D592D338BEB5C959051C0420B035028EE33DA6FC93220FAFD43.beads-issue.json",
+          "lastObservedAt" : "2026-07-28T08:41:20Z",
+          "observationCount" : 1,
+          "recurrenceCount" : 0
+        },
+        {
+          "action" : "migrate",
+          "firstObservedAt" : "2026-07-28T08:41:20Z",
+          "issueId" : "BUG-I18N-I18N002-C3CCD186B37E54F3D10ECC2FB6DA548C7D3D05EE58C0291CA531DF9E6C01702E",
+          "issuePath" : "/Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N002-C3CCD186B37E54F3D10ECC2FB6DA548C7D3D05EE58C0291CA531DF9E6C01702E.beads-issue.json",
+          "lastObservedAt" : "2026-07-28T08:41:20Z",
+          "observationCount" : 1,
+          "recurrenceCount" : 0
+        },
+        {
+          "action" : "migrate",
+          "firstObservedAt" : "2026-07-28T08:41:20Z",
+          "issueId" : "BUG-I18N-I18N002-C526EC3BDDBEBB3E13A48822A86404904CB1828C77359EB5A3C39757CDAFA858",
+          "issuePath" : "/Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N002-C526EC3BDDBEBB3E13A48822A86404904CB1828C77359EB5A3C39757CDAFA858.beads-issue.json",
+          "lastObservedAt" : "2026-07-28T08:41:20Z",
+          "observationCount" : 1,
+          "recurrenceCount" : 0
+        },
+        {
+          "action" : "migrate",
+          "firstObservedAt" : "2026-07-28T08:41:20Z",
+          "issueId" : "BUG-I18N-I18N002-C7D7A3D2A30B51706F9A86FE2834C51B839CD08C0392A6F7DC36F8CAB56E7B2C",
+          "issuePath" : "/Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N002-C7D7A3D2A30B51706F9A86FE2834C51B839CD08C0392A6F7DC36F8CAB56E7B2C.beads-issue.json",
+          "lastObservedAt" : "2026-07-28T08:41:20Z",
+          "observationCount" : 1,
+          "recurrenceCount" : 0
+        },
+        {
+          "action" : "migrate",
+          "firstObservedAt" : "2026-07-28T08:41:20Z",
+          "issueId" : "BUG-I18N-I18N002-C8546C558E68866DFDE68181B16DF940C35CD122104078E5B248DCCDEAB7FC7C",
+          "issuePath" : "/Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N002-C8546C558E68866DFDE68181B16DF940C35CD122104078E5B248DCCDEAB7FC7C.beads-issue.json",
+          "lastObservedAt" : "2026-07-28T08:41:20Z",
+          "observationCount" : 1,
+          "recurrenceCount" : 0
+        },
+        {
+          "action" : "migrate",
+          "firstObservedAt" : "2026-07-28T08:41:20Z",
+          "issueId" : "BUG-I18N-I18N002-C8F05B614CE99B962D6EDBB7A08203B146D268F237227D8547E604792BED3793",
+          "issuePath" : "/Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N002-C8F05B614CE99B962D6EDBB7A08203B146D268F237227D8547E604792BED3793.beads-issue.json",
+          "lastObservedAt" : "2026-07-28T08:41:20Z",
+          "observationCount" : 1,
+          "recurrenceCount" : 0
+        },
+        {
+          "action" : "migrate",
+          "firstObservedAt" : "2026-07-28T08:41:20Z",
+          "issueId" : "BUG-I18N-I18N002-CA7BDA4A2EB6CEE88E094015615CC2E82E2154DF698670C2BEB0E41ADCA3861D",
+          "issuePath" : "/Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N002-CA7BDA4A2EB6CEE88E094015615CC2E82E2154DF698670C2BEB0E41ADCA3861D.beads-issue.json",
+          "lastObservedAt" : "2026-07-28T08:41:20Z",
+          "observationCount" : 1,
+          "recurrenceCount" : 0
+        },
+        {
+          "action" : "migrate",
+          "firstObservedAt" : "2026-07-28T08:41:20Z",
+          "issueId" : "BUG-I18N-I18N002-CD895A1D2CA0FA4AAF6CB82DBB8E476B08E35533CD5B306B1FA6849BCE50A886",
+          "issuePath" : "/Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N002-CD895A1D2CA0FA4AAF6CB82DBB8E476B08E35533CD5B306B1FA6849BCE50A886.beads-issue.json",
+          "lastObservedAt" : "2026-07-28T08:41:20Z",
+          "observationCount" : 1,
+          "recurrenceCount" : 0
+        },
+        {
+          "action" : "migrate",
+          "firstObservedAt" : "2026-07-28T08:41:20Z",
+          "issueId" : "BUG-I18N-I18N002-CE4F7949AB0324FD4D33F995E900DB5AC5BE13E287463AA1A80F54B435AAFBB2",
+          "issuePath" : "/Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N002-CE4F7949AB0324FD4D33F995E900DB5AC5BE13E287463AA1A80F54B435AAFBB2.beads-issue.json",
+          "lastObservedAt" : "2026-07-28T08:41:20Z",
+          "observationCount" : 1,
+          "recurrenceCount" : 0
+        },
+        {
+          "action" : "migrate",
+          "firstObservedAt" : "2026-07-28T08:41:20Z",
+          "issueId" : "BUG-I18N-I18N002-CF320710D9E9158659D74768E8D4F196B50C284FE12622BBB87436EE179DD898",
+          "issuePath" : "/Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N002-CF320710D9E9158659D74768E8D4F196B50C284FE12622BBB87436EE179DD898.beads-issue.json",
+          "lastObservedAt" : "2026-07-28T08:41:20Z",
+          "observationCount" : 1,
+          "recurrenceCount" : 0
+        },
+        {
+          "action" : "migrate",
+          "firstObservedAt" : "2026-07-28T08:41:20Z",
+          "issueId" : "BUG-I18N-I18N002-CFE63CA74012FF5A20529E72219585F8AFD8A8ACEC28CA1BD03E5CF1BB9E09D1",
+          "issuePath" : "/Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N002-CFE63CA74012FF5A20529E72219585F8AFD8A8ACEC28CA1BD03E5CF1BB9E09D1.beads-issue.json",
+          "lastObservedAt" : "2026-07-28T08:41:20Z",
+          "observationCount" : 1,
+          "recurrenceCount" : 0
+        },
+        {
+          "action" : "migrate",
+          "firstObservedAt" : "2026-07-28T08:41:20Z",
+          "issueId" : "BUG-I18N-I18N002-D11B3CA26160EDD7501F780E1C2B6A57E512E5BF44749DFCBD71B43332028BE0",
+          "issuePath" : "/Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N002-D11B3CA26160EDD7501F780E1C2B6A57E512E5BF44749DFCBD71B43332028BE0.beads-issue.json",
+          "lastObservedAt" : "2026-07-28T08:41:20Z",
+          "observationCount" : 1,
+          "recurrenceCount" : 0
+        },
+        {
+          "action" : "migrate",
+          "firstObservedAt" : "2026-07-28T08:41:20Z",
+          "issueId" : "BUG-I18N-I18N002-D1EB1FAD36673A12A8913219F62D5DB691BCDA29E6930C32193718752FB8EB69",
+          "issuePath" : "/Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N002-D1EB1FAD36673A12A8913219F62D5DB691BCDA29E6930C32193718752FB8EB69.beads-issue.json",
+          "lastObservedAt" : "2026-07-28T08:41:20Z",
+          "observationCount" : 1,
+          "recurrenceCount" : 0
+        },
+        {
+          "action" : "migrate",
+          "firstObservedAt" : "2026-07-28T08:41:20Z",
+          "issueId" : "BUG-I18N-I18N002-D6945BEC55B453700B69B4D76E11ACA151397E58F8B334A0B9EEA68E5D42FCCA",
+          "issuePath" : "/Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N002-D6945BEC55B453700B69B4D76E11ACA151397E58F8B334A0B9EEA68E5D42FCCA.beads-issue.json",
+          "lastObservedAt" : "2026-07-28T08:41:20Z",
+          "observationCount" : 1,
+          "recurrenceCount" : 0
+        },
+        {
+          "action" : "migrate",
+          "firstObservedAt" : "2026-07-28T08:41:20Z",
+          "issueId" : "BUG-I18N-I18N002-D82B0B4F2D417E95CBF47525F2009CFC39D28FF2DEB8CADA44F49AE91073AC7E",
+          "issuePath" : "/Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N002-D82B0B4F2D417E95CBF47525F2009CFC39D28FF2DEB8CADA44F49AE91073AC7E.beads-issue.json",
+          "lastObservedAt" : "2026-07-28T08:41:20Z",
+          "observationCount" : 1,
+          "recurrenceCount" : 0
+        },
+        {
+          "action" : "migrate",
+          "firstObservedAt" : "2026-07-28T08:41:20Z",
+          "issueId" : "BUG-I18N-I18N002-D85AA67C57F74678A16D113A44A3AF99F436360DE284F95C502D56CA4075635E",
+          "issuePath" : "/Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N002-D85AA67C57F74678A16D113A44A3AF99F436360DE284F95C502D56CA4075635E.beads-issue.json",
+          "lastObservedAt" : "2026-07-28T08:41:20Z",
+          "observationCount" : 1,
+          "recurrenceCount" : 0
+        },
+        {
+          "action" : "migrate",
+          "firstObservedAt" : "2026-07-28T08:41:20Z",
+          "issueId" : "BUG-I18N-I18N002-D86E7654670629993ACB89967C5E13E58470EF339577F190E40898EAEADE40A9",
+          "issuePath" : "/Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N002-D86E7654670629993ACB89967C5E13E58470EF339577F190E40898EAEADE40A9.beads-issue.json",
+          "lastObservedAt" : "2026-07-28T08:41:20Z",
+          "observationCount" : 1,
+          "recurrenceCount" : 0
+        },
+        {
+          "action" : "migrate",
+          "firstObservedAt" : "2026-07-28T08:41:20Z",
+          "issueId" : "BUG-I18N-I18N002-E11FE814485C0098AC9EDBEB10238069E3C90F8FDFAEA30C5137C9E56E94BF85",
+          "issuePath" : "/Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N002-E11FE814485C0098AC9EDBEB10238069E3C90F8FDFAEA30C5137C9E56E94BF85.beads-issue.json",
+          "lastObservedAt" : "2026-07-28T08:41:20Z",
+          "observationCount" : 1,
+          "recurrenceCount" : 0
+        },
+        {
+          "action" : "migrate",
+          "firstObservedAt" : "2026-07-28T08:41:20Z",
+          "issueId" : "BUG-I18N-I18N002-E1D8F5632514F984DC1D18139EF70785148FCC38855C4A1159D5F52B216507BA",
+          "issuePath" : "/Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N002-E1D8F5632514F984DC1D18139EF70785148FCC38855C4A1159D5F52B216507BA.beads-issue.json",
+          "lastObservedAt" : "2026-07-28T08:41:20Z",
+          "observationCount" : 1,
+          "recurrenceCount" : 0
+        },
+        {
+          "action" : "migrate",
+          "firstObservedAt" : "2026-07-28T08:41:20Z",
+          "issueId" : "BUG-I18N-I18N002-E287C5F4DF659584762C461E1F0CF712E0E5150653867788C1EDEEEDBFAFDB64",
+          "issuePath" : "/Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N002-E287C5F4DF659584762C461E1F0CF712E0E5150653867788C1EDEEEDBFAFDB64.beads-issue.json",
+          "lastObservedAt" : "2026-07-28T08:41:20Z",
+          "observationCount" : 1,
+          "recurrenceCount" : 0
+        },
+        {
+          "action" : "migrate",
+          "firstObservedAt" : "2026-07-28T08:41:20Z",
+          "issueId" : "BUG-I18N-I18N002-E6250F6DE9327EE0AF4D17C4BBE76343D81EB79CA5020C5CC64B057DF820C15B",
+          "issuePath" : "/Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N002-E6250F6DE9327EE0AF4D17C4BBE76343D81EB79CA5020C5CC64B057DF820C15B.beads-issue.json",
+          "lastObservedAt" : "2026-07-28T08:41:20Z",
+          "observationCount" : 1,
+          "recurrenceCount" : 0
+        },
+        {
+          "action" : "migrate",
+          "firstObservedAt" : "2026-07-28T08:41:20Z",
+          "issueId" : "BUG-I18N-I18N002-E9319453E517EE7C6821ED44EF74BD0F18B43D0698419C1DC25F91C784110B56",
+          "issuePath" : "/Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N002-E9319453E517EE7C6821ED44EF74BD0F18B43D0698419C1DC25F91C784110B56.beads-issue.json",
+          "lastObservedAt" : "2026-07-28T08:41:20Z",
+          "observationCount" : 1,
+          "recurrenceCount" : 0
+        },
+        {
+          "action" : "migrate",
+          "firstObservedAt" : "2026-07-28T08:41:20Z",
+          "issueId" : "BUG-I18N-I18N002-EBCA8DD19E6203ECDA93F30BBC2985D9A07005F9A2F5D882FD33CC8331B4CF60",
+          "issuePath" : "/Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N002-EBCA8DD19E6203ECDA93F30BBC2985D9A07005F9A2F5D882FD33CC8331B4CF60.beads-issue.json",
+          "lastObservedAt" : "2026-07-28T08:41:20Z",
+          "observationCount" : 1,
+          "recurrenceCount" : 0
+        },
+        {
+          "action" : "migrate",
+          "firstObservedAt" : "2026-07-28T08:41:20Z",
+          "issueId" : "BUG-I18N-I18N002-ED4F0FD92FE46F3646B4CEB223CFE23E1CB4D8FE630F3754227977D9FC75B1EA",
+          "issuePath" : "/Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N002-ED4F0FD92FE46F3646B4CEB223CFE23E1CB4D8FE630F3754227977D9FC75B1EA.beads-issue.json",
+          "lastObservedAt" : "2026-07-28T08:41:20Z",
+          "observationCount" : 1,
+          "recurrenceCount" : 0
+        },
+        {
+          "action" : "migrate",
+          "firstObservedAt" : "2026-07-28T08:41:20Z",
+          "issueId" : "BUG-I18N-I18N002-EE209B10C7AE40ADF6D52CD8DE9F18E2342B7A6CE419ED843C75E40061E56812",
+          "issuePath" : "/Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N002-EE209B10C7AE40ADF6D52CD8DE9F18E2342B7A6CE419ED843C75E40061E56812.beads-issue.json",
+          "lastObservedAt" : "2026-07-28T08:41:20Z",
+          "observationCount" : 1,
+          "recurrenceCount" : 0
+        },
+        {
+          "action" : "migrate",
+          "firstObservedAt" : "2026-07-28T08:41:20Z",
+          "issueId" : "BUG-I18N-I18N002-EFF0AF0C000F408EEEECAECA3C42C52D241BCFC8F8D2829C31FB4637107BE769",
+          "issuePath" : "/Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N002-EFF0AF0C000F408EEEECAECA3C42C52D241BCFC8F8D2829C31FB4637107BE769.beads-issue.json",
+          "lastObservedAt" : "2026-07-28T08:41:20Z",
+          "observationCount" : 1,
+          "recurrenceCount" : 0
+        },
+        {
+          "action" : "migrate",
+          "firstObservedAt" : "2026-07-28T08:41:20Z",
+          "issueId" : "BUG-I18N-I18N002-F35E411B17CDAAB3C1B91404CEE1C0AD6CE20679A6FCAD0E2ABA37E942D74927",
+          "issuePath" : "/Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N002-F35E411B17CDAAB3C1B91404CEE1C0AD6CE20679A6FCAD0E2ABA37E942D74927.beads-issue.json",
+          "lastObservedAt" : "2026-07-28T08:41:20Z",
+          "observationCount" : 1,
+          "recurrenceCount" : 0
+        },
+        {
+          "action" : "migrate",
+          "firstObservedAt" : "2026-07-28T08:41:20Z",
+          "issueId" : "BUG-I18N-I18N002-F6DFFAFFDA98A999BB0886E8E29663A0AC9C29F86BFB7BFA5925F575576D4CFA",
+          "issuePath" : "/Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N002-F6DFFAFFDA98A999BB0886E8E29663A0AC9C29F86BFB7BFA5925F575576D4CFA.beads-issue.json",
+          "lastObservedAt" : "2026-07-28T08:41:20Z",
+          "observationCount" : 1,
+          "recurrenceCount" : 0
+        },
+        {
+          "action" : "migrate",
+          "firstObservedAt" : "2026-07-28T08:41:20Z",
+          "issueId" : "BUG-I18N-I18N002-F7240A89CC6EADA8DE543F2B587CA773FD1D7D03A3302197ED814AF5FE152961",
+          "issuePath" : "/Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N002-F7240A89CC6EADA8DE543F2B587CA773FD1D7D03A3302197ED814AF5FE152961.beads-issue.json",
+          "lastObservedAt" : "2026-07-28T08:41:20Z",
+          "observationCount" : 1,
+          "recurrenceCount" : 0
+        },
+        {
+          "action" : "migrate",
+          "firstObservedAt" : "2026-07-28T08:41:20Z",
+          "issueId" : "BUG-I18N-I18N002-F92A15C9F5A48C0B006105800035117C0E435275AE9D144D1617723F81DC5379",
+          "issuePath" : "/Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N002-F92A15C9F5A48C0B006105800035117C0E435275AE9D144D1617723F81DC5379.beads-issue.json",
+          "lastObservedAt" : "2026-07-28T08:41:20Z",
+          "observationCount" : 1,
+          "recurrenceCount" : 0
+        },
+        {
+          "action" : "migrate",
+          "firstObservedAt" : "2026-07-28T08:41:20Z",
+          "issueId" : "BUG-I18N-I18N002-FE0C379AB77183E681D63F3787650611F1028ACCE41C3A91C8A38C0DE20E9051",
+          "issuePath" : "/Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N002-FE0C379AB77183E681D63F3787650611F1028ACCE41C3A91C8A38C0DE20E9051.beads-issue.json",
+          "lastObservedAt" : "2026-07-28T08:41:20Z",
+          "observationCount" : 1,
+          "recurrenceCount" : 0
+        },
+        {
+          "action" : "migrate",
+          "firstObservedAt" : "2026-07-28T08:41:20Z",
+          "issueId" : "BUG-I18N-I18N002-FEA454DEB02E7FEDDFC434F25A7C75A9A3CC758B68B03CE543F15527E35E3889",
+          "issuePath" : "/Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N002-FEA454DEB02E7FEDDFC434F25A7C75A9A3CC758B68B03CE543F15527E35E3889.beads-issue.json",
+          "lastObservedAt" : "2026-07-28T08:41:20Z",
+          "observationCount" : 1,
+          "recurrenceCount" : 0
+        }
+      ],
+      "kind" : "beads-observation-counter-migration-receipt",
+      "migrated" : 147,
+      "owningHome" : "/Users/sonoma/mono/private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli",
+      "scanned" : 147,
+      "schemaVersion" : "0.1.0",
+      "writesApplied" : true
+    }
+  ],
+  "scanned" : 147,
+  "schemaVersion" : "0.1.0",
+  "writesApplied" : true
+}

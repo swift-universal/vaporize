@@ -1,0 +1,26 @@
+{
+  "kind": "bead-world-projection-schema-version-migration-receipt",
+  "schemaVersion": "0.0.1",
+  "migrationId": "vaporize-live-bead-world-projection-schema-version-0-1-0-to-0-0-1-2026-08-06",
+  "appliedAt": "2026-08-06T15:20:46Z",
+  "owningHome": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli",
+  "authoritativeVersionMapRef": "private/universal/substrate/collectives/spaces-universal/private/universal/kura-spaces/workstreams/instances/open/package-zero-minor-version-normalization/verification/schema-universal-historical-zero-minor-2026-08-06/schema-universal-version-root-map.json",
+  "mapping": {
+    "schemaFamily": "bead-world-projection-schemas",
+    "fromWireVersion": "0.1.0",
+    "toWireVersion": "0.0.1"
+  },
+  "scope": {
+    "selection": "direct owner-local projections with canonical issue and i18n source-gate evidence siblings",
+    "scanned": 147,
+    "migrated": 147,
+    "retainedHistoricalOrphans": 20
+  },
+  "verification": {
+    "preexistingActiveProjectionDiffs": 0,
+    "invalidJSON": 0,
+    "invalidTopLevelShape": 0,
+    "mechanicalDiffsOnly": true,
+    "postMigrationWireVersion": "0.0.1"
+  }
+}

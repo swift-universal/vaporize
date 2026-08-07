@@ -32,7 +32,7 @@ and CUJ count must already name the behavior being retired from the old location
 | Required Swift test obligations | 132 |
 | Required release evidence checks | 14 |
 | Required targetable test obligations | 146 |
-| Current executable Swift tests | 196 |
+| Current executable Swift tests | 197 |
 
 ## Targetable Test Bundles
 
@@ -51,7 +51,7 @@ and CUJ count must already name the behavior being retired from the old location
 | CUJ-11 | `VaporizeCUJ11PklYMLGenerationTests` | 3 |
 | CUJ-12 | `VaporizeCUJ12PackageGraphTests` | 1 |
 | CUJ-13 | `VaporizeCUJ13YMLPklImportTests` | 9 |
-| CUJ-14 | `VaporizeCUJ14PklXcodeProjectGenerationTests` | 7 |
+| CUJ-14 | `VaporizeCUJ14PklXcodeProjectGenerationTests` | 8 |
 | CUJ-15 | `VaporizeCUJ15XcodeProductCacheTests` | 4 |
 | CUJ-16 | `VaporizeCUJ16TargetFeaturesTests` | 5 |
 | CUJ-17 | `VaporizeCUJ17ReleaseDoctorTests` | 7 |
@@ -86,7 +86,7 @@ CUJ-02 and 3 attributed to CUJ-24's install-integrity slice.
 | CUJ-11 | FR-017 | 3 | Transitional YAML generation, renderer round-trip, generated YAML/Pkl comparison evidence |
 | CUJ-12 | FR-009 | 1 | Graph forwarded argument parsing |
 | CUJ-13 | FR-018 | 5 | Legacy YAML import parsing, generated Pkl evaluation, YAML/Pkl comparison, every parity proving-ground import, nested value rendering |
-| CUJ-14 | FR-020 | 7 | generate-xcodeproj parsing, Pkl-backed .xcodeproj output, deterministic renderer proof, tool releaseIdentity expected-pass, framework/app/unit-test/package/shared-scheme graph expected-pass, above-parity Pkl generation grounds, unsupported-target expected-fail |
+| CUJ-14 | FR-020 | 8 | generate-xcodeproj parsing, Pkl-backed .xcodeproj output, deterministic renderer proof, multi-source-root path preservation, tool releaseIdentity expected-pass, framework/app/unit-test/package/shared-scheme graph expected-pass, above-parity Pkl generation grounds, unsupported-target expected-fail |
 | CUJ-15 | FR-003, FR-021 | 4 | Product-cache option parsing, cache-first app lookup, shared workspace build invocation, paired option validation |
 | CUJ-16 | FR-023, FR-024 | 5 | Target feature inspection parsing, inferred target, stale xcconfig detection, generated Swift provenance, CLI parsing |
 | CUJ-17 | FR-027 | 7 Swift tests; 1 release evidence check | Release doctor parsing, live-spine pass, release-root resolution, missing-gate failure, unresolved-root rejection, unreviewed gate approval failure, follow-up list drift failure |

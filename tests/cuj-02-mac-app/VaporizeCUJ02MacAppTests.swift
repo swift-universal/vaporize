@@ -70,7 +70,10 @@ func picksAppleBuildPathFirst() throws {
   )
 
   let installer = SwiftAppInstaller(request: request)
-  #expect(installer.buildCandidates(for: tmp, configuration: request.configuration, product: request.product).first?.path == applePath.path)
+  #expect(
+    installer.buildCandidates(
+      for: tmp, configuration: request.configuration, product: request.product
+    ).first?.path == applePath.path)
   #expect(try installer.locateBuiltApp().path == applePath.path)
 }
 
@@ -97,7 +100,10 @@ func prefersDerivedDataWhenProvided() throws {
   )
 
   let installer = SwiftAppInstaller(request: request)
-  #expect(installer.buildCandidates(for: tmp, configuration: request.configuration, product: request.product).first?.path == derivedProduct.path)
+  #expect(
+    installer.buildCandidates(
+      for: tmp, configuration: request.configuration, product: request.product
+    ).first?.path == derivedProduct.path)
   #expect(try installer.locateBuiltApp().path == derivedProduct.path)
 }
 
@@ -123,19 +129,20 @@ func buildsTypedXcodeInvocation() throws {
     xcodeBuildSettings: ["CODE_SIGNING_ALLOWED=NO", "SKIP_APPLICATION_DEPLOY=YES"]
   )
 
-  #expect(try request.xcodeBuildInvocation().arguments == [
-    "-project", "/workspace/App/CreativeSelection.xcodeproj",
-    "-scheme", "CreativeSelection",
-    "-configuration", "Debug",
-    "-destination", "platform=macOS,arch=arm64",
-    "-destination", "platform=iOS Simulator,name=iPhone 16",
-    "-sdk", "macosx",
-    "-derivedDataPath", "/workspace/App/.derived-data",
-    "-resultBundlePath", "/tmp/CreativeSelection.xcresult",
-    "CODE_SIGNING_ALLOWED=NO",
-    "SKIP_APPLICATION_DEPLOY=YES",
-    "build",
-  ])
+  #expect(
+    try request.xcodeBuildInvocation().arguments == [
+      "-project", "/workspace/App/CreativeSelection.xcodeproj",
+      "-scheme", "CreativeSelection",
+      "-configuration", "Debug",
+      "-destination", "platform=macOS,arch=arm64",
+      "-destination", "platform=iOS Simulator,name=iPhone 16",
+      "-sdk", "macosx",
+      "-derivedDataPath", "/workspace/App/.derived-data",
+      "-resultBundlePath", "/tmp/CreativeSelection.xcresult",
+      "CODE_SIGNING_ALLOWED=NO",
+      "SKIP_APPLICATION_DEPLOY=YES",
+      "build",
+    ])
 }
 
 @Test("CUJ-02 defaults Xcode destination when using xcodebuild")
@@ -151,17 +158,19 @@ func defaultsXcodeDestinationWhenUsingXcodebuild() throws {
     xcodeScheme: "CreativeSelection"
   )
 
-  #expect(try request.xcodeBuildInvocation().arguments == [
-    "-workspace", "/workspace/App/CreativeSelection.xcworkspace",
-    "-scheme", "CreativeSelection",
-    "-configuration", "Release",
-    "-destination", SwiftAppInstaller.defaultXcodeDestination,
-    "-derivedDataPath", "/workspace/App/.build/vaporize-xcode-derived-data",
-    "build",
-  ])
+  #expect(
+    try request.xcodeBuildInvocation().arguments == [
+      "-workspace", "/workspace/App/CreativeSelection.xcworkspace",
+      "-scheme", "CreativeSelection",
+      "-configuration", "Release",
+      "-destination", SwiftAppInstaller.defaultXcodeDestination,
+      "-derivedDataPath", "/workspace/App/.build/vaporize-xcode-derived-data",
+      "build",
+    ])
 }
 
-@Test("CUJ-02 synthesizes a package-local derived data path when none is provided for an Xcode build")
+@Test(
+  "CUJ-02 synthesizes a package-local derived data path when none is provided for an Xcode build")
 func synthesizesDerivedDataPathForXcodeBuildWithoutExplicitPath() throws {
   let request = SwiftAppInstaller.Request(
     packagePath: "/workspace/App",
@@ -176,15 +185,17 @@ func synthesizesDerivedDataPathForXcodeBuildWithoutExplicitPath() throws {
 
   // The xcodebuild invocation must pin an explicit -derivedDataPath so a
   // successful build lands in a directory the locator also searches.
-  #expect(try request.xcodeBuildInvocation().arguments == [
-    "-project", "/workspace/App/CreativeSelection.xcodeproj",
-    "-scheme", "CreativeSelection",
-    "-configuration", "Debug",
-    "-destination", SwiftAppInstaller.defaultXcodeDestination,
-    "-derivedDataPath", "/workspace/App/.build/vaporize-xcode-derived-data",
-    "build",
-  ])
-  #expect(request.resolvedXcodeDerivedDataPath == "/workspace/App/.build/vaporize-xcode-derived-data")
+  #expect(
+    try request.xcodeBuildInvocation().arguments == [
+      "-project", "/workspace/App/CreativeSelection.xcodeproj",
+      "-scheme", "CreativeSelection",
+      "-configuration", "Debug",
+      "-destination", SwiftAppInstaller.defaultXcodeDestination,
+      "-derivedDataPath", "/workspace/App/.build/vaporize-xcode-derived-data",
+      "build",
+    ])
+  #expect(
+    request.resolvedXcodeDerivedDataPath == "/workspace/App/.build/vaporize-xcode-derived-data")
 }
 
 @Test("CUJ-02 locates the Xcode-built app under the synthesized derived data directory")
@@ -194,7 +205,8 @@ func locatesXcodeBuiltAppUnderSynthesizedDerivedData() throws {
   defer { try? FileManager.default.removeItem(at: tmp) }
 
   // Mirror what xcodebuild writes under the pinned -derivedDataPath.
-  let builtApp = tmp
+  let builtApp =
+    tmp
     .appendingPathComponent(SwiftAppInstaller.Request.defaultXcodeDerivedDataDirectoryName)
     .appendingPathComponent("Build/Products/Debug/CreativeSelection.app")
   try FileManager.default.createDirectory(at: builtApp, withIntermediateDirectories: true)
@@ -308,7 +320,8 @@ func appBundleNameControlsLocatedBundleWithoutChangingInstallProduct() throws {
   try FileManager.default.createDirectory(at: tmp, withIntermediateDirectories: true)
   defer { try? FileManager.default.removeItem(at: tmp) }
 
-  let builtPath = tmp.appendingPathComponent(".build/apple/Products/Debug/CreativeSelectionDebug.app")
+  let builtPath = tmp.appendingPathComponent(
+    ".build/apple/Products/Debug/CreativeSelectionDebug.app")
   try FileManager.default.createDirectory(at: builtPath, withIntermediateDirectories: true)
   let request = SwiftAppInstaller.Request(
     packagePath: tmp.path,
@@ -327,8 +340,95 @@ func appBundleNameControlsLocatedBundleWithoutChangingInstallProduct() throws {
 func bundleResolverExpandsConcourseWrapperNames() throws {
   let spec = try AppleProjectYMLReader.load(url: concourseProjectYMLURL)
 
-  #expect(AppleProjectAppBundleNameResolver.appBundleName(in: spec, targetName: "concourse", configuration: "Debug") == "concourse-0.1.0-debug")
-  #expect(AppleProjectAppBundleNameResolver.appBundleName(in: spec, targetName: "concourse", configuration: "Release") == "concourse-0.1.0-testflight")
+  #expect(
+    AppleProjectAppBundleNameResolver.appBundleName(
+      in: spec, targetName: "concourse", configuration: "Debug") == "concourse-0.0.1-debug")
+  #expect(
+    AppleProjectAppBundleNameResolver.appBundleName(
+      in: spec, targetName: "concourse", configuration: "Release") == "concourse-0.0.1-testflight")
+}
+
+@Test(
+  "CUJ-02 resolves Pkl wrapper identity from the source root for an out-of-tree generated project")
+func resolvesPklWrapperIdentityFromSourceRootForOutOfTreeGeneratedProject() async throws {
+  let fixture = try makeAppBundleIdentityFixture(
+    pklWrapperName: "pkl-debug",
+    ymlWrapperName: "legacy-debug"
+  )
+  defer { try? FileManager.default.removeItem(at: fixture.temporaryDirectory) }
+
+  let command = try VaporizeCLI.parse([
+    "build",
+    "xcode",
+    "--artifact",
+    "app",
+    "--package-path",
+    fixture.sourceRoot.path,
+    "--product",
+    "PklApp",
+    "--xcode-project",
+    fixture.generatedProject.path,
+    "--scheme",
+    "PklApp",
+    "--configuration",
+    "debug",
+  ])
+
+  #expect(await command.resolvedAppBundleName(product: "PklApp") == "pkl-debug")
+}
+
+@Test("CUJ-02 project-adjacent Pkl is checked before the generated project's source root")
+func projectAdjacentPklIsCheckedBeforeSourceRoot() throws {
+  let temporaryDirectory = FileManager.default.temporaryDirectory
+    .appendingPathComponent("vaporize-app-bundle-identity-\(UUID().uuidString)")
+  let projectDirectory = temporaryDirectory.appendingPathComponent("generated")
+  let sourceRoot = temporaryDirectory.appendingPathComponent("source")
+  let projectURL = projectDirectory.appendingPathComponent("PklApp.xcodeproj")
+  let request = XcodeAppBundleIdentityResolutionRequest(
+    explicitPklPath: nil,
+    xcodeProjectPath: projectURL.path,
+    xcodeWorkspacePath: nil,
+    sourceRootPath: sourceRoot.path,
+    targetName: "PklApp",
+    configuration: "Debug",
+    workingDirectoryURL: temporaryDirectory
+  )
+
+  let candidates = XcodeAppBundleIdentityResolver.candidateProjectPklURLs(for: request)
+
+  #expect(
+    candidates.map(\.path) == [
+      projectDirectory.appendingPathComponent("project.pkl").path,
+      sourceRoot.appendingPathComponent("project.pkl").path,
+    ])
+}
+
+@Test("CUJ-02 retains project.yml wrapper discovery when no Pkl record is present")
+func retainsLegacyYMLWrapperDiscoveryWhenNoPklIsPresent() async throws {
+  let fixture = try makeAppBundleIdentityFixture(
+    pklWrapperName: nil,
+    ymlWrapperName: "legacy-debug"
+  )
+  defer { try? FileManager.default.removeItem(at: fixture.temporaryDirectory) }
+
+  let command = try VaporizeCLI.parse([
+    "build",
+    "xcode",
+    "--artifact",
+    "app",
+    "--package-path",
+    fixture.sourceRoot.path,
+    "--product",
+    "PklApp",
+    "--xcode-project",
+    fixture.generatedProject.path,
+    "--scheme",
+    "PklApp",
+    "--configuration",
+    "debug",
+  ])
+
+  #expect(await command.resolvedAppBundleName(product: "PklApp") == "legacy-debug")
 }
 
 @Test("CUJ-02 bundle resolver uses case-insensitive configuration names")
@@ -347,7 +447,9 @@ func bundleResolverUsesCaseInsensitiveConfigurationNames() throws {
     """
   )
 
-  #expect(AppleProjectAppBundleNameResolver.appBundleName(in: spec, targetName: "mac", configuration: "debug") == "mac-debug")
+  #expect(
+    AppleProjectAppBundleNameResolver.appBundleName(
+      in: spec, targetName: "mac", configuration: "debug") == "mac-debug")
 }
 
 @Test("CUJ-02 bundle resolver falls back to the single target")
@@ -366,7 +468,9 @@ func bundleResolverFallsBackToSingleTarget() throws {
     """
   )
 
-  #expect(AppleProjectAppBundleNameResolver.appBundleName(in: spec, targetName: "missing", configuration: "Release") == "only")
+  #expect(
+    AppleProjectAppBundleNameResolver.appBundleName(
+      in: spec, targetName: "missing", configuration: "Release") == "only")
 }
 
 @Test("CUJ-02 bundle resolver rejects unresolved wrapper placeholders")
@@ -385,5 +489,66 @@ func bundleResolverRejectsUnresolvedWrapperPlaceholders() throws {
     """
   )
 
-  #expect(AppleProjectAppBundleNameResolver.appBundleName(in: spec, targetName: "mac", configuration: "Debug") == nil)
+  #expect(
+    AppleProjectAppBundleNameResolver.appBundleName(
+      in: spec, targetName: "mac", configuration: "Debug") == nil)
+}
+
+private struct AppBundleIdentityFixture {
+  var temporaryDirectory: URL
+  var sourceRoot: URL
+  var generatedProject: URL
+}
+
+private func makeAppBundleIdentityFixture(
+  pklWrapperName: String?,
+  ymlWrapperName: String
+) throws -> AppBundleIdentityFixture {
+  let temporaryDirectory = FileManager.default.temporaryDirectory
+    .appendingPathComponent("vaporize-app-bundle-identity-\(UUID().uuidString)")
+  let sourceRoot = temporaryDirectory.appendingPathComponent("source")
+  let generatedProject =
+    temporaryDirectory
+    .appendingPathComponent("generated")
+    .appendingPathComponent("PklApp.xcodeproj")
+  try FileManager.default.createDirectory(at: sourceRoot, withIntermediateDirectories: true)
+  try FileManager.default.createDirectory(at: generatedProject, withIntermediateDirectories: true)
+
+  let yml = appBundleIdentityYML(wrapperName: ymlWrapperName)
+  try Data(yml.utf8).write(to: sourceRoot.appendingPathComponent("project.yml"))
+
+  if let pklWrapperName {
+    let spec = try decodeAppleProjectYML(appBundleIdentityYML(wrapperName: pklWrapperName))
+    let pkl = AppleProjectPklRenderer.renderData(
+      spec: spec,
+      schemaAmendsPath: relativePathForPklAmends(
+        from: sourceRoot,
+        to: appleProjectSpecPklSchemaURL
+      ),
+      sourcePath: "project.yml"
+    )
+    try pkl.write(to: sourceRoot.appendingPathComponent("project.pkl"))
+  }
+
+  return AppBundleIdentityFixture(
+    temporaryDirectory: temporaryDirectory,
+    sourceRoot: sourceRoot,
+    generatedProject: generatedProject
+  )
+}
+
+private func appBundleIdentityYML(wrapperName: String) -> String {
+  """
+  name: pkl-wrapper-app
+  targets:
+    PklApp:
+      type: application
+      platform: macOS
+      settings:
+        base:
+          PRODUCT_NAME: PklApp
+        configs:
+          Debug:
+            WRAPPER_NAME: \(wrapperName).app
+  """
 }

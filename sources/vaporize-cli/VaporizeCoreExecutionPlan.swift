@@ -1,5 +1,6 @@
 import ArgumentParser
 import Foundation
+import VaporizeCLICopy_v000_000_001
 
 enum VaporizeCoreOperation: String, CaseIterable, Codable, Equatable, Sendable {
   case install
@@ -62,7 +63,7 @@ struct VaporizeCoreExecutionPlan: Codable, Equatable, Sendable {
         let authority = VaporizeCoreExecutionAuthority(rawValue: authorityArgument)
       else {
         throw ValidationError(
-          "Vaporize \(operation.rawValue) requires an execution authority on macOS. Use `\(operation.rawValue) swift` or `\(operation.rawValue) xcode`."
+          vaporizeCopyFill(VaporizeCLICopy_v000_000_001.CLI.vaporizeVaporizeA1RequiresAnExecutionAuthority, ["\(operation.rawValue)", "\(operation.rawValue)", "\(operation.rawValue)"])
         )
       }
       return Self(
@@ -77,7 +78,7 @@ struct VaporizeCoreExecutionPlan: Codable, Equatable, Sendable {
         VaporizeCoreExecutionAuthority(rawValue: first) != nil
       {
         throw ValidationError(
-          "Vaporize \(operation.rawValue) is already the collapsed pure-Swift command on this platform; remove the `\(first)` authority token."
+          vaporizeCopyFill(VaporizeCLICopy_v000_000_001.CLI.vaporizeVaporizeA1IsAlreadyTheCollapsed, ["\(operation.rawValue)", "\(first)"])
         )
       }
       return Self(

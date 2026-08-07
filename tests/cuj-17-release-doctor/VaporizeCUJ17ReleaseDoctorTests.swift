@@ -391,7 +391,7 @@ private func makeReleaseDoctorFixture(
           "VaporizeCUJ10YMLPklComparisonTests": 5,
           "VaporizeCUJ13YMLPklImportTests": 5,
           "VaporizeCUJ17ReleaseDoctorTests": 7,
-          "VaporizeCUJ14PklXcodeProjectGenerationTests": 7,
+          "VaporizeCUJ14PklXcodeProjectGenerationTests": 8,
           "VaporizeCUJ18ListTargetsTests": 5,
           "VaporizeCUJ19WorkspaceCacheDiscoveryTests": 5,
           "VaporizeCUJ20XcodeWorkspaceSchemesTests": 5,

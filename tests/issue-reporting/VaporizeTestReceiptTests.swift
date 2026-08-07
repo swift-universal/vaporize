@@ -6,6 +6,37 @@ import Testing
 @Suite(.serialized)
 struct VaporizeTestReceiptTests {
   @Test
+  func coreExecutionReceiptRetainsBuildAndInstallTimingEnvelope() throws {
+    let started = Date(timeIntervalSince1970: 1_700_000_000)
+    let finished = started.addingTimeInterval(12.5)
+    let receipt = VaporizeCoreExecutionReceipt(
+      operation: "install",
+      executionAuthority: "swift",
+      toolchainResolver: "default-swift",
+      packagePath: "/workspace/tool",
+      product: "tool.cli",
+      configuration: "debug",
+      startedAt: started,
+      finishedAt: finished,
+      commandElapsedNanoseconds: 12_500_000_000,
+      dependencyPreparationNanoseconds: 1_000_000_000,
+      dependencyRestoreNanoseconds: 500_000_000,
+      processExecutionNanoseconds: 11_000_000_000,
+      succeeded: true,
+      artifactPath: "/Users/example/.swiftpm/bin/tool.cli",
+      failureDescription: nil
+    )
+
+    let decoded = try JSONDecoder().decode(
+      VaporizeCoreExecutionReceipt.self,
+      from: JSONEncoder().encode(receipt)
+    )
+    #expect(decoded == receipt)
+    #expect(decoded.receiptKind == "vaporize-core-execution")
+    #expect(decoded.processExecutionNanoseconds == 11_000_000_000)
+  }
+
+  @Test
   func absentSinkRecordsRunWithZeroIssues() throws {
     let fixture = try ReceiptFixture()
     defer { fixture.remove() }

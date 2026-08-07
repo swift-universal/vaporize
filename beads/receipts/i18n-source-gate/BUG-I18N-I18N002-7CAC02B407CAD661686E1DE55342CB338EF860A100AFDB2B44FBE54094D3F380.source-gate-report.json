@@ -2,20 +2,64 @@
   "approvedImports" : [
 
   ],
+  "declaredKeys" : [
+
+  ],
   "enforcement" : "release",
   "findings" : [
     {
       "location" : {
-        "column" : 14,
-        "file" : "sources/vaporize-cli/I18nSourceGatePreflight.swift",
-        "line" : 20
+        "column" : 7,
+        "file" : "sources/vaporize-cli/HomebrewStatus.swift",
+        "line" : 79
       },
-      "message" : "Target 'vaporize.cli@wrkstrm-core.clia.sh' uses user-facing strings but imports none of its approved i18n copy packages: ApprovedCopy_v000_000_001, ConcourseCopy_v000_000_001, DiskCleanerCopy_v000_000_001, HarnessCLICopy_v000_000_001, KeikoWorldCopy_v000_000_001, RismayMeCopy_v000_000_001, SubstrateCLICopy_v000_000_001, TranslateCopy_v000_000_001, WrkstrmWorldCopy_v000_000_001.",
+      "message" : "Target 'vaporize.cli@wrkstrm-core.clia.sh' uses user-facing strings but imports none of its approved i18n copy packages: ApprovedCopy_v000_000_001, ConcourseCopy_v000_000_001, DiskCleanerCopy_v000_000_001, HarnessCLICopy_v000_000_001, KeikoWorldCopy_v000_000_001, RismayMeCopy_v000_000_001, SubstrateCLICopy_v000_000_001, TranslateCLICopy_v000_000_001, TranslateCopy_v000_000_001, WrkstrmWorldCopy_v000_000_001.",
       "rule" : "I18N001",
       "sink" : "target-import",
       "structuralAnchor" : "target-import"
     },
     {
+      "containsInterpolation" : true,
+      "literalSource" : "\"Homebrew formula source is missing: \\(path)\"",
+      "location" : {
+        "column" : 7,
+        "file" : "sources/vaporize-cli/HomebrewStatus.swift",
+        "line" : 79
+      },
+      "message" : "User-facing string literal must come from an approved generated i18n copy package.",
+      "rule" : "I18N002",
+      "sink" : "LocalizedError.errorDescription",
+      "structuralAnchor" : "sha256:44b12739c927fcb7deb5497cf1ccb8a6501d5e2f2fdeccc6394f5418d38951ca"
+    },
+    {
+      "containsInterpolation" : true,
+      "literalSource" : "\"Homebrew formula source has no explicit version: \\(path)\"",
+      "location" : {
+        "column" : 7,
+        "file" : "sources/vaporize-cli/HomebrewStatus.swift",
+        "line" : 81
+      },
+      "message" : "User-facing string literal must come from an approved generated i18n copy package.",
+      "rule" : "I18N002",
+      "sink" : "LocalizedError.errorDescription",
+      "structuralAnchor" : "sha256:ef3db3331aa9dae664edad2be2e7e8473e46f8bbb69fa56efac0939a0990aa34"
+    },
+    {
+      "containsInterpolation" : true,
+      "literalSource" : "\"Homebrew did not return a formulae JSON record: \\(detail)\"",
+      "location" : {
+        "column" : 7,
+        "file" : "sources/vaporize-cli/HomebrewStatus.swift",
+        "line" : 83
+      },
+      "message" : "User-facing string literal must come from an approved generated i18n copy package.",
+      "rule" : "I18N002",
+      "sink" : "LocalizedError.errorDescription",
+      "structuralAnchor" : "sha256:94a274aa5efd76da5977787a61aa44dec541445ce1863a20d411335c17c75adf"
+    },
+    {
+      "containsInterpolation" : true,
+      "literalSource" : "\"\"\"\n        \\(report.standard.title) v\\(report.standard.version) blocked \\(report.targetName).\n        \\(I18nSourceGateAssistantRenderer.render(\n          report: report,\n          receipt: imprintReceipt,\n          reportReceiptPath: receiptPath,\n          beadReceiptPath: imprintReceiptPath\n        ))\n        \"\"\"",
       "location" : {
         "column" : 14,
         "file" : "sources/vaporize-cli/I18nSourceGatePreflight.swift",
@@ -27,6 +71,8 @@
       "structuralAnchor" : "sha256:78585adcb6689b0f224af8003e72c7075a75da02db491380296036a4fa6f376a"
     },
     {
+      "containsInterpolation" : true,
+      "literalSource" : "\"\"\"\n        \\(report.standard.title) v\\(report.standard.version) completed for \\(report.targetName), but owner-local Bead reconciliation failed.\n        Report receipt: \\(receiptPath)\n        Bead reconciliation error: \\(failure)\n        \"\"\"",
       "location" : {
         "column" : 14,
         "file" : "sources/vaporize-cli/I18nSourceGatePreflight.swift",
@@ -38,10 +84,12 @@
       "structuralAnchor" : "sha256:006ffea26e1d886c4e033b9f5c7957e9a9cfc03ca137e3de66469d624684a0b1"
     },
     {
+      "containsInterpolation" : true,
+      "literalSource" : "\"Maintainer dependency \\(identity) is already editable at \\(actual), but the selected authority is \\(expected). Reconcile the workspace before building.\"",
       "location" : {
         "column" : 14,
         "file" : "sources/vaporize-cli/MaintainerSwiftPMConfiguration.swift",
-        "line" : 313
+        "line" : 329
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -49,10 +97,12 @@
       "structuralAnchor" : "sha256:efd61ab9f39f2885dbd968fb1fc5e4ab3ef5f8d6282b65509be250b23e6e2ce5"
     },
     {
+      "containsInterpolation" : true,
+      "literalSource" : "\"Maintainer dependency \\(identity) resolves from \\(actual), but the selected authority is \\(expected). Reconcile the package manifest before building.\"",
       "location" : {
         "column" : 14,
         "file" : "sources/vaporize-cli/MaintainerSwiftPMConfiguration.swift",
-        "line" : 315
+        "line" : 331
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -60,10 +110,12 @@
       "structuralAnchor" : "sha256:10449defd9ae455dce93777c80affc6f8fdcfef3130c218b5d605a5711dc365a"
     },
     {
+      "containsInterpolation" : true,
+      "literalSource" : "\"Maintainer SwiftPM authority registry repeats identity: \\(identity)\"",
       "location" : {
         "column" : 14,
         "file" : "sources/vaporize-cli/MaintainerSwiftPMConfiguration.swift",
-        "line" : 317
+        "line" : 333
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -71,10 +123,12 @@
       "structuralAnchor" : "sha256:4152f32e3934a40b6ce8293bb3331935d70bcf40e6b929a1d0f97744b51e5779"
     },
     {
+      "containsInterpolation" : true,
+      "literalSource" : "\"Maintainer SwiftPM authority registry repeats original URL: \\(original)\"",
       "location" : {
         "column" : 14,
         "file" : "sources/vaporize-cli/MaintainerSwiftPMConfiguration.swift",
-        "line" : 319
+        "line" : 335
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -82,10 +136,12 @@
       "structuralAnchor" : "sha256:06f7eb78266efb238b3179e40559d95c02f214117193a4eb9874858f1d18f009"
     },
     {
+      "containsInterpolation" : true,
+      "literalSource" : "\"Maintainer dependency \\(identity) is selected but its checkout is missing at \\(path). Run the maintainer sync before building.\"",
       "location" : {
         "column" : 14,
         "file" : "sources/vaporize-cli/MaintainerSwiftPMConfiguration.swift",
-        "line" : 321
+        "line" : 337
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -93,10 +149,12 @@
       "structuralAnchor" : "sha256:fc229c065bb1290df8c07a3edcff4555bb8643abc1f5ab624909b166a1369e3a"
     },
     {
+      "containsInterpolation" : true,
+      "literalSource" : "\"SwiftPM configuration directory does not contain mirrors.json: \\(path)\"",
       "location" : {
         "column" : 14,
         "file" : "sources/vaporize-cli/MaintainerSwiftPMConfiguration.swift",
-        "line" : 323
+        "line" : 339
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -104,10 +162,13 @@
       "structuralAnchor" : "sha256:2e02713abdbe2001e1cdb379843a94abdbd9cb3ff682aeacc802209038cdff77"
     },
     {
+      "containsInterpolation" : false,
+      "literalSource" : "\"Vaporize could not resolve the user cache directory for generated SwiftPM authority configuration.\"",
+      "literalValue" : "Vaporize could not resolve the user cache directory for generated SwiftPM authority configuration.",
       "location" : {
         "column" : 14,
         "file" : "sources/vaporize-cli/MaintainerSwiftPMConfiguration.swift",
-        "line" : 325
+        "line" : 341
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -115,6 +176,8 @@
       "structuralAnchor" : "sha256:501ed4ac70e02640cf4092d472fa0251ffd058fc5b83d8232a01288222e86e51"
     },
     {
+      "containsInterpolation" : true,
+      "literalSource" : "\"Vaporize \\(operation.rawValue) requires an execution authority on macOS. Use `\\(operation.rawValue) swift` or `\\(operation.rawValue) xcode`.\"",
       "location" : {
         "column" : 11,
         "file" : "sources/vaporize-cli/VaporizeCoreExecutionPlan.swift",
@@ -126,6 +189,8 @@
       "structuralAnchor" : "sha256:bfe35b48cfc4b37d287404666bd27f33f27607f2ffbb187269a76876a9a2ba8c"
     },
     {
+      "containsInterpolation" : true,
+      "literalSource" : "\"Vaporize \\(operation.rawValue) is already the collapsed pure-Swift command on this platform; remove the `\\(first)` authority token.\"",
       "location" : {
         "column" : 11,
         "file" : "sources/vaporize-cli/VaporizeCoreExecutionPlan.swift",
@@ -137,10 +202,12 @@
       "structuralAnchor" : "sha256:5941d55e69c910b17b759311792ba7bbcff2624c4121be2d19f95595f9c373bf"
     },
     {
+      "containsInterpolation" : true,
+      "literalSource" : "\"\"\"\n      Substrate-canonical vaporware-collapse gate. vaporize transmutes typed \\\n      substrate-vaporware into world-state: binaries land, .app installs, \\\n      processes run, receipts emit. Modes: install, uninstall, build, test, run, \\\n      pass, use, toolchain-selection, setup. Toolchain selection compiles \\\n      swiftlang/swiftly's `use` operation into this executable for default Swift \\\n      selection. Core build, test, install, and run commands use the platform \\\n      authority grammar documented below.\\(platformToolchainSelectionAbstract) Vaporize does not locate \\\n      or launch an installed swiftly CLI. Toolchain lifecycle, general \\\n      inspection, and execution remain separate responsibilities. \\\n      Vaporware-awareness modes: status + warehouse enumerate and \\\n      store vaporware at a path per the `x-vaporize-collapse-path` annotation \\\n      convention. Project-generation bridge mode: inspect-project-yml reads \\\n      legacy XcodeGen YAML into an owned Swift model without rewriting it; \\\n      compare-project-yml-pkl compares that model with a Pkl parity specimen; \\\n      import-project-yml emits a Pkl parity specimen from legacy YAML; \\\n      generate-project-yml emits transitional AppleProjectSpec YAML from Pkl \\\n      with receipts; generate-xcodeproj emits first-slice .xcodeproj \\\n      world-state from evaluated AppleProjectSpec Pkl; \\\n      generate-sparkle-config emits a compiled-in SparkleConfig.swift for a \\\n      CLI tool target from its project.pkl releaseIdentity; list-targets discovers \\\n      project targets, packages, and schemes for parity/build routing; \\\n      list-schemes asks xcodebuild for live .xcworkspace schemes; \\\n      release-doctor audits the release spine before claims are trusted. \\\n      homebrew-status compares an owned formula, its typed tap manifest, and \\\n      the local Homebrew receipt without conflating formula revision with a \\\n      product build number. \\\n      fleet-status reports every installed bin-directory tool with its \\\n      sidecar-recorded version and appcast feed currency \\\n      (current/behind/critical-behind/feed-unreachable/no-sidecar). \\\n      version-status reports owner-controlled Apple application source \\\n      marketing versions and build numbers against the 0.0.x policy, while \\\n      keeping source, installed, release, and historical-wire evidence \\\n      boundaries explicit. \\\n      `inventory` discovers Package.swift, .xcodeproj, .xcworkspace, \\\n      project.yml, and project.pkl surfaces by domain, product line, and \\\n      ownership scope. `cuj-audit` inventories CUJ definitions, proof \\\n      bindings, canonical product homes, and active-owned implementation \\\n      coverage without conflating fixtures, matrices, receipts, or tests; \\\n      `--proof-ledger-path` writes the canonical cross-portfolio proof index \\\n      while `--project-ledger-path` and `--project-ledger-csv-path` write one \\\n      fine-grained coverage row per active-owned implementation project. \\\n      Executable tests and green receipts remain in their owning homes. \\\n      `domains` lists available tool domains from the tools collection. \\\n      Legacy `x-craze-collapse-path` remains a compatibility alias during migration.\n      Target feature inspection mode: inspect-target-features reads a project.yml \\\n      target, its configFiles wiring, release-features.json, generated xcconfigs, \\\n      and ReleaseFeatures.swift provenance.\n      \"\"\"",
       "location" : {
         "column" : 15,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 79
+        "line" : 87
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -148,21 +215,27 @@
       "structuralAnchor" : "sha256:ab12302d70047f5f27cf8c064d8b8c2de80c054390fdbcac8fda56e080e7be54"
     },
     {
+      "containsInterpolation" : false,
+      "literalSource" : "\"Mode: install, uninstall, build, test, run, pass, use, toolchain-selection, setup, status, warehouse, validate-json, validate-json-schema, inspect-project-yml, inspect-target-features, compare-project-yml-pkl, import-project-yml, upgrade-project-yml-to-pkl, generate-project-yml, generate-xcodeproj, generate-sparkle-config, list-targets, list-schemes, release-doctor, version-status, inventory, cuj-audit, maintainer-dependencies, domains, self-update, fleet-status, graph (forwards to package-graph@wrkstrm.cli), or the deprecated cli and app compatibility spellings.\"",
+      "literalValue" : "Mode: install, uninstall, build, test, run, pass, use, toolchain-selection, setup, status, warehouse, validate-json, validate-json-schema, inspect-project-yml, inspect-target-features, compare-project-yml-pkl, import-project-yml, upgrade-project-yml-to-pkl, generate-project-yml, generate-xcodeproj, generate-sparkle-config, list-targets, list-schemes, release-doctor, version-status, inventory, cuj-audit, maintainer-dependencies, domains, self-update, fleet-status, graph (forwards to package-graph@wrkstrm.cli), or the deprecated cli and app compatibility spellings.",
       "location" : {
         "column" : 11,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 187
+        "line" : 209
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
       "sink" : "ArgumentParser.@Argument.help",
-      "structuralAnchor" : "sha256:a5bd25b920c146dc8c109922e004b8069b4ea7b0c20161cf734b6cde4b49e2ee"
+      "structuralAnchor" : "sha256:026956c1e2b5b25c643a2f8615c4112242cb229bbd88b9575311c1313a2bc66e"
     },
     {
+      "containsInterpolation" : false,
+      "literalSource" : "\"Prints the tool name, version, and build metadata and exits.\"",
+      "literalValue" : "Prints the tool name, version, and build metadata and exits.",
       "location" : {
         "column" : 15,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 190
+        "line" : 212
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -170,10 +243,13 @@
       "structuralAnchor" : "sha256:bda9826639f9a68082fe309d603e51429792efe620cba47862d47253e4c783db"
     },
     {
+      "containsInterpolation" : false,
+      "literalSource" : "\"Diagnostic exposure: trace, debug, info, notice, warning, error, or critical. Command results remain on stdout.\"",
+      "literalValue" : "Diagnostic exposure: trace, debug, info, notice, warning, error, or critical. Command results remain on stdout.",
       "location" : {
         "column" : 11,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 195
+        "line" : 217
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -181,21 +257,27 @@
       "structuralAnchor" : "sha256:e4660028a38b85453402090c9f2d0c12f415932ed5eadd7bde28c93b98937597"
     },
     {
+      "containsInterpolation" : false,
+      "literalSource" : "\"Artifact kind: cli, tui, or app.\"",
+      "literalValue" : "Artifact kind: cli, tui, or app.",
       "location" : {
         "column" : 48,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 199
+        "line" : 221
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
       "sink" : "ArgumentParser.@Option.help",
-      "structuralAnchor" : "sha256:c2610ee906982310550d1d34c5a5ceb24e34ef1fa1cafb6045f94d6dce19aa69"
+      "structuralAnchor" : "sha256:6d66186433d64408356ef3464d9711207888b823dec67314ec69b60c9bc154cb"
     },
     {
+      "containsInterpolation" : false,
+      "literalSource" : "\"Path to the Swift package.\"",
+      "literalValue" : "Path to the Swift package.",
       "location" : {
         "column" : 52,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 202
+        "line" : 224
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -203,10 +285,13 @@
       "structuralAnchor" : "sha256:ef513b1745a8bc8436ec7c157928b5b87e3e098099316863c0cd903dded405c0"
     },
     {
+      "containsInterpolation" : false,
+      "literalSource" : "\"SwiftPM configuration directory. When omitted, Vaporize discovers the substrate maintainer authority registry and materializes portable local mirrors automatically.\"",
+      "literalValue" : "SwiftPM configuration directory. When omitted, Vaporize discovers the substrate maintainer authority registry and materializes portable local mirrors automatically.",
       "location" : {
         "column" : 11,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 207
+        "line" : 229
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -214,10 +299,13 @@
       "structuralAnchor" : "sha256:dc546c6b7466341ed36694103dde1fb7eecceb436c03cd314ce271488a65d3f4"
     },
     {
+      "containsInterpolation" : false,
+      "literalSource" : "\"Product name (binary or app bundle).\"",
+      "literalValue" : "Product name (binary or app bundle).",
       "location" : {
         "column" : 47,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 210
+        "line" : 232
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -225,10 +313,13 @@
       "structuralAnchor" : "sha256:fca3af135461c27816e8aa0b8d98b240f2c86a45e5b8be2861d4d54f8f1436ff"
     },
     {
+      "containsInterpolation" : false,
+      "literalSource" : "\"Version recorded as CFBundleShortVersionString in the installed CLI metadata Info.plist.\"",
+      "literalValue" : "Version recorded as CFBundleShortVersionString in the installed CLI metadata Info.plist.",
       "location" : {
         "column" : 11,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 215
+        "line" : 237
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -236,10 +327,13 @@
       "structuralAnchor" : "sha256:377e2a744a36df164ad564faee68667a70c61d57da5f97437e510f34b22dc664"
     },
     {
+      "containsInterpolation" : false,
+      "literalSource" : "\"Build recorded as CFBundleVersion in the installed CLI metadata Info.plist.\"",
+      "literalValue" : "Build recorded as CFBundleVersion in the installed CLI metadata Info.plist.",
       "location" : {
         "column" : 11,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 220
+        "line" : 242
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -247,50 +341,9 @@
       "structuralAnchor" : "sha256:ae55032e24ad073216e4f27d1af08690c9df4672a486d5945fca72bfeaf6a5b6"
     },
     {
-      "location" : {
-        "column" : 11,
-        "file" : "sources/vaporize-cli/main.swift",
-        "line" : 225
-      },
-      "message" : "User-facing string literal must come from an approved generated i18n copy package.",
-      "rule" : "I18N002",
-      "sink" : "ArgumentParser.@Option.help",
-      "structuralAnchor" : "sha256:125e102690d4c7644ed773b6e31c89ef7335be741d050e210cfad3b179a9ba67"
-    },
-    {
-      "location" : {
-        "column" : 11,
-        "file" : "sources/vaporize-cli/main.swift",
-        "line" : 230
-      },
-      "message" : "User-facing string literal must come from an approved generated i18n copy package.",
-      "rule" : "I18N002",
-      "sink" : "ArgumentParser.@Option.help",
-      "structuralAnchor" : "sha256:30ba111c54a5f1f5e156add1d10a14a8a023456ab90dd02789fcc023c13169ce"
-    },
-    {
-      "location" : {
-        "column" : 7,
-        "file" : "sources/vaporize-cli/main.swift",
-        "line" : 236
-      },
-      "message" : "User-facing string literal must come from an approved generated i18n copy package.",
-      "rule" : "I18N002",
-      "sink" : "ArgumentParser.@Option.help",
-      "structuralAnchor" : "sha256:ec7c6f07a96f0d5eeb853dd9d34e8daaf170ef35b8e71ca2082b5b56607766e8"
-    },
-    {
-      "location" : {
-        "column" : 7,
-        "file" : "sources/vaporize-cli/main.swift",
-        "line" : 242
-      },
-      "message" : "User-facing string literal must come from an approved generated i18n copy package.",
-      "rule" : "I18N002",
-      "sink" : "ArgumentParser.@Option.help",
-      "structuralAnchor" : "sha256:17c24a252d22ce9c1fc7088d31c040b93632a0a87e517040b968c739698d6ea6"
-    },
-    {
+      "containsInterpolation" : false,
+      "literalSource" : "\"Source revision recorded in the installed CLI metadata Info.plist.\"",
+      "literalValue" : "Source revision recorded in the installed CLI metadata Info.plist.",
       "location" : {
         "column" : 11,
         "file" : "sources/vaporize-cli/main.swift",
@@ -299,13 +352,72 @@
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
       "sink" : "ArgumentParser.@Option.help",
+      "structuralAnchor" : "sha256:125e102690d4c7644ed773b6e31c89ef7335be741d050e210cfad3b179a9ba67"
+    },
+    {
+      "containsInterpolation" : false,
+      "literalSource" : "\"Build date recorded in the installed CLI metadata Info.plist.\"",
+      "literalValue" : "Build date recorded in the installed CLI metadata Info.plist.",
+      "location" : {
+        "column" : 11,
+        "file" : "sources/vaporize-cli/main.swift",
+        "line" : 252
+      },
+      "message" : "User-facing string literal must come from an approved generated i18n copy package.",
+      "rule" : "I18N002",
+      "sink" : "ArgumentParser.@Option.help",
+      "structuralAnchor" : "sha256:30ba111c54a5f1f5e156add1d10a14a8a023456ab90dd02789fcc023c13169ce"
+    },
+    {
+      "containsInterpolation" : false,
+      "literalSource" : "\"Sparkle appcast URL recorded as SUFeedURL in the installed CLI metadata Info.plist sidecar (requires --su-public-ed-key).\"",
+      "literalValue" : "Sparkle appcast URL recorded as SUFeedURL in the installed CLI metadata Info.plist sidecar (requires --su-public-ed-key).",
+      "location" : {
+        "column" : 7,
+        "file" : "sources/vaporize-cli/main.swift",
+        "line" : 258
+      },
+      "message" : "User-facing string literal must come from an approved generated i18n copy package.",
+      "rule" : "I18N002",
+      "sink" : "ArgumentParser.@Option.help",
+      "structuralAnchor" : "sha256:ec7c6f07a96f0d5eeb853dd9d34e8daaf170ef35b8e71ca2082b5b56607766e8"
+    },
+    {
+      "containsInterpolation" : false,
+      "literalSource" : "\"Base64 ed25519 public key recorded as SUPublicEDKey in the installed CLI metadata Info.plist sidecar (requires --su-feed-url).\"",
+      "literalValue" : "Base64 ed25519 public key recorded as SUPublicEDKey in the installed CLI metadata Info.plist sidecar (requires --su-feed-url).",
+      "location" : {
+        "column" : 7,
+        "file" : "sources/vaporize-cli/main.swift",
+        "line" : 264
+      },
+      "message" : "User-facing string literal must come from an approved generated i18n copy package.",
+      "rule" : "I18N002",
+      "sink" : "ArgumentParser.@Option.help",
+      "structuralAnchor" : "sha256:17c24a252d22ce9c1fc7088d31c040b93632a0a87e517040b968c739698d6ea6"
+    },
+    {
+      "containsInterpolation" : false,
+      "literalSource" : "\"Built .app bundle name when it differs from --product (app mode).\"",
+      "literalValue" : "Built .app bundle name when it differs from --product (app mode).",
+      "location" : {
+        "column" : 11,
+        "file" : "sources/vaporize-cli/main.swift",
+        "line" : 269
+      },
+      "message" : "User-facing string literal must come from an approved generated i18n copy package.",
+      "rule" : "I18N002",
+      "sink" : "ArgumentParser.@Option.help",
       "structuralAnchor" : "sha256:236d00bc49ac638499c55639901cb1a072904b94257881b234f3f09d7e9e912c"
     },
     {
+      "containsInterpolation" : false,
+      "literalSource" : "\"Build configuration.\"",
+      "literalValue" : "Build configuration.",
       "location" : {
         "column" : 53,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 250
+        "line" : 272
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -313,72 +425,9 @@
       "structuralAnchor" : "sha256:68b05b98bc0e2b4048c0eb7bf60b6bfb4d488b8d310545b5a6f7b15bfea0e37e"
     },
     {
-      "location" : {
-        "column" : 11,
-        "file" : "sources/vaporize-cli/main.swift",
-        "line" : 256
-      },
-      "message" : "User-facing string literal must come from an approved generated i18n copy package.",
-      "rule" : "I18N002",
-      "sink" : "ArgumentParser.@Option.help",
-      "structuralAnchor" : "sha256:4d510d3ed737b9ac0b9123660d98d2937059164a420b7d67040d01cbd11eb678"
-    },
-    {
-      "location" : {
-        "column" : 43,
-        "file" : "sources/vaporize-cli/main.swift",
-        "line" : 259
-      },
-      "message" : "User-facing string literal must come from an approved generated i18n copy package.",
-      "rule" : "I18N002",
-      "sink" : "ArgumentParser.@Flag.help",
-      "structuralAnchor" : "sha256:c632890b7b6a0fcc915e46c95c7b939dcfa6ae0e9ff157728ccb5f6b5d1ae085"
-    },
-    {
-      "location" : {
-        "column" : 48,
-        "file" : "sources/vaporize-cli/main.swift",
-        "line" : 262
-      },
-      "message" : "User-facing string literal must come from an approved generated i18n copy package.",
-      "rule" : "I18N002",
-      "sink" : "ArgumentParser.@Flag.help",
-      "structuralAnchor" : "sha256:10b907520a61bdbb7a6f5a8f482d5a2e8855bf55ca3f9352e88c41faa083f054"
-    },
-    {
-      "location" : {
-        "column" : 50,
-        "file" : "sources/vaporize-cli/main.swift",
-        "line" : 265
-      },
-      "message" : "User-facing string literal must come from an approved generated i18n copy package.",
-      "rule" : "I18N002",
-      "sink" : "ArgumentParser.@Flag.help",
-      "structuralAnchor" : "sha256:7a32c2c0f01983bc5529e4ec10b7ec7c228c67cf186379aa7be99c48026113bd"
-    },
-    {
-      "location" : {
-        "column" : 44,
-        "file" : "sources/vaporize-cli/main.swift",
-        "line" : 268
-      },
-      "message" : "User-facing string literal must come from an approved generated i18n copy package.",
-      "rule" : "I18N002",
-      "sink" : "ArgumentParser.@Flag.help",
-      "structuralAnchor" : "sha256:a0f9f8e9ea1704a9f6bea973e79d910447605578c8109d0c407c995f5f8803ef"
-    },
-    {
-      "location" : {
-        "column" : 11,
-        "file" : "sources/vaporize-cli/main.swift",
-        "line" : 273
-      },
-      "message" : "User-facing string literal must come from an approved generated i18n copy package.",
-      "rule" : "I18N002",
-      "sink" : "ArgumentParser.@Option.help",
-      "structuralAnchor" : "sha256:4cb37a82faff82783666b33ad954d08d57b04484aedec36e2088ae42efc626da"
-    },
-    {
+      "containsInterpolation" : false,
+      "literalSource" : "\"Destination directory for app install (default /Applications).\"",
+      "literalValue" : "Destination directory for app install (default /Applications).",
       "location" : {
         "column" : 11,
         "file" : "sources/vaporize-cli/main.swift",
@@ -387,13 +436,100 @@
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
       "sink" : "ArgumentParser.@Option.help",
-      "structuralAnchor" : "sha256:1da93d5d38520202efb0be82498fe8993f78ede4f743dc9587c7dfc96a619c84"
+      "structuralAnchor" : "sha256:4d510d3ed737b9ac0b9123660d98d2937059164a420b7d67040d01cbd11eb678"
     },
     {
+      "containsInterpolation" : false,
+      "literalSource" : "\"Replace existing install.\"",
+      "literalValue" : "Replace existing install.",
+      "location" : {
+        "column" : 43,
+        "file" : "sources/vaporize-cli/main.swift",
+        "line" : 281
+      },
+      "message" : "User-facing string literal must come from an approved generated i18n copy package.",
+      "rule" : "I18N002",
+      "sink" : "ArgumentParser.@Flag.help",
+      "structuralAnchor" : "sha256:c632890b7b6a0fcc915e46c95c7b939dcfa6ae0e9ff157728ccb5f6b5d1ae085"
+    },
+    {
+      "containsInterpolation" : false,
+      "literalSource" : "\"Skip build (app mode only).\"",
+      "literalValue" : "Skip build (app mode only).",
+      "location" : {
+        "column" : 48,
+        "file" : "sources/vaporize-cli/main.swift",
+        "line" : 284
+      },
+      "message" : "User-facing string literal must come from an approved generated i18n copy package.",
+      "rule" : "I18N002",
+      "sink" : "ArgumentParser.@Flag.help",
+      "structuralAnchor" : "sha256:10b907520a61bdbb7a6f5a8f482d5a2e8855bf55ca3f9352e88c41faa083f054"
+    },
+    {
+      "containsInterpolation" : false,
+      "literalSource" : "\"Skip the default install step for build or run mode.\"",
+      "literalValue" : "Skip the default install step for build or run mode.",
+      "location" : {
+        "column" : 50,
+        "file" : "sources/vaporize-cli/main.swift",
+        "line" : 287
+      },
+      "message" : "User-facing string literal must come from an approved generated i18n copy package.",
+      "rule" : "I18N002",
+      "sink" : "ArgumentParser.@Flag.help",
+      "structuralAnchor" : "sha256:7a32c2c0f01983bc5529e4ec10b7ec7c228c67cf186379aa7be99c48026113bd"
+    },
+    {
+      "containsInterpolation" : false,
+      "literalSource" : "\"Launch app after install (app mode).\"",
+      "literalValue" : "Launch app after install (app mode).",
+      "location" : {
+        "column" : 44,
+        "file" : "sources/vaporize-cli/main.swift",
+        "line" : 290
+      },
+      "message" : "User-facing string literal must come from an approved generated i18n copy package.",
+      "rule" : "I18N002",
+      "sink" : "ArgumentParser.@Flag.help",
+      "structuralAnchor" : "sha256:a0f9f8e9ea1704a9f6bea973e79d910447605578c8109d0c407c995f5f8803ef"
+    },
+    {
+      "containsInterpolation" : false,
+      "literalSource" : "\"Path to .xcodeproj when building with xcodebuild (app mode).\"",
+      "literalValue" : "Path to .xcodeproj when building with xcodebuild (app mode).",
       "location" : {
         "column" : 11,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 283
+        "line" : 295
+      },
+      "message" : "User-facing string literal must come from an approved generated i18n copy package.",
+      "rule" : "I18N002",
+      "sink" : "ArgumentParser.@Option.help",
+      "structuralAnchor" : "sha256:4cb37a82faff82783666b33ad954d08d57b04484aedec36e2088ae42efc626da"
+    },
+    {
+      "containsInterpolation" : false,
+      "literalSource" : "\"Path to .xcworkspace when building with xcodebuild (app mode) or listing workspace schemes.\"",
+      "literalValue" : "Path to .xcworkspace when building with xcodebuild (app mode) or listing workspace schemes.",
+      "location" : {
+        "column" : 11,
+        "file" : "sources/vaporize-cli/main.swift",
+        "line" : 300
+      },
+      "message" : "User-facing string literal must come from an approved generated i18n copy package.",
+      "rule" : "I18N002",
+      "sink" : "ArgumentParser.@Option.help",
+      "structuralAnchor" : "sha256:1da93d5d38520202efb0be82498fe8993f78ede4f743dc9587c7dfc96a619c84"
+    },
+    {
+      "containsInterpolation" : false,
+      "literalSource" : "\"Scheme to build with xcodebuild (requires --xcode-project or --xcode-workspace).\"",
+      "literalValue" : "Scheme to build with xcodebuild (requires --xcode-project or --xcode-workspace).",
+      "location" : {
+        "column" : 11,
+        "file" : "sources/vaporize-cli/main.swift",
+        "line" : 305
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -401,10 +537,13 @@
       "structuralAnchor" : "sha256:490a2dcc0484fc3bb97b31335c757554b4ca6837abe054c8c82b07404ccf9714"
     },
     {
+      "containsInterpolation" : false,
+      "literalSource" : "\"Target name for inspect-target-features or generate-sparkle-config mode.\"",
+      "literalValue" : "Target name for inspect-target-features or generate-sparkle-config mode.",
       "location" : {
         "column" : 11,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 288
+        "line" : 310
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -412,10 +551,13 @@
       "structuralAnchor" : "sha256:5ff5994744e9153f2c5cf10f2e7f961c49787dddbc03a3ad55eecf687d990c14"
     },
     {
+      "containsInterpolation" : false,
+      "literalSource" : "\"Derived data path to use with xcodebuild; also searched for the built .app bundle.\"",
+      "literalValue" : "Derived data path to use with xcodebuild; also searched for the built .app bundle.",
       "location" : {
         "column" : 11,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 293
+        "line" : 315
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -423,10 +565,13 @@
       "structuralAnchor" : "sha256:f381516d5ca71b69055d672389f99321a199be34b556bc4dc9dff11fb078e139"
     },
     {
+      "containsInterpolation" : false,
+      "literalSource" : "\"Shared .xcworkspace whose warm product cache should be queried before per-project app build outputs.\"",
+      "literalValue" : "Shared .xcworkspace whose warm product cache should be queried before per-project app build outputs.",
       "location" : {
         "column" : 11,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 298
+        "line" : 320
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -434,10 +579,13 @@
       "structuralAnchor" : "sha256:3ec1a8ca73181f7d37f676c23b4ed863dac2633ad6e71f71c148715a46632ab7"
     },
     {
+      "containsInterpolation" : false,
+      "literalSource" : "\"DerivedData root for --xcode-product-cache-workspace; Vaporize searches Build/Products/<configuration>/<app>.app there first.\"",
+      "literalValue" : "DerivedData root for --xcode-product-cache-workspace; Vaporize searches Build/Products/<configuration>/<app>.app there first.",
       "location" : {
         "column" : 11,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 303
+        "line" : 325
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -445,10 +593,13 @@
       "structuralAnchor" : "sha256:c27ab914ad29cda0de967e2bf1f6deedf58673bea3e5b3d86a2f27ddbcd3323d"
     },
     {
+      "containsInterpolation" : false,
+      "literalSource" : "\"Typed xcodebuild destination. Repeat for multiple destinations. Defaults to macOS arm64 when using xcodebuild.\"",
+      "literalValue" : "Typed xcodebuild destination. Repeat for multiple destinations. Defaults to macOS arm64 when using xcodebuild.",
       "location" : {
         "column" : 11,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 308
+        "line" : 330
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -456,10 +607,13 @@
       "structuralAnchor" : "sha256:d14e19a311c46cf6a1161826880fe6d1ac53eb63c66ddb345bb97a907664909f"
     },
     {
+      "containsInterpolation" : false,
+      "literalSource" : "\"SDK passed to xcodebuild with -sdk.\"",
+      "literalValue" : "SDK passed to xcodebuild with -sdk.",
       "location" : {
         "column" : 11,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 313
+        "line" : 335
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -467,10 +621,13 @@
       "structuralAnchor" : "sha256:8906edad1d47763f83bb243a194ec4e956b6fe498a76d915f06ea2ac08037141"
     },
     {
+      "containsInterpolation" : false,
+      "literalSource" : "\"Result bundle path passed to xcodebuild with -resultBundlePath.\"",
+      "literalValue" : "Result bundle path passed to xcodebuild with -resultBundlePath.",
       "location" : {
         "column" : 11,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 318
+        "line" : 340
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -478,10 +635,13 @@
       "structuralAnchor" : "sha256:763f704a33358b47aec8142ac136368b9a77e528cbc7fac24f4e34194718ee70"
     },
     {
+      "containsInterpolation" : false,
+      "literalSource" : "\"Build setting passed to xcodebuild as KEY=VALUE. Repeat for multiple settings.\"",
+      "literalValue" : "Build setting passed to xcodebuild as KEY=VALUE. Repeat for multiple settings.",
       "location" : {
         "column" : 11,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 323
+        "line" : 345
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -489,10 +649,13 @@
       "structuralAnchor" : "sha256:5af428fc839f1ae047fc1a52856347c33f8db6f8b94bdbdb3edb26a717fd7c80"
     },
     {
+      "containsInterpolation" : false,
+      "literalSource" : "\"Emit a JSON receipt for test, pass, use, or toolchain-selection mode.\"",
+      "literalValue" : "Emit a JSON receipt for test, pass, use, or toolchain-selection mode.",
       "location" : {
         "column" : 11,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 328
+        "line" : 350
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -500,21 +663,27 @@
       "structuralAnchor" : "sha256:5992fd04ac7a1788ac8a035dcabd66bf13dddd0f87a208ef55d4701ed2de6985"
     },
     {
+      "containsInterpolation" : false,
+      "literalSource" : "\"Write the test, pass-through, use, toolchain-selection, version-status, inventory, or CUJ audit JSON receipt to this path.\"",
+      "literalValue" : "Write the test, pass-through, use, toolchain-selection, version-status, inventory, or CUJ audit JSON receipt to this path.",
       "location" : {
         "column" : 11,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 333
+        "line" : 355
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
       "sink" : "ArgumentParser.@Option.help",
-      "structuralAnchor" : "sha256:240d2e2afdcea48a011329039399f37e6cb77917a208d2b40bc08b3f9ac62c45"
+      "structuralAnchor" : "sha256:0c3f3246cdad9b4469b3f71003ba131384848339437e71a7323097b91fff11c6"
     },
     {
+      "containsInterpolation" : false,
+      "literalSource" : "\"Write the CUJ audit Markdown report to this path.\"",
+      "literalValue" : "Write the CUJ audit Markdown report to this path.",
       "location" : {
         "column" : 11,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 338
+        "line" : 360
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -522,10 +691,13 @@
       "structuralAnchor" : "sha256:b82be90de53bce0836a4dac3c01eab8985b68382aac33a2ffc21d6064c1ca032"
     },
     {
+      "containsInterpolation" : false,
+      "literalSource" : "\"Write the canonical CUJ automated-proof ledger to this path.\"",
+      "literalValue" : "Write the canonical CUJ automated-proof ledger to this path.",
       "location" : {
         "column" : 11,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 343
+        "line" : 365
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -533,10 +705,13 @@
       "structuralAnchor" : "sha256:70eaa2eaebc1e63a451c9f5ab370792df477094b3ae2e708b59d0896f21eb1b2"
     },
     {
+      "containsInterpolation" : false,
+      "literalSource" : "\"Write the fine-grained active-owned implementation project CUJ coverage ledger to this path.\"",
+      "literalValue" : "Write the fine-grained active-owned implementation project CUJ coverage ledger to this path.",
       "location" : {
         "column" : 11,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 348
+        "line" : 370
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -544,50 +719,9 @@
       "structuralAnchor" : "sha256:684d35b42bda18fc9c925399d466016b3f49b874425374cf2ef879875fbb89f0"
     },
     {
-      "location" : {
-        "column" : 11,
-        "file" : "sources/vaporize-cli/main.swift",
-        "line" : 353
-      },
-      "message" : "User-facing string literal must come from an approved generated i18n copy package.",
-      "rule" : "I18N002",
-      "sink" : "ArgumentParser.@Option.help",
-      "structuralAnchor" : "sha256:a9c19b0a0cef3abc29cfa735f2cbb2311725d5bfb5f87a99d501b10bf377e019"
-    },
-    {
-      "location" : {
-        "column" : 11,
-        "file" : "sources/vaporize-cli/main.swift",
-        "line" : 358
-      },
-      "message" : "User-facing string literal must come from an approved generated i18n copy package.",
-      "rule" : "I18N002",
-      "sink" : "ArgumentParser.@Option.help",
-      "structuralAnchor" : "sha256:dadde5e015199db086b43ca2512f9258dd0e8dd1b7701f962e42a3bd193b0b77"
-    },
-    {
-      "location" : {
-        "column" : 11,
-        "file" : "sources/vaporize-cli/main.swift",
-        "line" : 363
-      },
-      "message" : "User-facing string literal must come from an approved generated i18n copy package.",
-      "rule" : "I18N002",
-      "sink" : "ArgumentParser.@Option.help",
-      "structuralAnchor" : "sha256:ad203184c6d48695bad26a79b8327ef02cdd40aaa85810afb70d91460a0580ae"
-    },
-    {
-      "location" : {
-        "column" : 13,
-        "file" : "sources/vaporize-cli/main.swift",
-        "line" : 369
-      },
-      "message" : "User-facing string literal must come from an approved generated i18n copy package.",
-      "rule" : "I18N002",
-      "sink" : "ArgumentParser.@Option.help",
-      "structuralAnchor" : "sha256:80b106db5a7cc8ccb1f6e72a74dc2f5fa9d7ab140377bded2c95d17c4e06b90a"
-    },
-    {
+      "containsInterpolation" : false,
+      "literalSource" : "\"Write the fine-grained implementation project CUJ coverage ledger as CSV to this path.\"",
+      "literalValue" : "Write the fine-grained implementation project CUJ coverage ledger as CSV to this path.",
       "location" : {
         "column" : 11,
         "file" : "sources/vaporize-cli/main.swift",
@@ -596,9 +730,12 @@
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
       "sink" : "ArgumentParser.@Option.help",
-      "structuralAnchor" : "sha256:bd423b2ed726e0516a9703e2eb343e2e4023477ce2323be4c002f04aa2a31d9c"
+      "structuralAnchor" : "sha256:a9c19b0a0cef3abc29cfa735f2cbb2311725d5bfb5f87a99d501b10bf377e019"
     },
     {
+      "containsInterpolation" : false,
+      "literalSource" : "\"Working directory for pass mode. Defaults to the current directory.\"",
+      "literalValue" : "Working directory for pass mode. Defaults to the current directory.",
       "location" : {
         "column" : 11,
         "file" : "sources/vaporize-cli/main.swift",
@@ -607,9 +744,12 @@
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
       "sink" : "ArgumentParser.@Option.help",
-      "structuralAnchor" : "sha256:6b4d627bfbd34e3463788664d49efdf14bc8724938094716a1a9389550bacc25"
+      "structuralAnchor" : "sha256:dadde5e015199db086b43ca2512f9258dd0e8dd1b7701f962e42a3bd193b0b77"
     },
     {
+      "containsInterpolation" : false,
+      "literalSource" : "\"Path to a CommonProcess CommandSpec JSON for use mode. Use '-' for stdin.\"",
+      "literalValue" : "Path to a CommonProcess CommandSpec JSON for use mode. Use '-' for stdin.",
       "location" : {
         "column" : 11,
         "file" : "sources/vaporize-cli/main.swift",
@@ -618,13 +758,72 @@
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
       "sink" : "ArgumentParser.@Option.help",
-      "structuralAnchor" : "sha256:2b9e73c1a910da818cadd7e06ec71bd1c5bb9f9d597b442997d73264258f6889"
+      "structuralAnchor" : "sha256:ad203184c6d48695bad26a79b8327ef02cdd40aaa85810afb70d91460a0580ae"
     },
     {
+      "containsInterpolation" : false,
+      "literalSource" : "\"Process-local DEVELOPER_DIR override for an explicit xcode authority or another Xcode command; it does not change xcode-select selection.\"",
+      "literalValue" : "Process-local DEVELOPER_DIR override for an explicit xcode authority or another Xcode command; it does not change xcode-select selection.",
+      "location" : {
+        "column" : 13,
+        "file" : "sources/vaporize-cli/main.swift",
+        "line" : 391
+      },
+      "message" : "User-facing string literal must come from an approved generated i18n copy package.",
+      "rule" : "I18N002",
+      "sink" : "ArgumentParser.@Option.help",
+      "structuralAnchor" : "sha256:80b106db5a7cc8ccb1f6e72a74dc2f5fa9d7ab140377bded2c95d17c4e06b90a"
+    },
+    {
+      "containsInterpolation" : false,
+      "literalSource" : "\"Xcode component to download in setup mode, for example MetalToolchain.\"",
+      "literalValue" : "Xcode component to download in setup mode, for example MetalToolchain.",
       "location" : {
         "column" : 11,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 390
+        "line" : 397
+      },
+      "message" : "User-facing string literal must come from an approved generated i18n copy package.",
+      "rule" : "I18N002",
+      "sink" : "ArgumentParser.@Option.help",
+      "structuralAnchor" : "sha256:bd423b2ed726e0516a9703e2eb343e2e4023477ce2323be4c002f04aa2a31d9c"
+    },
+    {
+      "containsInterpolation" : false,
+      "literalSource" : "\"Path for status, warehouse, version-status, inventory, cuj-audit, validate-json, inspect-project-yml, inspect-target-features, compare-project-yml-pkl, import-project-yml, or list-targets modes.\"",
+      "literalValue" : "Path for status, warehouse, version-status, inventory, cuj-audit, validate-json, inspect-project-yml, inspect-target-features, compare-project-yml-pkl, import-project-yml, or list-targets modes.",
+      "location" : {
+        "column" : 11,
+        "file" : "sources/vaporize-cli/main.swift",
+        "line" : 402
+      },
+      "message" : "User-facing string literal must come from an approved generated i18n copy package.",
+      "rule" : "I18N002",
+      "sink" : "ArgumentParser.@Option.help",
+      "structuralAnchor" : "sha256:64370588c5c9e7610d421ffd1a4d29a1dca7a208ae210daf741bb820d1b78f18"
+    },
+    {
+      "containsInterpolation" : false,
+      "literalSource" : "\"JSON Schema file path for validate-json-schema mode.\"",
+      "literalValue" : "JSON Schema file path for validate-json-schema mode.",
+      "location" : {
+        "column" : 11,
+        "file" : "sources/vaporize-cli/main.swift",
+        "line" : 407
+      },
+      "message" : "User-facing string literal must come from an approved generated i18n copy package.",
+      "rule" : "I18N002",
+      "sink" : "ArgumentParser.@Option.help",
+      "structuralAnchor" : "sha256:2b9e73c1a910da818cadd7e06ec71bd1c5bb9f9d597b442997d73264258f6889"
+    },
+    {
+      "containsInterpolation" : false,
+      "literalSource" : "\"Fixture JSON instance path validated against --schema in validate-json-schema mode.\"",
+      "literalValue" : "Fixture JSON instance path validated against --schema in validate-json-schema mode.",
+      "location" : {
+        "column" : 11,
+        "file" : "sources/vaporize-cli/main.swift",
+        "line" : 412
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -632,10 +831,13 @@
       "structuralAnchor" : "sha256:35469fda90923444796dfa4b57a26d7c54fa270653799d5b6536695a67f137a5"
     },
     {
+      "containsInterpolation" : false,
+      "literalSource" : "\"Expected validate-json-schema outcome: pass or fail. Exit is nonzero when the actual outcome differs.\"",
+      "literalValue" : "Expected validate-json-schema outcome: pass or fail. Exit is nonzero when the actual outcome differs.",
       "location" : {
         "column" : 11,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 395
+        "line" : 417
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -643,10 +845,13 @@
       "structuralAnchor" : "sha256:a802423c343d7a7d41f05adcbf9d1a418a752d8072febc5cd0849381f266df22"
     },
     {
+      "containsInterpolation" : false,
+      "literalSource" : "\"Path to an AppleProjectSpec Pkl record for compare-project-yml-pkl, generate-project-yml, generate-xcodeproj, or list-targets mode.\"",
+      "literalValue" : "Path to an AppleProjectSpec Pkl record for compare-project-yml-pkl, generate-project-yml, generate-xcodeproj, or list-targets mode.",
       "location" : {
         "column" : 11,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 400
+        "line" : 422
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -654,10 +859,13 @@
       "structuralAnchor" : "sha256:57c476aec5d51ad670d2bdcf79ba01ebceb1ed8afeb3a93f9c8292badaf02e67"
     },
     {
+      "containsInterpolation" : false,
+      "literalSource" : "\"Path to AppleProjectSpec.pkl for import-project-yml mode. Defaults to Vaporize's package schema when discoverable.\"",
+      "literalValue" : "Path to AppleProjectSpec.pkl for import-project-yml mode. Defaults to Vaporize's package schema when discoverable.",
       "location" : {
         "column" : 11,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 405
+        "line" : 427
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -665,10 +873,13 @@
       "structuralAnchor" : "sha256:29bdd18ac933983e2bb956dee3bf84ceb6f8eda73930e70f500f73046d3b6bc0"
     },
     {
+      "containsInterpolation" : false,
+      "literalSource" : "\"Output path for import-project-yml, generate-project-yml, or generate-xcodeproj mode.\"",
+      "literalValue" : "Output path for import-project-yml, generate-project-yml, or generate-xcodeproj mode.",
       "location" : {
         "column" : 11,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 410
+        "line" : 432
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -676,10 +887,13 @@
       "structuralAnchor" : "sha256:9c95cf9aab9dd812b440ef99e7ee3218b6ca80eee08b4c13ae278ed5a8c702f8"
     },
     {
+      "containsInterpolation" : false,
+      "literalSource" : "\"Output path for the generated SparkleConfig.swift in generate-sparkle-config mode.\"",
+      "literalValue" : "Output path for the generated SparkleConfig.swift in generate-sparkle-config mode.",
       "location" : {
         "column" : 11,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 415
+        "line" : 437
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -687,10 +901,13 @@
       "structuralAnchor" : "sha256:598d9c860282a4a3d72887501b333cea945ca89a3870587b7eebfd950947db16"
     },
     {
+      "containsInterpolation" : false,
+      "literalSource" : "\"For upgrade-project-yml-to-pkl mode: retire the project.yml after a parity-verified upgrade. Without it the upgrade is a dry-run preview.\"",
+      "literalValue" : "For upgrade-project-yml-to-pkl mode: retire the project.yml after a parity-verified upgrade. Without it the upgrade is a dry-run preview.",
       "location" : {
         "column" : 11,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 420
+        "line" : 442
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -698,21 +915,27 @@
       "structuralAnchor" : "sha256:651e2cd07ff39a4a8e79ac08400301b1944f9a5433fa5e4c13b42a8409b12d7d"
     },
     {
+      "containsInterpolation" : false,
+      "literalSource" : "\"Output format for status, version-status, inventory, cuj-audit, domains, inspect-project-yml, inspect-target-features, compare-project-yml-pkl, import-project-yml, generate-project-yml, generate-xcodeproj, list-targets, list-schemes, release-doctor, or fleet-status mode: text (default) or json.\"",
+      "literalValue" : "Output format for status, version-status, inventory, cuj-audit, domains, inspect-project-yml, inspect-target-features, compare-project-yml-pkl, import-project-yml, generate-project-yml, generate-xcodeproj, list-targets, list-schemes, release-doctor, or fleet-status mode: text (default) or json.",
       "location" : {
         "column" : 11,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 425
+        "line" : 447
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
       "sink" : "ArgumentParser.@Option.help",
-      "structuralAnchor" : "sha256:b8eb4b748584aee43ae6db8712146ce9b6a50ed3d9363d2488ddee86d8d72dcf"
+      "structuralAnchor" : "sha256:f2c5421424b71e964ece6f4028732177bfae8712aea3e6547e4fc3b3723d95d8"
     },
     {
+      "containsInterpolation" : false,
+      "literalSource" : "\"Install bin directory scanned by fleet-status (default ~/.swiftpm/bin).\"",
+      "literalValue" : "Install bin directory scanned by fleet-status (default ~/.swiftpm/bin).",
       "location" : {
         "column" : 11,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 430
+        "line" : 452
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -720,21 +943,55 @@
       "structuralAnchor" : "sha256:04936203c140a3bd3c4bc86a47616ae055d66f841f0cd0c47ab6c364189ee490"
     },
     {
+      "containsInterpolation" : false,
+      "literalSource" : "\"Formula token inspected by homebrew-status (for example clia-assistants).\"",
+      "literalValue" : "Formula token inspected by homebrew-status (for example clia-assistants).",
       "location" : {
-        "column" : 46,
+        "column" : 11,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 433
+        "line" : 457
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
       "sink" : "ArgumentParser.@Option.help",
-      "structuralAnchor" : "sha256:ca745a06195bd93618c89d96eb162d8f4fdd3123477b76a3d289e15e68d83258"
+      "structuralAnchor" : "sha256:dfd6284c80a5817e781a6b169622e8494ff73edb3ef092a3abbad3e9d000559f"
     },
     {
+      "containsInterpolation" : false,
+      "literalSource" : "\"Owning Homebrew tap root containing Formula/ and Manifests/, required by homebrew-status.\"",
+      "literalValue" : "Owning Homebrew tap root containing Formula/ and Manifests/, required by homebrew-status.",
+      "location" : {
+        "column" : 11,
+        "file" : "sources/vaporize-cli/main.swift",
+        "line" : 463
+      },
+      "message" : "User-facing string literal must come from an approved generated i18n copy package.",
+      "rule" : "I18N002",
+      "sink" : "ArgumentParser.@Option.help",
+      "structuralAnchor" : "sha256:3e21d5ed988f566e9f1a6874f3e55caabfd4f606b01fc92d5f8d2dafc4784cff"
+    },
+    {
+      "containsInterpolation" : false,
+      "literalSource" : "\"Tool domain for install/uninstall/run and domain path shaping (for example build).\"",
+      "literalValue" : "Tool domain for install/uninstall/run and domain path shaping (for example build).",
+      "location" : {
+        "column" : 46,
+        "file" : "sources/vaporize-cli/main.swift",
+        "line" : 467
+      },
+      "message" : "User-facing string literal must come from an approved generated i18n copy package.",
+      "rule" : "I18N002",
+      "sink" : "ArgumentParser.@Option.help",
+      "structuralAnchor" : "sha256:dd67ff6044c94e4005ab8001956e877f12707d0b9e4811422c048eebd5aff68c"
+    },
+    {
+      "containsInterpolation" : false,
+      "literalSource" : "\"Kura tools collection directory for domains mode.\"",
+      "literalValue" : "Kura tools collection directory for domains mode.",
       "location" : {
         "column" : 56,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 436
+        "line" : 470
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -742,10 +999,13 @@
       "structuralAnchor" : "sha256:ad2f4e40349814bfadd801da4892cd05e6ad1b77c89eb7499c074c5c34f58db2"
     },
     {
+      "containsInterpolation" : false,
+      "literalSource" : "\"Arguments forwarded to test, run, pass, or toolchain-selection mode.\"",
+      "literalValue" : "Arguments forwarded to test, run, pass, or toolchain-selection mode.",
       "location" : {
         "column" : 40,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 439
+        "line" : 473
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -753,10 +1013,13 @@
       "structuralAnchor" : "sha256:3d7b6f1f48977b7f23874a84eb2fada95588f1b1b5f6d3c6f1050ff0832c8592"
     },
     {
+      "containsInterpolation" : false,
+      "literalSource" : "\"missing expected argument <mode>. Run with --help for valid modes, or --version to print build metadata.\"",
+      "literalValue" : "missing expected argument <mode>. Run with --help for valid modes, or --version to print build metadata.",
       "location" : {
         "column" : 9,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 452
+        "line" : 486
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -764,10 +1027,12 @@
       "structuralAnchor" : "sha256:010cdd9f38c89ceaf78196e940cf1b65103de6b34818b29e15d3154f0a4b8b5c"
     },
     {
+      "containsInterpolation" : true,
+      "literalSource" : "\"--developer-dir belongs to the `\\(operation.rawValue) xcode` authority; the pure-Swift sibling is independent of Xcode.\"",
       "location" : {
         "column" : 9,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 624
+        "line" : 662
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -775,10 +1040,12 @@
       "structuralAnchor" : "sha256:292f793af634a9685f5bb38736e8a0c83e5b70235db87212a5e1b65f5efa328a"
     },
     {
+      "containsInterpolation" : true,
+      "literalSource" : "\"Vaporize app artifacts require the Xcode-assisted command. Use `\\(plan.operation.rawValue) xcode --artifact app`; pure Swift remains available for CLI and package operations.\"",
       "location" : {
         "column" : 9,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 634
+        "line" : 672
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -786,10 +1053,13 @@
       "structuralAnchor" : "sha256:eb4d95c8c7c4e9e905cdd781b671d1d62cd6fae850c552298f67d36a9f9070a6"
     },
     {
+      "containsInterpolation" : false,
+      "literalSource" : "\"Vaporize app artifacts require Xcode and are unavailable on this platform; the collapsed command supports pure-Swift CLI and package operations.\"",
+      "literalValue" : "Vaporize app artifacts require Xcode and are unavailable on this platform; the collapsed command supports pure-Swift CLI and package operations.",
       "location" : {
         "column" : 9,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 638
+        "line" : 676
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -797,10 +1067,13 @@
       "structuralAnchor" : "sha256:339296f3cf5b1a34e7a0037a5f972c18da3ce253a3822fc39ff893426d6091d5"
     },
     {
+      "containsInterpolation" : false,
+      "literalSource" : "\"The Xcode-assisted Swift authority is unavailable on this platform.\"",
+      "literalValue" : "The Xcode-assisted Swift authority is unavailable on this platform.",
       "location" : {
         "column" : 31,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 662
+        "line" : 700
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -808,10 +1081,12 @@
       "structuralAnchor" : "sha256:bd18ad8a3e5b17bdb70aef88b80d78fb8be87d05f598119ccf91e5cda70d39fb"
     },
     {
+      "containsInterpolation" : true,
+      "literalSource" : "\"vaporize: \\(result.report.standard.title) v\\(result.report.standard.version) passed for \\(selectedProduct) · receipt \\(result.receiptURL.path)\"",
       "location" : {
         "column" : 7,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 723
+        "line" : 767
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -819,10 +1094,13 @@
       "structuralAnchor" : "sha256:834a24877554633e64570f149a22c203e6124c343658eb4a8dfe7e41e31933d7"
     },
     {
+      "containsInterpolation" : false,
+      "literalSource" : "\"--su-feed-url and --su-public-ed-key must be provided together to record a self-update identity.\"",
+      "literalValue" : "--su-feed-url and --su-public-ed-key must be provided together to record a self-update identity.",
       "location" : {
         "column" : 9,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 858
+        "line" : 902
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -830,10 +1108,12 @@
       "structuralAnchor" : "sha256:b1cf3d6b668490e39f69cdb1b6814208be2dc0183f79a9073679fb2056de1b71"
     },
     {
+      "containsInterpolation" : true,
+      "literalSource" : "\"--su-feed-url is not a valid URL: \\(feed)\"",
       "location" : {
         "column" : 29,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 862
+        "line" : 906
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -841,10 +1121,13 @@
       "structuralAnchor" : "sha256:347c6d5e3bf2002c1c77981ce913e02a1bdb7bea3b47510ecb90890390f40525"
     },
     {
+      "containsInterpolation" : false,
+      "literalSource" : "\"test mode currently supports SwiftPM package tests only; use --artifact cli.\"",
+      "literalValue" : "test mode currently supports SwiftPM package tests only; use --artifact cli.",
       "location" : {
         "column" : 29,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 888
+        "line" : 932
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -852,10 +1135,12 @@
       "structuralAnchor" : "sha256:381818d41c031a557cb4a91b1bc536ae20dbc92698a343ff08ec1d7970e649be"
     },
     {
+      "containsInterpolation" : true,
+      "literalSource" : "\"\"\"\n        Install reported success but no executable landed for product `\\(product)`.\n        Expected an executable at:\n          \\(installedPath)\n        This guards the remove-then-copy failure mode where the prior binary is removed\n        but the new one is never written (leaving nothing, or only a stale .bak). Re-run\n        the build; if it recurs, inspect the `swift package experimental-install` copy step.\n        \"\"\"",
       "location" : {
         "column" : 9,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 941
+        "line" : 985
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -863,10 +1148,12 @@
       "structuralAnchor" : "sha256:2ceb1d367c8aed1f6090503a2187e34952755a7dbe23b5afaaf48bc9e43d124d"
     },
     {
+      "containsInterpolation" : true,
+      "literalSource" : "\"vaporize: verified \\(product) installed at \\(installedPath)\"",
       "location" : {
         "column" : 11,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 955
+        "line" : 999
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -874,10 +1161,12 @@
       "structuralAnchor" : "sha256:e17a647115da220b653f369bf1e6921a3000b61f0aa1904015c840b7ef35a7b0"
     },
     {
+      "containsInterpolation" : true,
+      "literalSource" : "\"\"\"\n      Executable product `\\(product)` is not installed or is not executable.\n      Checked:\n      \\(candidates.map { \"  - \\($0)\" }.joined(separator: \"\\n\"))\n      \"\"\"",
       "location" : {
         "column" : 7,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 1178
+        "line" : 1222
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -885,10 +1174,12 @@
       "structuralAnchor" : "sha256:2d1778d5489512ab46992207e7029452f6446f84140c285e480b112d9d89465f"
     },
     {
+      "containsInterpolation" : true,
+      "literalSource" : "\"Vaporize could not restore Package.resolved at \\(snapshot.url.path) after maintainer authority preparation: \\(error.localizedDescription)\"",
       "location" : {
         "column" : 11,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 1435
+        "line" : 1479
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -896,10 +1187,13 @@
       "structuralAnchor" : "sha256:ea6025524ed104b5db304cafb3eb7d1559e982490a8c5ed3181c45dbdb4c3d02"
     },
     {
+      "containsInterpolation" : false,
+      "literalSource" : "\"--package-path is required for operation mode.\"",
+      "literalValue" : "--package-path is required for operation mode.",
       "location" : {
         "column" : 29,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 1481
+        "line" : 1525
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -907,10 +1201,13 @@
       "structuralAnchor" : "sha256:cdde74a2a841ef681b0e161feebbede75dccbcf07eec211101fc70839645da08"
     },
     {
+      "containsInterpolation" : false,
+      "literalSource" : "\"--package-path is required for self-update unless run from a package root.\"",
+      "literalValue" : "--package-path is required for self-update unless run from a package root.",
       "location" : {
         "column" : 9,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 1497
+        "line" : 1541
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -918,10 +1215,13 @@
       "structuralAnchor" : "sha256:6e8f4057c9aa732aeabd6dd8d2fc321e5163f12ade289ac21b47dcb87aa628e5"
     },
     {
+      "containsInterpolation" : false,
+      "literalSource" : "\"--product is required for operation mode.\"",
+      "literalValue" : "--product is required for operation mode.",
       "location" : {
         "column" : 29,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 1506
+        "line" : 1550
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -929,43 +1229,78 @@
       "structuralAnchor" : "sha256:a1f796df9039747c5474b1653c966371f469193733495a45cec6f4fa8c30a5c2"
     },
     {
+      "containsInterpolation" : true,
+      "literalSource" : "\"vaporize.cli@wrkstrm-core.clia.sh \\(Self.vaporizeVersion) (build \\(metadata.buildNumber))\"",
       "location" : {
         "column" : 11,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 1596
+        "line" : 1641
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
       "sink" : "Swift.print",
-      "structuralAnchor" : "sha256:3c27360abd31e107c6c3c3913e75f13a54d0a695a56e77a8932abef23925c7d3"
+      "structuralAnchor" : "sha256:a3c431c674edd559ad706adf3e40d732af45478b26a8d028e57d242e98be36ab"
     },
     {
+      "containsInterpolation" : true,
+      "literalSource" : "\"build-authority: \\(metadata.authority.rawValue)\"",
+      "location" : {
+        "column" : 11,
+        "file" : "sources/vaporize-cli/main.swift",
+        "line" : 1642
+      },
+      "message" : "User-facing string literal must come from an approved generated i18n copy package.",
+      "rule" : "I18N002",
+      "sink" : "Swift.print",
+      "structuralAnchor" : "sha256:0bcee21793df783b1ba39f1b739868979cc28e4670bfb1f237a9f8806b810ab5"
+    },
+    {
+      "containsInterpolation" : true,
+      "literalSource" : "\"metadata-version: \\(sidecarVersion) (does not match running source version)\"",
       "location" : {
         "column" : 13,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 1598
+        "line" : 1644
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
       "sink" : "Swift.print",
-      "structuralAnchor" : "sha256:1f49cc84fe986b4acc1710e7537e40df87e551e9ee84b6cbcc4b0b559e3e9e56"
+      "structuralAnchor" : "sha256:02ad42156870f9509937d4a1dd8ffaa1c34698ea6365d87a446ed41199dde2c3"
     },
     {
+      "containsInterpolation" : true,
+      "literalSource" : "\"build-sha: \\(buildSha)\"",
       "location" : {
         "column" : 13,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 1601
+        "line" : 1647
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
       "sink" : "Swift.print",
-      "structuralAnchor" : "sha256:b52af5dcaf7eb730d5e36899db62985186c60d2e684ce5152276ae38efc8f11d"
+      "structuralAnchor" : "sha256:cb919af3fe720a0dcf710c5f9e0194b05f9f6c551ab51a1f2fcad87cec70c195"
     },
     {
+      "containsInterpolation" : true,
+      "literalSource" : "\"build-date: \\(buildDate)\"",
+      "location" : {
+        "column" : 13,
+        "file" : "sources/vaporize-cli/main.swift",
+        "line" : 1650
+      },
+      "message" : "User-facing string literal must come from an approved generated i18n copy package.",
+      "rule" : "I18N002",
+      "sink" : "Swift.print",
+      "structuralAnchor" : "sha256:7d26aae643ba3a017ac209e509a93bca4a643f83076e2bd83d5f1b62d97e58ea"
+    },
+    {
+      "containsInterpolation" : false,
+      "literalSource" : "\"--common-process-spec is required for use mode.\"",
+      "literalValue" : "--common-process-spec is required for use mode.",
       "location" : {
         "column" : 29,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 1607
+        "line" : 1656
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -973,10 +1308,13 @@
       "structuralAnchor" : "sha256:b1d00f741e874ae651874b55ba58515fae2a682049ec66336666d671231824ec"
     },
     {
+      "containsInterpolation" : false,
+      "literalSource" : "\"--developer-dir is a process-local Xcode execution override; select the active Xcode with `toolchain-selection xcode -- select --switch <developer-directory>`.\"",
+      "literalValue" : "--developer-dir is a process-local Xcode execution override; select the active Xcode with `toolchain-selection xcode -- select --switch <developer-directory>`.",
       "location" : {
         "column" : 9,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 1643
+        "line" : 1692
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -984,10 +1322,13 @@
       "structuralAnchor" : "sha256:29d49a8c0fbce6460b3dea43a04db8a13c07a86fe34a4c1d9e726afc6a295338"
     },
     {
+      "containsInterpolation" : false,
+      "literalSource" : "\"--xcode-component is required for setup mode.\"",
+      "literalValue" : "--xcode-component is required for setup mode.",
       "location" : {
         "column" : 29,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 1766
+        "line" : 1815
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -995,10 +1336,54 @@
       "structuralAnchor" : "sha256:2aef08170e495c75b50bf554d473a5c50b51754098d0b5f83d2b822c492dfc36"
     },
     {
+      "containsInterpolation" : false,
+      "literalSource" : "\"--homebrew-formula is required for homebrew-status.\"",
+      "literalValue" : "--homebrew-formula is required for homebrew-status.",
+      "location" : {
+        "column" : 29,
+        "file" : "sources/vaporize-cli/main.swift",
+        "line" : 1917
+      },
+      "message" : "User-facing string literal must come from an approved generated i18n copy package.",
+      "rule" : "I18N002",
+      "sink" : "ArgumentParser.ValidationError",
+      "structuralAnchor" : "sha256:ac64fb90e09a6e54008f21e8f661350fbe856aedd55076b650a6158206825eb8"
+    },
+    {
+      "containsInterpolation" : false,
+      "literalSource" : "\"--homebrew-tap-root is required for homebrew-status.\"",
+      "literalValue" : "--homebrew-tap-root is required for homebrew-status.",
+      "location" : {
+        "column" : 29,
+        "file" : "sources/vaporize-cli/main.swift",
+        "line" : 1920
+      },
+      "message" : "User-facing string literal must come from an approved generated i18n copy package.",
+      "rule" : "I18N002",
+      "sink" : "ArgumentParser.ValidationError",
+      "structuralAnchor" : "sha256:43cac13c8adaff93a25cfd2fd12d392724ebd2b46d7056c5a9bfcd658715f289"
+    },
+    {
+      "containsInterpolation" : true,
+      "literalSource" : "\"homebrew-status could not read brew info for \\(homebrewFormula): \\(detail)\"",
+      "location" : {
+        "column" : 29,
+        "file" : "sources/vaporize-cli/main.swift",
+        "line" : 1936
+      },
+      "message" : "User-facing string literal must come from an approved generated i18n copy package.",
+      "rule" : "I18N002",
+      "sink" : "ArgumentParser.ValidationError",
+      "structuralAnchor" : "sha256:12f9a78d5d977e44ec70583ce0e245b2fd6e91e644e79b6c2a6966bfaf7426f2"
+    },
+    {
+      "containsInterpolation" : false,
+      "literalSource" : "\"could not resolve tool collection path for domains mode. Pass --tools-collection or run from a mono root.\"",
+      "literalValue" : "could not resolve tool collection path for domains mode. Pass --tools-collection or run from a mono root.",
       "location" : {
         "column" : 9,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 1956
+        "line" : 2080
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -1006,10 +1391,13 @@
       "structuralAnchor" : "sha256:599d2a7e2dea666aeaeb46b3355bb365d21cfe40c460e9535a250a7010a4305f"
     },
     {
+      "containsInterpolation" : false,
+      "literalSource" : "\"--path is required for this operation.\"",
+      "literalValue" : "--path is required for this operation.",
       "location" : {
         "column" : 29,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 2059
+        "line" : 2183
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -1017,10 +1405,13 @@
       "structuralAnchor" : "sha256:1d623a86d59337083fe8085067ff82cb22584e1b5574394f7330180da4c575d1"
     },
     {
+      "containsInterpolation" : false,
+      "literalSource" : "\"--path is required for validate-json mode.\"",
+      "literalValue" : "--path is required for validate-json mode.",
       "location" : {
         "column" : 29,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 2067
+        "line" : 2191
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -1028,10 +1419,12 @@
       "structuralAnchor" : "sha256:e2e6835e8a8e87918efc7e102c668030babededa1f9b4b26f73c49ca1ec112a7"
     },
     {
+      "containsInterpolation" : true,
+      "literalSource" : "\"valid JSON: \\(vaporScanPath)\"",
       "location" : {
         "column" : 13,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 2079
+        "line" : 2203
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -1039,10 +1432,12 @@
       "structuralAnchor" : "sha256:ade6d86962f698f25161bebc3534599b5ca6b77913731c28f81dec5e1a4075ab"
     },
     {
+      "containsInterpolation" : true,
+      "literalSource" : "\"invalid JSON at \\(vaporScanPath): \\(error)\"",
       "location" : {
         "column" : 29,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 2089
+        "line" : 2213
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -1050,10 +1445,13 @@
       "structuralAnchor" : "sha256:fb4ad44583b4d7fdf5613946e4c8e97a477257379d8aa175f8f699a204a781e9"
     },
     {
+      "containsInterpolation" : false,
+      "literalSource" : "\"--schema is required for validate-json-schema mode.\"",
+      "literalValue" : "--schema is required for validate-json-schema mode.",
       "location" : {
         "column" : 29,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 2095
+        "line" : 2219
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -1061,10 +1459,13 @@
       "structuralAnchor" : "sha256:cf53d6ed190571e007c027723a4eec9e0f0d64a595a58d48b464d14c00fa8398"
     },
     {
+      "containsInterpolation" : false,
+      "literalSource" : "\"--fixture is required for validate-json-schema mode.\"",
+      "literalValue" : "--fixture is required for validate-json-schema mode.",
       "location" : {
         "column" : 29,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 2098
+        "line" : 2222
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -1072,10 +1473,12 @@
       "structuralAnchor" : "sha256:9daf4b5cce9857bcdb5c7abaf5ffd5800df03fc6aa337b5866ccb86d1de58e84"
     },
     {
+      "containsInterpolation" : true,
+      "literalSource" : "\"schema validation \\(actual)\\(expectationSuffix): \\(jsonSchemaFixturePath) against \\(jsonSchemaPath)\"",
       "location" : {
         "column" : 9,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 2155
+        "line" : 2279
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -1083,10 +1486,13 @@
       "structuralAnchor" : "sha256:87390ac565c04f494033558f401176cfbc2df09c7c42d838b25e032f315807f8"
     },
     {
+      "containsInterpolation" : false,
+      "literalSource" : "\"--path is required for inspect-project-yml mode.\"",
+      "literalValue" : "--path is required for inspect-project-yml mode.",
       "location" : {
         "column" : 29,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 2188
+        "line" : 2312
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -1094,10 +1500,12 @@
       "structuralAnchor" : "sha256:470d99aa5a2d2eea120c8f209d7858aed71fb8396a8aee914935cf2f34019547"
     },
     {
+      "containsInterpolation" : true,
+      "literalSource" : "\"project.yml: \\(receipt.projectName) targets=\\(receipt.targetCount) packages=\\(receipt.packageCount) schemes=\\(receipt.schemeCount)\"",
       "location" : {
         "column" : 9,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 2203
+        "line" : 2327
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -1105,149 +1513,9 @@
       "structuralAnchor" : "sha256:09e051acfbd2c8ed164bbec6d3cf0441a470694109fec7ec52a312d91806eb82"
     },
     {
-      "location" : {
-        "column" : 29,
-        "file" : "sources/vaporize-cli/main.swift",
-        "line" : 2216
-      },
-      "message" : "User-facing string literal must come from an approved generated i18n copy package.",
-      "rule" : "I18N002",
-      "sink" : "ArgumentParser.ValidationError",
-      "structuralAnchor" : "sha256:27bf4cbb27d691a92a7d88a49c789e5b5099581f7d6fc329598286d9d21c6404"
-    },
-    {
-      "location" : {
-        "column" : 9,
-        "file" : "sources/vaporize-cli/main.swift",
-        "line" : 2231
-      },
-      "message" : "User-facing string literal must come from an approved generated i18n copy package.",
-      "rule" : "I18N002",
-      "sink" : "Swift.print",
-      "structuralAnchor" : "sha256:a2e9dfa329e134f739f210c8e93f9c69a07cd45df7bdb13f1fbb83f11ca668db"
-    },
-    {
-      "location" : {
-        "column" : 15,
-        "file" : "sources/vaporize-cli/main.swift",
-        "line" : 2234
-      },
-      "message" : "User-facing string literal must come from an approved generated i18n copy package.",
-      "rule" : "I18N002",
-      "sink" : "Swift.print",
-      "structuralAnchor" : "sha256:40928d7111039f16fb988ac7f1c32ebdcd5c15fcc1986326de60d8bcc6d12071"
-    },
-    {
-      "location" : {
-        "column" : 29,
-        "file" : "sources/vaporize-cli/main.swift",
-        "line" : 2245
-      },
-      "message" : "User-facing string literal must come from an approved generated i18n copy package.",
-      "rule" : "I18N002",
-      "sink" : "ArgumentParser.ValidationError",
-      "structuralAnchor" : "sha256:1b7f1546453c8afc98af79c9bec54084c99f4d66f997908ea65b5d3076c7ff13"
-    },
-    {
-      "location" : {
-        "column" : 29,
-        "file" : "sources/vaporize-cli/main.swift",
-        "line" : 2251
-      },
-      "message" : "User-facing string literal must come from an approved generated i18n copy package.",
-      "rule" : "I18N002",
-      "sink" : "ArgumentParser.ValidationError",
-      "structuralAnchor" : "sha256:eeacca5cebfac5c6d5e3ff0dc47d538ad849af22aaa604d629904e0378435393"
-    },
-    {
-      "location" : {
-        "column" : 29,
-        "file" : "sources/vaporize-cli/main.swift",
-        "line" : 2254
-      },
-      "message" : "User-facing string literal must come from an approved generated i18n copy package.",
-      "rule" : "I18N002",
-      "sink" : "ArgumentParser.ValidationError",
-      "structuralAnchor" : "sha256:c77d2b9a8f076443e32ecb7bbdec7627f64730dd6ff3ff89f9fd7227ec8fe09c"
-    },
-    {
-      "location" : {
-        "column" : 13,
-        "file" : "sources/vaporize-cli/main.swift",
-        "line" : 2272
-      },
-      "message" : "User-facing string literal must come from an approved generated i18n copy package.",
-      "rule" : "I18N002",
-      "sink" : "Swift.print",
-      "structuralAnchor" : "sha256:48cd78b60f90b5a3e870809ada9fb0bb590236bb8f0a38ecab25c61db55a8701"
-    },
-    {
-      "location" : {
-        "column" : 15,
-        "file" : "sources/vaporize-cli/main.swift",
-        "line" : 2275
-      },
-      "message" : "User-facing string literal must come from an approved generated i18n copy package.",
-      "rule" : "I18N002",
-      "sink" : "Swift.print",
-      "structuralAnchor" : "sha256:0660184849cfe3bda6e30f683ead6830171c9308db23226c25cb83f0f484c887"
-    },
-    {
-      "location" : {
-        "column" : 29,
-        "file" : "sources/vaporize-cli/main.swift",
-        "line" : 2287
-      },
-      "message" : "User-facing string literal must come from an approved generated i18n copy package.",
-      "rule" : "I18N002",
-      "sink" : "ArgumentParser.ValidationError",
-      "structuralAnchor" : "sha256:0d33b494cba044dac41f391fcf25ed021b01571046f482112cc0f1e4f99ab4b4"
-    },
-    {
-      "location" : {
-        "column" : 29,
-        "file" : "sources/vaporize-cli/main.swift",
-        "line" : 2293
-      },
-      "message" : "User-facing string literal must come from an approved generated i18n copy package.",
-      "rule" : "I18N002",
-      "sink" : "ArgumentParser.ValidationError",
-      "structuralAnchor" : "sha256:8673095324f94f7a10a9faf685e073e35c88059fdab163f416fdb0852553285d"
-    },
-    {
-      "location" : {
-        "column" : 29,
-        "file" : "sources/vaporize-cli/main.swift",
-        "line" : 2296
-      },
-      "message" : "User-facing string literal must come from an approved generated i18n copy package.",
-      "rule" : "I18N002",
-      "sink" : "ArgumentParser.ValidationError",
-      "structuralAnchor" : "sha256:146a20ec41449c64a79e6b52deff638d6939e4d61f019bacc61f477a88e1415c"
-    },
-    {
-      "location" : {
-        "column" : 9,
-        "file" : "sources/vaporize-cli/main.swift",
-        "line" : 2317
-      },
-      "message" : "User-facing string literal must come from an approved generated i18n copy package.",
-      "rule" : "I18N002",
-      "sink" : "Swift.print",
-      "structuralAnchor" : "sha256:232ed01374974830591ad09104e6f40b1af2273813852714e248fc53cc311f2d"
-    },
-    {
-      "location" : {
-        "column" : 29,
-        "file" : "sources/vaporize-cli/main.swift",
-        "line" : 2336
-      },
-      "message" : "User-facing string literal must come from an approved generated i18n copy package.",
-      "rule" : "I18N002",
-      "sink" : "ArgumentParser.ValidationError",
-      "structuralAnchor" : "sha256:c88fa8e6fb5b56ba224717fa835eed33d03f9ce07b2ad53d46b2bb61b26c7915"
-    },
-    {
+      "containsInterpolation" : false,
+      "literalSource" : "\"--path is required for inspect-target-features mode.\"",
+      "literalValue" : "--path is required for inspect-target-features mode.",
       "location" : {
         "column" : 29,
         "file" : "sources/vaporize-cli/main.swift",
@@ -1256,13 +1524,190 @@
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
       "sink" : "ArgumentParser.ValidationError",
-      "structuralAnchor" : "sha256:8e9301cafc27080b7f5ce946eecb2b991c9058f69e75e0b8059af54d6ec27119"
+      "structuralAnchor" : "sha256:27bf4cbb27d691a92a7d88a49c789e5b5099581f7d6fc329598286d9d21c6404"
     },
     {
+      "containsInterpolation" : true,
+      "literalSource" : "\"target features: \\(receipt.targetName) status=\\(receipt.overallStatus) configs=[\\(configs)] tiers=\\(receipt.releaseFeatureManifest.tierCount)\"",
+      "location" : {
+        "column" : 9,
+        "file" : "sources/vaporize-cli/main.swift",
+        "line" : 2355
+      },
+      "message" : "User-facing string literal must come from an approved generated i18n copy package.",
+      "rule" : "I18N002",
+      "sink" : "Swift.print",
+      "structuralAnchor" : "sha256:a2e9dfa329e134f739f210c8e93f9c69a07cd45df7bdb13f1fbb83f11ca668db"
+    },
+    {
+      "containsInterpolation" : true,
+      "literalSource" : "\"\\(minimum.status): \\(minimum.name) - \\(minimum.detail)\"",
+      "location" : {
+        "column" : 15,
+        "file" : "sources/vaporize-cli/main.swift",
+        "line" : 2358
+      },
+      "message" : "User-facing string literal must come from an approved generated i18n copy package.",
+      "rule" : "I18N002",
+      "sink" : "Swift.print",
+      "structuralAnchor" : "sha256:40928d7111039f16fb988ac7f1c32ebdcd5c15fcc1986326de60d8bcc6d12071"
+    },
+    {
+      "containsInterpolation" : true,
+      "literalSource" : "\"target feature inspection failed for \\(receipt.targetName).\"",
       "location" : {
         "column" : 29,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 2405
+        "line" : 2369
+      },
+      "message" : "User-facing string literal must come from an approved generated i18n copy package.",
+      "rule" : "I18N002",
+      "sink" : "ArgumentParser.ValidationError",
+      "structuralAnchor" : "sha256:1b7f1546453c8afc98af79c9bec54084c99f4d66f997908ea65b5d3076c7ff13"
+    },
+    {
+      "containsInterpolation" : false,
+      "literalSource" : "\"--path is required for compare-project-yml-pkl mode.\"",
+      "literalValue" : "--path is required for compare-project-yml-pkl mode.",
+      "location" : {
+        "column" : 29,
+        "file" : "sources/vaporize-cli/main.swift",
+        "line" : 2375
+      },
+      "message" : "User-facing string literal must come from an approved generated i18n copy package.",
+      "rule" : "I18N002",
+      "sink" : "ArgumentParser.ValidationError",
+      "structuralAnchor" : "sha256:eeacca5cebfac5c6d5e3ff0dc47d538ad849af22aaa604d629904e0378435393"
+    },
+    {
+      "containsInterpolation" : false,
+      "literalSource" : "\"--pkl-path is required for compare-project-yml-pkl mode.\"",
+      "literalValue" : "--pkl-path is required for compare-project-yml-pkl mode.",
+      "location" : {
+        "column" : 29,
+        "file" : "sources/vaporize-cli/main.swift",
+        "line" : 2378
+      },
+      "message" : "User-facing string literal must come from an approved generated i18n copy package.",
+      "rule" : "I18N002",
+      "sink" : "ArgumentParser.ValidationError",
+      "structuralAnchor" : "sha256:c77d2b9a8f076443e32ecb7bbdec7627f64730dd6ff3ff89f9fd7227ec8fe09c"
+    },
+    {
+      "containsInterpolation" : true,
+      "literalSource" : "\"project.yml <-> project.pkl: \\(status) mismatches=\\(receipt.mismatchCount)\"",
+      "location" : {
+        "column" : 13,
+        "file" : "sources/vaporize-cli/main.swift",
+        "line" : 2396
+      },
+      "message" : "User-facing string literal must come from an approved generated i18n copy package.",
+      "rule" : "I18N002",
+      "sink" : "Swift.print",
+      "structuralAnchor" : "sha256:48cd78b60f90b5a3e870809ada9fb0bb590236bb8f0a38ecab25c61db55a8701"
+    },
+    {
+      "containsInterpolation" : true,
+      "literalSource" : "\"mismatches: \\(joinedMismatches)\"",
+      "location" : {
+        "column" : 15,
+        "file" : "sources/vaporize-cli/main.swift",
+        "line" : 2399
+      },
+      "message" : "User-facing string literal must come from an approved generated i18n copy package.",
+      "rule" : "I18N002",
+      "sink" : "Swift.print",
+      "structuralAnchor" : "sha256:0660184849cfe3bda6e30f683ead6830171c9308db23226c25cb83f0f484c887"
+    },
+    {
+      "containsInterpolation" : true,
+      "literalSource" : "\"project.yml and project.pkl differ: \\(joinedMismatches)\"",
+      "location" : {
+        "column" : 29,
+        "file" : "sources/vaporize-cli/main.swift",
+        "line" : 2411
+      },
+      "message" : "User-facing string literal must come from an approved generated i18n copy package.",
+      "rule" : "I18N002",
+      "sink" : "ArgumentParser.ValidationError",
+      "structuralAnchor" : "sha256:0d33b494cba044dac41f391fcf25ed021b01571046f482112cc0f1e4f99ab4b4"
+    },
+    {
+      "containsInterpolation" : false,
+      "literalSource" : "\"--path is required for import-project-yml mode.\"",
+      "literalValue" : "--path is required for import-project-yml mode.",
+      "location" : {
+        "column" : 29,
+        "file" : "sources/vaporize-cli/main.swift",
+        "line" : 2417
+      },
+      "message" : "User-facing string literal must come from an approved generated i18n copy package.",
+      "rule" : "I18N002",
+      "sink" : "ArgumentParser.ValidationError",
+      "structuralAnchor" : "sha256:8673095324f94f7a10a9faf685e073e35c88059fdab163f416fdb0852553285d"
+    },
+    {
+      "containsInterpolation" : false,
+      "literalSource" : "\"--output-path is required for import-project-yml mode.\"",
+      "literalValue" : "--output-path is required for import-project-yml mode.",
+      "location" : {
+        "column" : 29,
+        "file" : "sources/vaporize-cli/main.swift",
+        "line" : 2420
+      },
+      "message" : "User-facing string literal must come from an approved generated i18n copy package.",
+      "rule" : "I18N002",
+      "sink" : "ArgumentParser.ValidationError",
+      "structuralAnchor" : "sha256:146a20ec41449c64a79e6b52deff638d6939e4d61f019bacc61f477a88e1415c"
+    },
+    {
+      "containsInterpolation" : true,
+      "literalSource" : "\"project.yml -> project.pkl: \\(receipt.projectName) targets=\\(receipt.targetCount) packages=\\(receipt.packageCount) bytes=\\(receipt.generatedByteCount)\"",
+      "location" : {
+        "column" : 9,
+        "file" : "sources/vaporize-cli/main.swift",
+        "line" : 2441
+      },
+      "message" : "User-facing string literal must come from an approved generated i18n copy package.",
+      "rule" : "I18N002",
+      "sink" : "Swift.print",
+      "structuralAnchor" : "sha256:232ed01374974830591ad09104e6f40b1af2273813852714e248fc53cc311f2d"
+    },
+    {
+      "containsInterpolation" : false,
+      "literalSource" : "\"--path is required for upgrade-project-yml-to-pkl mode (the project.yml).\"",
+      "literalValue" : "--path is required for upgrade-project-yml-to-pkl mode (the project.yml).",
+      "location" : {
+        "column" : 29,
+        "file" : "sources/vaporize-cli/main.swift",
+        "line" : 2460
+      },
+      "message" : "User-facing string literal must come from an approved generated i18n copy package.",
+      "rule" : "I18N002",
+      "sink" : "ArgumentParser.ValidationError",
+      "structuralAnchor" : "sha256:c88fa8e6fb5b56ba224717fa835eed33d03f9ce07b2ad53d46b2bb61b26c7915"
+    },
+    {
+      "containsInterpolation" : true,
+      "literalSource" : "\"upgrade-project-yml-to-pkl: no project.yml at \\(ymlURL.path).\"",
+      "location" : {
+        "column" : 29,
+        "file" : "sources/vaporize-cli/main.swift",
+        "line" : 2464
+      },
+      "message" : "User-facing string literal must come from an approved generated i18n copy package.",
+      "rule" : "I18N002",
+      "sink" : "ArgumentParser.ValidationError",
+      "structuralAnchor" : "sha256:8e9301cafc27080b7f5ce946eecb2b991c9058f69e75e0b8059af54d6ec27119"
+    },
+    {
+      "containsInterpolation" : false,
+      "literalSource" : "\"--pkl-path is required for generate-project-yml mode.\"",
+      "literalValue" : "--pkl-path is required for generate-project-yml mode.",
+      "location" : {
+        "column" : 29,
+        "file" : "sources/vaporize-cli/main.swift",
+        "line" : 2529
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -1270,10 +1715,13 @@
       "structuralAnchor" : "sha256:994b75475b495f8e662dd0181dda14d9bbe86ac0a9ca09124db9f28ec3f83675"
     },
     {
+      "containsInterpolation" : false,
+      "literalSource" : "\"--output-path is required for generate-project-yml mode.\"",
+      "literalValue" : "--output-path is required for generate-project-yml mode.",
       "location" : {
         "column" : 29,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 2408
+        "line" : 2532
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -1281,10 +1729,12 @@
       "structuralAnchor" : "sha256:8ce60c5a030d4c69023371f97c9e79f3dba4ba0f17bc1fd2a0d7c14a24eaf435"
     },
     {
+      "containsInterpolation" : true,
+      "literalSource" : "\"project.pkl -> project.yml: \\(receipt.projectName) targets=\\(receipt.targetCount) packages=\\(receipt.packageCount) bytes=\\(receipt.generatedByteCount)\"",
       "location" : {
         "column" : 9,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 2422
+        "line" : 2546
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -1292,10 +1742,13 @@
       "structuralAnchor" : "sha256:2baf8d068ee612028356fdcae1b9593ee98f90c9929aafed6fd5d36c71eb5911"
     },
     {
+      "containsInterpolation" : false,
+      "literalSource" : "\"--pkl-path is required for generate-xcodeproj mode.\"",
+      "literalValue" : "--pkl-path is required for generate-xcodeproj mode.",
       "location" : {
         "column" : 29,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 2436
+        "line" : 2560
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -1303,10 +1756,13 @@
       "structuralAnchor" : "sha256:407f5f2b38b0dca8ddacb214d8cb720279d051e82025b9dc3026a18dded82f7a"
     },
     {
+      "containsInterpolation" : false,
+      "literalSource" : "\"--output-path is required for generate-xcodeproj mode.\"",
+      "literalValue" : "--output-path is required for generate-xcodeproj mode.",
       "location" : {
         "column" : 29,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 2439
+        "line" : 2563
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -1314,10 +1770,12 @@
       "structuralAnchor" : "sha256:0ecaf57df2520852890d3663f9595f62f119fdea30cd60bedb8cb02a874a3b52"
     },
     {
+      "containsInterpolation" : true,
+      "literalSource" : "\"project.pkl -> xcodeproj: \\(receipt.projectName) targets=\\(receipt.targetCount) sources=\\(receipt.sourceFileCount) resources=\\(receipt.resourceFileCount) bytes=\\(receipt.generatedByteCount)\"",
       "location" : {
         "column" : 9,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 2453
+        "line" : 2577
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -1325,10 +1783,13 @@
       "structuralAnchor" : "sha256:eaa18ea338902cba5a8fde16852d526acf0db8e186d52aa46ae9c1e5bf23d63a"
     },
     {
+      "containsInterpolation" : false,
+      "literalSource" : "\"--pkl-path is required for generate-sparkle-config mode.\"",
+      "literalValue" : "--pkl-path is required for generate-sparkle-config mode.",
       "location" : {
         "column" : 29,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 2471
+        "line" : 2595
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -1336,10 +1797,13 @@
       "structuralAnchor" : "sha256:b821651e7634301811638f976a26a6c979979d832ef1c5779658b205f08adec1"
     },
     {
+      "containsInterpolation" : false,
+      "literalSource" : "\"--target is required for generate-sparkle-config mode.\"",
+      "literalValue" : "--target is required for generate-sparkle-config mode.",
       "location" : {
         "column" : 29,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 2474
+        "line" : 2598
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -1347,10 +1811,13 @@
       "structuralAnchor" : "sha256:39ae9c9bd8164ae681af9a3aec73d1026092a51daf2f578fc531f914d09c784f"
     },
     {
+      "containsInterpolation" : false,
+      "literalSource" : "\"--output is required for generate-sparkle-config mode.\"",
+      "literalValue" : "--output is required for generate-sparkle-config mode.",
       "location" : {
         "column" : 29,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 2477
+        "line" : 2601
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -1358,10 +1825,13 @@
       "structuralAnchor" : "sha256:ea83459b21c0ec9dd328c335684aa6584d01683cd3eb5edc3db05d9f16b409f0"
     },
     {
+      "containsInterpolation" : false,
+      "literalSource" : "\"--path, --pkl-path, or --package-path is required for list-targets mode.\"",
+      "literalValue" : "--path, --pkl-path, or --package-path is required for list-targets mode.",
       "location" : {
         "column" : 29,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 2522
+        "line" : 2646
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -1369,10 +1839,12 @@
       "structuralAnchor" : "sha256:d9654e99e6a00c3ca0018223b207d2a4bb2a37f24a571f8604d9ebdbb0e630bc"
     },
     {
+      "containsInterpolation" : true,
+      "literalSource" : "\"targets: \\(receipt.projectName) input=\\(receipt.inputKind) targets=\\(receipt.targetCount) buildable=\\(receipt.buildableTargetNames.count) schemes=\\(receipt.schemeCount) packages=\\(receipt.packageCount)\"",
       "location" : {
         "column" : 9,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 2529
+        "line" : 2653
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -1380,83 +1852,8 @@
       "structuralAnchor" : "sha256:76d3a664eaa1d3a5b44563c38693682323cbd55aa04bd28c0a1c9c1d931e87fc"
     },
     {
-      "location" : {
-        "column" : 15,
-        "file" : "sources/vaporize-cli/main.swift",
-        "line" : 2533
-      },
-      "message" : "User-facing string literal must come from an approved generated i18n copy package.",
-      "rule" : "I18N002",
-      "sink" : "Swift.print",
-      "structuralAnchor" : "sha256:70f7168bc29ca27343f2d61fa63b4eede94b15c8a21923584d7d56ef92f8571d"
-    },
-    {
-      "location" : {
-        "column" : 11,
-        "file" : "sources/vaporize-cli/main.swift",
-        "line" : 2537
-      },
-      "message" : "User-facing string literal must come from an approved generated i18n copy package.",
-      "rule" : "I18N002",
-      "sink" : "Swift.print",
-      "structuralAnchor" : "sha256:1e741cef15f26656b90f1de6fed9e1ca7ec56bc014c6385d0df05594725ef334"
-    },
-    {
-      "location" : {
-        "column" : 17,
-        "file" : "sources/vaporize-cli/main.swift",
-        "line" : 2540
-      },
-      "message" : "User-facing string literal must come from an approved generated i18n copy package.",
-      "rule" : "I18N002",
-      "sink" : "Swift.print",
-      "structuralAnchor" : "sha256:083088fe19e912d7beace287a2977b6e98873660552b10bc943e7c77d9004bbb"
-    },
-    {
-      "location" : {
-        "column" : 29,
-        "file" : "sources/vaporize-cli/main.swift",
-        "line" : 2555
-      },
-      "message" : "User-facing string literal must come from an approved generated i18n copy package.",
-      "rule" : "I18N002",
-      "sink" : "ArgumentParser.ValidationError",
-      "structuralAnchor" : "sha256:72b68bd1655c4409afe7b7468ad6a0b3ece4a14fef1a2d68d82384bd6c8637f7"
-    },
-    {
-      "location" : {
-        "column" : 13,
-        "file" : "sources/vaporize-cli/main.swift",
-        "line" : 2628
-      },
-      "message" : "User-facing string literal must come from an approved generated i18n copy package.",
-      "rule" : "I18N002",
-      "sink" : "Swift.print",
-      "structuralAnchor" : "sha256:d6b1a4312c05da542eab94c13cefacb20ddcd978af31e4ba49f2e38b78bdb76d"
-    },
-    {
-      "location" : {
-        "column" : 15,
-        "file" : "sources/vaporize-cli/main.swift",
-        "line" : 2630
-      },
-      "message" : "User-facing string literal must come from an approved generated i18n copy package.",
-      "rule" : "I18N002",
-      "sink" : "Swift.print",
-      "structuralAnchor" : "sha256:58169bc7054aad98b8caa25b9ba2b27656cde134222a7e05221f01373a25247a"
-    },
-    {
-      "location" : {
-        "column" : 9,
-        "file" : "sources/vaporize-cli/main.swift",
-        "line" : 2654
-      },
-      "message" : "User-facing string literal must come from an approved generated i18n copy package.",
-      "rule" : "I18N002",
-      "sink" : "Swift.print",
-      "structuralAnchor" : "sha256:cbf5dbaa78e952e434b4a26a050cbe10e34c6242e54cc02b71c3194c86b503f6"
-    },
-    {
+      "containsInterpolation" : true,
+      "literalSource" : "\"- \\(target.name): type=\\(target.type ?? \"<nil>\") platform=\\(target.platform ?? \"<nil>\") product=\\(target.productName)\\(buildable)\"",
       "location" : {
         "column" : 15,
         "file" : "sources/vaporize-cli/main.swift",
@@ -1465,13 +1862,107 @@
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
       "sink" : "Swift.print",
-      "structuralAnchor" : "sha256:21bd5e64f7b6365978945b5168b30e0fc30da693b0f723d5ca82b11bfe1e6e5b"
+      "structuralAnchor" : "sha256:70f7168bc29ca27343f2d61fa63b4eede94b15c8a21923584d7d56ef92f8571d"
     },
     {
+      "containsInterpolation" : true,
+      "literalSource" : "\"product-cache: candidates=\\(receipt.productCacheCandidateCount) warm=\\(receipt.warmProductCacheCandidateCount) configuration=\\(receipt.productCacheConfigurationName ?? \"<nil>\")\"",
+      "location" : {
+        "column" : 11,
+        "file" : "sources/vaporize-cli/main.swift",
+        "line" : 2661
+      },
+      "message" : "User-facing string literal must come from an approved generated i18n copy package.",
+      "rule" : "I18N002",
+      "sink" : "Swift.print",
+      "structuralAnchor" : "sha256:1e741cef15f26656b90f1de6fed9e1ca7ec56bc014c6385d0df05594725ef334"
+    },
+    {
+      "containsInterpolation" : true,
+      "literalSource" : "\"- cache \\(candidate.status): \\(candidate.targetName) -> \\(candidate.appBundlePath)\"",
+      "location" : {
+        "column" : 17,
+        "file" : "sources/vaporize-cli/main.swift",
+        "line" : 2664
+      },
+      "message" : "User-facing string literal must come from an approved generated i18n copy package.",
+      "rule" : "I18N002",
+      "sink" : "Swift.print",
+      "structuralAnchor" : "sha256:083088fe19e912d7beace287a2977b6e98873660552b10bc943e7c77d9004bbb"
+    },
+    {
+      "containsInterpolation" : false,
+      "literalSource" : "\"--xcode-workspace is required for list-schemes mode.\"",
+      "literalValue" : "--xcode-workspace is required for list-schemes mode.",
       "location" : {
         "column" : 29,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 2668
+        "line" : 2679
+      },
+      "message" : "User-facing string literal must come from an approved generated i18n copy package.",
+      "rule" : "I18N002",
+      "sink" : "ArgumentParser.ValidationError",
+      "structuralAnchor" : "sha256:72b68bd1655c4409afe7b7468ad6a0b3ece4a14fef1a2d68d82384bd6c8637f7"
+    },
+    {
+      "containsInterpolation" : true,
+      "literalSource" : "\"workspace schemes: \\(receipt.workspaceName ?? \"<unknown>\") schemes=\\(receipt.schemeCount)\"",
+      "location" : {
+        "column" : 13,
+        "file" : "sources/vaporize-cli/main.swift",
+        "line" : 2752
+      },
+      "message" : "User-facing string literal must come from an approved generated i18n copy package.",
+      "rule" : "I18N002",
+      "sink" : "Swift.print",
+      "structuralAnchor" : "sha256:d6b1a4312c05da542eab94c13cefacb20ddcd978af31e4ba49f2e38b78bdb76d"
+    },
+    {
+      "containsInterpolation" : true,
+      "literalSource" : "\"- \\(scheme)\"",
+      "location" : {
+        "column" : 15,
+        "file" : "sources/vaporize-cli/main.swift",
+        "line" : 2754
+      },
+      "message" : "User-facing string literal must come from an approved generated i18n copy package.",
+      "rule" : "I18N002",
+      "sink" : "Swift.print",
+      "structuralAnchor" : "sha256:58169bc7054aad98b8caa25b9ba2b27656cde134222a7e05221f01373a25247a"
+    },
+    {
+      "containsInterpolation" : true,
+      "literalSource" : "\"release doctor: \\(receipt.subjectAppSlug) \\(receipt.subjectReleaseSlug) status=\\(receipt.overallStatus) checks=\\(receipt.passedCheckCount)/\\(receipt.checkCount)\"",
+      "location" : {
+        "column" : 9,
+        "file" : "sources/vaporize-cli/main.swift",
+        "line" : 2778
+      },
+      "message" : "User-facing string literal must come from an approved generated i18n copy package.",
+      "rule" : "I18N002",
+      "sink" : "Swift.print",
+      "structuralAnchor" : "sha256:cbf5dbaa78e952e434b4a26a050cbe10e34c6242e54cc02b71c3194c86b503f6"
+    },
+    {
+      "containsInterpolation" : true,
+      "literalSource" : "\"\\(check.status): \\(check.name) - \\(check.detail)\"",
+      "location" : {
+        "column" : 15,
+        "file" : "sources/vaporize-cli/main.swift",
+        "line" : 2781
+      },
+      "message" : "User-facing string literal must come from an approved generated i18n copy package.",
+      "rule" : "I18N002",
+      "sink" : "Swift.print",
+      "structuralAnchor" : "sha256:21bd5e64f7b6365978945b5168b30e0fc30da693b0f723d5ca82b11bfe1e6e5b"
+    },
+    {
+      "containsInterpolation" : true,
+      "literalSource" : "\"release doctor failed with \\(receipt.failedCheckCount) failing checks.\"",
+      "location" : {
+        "column" : 29,
+        "file" : "sources/vaporize-cli/main.swift",
+        "line" : 2792
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -1479,10 +1970,12 @@
       "structuralAnchor" : "sha256:76b2df52a8de623d0b65311a5fd5c782c412fc75a644a2952ea66be37ea770e1"
     },
     {
+      "containsInterpolation" : true,
+      "literalSource" : "\"--pkl-schema-path does not exist: \\(pklSchemaPath)\"",
       "location" : {
         "column" : 31,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 2678
+        "line" : 2802
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -1490,10 +1983,13 @@
       "structuralAnchor" : "sha256:8dba3e78f2d9dc7818c7affb58285522d867fe0677282197d5645341c34d475b"
     },
     {
+      "containsInterpolation" : false,
+      "literalSource" : "\"--pkl-schema-path is required for import-project-yml mode when Vaporize cannot locate Pkl/AppleProjectSpec.pkl.\"",
+      "literalValue" : "--pkl-schema-path is required for import-project-yml mode when Vaporize cannot locate Pkl/AppleProjectSpec.pkl.",
       "location" : {
         "column" : 7,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 2709
+        "line" : 2833
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -1501,10 +1997,13 @@
       "structuralAnchor" : "sha256:5963dec7923e73371201d5dcfa62e597b0d9e50ef17d18ea6a9c81ddec7bca3b"
     },
     {
+      "containsInterpolation" : false,
+      "literalSource" : "\"Vaporize test issue evidence was malformed; inspect the test receipt before trusting issue counts.\"",
+      "literalValue" : "Vaporize test issue evidence was malformed; inspect the test receipt before trusting issue counts.",
       "location" : {
         "column" : 9,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 2889
+        "line" : 3013
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -1512,10 +2011,12 @@
       "structuralAnchor" : "sha256:17c8f4d7cd438c9130c5b3bf3006ff681b2c388d5eb343a089c0fff01b59c43d"
     },
     {
+      "containsInterpolation" : true,
+      "literalSource" : "\"Vaporize test issue sink path is a directory: \\(url.path)\"",
       "location" : {
         "column" : 29,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 2913
+        "line" : 3037
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -1523,10 +2024,12 @@
       "structuralAnchor" : "sha256:e68deb8ab0c8d369b1250aaff69d763b5bf80526293244b233a003076e0d6b5d"
     },
     {
+      "containsInterpolation" : true,
+      "literalSource" : "\"Vaporize could not resolve Swift via \\(invocation.executableRef): \\(versionOutput)\"",
       "location" : {
         "column" : 9,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 2999
+        "line" : 3123
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -1534,10 +2037,12 @@
       "structuralAnchor" : "sha256:24c234ab52cd1e037a0b0a5fc271a245d8c697e763492d22a3fe88dcede0a146"
     },
     {
+      "containsInterpolation" : true,
+      "literalSource" : "\"Vaporize could not parse Xcode-selected Swift version from: \\(versionOutput)\"",
       "location" : {
         "column" : 29,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 3003
+        "line" : 3127
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -1545,10 +2050,12 @@
       "structuralAnchor" : "sha256:4859d573e581e0fdb9b29a26fcca6ccabe0600ebc68f0fd0e2a9307f5197f2cb"
     },
     {
+      "containsInterpolation" : true,
+      "literalSource" : "\"Vaporize resolved Swift \\(actualVersion) from \\(invocation.resolver), but package at \\(packagePath) requires Swift tools \\(requiredVersion). Select a pure Swift \\(requiredVersion) or newer, or on macOS retry the same core operation with its adjacent `xcode` authority.\"",
       "location" : {
         "column" : 9,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 3007
+        "line" : 3131
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -1556,10 +2063,12 @@
       "structuralAnchor" : "sha256:b62f69da61bf9b61267937fffeb20815fa3c367a822026958481047b0cb4c304"
     },
     {
+      "containsInterpolation" : true,
+      "literalSource" : "\"toolchain-selection requires a provider compiled for this host: \\(Provider.expectedDescription).\"",
       "location" : {
         "column" : 9,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 3207
+        "line" : 3331
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -1567,10 +2076,13 @@
       "structuralAnchor" : "sha256:1ca37f90363a2bc458fd2c6387d897ef634d94f64471c5fbc9d579e7b2970f56"
     },
     {
+      "containsInterpolation" : false,
+      "literalSource" : "\"toolchain-selection swift owns only active Swift selection; use `toolchain-selection swift -- use [options] [selector]`. Swift lifecycle, inspection, and execution belong to other commands.\"",
+      "literalValue" : "toolchain-selection swift owns only active Swift selection; use `toolchain-selection swift -- use [options] [selector]`. Swift lifecycle, inspection, and execution belong to other commands.",
       "location" : {
         "column" : 11,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 3219
+        "line" : 3343
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -1578,10 +2090,13 @@
       "structuralAnchor" : "sha256:28a04e8863c8e2c01e698c5605cf5026cabfeb9c8d068b6cc3580b81b9d4a8c6"
     },
     {
+      "containsInterpolation" : false,
+      "literalSource" : "\"toolchain-selection xcode owns only the active Xcode developer-directory selection; use `toolchain-selection xcode -- select <xcode-select-options>`. Xcode inspection and execution belong to other commands.\"",
+      "literalValue" : "toolchain-selection xcode owns only the active Xcode developer-directory selection; use `toolchain-selection xcode -- select <xcode-select-options>`. Xcode inspection and execution belong to other commands.",
       "location" : {
         "column" : 13,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 3229
+        "line" : 3353
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -1589,10 +2104,13 @@
       "structuralAnchor" : "sha256:ab12e08bcd0fe100f25efa14456093864c50a89a9c5268cd27b1fb22680fb9f8"
     },
     {
+      "containsInterpolation" : false,
+      "literalSource" : "\"Swift and Xcode are independent selection domains. Select a Swift version with `toolchain-selection swift -- use <version>`; on macOS select Xcode with `toolchain-selection xcode -- select --switch <developer-directory>`.\"",
+      "literalValue" : "Swift and Xcode are independent selection domains. Select a Swift version with `toolchain-selection swift -- use <version>`; on macOS select Xcode with `toolchain-selection xcode -- select --switch <developer-directory>`.",
       "location" : {
         "column" : 9,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 3243
+        "line" : 3367
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -1600,10 +2118,13 @@
       "structuralAnchor" : "sha256:fd0d766aeb14ad2e2e5664fd4a58a119040bab80d3790faf8d217750be4cccf0"
     },
     {
+      "containsInterpolation" : false,
+      "literalSource" : "\"toolchain-selection xcode accepts selection-state operations only: `select --print-path`, `select --switch <developer-directory>`, or `select --reset`.\"",
+      "literalValue" : "toolchain-selection xcode accepts selection-state operations only: `select --print-path`, `select --switch <developer-directory>`, or `select --reset`.",
       "location" : {
         "column" : 11,
         "file" : "sources/vaporize-cli/main.swift",
-        "line" : 3269
+        "line" : 3393
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -1612,6 +2133,169 @@
     }
   ],
   "formatVersion" : "0.3.0",
+  "heuristics" : [
+    {
+      "autofixPolicy" : "none",
+      "category" : "adoption",
+      "description" : "User-facing copy crosses the target boundary without an approved generated-package passport.",
+      "enforcementStatus" : "enforced",
+      "name" : "Missing Passport",
+      "rule" : "I18N001"
+    },
+    {
+      "autofixPolicy" : "none",
+      "category" : "adoption",
+      "description" : "User-facing prose has escaped the typed catalog and is authored loose in product source.",
+      "enforcementStatus" : "enforced",
+      "name" : "Loose Copy",
+      "rule" : "I18N002"
+    },
+    {
+      "autofixPolicy" : "none",
+      "category" : "provenance",
+      "description" : "Product code takes a localization side door around the approved generated accessor boundary.",
+      "enforcementStatus" : "enforced",
+      "name" : "Side Door",
+      "rule" : "I18N003"
+    },
+    {
+      "autofixPolicy" : "none",
+      "category" : "adoption",
+      "description" : "An approved import dresses the target as adopted while none of its generated accessors are used.",
+      "enforcementStatus" : "enforced",
+      "name" : "Costume Import",
+      "rule" : "I18N004"
+    },
+    {
+      "autofixPolicy" : "none",
+      "category" : "release-hygiene",
+      "description" : "Development-only vapor has leaked across the release boundary.",
+      "enforcementStatus" : "enforced",
+      "name" : "Vapor Leak",
+      "rule" : "I18N005"
+    },
+    {
+      "autofixPolicy" : "none",
+      "category" : "provenance",
+      "description" : "A generated accessor appears without a reproducible dependency on its owning module.",
+      "enforcementStatus" : "enforced",
+      "name" : "Ghost Dependency",
+      "rule" : "I18N006"
+    },
+    {
+      "autofixPolicy" : "none",
+      "category" : "declaration-integrity",
+      "description" : "An approved declaration has no live generated-accessor sink in the scanned target.",
+      "enforcementStatus" : "enforced",
+      "name" : "Orphaned Declaration",
+      "rule" : "I18N007"
+    },
+    {
+      "autofixPolicy" : "none",
+      "category" : "provenance",
+      "description" : "A copy-shaped module presents no approved publication receipt proving its identity.",
+      "enforcementStatus" : "enforced",
+      "name" : "Counterfeit Package",
+      "rule" : "I18N008"
+    },
+    {
+      "autofixPolicy" : "none",
+      "category" : "generated-code-integrity",
+      "description" : "The generated accessor index cannot account for every declared canonical key exactly once.",
+      "enforcementStatus" : "enforced",
+      "name" : "Broken Index",
+      "rule" : "I18N009"
+    },
+    {
+      "autofixPolicy" : "none",
+      "category" : "declaration-integrity",
+      "description" : "Multiple imported packages contest ownership of the same canonical key.",
+      "enforcementStatus" : "enforced",
+      "name" : "Key Turf War",
+      "rule" : "I18N010"
+    },
+    {
+      "autofixPolicy" : "none",
+      "category" : "declaration-integrity",
+      "description" : "A live generated accessor resolves to a key missing from imported publication declarations.",
+      "enforcementStatus" : "enforced",
+      "name" : "Undocumented Use",
+      "rule" : "I18N011"
+    },
+    {
+      "autofixPolicy" : "none",
+      "category" : "provenance",
+      "description" : "One imported module answers to multiple approved receipts, splitting publication authority.",
+      "enforcementStatus" : "enforced",
+      "name" : "Split Authority",
+      "rule" : "I18N012"
+    },
+    {
+      "autofixPolicy" : "none",
+      "category" : "generated-code-integrity",
+      "description" : "Multiple generated accessor aliases lead to the same canonical key.",
+      "enforcementStatus" : "enforced",
+      "name" : "Alias Maze",
+      "rule" : "I18N013"
+    },
+    {
+      "autofixPolicy" : "none",
+      "category" : "declaration-integrity",
+      "description" : "One publication receipt counts the same canonical key more than once.",
+      "enforcementStatus" : "enforced",
+      "name" : "Double Entry",
+      "rule" : "I18N014"
+    },
+    {
+      "autofixPolicy" : "none",
+      "category" : "locale-integrity",
+      "description" : "A declared locale shard looks complete but cannot materialize every canonical catalog record into target resources.",
+      "enforcementStatus" : "enforced",
+      "name" : "Translation Mirage",
+      "rule" : "I18N015"
+    },
+    {
+      "autofixPolicy" : "none",
+      "category" : "locale-integrity",
+      "description" : "A translation changes, drops, duplicates, or retags formatting placeholders at the locale boundary.",
+      "enforcementStatus" : "enforced",
+      "name" : "Placeholder Smuggling",
+      "rule" : "I18N016"
+    },
+    {
+      "autofixPolicy" : "none",
+      "category" : "runtime-coverage",
+      "description" : "A locale silently resolves through source-language fallback instead of proving a localized artifact.",
+      "enforcementStatus" : "enforced",
+      "name" : "Fallback Fog",
+      "rule" : "I18N017"
+    },
+    {
+      "autofixPolicy" : "none",
+      "category" : "runtime-coverage",
+      "description" : "A published locale exists in inventory but no declared product route can reach it.",
+      "enforcementStatus" : "needs-contract",
+      "name" : "Dead Tongue",
+      "rule" : "I18N018"
+    },
+    {
+      "autofixPolicy" : "none",
+      "category" : "generated-code-integrity",
+      "coveredBy" : "I18N009",
+      "description" : "A canonical key and its generated accessor diverge from the product's declared key-shape grammar.",
+      "enforcementStatus" : "covered-by-existing-law",
+      "name" : "Key Shape Drift",
+      "rule" : "I18N019"
+    },
+    {
+      "autofixPolicy" : "none",
+      "category" : "semantic-context",
+      "description" : "Distinct meanings are forced through one key without typed context evidence proving that the reuse is intentional.",
+      "enforcementStatus" : "needs-contract",
+      "name" : "Context Collapse",
+      "rule" : "I18N020"
+    }
+  ],
   "imports" : [
     "AppleProjectSpecCore",
     "ArgumentParser",
@@ -1633,11 +2317,18 @@
     "Yams",
     "os"
   ],
+  "lawbook" : {
+    "name" : "i18n Lint Lawbook",
+    "nickname" : "International Law"
+  },
+  "localeCoverage" : [
+
+  ],
   "passed" : false,
   "placeholders" : [
 
   ],
-  "scannedFileCount" : 28,
+  "scannedFileCount" : 31,
   "scannedFiles" : [
     "sources/apple-project-spec-core/AppleProjectPklUpgradePlanner.swift",
     "sources/apple-project-spec-core/AppleProjectSparkleConfigRenderer.swift",
@@ -1651,14 +2342,17 @@
     "sources/vaporize-cli/CUJImplementationProjectCoverageLedger.swift",
     "sources/vaporize-cli/CUJPortfolioAudit.swift",
     "sources/vaporize-cli/FleetStatus.swift",
+    "sources/vaporize-cli/HomebrewStatus.swift",
     "sources/vaporize-cli/I18nSourceGatePreflight.swift",
     "sources/vaporize-cli/MaintainerSwiftPMConfiguration.swift",
     "sources/vaporize-cli/OwnedSurfaceInventory.swift",
     "sources/vaporize-cli/ProductSelfUpdate.swift",
     "sources/vaporize-cli/ReleaseDoctor.swift",
+    "sources/vaporize-cli/SourceVersionStatus.swift",
     "sources/vaporize-cli/SwiftUIImportGate.swift",
     "sources/vaporize-cli/VaporInventory.swift",
     "sources/vaporize-cli/VaporInventoryRenderer.swift",
+    "sources/vaporize-cli/VaporizeBuildMetadata.swift",
     "sources/vaporize-cli/VaporizeCoreExecutionInstrumentation.swift",
     "sources/vaporize-cli/VaporizeCoreExecutionPlan.swift",
     "sources/vaporize-cli/VaporizeLogging.swift",
@@ -1676,5 +2370,8 @@
     "version" : "0.1.0"
   },
   "surfaceKind" : "cli",
-  "targetName" : "vaporize.cli@wrkstrm-core.clia.sh"
+  "targetName" : "vaporize.cli@wrkstrm-core.clia.sh",
+  "usedKeys" : [
+
+  ]
 }

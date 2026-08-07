@@ -69,6 +69,31 @@ func generatesXcodeProjectWorldStateFromPkl() async throws {
   #expect(pbxproj.contains("tiny-pkl-app.app"))
 }
 
+@Test("CUJ-14 preserves multiple Pkl source roots in generated Xcode project")
+func preservesMultiplePklSourceRootsInGeneratedXcodeProject() async throws {
+  let fixture = try makeMultiSourcePklAppFixture()
+  defer { try? FileManager.default.removeItem(at: fixture.temporaryDirectory) }
+  defer { try? FileManager.default.removeItem(at: fixture.outputDirectory) }
+
+  let outputURL = fixture.outputDirectory.appendingPathComponent("MultiSourceGenerated.xcodeproj")
+  let receipt = try await AppleProjectXcodeProjectGenerator.generate(
+    pklURL: fixture.projectPkl,
+    outputURL: outputURL,
+    requestId: "cuj-14-multiple-pkl-source-roots"
+  )
+
+  let pbxprojData = try Data(contentsOf: outputURL.appendingPathComponent("project.pbxproj"))
+  let pbxproj = String(decoding: pbxprojData, as: UTF8.self)
+
+  #expect(receipt.projectName == "multi-source-pkl-app")
+  #expect(receipt.targetNames == ["MultiSourceApp"])
+  #expect(receipt.sourceFileCount == 2)
+  #expect(pbxproj.contains("MacApp.swift in Sources"))
+  #expect(pbxproj.contains("SharedFeature.swift in Sources"))
+  #expect(pbxproj.contains("path = \"../shared/SharedFeature.swift\";"))
+  #expect(!pbxproj.contains("path = \"SharedFeature.swift\";"))
+}
+
 @Test("CUJ-14 generates Xcode tool targets with typed release identity from Pkl")
 func generatesToolTargetReleaseIdentityFromPkl() async throws {
   let fixture = try makeTinyPklToolFixture()
@@ -243,6 +268,12 @@ private struct TinyPklAppFixture {
   var projectPkl: URL
 }
 
+private struct MultiSourcePklAppFixture {
+  var temporaryDirectory: URL
+  var outputDirectory: URL
+  var projectPkl: URL
+}
+
 private struct TinyPklToolFixture {
   var temporaryDirectory: URL
   var outputDirectory: URL
@@ -326,6 +357,66 @@ private func makeTinyPklAppFixture() throws -> TinyPklAppFixture {
   try data.write(to: projectPkl)
 
   return TinyPklAppFixture(
+    temporaryDirectory: temporaryDirectory,
+    outputDirectory: outputDirectory,
+    projectPkl: projectPkl
+  )
+}
+
+private func makeMultiSourcePklAppFixture() throws -> MultiSourcePklAppFixture {
+  let temporaryDirectory = FileManager.default.temporaryDirectory
+    .appendingPathComponent("vaporize-pkl-multiple-source-roots-\(UUID().uuidString)")
+  let outputDirectory = FileManager.default.temporaryDirectory
+    .appendingPathComponent("vaporize-pkl-multiple-source-roots-output-\(UUID().uuidString)")
+  let macAppDirectory = temporaryDirectory.appendingPathComponent("Sources/mac-app")
+  let sharedDirectory = temporaryDirectory.appendingPathComponent("Sources/shared")
+
+  try FileManager.default.createDirectory(at: macAppDirectory, withIntermediateDirectories: true)
+  try FileManager.default.createDirectory(at: sharedDirectory, withIntermediateDirectories: true)
+  try Data("import SwiftUI\nstruct MacApp {}\n".utf8)
+    .write(to: macAppDirectory.appendingPathComponent("MacApp.swift"))
+  try Data("public struct SharedFeature {}\n".utf8)
+    .write(to: sharedDirectory.appendingPathComponent("SharedFeature.swift"))
+  try Data("<?xml version=\"1.0\"?><plist version=\"1.0\"><dict/></plist>\n".utf8)
+    .write(to: macAppDirectory.appendingPathComponent("Info.plist"))
+
+  let projectPkl = temporaryDirectory.appendingPathComponent("project.pkl")
+  let schemaAmendsPath = relativePathForPklAmends(
+    from: projectPkl.deletingLastPathComponent(),
+    to: appleProjectSpecPklSchemaURL
+  )
+  try Data("""
+  amends "\(schemaAmendsPath)"
+
+  name = "multi-source-pkl-app"
+
+  settings = new {
+    base = new {
+      ["SWIFT_VERSION"] = 6.4
+    }
+  }
+
+  targets = new {
+    ["MultiSourceApp"] = new {
+      type = "application"
+      platform = "macOS"
+      sources = new {
+        new { path = "Sources/mac-app" }
+        new { path = "Sources/shared" }
+      }
+      settings = new {
+        base = new {
+          ["GENERATE_INFOPLIST_FILE"] = false
+          ["INFOPLIST_FILE"] = "Sources/mac-app/Info.plist"
+          ["PRODUCT_BUNDLE_IDENTIFIER"] = "com.wrkstrm.multi-source-pkl-app"
+          ["PRODUCT_NAME"] = "multi-source-pkl-app"
+        }
+      }
+    }
+  }
+  """.utf8).write(to: projectPkl)
+
+  return MultiSourcePklAppFixture(
     temporaryDirectory: temporaryDirectory,
     outputDirectory: outputDirectory,
     projectPkl: projectPkl

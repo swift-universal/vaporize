@@ -41,14 +41,14 @@
       "transit" : "completed"
     }
   ],
-  "schemaVersion" : "0.1.0",
+  "schemaVersion" : "0.0.1",
   "slug" : "bug-i18n-i18n001-36b2b5a97685ddebf07cdb829406bd0e9975444b997b736d538074f186186691",
   "workPoem" : {
-    "boundary" : "Detector reachability records evidence; it does not grant ownership, remediation authority, or approval.",
-    "meaning" : "Preserve one recoverable, durable work identity for this structural i18n violation.",
-    "move" : "Repair the violating sink through approved i18n source consumption and rerun the detector.",
-    "proof" : "Only absence from a complete i18n-source-consumption-enforcement v0.1.0 scan closes this world.",
-    "world" : "One vaporize.cli@wrkstrm-core.clia.sh source coordinate contains an observed I18N001 law break."
+    "boundary" : "Change only the owning Package.swift dependency wiring and the affected target sources named by the spawn cast.",
+    "meaning" : "Without the approved package, product copy has no catalog-owned, localizable source of truth.",
+    "move" : "Wire the approved copy-package product into the target, import it, and route each user-facing sink through its generated accessor.",
+    "proof" : "Rerun the exact complete source-gate verifier from the Bead spawn cast. Only authoritative complete absence permits automatic closure.",
+    "world" : "Target 'vaporize.cli@wrkstrm-core.clia.sh' uses user-facing strings but imports none of its approved i18n copy packages: ApprovedCopy_v000_000_001, ConcourseCopy_v000_000_001, DiskCleanerCopy_v000_000_001, HarnessCLICopy_v000_000_001, KeikoWorldCopy_v000_000_001, RismayMeCopy_v000_000_001, SubstrateCLICopy_v000_000_001, TranslateCLICopy_v000_000_001, TranslateCopy_v000_000_001, WrkstrmWorldCopy_v000_000_001."
   },
   "worldRole" : "bug"
 }

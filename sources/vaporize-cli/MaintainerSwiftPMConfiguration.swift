@@ -1,4 +1,5 @@
 import Foundation
+import VaporizeCLICopy_v000_000_001
 
 enum MaintainerSwiftPMConfiguration {
   struct EditableDependency: Equatable {
@@ -326,19 +327,19 @@ enum MaintainerSwiftPMConfigurationError: LocalizedError {
   var errorDescription: String? {
     switch self {
     case .conflictingEditableDependency(let identity, let expected, let actual):
-      return "Maintainer dependency \(identity) is already editable at \(actual), but the selected authority is \(expected). Reconcile the workspace before building."
+      return vaporizeCopyFill(VaporizeCLICopy_v000_000_001.CLI.vaporizeMaintainerDependencyA1IsAlreadyEditable, [String(describing: identity), String(describing: actual), String(describing: expected)])
     case .conflictingFileSystemDependency(let identity, let expected, let actual):
-      return "Maintainer dependency \(identity) resolves from \(actual), but the selected authority is \(expected). Reconcile the package manifest before building."
+      return vaporizeCopyFill(VaporizeCLICopy_v000_000_001.CLI.vaporizeMaintainerDependencyA1ResolvesFromA2, [String(describing: identity), String(describing: actual), String(describing: expected)])
     case .duplicateIdentity(let identity):
-      return "Maintainer SwiftPM authority registry repeats identity: \(identity)"
+      return vaporizeCopyFill(VaporizeCLICopy_v000_000_001.CLI.vaporizeMaintainerSwiftpmAuthorityRegistryRepeatsIdentity, [String(describing: identity)])
     case .duplicateOriginal(let original):
-      return "Maintainer SwiftPM authority registry repeats original URL: \(original)"
+      return vaporizeCopyFill(VaporizeCLICopy_v000_000_001.CLI.vaporizeMaintainerSwiftpmAuthorityRegistryRepeatsOriginal, [String(describing: original)])
     case .missingMaintainerCheckout(let identity, let path):
-      return "Maintainer dependency \(identity) is selected but its checkout is missing at \(path). Run the maintainer sync before building."
+      return vaporizeCopyFill(VaporizeCLICopy_v000_000_001.CLI.vaporizeMaintainerDependencyA1IsSelectedBut, [String(describing: identity), String(describing: path)])
     case .missingMirrorFile(let path):
-      return "SwiftPM configuration directory does not contain mirrors.json: \(path)"
+      return vaporizeCopyFill(VaporizeCLICopy_v000_000_001.CLI.vaporizeSwiftpmConfigurationDirectoryDoesNotContain, [String(describing: path)])
     case .missingUserCacheDirectory:
-      return "Vaporize could not resolve the user cache directory for generated SwiftPM authority configuration."
+      return VaporizeCLICopy_v000_000_001.CLI.vaporizeVaporizeCouldNotResolveTheUser
     }
   }
 }

@@ -87,6 +87,7 @@ private func makeFleetFixture(_ tools: [FixtureTool]) throws -> URL {
       payload: [
         "CFBundleExecutable": product,
         "CFBundleShortVersionString": installedVersion,
+        "CFBundleVersion": "42",
         "SUFeedURL": feedURL.absoluteString,
         "SUPublicEDKey": "AAAA",
       ])
@@ -155,6 +156,7 @@ func sidecaredToolCurrent() async throws {
   let row = try #require(report.tools.first { $0.product == "alpha.cli@cuj30.clia.sh" })
   #expect(row.status == .current)
   #expect(row.installedVersion == "2.0.0")
+  #expect(row.installedBuild == "42")
   #expect(row.latestVersion == "2.0.0")
   #expect(row.feedURL?.hasPrefix("file://") == true)
   #expect(report.summary.current == 1)
@@ -286,7 +288,7 @@ func jsonFieldNamesAreStable() async throws {
   let json = try #require(String(data: encoder.encode(report), encoding: .utf8))
   for field in [
     "\"binDirectory\"", "\"tools\"", "\"summary\"",
-    "\"product\"", "\"installedVersion\"", "\"feedURL\"", "\"latestVersion\"",
+    "\"product\"", "\"installedVersion\"", "\"installedBuild\"", "\"feedURL\"", "\"latestVersion\"",
     "\"status\"", "\"detail\"",
     "\"total\"", "\"current\"", "\"behind\"", "\"criticalBehind\"", "\"unknown\"",
     "\"feedUnreachable\"", "\"feedMalformed\"",
@@ -308,6 +310,7 @@ func textTableRenders() async throws {
   #expect(lines[0].hasPrefix("fleet-status: "))
   #expect(lines[0].contains("tools=2 current=0 behind=1"))
   let header = try #require(lines.first { $0.hasPrefix("PRODUCT") })
+  #expect(header.contains("BUILD"))
   let alphaRow = try #require(lines.first { $0.hasPrefix("alpha.cli@cuj30.clia.sh") })
   // Column alignment: STATUS starts at the same offset in header and rows.
   let headerStatusOffset = try #require(header.range(of: "STATUS")?.lowerBound)

@@ -41,14 +41,14 @@
       "transit" : "completed"
     }
   ],
-  "schemaVersion" : "0.1.0",
+  "schemaVersion" : "0.0.1",
   "slug" : "bug-i18n-i18n002-a64aca1c7dac36e61a2a6401d559d3f3174779b70d85751e5ced64ffad8c9a07",
   "workPoem" : {
-    "boundary" : "Detector reachability records evidence; it does not grant ownership, remediation authority, or approval.",
-    "meaning" : "Preserve one recoverable, durable work identity for this structural i18n violation.",
-    "move" : "Repair the violating sink through approved i18n source consumption and rerun the detector.",
-    "proof" : "Only absence from a complete i18n-source-consumption-enforcement v0.1.0 scan closes this world.",
-    "world" : "One vaporize.cli@wrkstrm-core.clia.sh source coordinate contains an observed I18N002 law break."
+    "boundary" : "Repair the reported source coordinate and only the predeclared catalog or dependency scope; do not invent replacement wording in product code.",
+    "meaning" : "Raw product copy bypasses the approved catalog, so wording can drift and cannot be localized consistently.",
+    "move" : "Replace the literal with the matching accessor from the approved generated copy package; add catalog copy through the catalog workflow when no accessor exists.",
+    "proof" : "Rerun the exact complete source-gate verifier from the Bead spawn cast. Only authoritative complete absence permits automatic closure.",
+    "world" : "User-facing string literal must come from an approved generated i18n copy package."
   },
   "worldRole" : "bug"
 }

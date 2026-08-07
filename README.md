@@ -66,6 +66,8 @@ vaporize list-schemes --xcode-workspace <workspace.xcworkspace> --format json --
 vaporize setup --xcode-component MetalToolchain
 vaporize status --path <records> --format text
 vaporize warehouse --path <records> --receipt-path <receipt.json>
+vaporize version-status --path <substrate-root> --format text
+vaporize fleet-status --bin-dir <install-bin> --format text
 ```
 
 ## Command grammar and manual pages
@@ -81,11 +83,35 @@ vaporize [options] [mode] [-- forwarded-arguments...]
 `validate-json-schema`, `inspect-project-yml`, `inspect-target-features`,
 `compare-project-yml-pkl`, `import-project-yml`, `upgrade-project-yml-to-pkl`,
 `generate-project-yml`, `generate-xcodeproj`, `generate-sparkle-config`,
-`list-targets`, `list-schemes`, `release-doctor`, `inventory`, `cuj-audit`,
+`list-targets`, `list-schemes`, `release-doctor`, `version-status`, `homebrew-status`, `inventory`, `cuj-audit`,
 `graph`, `domains`, `self-update`, or `fleet-status`. Options are parsed by the
 root command and validated by the selected mode; they are not separate
 ArgumentParser subcommands yet. The deprecated compatibility spellings `cli`
 and `app` are also still accepted by the current parser.
+
+## Version and build status
+
+`version-status --path <substrate-root>` reports the effective source marketing
+version and source build number for owner-controlled Apple application targets.
+It labels each version as `compliant`, `outside-policy`, or `unresolved` against
+the `0.0.x` policy and retains exact source carrier refs per configuration.
+SwiftPM application targets report `build-not-applicable` when they are raw,
+unbundled executables. This is source evidence only: it does not certify an
+installed app bundle, publication, consumer upgrade, or historical schema wire
+version.
+
+`fleet-status` complements it for installed CLI tools: each row now reports
+the sidecar's `CFBundleShortVersionString` and `CFBundleVersion` alongside feed
+currency. Run `vaporize --version` to inspect Vaporize's own running version
+and build metadata.
+
+`homebrew-status --homebrew-formula <formula> --homebrew-tap-root <tap-root>`
+joins three distinct Homebrew carriers: formula version and archive checksum,
+typed tap-manifest product build/source provenance, and `brew info --json=v2`
+install state. Formula `revision` and `version_scheme` are package-manager
+ordering metadata, never product build numbers. A legacy manifest with no
+`build.buildNumber` is reported as `unrecorded`, never guessed from install
+time, a tap commit, or an artifact timestamp.
 
 `toolchain-selection` requires an explicit, compiled provider and owns only
 active selection state:

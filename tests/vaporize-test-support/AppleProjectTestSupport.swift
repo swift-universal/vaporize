@@ -6,13 +6,13 @@ public let vaporizeTestPackageRoot = URL(fileURLWithPath: #filePath)
   .deletingLastPathComponent()
   .deletingLastPathComponent()
 
-public let concourseProjectYMLURL = vaporizeTestPackageRoot
-  .appendingPathComponent("../../apps/concourse/project.yml")
+public let concourseProjectRootURL = vaporizeTestPackageRoot
+  .appendingPathComponent("../../../../../keiko-org/private/product-lines/concourse/apps/concourse")
   .standardizedFileURL
 
-public let concourseProjectPklURL = vaporizeTestPackageRoot
-  .appendingPathComponent("../../apps/concourse/project.pkl")
-  .standardizedFileURL
+public let concourseProjectYMLURL = concourseProjectRootURL.appendingPathComponent("project.yml")
+
+public let concourseProjectPklURL = concourseProjectRootURL.appendingPathComponent("project.pkl")
 
 public let expectedConcourseTargetNames = ["concourse", "concourse-tests-ui"]
 public let expectedConcourseBuildableTargetNames = ["concourse"]

@@ -1,0 +1,103 @@
+{
+  "id": "BUG-VAPORIZE-PKL-CONCOURSE-WORLD-STATE-BUILD-PARITY-2026-08-06",
+  "title": "Pkl Xcode generation must produce fresh, portable Concourse world-state without project.yml",
+  "status": "open",
+  "priority": 1,
+  "issueType": "bug",
+  "description": "Concourse project.yml and project.pkl currently have zero topology mismatches, and Vaporize can emit Xcode project world-state from the Pkl. That is not sufficient for Pkl ownership: the emitted project only resolves local package paths when placed beside project.pkl. At discovery, app build/install routing still read project.yml to infer the app bundle name and the emitted project lacked an XCRemoteSwiftPackageReference for Concourse's swift-snapshot-testing dependency; focused source patches now cover those renderer and Pkl-first routing slices, pending generated-project integration proof. The existing untracked concourse.generated.xcodeproj is stale, so reusing an old generated project would hide source-to-world-state drift. Until the remaining boundaries are closed, Pkl is a parity specimen rather than Concourse's canonical project-generation truth.",
+  "design": "Make generate-xcodeproj own a fresh, deterministic world-state replacement: resolve relative source and local-package paths against the Pkl home (or rebase them for a declared output home), atomically replace its output rather than leaving stale project/workspace state, and record an input/output fingerprint in the generation receipt. Emit XCRemoteSwiftPackageReference plus matching XCSwiftPackageProductDependency records for url/from packages. Extend Vaporize's app build/install discovery to derive the bundle identity from evaluated AppleProjectSpec Pkl or an explicit typed app-bundle input, retaining project.yml only as a compatibility projection during the migration. Concourse's shared UI-test scheme is a Pkl product-spec declaration, not an inferred generator behavior; keep Pkl normative only after its declared app and test schemes build from freshly generated world-state.",
+  "acceptanceCriteria": [
+    "A fresh Concourse project generated from project.pkl resolves both its local packages and the remote swift-snapshot-testing package without a dangling PBX package reference.",
+    "The generated concourse app target builds with SKIP_APPLICATION_DEPLOY=YES using the source tree's current files, and the receipt records a generation input fingerprint plus the generated project path.",
+    "When Concourse declares its shared UI-test scheme in project.pkl, the generated scheme has a callable macOS test action and its target can resolve SnapshotTesting from the emitted remote package reference.",
+    "Vaporize app build/install routing can use evaluated Pkl project identity without reading project.yml; project.yml remains only an explicitly named compatibility projection until a separate retirement decision.",
+    "Generation safely replaces a prior output or rejects an unsafe output path; stale project/workspace artifacts cannot silently survive a new Pkl generation.",
+    "Focused standard Swift Testing coverage proves local-package, remote-package, output-freshness, and Pkl-derived app-bundle routing behavior; a live Concourse generated-project build is retained as integration evidence."
+  ],
+  "observedEvidence": [
+    {
+      "status": "historical-pre-fix-observation",
+      "command": "vaporize compare-project-yml-pkl --path <concourse>/project.yml --pkl-path <concourse>/project.pkl --format json",
+      "result": "matched=true; mismatchCount=0"
+    },
+    {
+      "status": "historical-pre-fix-observation",
+      "command": "vaporize generate-xcodeproj --pkl-path <concourse>/project.pkl --output-path <concourse>/.concourse-pkl-proof-<uuid>.xcodeproj --receipt-path /tmp/concourse-pkl-proof/generation.receipt.json --format json",
+      "result": "xcodeProjectGenerated=true; targetCount=2; packageCount=8; sourceFileCount=34; resourceFileCount=23"
+    },
+    {
+      "status": "historical-pre-fix-observation",
+      "observation": "Generating the same Pkl project under /tmp made Xcode resolve relative local-package paths from the output project and fail at /service-universal/...; output placement currently changes semantics."
+    },
+    {
+      "status": "historical-pre-fix-observation",
+      "observation": "Concourse's remote swift-snapshot-testing dependency has a product dependency in the generated PBX but no emitted XCRemoteSwiftPackageReference, so the UI-test graph is incomplete."
+    },
+    {
+      "status": "source-patch-focused-proof-pending-integration",
+      "changedPaths": [
+        "sources/apple-project-spec-core/AppleProjectXcodeProjectGenerator.swift",
+        "tests/cuj-14-remote-package-generation/VaporizeCUJ14RemotePackageGenerationTests.swift"
+      ],
+      "result": "A focused Swift Testing target passed 2/2 cases: the Concourse swift-snapshot-testing url/from package emits XCRemoteSwiftPackageReference with upToNextMajorVersion 1.17.0, SnapshotTesting links to that object, and unpinned remotes are rejected. Fresh generated-project UI-test compilation remains required."
+    },
+    {
+      "status": "historical-pre-fix-observation",
+      "observation": "Vaporize app routing still consults project.yml for WRAPPER_NAME/app-bundle inference, preventing YAML retirement."
+    },
+    {
+      "status": "source-patch-focused-proof-pending-integration",
+      "changedPaths": [
+        "sources/vaporize-cli/XcodeAppBundleIdentityResolver.swift",
+        "sources/vaporize-cli/main.swift",
+        "tests/cuj-02-mac-app/VaporizeCUJ02MacAppTests.swift"
+      ],
+      "result": "The Pkl-first wrapper-name resolver resolves explicit Pkl, project-adjacent Pkl, workspace-adjacent Pkl, then source-root Pkl before project.yml compatibility fallback. Its target-only Swift Testing bundle passed 32/32 tests through direct xctest execution. The ordinary filtered swift test command remains blocked before CUJ-02 by existing CUJ-01 source-policy error CPPP001 at VaporizeCUJ01SwiftPMCLITests.swift:696; target-only execution is evidence for this slice, not a green global suite."
+    },
+    {
+      "status": "generated-project-integration-proof",
+      "command": "<source-built-vaporize> generate-xcodeproj --pkl-path <concourse>/project.pkl --output-path <concourse>/.concourse-source-pkl-scheme-proof-<uuid>.xcodeproj --receipt-path <external-volume>/generation.receipt.json; GIT_CEILING_DIRECTORIES=/Users/sonoma/mono/private xcodebuild -project <fresh-output>.xcodeproj -scheme concourse-tests-ui -configuration Debug -destination platform=macOS,arch=arm64 -derivedDataPath <external-volume>/DerivedData CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO SKIP_APPLICATION_DEPLOY=YES build",
+      "result": "The fresh source-built generator emitted the Concourse shared UI-test scheme, resolved swift-snapshot-testing as XCRemoteSwiftPackageReference, and the UI-test scheme compiled with xcodebuild exit=0 and BUILD SUCCEEDED. The external derived-data path was required because the system volume was nearly full; the installed Concourse app was not replaced or relaunched."
+    },
+    {
+      "status": "historical-pre-fix-observation",
+      "command": "GIT_CEILING_DIRECTORIES=/Users/sonoma/mono/private xcodebuild -project <fresh-side-by-side-pkl-output>.xcodeproj -scheme concourse -configuration Debug -destination platform=macOS,arch=arm64 -derivedDataPath /tmp/concourse-pkl-proof/DerivedData CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO SKIP_APPLICATION_DEPLOY=YES build",
+      "result": "exit=0; BUILD SUCCEEDED; deploy phase printed 'Skipping /Applications deploy because SKIP_APPLICATION_DEPLOY=YES'. This proves only the app-target slice."
+    },
+    {
+      "status": "historical-pre-fix-observation",
+      "command": "GIT_CEILING_DIRECTORIES=/Users/sonoma/mono/private xcodebuild -project <fresh-side-by-side-pkl-output>.xcodeproj -scheme concourse-tests-ui -configuration Debug -destination platform=macOS,arch=arm64 -derivedDataPath /tmp/concourse-pkl-test-proof/DerivedData CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO SKIP_APPLICATION_DEPLOY=YES build",
+      "result": "exit=70; xcodebuild reported 'Unable to find a destination matching { platform:macOS, arch:arm64 }'. Reclassified after comparison: both tracked and generated projects lacked a shared concourse-tests-ui scheme, so this is a missing Concourse project-spec declaration rather than a Pkl platform-generation defect."
+    }
+  ],
+  "scope": {
+    "in": [
+      "AppleProjectSpec Pkl to Xcode project rendering",
+      "Concourse as the live integration specimen",
+      "Remote Swift package reference rendering",
+      "Fresh-output and receipt integrity",
+      "Pkl-derived Vaporize app bundle routing"
+    ],
+    "out": [
+      "Installing, replacing, or relaunching the user's running Concourse application",
+      "Deleting Concourse project.yml before Pkl-generated app and test parity is demonstrated",
+      "A broad fleet migration beyond the Concourse proving ground"
+    ]
+  },
+  "provenance": {
+    "sourceProject": "private/universal/substrate/collectives/keiko-org/private/product-lines/concourse/apps/concourse/project.pkl",
+    "legacyProjection": "private/universal/substrate/collectives/keiko-org/private/product-lines/concourse/apps/concourse/project.yml",
+    "umbrellaBead": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/FR-VAPORIZE-PKL-PROJECT-GENERATION-move-owned-xcodegen-surfaces-to-pkl.beads-issue.su.json",
+    "createdFrom": "Concourse Pkl generation and compile-lane investigation on 2026-08-06"
+  },
+  "createdAt": "2026-08-06",
+  "createdBy": "codex",
+  "labels": [
+    "pkl",
+    "xcodeproj-generation",
+    "concourse",
+    "vaporize",
+    "build-parity",
+    "provenance"
+  ]
+}

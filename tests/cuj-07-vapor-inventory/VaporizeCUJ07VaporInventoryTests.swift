@@ -35,6 +35,158 @@ func parsesInventoryAsOwnedSurfaceInventory() throws {
   #expect(command.receiptPath == "/tmp/owned-surfaces.json")
 }
 
+@Test("CUJ-07 parses version-status as a source identity report")
+func parsesVersionStatusAsSourceIdentityReport() throws {
+  let command = try VaporizeCLI.parse([
+    "version-status",
+    "--path", "/tmp/substrate",
+    "--format", "json",
+    "--receipt-path", "/tmp/source-version-status.json",
+  ])
+
+  #expect(command.mode == .versionStatus)
+  #expect(command.vaporScanPath == "/tmp/substrate")
+  #expect(command.vaporOutputFormat == .json)
+  #expect(command.receiptPath == "/tmp/source-version-status.json")
+}
+
+@Test("CUJ-07 source version status resolves an XcodeGen app version and build from exact source refs")
+func sourceVersionStatusResolvesXcodeGenSourceCarriers() throws {
+  let fixture = try makeFixtureDirectory(named: "source-version-status-xcode")
+  defer { try? FileManager.default.removeItem(at: fixture) }
+
+  let projectYML = fixture.appendingPathComponent(
+    "collectives/wrkstrm-core/private/apple/apps/tiny-app/project.yml"
+  )
+  try writeText(
+    """
+    name: tiny-app
+    settings:
+      base:
+        MARKETING_VERSION: 0.0.7
+        CURRENT_PROJECT_VERSION: 42
+    targets:
+      TinyApp:
+        type: application
+        platform: macOS
+        sources: Sources
+    """,
+    to: projectYML
+  )
+
+  let result = try SourceVersionStatusScanner().scan(path: fixture.path)
+  let unit = try #require(result.units.first)
+  #expect(result.summary.totalUnits == 1)
+  #expect(result.summary.zeroMinorCompliant == 1)
+  #expect(result.summary.sourceDeclaredBuildNumbers == 1)
+  #expect(unit.targetRef.path == projectYML.path)
+  #expect(unit.targetRef.target == "TinyApp")
+  #expect(unit.carrierKind == .xcodegenProjectYML)
+  #expect(unit.authorityStatus == .sourceDeclared)
+  #expect(unit.versionPolicyStatus == .compliant)
+  #expect(unit.buildNumberStatus == .sourceDeclared)
+  #expect(Set(unit.configurations.compactMap(\.marketingVersion)) == Set(["0.0.7"]))
+  #expect(Set(unit.configurations.compactMap(\.buildNumber)) == Set(["42"]))
+  #expect(
+    unit.configurations.allSatisfy {
+      $0.marketingVersionCarrierRef == "\(projectYML.path)#settings.base.MARKETING_VERSION"
+        && $0.buildNumberCarrierRef == "\(projectYML.path)#settings.base.CURRENT_PROJECT_VERSION"
+    }
+  )
+
+  let receipt = SourceVersionStatusScanner().receipt(
+    from: result,
+    reporterVersion: "0.1.0",
+    reporterBuildNumber: "local",
+    capturedAt: Date(timeIntervalSince1970: 0)
+  )
+  #expect(receipt.reporter.versionPolicyStatus == .outsidePolicy)
+  #expect(receipt.capturedAt == "1970-01-01T00:00:00Z")
+  let rendered = SourceVersionStatusRenderer.renderText(receipt)
+  #expect(rendered.contains("TinyApp"))
+  #expect(rendered.contains("0.0.7"))
+  #expect(rendered.contains("42"))
+}
+
+@Test("CUJ-07 source version status keeps SwiftPM app builds distinct and verifies runtime linkage")
+func sourceVersionStatusResolvesRuntimeLinkedSwiftPMAppCarrier() throws {
+  let fixture = try makeFixtureDirectory(named: "source-version-status-swiftpm")
+  defer { try? FileManager.default.removeItem(at: fixture) }
+
+  let appHome = fixture.appendingPathComponent(
+    "collectives/wrkstrm-core/private/apple/apps/tiny-swiftpm"
+  )
+  let packageURL = appHome.appendingPathComponent("Package.swift")
+  try writeText(packageManifest(named: "tiny-swiftpm"), to: packageURL)
+  try writeText(
+    """
+    enum AppVersion {
+      static let marketingVersion = "0.0.9"
+    }
+    """,
+    to: appHome.appendingPathComponent("Sources/TinyApp/AppVersion.swift")
+  )
+  try writeText(
+    """
+    import SwiftUI
+
+    @main
+    struct TinyApp: App {
+      let version = AppVersion.marketingVersion
+
+      var body: some Scene {
+        WindowGroup { Text(version) }
+      }
+    }
+    """,
+    to: appHome.appendingPathComponent("Sources/TinyApp/TinyApp.swift")
+  )
+
+  let result = try SourceVersionStatusScanner().scan(path: fixture.path)
+  let unit = try #require(result.units.first)
+  #expect(result.summary.totalUnits == 1)
+  #expect(result.summary.swiftPMApplicationTargets == 1)
+  #expect(result.summary.buildNumbersNotApplicable == 1)
+  #expect(unit.targetRef.path == packageURL.path)
+  #expect(unit.targetRef.target == "TinyApp")
+  #expect(unit.carrierKind == .swiftPMRuntimeSourceAppVersion)
+  #expect(unit.authorityStatus == .sourceDeclared)
+  #expect(unit.versionPolicyStatus == .compliant)
+  #expect(unit.buildNumberStatus == .notApplicable)
+  #expect(unit.configurations.first?.marketingVersion == "0.0.9")
+  #expect(unit.configurations.first?.buildNumber == nil)
+}
+
+@Test("CUJ-07 source version status leaves a partially declared Xcode target unresolved")
+func sourceVersionStatusDoesNotCertifyMissingConfigurationValues() throws {
+  let fixture = try makeFixtureDirectory(named: "source-version-status-missing-config")
+  defer { try? FileManager.default.removeItem(at: fixture) }
+  try writeText(
+    """
+    name: partial-app
+    settings:
+      configs:
+        Debug:
+          MARKETING_VERSION: 0.0.4
+          CURRENT_PROJECT_VERSION: 4
+    targets:
+      PartialApp:
+        type: application
+        platform: macOS
+        sources: Sources
+    """,
+    to: fixture.appendingPathComponent(
+      "collectives/wrkstrm-core/private/apple/apps/partial-app/project.yml"
+    )
+  )
+
+  let result = try SourceVersionStatusScanner().scan(path: fixture.path)
+  let unit = try #require(result.units.first)
+  #expect(unit.versionPolicyStatus == .unresolved)
+  #expect(unit.buildNumberStatus == .unresolved)
+  #expect(unit.configurations.contains { $0.name == "Release" && $0.marketingVersion == nil })
+}
+
 @Test("CUJ-07 owned surface inventory finds packages projects and workspaces")
 func ownedSurfaceInventoryFindsPackagesProjectsAndWorkspaces() throws {
   let fixture = try makeFixtureDirectory(named: "owned-surfaces")

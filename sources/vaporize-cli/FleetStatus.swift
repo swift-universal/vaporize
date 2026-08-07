@@ -45,7 +45,8 @@ enum FleetStatus {
 
   /// One installed tool's fleet row. Field names are the stable JSON contract:
   /// `product` (executable name), `installedVersion` (sidecar
-  /// CFBundleShortVersionString, null when unrecorded), `feedURL` (sidecar
+  /// CFBundleShortVersionString, null when unrecorded), `installedBuild`
+  /// (sidecar CFBundleVersion, null when unrecorded), `feedURL` (sidecar
   /// SUFeedURL as stored, null when unrecorded), `latestVersion` (feed's
   /// newest comparable version, null when no feed answer), `status` (see
   /// ``Status``), `detail` (human-readable finding or typed error text, null
@@ -53,6 +54,7 @@ enum FleetStatus {
   struct Row: Codable, Sendable, Equatable {
     var product: String
     var installedVersion: String?
+    var installedBuild: String? = nil
     var feedURL: String?
     var latestVersion: String?
     var status: Status
@@ -169,6 +171,7 @@ enum FleetStatus {
         detail: String(describing: error)
       )
     }
+    let installedBuild = sidecar.payload["CFBundleVersion"]
 
     // Identity: incomplete triples are a typed finding, not a crash.
     let identity: (feedURL: URL, publicEDKeyBase64: String, installedVersion: String)
@@ -178,6 +181,7 @@ enum FleetStatus {
       return Row(
         product: product,
         installedVersion: sidecar.shortVersionString,
+        installedBuild: installedBuild,
         feedURL: sidecar.feedURLString,
         status: .noUpdateIdentity,
         detail: String(describing: error)
@@ -196,6 +200,7 @@ enum FleetStatus {
       return Row(
         product: product,
         installedVersion: identity.installedVersion,
+        installedBuild: installedBuild,
         feedURL: identity.feedURL.absoluteString,
         status: .feedUnreachable,
         detail: error.localizedDescription
@@ -209,6 +214,7 @@ enum FleetStatus {
       return Row(
         product: product,
         installedVersion: identity.installedVersion,
+        installedBuild: installedBuild,
         feedURL: identity.feedURL.absoluteString,
         status: .feedMalformed,
         detail: error.localizedDescription
@@ -228,6 +234,7 @@ enum FleetStatus {
       return Row(
         product: product,
         installedVersion: identity.installedVersion,
+        installedBuild: installedBuild,
         feedURL: identity.feedURL.absoluteString,
         latestVersion: newestInstallable ?? critical.version,
         status: .criticalBehind,
@@ -245,6 +252,7 @@ enum FleetStatus {
         return Row(
           product: product,
           installedVersion: installed,
+          installedBuild: installedBuild,
           feedURL: identity.feedURL.absoluteString,
           status: .unknown,
           detail: "Feed is reachable but carries no comparable items."
@@ -253,6 +261,7 @@ enum FleetStatus {
       return Row(
         product: product,
         installedVersion: installed,
+        installedBuild: installedBuild,
         feedURL: identity.feedURL.absoluteString,
         latestVersion: newest,
         status: .current
@@ -261,6 +270,7 @@ enum FleetStatus {
       return Row(
         product: product,
         installedVersion: identity.installedVersion,
+        installedBuild: installedBuild,
         feedURL: identity.feedURL.absoluteString,
         latestVersion: newestVersion,
         status: .behind,
@@ -289,11 +299,12 @@ enum FleetStatus {
   /// Aligned text table. Rows with a detail carry it on an indented
   /// continuation line so column alignment survives long typed errors.
   static func renderTable(_ report: Report) -> String {
-    let header = ["PRODUCT", "INSTALLED", "LATEST", "STATUS"]
+    let header = ["PRODUCT", "INSTALLED", "BUILD", "LATEST", "STATUS"]
     let cells: [[String]] = report.tools.map { row in
       [
         row.product,
         row.installedVersion ?? "-",
+        row.installedBuild ?? "-",
         row.latestVersion ?? "-",
         row.status.rawValue,
       ]

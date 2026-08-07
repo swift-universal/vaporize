@@ -1,5 +1,7 @@
 {
   "acceptanceCriteria" : "- The structural law break no longer appears at this source coordinate.\n- A complete i18n Source Consumption Enforcement scan confirms the repair before closure.\n- The canonical Bead, detector evidence, spawn cast, and strict Bead World projection remain decodable.",
+  "closeReason" : "Finding absent from a complete i18n Source Consumption Enforcement v0.1.0 scan.",
+  "closedAt" : "2026-08-06T15:54:11Z",
   "createdAt" : "2026-07-28T08:41:20Z",
   "createdBy" : "translate-source-gate",
   "dependencies" : [
@@ -13,6 +15,7 @@
   ],
   "description" : "translate-source-gate observed I18N001 at the stable source coordinate target-import. Diagnostic line and column are evidence, not identity.",
   "externalRef" : "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N001-36B2B5A97685DDEBF07CDB829406BD0E9975444B997B736D538074F186186691.beads-spawn-cast.json",
+  "firstObservedAt" : "2026-07-28T08:41:20Z",
   "id" : "BUG-I18N-I18N001-36B2B5A97685DDEBF07CDB829406BD0E9975444B997B736D538074F186186691",
   "issueType" : "bug",
   "labels" : [
@@ -23,11 +26,15 @@
     "i18n001",
     "spawn-ready"
   ],
+  "lastObservedAt" : "2026-08-06T15:21:36Z",
+  "observationCount" : 2,
   "owner" : "vaporize.cli@wrkstrm-core.clia.sh",
   "priority" : 2,
+  "recurrenceCount" : 0,
   "sourceLocation" : "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N001-36B2B5A97685DDEBF07CDB829406BD0E9975444B997B736D538074F186186691.i18n-source-gate-evidence.json",
   "sourceSystem" : "translate-source-gate",
   "sourceType" : "i18n-source-gate-finding",
-  "status" : "open",
-  "title" : "Resolve I18N001 at target-import"
+  "status" : "closed",
+  "title" : "Resolve I18N001 at target-import",
+  "updatedAt" : "2026-08-06T15:54:11Z"
 }
