@@ -260,6 +260,40 @@ func retainsLegacyJSONAndMarkdownDefinitions() throws {
   #expect(result.summary.byArtifactClass["legacy-markdown-definition"] == 1)
 }
 
+@Test("CUJ-25 recognizes current schema-backed CujModel product definitions")
+func recognizesCurrentSchemaBackedCujModelProductDefinitions() throws {
+  let fixture = try makeFixtureDirectory(named: "schema-backed-cuj-model")
+  defer { try? FileManager.default.removeItem(at: fixture) }
+
+  let proofPath = "collectives/wrkstrm-core/private/apple/spm/alpha/Tests/AlphaCUJProofTests.swift"
+  try writeText(
+    schemaBackedCUJ(id: "cuj-schema-backed", proofPath: proofPath),
+    to: fixture.appendingPathComponent(
+      "collectives/wrkstrm/private/universal/kura-spaces/product-lines/alpha/cujs/cuj-schema-backed.cuj.su.json"
+    )
+  )
+  try writeText(
+    """
+    import Testing
+    @Test("cuj-schema-backed") func schemaBackedProof() {}
+    """,
+    to: fixture.appendingPathComponent(proofPath)
+  )
+
+  let result = try CUJPortfolioAuditScanner().scan(path: fixture.path)
+  let definition = try #require(result.definitions.first)
+
+  #expect(result.summary.uniqueDefinitionCount == 1)
+  #expect(result.summary.byArtifactClass["typed-product-definition"] == 1)
+  #expect(result.summary.byArtifactClass["unknown-cuj-artifact"] == nil)
+  #expect(definition.id == "cuj-schema-backed")
+  #expect(definition.statusOrdinal == 1)
+  #expect(definition.declaredProofReferenceCount == 1)
+  #expect(definition.declaredProofReferences.first?.format == "schema-link-ref-v0.3.0")
+  #expect(definition.resolvedExecutableProofPaths == [proofPath])
+  #expect(definition.structuralIssues.isEmpty)
+}
+
 @Test("CUJ-25 reports malformed proven records without counting them as proof")
 func reportsMalformedProvenRecords() throws {
   let fixture = try makeFixtureDirectory(named: "malformed-proven")
@@ -343,6 +377,34 @@ private func compactCUJ(id: String, status: Int, withProof: Bool) -> String {
       "sg":[{"n":1,"a":"Act"}],
       "cs":"Complete",
       "ap":\(proofs)\(lastProven)
+    }
+    """
+}
+
+private func schemaBackedCUJ(id: String, proofPath: String) -> String {
+  """
+    {
+      "CujModel":"0.3.0",
+      "schemaVersion":"0.3.0",
+      "kind":"cuj",
+      "slug":"\(id)",
+      "title":"Schema-backed CUJ",
+      "journey":"An operator completes a schema-backed journey.",
+      "domains":["developer-experience-and-docs"],
+      "provenance":{
+        "provedBy":"proven-here",
+        "proofRefs":[{
+          "link-ref-model":"0.0.5",
+          "t":"Schema-backed Swift proof",
+          "tg":[{"k":"rp","rt":"mono","v":"\(proofPath)"}]
+        }],
+        "referentRefs":[],
+        "referentProof":"The source test is discoverable from the declared LinkRef."
+      },
+      "breaks":"The audit recognizes current schema-backed CUJs; schema validation remains a separate gate.",
+      "status":"active",
+      "contextRefs":[],
+      "notes":[]
     }
     """
 }

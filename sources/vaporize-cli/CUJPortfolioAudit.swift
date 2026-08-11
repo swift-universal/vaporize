@@ -667,7 +667,9 @@ struct CUJPortfolioAuditScanner {
       return
     }
 
-    if isCompactCUJDefinition(object) || isLongFormCUJDefinition(object) {
+    if isCompactCUJDefinition(object) || isLongFormCUJDefinition(object)
+      || isSchemaBackedCUJDefinition(object)
+    {
       let artifactClass = typedDefinitionClass(for: lowerPath)
       let definition = individualDefinition(
         object: object,
@@ -1116,6 +1118,7 @@ struct CUJPortfolioAuditScanner {
     sourcePath: String
   ) -> DefinitionCandidate {
     let isCompact = isCompactCUJDefinition(object)
+    let isSchemaBacked = isSchemaBackedCUJDefinition(object)
     let id =
       string(object[isCompact ? "i" : "slug"])
       ?? URL(fileURLWithPath: sourcePath).deletingPathExtension().lastPathComponent
@@ -1124,7 +1127,10 @@ struct CUJPortfolioAuditScanner {
       integer(object[isCompact ? "st" : "statusOrdinal"])
       ?? statusOrdinal(from: string(object["status"]))
     let proofArray = object[isCompact ? "ap" : "automatedProofs"] as? [Any] ?? []
-    let proofReferences = declaredProofReferences(from: proofArray, sourcePath: sourcePath)
+    let proofReferences = isSchemaBacked
+      ? schemaBackedProofReferences(from: object, sourcePath: sourcePath)
+      : declaredProofReferences(from: proofArray, sourcePath: sourcePath)
+    let proofCount = isSchemaBacked ? proofReferences.count : proofArray.count
     var issues: [String] = []
     if isCompact {
       let requiredKeys = ["i", "t", "s", "c", "k", "st", "a", "g", "sg", "cs"]
@@ -1151,7 +1157,7 @@ struct CUJPortfolioAuditScanner {
       sourceClass: sourceClass,
       sourcePath: sourcePath,
       statusOrdinal: statusOrdinal,
-      declaredProofReferenceCount: proofArray.count,
+      declaredProofReferenceCount: proofCount,
       declaredProofReferences: proofReferences,
       lastProvenAtChrononID: integer(object[isCompact ? "lP" : "lastProvenAtChrononID"]),
       evidencePaths: [],
@@ -1571,6 +1577,11 @@ struct CUJPortfolioAuditScanner {
       && object["steps"] != nil
   }
 
+  private func isSchemaBackedCUJDefinition(_ object: [String: Any]) -> Bool {
+    object["CujModel"] != nil && object["slug"] != nil && object["title"] != nil
+      && object["journey"] != nil
+  }
+
   private func isLegacySingleCUJDefinition(_ object: [String: Any]) -> Bool {
     object["CUJModel"] != nil && object["slug"] != nil && object["title"] != nil
       && (object["goal"] != nil || object["userJourney"] != nil || object["journeys"] != nil)
@@ -1634,6 +1645,31 @@ struct CUJPortfolioAuditScanner {
         tag: string(proof["tg"]),
         declarationPath: sourcePath,
         format: format
+      )
+    }
+  }
+
+  private func schemaBackedProofReferences(
+    from object: [String: Any],
+    sourcePath: String
+  ) -> [CUJDeclaredProofReference] {
+    guard
+      let provenance = object["provenance"] as? [String: Any],
+      let proofRefs = provenance["proofRefs"] as? [[String: Any]]
+    else {
+      return []
+    }
+    return proofRefs.map { proof in
+      let targets = proof["tg"] as? [[String: Any]] ?? []
+      let target = targets.first
+      return CUJDeclaredProofReference(
+        claim: string(proof["t"]),
+        packagePath: string(target?["v"]),
+        testTypeName: nil,
+        testMethodName: nil,
+        tag: nil,
+        declarationPath: sourcePath,
+        format: "schema-link-ref-v0.3.0"
       )
     }
   }
@@ -1799,6 +1835,7 @@ struct CUJPortfolioAuditScanner {
 
   private func statusOrdinal(from value: String?) -> Int? {
     switch value?.lowercased() {
+    case "active": return 1
     case "modeled": return 1
     case "in-construction": return 2
     case "proven": return 3
