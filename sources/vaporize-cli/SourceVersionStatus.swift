@@ -29,6 +29,7 @@ enum SourceVersionTargetKind: String, Codable, Equatable {
 
 enum SourceVersionCarrierKind: String, Codable, Equatable {
   case xcodegenProjectYML = "xcodegen-project-yml"
+  case pklAppleProject = "pkl-apple-project"
   case swiftPMRuntimeSourceAppVersion = "swiftpm-runtime-source-app-version"
 }
 
@@ -133,7 +134,7 @@ struct SourceVersionStatusReceipt: Codable, Equatable {
 struct SourceVersionStatusScanner {
   var fileManager: FileManager = .default
 
-  func scan(path: String) throws -> SourceVersionStatusResult {
+  func scan(path: String) async throws -> SourceVersionStatusResult {
     let inventory = try OwnedSurfaceInventoryScanner(fileManager: fileManager).scan(path: path)
     let surfaces = inventory.surfaces.filter(Self.isActiveAppleAppSurface)
 
@@ -144,6 +145,17 @@ struct SourceVersionStatusScanner {
       $0.kind == .appleProjectYML && Self.isDirectAppHomeSurface($0)
     }
     let projectYMLPaths = Set(projectYMLSurfaces.map(\.path))
+    let projectPKLSurfaces = surfaces.filter {
+      $0.kind == .appleProjectPKL
+        && Self.isDirectAppHomeSurface($0)
+        && !projectYMLPaths.contains(
+          URL(fileURLWithPath: $0.path)
+            .deletingLastPathComponent()
+            .appendingPathComponent("project.yml")
+            .path
+        )
+    }
+    let projectPKLPaths = Set(projectPKLSurfaces.map(\.path))
 
     for surface in projectYMLSurfaces {
       let sourceURL = URL(fileURLWithPath: surface.path)
@@ -153,10 +165,11 @@ struct SourceVersionStatusScanner {
           units.append(
             Self.xcodeUnit(
               surface: surface,
-              projectYMLURL: sourceURL,
+              projectSourceURL: sourceURL,
               spec: spec,
               targetName: targetName,
-              target: target
+              target: target,
+              carrierKind: .xcodegenProjectYML
             )
           )
         }
@@ -171,29 +184,46 @@ struct SourceVersionStatusScanner {
       }
     }
 
+    for surface in projectPKLSurfaces {
+      let sourceURL = URL(fileURLWithPath: surface.path)
+      do {
+        let spec = try await AppleProjectPklLoader.load(url: sourceURL)
+        for (targetName, target) in spec.targets where Self.isApplicationTarget(target) {
+          units.append(
+            Self.xcodeUnit(
+              surface: surface,
+              projectSourceURL: sourceURL,
+              spec: spec,
+              targetName: targetName,
+              target: target,
+              carrierKind: .pklAppleProject
+            )
+          )
+        }
+      } catch {
+        findings.append(
+          SourceVersionStatusFinding(
+            kind: "unreadable-project-pkl",
+            sourceRef: sourceURL.path,
+            detail: String(describing: error)
+          )
+        )
+      }
+    }
+
     for surface in surfaces where surface.kind == .xcodeProject && Self.isDirectAppHomeSurface(surface) {
       let projectURL = URL(fileURLWithPath: surface.path)
       let appHome = projectURL.deletingLastPathComponent()
       let projectYMLPath = appHome.appendingPathComponent("project.yml").path
-      guard !projectYMLPaths.contains(projectYMLPath) else { continue }
+      let projectPKLPath = appHome.appendingPathComponent("project.pkl").path
+      guard !projectYMLPaths.contains(projectYMLPath), !projectPKLPaths.contains(projectPKLPath) else {
+        continue
+      }
       findings.append(
         SourceVersionStatusFinding(
           kind: "xcode-project-without-project-yml-source-carrier",
           sourceRef: projectURL.path,
-          detail: "No owner-controlled project.yml sits beside this Xcode project; source version and build carriers require an explicit adapter."
-        )
-      )
-    }
-
-    for surface in surfaces where surface.kind == .appleProjectPKL && Self.isDirectAppHomeSurface(surface) {
-      let pklURL = URL(fileURLWithPath: surface.path)
-      let projectYMLPath = pklURL.deletingLastPathComponent().appendingPathComponent("project.yml").path
-      guard !projectYMLPaths.contains(projectYMLPath) else { continue }
-      findings.append(
-        SourceVersionStatusFinding(
-          kind: "pkl-project-source-carrier-not-yet-adapted",
-          sourceRef: pklURL.path,
-          detail: "The report does not evaluate Pkl-only project carriers yet; add a source-carrier adapter before treating this project as covered."
+          detail: "No owner-controlled project.yml or evaluable project.pkl sits beside this Xcode project; source version and build carriers require an explicit adapter."
         )
       )
     }
@@ -238,7 +268,7 @@ struct SourceVersionStatusScanner {
     return SourceVersionStatusReceipt(
       capturedAt: formatter.string(from: capturedAt),
       scannedPath: result.scannedPath,
-      scope: "Owner-controlled Apple application source identities below private/universal/substrate/**/private/apple/apps. XcodeGen application targets and SwiftPM application-entry targets are included. Package public release carriers, historical schema version roots, payload wire versions, generated project output, and installed app bundles are outside this report's scope.",
+      scope: "Owner-controlled Apple application source identities below explicit app homes: private/apple/apps/<app> and product-lines/<product-line>/apps/<app>. XcodeGen and Pkl Apple-project application targets plus SwiftPM application-entry targets are included. Package public release carriers, historical schema version roots, payload wire versions, generated project output, and installed app bundles are outside this report's scope.",
       evidenceBoundary: "Rows are source declarations only. A compliant source row is not an installed, published, consumer-upgraded, or Launch Review claim. Use fleet-status for installed CLI sidecars and dedicated release evidence for built applications.",
       reporter: SourceVersionStatusReporter(
         product: "vaporize.cli@wrkstrm-core.clia.sh",
@@ -273,13 +303,25 @@ struct SourceVersionStatusScanner {
 
   private static func appHomeURL(for url: URL) -> URL? {
     let path = url.standardizedFileURL.path
-    guard let marker = path.range(of: "/private/apple/apps/") else { return nil }
-    let remainder = path[marker.upperBound...]
-    guard let appName = remainder.split(separator: "/", maxSplits: 1).first, !appName.isEmpty else {
-      return nil
+    if let marker = path.range(of: "/private/apple/apps/") {
+      let remainder = path[marker.upperBound...]
+      guard let appName = remainder.split(separator: "/", maxSplits: 1).first, !appName.isEmpty else {
+        return nil
+      }
+      return URL(fileURLWithPath: String(path[..<marker.upperBound]) + String(appName))
+        .standardizedFileURL
     }
-    return URL(fileURLWithPath: String(path[..<marker.upperBound]) + String(appName))
-      .standardizedFileURL
+    guard let marker = path.range(of: "/product-lines/") else { return nil }
+    let components = path[marker.upperBound...].split(separator: "/")
+    guard components.count >= 3,
+      !components[0].isEmpty,
+      components[1] == "apps",
+      !components[2].isEmpty
+    else { return nil }
+    return URL(
+      fileURLWithPath: String(path[..<marker.upperBound]) + "\(components[0])/apps/\(components[2])"
+    )
+    .standardizedFileURL
   }
 
   private static func appHomeContainsXcodeProject(_ appHome: URL, fileManager: FileManager) -> Bool {
@@ -300,16 +342,17 @@ struct SourceVersionStatusScanner {
 
   private static func xcodeUnit(
     surface: OwnedSurfaceRecord,
-    projectYMLURL: URL,
+    projectSourceURL: URL,
     spec: AppleProjectSpec,
     targetName: String,
-    target: AppleProjectTarget
+    target: AppleProjectTarget,
+    carrierKind: SourceVersionCarrierKind
   ) -> SourceVersionStatusUnit {
     let configurations = configurationNames(spec: spec, target: target).map { configuration in
       let marketing = resolvedXcodeValue(
         key: "MARKETING_VERSION",
         infoKey: "CFBundleShortVersionString",
-        projectYMLURL: projectYMLURL,
+        projectSourceURL: projectSourceURL,
         spec: spec,
         targetName: targetName,
         target: target,
@@ -318,7 +361,7 @@ struct SourceVersionStatusScanner {
       let build = resolvedXcodeValue(
         key: "CURRENT_PROJECT_VERSION",
         infoKey: "CFBundleVersion",
-        projectYMLURL: projectYMLURL,
+        projectSourceURL: projectSourceURL,
         spec: spec,
         targetName: targetName,
         target: target,
@@ -343,11 +386,11 @@ struct SourceVersionStatusScanner {
       ? "One or more build configurations do not resolve an owner-controlled source version or build number."
       : nil
     return SourceVersionStatusUnit(
-      targetRef: SourceVersionTargetRef(path: projectYMLURL.path, target: targetName),
+      targetRef: SourceVersionTargetRef(path: projectSourceURL.path, target: targetName),
       owner: surface.owner,
       ownershipScope: surface.ownershipScope,
       targetKind: .xcodeApp,
-      carrierKind: .xcodegenProjectYML,
+      carrierKind: carrierKind,
       authorityStatus: authorityStatus,
       configurations: configurations,
       versionPolicyStatus: policyStatus,
@@ -364,13 +407,13 @@ struct SourceVersionStatusScanner {
   private static func resolvedXcodeValue(
     key: String,
     infoKey: String,
-    projectYMLURL: URL,
+    projectSourceURL: URL,
     spec: AppleProjectSpec,
     targetName: String,
     target: AppleProjectTarget,
     configuration: String
   ) -> ResolvedSourceValue {
-    let targetPrefix = "\(projectYMLURL.path)#targets.\(targetName)"
+    let targetPrefix = "\(projectSourceURL.path)#targets.\(targetName)"
     if key == "MARKETING_VERSION", let value = usableSourceValue(target.releaseIdentity?.shortVersion) {
       return ResolvedSourceValue(value: value, carrierRef: "\(targetPrefix).releaseIdentity.shortVersion")
     }
@@ -388,7 +431,7 @@ struct SourceVersionStatusScanner {
     if let result = settingsValue(
       key: key,
       settings: spec.settings,
-      prefix: "\(projectYMLURL.path)#settings",
+      prefix: "\(projectSourceURL.path)#settings",
       configuration: configuration
     ) {
       return result
@@ -399,7 +442,7 @@ struct SourceVersionStatusScanner {
       return ResolvedSourceValue(value: value, carrierRef: "\(targetPrefix).info.properties.\(infoKey)")
     }
     if let infoPath = target.info?.path {
-      let infoURL = projectYMLURL.deletingLastPathComponent().appendingPathComponent(infoPath)
+      let infoURL = projectSourceURL.deletingLastPathComponent().appendingPathComponent(infoPath)
       if let value = directInfoPlistValue(at: infoURL, key: infoKey) {
         return ResolvedSourceValue(value: value, carrierRef: "\(infoURL.path)#\(infoKey)")
       }

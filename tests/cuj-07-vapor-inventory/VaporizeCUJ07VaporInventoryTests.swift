@@ -51,7 +51,7 @@ func parsesVersionStatusAsSourceIdentityReport() throws {
 }
 
 @Test("CUJ-07 source version status resolves an XcodeGen app version and build from exact source refs")
-func sourceVersionStatusResolvesXcodeGenSourceCarriers() throws {
+func sourceVersionStatusResolvesXcodeGenSourceCarriers() async throws {
   let fixture = try makeFixtureDirectory(named: "source-version-status-xcode")
   defer { try? FileManager.default.removeItem(at: fixture) }
 
@@ -74,7 +74,7 @@ func sourceVersionStatusResolvesXcodeGenSourceCarriers() throws {
     to: projectYML
   )
 
-  let result = try SourceVersionStatusScanner().scan(path: fixture.path)
+  let result = try await SourceVersionStatusScanner().scan(path: fixture.path)
   let unit = try #require(result.units.first)
   #expect(result.summary.totalUnits == 1)
   #expect(result.summary.zeroMinorCompliant == 1)
@@ -109,7 +109,7 @@ func sourceVersionStatusResolvesXcodeGenSourceCarriers() throws {
 }
 
 @Test("CUJ-07 source version status keeps SwiftPM app builds distinct and verifies runtime linkage")
-func sourceVersionStatusResolvesRuntimeLinkedSwiftPMAppCarrier() throws {
+func sourceVersionStatusResolvesRuntimeLinkedSwiftPMAppCarrier() async throws {
   let fixture = try makeFixtureDirectory(named: "source-version-status-swiftpm")
   defer { try? FileManager.default.removeItem(at: fixture) }
 
@@ -142,7 +142,7 @@ func sourceVersionStatusResolvesRuntimeLinkedSwiftPMAppCarrier() throws {
     to: appHome.appendingPathComponent("Sources/TinyApp/TinyApp.swift")
   )
 
-  let result = try SourceVersionStatusScanner().scan(path: fixture.path)
+  let result = try await SourceVersionStatusScanner().scan(path: fixture.path)
   let unit = try #require(result.units.first)
   #expect(result.summary.totalUnits == 1)
   #expect(result.summary.swiftPMApplicationTargets == 1)
@@ -158,7 +158,7 @@ func sourceVersionStatusResolvesRuntimeLinkedSwiftPMAppCarrier() throws {
 }
 
 @Test("CUJ-07 source version status leaves a partially declared Xcode target unresolved")
-func sourceVersionStatusDoesNotCertifyMissingConfigurationValues() throws {
+func sourceVersionStatusDoesNotCertifyMissingConfigurationValues() async throws {
   let fixture = try makeFixtureDirectory(named: "source-version-status-missing-config")
   defer { try? FileManager.default.removeItem(at: fixture) }
   try writeText(
@@ -180,11 +180,127 @@ func sourceVersionStatusDoesNotCertifyMissingConfigurationValues() throws {
     )
   )
 
-  let result = try SourceVersionStatusScanner().scan(path: fixture.path)
+  let result = try await SourceVersionStatusScanner().scan(path: fixture.path)
   let unit = try #require(result.units.first)
   #expect(unit.versionPolicyStatus == .unresolved)
   #expect(unit.buildNumberStatus == .unresolved)
   #expect(unit.configurations.contains { $0.name == "Release" && $0.marketingVersion == nil })
+}
+
+@Test("CUJ-07 source version status resolves a Pkl app in a product-line app home through its stable entrypoint")
+func sourceVersionStatusResolvesVersionedPklProductLineCarrier() async throws {
+  let fixture = try makeFixtureDirectory(named: "source-version-status-pkl-product-line")
+  defer { try? FileManager.default.removeItem(at: fixture) }
+
+  let appHome = fixture.appendingPathComponent(
+    "collectives/spaces-universal/private/universal/kura-spaces/product-lines/launch-review/apps/tiny-pkl-app"
+  )
+  let projectPkl = appHome.appendingPathComponent("project.pkl")
+  let versionedCarrier = appHome.appendingPathComponent("project-v000_000_001.pkl")
+  try writeText(
+    """
+    class Settings {
+      base: Mapping<String, Any>?
+      configs: Mapping<String, Mapping<String, Any>>?
+    }
+
+    class Target {
+      type: String?
+      platform: String?
+      settings: Settings?
+    }
+
+    class Scheme {
+      shared: Boolean?
+    }
+
+    name: String
+    settings: Settings?
+    packages: Mapping<String, Any> = new {}
+    targets: Mapping<String, Target> = new {}
+    schemes: Mapping<String, Scheme> = new {}
+    """,
+    to: appHome.appendingPathComponent("AppleProjectSpec.pkl")
+  )
+  try writeText(
+    """
+    amends "AppleProjectSpec.pkl"
+
+    name = "tiny-pkl-app"
+
+    settings = new {
+      base = new {
+        ["MARKETING_VERSION"] = "0.0.1"
+        ["CURRENT_PROJECT_VERSION"] = "1"
+      }
+    }
+
+    targets = new {
+      ["TinyPklApp"] = new {
+        type = "application"
+        platform = "macOS"
+      }
+    }
+    """,
+    to: versionedCarrier
+  )
+  try writeText(
+    """
+    /// Active composition entrypoint; the versioned carrier owns the payload.
+    amends "project-v000_000_001.pkl"
+    """,
+    to: projectPkl
+  )
+  try FileManager.default.createDirectory(
+    at: appHome.appendingPathComponent("TinyPklApp.xcodeproj"),
+    withIntermediateDirectories: true
+  )
+
+  let result = try await SourceVersionStatusScanner().scan(path: fixture.path)
+  let unit = try #require(result.units.first)
+  #expect(result.summary.totalUnits == 1)
+  #expect(result.summary.xcodeApplicationTargets == 1)
+  #expect(result.summary.zeroMinorCompliant == 1)
+  #expect(result.summary.sourceDeclaredBuildNumbers == 1)
+  #expect(result.findings.isEmpty)
+  #expect(unit.owner == "spaces-universal")
+  #expect(unit.targetRef.path == projectPkl.path)
+  #expect(unit.targetRef.target == "TinyPklApp")
+  #expect(unit.carrierKind == .pklAppleProject)
+  #expect(unit.authorityStatus == .sourceDeclared)
+  #expect(unit.versionPolicyStatus == .compliant)
+  #expect(unit.buildNumberStatus == .sourceDeclared)
+  #expect(
+    unit.configurations.allSatisfy {
+      $0.marketingVersion == "0.0.1"
+        && $0.marketingVersionCarrierRef == "\(projectPkl.path)#settings.base.MARKETING_VERSION"
+        && $0.buildNumber == "1"
+        && $0.buildNumberCarrierRef == "\(projectPkl.path)#settings.base.CURRENT_PROJECT_VERSION"
+    }
+  )
+}
+
+@Test("CUJ-07 source version status reports an unreadable Pkl entrypoint instead of silently omitting it")
+func sourceVersionStatusReportsUnreadablePklProductLineCarrier() async throws {
+  let fixture = try makeFixtureDirectory(named: "source-version-status-unreadable-pkl")
+  defer { try? FileManager.default.removeItem(at: fixture) }
+
+  let projectPkl = fixture.appendingPathComponent(
+    "collectives/spaces-universal/private/universal/kura-spaces/product-lines/launch-review/apps/broken-pkl-app/project.pkl"
+  )
+  try writeText(
+    """
+    amends "missing-versioned-carrier.pkl"
+    """,
+    to: projectPkl
+  )
+
+  let result = try await SourceVersionStatusScanner().scan(path: fixture.path)
+  #expect(result.units.isEmpty)
+  let finding = try #require(result.findings.first)
+  #expect(result.summary.discoveryFindings == 1)
+  #expect(finding.kind == "unreadable-project-pkl")
+  #expect(finding.sourceRef == projectPkl.path)
 }
 
 @Test("CUJ-07 owned surface inventory finds packages projects and workspaces")

@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" fill="none" role="img" aria-labelledby="title">
+  <title id="title">An active Pkl entrypoint composes a versioned carrier into a source-only version status receipt</title>
+  <rect width="1600" height="900" rx="48" fill="#F8FAFC"/>
+  <rect x="108" y="230" width="292" height="440" rx="36" fill="white" stroke="#0EA5E9" stroke-width="18"/>
+  <path d="M178 340H330M178 412H300M178 484H326" stroke="#0EA5E9" stroke-width="18" stroke-linecap="round"/>
+  <circle cx="254" cy="574" r="42" fill="#0EA5E9"/>
+  <path d="M236 574H272M254 556V592" stroke="white" stroke-width="14" stroke-linecap="round"/>
+  <path d="M428 450H566M536 420L572 450L536 480" stroke="#64748B" stroke-width="18" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="606" y="170" width="390" height="560" rx="42" fill="white" stroke="#7C3AED" stroke-width="18"/>
+  <path d="M694 302H908M694 386H862M694 470H908" stroke="#7C3AED" stroke-width="18" stroke-linecap="round"/>
+  <circle cx="801" cy="586" r="54" fill="#7C3AED"/>
+  <path d="M775 586H827M801 560V612" stroke="white" stroke-width="16" stroke-linecap="round"/>
+  <path d="M1028 450H1168M1138 420L1174 450L1138 480" stroke="#64748B" stroke-width="18" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="1210" y="272" width="282" height="356" rx="40" fill="white" stroke="#16A34A" stroke-width="18"/>
+  <path d="M1284 376H1424M1284 450H1392" stroke="#16A34A" stroke-width="18" stroke-linecap="round"/>
+  <path d="M1300 530L1334 564L1416 482" stroke="#16A34A" stroke-width="20" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

@@ -1059,7 +1059,8 @@ struct VaporizeCLI: AsyncParsableCommand {
       installerBuild: Self.reportedBuildIdentifier,
       swiftToolchainSource: try selectedSwiftToolchainSource(),
       developerDirectory: resolvedDeveloperDirectory,
-      swiftPMConfigPath: try resolvedSwiftPMConfigurationPath(packagePath: packagePath)
+      swiftPMConfigPath: try resolvedSwiftPMConfigurationPath(packagePath: packagePath),
+      swiftPMScratchPath: resolvedSwiftPMScratchPath()
     )
     try await SwiftCLIInstaller(request: request).run()
     try publishInstalledCLI(toDomain: updateDomain, product: product)
@@ -1225,6 +1226,7 @@ struct VaporizeCLI: AsyncParsableCommand {
       swiftToolchainSource: try selectedSwiftToolchainSource(),
       developerDirectory: resolvedDeveloperDirectory,
       swiftPMConfigPath: try resolvedSwiftPMConfigurationPath(packagePath: packagePath),
+      swiftPMScratchPath: resolvedSwiftPMScratchPath(),
       selfUpdateIdentity: try resolvedSelfUpdateIdentity()
     )
     try await measureCoreProcess {
@@ -1706,10 +1708,19 @@ struct VaporizeCLI: AsyncParsableCommand {
 
   private func swiftPMWorkspaceArguments(packagePath: String) throws -> [String] {
     var arguments = try swiftPMConfigurationArguments(packagePath: packagePath)
-    if let swiftPMScratchPath, !swiftPMScratchPath.isEmpty {
-      arguments += ["--scratch-path", absoluteURL(for: swiftPMScratchPath).path]
+    if let scratchPath = resolvedSwiftPMScratchPath() {
+      arguments += ["--scratch-path", scratchPath]
     }
     return arguments
+  }
+
+  private func resolvedSwiftPMScratchPath() -> String? {
+    guard let swiftPMScratchPath = swiftPMScratchPath?.trimmingCharacters(in: .whitespacesAndNewlines),
+      !swiftPMScratchPath.isEmpty
+    else {
+      return nil
+    }
+    return absoluteURL(for: swiftPMScratchPath).path
   }
 
   /// A scratch workspace is an isolated, read-only consumption of the
@@ -2220,7 +2231,7 @@ struct VaporizeCLI: AsyncParsableCommand {
   private func runSourceVersionStatus() async throws {
     let scanPath = try ownedSurfaceInventoryPath()
     let scanner = SourceVersionStatusScanner()
-    let result = try scanner.scan(path: scanPath)
+    let result = try await scanner.scan(path: scanPath)
     let receipt = scanner.receipt(
       from: result,
       reporterVersion: Self.vaporizeVersion,
@@ -2746,7 +2757,7 @@ struct VaporizeCLI: AsyncParsableCommand {
     }
 
     let requestId = "vaporize-compare-project-yml-pkl-\(UUID().uuidString)"
-    let ymlSpec = try AppleProjectYMLReader.load(url: URL(fileURLWithPath: vaporScanPath))
+    let ymlSpec = try AppleProjectYMLReader.loadForPklMigration(url: URL(fileURLWithPath: vaporScanPath))
     let pklSpec = try await AppleProjectPklLoader.load(url: URL(fileURLWithPath: pklPath))
     let receipt = AppleProjectSpecComparator.receipt(
       ymlSpec: ymlSpec,
@@ -2866,7 +2877,7 @@ struct VaporizeCLI: AsyncParsableCommand {
     )
 
     // 2. Parity gate: load the generated pkl back and compare to the yml.
-    let ymlSpec = try AppleProjectYMLReader.load(url: ymlURL)
+    let ymlSpec = try AppleProjectYMLReader.loadForPklMigration(url: ymlURL)
     let pklSpec = try await AppleProjectPklLoader.load(url: pklURL)
     let comparison = AppleProjectSpecComparator.receipt(
       ymlSpec: ymlSpec,

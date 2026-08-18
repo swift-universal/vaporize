@@ -2,18 +2,18 @@
   "BeadsIssue": "0.1.0",
   "schemaVersion": "0.1.0",
   "id": "bug-vaporize-xcode-app-test-lane-2026-08-18",
-  "title": "Enable Vaporize Xcode app test execution",
+  "title": "Preserve Vaporize Xcode app-test source-to-install parity",
   "createdAt": "2026-08-18T03:50:30Z",
   "createdBy": "codex at operator direction",
   "issueType": "bug",
-  "status": "open",
+  "status": "closed",
   "priority": 1,
   "labels": ["vaporize", "xcode", "test", "launch-review", "ttd"],
-  "description": "The approved `vaporize test xcode --artifact app` route rejects a declared Xcode project and scheme with `test mode currently supports SwiftPM package tests only; use --artifact cli.` This prevents app-target TTD and Launch Review core tests from receiving an approved Xcode test receipt.",
+  "description": "Vaporize source already dispatched `test xcode --artifact app` to Xcode, but the installed binary was stale. Refresh initially failed because the CLI installer discarded `--scratch-path` and rebuilt from the incompatible local world state. The installer now carries the isolated workspace through replacement build and product lookup; the refreshed installed binary reaches xcodebuild for app-test requests. The separate Launch Review Xcode world-state migration remains tracked by bug-launch-review-vaporize-generated-xcodeproj-world-state-stale-2026-08-18.",
   "acceptanceCriteria": [
-    "Vaporize accepts a macOS app Xcode project or workspace, scheme, and destination in test mode.",
-    "The command emits a typed test receipt distinguishing project load, build, test execution, and install/run state.",
-    "The app test route does not fall back to direct xcodebuild instructions or claim an installed app, release, or human approval.",
-    "A Launch Review fixture can execute its Xcode unit-test target through the route."
+    "The installed Vaporize binary accepts a macOS app Xcode project or workspace, scheme, and destination in test mode.",
+    "A forced CLI replacement uses the same isolated SwiftPM workspace for build and build-product discovery.",
+    "The app-test route reaches Xcode without claiming an installed app, release, or human approval.",
+    "The separate Launch Review world-state migration is not conflated with this tool source-to-install repair."
   ]
 }

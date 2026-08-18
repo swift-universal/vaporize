@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none" role="img" aria-labelledby="title">
+  <title id="title">A stable Pkl entrypoint composes a versioned source carrier</title>
+  <rect x="58" y="116" width="160" height="280" rx="28" stroke="#0EA5E9" stroke-width="16"/>
+  <path d="M102 188H174M102 240H154M102 292H166" stroke="#0EA5E9" stroke-width="16" stroke-linecap="round"/>
+  <path d="M240 256H286" stroke="#64748B" stroke-width="16" stroke-linecap="round"/>
+  <rect x="308" y="116" width="146" height="280" rx="28" stroke="#7C3AED" stroke-width="16"/>
+  <path d="M350 188H414M350 240H398M350 292H414" stroke="#7C3AED" stroke-width="16" stroke-linecap="round"/>
+  <circle cx="381" cy="342" r="28" fill="#16A34A"/>
+  <path d="M366 342L377 353L398 328" stroke="white" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

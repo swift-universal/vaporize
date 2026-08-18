@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" fill="none" role="img" aria-labelledby="title">
+  <title id="title">A Pkl entrypoint, a versioned carrier, and a source-only version receipt</title>
+  <rect width="1200" height="630" rx="36" fill="#F8FAFC"/>
+  <rect x="86" y="162" width="216" height="306" rx="28" fill="white" stroke="#0EA5E9" stroke-width="14"/>
+  <path d="M136 242H252M136 296H230M136 350H248" stroke="#0EA5E9" stroke-width="14" stroke-linecap="round"/>
+  <path d="M324 315H396M380 291L408 315L380 339" stroke="#64748B" stroke-width="14" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="434" y="130" width="286" height="370" rx="30" fill="white" stroke="#7C3AED" stroke-width="14"/>
+  <path d="M494 218H660M494 280H628M494 342H660" stroke="#7C3AED" stroke-width="14" stroke-linecap="round"/>
+  <circle cx="576" cy="422" r="36" fill="#7C3AED"/>
+  <path d="M560 422H592M576 406V438" stroke="white" stroke-width="12" stroke-linecap="round"/>
+  <path d="M746 315H822M806 291L834 315L806 339" stroke="#64748B" stroke-width="14" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="860" y="192" width="254" height="246" rx="30" fill="white" stroke="#16A34A" stroke-width="14"/>
+  <path d="M916 270H1056M916 326H1026" stroke="#16A34A" stroke-width="14" stroke-linecap="round"/>
+  <path d="M938 382L962 406L1038 330" stroke="#16A34A" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

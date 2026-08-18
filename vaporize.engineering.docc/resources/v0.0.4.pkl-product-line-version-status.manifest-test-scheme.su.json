@@ -1,0 +1,18 @@
+{
+  "schemaVersion": "0.0.1",
+  "kind": "manifest-test-scheme",
+  "slug": "pkl-product-line-version-status-manifest-test-scheme",
+  "upgrade": "vaporize-pkl-product-line-version-status-v0.0.4",
+  "scope": "Vaporize observes source-declared versions for active Apple apps at private/apple/apps/<app> and product-lines/<product-line>/apps/<app>, including evaluated Pkl composition entrypoints.",
+  "commands": [
+    "vaporize.cli@wrkstrm-core.clia.sh test swift --package-path private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli --configuration debug -- --filter VaporizeCUJ07VaporInventoryTests",
+    "vaporize.cli@wrkstrm-core.clia.sh version-status --path <substrate-root> --format json",
+    "pkl eval <product-line>/apps/<app>/project.pkl --format json"
+  ],
+  "toolingBoundary": "The focused test establishes scanner behavior and the Pkl command establishes entrypoint evaluation. The version-status report remains source-only and does not prove generated-project parity, Xcode execution, installed-runtime parity, release, or human approval.",
+  "claims": [
+    "A product-line app home is recognized without relocating it to private/apple/apps.",
+    "A payload-free project.pkl entrypoint may compose a versioned Pkl carrier and be evaluated as the active source carrier.",
+    "Unreadable Pkl source is reported as a finding rather than silently omitted or inferred from generated Xcode state."
+  ]
+}

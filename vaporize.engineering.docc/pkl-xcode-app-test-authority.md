@@ -50,3 +50,7 @@ documented in Vaporize's support catalog.
 The v0.0.3 manifest test scheme for versioned Pkl carriers is carried with this DocC
 bundle at
 `resources/v0.0.3.pkl-versioned-carrier.manifest-test-scheme.su.json`.
+
+The follow-on v0.0.4 manifest captures source-version observation for that same
+Pkl/Xcode authority at
+`resources/v0.0.4.pkl-product-line-version-status.manifest-test-scheme.su.json`.

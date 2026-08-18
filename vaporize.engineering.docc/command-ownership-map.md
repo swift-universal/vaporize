@@ -62,7 +62,7 @@ parameters rather than being flattened into peer command nodes.
 | Project inspection | `inspect-project-yml`, `inspect-target-features`, `compare-project-yml-pkl`, `list-targets`, `list-schemes` | Read and compare project world-state without migrating it. |
 | Project transformation | `import-project-yml`, `upgrade-project-yml-to-pkl`, `generate-project-yml`, `generate-xcodeproj`, `generate-sparkle-config` | Import, upgrade, or generate a named project representation or source artifact. |
 | Release and coverage audit | `release-doctor`, `cuj-audit` | Audit release or CUJ proof state. |
-| Portfolio observation | `inventory`, `domains`, `fleet-status`, `graph` | Report owned project, domain, installed-tool, or package-graph state. |
+| Portfolio observation | `inventory`, `version-status`, `domains`, `fleet-status`, `graph` | Report owned project, source-version, domain, installed-tool, or package-graph state. |
 | Product maintenance | `self-update`, `maintainer-dependencies` | Update Vaporize itself or materialize its maintainer-selected SwiftPM dependency authority. |
 | Compatibility debt | `cli`, `app` | Deprecated spellings retained by the existing artifact lifecycle parser. They are not command-family precedents. |
 
@@ -120,7 +120,7 @@ subcommands and per-command man pages.
 | `--common-process-spec` | `use`. |
 | `--developer-dir` | macOS Apple build/test execution. It does not choose the globally selected Xcode developer directory. |
 | `--xcode-component` | `setup`. |
-| `--path` | Status, warehouse, inventory, CUJ audit, validation, inspection, comparison, import, and target discovery as enumerated by the option help. |
+| `--path` | Status, warehouse, inventory, source-version status, CUJ audit, validation, inspection, comparison, import, and target discovery as enumerated by the option help. |
 | `--schema`, `--fixture`, `--expect` | JSON Schema validation. |
 | `--pkl-path`, `--pkl-schema-path`, `--output-path`, `--output`, `--apply` | Project import, upgrade, and generation. `test xcode --artifact app` also accepts `--pkl-path` as the source-root authority for a generated Xcode project. |
 | `--format` | Typed rendering for the observation, inspection, audit, and generation modes enumerated by the option help. |
