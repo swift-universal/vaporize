@@ -29,6 +29,8 @@ public struct SwiftAppInstaller: Sendable {
     public var xcodeBuildSettings: [String]
     public var swiftPMConfigPath: String?
     public var developerDirectory: String?
+    public var expectedMarketingVersion: String?
+    public var expectedBuildNumber: String?
 
     public init(
       packagePath: String,
@@ -50,7 +52,9 @@ public struct SwiftAppInstaller: Sendable {
       xcodeResultBundlePath: String? = nil,
       xcodeBuildSettings: [String] = [],
       swiftPMConfigPath: String? = nil,
-      developerDirectory: String? = nil
+      developerDirectory: String? = nil,
+      expectedMarketingVersion: String? = nil,
+      expectedBuildNumber: String? = nil
     ) {
       self.packagePath = packagePath
       self.product = product
@@ -72,6 +76,8 @@ public struct SwiftAppInstaller: Sendable {
       self.xcodeBuildSettings = xcodeBuildSettings
       self.swiftPMConfigPath = swiftPMConfigPath
       self.developerDirectory = developerDirectory
+      self.expectedMarketingVersion = expectedMarketingVersion
+      self.expectedBuildNumber = expectedBuildNumber
     }
 
     var swiftPMConfigurationArguments: [String] {
@@ -97,14 +103,17 @@ public struct SwiftAppInstaller: Sendable {
       try await buildApp()
     }
     let builtApp = try locateBuiltApp()
+    try verifyAppIdentity(at: builtApp)
     let destinationApp = URL(fileURLWithPath: request.destination)
       .appendingPathComponent("\(request.product).app")
     try installApp(from: builtApp, to: destinationApp, force: request.forceReinstall)
+    try verifyAppIdentity(at: destinationApp)
     try await launchIfRequested(appPath: destinationApp)
   }
 
   public func buildOnly() async throws {
     try await buildApp()
+    try verifyAppIdentity(at: try locateBuiltApp())
   }
 
   // MARK: - Build
@@ -207,6 +216,51 @@ public struct SwiftAppInstaller: Sendable {
 
   private func installApp(from source: URL, to destination: URL, force: Bool) throws {
     try Self.atomicInstall(from: source, to: destination, force: force)
+  }
+
+  /// Verifies the exact build identity that Vaporize resolved before it starts
+  /// a build. This is deliberately checked at both the built and installed
+  /// bundle boundaries; a source mutation alone is not runtime evidence.
+  func verifyAppIdentity(at appBundle: URL) throws {
+    guard request.expectedMarketingVersion != nil || request.expectedBuildNumber != nil else {
+      return
+    }
+    let infoURL = appBundle.appendingPathComponent("Contents/Info.plist")
+    guard let data = try? Data(contentsOf: infoURL),
+      let info = try? PropertyListSerialization.propertyList(from: data, format: nil)
+        as? [String: Any]
+    else {
+      throw InstallerError.appIdentityUnreadable(infoURL.path)
+    }
+    if let expected = request.expectedMarketingVersion {
+      guard let actual = info["CFBundleShortVersionString"] as? String else {
+        throw InstallerError.appIdentityFieldMissing(
+          appBundle.path,
+          field: "CFBundleShortVersionString"
+        )
+      }
+      guard actual == expected else {
+      throw InstallerError.appIdentityMismatch(
+        appBundle.path,
+        field: "CFBundleShortVersionString",
+        expected: expected,
+        actual: actual
+      )
+      }
+    }
+    if let expected = request.expectedBuildNumber {
+      guard let actual = info["CFBundleVersion"] as? String else {
+        throw InstallerError.appIdentityFieldMissing(appBundle.path, field: "CFBundleVersion")
+      }
+      guard actual == expected else {
+      throw InstallerError.appIdentityMismatch(
+        appBundle.path,
+        field: "CFBundleVersion",
+        expected: expected,
+        actual: actual
+      )
+      }
+    }
   }
 
   /// Atomically install a bundle/directory at `destination`.
@@ -389,6 +443,26 @@ extension SwiftAppInstaller.Request {
     return .init(arguments: args)
   }
 
+  /// Uses the same typed project, scheme, destination, result-bundle, and
+  /// build-setting contract as an app build, but asks Xcode to run the shared
+  /// test action. This deliberately has no SwiftPM package requirement.
+  public func xcodeTestArguments() throws -> [String] {
+    try xcodeTestInvocation().arguments
+  }
+
+  /// Keeps the typed build invocation internal to SwiftAppInstaller while its
+  /// public callers consume only the command arguments they need to execute.
+  func xcodeTestInvocation() throws -> SwiftAppInstaller.XcodeBuildInvocation {
+    var invocation = try xcodeBuildInvocation()
+    guard invocation.arguments.last == "build" else {
+      throw InstallerError.invalidXcodeBuildConfiguration(
+        "xcodebuild test invocation could not derive the build action."
+      )
+    }
+    invocation.arguments[invocation.arguments.count - 1] = "test"
+    return invocation
+  }
+
   private func validateXcodeBuildSettings() throws {
     for setting in xcodeBuildSettings {
       let parts = setting.split(separator: "=", maxSplits: 1, omittingEmptySubsequences: false)
@@ -429,6 +503,9 @@ public enum InstallerError: Error, CustomStringConvertible {
   case invalidXcodeBuildConfiguration(String)
   case invalidXcodeBuildSetting(String)
   case installVerificationFailed(String)
+  case appIdentityUnreadable(String)
+  case appIdentityFieldMissing(String, field: String)
+  case appIdentityMismatch(String, field: String, expected: String, actual: String)
 
   public var description: String {
     switch self {
@@ -446,6 +523,12 @@ public enum InstallerError: Error, CustomStringConvertible {
         remove-then-copy failure mode where the prior install is removed but the new one \
         is never written. Re-run the install; if it recurs, inspect the build/copy step.
         """
+    case .appIdentityUnreadable(let path):
+      return "Cannot read app identity from \(path)."
+    case .appIdentityFieldMissing(let path, let field):
+      return "App identity at \(path) does not declare \(field)."
+    case .appIdentityMismatch(let path, let field, let expected, let actual):
+      return "App identity mismatch at \(path): \(field) expected \(expected), got \(actual)."
     }
   }
 }

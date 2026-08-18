@@ -53,7 +53,7 @@ parameters rather than being flattened into peer command nodes.
 
 | Responsibility | Modes from the man page | Ownership |
 | --- | --- | --- |
-| Artifact lifecycle | `install`, `uninstall`, `build`, `test`, `run` | Build, install, remove, test, or launch CLI and app artifacts. |
+| Artifact lifecycle | `install`, `uninstall`, `build`, `test`, `run` | Build, install, remove, test, or launch CLI and app artifacts. App test uses a declared Xcode project/workspace and shared scheme; it never requires an app `Package.swift`. |
 | Controlled execution | `pass`, `use` | Run forwarded arguments or a typed CommonProcess specification and emit the corresponding evidence. |
 | Toolchain selection | `toolchain-selection` | Select or report the active Swift selection; on macOS, select or report the active Xcode developer directory. |
 | Host provisioning | `setup` | Download a named Xcode component. This is provisioning, not Xcode selection. |
@@ -122,7 +122,7 @@ subcommands and per-command man pages.
 | `--xcode-component` | `setup`. |
 | `--path` | Status, warehouse, inventory, CUJ audit, validation, inspection, comparison, import, and target discovery as enumerated by the option help. |
 | `--schema`, `--fixture`, `--expect` | JSON Schema validation. |
-| `--pkl-path`, `--pkl-schema-path`, `--output-path`, `--output`, `--apply` | Project import, upgrade, and generation. |
+| `--pkl-path`, `--pkl-schema-path`, `--output-path`, `--output`, `--apply` | Project import, upgrade, and generation. `test xcode --artifact app` also accepts `--pkl-path` as the source-root authority for a generated Xcode project. |
 | `--format` | Typed rendering for the observation, inspection, audit, and generation modes enumerated by the option help. |
 | `--bin-dir` | `fleet-status`. |
 | `--domain` | Artifact lifecycle domain routing. |

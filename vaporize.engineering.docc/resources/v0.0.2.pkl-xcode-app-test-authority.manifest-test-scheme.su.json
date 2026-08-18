@@ -1,0 +1,17 @@
+{
+  "schemaVersion": "0.0.1",
+  "kind": "manifest-test-scheme",
+  "slug": "pkl-xcode-app-test-authority-manifest-test-scheme",
+  "upgrade": "vaporize-pkl-xcode-app-test-authority-v0.0.2",
+  "scope": "Vaporize runs a generated Xcode app test action from Pkl and project/scheme authority without a SwiftPM app-project requirement.",
+  "commands": [
+    "vaporize.cli@wrkstrm-core.clia.sh test swift --package-path . --configuration debug -- --filter 'CUJ-02'",
+    "vaporize.cli@wrkstrm-core.clia.sh test xcode --artifact app --pkl-path <app>/project.pkl --xcode-project <app>/<app>.xcodeproj --scheme <scheme> --configuration debug --xcode-destination 'platform=macOS,arch=arm64' --xcode-build-setting CODE_SIGNING_ALLOWED=NO"
+  ],
+  "toolingBoundary": "The Pkl/Xcode app-test source implementation is syntax-checked. Its owned SwiftPM source-test lane is presently blocked in the package resolver, so this scheme does not claim a source test or installed-runtime pass until that separate stall is resolved.",
+  "claims": [
+    "An app test must use the Xcode execution authority.",
+    "A Pkl-authored app may be tested without Package.swift or SwiftPM editable-dependency preparation.",
+    "The tool does not install an app or imply release, terminal evidence, or human approval."
+  ]
+}

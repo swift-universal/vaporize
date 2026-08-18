@@ -52,6 +52,27 @@ func parsesAppInstallModeWithXcodeBuildOptions() throws {
   #expect(command.xcodeBuildSettings == ["CODE_SIGNING_ALLOWED=NO"])
 }
 
+@Test("CUJ-02 parses a Pkl-driven Xcode app test without a SwiftPM app package")
+func parsesPklDrivenXcodeAppTestWithoutSwiftPMPackage() throws {
+  let command = try VaporizeCLI.parse([
+    "test",
+    "xcode",
+    "--artifact", "app",
+    "--pkl-path", "/workspace/app/project.pkl",
+    "--xcode-project", "/workspace/app/App.xcodeproj",
+    "--scheme", "App",
+    "--configuration", "debug",
+    "--xcode-build-setting", "CODE_SIGNING_ALLOWED=NO",
+  ])
+
+  #expect(command.mode == .test)
+  #expect(command.artifact == .app)
+  #expect(command.packagePath == nil)
+  #expect(command.pklPath == "/workspace/app/project.pkl")
+  #expect(command.xcodeProject == "/workspace/app/App.xcodeproj")
+  #expect(command.xcodeScheme == "App")
+}
+
 @Test("CUJ-02 picks Apple build path first")
 func picksAppleBuildPathFirst() throws {
   let tmp = URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent(UUID().uuidString)
@@ -75,6 +96,99 @@ func picksAppleBuildPathFirst() throws {
       for: tmp, configuration: request.configuration, product: request.product
     ).first?.path == applePath.path)
   #expect(try installer.locateBuiltApp().path == applePath.path)
+}
+
+@Test("CUJ-02 verifies the source-resolved version/build pair in an app bundle")
+func verifiesBuiltAppIdentity() throws {
+  let root = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
+  try FileManager.default.createDirectory(at: root, withIntermediateDirectories: true)
+  defer { try? FileManager.default.removeItem(at: root) }
+
+  let app = root.appendingPathComponent("Disk Cleaner.app")
+  let contents = app.appendingPathComponent("Contents")
+  try FileManager.default.createDirectory(at: contents, withIntermediateDirectories: true)
+  let plist: [String: String] = [
+    "CFBundleShortVersionString": "0.0.3",
+    "CFBundleVersion": "4",
+  ]
+  let plistData = try PropertyListSerialization.data(
+    fromPropertyList: plist,
+    format: .xml,
+    options: 0
+  )
+  try plistData.write(to: contents.appendingPathComponent("Info.plist"))
+
+  let request = SwiftAppInstaller.Request(
+    packagePath: root.path,
+    product: "Disk Cleaner",
+    skipBuild: true,
+    expectedMarketingVersion: "0.0.3",
+    expectedBuildNumber: "4"
+  )
+  let installer = SwiftAppInstaller(request: request)
+  try installer.verifyAppIdentity(at: app)
+
+  let wrongBuild = SwiftAppInstaller(
+    request: .init(
+      packagePath: root.path,
+      product: "Disk Cleaner",
+      skipBuild: true,
+      expectedMarketingVersion: "0.0.3",
+      expectedBuildNumber: "5"
+    )
+  )
+  #expect(throws: InstallerError.self) {
+    try wrongBuild.verifyAppIdentity(at: app)
+  }
+}
+
+@Test("CUJ-02 app auto-increment advances the Pkl carrier only with explicit dirty policy")
+func preparesAutoIncrementedAppBuildIdentity() async throws {
+  let root = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
+  try FileManager.default.createDirectory(at: root, withIntermediateDirectories: true)
+  defer { try? FileManager.default.removeItem(at: root) }
+
+  let git = Process()
+  git.executableURL = URL(fileURLWithPath: "/usr/bin/git")
+  git.arguments = ["init", root.path]
+  try git.run()
+  git.waitUntilExit()
+  #expect(git.terminationStatus == 0)
+
+  let pkl = root.appendingPathComponent("project.pkl")
+  try """
+  module diskCleaner
+  settings = new {
+    base = new {
+      [\"CURRENT_PROJECT_VERSION\"] = 3
+      [\"MARKETING_VERSION\"] = \"0.0.3\"
+    }
+  }
+  """.write(to: pkl, atomically: true, encoding: .utf8)
+
+  let baseArguments = [
+    "build",
+    "--artifact", "app",
+    "--package-path", root.path,
+    "--product", "Disk Cleaner",
+    "--pkl-path", pkl.path,
+    "--auto-increment-build",
+  ]
+  let blocked = try VaporizeCLI.parse(baseArguments)
+  do {
+    _ = try await blocked.prepareAppBuildNumberIdentity(for: .build)
+    Issue.record("Expected a dirty source worktree to require explicit policy.")
+  } catch is ValidationError {
+    // Expected: this temporary Pkl is intentionally untracked.
+  }
+
+  let allowed = try VaporizeCLI.parse(baseArguments + ["--allow-dirty-build-number-source"])
+  let identity = try await allowed.prepareAppBuildNumberIdentity(for: .build)
+  #expect(identity?.marketingVersion == "0.0.3")
+  #expect(identity?.buildNumber == 4)
+  #expect(identity?.receipt.previousBuildNumber == 3)
+  #expect(identity?.receipt.nextBuildNumber == 4)
+  #expect(try String(contentsOf: pkl, encoding: .utf8).contains("CURRENT_PROJECT_VERSION\"] = 4"))
 }
 
 @Test("CUJ-02 prefers derived data when provided")
@@ -142,6 +256,34 @@ func buildsTypedXcodeInvocation() throws {
       "CODE_SIGNING_ALLOWED=NO",
       "SKIP_APPLICATION_DEPLOY=YES",
       "build",
+    ])
+}
+
+@Test("CUJ-02 builds typed Xcode app-test invocation without SwiftPM semantics")
+func buildsTypedXcodeAppTestInvocation() throws {
+  let request = SwiftAppInstaller.Request(
+    packagePath: "/workspace/App",
+    product: "Launch Review",
+    configuration: .debug,
+    destination: "/Applications",
+    forceReinstall: false,
+    skipBuild: true,
+    xcodeProject: "/workspace/App/LaunchReview.xcodeproj",
+    xcodeScheme: "launch-review-viewer",
+    derivedDataPath: "/workspace/App/.derived-data",
+    xcodeDestinations: ["platform=macOS,arch=arm64"],
+    xcodeBuildSettings: ["CODE_SIGNING_ALLOWED=NO"]
+  )
+
+  #expect(
+    try request.xcodeTestArguments() == [
+      "-project", "/workspace/App/LaunchReview.xcodeproj",
+      "-scheme", "launch-review-viewer",
+      "-configuration", "Debug",
+      "-destination", "platform=macOS,arch=arm64",
+      "-derivedDataPath", "/workspace/App/.derived-data",
+      "CODE_SIGNING_ALLOWED=NO",
+      "test",
     ])
 }
 

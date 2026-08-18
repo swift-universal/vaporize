@@ -38,6 +38,8 @@ and explicit disposition of remaining XcodeGen surfaces.
 - <doc:command-ownership-map>
 - <doc:swiftpm-cli-resource-bundle-installs>
 - <doc:project-generation-and-migration>
+- <doc:pkl-xcode-app-test-authority>
+- <doc:apple-project-spec-core-external-xcrun-fix-note-2026-08-17>
 - <doc:release-evidence-and-gates>
 - <doc:pre-code-prd-review>
 - <doc:benchmark-and-size-evidence>

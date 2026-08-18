@@ -1,5 +1,6 @@
 import AppleProjectSpecCore
 import ArgumentParser
+import BumpBuildTakumiOrgCore
 import CommonProcess
 import CommonProcessExecutionKit
 import CommonShell
@@ -7,7 +8,9 @@ import Foundation
 import SwiftAppInstaller
 import SwiftCLIInstaller
 import SwiftJSONFormatter
-import Swiftly
+#if canImport(Swiftly)
+  import Swiftly
+#endif
 import TranslateSourceGate
 import VaporizeCLICopy_v000_000_001
 import VaporizeIssueReporting
@@ -17,8 +20,17 @@ import VaporizeJSONSchemaValidation
 enum VaporizeExecutable {
   static func main() async throws {
     if VaporizeInvocation.isToolchainProxy(arguments: CommandLine.arguments) {
+      #if canImport(Swiftly)
       try await SwiftlyProxy.main(includesSystemToolchains: false)
       return
+      #else
+      throw ValidationError(
+        vaporizeCopyFill(
+          VaporizeCLICopy_v000_000_001.CLI.vaporizeToolchainSelectionRequiresAProviderCompiled,
+          ["Swiftly"]
+        )
+      )
+      #endif
     }
 
     await VaporizeCLI.main()
@@ -43,6 +55,13 @@ struct VaporizeCLI: AsyncParsableCommand {
     )
   }
   static var reportedBuildIdentifier: String { reportedBuildMetadata.buildNumber }
+  #if canImport(Swiftly)
+    static let swiftlyToolchainSelectionAvailability =
+      "This build includes the embedded Swiftly toolchain-selection provider."
+  #else
+    static let swiftlyToolchainSelectionAvailability =
+      "This compatibility build omits the optional Swiftly toolchain-selection provider; core build, test, install, and run commands remain available."
+  #endif
   #if os(macOS)
     static let platformToolchainSelectionAbstract =
       " On macOS, the independent `toolchain-selection xcode` provider compiles in the xcode-select selection surface."
@@ -65,7 +84,9 @@ struct VaporizeCLI: AsyncParsableCommand {
         vaporize toolchain-selection xcode -- select <xcode-select-options>
       Swift and Xcode are independent selection domains. Selection does not own
       toolchain lifecycle, general inspection, or execution.
-      """
+
+      \(swiftlyToolchainSelectionAvailability)
+    """
   #else
     static let platformToolchainSelectionAbstract = ""
     static let coreCommandAuthorityDiscussion = """
@@ -82,7 +103,9 @@ struct VaporizeCLI: AsyncParsableCommand {
       Toolchain selection structure:
         vaporize toolchain-selection swift -- use [swiftly-use-options] [selector]
       Selection does not own toolchain lifecycle, general inspection, or execution.
-      """
+
+      \(swiftlyToolchainSelectionAvailability)
+    """
   #endif
 
   static let configuration = CommandConfiguration(
@@ -191,6 +214,9 @@ struct VaporizeCLI: AsyncParsableCommand {
     help: ArgumentHelp(
       VaporizeCLICopy_v000_000_001.CLI.vaporizeSwiftpmConfigurationDirectoryWhenOmittedVaporize))
   var swiftPMConfigurationPathOverride: String?
+
+  @Option(name: .customLong("scratch-path"))
+  var swiftPMScratchPath: String?
 
   @Option(
     name: .customLong("product"),
@@ -327,6 +353,15 @@ struct VaporizeCLI: AsyncParsableCommand {
     name: .customLong("xcode-build-setting"),
     help: ArgumentHelp(VaporizeCLICopy_v000_000_001.CLI.vaporizeBuildSettingPassedToXcodebuildAs))
   var xcodeBuildSettings: [String] = []
+
+  @Flag(name: .customLong("auto-increment-build"))
+  var autoIncrementBuild: Bool = false
+
+  @Flag(name: .customLong("allow-dirty-build-number-source"))
+  var allowDirtyBuildNumberSource: Bool = false
+
+  @Option(name: .customLong("build-number-receipt-path"))
+  var buildNumberReceiptPath: String?
 
   @Flag(
     name: .customLong("analyze"),
@@ -488,7 +523,7 @@ struct VaporizeCLI: AsyncParsableCommand {
     }
 
     let coreExecutionPlan = try coreExecutionPlan(for: mode)
-    try enforceI18nSourcePolicy(for: mode)
+    try await enforceI18nSourcePolicy(for: mode)
     try enforceSwiftUIImportPolicy(for: mode)
 
     if let coreExecutionPlan {
@@ -571,7 +606,7 @@ struct VaporizeCLI: AsyncParsableCommand {
       }
     case .app:
       try await withMaintainerDependencyAuthority(packagePath: try requirePackagePath()) {
-        try await installApp(launchApp: launch)
+        try await installApp(launchApp: launch, buildIdentity: nil)
       }
     }
   }
@@ -589,29 +624,37 @@ struct VaporizeCLI: AsyncParsableCommand {
         try await recorder.measure(.coreCommand) {
           do {
             try validateArtifactAuthority(plan)
+            let buildIdentity = try await prepareAppBuildNumberIdentity(for: mode)
             switch mode {
             case .install:
               try await withMaintainerDependencyAuthority(packagePath: try requirePackagePath()) {
-                try await installArtifact(launchApp: launch)
+                try await installArtifact(launchApp: launch, buildIdentity: buildIdentity)
               }
             case .build:
               try await withMaintainerDependencyAuthority(packagePath: try requirePackagePath()) {
-                try await buildArtifact()
+                try await buildArtifact(buildIdentity: buildIdentity)
               }
             case .test:
-              try await withMaintainerDependencyAuthority(packagePath: try requirePackagePath()) {
+              if artifact == .app {
                 try await testArtifact()
+              } else {
+                try await withMaintainerDependencyAuthority(packagePath: try requirePackagePath()) {
+                  try await testArtifact()
+                }
               }
             case .run:
               if skipInstall {
-                try await runArtifact()
+                try await runArtifact(buildIdentity: buildIdentity)
               } else {
                 try await withMaintainerDependencyAuthority(packagePath: try requirePackagePath()) {
-                  try await runArtifact()
+                  try await runArtifact(buildIdentity: buildIdentity)
                 }
               }
             default:
               preconditionFailure("non-core mode reached core command dispatch")
+            }
+            if let buildIdentity {
+              try writeBuildNumberReceipt(buildIdentity.receipt)
             }
           } catch {
             if let alternate = plan.alternateCommand(invocation: CommandLine.arguments) {
@@ -662,14 +705,17 @@ struct VaporizeCLI: AsyncParsableCommand {
     let artifactPath: String?
     switch artifact {
     case .cli, .tui:
-      artifactPath = product.map { installedCLIPath(product: $0) }
+      if usesIsolatedSwiftPMWorkspace, let product {
+        artifactPath = sourceBuiltCLIExecutablePath(product: product)
+      } else {
+        artifactPath = product.map { installedCLIPath(product: $0) }
+      }
     case .app:
       if let product {
-        let bundleName = await resolvedAppBundleName(product: product) ?? product
-        artifactPath =
-          URL(fileURLWithPath: destination, isDirectory: true)
-          .appendingPathComponent("\(bundleName).app", isDirectory: true)
-          .path
+        // SwiftAppInstaller may locate a debug-named build bundle, but it
+        // installs it under the product name. The receipt must name the
+        // installed runtime, never the intermediate build artifact.
+        artifactPath = vaporizeInstalledAppPath(destination: destination, product: product)
       } else {
         artifactPath = nil
       }
@@ -725,6 +771,97 @@ struct VaporizeCLI: AsyncParsableCommand {
     #endif
   }
 
+  /// Resolves and advances the one declared app build-number source before an
+  /// Xcode build starts. The changed Pkl value, the Xcode override, and later
+  /// bundle verification all use the same number.
+  func prepareAppBuildNumberIdentity(for mode: Mode) async throws
+    -> AppBuildNumberIdentity?
+  {
+    guard autoIncrementBuild else { return nil }
+    guard artifact == .app else {
+      throw ValidationError(VaporizeCLICopy_v000_000_001.CLI.vaporizeAutoIncrementBuildRequiresArtifactApp)
+    }
+    guard !skipBuild else {
+      throw ValidationError(VaporizeCLICopy_v000_000_001.CLI.vaporizeAutoIncrementBuildCannotRunWithSkipBuild)
+    }
+    guard mode != .run || !skipInstall else {
+      throw ValidationError(VaporizeCLICopy_v000_000_001.CLI.vaporizeAutoIncrementBuildCannotRunWithRunSkipInstall)
+    }
+    let packagePath = try requirePackagePath()
+    let product = try requireProduct()
+    guard let pklPath, !pklPath.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
+      throw ValidationError(VaporizeCLICopy_v000_000_001.CLI.vaporizeAutoIncrementBuildRequiresPklPath)
+    }
+
+    let dirty = try await sourceWorktreeIsDirty(packagePath: packagePath)
+    guard !dirty || allowDirtyBuildNumberSource else {
+      throw ValidationError(
+        VaporizeCLICopy_v000_000_001.CLI.vaporizeAutoIncrementBuildRequiresCleanSourceWorktree
+      )
+    }
+
+    let stamped = try PklBuildVersionStamper.stamp(pklURL: absoluteURL(for: pklPath))
+    let timestamp = ISO8601DateFormatter().string(from: Date())
+    let receipt = VaporizeBuildNumberReceipt(
+      kind: "vaporize-app-build-number-receipt",
+      schemaVersion: "0.0.1",
+      capturedAt: timestamp,
+      operation: mode.rawValue,
+      product: product,
+      configuration: configuration.rawValue,
+      bundleMarketingVersion: stamped.marketingVersion,
+      previousBuildNumber: stamped.previousBuild,
+      nextBuildNumber: stamped.newBuild,
+      sourceCarrierPath: stamped.sourcePath,
+      sourceCarrierKind: "pkl-current-project-version",
+      xcodeBuildSetting: "CURRENT_PROJECT_VERSION=\(stamped.newBuild)",
+      dirtyWorktreePolicy: dirty ? "explicitly-allowed" : "clean",
+      evidenceBoundary: "Source Pkl was advanced before build. SwiftAppInstaller verifies the expected marketing/build pair in the built and installed app bundles; this receipt is not release approval."
+    )
+    return AppBuildNumberIdentity(
+      marketingVersion: stamped.marketingVersion,
+      buildNumber: stamped.newBuild,
+      sourceCarrierPath: stamped.sourcePath,
+      receipt: receipt
+    )
+  }
+
+  private func sourceWorktreeIsDirty(packagePath: String) async throws -> Bool {
+    var shell = CommonShell()
+    shell.logOptions = .init(
+      exposure: .none,
+      tags: ["source": "vaporize-build-number", "action": "worktree-status"]
+    )
+    let output = try await measureCoreProcess {
+      try await shell.run(
+        host: .direct,
+        executable: .name("git"),
+        arguments: ["-C", packagePath, "status", "--porcelain"],
+        runnerKind: .auto
+      )
+    }
+    return !output.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+  }
+
+  private func writeBuildNumberReceipt(_ receipt: VaporizeBuildNumberReceipt) throws {
+    let receiptURL: URL
+    if let buildNumberReceiptPath, !buildNumberReceiptPath.isEmpty {
+      receiptURL = absoluteURL(for: buildNumberReceiptPath)
+    } else {
+      let packagePath = try requirePackagePath()
+      let safeProduct = receipt.product.replacingOccurrences(of: "/", with: "-")
+      receiptURL = absoluteURL(for: packagePath)
+        .appendingPathComponent(".build/vaporize/build-number-receipts/\(safeProduct).su.json")
+    }
+    try FileManager.default.createDirectory(
+      at: receiptURL.deletingLastPathComponent(),
+      withIntermediateDirectories: true
+    )
+    let encoder = JSONEncoder()
+    encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
+    try encoder.encode(receipt).write(to: receiptURL, options: .atomic)
+  }
+
   private var resolvedDeveloperDirectory: String? {
     #if os(macOS)
       developerDirectory
@@ -759,7 +896,7 @@ struct VaporizeCLI: AsyncParsableCommand {
 
   /// Fail closed before any canonical build/install/test/run dispatch reaches
   /// SwiftPM or Xcode. Both build systems consume the same i18n-owned AST gate.
-  private func enforceI18nSourcePolicy(for mode: Mode) throws {
+  private func enforceI18nSourcePolicy(for mode: Mode) async throws {
     let selectedArtifact: ArtifactKind
     let selectedPackagePath: String
     let selectedProduct: String
@@ -807,7 +944,7 @@ struct VaporizeCLI: AsyncParsableCommand {
     case .cli: selectedSurfaceKind = .cli
     case .tui: selectedSurfaceKind = .tui
     }
-    let result = try VaporizeI18nSourceGate.enforce(
+    let result = try await VaporizeI18nSourceGate.enforce(
       productDirectory: URL(fileURLWithPath: selectedPackagePath, isDirectory: true),
       productName: selectedProduct,
       surfaceKind: selectedSurfaceKind,
@@ -868,12 +1005,15 @@ struct VaporizeCLI: AsyncParsableCommand {
     )
   }
 
-  private func installArtifact(launchApp: Bool) async throws {
+  private func installArtifact(
+    launchApp: Bool,
+    buildIdentity: AppBuildNumberIdentity?
+  ) async throws {
     switch artifact {
     case .cli, .tui:
       try await installCLI()
     case .app:
-      try await installApp(launchApp: launchApp)
+      try await installApp(launchApp: launchApp, buildIdentity: buildIdentity)
     }
   }
 
@@ -966,7 +1106,7 @@ struct VaporizeCLI: AsyncParsableCommand {
     return SelfUpdateIdentity(feedURL: feedURL, publicEDKeyBase64: key)
   }
 
-  private func buildArtifact() async throws {
+  private func buildArtifact(buildIdentity: AppBuildNumberIdentity?) async throws {
     switch artifact {
     case .cli, .tui:
       try await runSwift(arguments: try swiftBuildArguments())
@@ -975,9 +1115,9 @@ struct VaporizeCLI: AsyncParsableCommand {
       }
     case .app:
       if skipInstall {
-        try await buildAppOnly()
+        try await buildAppOnly(buildIdentity: buildIdentity)
       } else {
-        try await installApp(launchApp: launch)
+        try await installApp(launchApp: launch, buildIdentity: buildIdentity)
       }
     }
   }
@@ -987,21 +1127,80 @@ struct VaporizeCLI: AsyncParsableCommand {
     case .cli, .tui:
       try await runSwiftTests()
     case .app:
-      throw ValidationError(
-        VaporizeCLICopy_v000_000_001.CLI.vaporizeTestModeCurrentlySupportsSwiftpmPackage)
+      try await runXcodeAppTests()
     }
   }
 
-  private func runArtifact() async throws {
+  /// Runs an Xcode app test bundle without treating the application as a
+  /// SwiftPM package. `--pkl-path` is preferred as the project source root;
+  /// an explicit Xcode project or workspace supplies the same root when a Pkl
+  /// carrier is not relevant to the calling surface.
+  private func runXcodeAppTests() async throws {
+    let sourceRoot: String
+    if let pklPath, !pklPath.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+      sourceRoot = absoluteURL(for: pklPath).deletingLastPathComponent().path
+    } else if let xcodeProject, !xcodeProject.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+      sourceRoot = absoluteURL(for: xcodeProject).deletingLastPathComponent().path
+    } else if let xcodeWorkspace,
+      !xcodeWorkspace.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+    {
+      sourceRoot = absoluteURL(for: xcodeWorkspace).deletingLastPathComponent().path
+    } else if let packagePath, !packagePath.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+      // Compatibility only. This is a project directory, not a requirement
+      // for Package.swift or SwiftPM app-project ownership.
+      sourceRoot = absoluteURL(for: packagePath).path
+    } else {
+      sourceRoot = FileManager.default.currentDirectoryPath
+    }
+
+    let request = SwiftAppInstaller.Request(
+      packagePath: sourceRoot,
+      product: xcodeScheme ?? "xcode-app-tests",
+      configuration: configuration,
+      destination: destination,
+      forceReinstall: false,
+      skipBuild: true,
+      xcodeProject: xcodeProject,
+      xcodeWorkspace: xcodeWorkspace,
+      xcodeScheme: xcodeScheme,
+      derivedDataPath: derivedDataPath,
+      xcodeProductCacheWorkspace: xcodeProductCacheWorkspace,
+      xcodeProductCacheDerivedDataPath: xcodeProductCacheDerivedDataPath,
+      xcodeDestinations: xcodeDestinations,
+      xcodeSDK: xcodeSDK,
+      xcodeResultBundlePath: xcodeResultBundlePath,
+      xcodeBuildSettings: xcodeBuildSettings,
+      developerDirectory: resolvedDeveloperDirectory
+    )
+    let arguments = try request.xcodeTestArguments()
+    try await runExecutable(
+      executable: .name("xcodebuild"),
+      arguments: arguments,
+      sourceTag: "vaporize-xcode-app-test",
+      environment: developerDirectoryEnvironment(),
+      additionalTags: [
+        "artifact": "app",
+        "projectAuthority": pklPath == nil ? "xcode" : "pkl-xcode",
+        "testKind": "xcode-app",
+      ]
+    )
+  }
+
+  private func runArtifact(buildIdentity: AppBuildNumberIdentity?) async throws {
     switch artifact {
     case .cli, .tui:
+      if usesIsolatedSwiftPMWorkspace {
+        try await runSwift(arguments: try swiftBuildArguments())
+        try await runSourceBuiltCLI()
+        return
+      }
       if !skipInstall {
         try await installCLI()
       }
       try await runInstalledCLI()
     case .app:
       if !skipInstall {
-        try await installApp(launchApp: true)
+        try await installApp(launchApp: true, buildIdentity: buildIdentity)
       } else {
         try await openInstalledApp()
       }
@@ -1096,7 +1295,10 @@ struct VaporizeCLI: AsyncParsableCommand {
     }
   }
 
-  private func installApp(launchApp: Bool) async throws {
+  private func installApp(
+    launchApp: Bool,
+    buildIdentity: AppBuildNumberIdentity?
+  ) async throws {
     let packagePath = try requirePackagePath()
     let product = try requireProduct()
     let xcodeInputs = try resolvedXcodeAppInputs(packagePath: packagePath, product: product)
@@ -1118,9 +1320,11 @@ struct VaporizeCLI: AsyncParsableCommand {
       xcodeDestinations: xcodeDestinations,
       xcodeSDK: xcodeSDK,
       xcodeResultBundlePath: xcodeResultBundlePath,
-      xcodeBuildSettings: xcodeBuildSettings,
+      xcodeBuildSettings: try resolvedXcodeBuildSettings(buildIdentity: buildIdentity),
       swiftPMConfigPath: try resolvedSwiftPMConfigurationPath(packagePath: packagePath),
-      developerDirectory: resolvedDeveloperDirectory
+      developerDirectory: resolvedDeveloperDirectory,
+      expectedMarketingVersion: buildIdentity?.marketingVersion,
+      expectedBuildNumber: buildIdentity.map { String($0.buildNumber) }
     )
     try await measureCoreProcess {
       try await SwiftAppInstaller(request: request).run()
@@ -1152,7 +1356,7 @@ struct VaporizeCLI: AsyncParsableCommand {
     try fileManager.removeItem(at: installedApp)
   }
 
-  private func buildAppOnly() async throws {
+  private func buildAppOnly(buildIdentity: AppBuildNumberIdentity?) async throws {
     let packagePath = try requirePackagePath()
     let product = try requireProduct()
     let xcodeInputs = try resolvedXcodeAppInputs(packagePath: packagePath, product: product)
@@ -1174,13 +1378,29 @@ struct VaporizeCLI: AsyncParsableCommand {
       xcodeDestinations: xcodeDestinations,
       xcodeSDK: xcodeSDK,
       xcodeResultBundlePath: xcodeResultBundlePath,
-      xcodeBuildSettings: xcodeBuildSettings,
+      xcodeBuildSettings: try resolvedXcodeBuildSettings(buildIdentity: buildIdentity),
       swiftPMConfigPath: try resolvedSwiftPMConfigurationPath(packagePath: packagePath),
-      developerDirectory: resolvedDeveloperDirectory
+      developerDirectory: resolvedDeveloperDirectory,
+      expectedMarketingVersion: buildIdentity?.marketingVersion,
+      expectedBuildNumber: buildIdentity.map { String($0.buildNumber) }
     )
     try await measureCoreProcess {
       try await SwiftAppInstaller(request: request).buildOnly()
     }
+  }
+
+  private func resolvedXcodeBuildSettings(buildIdentity: AppBuildNumberIdentity?) throws -> [String] {
+    guard let buildIdentity else { return xcodeBuildSettings }
+    let hasConflictingBuildNumber = xcodeBuildSettings.contains { setting in
+      setting.split(separator: "=", maxSplits: 1, omittingEmptySubsequences: false).first
+        == "CURRENT_PROJECT_VERSION"
+    }
+    guard !hasConflictingBuildNumber else {
+      throw ValidationError(
+        VaporizeCLICopy_v000_000_001.CLI.vaporizeAutoIncrementBuildCannotComposeManualCurrentProjectVersion
+      )
+    }
+    return xcodeBuildSettings + [buildIdentity.xcodeBuildSetting]
   }
 
   private func runInstalledCLI() async throws {
@@ -1190,6 +1410,15 @@ struct VaporizeCLI: AsyncParsableCommand {
       executable: .path(executablePath),
       arguments: try coreForwardedArguments(),
       sourceTag: "vaporize-run-cli"
+    )
+  }
+
+  private func runSourceBuiltCLI() async throws {
+    let product = try requireCLIProduct()
+    try await runExecutable(
+      executable: .path(sourceBuiltCLIExecutablePath(product: product)),
+      arguments: try coreForwardedArguments(),
+      sourceTag: "vaporize-run-source-built-cli"
     )
   }
 
@@ -1257,6 +1486,15 @@ struct VaporizeCLI: AsyncParsableCommand {
 
   private func installedCLIPath(product: String) -> String {
     installedCLIBinDirectory().appendingPathComponent(product).path
+  }
+
+  func sourceBuiltCLIExecutablePath(product: String) -> String {
+    precondition(usesIsolatedSwiftPMWorkspace)
+    let scratchPath = swiftPMScratchPath!
+      .trimmingCharacters(in: .whitespacesAndNewlines)
+    return absoluteURL(for: scratchPath)
+      .appendingPathComponent("out/Products/\(configuration.rawValue.capitalized)/\(product)")
+      .path
   }
 
   func installedCLIExecutablePath(product: String) throws -> String {
@@ -1441,7 +1679,7 @@ struct VaporizeCLI: AsyncParsableCommand {
   func swiftBuildArguments() throws -> [String] {
     let packagePath = try requirePackagePath()
     let product = try requireCLIProduct()
-    return ["build"] + (try swiftPMConfigurationArguments(packagePath: packagePath)) + [
+    return ["build"] + (try swiftPMWorkspaceArguments(packagePath: packagePath)) + [
       "--package-path", packagePath,
       "-c", configuration.rawValue,
       "--product", product,
@@ -1451,7 +1689,7 @@ struct VaporizeCLI: AsyncParsableCommand {
   func swiftTestArguments() throws -> [String] {
     let packagePath = try requirePackagePath()
     var arguments =
-      ["test"] + (try swiftPMConfigurationArguments(packagePath: packagePath)) + [
+      ["test"] + (try swiftPMWorkspaceArguments(packagePath: packagePath)) + [
         "--package-path", packagePath,
         "-c", configuration.rawValue,
       ]
@@ -1466,6 +1704,23 @@ struct VaporizeCLI: AsyncParsableCommand {
     return ["--config-path", path]
   }
 
+  private func swiftPMWorkspaceArguments(packagePath: String) throws -> [String] {
+    var arguments = try swiftPMConfigurationArguments(packagePath: packagePath)
+    if let swiftPMScratchPath, !swiftPMScratchPath.isEmpty {
+      arguments += ["--scratch-path", absoluteURL(for: swiftPMScratchPath).path]
+    }
+    return arguments
+  }
+
+  /// A scratch workspace is an isolated, read-only consumption of the
+  /// maintainer mirror configuration.  It must not mutate the caller's
+  /// Package.resolved through `swift package edit`; the mirrors already name
+  /// the authoritative local upstream homes.
+  var usesIsolatedSwiftPMWorkspace: Bool {
+    guard let swiftPMScratchPath else { return false }
+    return !swiftPMScratchPath.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+  }
+
   private func resolvedSwiftPMConfigurationPath(packagePath: String) throws -> String? {
     try MaintainerSwiftPMConfiguration.resolve(
       explicitPath: swiftPMConfigurationPathOverride,
@@ -1477,6 +1732,9 @@ struct VaporizeCLI: AsyncParsableCommand {
     packagePath: String,
     operation: () async throws -> Result
   ) async throws -> Result {
+    guard !usesIsolatedSwiftPMWorkspace else {
+      return try await operation()
+    }
     let dependencies = try MaintainerSwiftPMConfiguration.editableDependencies(
       packagePath: packagePath
     )
@@ -1487,7 +1745,7 @@ struct VaporizeCLI: AsyncParsableCommand {
     let snapshot = try PackageResolutionSnapshot.capture(packagePath: packagePath)
     do {
       let prepare = {
-        let configurationArguments = try swiftPMConfigurationArguments(
+        let configurationArguments = try swiftPMWorkspaceArguments(
           packagePath: packagePath
         )
         for dependency in dependencies where dependency.requiresEdit {
@@ -1772,6 +2030,7 @@ struct VaporizeCLI: AsyncParsableCommand {
   /// Runs Swiftly's selection implementation in this process. Swiftly remains
   /// an implementation dependency, not a Vaporize command name or subprocess.
   private func runSwiftToolchainSelection(arguments: [String]) async throws {
+    #if canImport(Swiftly)
     let rootCommandName =
       Self.configuration.commandName
       ?? "vaporize.cli@wrkstrm-core.clia.sh"
@@ -1801,6 +2060,14 @@ struct VaporizeCLI: AsyncParsableCommand {
         processIdentifier: nil
       )
     )
+    #else
+    throw ValidationError(
+      vaporizeCopyFill(
+        VaporizeCLICopy_v000_000_001.CLI.vaporizeToolchainSelectionRequiresAProviderCompiled,
+        ["Swiftly"]
+      )
+    )
+    #endif
   }
 
   #if os(macOS)
@@ -3252,14 +3519,19 @@ struct VaporizeCLI: AsyncParsableCommand {
   }
 
   func swiftCommandEnvironment() -> [String: String]? {
+    var environment: [String: String] = [:]
+    if usesIsolatedSwiftPMWorkspace {
+      // Swiftly independently selects its Subprocess dependency with this
+      // flag. The isolated workspace must consume the same local upstream as
+      // the source package, rather than resolve the older remote pin.
+      environment["SWIFTPM_USE_LOCAL_DEPS"] = "1"
+    }
     #if os(macOS)
-      guard let source = try? selectedSwiftToolchainSource(), source == .xcode else {
-        return nil
+      if let source = try? selectedSwiftToolchainSource(), source == .xcode {
+        environment.merge(developerDirectoryEnvironment() ?? [:]) { _, new in new }
       }
-      return developerDirectoryEnvironment()
-    #else
-      return nil
     #endif
+    return environment.isEmpty ? nil : environment
   }
 
   private func validateSelectedSwiftCompatibility(arguments: [String]) async throws {
@@ -3386,6 +3658,12 @@ struct VaporizeCLI: AsyncParsableCommand {
     }
     return try await operation()
   }
+}
+
+func vaporizeInstalledAppPath(destination: String, product: String) -> String {
+  URL(fileURLWithPath: destination, isDirectory: true)
+    .appendingPathComponent("\(product).app", isDirectory: true)
+    .path
 }
 
 struct SwiftToolchainVersion: Comparable, CustomStringConvertible, Equatable, Sendable {
