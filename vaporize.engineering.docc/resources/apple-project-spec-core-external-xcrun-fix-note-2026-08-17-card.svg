@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" fill="none" role="img" aria-labelledby="title">
+  <title id="title">A Pkl source, generated Xcode project, and xcrun proof remain distinct evidence stages</title>
+  <rect x="98" y="156" width="220" height="318" rx="30" stroke="#0EA5E9" stroke-width="14"/>
+  <path d="M146 238H270M146 292H250M146 346H226" stroke="#0EA5E9" stroke-width="14" stroke-linecap="round"/>
+  <path d="M332 315H398" stroke="#64748B" stroke-width="14" stroke-linecap="round"/>
+  <path d="M548 160L684 238V392L548 470L412 392V238L548 160Z" stroke="#7C3AED" stroke-width="14" stroke-linejoin="round"/>
+  <path d="M698 315H810" stroke="#64748B" stroke-width="14" stroke-linecap="round"/>
+  <circle cx="930" cy="315" r="106" stroke="#D97706" stroke-width="14"/>
+  <path d="M884 315H976M930 269V361" stroke="#D97706" stroke-width="14" stroke-linecap="round"/>
+  <path d="M1050 315H1075" stroke="#64748B" stroke-width="14" stroke-linecap="round"/>
+  <path d="M1090 315L1122 347L1170 277" stroke="#16A34A" stroke-width="14" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

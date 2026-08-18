@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none" role="img" aria-labelledby="title">
+  <title id="title">Source declaration is rendered to a verified external project</title>
+  <rect x="78" y="156" width="152" height="200" rx="24" stroke="#0EA5E9" stroke-width="16"/>
+  <path d="M116 214H192M116 256H174M116 298H154" stroke="#0EA5E9" stroke-width="16" stroke-linecap="round"/>
+  <path d="M248 256H254" stroke="#64748B" stroke-width="16" stroke-linecap="round"/>
+  <path d="M368 136L464 192V320L368 376L272 320V192L368 136Z" stroke="#7C3AED" stroke-width="16" stroke-linejoin="round"/>
+  <path d="M324 256L354 286L416 218" stroke="#16A34A" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

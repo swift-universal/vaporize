@@ -1,0 +1,61 @@
+{
+  "schemaVersion": "0.0.1",
+  "kind": "docc-page-identity-review-plan",
+  "status": "framed",
+  "createdAt": "2026-08-17T16:58:00Z",
+  "reviewActivityID": "activity-apple-project-spec-core-external-xcrun-fix-note-page-identity-review-v000-000-001-2026-08-17",
+  "bundlePath": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/vaporize.engineering.docc",
+  "visualIntent": "A Pkl declaration is rendered to an external Xcode world-state, exercised by the platform, and held apart from the later migration authority. The transparent structural diagrams use role colors rather than background panels so the evidence grammar survives light and dark DocC readers.",
+  "semanticColors": {
+    "source": "#0EA5E9",
+    "generatedWorldState": "#7C3AED",
+    "platformExecution": "#D97706",
+    "passedMachineProof": "#16A34A",
+    "neutralEvidenceLinkage": "#64748B"
+  },
+  "sourceRules": [
+    "Transparent SVG canvas; no background rectangles, fills, or gradients.",
+    "No external resources, scripts, CSS dependencies, or embedded text.",
+    "Connections meet semantic marks only at deliberate endpoints; no accidental stroke intersections.",
+    "Semantic color is reinforced by distinct geometry and page-owned alternate text."
+  ],
+  "pages": [
+    {
+      "slug": "apple-project-spec-core-external-xcrun-fix-note-2026-08-17",
+      "concept": "Pkl source, generated Xcode world-state, xcrun platform proof, and future migration authority remain visibly distinct.",
+      "assets": [
+        "apple-project-spec-core-external-xcrun-fix-note-2026-08-17-icon.svg",
+        "apple-project-spec-core-external-xcrun-fix-note-2026-08-17-card.svg",
+        "apple-project-spec-core-external-xcrun-fix-note-2026-08-17-hero.svg"
+      ]
+    }
+  ],
+  "reviewStages": {
+    "source": "completed-source-native",
+    "doccConversion": "completed",
+    "renderedLight": "pending",
+    "renderedDark": "pending",
+    "digikoma": "pending",
+    "cpoDecision": "pending-human"
+  },
+  "sourceReview": {
+    "recordedAt": "2026-08-17T17:16:00Z",
+    "record": "source-geometry-review.md",
+    "digestManifest": "active-source-digests.sha256",
+    "checks": [
+      "xmllint --noout passed for the exact three-source denominator",
+      "source guard passed for scripts, CSS, gradients, and filled canvas rectangles",
+      "native raster inspection found no clipping, accidental intersection, or source-art overlap"
+    ],
+    "nonClaims": [
+      "No rendered light or dark DocC capture is recorded.",
+      "No Digikoma visual judgment is recorded.",
+      "No CPO decision is recorded."
+    ]
+  },
+  "nonClaims": [
+    "DocC source conversion is recorded, but this plan does not prove a retained rendered light or dark capture.",
+    "This plan does not prove installed Vaporize behavior, a standalone generator package, or consumer migration.",
+    "This plan does not imply Digikoma or CPO visual acceptance."
+  ]
+}

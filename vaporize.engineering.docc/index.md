@@ -39,6 +39,9 @@ and explicit disposition of remaining XcodeGen surfaces.
 - <doc:swiftpm-cli-resource-bundle-installs>
 - <doc:project-generation-and-migration>
 - <doc:pkl-xcode-app-test-authority>
+- <doc:pkl-source-version-status>
+- <doc:temporal-candidate-and-explicit-release-request-v001-2608-18050>
+- <doc:temporal-candidate-and-explicit-release-request-cuj-v001-2608-18050>
 - <doc:apple-project-spec-core-external-xcrun-fix-note-2026-08-17>
 - <doc:release-evidence-and-gates>
 - <doc:pre-code-prd-review>
