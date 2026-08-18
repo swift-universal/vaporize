@@ -1,0 +1,19 @@
+{
+  "schemaVersion": "0.0.1",
+  "kind": "manifest-test-scheme",
+  "slug": "pkl-versioned-carrier-manifest-test-scheme",
+  "upgrade": "vaporize-pkl-versioned-carrier-v0.0.3",
+  "scope": "A versioned Pkl carrier owns an Apple project payload; project.pkl is a payload-free active composition entrypoint when discovery requires it.",
+  "commands": [
+    "pkl eval <app>/project.pkl --format json",
+    "pkl eval <app>/project-v000_000_001.pkl --format json",
+    "vaporize.cli@wrkstrm-core.clia.sh generate-xcodeproj --pkl-path <app>/project-v000_000_001.pkl --output-path <app>/<app>.xcodeproj --format json",
+    "vaporize.cli@wrkstrm-core.clia.sh test xcode --artifact app --pkl-path <app>/project-v000_000_001.pkl --xcode-project <app>/<app>.xcodeproj --scheme <scheme> --configuration debug --xcode-destination 'platform=macOS,arch=arm64' --xcode-build-setting CODE_SIGNING_ALLOWED=NO"
+  ],
+  "toolingBoundary": "The first two commands establish composition equivalence; project generation proves source world-state only. The final app-test command requires a source-tested installed Vaporize that contains the Pkl/Xcode app-test bridge.",
+  "claims": [
+    "The versioned carrier names a v0.0.x project payload.",
+    "The composition entrypoint contains no target configuration payload.",
+    "A generated Xcode project remains distinct from installed-runtime and release evidence."
+  ]
+}
