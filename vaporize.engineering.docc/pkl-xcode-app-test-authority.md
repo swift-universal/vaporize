@@ -1,11 +1,11 @@
+# Pkl Xcode App Test Authority
+
 @Metadata {
   @PageKind(article)
   @PageColor(blue)
   @TitleHeading("Pkl Xcode App Test Authority")
   @Available(macOS, introduced: "0.0.1")
 }
-
-# Pkl Xcode App Test Authority
 
 A native Apple application is an Xcode project authored from `project.pkl`.
 It is not a SwiftPM application merely because its Xcode target imports local
