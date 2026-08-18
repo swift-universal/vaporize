@@ -1,0 +1,18 @@
+{
+  "BeadsIssue": "0.1.0",
+  "schemaVersion": "0.1.0",
+  "id": "bug-vaporize-xcode-test-failure-receipt-2026-08-18",
+  "title": "Emit a typed Vaporize receipt when an Xcode test command fails",
+  "createdAt": "2026-08-18T08:00:00Z",
+  "createdBy": "codex at operator direction",
+  "issueType": "bug",
+  "status": "open",
+  "priority": 1,
+  "labels": ["vaporize", "xcode", "test", "receipt", "launch-review"],
+  "description": "Vaporize was invoked with --analyze and --receipt-path for the generated Launch Review Xcode candidate. Xcode reached terminal status 65 with 55 passing and 12 failing tests, but Vaporize returned ProcessError without writing the requested receipt. Failed execution needs a typed receipt containing command authority, status, elapsed time, result-bundle path, and failure classification so Launch Review can fail closed with durable evidence.",
+  "acceptanceCriteria": [
+    "Vaporize writes a valid typed test receipt at --receipt-path for both passing and failing Xcode test executions.",
+    "A failing fixture proves that the receipt records non-passing status without claiming a successful test or release.",
+    "The receipt carries the selected Xcode authority, terminal process status, elapsed time, and result-bundle path when supplied."
+  ]
+}
