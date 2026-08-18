@@ -1,3 +1,5 @@
+# CUJ: Materialize A Temporal Candidate
+
 @Metadata {
   @PageKind(article)
   @PageColor(blue)
@@ -6,8 +8,6 @@
   @PageImage(purpose: card, source: "temporal-candidate-and-explicit-release-request-cuj-v001-2608-18050-card", alt: "Three bounded temporal materialization journeys branching from one validated handoff")
   @Available(platform: macOS, introduced: "0.0.1")
 }
-
-# CUJ: Materialize A Temporal Candidate
 
 @Image(source: "temporal-candidate-and-explicit-release-request-cuj-v001-2608-18050-hero", alt: "A validated temporal handoff branches into candidate, explicit release-request, and no-mutation refusal journeys")
 

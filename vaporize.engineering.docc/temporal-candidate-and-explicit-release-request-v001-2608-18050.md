@@ -1,3 +1,5 @@
+# Temporal Candidate And Explicit Release Request
+
 @Metadata {
   @PageKind(article)
   @PageColor(blue)
@@ -6,8 +8,6 @@
   @PageImage(purpose: card, source: "temporal-candidate-and-explicit-release-request-v001-2608-18050-card", alt: "A temporal source coordinate flowing through separate candidate and release-request decisions")
   @Available(platform: macOS, introduced: "0.0.1")
 }
-
-# Temporal Candidate And Explicit Release Request
 
 @Image(source: "temporal-candidate-and-explicit-release-request-v001-2608-18050-hero", alt: "A temporal source coordinate flows into a default candidate lane and an explicit release-request lane while refusals stop before mutation")
 

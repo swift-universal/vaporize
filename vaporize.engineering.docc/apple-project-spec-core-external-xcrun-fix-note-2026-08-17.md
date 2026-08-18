@@ -1,3 +1,5 @@
+# AppleProjectSpecCore: External `xcrun` Materialization Fix Note
+
 @Metadata {
   @PageKind(article)
   @PageColor(blue)
@@ -6,8 +8,6 @@
   @PageImage(purpose: card, source: "apple-project-spec-core-external-xcrun-fix-note-2026-08-17-card", alt: "Pkl source, generated project, xcrun execution, and proof remain distinct")
   @Available(macOS, introduced: "0.0.1")
 }
-
-# AppleProjectSpecCore: External `xcrun` Materialization Fix Note
 
 @Image(source: "apple-project-spec-core-external-xcrun-fix-note-2026-08-17-hero", alt: "Four separate stations show Pkl source, generated Xcode project, xcrun build proof, and later migration authority")
 
