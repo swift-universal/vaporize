@@ -1,0 +1,19 @@
+{
+  "BeadsIssue": "0.1.0",
+  "schemaVersion": "0.1.0",
+  "id": "bug-vaporize-xcode-app-test-lane-2026-08-18",
+  "title": "Enable Vaporize Xcode app test execution",
+  "createdAt": "2026-08-18T03:50:30Z",
+  "createdBy": "codex at operator direction",
+  "issueType": "bug",
+  "status": "open",
+  "priority": 1,
+  "labels": ["vaporize", "xcode", "test", "launch-review", "ttd"],
+  "description": "The approved `vaporize test xcode --artifact app` route rejects a declared Xcode project and scheme with `test mode currently supports SwiftPM package tests only; use --artifact cli.` This prevents app-target TTD and Launch Review core tests from receiving an approved Xcode test receipt.",
+  "acceptanceCriteria": [
+    "Vaporize accepts a macOS app Xcode project or workspace, scheme, and destination in test mode.",
+    "The command emits a typed test receipt distinguishing project load, build, test execution, and install/run state.",
+    "The app test route does not fall back to direct xcodebuild instructions or claim an installed app, release, or human approval.",
+    "A Launch Review fixture can execute its Xcode unit-test target through the route."
+  ]
+}
