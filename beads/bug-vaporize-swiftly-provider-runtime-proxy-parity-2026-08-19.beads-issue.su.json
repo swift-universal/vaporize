@@ -1,0 +1,36 @@
+{
+  "BeadsIssue": "0.1.0",
+  "schemaVersion": "0.1.0",
+  "id": "bug-vaporize-swiftly-provider-runtime-proxy-parity-2026-08-19",
+  "title": "Bug — prevent a provider-disabled Vaporize install from breaking the Swiftly swift proxy",
+  "createdAt": "2026-08-19T00:00:00Z",
+  "createdBy": "codex after operator-directed toolchain repair",
+  "owner": "vaporize.cli@wrkstrm-core.clia.sh",
+  "issueType": "bug",
+  "status": "open",
+  "priority": 1,
+  "labels": [
+    "bug",
+    "vaporize",
+    "swiftly",
+    "installed-runtime",
+    "toolchain-selection",
+    "source-install-parity"
+  ],
+  "description": "On this host, the installed Vaporize compatibility build omitted its embedded Swiftly provider but was registered as ~/.swiftly/bin/swift. Consequently, bare `swift --version` terminated with `toolchain-selection requires a provider compiled for this host: Swiftly`. Swiftly's global default also named a removed 6.4 snapshot. Installing Swift 6.3.3 and selecting it as the global default restored ~/.swiftly/bin/swift to the Swiftly proxy and made bare Swift work, but the installed Vaporize capability/proxy mismatch remains a product defect. The existing BUG-VAPORIZE-XCODE27-SWIFTLY-INPUT-PROTOCOL-2026-08-17 tracks the upstream compile cause; this Bead tracks the installed-runtime safety contract.",
+  "actualBehavior": "A provider-disabled installed Vaporize binary can occupy Swiftly's `swift` proxy path, making the default Swift command unusable. Its help reports that the optional Swiftly provider is omitted, while its proxy invocation fails before reaching a selected toolchain.",
+  "expectedBehavior": "A Vaporize installation without an embedded Swiftly provider must not become the active Swiftly `swift` proxy. When Vaporize owns that proxy, its embedded selection provider must be present and the selected toolchain must resolve successfully.",
+  "acceptanceCriteria": [
+    "The installed-runtime installer records whether the Vaporize build contains the Swiftly provider before it can be registered as a Swiftly command proxy.",
+    "A provider-disabled compatibility build cannot replace ~/.swiftly/bin/swift; direct Swiftly proxy behavior remains intact.",
+    "An installed Vaporize build that owns the proxy proves `vaporize toolchain-selection swift -- use` and `swift --version` against an installed selected toolchain.",
+    "A regression test covers both provider-enabled and provider-disabled installation outcomes without relying on pre-existing user toolchain state.",
+    "The repair links or closes only after the Xcode 27 InputProtocol compatibility Bead and installed-runtime parity evidence identify a build with the provider restored or a safe non-proxy installation mode."
+  ],
+  "relatedBeads": [
+    "BUG-VAPORIZE-XCODE27-SWIFTLY-INPUT-PROTOCOL-2026-08-17",
+    "bug-vaporize-installed-cli-source-exclude-parity-2026-08-16"
+  ],
+  "sourceType": "operator-observed-installed-runtime-toolchain-defect",
+  "sourceLocation": "/Users/sonoma/.swiftpm/bin/vaporize.cli@wrkstrm-core.clia.sh"
+}
