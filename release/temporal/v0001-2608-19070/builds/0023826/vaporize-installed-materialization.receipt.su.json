@@ -1,0 +1,41 @@
+{
+  "vaporize-installed-materialization-receipt": "v0001_2608_19070",
+  "materializedAt": "2026-08-19T07:43:29Z",
+  "operation": "install",
+  "technicalState": "installed-runtime-verified",
+  "sourceCoordinate": "v0001_2608_19070",
+  "sourceContractPath": "release/temporal/v0001-2608-19070/vaporize-source-contract.candidate.su.json",
+  "sourceContractDigest": "25bac15e405d343976610941d2eff0980eb2d0483a11ae97610802dac15596d3",
+  "resolvingVersion": "1.2608.19070",
+  "buildSequence": 2,
+  "mintMMSS": "3826",
+  "buildMMSS": "0023826",
+  "fullReleaseVersion": "1.2608.19070+0023826",
+  "executionAuthority": "xcode",
+  "installedArtifact": {
+    "product": "vaporize.cli@wrkstrm-core.clia.sh",
+    "path": "/Users/sonoma/.swiftpm/bin/vaporize.cli@wrkstrm-core.clia.sh",
+    "sha256": "911bf8ecc34842681a1b7efd63db55dec927c8f2f3e73c3c4ab93ac3cb5ceb25",
+    "sidecarAuthority": "installed-sidecar",
+    "CFBundleShortVersionString": "1.2608.19070",
+    "CFBundleVersion": "0023826",
+    "VaporizeProductBuildSHA": "25bac15e405d343976610941d2eff0980eb2d0483a11ae97610802dac15596d3",
+    "VaporizeProductBuildDate": "2026-08-19T07:38:26Z"
+  },
+  "verification": [
+    "installed --version reports 1.2608.19070 build 0023826",
+    "CFBundleVersion preserves BuildMMSS 0023826",
+    "BuildMMSS sequence 002 has UTC mint minute-second 3826",
+    "Swiftly-backed default swift still resolves Apple Swift 6.3.3"
+  ],
+  "claims": [
+    "technical-build-completed",
+    "installed-runtime-identity-verified",
+    "BuildMMSS-temporal-build-provenance-materialized"
+  ],
+  "nonClaims": [
+    "not-a-published-release",
+    "not-human-approved",
+    "not-a-forward-source-package-successor"
+  ]
+}

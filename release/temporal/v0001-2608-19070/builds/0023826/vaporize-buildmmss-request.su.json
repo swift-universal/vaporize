@@ -1,0 +1,36 @@
+{
+  "vaporize-buildmmss-request": "v0001_2608_19070",
+  "intent": "corrective-installed-runtime-materialization",
+  "requestedAt": "2026-08-19T07:38:26Z",
+  "supersedesMaterialization": "release/temporal/v0001-2608-19070/vaporize-installed-materialization.receipt.su.json",
+  "sourceCoordinate": "v0001_2608_19070",
+  "sourceContractPath": "release/temporal/v0001-2608-19070/vaporize-source-contract.candidate.su.json",
+  "sourceContractDigest": "25bac15e405d343976610941d2eff0980eb2d0483a11ae97610802dac15596d3",
+  "sourceCoordinateAuthority": "calendar-origin-coordinate-v0001_2608_19060",
+  "governingBuildProvenanceStandard": {
+    "artifact": "private/universal/kura-spaces/collections/versioning/swift-package-resolving-coordinate.v001_2608_18030.standard.docc",
+    "standardRelease": "1.2608.18030+0012128",
+    "fullReleaseGrammar": "Major.YYMM.DDHHRevision+BuildMMSS"
+  },
+  "resolvingVersion": "1.2608.19070",
+  "buildSequence": 2,
+  "mintMMSS": "3826",
+  "buildMMSS": "0023826",
+  "fullReleaseVersion": "1.2608.19070+0023826",
+  "carrierProjection": {
+    "CFBundleShortVersionString": "1.2608.19070",
+    "CFBundleVersion": "0023826",
+    "VaporizeProductBuildSHA": "25bac15e405d343976610941d2eff0980eb2d0483a11ae97610802dac15596d3",
+    "VaporizeProductBuildDate": "2026-08-19T07:38:26Z"
+  },
+  "claims": [
+    "BuildMMSS-carries-UTC-minute-and-second",
+    "build-provenance-remains-outside-source-coordinate",
+    "corrective-materialization-request"
+  ],
+  "nonClaims": [
+    "not-a-published-release",
+    "not-human-approved",
+    "not-a-forward-source-package-successor"
+  ]
+}

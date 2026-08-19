@@ -1,0 +1,34 @@
+{
+  "vaporize-buildmmss-correction-receipt": "v0001_2608_19070",
+  "recordedAt": "2026-08-19T07:43:29Z",
+  "correction": "Build provenance must carry UTC minute and second in BuildMMSS; the earlier four-digit counter did not meet that grammar.",
+  "supersededMaterialization": {
+    "receiptPath": "release/temporal/v0001-2608-19070/vaporize-installed-materialization.receipt.su.json",
+    "fullReleaseVersion": "1.2608.19070+0001",
+    "carrier": "0001",
+    "disposition": "retained-historical-nonconforming-materialization"
+  },
+  "replacementMaterialization": {
+    "receiptPath": "release/temporal/v0001-2608-19070/builds/0023826/vaporize-installed-materialization.receipt.su.json",
+    "fullReleaseVersion": "1.2608.19070+0023826",
+    "buildSequence": 2,
+    "mintMMSS": "3826",
+    "buildMMSS": "0023826",
+    "disposition": "current-installed-runtime-materialization"
+  },
+  "governingBuildProvenanceStandard": {
+    "artifact": "private/universal/kura-spaces/collections/versioning/swift-package-resolving-coordinate.v001_2608_18030.standard.docc",
+    "standardRelease": "1.2608.18030+0012128",
+    "fullReleaseGrammar": "Major.YYMM.DDHHRevision+BuildMMSS"
+  },
+  "claims": [
+    "forward-correction",
+    "historical-record-retained",
+    "installed-runtime-replaced-with-BuildMMSS"
+  ],
+  "nonClaims": [
+    "not-a-published-release",
+    "not-human-approved",
+    "not-a-source-coordinate-change"
+  ]
+}
