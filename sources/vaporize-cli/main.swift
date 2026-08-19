@@ -54,6 +54,11 @@ struct VaporizeCLI: AsyncParsableCommand {
       fallbackBuildDate: buildDate
     )
   }
+  /// The installed sidecar owns the materialized artifact version. The source
+  /// fallback remains useful for an uninstalled development product.
+  static var reportedVersion: String {
+    reportedBuildMetadata.sidecarVersion ?? vaporizeVersion
+  }
   static var reportedBuildIdentifier: String { reportedBuildMetadata.buildNumber }
   #if canImport(Swiftly)
     static let swiftlyToolchainSelectionAvailability =
@@ -1051,11 +1056,11 @@ struct VaporizeCLI: AsyncParsableCommand {
       product: product,
       configuration: .init(rawValue: configuration.rawValue) ?? .release,
       forceReinstall: true,
-      productVersion: Self.vaporizeVersion,
+      productVersion: Self.reportedVersion,
       productBuild: Self.reportedBuildIdentifier,
       productBuildSha: Self.buildSha,
       productBuildDate: Self.buildDate,
-      installerVersion: Self.vaporizeVersion,
+      installerVersion: Self.reportedVersion,
       installerBuild: Self.reportedBuildIdentifier,
       swiftToolchainSource: try selectedSwiftToolchainSource(),
       developerDirectory: resolvedDeveloperDirectory,
@@ -1221,7 +1226,7 @@ struct VaporizeCLI: AsyncParsableCommand {
       productBuild: resolvedProductBuild(for: product),
       productBuildSha: resolvedProductBuildSha(for: product),
       productBuildDate: resolvedProductBuildDate(for: product),
-      installerVersion: Self.vaporizeVersion,
+      installerVersion: Self.reportedVersion,
       installerBuild: Self.reportedBuildIdentifier,
       swiftToolchainSource: try selectedSwiftToolchainSource(),
       developerDirectory: resolvedDeveloperDirectory,
@@ -1945,7 +1950,7 @@ struct VaporizeCLI: AsyncParsableCommand {
   }
 
   private func resolvedProductVersion(for product: String) -> String? {
-    productVersion ?? (product == Self.configuration.commandName ? Self.vaporizeVersion : nil)
+    productVersion ?? (product == Self.configuration.commandName ? Self.reportedVersion : nil)
   }
 
   private func resolvedProductBuild(for product: String) -> String? {
@@ -1965,12 +1970,12 @@ struct VaporizeCLI: AsyncParsableCommand {
     print(
       vaporizeCopyFill(
         VaporizeCLICopy_v000_000_001.CLI.vaporizeVaporizeCliWrkstrmCoreCliaSh,
-        ["\(Self.vaporizeVersion)", "\(metadata.buildNumber)"]))
+        ["\(Self.reportedVersion)", "\(metadata.buildNumber)"]))
     print(
       vaporizeCopyFill(
         VaporizeCLICopy_v000_000_001.CLI.vaporizeBuildAuthorityA1,
         ["\(metadata.authority.rawValue)"]))
-    if let sidecarVersion = metadata.sidecarVersion, sidecarVersion != Self.vaporizeVersion {
+    if let sidecarVersion = metadata.sidecarVersion, sidecarVersion != Self.reportedVersion {
       print(
         vaporizeCopyFill(
           VaporizeCLICopy_v000_000_001.CLI.vaporizeMetadataVersionA1DoesNotMatch,
@@ -2176,7 +2181,7 @@ struct VaporizeCLI: AsyncParsableCommand {
     case .json:
       let data = try VaporInventoryRenderer.renderJSON(
         scanResult,
-        vaporizeVersion: Self.vaporizeVersion
+        vaporizeVersion: Self.reportedVersion
       )
       FileHandle.standardOutput.write(data)
       FileHandle.standardOutput.write(Data("\n".utf8))
@@ -2186,7 +2191,7 @@ struct VaporizeCLI: AsyncParsableCommand {
   private func runVaporWarehouse() async throws {
     let scanResult = try scanForVapor()
     let scanner = VaporInventoryScanner()
-    let receipt = scanner.receipt(from: scanResult, vaporizeVersion: Self.vaporizeVersion)
+    let receipt = scanner.receipt(from: scanResult, vaporizeVersion: Self.reportedVersion)
     let data = try VaporInventoryRenderer.makeJSONEncoder().encode(receipt)
 
     if let receiptPath {
@@ -2207,7 +2212,7 @@ struct VaporizeCLI: AsyncParsableCommand {
     let result = try OwnedSurfaceInventoryScanner().scan(path: scanPath)
     let data = try OwnedSurfaceInventoryRenderer.renderJSON(
       result,
-      vaporizeVersion: Self.vaporizeVersion
+      vaporizeVersion: Self.reportedVersion
     )
 
     if let receiptPath {
@@ -2234,7 +2239,7 @@ struct VaporizeCLI: AsyncParsableCommand {
     let result = try await scanner.scan(path: scanPath)
     let receipt = scanner.receipt(
       from: result,
-      reporterVersion: Self.vaporizeVersion,
+      reporterVersion: Self.reportedVersion,
       reporterBuildNumber: Self.reportedBuildIdentifier
     )
     let data = try SourceVersionStatusRenderer.renderJSON(receipt)
@@ -2329,23 +2334,23 @@ struct VaporizeCLI: AsyncParsableCommand {
     let generatedAt = Date()
     let data = try CUJPortfolioAuditRenderer.renderJSON(
       result,
-      vaporizeVersion: Self.vaporizeVersion,
+      vaporizeVersion: Self.reportedVersion,
       scannedAt: generatedAt
     )
     let report = CUJPortfolioAuditRenderer.renderMarkdown(result)
     let proofLedger = try CUJAutomatedProofLedgerRenderer.renderJSON(
       result,
-      vaporizeVersion: Self.vaporizeVersion,
+      vaporizeVersion: Self.reportedVersion,
       generatedAt: generatedAt
     )
     let projectLedger = try CUJImplementationProjectCoverageLedgerRenderer.renderJSON(
       result,
-      vaporizeVersion: Self.vaporizeVersion,
+      vaporizeVersion: Self.reportedVersion,
       generatedAt: generatedAt
     )
     let projectLedgerCSV = CUJImplementationProjectCoverageLedgerRenderer.renderCSV(
       result,
-      vaporizeVersion: Self.vaporizeVersion,
+      vaporizeVersion: Self.reportedVersion,
       generatedAt: generatedAt
     )
 

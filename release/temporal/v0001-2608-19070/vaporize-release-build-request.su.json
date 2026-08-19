@@ -1,0 +1,27 @@
+{
+  "vaporize-release-build-request": "v0001_2608_19070",
+  "intent": "materialize-installed-runtime",
+  "requestedAt": "2026-08-19T07:24:42Z",
+  "sourceContractPath": "release/temporal/v0001-2608-19070/vaporize-source-contract.candidate.su.json",
+  "sourceContractDigest": "25bac15e405d343976610941d2eff0980eb2d0483a11ae97610802dac15596d3",
+  "sourceCoordinate": "v0001_2608_19070",
+  "resolvingVersion": "1.2608.19070",
+  "buildSerial": "0001",
+  "fullReleaseVersion": "1.2608.19070+0001",
+  "carrierProjection": {
+    "CFBundleShortVersionString": "1.2608.19070",
+    "CFBundleVersion": "0001",
+    "VaporizeProductBuildSHA": "25bac15e405d343976610941d2eff0980eb2d0483a11ae97610802dac15596d3"
+  },
+  "governingPolicy": "tool-interface-language-naming-v0003_2608_18120",
+  "claims": [
+    "explicit-temporal-build-request",
+    "source-coordinate-reservation-required",
+    "build-serial-is-not-source-identity"
+  ],
+  "nonClaims": [
+    "not-a-publication-request",
+    "not-human-approval",
+    "not-a-forward-source-package-successor"
+  ]
+}

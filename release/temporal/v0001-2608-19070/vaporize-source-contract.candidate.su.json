@@ -1,0 +1,28 @@
+{
+  "vaporize-temporal-source-contract": "v0001_2608_19070",
+  "intent": "candidate",
+  "stableArtifactName": "vaporize",
+  "artifactIdentity": "vaporize.cli@wrkstrm-core.clia.sh",
+  "sourcePackageCoordinate": "vaporize@wrkstrm-core.cli",
+  "sourceCoordinate": "v0001_2608_19070",
+  "filesystemArtifactIdentity": "vaporize-v0001-2608-19070",
+  "swiftSourceIdentity": "Vaporize_v0001_2608_19070",
+  "language": "spm",
+  "calendarTimeBasis": "UTC+00:00",
+  "governingPolicy": "tool-interface-language-naming-v0003_2608_18120",
+  "sourceVersionFallback": "0.0.1",
+  "runtimeVersionAuthority": "installed-sidecar",
+  "claims": [
+    "temporal-candidate",
+    "utc-derived-source-coordinate",
+    "installed-sidecar-runtime-version-projection",
+    "explicit-build-serial-required-for-materialization"
+  ],
+  "nonClaims": [
+    "source-coordinate-not-yet-reserved",
+    "no-build-or-install-performed",
+    "no-publication-performed",
+    "no-human-approval-performed",
+    "no-forward-source-package-successor-materialized"
+  ]
+}

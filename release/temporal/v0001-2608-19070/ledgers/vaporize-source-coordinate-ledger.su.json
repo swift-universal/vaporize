@@ -1,0 +1,21 @@
+{
+  "createdAt" : "2026-08-19T07:24:42Z",
+  "entries" : [
+    {
+      "actor" : "codex",
+      "candidate" : "v0001_2608_19070",
+      "coordinate" : "v0001_2608_19070",
+      "ledgerOwner" : "vaporize",
+      "lowerBound" : "v0001_2608_19060",
+      "recordedAt" : "2026-08-19T07:24:42Z",
+      "source-coordinate-reservation-model" : "v0001_2608_19060",
+      "sourceDigest" : "25bac15e405d343976610941d2eff0980eb2d0483a11ae97610802dac15596d3",
+      "status" : "reserved",
+      "upperBound" : "v0001_2608_19080"
+    }
+  ],
+  "ledgerID" : "vaporize-source-coordinate-ledger",
+  "owner" : "vaporize",
+  "source-coordinate-reservation-ledger-model" : "v0001_2608_19060",
+  "updatedAt" : "2026-08-19T07:24:42Z"
+}
