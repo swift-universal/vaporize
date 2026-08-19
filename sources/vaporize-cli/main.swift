@@ -153,6 +153,7 @@ struct VaporizeCLI: AsyncParsableCommand {
     case inventory
     case cujAudit = "cuj-audit"
     case maintainerDependencies = "maintainer-dependencies"
+    case temporalStamp = "temporal-stamp"
 
     /// Substrate package-graph subfunction. Forwards remaining arguments to
     /// `package-graph@wrkstrm.cli` (a sibling SPM binary at
@@ -250,6 +251,24 @@ struct VaporizeCLI: AsyncParsableCommand {
     name: .customLong("product-build-date"),
     help: ArgumentHelp(VaporizeCLICopy_v000_000_001.CLI.vaporizeBuildDateRecordedInTheInstalled))
   var productBuildDate: String?
+
+  @Option(
+    name: .customLong("source-coordinate"),
+    help: "Reserved Calendar-Origin source coordinate for temporal-stamp, in vNNNN_YYMM_DDHHr form."
+  )
+  var temporalSourceCoordinate: String?
+
+  @Option(
+    name: .customLong("build-sequence"),
+    help: "One-to-three digit materialization sequence for temporal-stamp; it becomes the three-digit BuildMMSS prefix."
+  )
+  var temporalBuildSequence: Int?
+
+  @Option(
+    name: .customLong("at"),
+    help: "Optional ISO-8601 UTC timestamp for temporal-stamp; defaults to the current UTC instant."
+  )
+  var temporalStampAt: String?
 
   @Option(
     name: .customLong("su-feed-url"),
@@ -527,6 +546,11 @@ struct VaporizeCLI: AsyncParsableCommand {
       )
     }
 
+    if mode == .temporalStamp {
+      try temporalStamp()
+      return
+    }
+
     let coreExecutionPlan = try coreExecutionPlan(for: mode)
     try await enforceI18nSourcePolicy(for: mode)
     try enforceSwiftUIImportPolicy(for: mode)
@@ -589,6 +613,8 @@ struct VaporizeCLI: AsyncParsableCommand {
       try await runCUJPortfolioAudit()
     case .maintainerDependencies:
       try await prepareMaintainerDependencies()
+    case .temporalStamp:
+      preconditionFailure("temporal-stamp returns before general dispatch")
     case .domains:
       try await runDomains()
     case .selfUpdate:
@@ -614,6 +640,34 @@ struct VaporizeCLI: AsyncParsableCommand {
         try await installApp(launchApp: launch, buildIdentity: nil)
       }
     }
+  }
+
+  private func temporalStamp() throws {
+    guard let temporalSourceCoordinate else {
+      throw ValidationError("temporal-stamp requires --source-coordinate")
+    }
+    guard let temporalBuildSequence else {
+      throw ValidationError("temporal-stamp requires --build-sequence")
+    }
+
+    let stamp = try TemporalBuildStamp.stamp(
+      sourceCoordinate: temporalSourceCoordinate,
+      buildSequence: temporalBuildSequence,
+      stampedAt: try TemporalBuildStamp.parseUTC(temporalStampAt)
+    )
+    let encoder = JSONEncoder()
+    encoder.outputFormatting = [.prettyPrinted, .sortedKeys, .withoutEscapingSlashes]
+    let data = try encoder.encode(stamp)
+    if let receiptPath {
+      let url = absoluteURL(for: receiptPath)
+      try FileManager.default.createDirectory(
+        at: url.deletingLastPathComponent(),
+        withIntermediateDirectories: true
+      )
+      try data.write(to: url, options: .atomic)
+    }
+    FileHandle.standardOutput.write(data)
+    FileHandle.standardOutput.write(Data("\n".utf8))
   }
 
   private func runCoreCommand(
