@@ -259,6 +259,12 @@ struct VaporizeCLI: AsyncParsableCommand {
   var temporalSourceCoordinate: String?
 
   @Option(
+    name: .customLong("build-sequence"),
+    help: "One-to-three digit materialization sequence for temporal-stamp; it becomes the three-digit BuildMMSS prefix."
+  )
+  var temporalBuildSequence: Int?
+
+  @Option(
     name: .customLong("at"),
     help: "Optional ISO-8601 UTC timestamp for temporal-stamp; defaults to the current UTC instant."
   )
@@ -640,30 +646,13 @@ struct VaporizeCLI: AsyncParsableCommand {
     guard let temporalSourceCoordinate else {
       throw ValidationError("temporal-stamp requires --source-coordinate")
     }
-    guard let pklPath, !pklPath.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
-      throw ValidationError(
-        "temporal-stamp requires --pkl-path so Bump Build can plan the numeric build carrier"
-      )
-    }
-
-    // Bump Build remains the sole numeric build-carrier authority. This mode
-    // intentionally plans (rather than applies) its `previous + 1` result;
-    // Vaporize materialization owns any later explicit source mutation.
-    let buildPlan = try PklBuildVersionStamper.plan(
-      pklURL: absoluteURL(for: pklPath),
-      mode: .plan
-    )
-    guard let temporalBuildSequence = buildPlan.proposedBuild else {
-      throw ValidationError("Bump Build plan did not produce a proposed build serial")
+    guard let temporalBuildSequence else {
+      throw ValidationError("temporal-stamp requires --build-sequence")
     }
 
     let stamp = try TemporalBuildStamp.stamp(
       sourceCoordinate: temporalSourceCoordinate,
       buildSequence: temporalBuildSequence,
-      previousBuildSequence: buildPlan.previousBuild,
-      buildCarrierKind: buildPlan.carrier.rawValue,
-      buildCarrierPath: buildPlan.sourcePath,
-      buildCarrierMode: buildPlan.mode.rawValue,
       stampedAt: try TemporalBuildStamp.parseUTC(temporalStampAt)
     )
     let encoder = JSONEncoder()

@@ -1,18 +1,13 @@
 import Foundation
 
 /// A BuildMMSS projection for one already-reserved Calendar-Origin source
-/// coordinate. Its numeric sequence comes from the shared Bump Build carrier
-/// plan; this source-level stamp neither reserves a coordinate nor builds,
-/// installs, publishes, or approves an artifact.
+/// coordinate. This is a source-level stamp only: it neither reserves a
+/// coordinate nor builds, installs, publishes, or approves an artifact.
 struct TemporalBuildStamp: Codable, Equatable, Sendable {
   let stampModel: String
   let sourceCoordinate: String
   let resolvingVersion: String
   let buildSequence: Int
-  let previousBuildSequence: Int
-  let buildCarrierKind: String
-  let buildCarrierPath: String
-  let buildCarrierMode: String
   let mintMMSS: String
   let buildMMSS: String
   let fullReleaseVersion: String
@@ -25,10 +20,6 @@ struct TemporalBuildStamp: Codable, Equatable, Sendable {
     case sourceCoordinate
     case resolvingVersion
     case buildSequence
-    case previousBuildSequence
-    case buildCarrierKind
-    case buildCarrierPath
-    case buildCarrierMode
     case mintMMSS
     case buildMMSS
     case fullReleaseVersion
@@ -40,10 +31,6 @@ struct TemporalBuildStamp: Codable, Equatable, Sendable {
   static func stamp(
     sourceCoordinate: String,
     buildSequence: Int,
-    previousBuildSequence: Int,
-    buildCarrierKind: String,
-    buildCarrierPath: String,
-    buildCarrierMode: String,
     stampedAt: Date
   ) throws -> Self {
     let coordinate = try TemporalSourceCoordinate(sourceCoordinate)
@@ -64,10 +51,6 @@ struct TemporalBuildStamp: Codable, Equatable, Sendable {
       sourceCoordinate: coordinate.rawValue,
       resolvingVersion: resolvingVersion,
       buildSequence: buildSequence,
-      previousBuildSequence: previousBuildSequence,
-      buildCarrierKind: buildCarrierKind,
-      buildCarrierPath: buildCarrierPath,
-      buildCarrierMode: buildCarrierMode,
       mintMMSS: mintMMSS,
       buildMMSS: buildMMSS,
       fullReleaseVersion: "\(resolvingVersion)+\(buildMMSS)",
@@ -75,12 +58,10 @@ struct TemporalBuildStamp: Codable, Equatable, Sendable {
       claims: [
         "utc-derived-BuildMMSS",
         "BuildMMSS-is-outside-source-coordinate",
-        "build-sequence-planned-by-bump-build",
         "ready-for-Vaporize-product-version-and-product-build"
       ],
       nonClaims: [
         "no-source-coordinate-reservation",
-        "no-bump-build-apply-performed",
         "no-build-or-install-performed",
         "no-publication-performed",
         "no-human-approval-performed"
