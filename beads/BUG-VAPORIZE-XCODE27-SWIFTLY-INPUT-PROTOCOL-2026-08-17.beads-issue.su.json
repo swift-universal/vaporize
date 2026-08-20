@@ -1,0 +1,28 @@
+{
+  "acceptanceCriteria": "- The checked-out Vaporize source toolchain builds under the selected Xcode 27 beta without an InputProtocol.currentStandardInput compile failure.\n- The Board Review native-app build spine advances through vaporize-source-toolchain, Pkl project generation, and Xcode compilation in a fresh caller-owned work root.\n- The repair preserves Vaporize's source-built-generator rule; no installed Vaporize binary or pre-existing app bundle is accepted as a fallback.",
+  "createdAt": "2026-08-17T00:00:00Z",
+  "createdBy": "board-review-build",
+  "description": "Board Review's declared native-app build spine passed source contracts, navigation, host composition, and Pkl specification, then held while compiling checked-out Vaporize source. Xcode 27 beta rejects SwiftlyCore/ModeledCommandLine.swift:45 because InputProtocol no longer has currentStandardInput. The failure prevents Vaporize project generation and Xcode app compilation; it must be repaired at the Vaporize/Swiftly compatibility boundary rather than bypassed with an installed generator.",
+  "firstObservedAt": "2026-08-17T00:00:00Z",
+  "id": "BUG-VAPORIZE-XCODE27-SWIFTLY-INPUT-PROTOCOL-2026-08-17",
+  "issueType": "bug",
+  "labels": [
+    "bug",
+    "vaporize",
+    "swiftly",
+    "xcode-27",
+    "source-toolchain",
+    "board-review-build",
+    "native-app-blocker"
+  ],
+  "lastObservedAt": "2026-08-17T00:00:00Z",
+  "observationCount": 1,
+  "owner": "vaporize.cli@wrkstrm-core.clia.sh",
+  "priority": 1,
+  "recurrenceCount": 0,
+  "sourceLocation": "private/universal/substrate/upstreams/swiftlang/public/universal/tooling/swift/swiftly/Sources/SwiftlyCore/ModeledCommandLine.swift:45",
+  "sourceSystem": "board-review-build",
+  "sourceType": "xcode-source-toolchain-compatibility",
+  "status": "open",
+  "title": "Repair Vaporize Swiftly InputProtocol compatibility for Xcode 27"
+}

@@ -1,0 +1,52 @@
+{
+  "BeadsIssue": "0.1.0",
+  "schemaVersion": "0.1.0",
+  "id": "bug-vaporize-installed-cli-source-exclude-parity-2026-08-16",
+  "title": "Bug — refresh installed Vaporize CLI to match source Pkl exclusion semantics",
+  "createdAt": "2026-08-16T23:35:00Z",
+  "createdBy": "codex at chairman direction",
+  "owner": "wrkstrm-core",
+  "issueType": "bug",
+  "status": "open",
+  "priority": 0,
+  "labels": ["vaporize", "pkl", "source-install-parity", "xcodeproj", "release-evidence", "bead-backed"],
+  "description": "The installed vaporize.cli@wrkstrm-core.clia.sh generated a Disk Cleaner project that ignored the Pkl source exclusion for DiskCleanerV000000002App.swift, producing two @main entries. A newer source-built Vaporize binary honored that exclusion and generated four source files. The installed CLI must be refreshed through its owning source-gate and installation workflow; source-only success is not installed-runtime proof.",
+  "acceptanceCriteria": [
+    "The source and installed Vaporize CLI generate equivalent Pkl source-exclusion results for the CUJ-14 exact and recursive exclusion fixtures.",
+    "The installed CLI generates the Disk Cleaner active project without DiskCleanerV000000002App.swift in its PBX sources phase.",
+    "The install receipt identifies source revision or binary digest, installed path, and post-install exclusion proof.",
+    "The CLI's owning i18n/source gates and installation controls pass; no direct binary replacement bypasses them.",
+    "A fresh generated Disk Cleaner project builds its focused topology suite without multiple @main failures."
+  ],
+  "risks": [
+    "Using an older installed generator can make a valid Pkl exclusion appear ineffective, causing duplicate application entry points or stale build graphs.",
+    "Replacing the installed binary without its resource and source-gate workflow would create an untraceable runtime artifact.",
+    "A successful source-built tool is not evidence that the operator-default installed tool has the same behavior."
+  ],
+  "relatedRefs": [
+    {
+      "link-ref-model": "0.0.5",
+      "t": "Pkl exclusion generator source",
+      "m": [{ "lane": "kind", "v": "source" }, { "lane": "tag", "v": "behavior-authority" }],
+      "tg": [{ "k": "rp", "rt": "mono", "v": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/sources/apple-project-spec-core/AppleProjectXcodeProjectGenerator.swift" }]
+    },
+    {
+      "link-ref-model": "0.0.5",
+      "t": "Pkl exclusion CUJ test",
+      "m": [{ "lane": "kind", "v": "test" }, { "lane": "tag", "v": "source-install-parity" }],
+      "tg": [{ "k": "rp", "rt": "mono", "v": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/tests/cuj-14-pkl-xcodeproj-generation/VaporizeCUJ14PklXcodeProjectGenerationTests.swift" }]
+    },
+    {
+      "link-ref-model": "0.0.5",
+      "t": "Disk Cleaner affected single-project-manifest migration Bead",
+      "m": [{ "lane": "kind", "v": "bead" }, { "lane": "tag", "v": "affected-consumer" }],
+      "tg": [{ "k": "rp", "rt": "mono", "v": "private/universal/substrate/collectives/wrkstrm-core/private/apple/apps/disk-cleaner/beads/action-disk-cleaner-single-project-manifest-and-feature-service-boundary-2026-08-16.beads-issue.su.json" }]
+    },
+    {
+      "link-ref-model": "0.0.5",
+      "t": "Wrkstrm CTO accountable owner job",
+      "m": [{ "lane": "kind", "v": "job" }, { "lane": "slug", "v": "position-wrkstrm-org-cto" }, { "lane": "tag", "v": "accountable-owner" }],
+      "tg": [{ "k": "rp", "rt": "mono", "v": "private/universal/substrate/collectives/wrkstrm/private/universal/kura-spaces/jobs/position-wrkstrm-org-cto.org-job.json" }]
+    }
+  ]
+}

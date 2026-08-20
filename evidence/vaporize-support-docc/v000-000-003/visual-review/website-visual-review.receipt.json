@@ -1,0 +1,91 @@
+{
+  "captures" : [
+    {
+      "finalURL" : "http://127.0.0.1:8132/documentation/index/",
+      "pageTitle" : "Vaporize Support | Documentation",
+      "profileID" : "desktop-1440x1200",
+      "screenshotPath" : "visual-review/captures/desktop-1440x1200.png",
+      "screenshotSHA256" : "6b11be5183e7842c36acbc4cddeb01fa412ae3558f0a5b4a5c4552f2b59f88b9"
+    },
+    {
+      "finalURL" : "http://127.0.0.1:8132/documentation/index/",
+      "pageTitle" : "Vaporize Support | Documentation",
+      "profileID" : "mobile-390x844",
+      "screenshotPath" : "visual-review/captures/mobile-390x844.png",
+      "screenshotSHA256" : "03b19b43806b3399f847ff7569a8589cf331168f2c755c8cfdc0981d5c8045f2"
+    }
+  ],
+  "findings" : [
+    {
+      "captureProfileID" : "mobile-390x844",
+      "criterion" : "foundation-model-availability",
+      "severity" : "blocking",
+      "summary" : "Foundation Models visual judgment is failed: Website Visual Review Digikoma returned invalid structured judgment: pass may not carry defect findings."
+    }
+  ],
+  "generatedAt" : "2026-08-17T16:41:10.400Z",
+  "intelligenceAssessments" : [
+    {
+      "captureProfileID" : "desktop-1440x1200",
+      "disposition" : "pass",
+      "findings" : [
+
+      ],
+      "model" : "SystemLanguageModel.default",
+      "status" : "completed",
+      "summary" : "The Vaporize Support documentation root displays a coherent hierarchy with clear Start Here paths and no visible defects.",
+      "tokenCount" : 1780
+    },
+    {
+      "captureProfileID" : "mobile-390x844",
+      "errorMessage" : "Website Visual Review Digikoma returned invalid structured judgment: pass may not carry defect findings.",
+      "findings" : [
+
+      ],
+      "status" : "failed"
+    }
+  ],
+  "kind" : "website-visual-review-receipt",
+  "planSHA256" : "c7cd46e0a4dd48a9d7e3a65deed719db0bc603d427eb1fdbda90947f3d3991f9",
+  "prdSHA256" : "0c1a019494f343c686a48a41c8e1bb052c02764044e5b384720083d6a0df5b83",
+  "releaseItemID" : "vaporize-support-docc-page-identity-v000-000-003",
+  "reviewCoordinatorID" : "wrkstrm-core.vaporize-support.machine-visual-review",
+  "reviewCoordinatorRole" : "Vaporize Support DocC machine visual-review coordinator",
+  "reviewedURL" : "http://127.0.0.1:8132/documentation/index/",
+  "runnerID" : "website-visual-review-v000-000-003@swift-universal.clia.sh",
+  "runnerVersion" : "0.0.3",
+  "schemaVersion" : "0.0.3",
+  "sourceArtifactDigest" : "22e660f581423900d3acb047924f30348a0e38aa0914ffe5b66791a634d1103f",
+  "testingPlanContributors" : [
+    {
+      "authoredAt" : "2026-08-17T17:15:00Z",
+      "contributedTestCaseIDs" : [
+        "support-reader-task-and-boundary"
+      ],
+      "contributorID" : "wrkstrm-core.vaporize-support.requirements",
+      "discipline" : "prd",
+      "role" : "Vaporize Support requirements author"
+    },
+    {
+      "authoredAt" : "2026-08-17T17:15:00Z",
+      "contributedTestCaseIDs" : [
+        "support-visual-identity-and-evidence-grammar"
+      ],
+      "contributorID" : "wrkstrm-core.vaporize-support.design",
+      "discipline" : "design",
+      "role" : "Vaporize Support page-identity author"
+    },
+    {
+      "authoredAt" : "2026-08-17T17:15:00Z",
+      "contributedTestCaseIDs" : [
+        "support-responsive-render-and-asset-resolution"
+      ],
+      "contributorID" : "wrkstrm-core.vaporize-support.engineering",
+      "discipline" : "engineering",
+      "role" : "Vaporize Support DocC renderer maintainer"
+    }
+  ],
+  "testingPlanID" : "vaporize-support-docc-page-identity-v000-000-003",
+  "testingPlanSHA256" : "4fcb26c7e42558ef9597aca01821c4a7022ba890e315e512aef42762cc221e0e",
+  "verdict" : "blocked"
+}

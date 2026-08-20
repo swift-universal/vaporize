@@ -1,0 +1,41 @@
+{
+  "schemaVersion": "0.0.1",
+  "kind": "docc-page-identity-review-plan",
+  "status": "framed",
+  "createdAt": "2026-08-17T16:38:00Z",
+  "reviewActivityID": "activity-vaporize-support-docc-page-identity-review-v000-000-001-2026-08-17",
+  "bundlePath": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/vaporize.support.docc",
+  "visualIntent": "Evidence-bearing build operations: observe authority, identify exact artifacts, bound a build, and assemble an escalation packet. The visual language is transparent and structural so it works in light and dark DocC readers without a decorative backplate.",
+  "semanticColors": {
+    "observation": "#0EA5E9",
+    "verifiedCandidate": "#16A34A",
+    "mutationBoundary": "#D97706",
+    "comparisonOrScope": "#7C3AED",
+    "neutralLinkage": "#64748B"
+  },
+  "sourceRules": [
+    "Transparent SVG canvas; no background rectangles, fills, or gradients.",
+    "No external resources, scripts, or CSS dependencies.",
+    "Connections meet shapes only at intentional endpoints; no accidental stroke intersections.",
+    "No embedded text; page headings and explicit alt text carry the words."
+  ],
+  "pages": [
+    {"slug": "index", "concept": "Four stations from observation to escalation", "assets": ["index-icon.svg", "index-card.svg", "index-hero.svg"]},
+    {"slug": "toolchain-triage", "concept": "Independent Xcode and Swiftly lanes converge only on a diagnosis", "assets": ["toolchain-triage-icon.svg", "toolchain-triage-card.svg", "toolchain-triage-hero.svg"]},
+    {"slug": "source-installed-parity", "concept": "Source candidate and installed artifact retain distinct identities at a comparison gate", "assets": ["source-installed-parity-icon.svg", "source-installed-parity-card.svg", "source-installed-parity-hero.svg"]},
+    {"slug": "bounded-build-observation", "concept": "Repeated samples distinguish active work from a bounded no-progress interval", "assets": ["bounded-build-observation-icon.svg", "bounded-build-observation-card.svg", "bounded-build-observation-hero.svg"]},
+    {"slug": "support-packet", "concept": "Five evidence fields compose a non-secret escalation packet", "assets": ["support-packet-icon.svg", "support-packet-card.svg", "support-packet-hero.svg"]}
+  ],
+  "reviewStages": {
+    "source": "pending",
+    "renderedLight": "pending",
+    "renderedDark": "pending",
+    "digikoma": "pending",
+    "cpoDecision": "pending-human"
+  },
+  "nonClaims": [
+    "This plan does not prove that the assets resolve in a DocC renderer.",
+    "This plan does not prove a repaired installed Vaporize artifact.",
+    "This plan does not imply CPO visual approval or human support sign-off."
+  ]
+}

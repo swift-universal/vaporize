@@ -1,0 +1,40 @@
+{
+  "acceptanceCriteria" : "- Publish and validate the package through i18n-universal, or remove the impostor dependency.\n- Repair the package at its i18n owner home and the target dependency edge.\n- Rerun the exact complete source-gate verifier from the Bead spawn cast. Only authoritative complete absence permits automatic closure.\n- The structural law break no longer appears at this source coordinate.\n- The canonical Bead, detector evidence, spawn cast, and strict Bead World projection remain decodable.",
+  "closeReason" : "Finding absent from a complete i18n Source Consumption Enforcement v0.1.0 scan.",
+  "closedAt" : "2026-08-13T08:07:33Z",
+  "createdAt" : "2026-08-10T11:27:37Z",
+  "createdBy" : "translate-source-gate",
+  "dependencies" : [
+    {
+      "createdAt" : "2026-08-10T11:27:37Z",
+      "createdBy" : "translate-source-gate",
+      "dependsOnId" : "EPIC-I18N-SOURCE-CONSUMPTION-ENFORCEMENT-ADOPTION-2026-07-18",
+      "issueId" : "BUG-I18N-I18N008-9E604FD95C42B4E8A2AF5C38095EC5C93C4FC7195404F6DD65D45043672DBCB8",
+      "type" : "parent-child"
+    }
+  ],
+  "description" : "What happened: Generated copy module 'VaporizeCLICopy_v000_000_001' has no approved publication receipt.\n\nWhy it matters: A module name is not provenance; only an approved receipt binds generated copy to the active registry.\n\nNext move: Publish and validate the package through i18n-universal, or remove the impostor dependency.\n\nBoundary: Repair the package at its i18n owner home and the target dependency edge.\n\nIdentity: translate-source-gate observed I18N008 at the stable source coordinate sources/vaporize-cli/HomebrewStatus.swift. Diagnostic line, column, message, visibility, and time are evidence, not identity.",
+  "externalRef" : "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N008-9E604FD95C42B4E8A2AF5C38095EC5C93C4FC7195404F6DD65D45043672DBCB8.beads-spawn-cast.json",
+  "firstObservedAt" : "2026-08-10T11:27:37Z",
+  "id" : "BUG-I18N-I18N008-9E604FD95C42B4E8A2AF5C38095EC5C93C4FC7195404F6DD65D45043672DBCB8",
+  "issueType" : "bug",
+  "labels" : [
+    "bug",
+    "detector-authored",
+    "i18n-universal",
+    "i18n-source-consumption-enforcement",
+    "i18n008",
+    "spawn-ready"
+  ],
+  "lastObservedAt" : "2026-08-13T08:03:08Z",
+  "observationCount" : 3,
+  "owner" : "vaporize.cli@wrkstrm-core.clia.sh",
+  "priority" : 2,
+  "recurrenceCount" : 2,
+  "sourceLocation" : "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N008-9E604FD95C42B4E8A2AF5C38095EC5C93C4FC7195404F6DD65D45043672DBCB8.i18n-source-gate-evidence.json",
+  "sourceSystem" : "translate-source-gate",
+  "sourceType" : "i18n-source-gate-finding",
+  "status" : "closed",
+  "title" : "Resolve I18N008 at sources/vaporize-cli/HomebrewStatus.swift",
+  "updatedAt" : "2026-08-13T08:07:33Z"
+}

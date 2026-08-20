@@ -1,0 +1,40 @@
+{
+  "acceptanceCriteria" : "- Replace the literal with the matching accessor from the approved generated copy package; add catalog copy through the catalog workflow when no accessor exists.\n- Repair the reported source coordinate and only the predeclared catalog or dependency scope; do not invent replacement wording in product code.\n- Rerun the exact complete source-gate verifier from the Bead spawn cast. Only authoritative complete absence permits automatic closure.\n- The structural law break no longer appears at this source coordinate.\n- The canonical Bead, detector evidence, spawn cast, and strict Bead World projection remain decodable.",
+  "closeReason" : "Finding absent from a complete i18n Source Consumption Enforcement v0.1.0 scan.",
+  "closedAt" : "2026-08-17T03:41:47Z",
+  "createdAt" : "2026-08-17T03:29:07Z",
+  "createdBy" : "translate-source-gate",
+  "dependencies" : [
+    {
+      "createdAt" : "2026-08-17T03:29:07Z",
+      "createdBy" : "translate-source-gate",
+      "dependsOnId" : "EPIC-I18N-SOURCE-CONSUMPTION-ENFORCEMENT-ADOPTION-2026-07-18",
+      "issueId" : "BUG-I18N-I18N002-831987267E5AF6EF882F8B1F9D64B63E05F7C661806938F4585312F30A2AB096",
+      "type" : "parent-child"
+    }
+  ],
+  "description" : "What happened: User-facing string literal must come from an approved generated i18n copy package.\n\nWhy it matters: Raw product copy bypasses the approved catalog, so wording can drift and cannot be localized consistently.\n\nNext move: Replace the literal with the matching accessor from the approved generated copy package; add catalog copy through the catalog workflow when no accessor exists.\n\nBoundary: Repair the reported source coordinate and only the predeclared catalog or dependency scope; do not invent replacement wording in product code.\n\nIdentity: translate-source-gate observed I18N002 at the stable source coordinate sources/vaporize-cli/main.swift. Diagnostic line, column, message, visibility, and time are evidence, not identity.",
+  "externalRef" : "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N002-831987267E5AF6EF882F8B1F9D64B63E05F7C661806938F4585312F30A2AB096.beads-spawn-cast.json",
+  "firstObservedAt" : "2026-08-17T03:29:07Z",
+  "id" : "BUG-I18N-I18N002-831987267E5AF6EF882F8B1F9D64B63E05F7C661806938F4585312F30A2AB096",
+  "issueType" : "bug",
+  "labels" : [
+    "bug",
+    "detector-authored",
+    "i18n-universal",
+    "i18n-source-consumption-enforcement",
+    "i18n002",
+    "spawn-ready"
+  ],
+  "lastObservedAt" : "2026-08-17T03:29:07Z",
+  "observationCount" : 1,
+  "owner" : "vaporize.cli@wrkstrm-core.clia.sh",
+  "priority" : 2,
+  "recurrenceCount" : 0,
+  "sourceLocation" : "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/BUG-I18N-I18N002-831987267E5AF6EF882F8B1F9D64B63E05F7C661806938F4585312F30A2AB096.i18n-source-gate-evidence.json",
+  "sourceSystem" : "translate-source-gate",
+  "sourceType" : "i18n-source-gate-finding",
+  "status" : "closed",
+  "title" : "Resolve I18N002 at sources/vaporize-cli/main.swift",
+  "updatedAt" : "2026-08-17T03:41:47Z"
+}

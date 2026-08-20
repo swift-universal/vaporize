@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 540" fill="none" role="img" aria-labelledby="title">
+  <title id="title">Support packet composition</title>
+  <path d="M184 170H776V370H184Z" stroke="#7C3AED" stroke-width="8" stroke-linejoin="round"/>
+  <path d="M184 222H776" stroke="#7C3AED" stroke-width="8" stroke-linecap="round"/>
+  <path d="M278 270V322M382 270V322M486 270V322M590 270V322M694 270V322" stroke="#64748B" stroke-width="8" stroke-linecap="round"/>
+  <circle cx="278" cy="270" r="28" stroke="#0EA5E9" stroke-width="8"/>
+  <circle cx="382" cy="270" r="28" stroke="#16A34A" stroke-width="8"/>
+  <circle cx="486" cy="270" r="28" stroke="#D97706" stroke-width="8"/>
+  <circle cx="590" cy="270" r="28" stroke="#64748B" stroke-width="8"/>
+  <circle cx="694" cy="270" r="28" stroke="#0EA5E9" stroke-width="8"/>
+</svg>

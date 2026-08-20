@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 600" fill="none" role="img" aria-labelledby="title">
+  <title id="title">Source candidate and installed artifact meet at a comparison gate</title>
+  <path d="M260 300H618M982 300H1340" stroke="#64748B" stroke-width="10" stroke-linecap="round"/>
+  <path d="M84 194H228L300 300L228 406H84L12 300Z" stroke="#16A34A" stroke-width="10" stroke-linejoin="round"/>
+  <path d="M618 150H982V450H618Z" stroke="#7C3AED" stroke-width="10" stroke-linejoin="round"/>
+  <path d="M706 300H894M800 206V394" stroke="#7C3AED" stroke-width="10" stroke-linecap="round"/>
+  <path d="M1340 190H1510V410H1340Z" stroke="#0EA5E9" stroke-width="10" stroke-linejoin="round"/>
+</svg>

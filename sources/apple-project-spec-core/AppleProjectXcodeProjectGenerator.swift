@@ -4,6 +4,7 @@ public enum AppleProjectXcodeProjectGenerationError: Error, CustomStringConverti
   case noBuildableTargets
   case unsupportedTargetType(targetName: String, type: String?)
   case missingSourcePath(targetName: String, path: String)
+  case missingConfigFile(targetName: String, configuration: String, path: String)
   case unknownTargetDependency(targetName: String, dependencyTargetName: String)
   case unsupportedRemotePackageRequirement(packageName: String)
 
@@ -15,6 +16,8 @@ public enum AppleProjectXcodeProjectGenerationError: Error, CustomStringConverti
       return "Target \(targetName) has unsupported type \(type ?? "<nil>")."
     case .missingSourcePath(let targetName, let path):
       return "Target \(targetName) source path does not exist: \(path)"
+    case .missingConfigFile(let targetName, let configuration, let path):
+      return "Target \(targetName) configuration \(configuration) references missing xcconfig: \(path)"
     case .unknownTargetDependency(let targetName, let dependencyTargetName):
       return "Target \(targetName) depends on unknown target \(dependencyTargetName)."
     case .unsupportedRemotePackageRequirement(let packageName):
@@ -47,11 +50,12 @@ public enum AppleProjectXcodeProjectGenerator {
     requestId: String
   ) throws -> PklXcodeProjectGenerationReceipt {
     let projectURL = normalizedProjectURL(outputURL, projectName: spec.name)
-    let projectDirectory = sourceDirectory?.standardizedFileURL
+    let sourceRoot = sourceDirectory?.standardizedFileURL
       ?? projectURL.deletingLastPathComponent().standardizedFileURL
     let rendered = try AppleProjectXcodeProjectRenderer.render(
       spec: spec,
-      projectDirectory: projectDirectory,
+      projectDirectory: sourceRoot,
+      outputProjectDirectory: projectURL.deletingLastPathComponent(),
       projectFileName: projectURL.lastPathComponent
     )
 
@@ -130,6 +134,7 @@ public enum AppleProjectXcodeProjectRenderer {
   public static func render(
     spec: AppleProjectSpec,
     projectDirectory: URL,
+    outputProjectDirectory: URL? = nil,
     projectFileName: String? = nil
   ) throws -> AppleRenderedXcodeProject {
     let buildableTargets = spec.targets
@@ -148,7 +153,8 @@ public enum AppleProjectXcodeProjectRenderer {
     let context = try RenderContext(
       spec: spec,
       buildableTargets: buildableTargets,
-      projectDirectory: projectDirectory
+      sourceDirectory: projectDirectory,
+      outputProjectDirectory: outputProjectDirectory ?? projectDirectory
     )
     return AppleRenderedXcodeProject(
       pbxproj: context.renderPBXProj(),
@@ -165,31 +171,54 @@ public enum AppleProjectXcodeProjectRenderer {
 
 private struct RenderContext {
   var spec: AppleProjectSpec
-  var projectDirectory: URL
+  var sourceDirectory: URL
+  var outputProjectDirectory: URL
+  var sourcesGroupPath: String
   var targetRecords: [TargetRecord]
   var fileRecords: [FileRecord]
+  var configFileRecords: [ConfigFileRecord]
   var packageRecords: [PackageRecord]
   var productRecords: [ProductRecord]
+  var sdkFrameworkRecords: [SDKFrameworkRecord]
+  var sdkFrameworkBuildFileRecords: [SDKFrameworkBuildFileRecord]
   var targetDependencyRecords: [TargetDependencyRecord]
   var rootGroupID = stableID("root-group")
   var productsGroupID = stableID("products-group")
   var sourcesGroupID = stableID("sources-group")
+  var configurationFilesGroupID = stableID("configuration-files-group")
   var packagesGroupID = stableID("packages-group")
+  var frameworksGroupID = stableID("frameworks-group")
   var projectID = stableID("project")
   var projectConfigListID = stableID("project-config-list")
 
   init(
     spec: AppleProjectSpec,
     buildableTargets: [(key: String, value: AppleProjectTarget)],
-    projectDirectory: URL
+    sourceDirectory: URL,
+    outputProjectDirectory: URL
   ) throws {
+    let normalizedSourceDirectory = sourceDirectory.standardizedFileURL
+    let normalizedOutputProjectDirectory = outputProjectDirectory.standardizedFileURL
     self.spec = spec
-    self.projectDirectory = projectDirectory.standardizedFileURL
+    self.sourceDirectory = normalizedSourceDirectory
+    self.outputProjectDirectory = normalizedOutputProjectDirectory
+    self.sourcesGroupPath = relativePath(
+      from: normalizedOutputProjectDirectory,
+      to: normalizedSourceDirectory.appendingPathComponent("Sources", isDirectory: true)
+    )
     let packageRecords: [PackageRecord] = spec.packages.keys.sorted().compactMap { packageName -> PackageRecord? in
       guard let package = spec.packages[packageName] else { return nil }
+      var xcodePackage = package
+      if let path = package.path {
+        xcodePackage.path = Self.rebasedPath(
+          path,
+          from: normalizedSourceDirectory,
+          to: normalizedOutputProjectDirectory
+        )
+      }
       return PackageRecord(
         name: packageName,
-        package: package,
+        package: xcodePackage,
         id: stableID("package-\(packageName)"),
         groupFileID: stableID("package-group-file-\(packageName)")
       )
@@ -203,7 +232,19 @@ private struct RenderContext {
 
     var targetRecords: [TargetRecord] = []
     var fileRecords: [FileRecord] = []
+    var configFileRecords: [ConfigFileRecord] = []
     var productRecords: [ProductRecord] = []
+    let sdkFrameworkRecords = Set(
+      buildableTargets.flatMap { $0.value.dependencies?.compactMap(\.sdk) ?? [] }
+    )
+    .sorted()
+    .map { sdk in
+      SDKFrameworkRecord(
+        name: sdk,
+        id: stableID("sdk-framework-file-\(sdk)")
+      )
+    }
+    var sdkFrameworkBuildFileRecords: [SDKFrameworkBuildFileRecord] = []
     var targetDependencyRecords: [TargetDependencyRecord] = []
     let targetSpecsByName = Dictionary(uniqueKeysWithValues: buildableTargets.map { ($0.key, $0.value) })
     let supportedTargetNames = Set(targetSpecsByName.keys)
@@ -212,11 +253,17 @@ private struct RenderContext {
       let discoveredFiles = try Self.discoverFiles(
         targetName: targetName,
         target: target,
-        projectDirectory: projectDirectory
+        projectDirectory: normalizedSourceDirectory
       )
       let targetFrameworkDependencies = (target.dependencies ?? [])
         .compactMap(\.target)
         .filter { targetSpecsByName[$0]?.isFramework == true }
+      let targetExtensionKitDependencies = (target.dependencies ?? []).filter { dependency in
+        guard let dependencyTargetName = dependency.target else { return false }
+        return dependency.embed == true
+          && targetSpecsByName[dependencyTargetName]?.isExtensionKitExtension == true
+      }
+      let sdkFrameworkDependencies = Set((target.dependencies ?? []).compactMap(\.sdk))
       let targetRecord = TargetRecord(
         name: targetName,
         target: target,
@@ -226,20 +273,46 @@ private struct RenderContext {
         sourcesPhaseID: stableID("sources-phase-\(targetName)"),
         resourcesPhaseID: discoveredFiles.contains(where: \.isResource) ? stableID("resources-phase-\(targetName)") : nil,
         frameworksPhaseID: (target.dependencies ?? []).contains(where: { $0.package != nil && $0.product != nil })
+          || !sdkFrameworkDependencies.isEmpty
           || !targetFrameworkDependencies.isEmpty
           ? stableID("frameworks-phase-\(targetName)")
           : nil,
         embedFrameworksPhaseID: target.shouldEmbedFrameworkDependencies && !targetFrameworkDependencies.isEmpty
           ? stableID("embed-frameworks-phase-\(targetName)")
           : nil,
+        embedExtensionKitExtensionsPhaseID: target.shouldEmbedExtensionKitExtensions
+          && !targetExtensionKitDependencies.isEmpty
+          ? stableID("embed-extensionkit-extensions-phase-\(targetName)")
+          : nil,
         configListID: stableID("target-config-list-\(targetName)"),
         sourceGroupID: stableID("source-group-\(targetName)"),
         sourceGroupPath: Self.sourceGroupPath(
           target: target,
-          projectDirectory: self.projectDirectory
+          projectDirectory: normalizedSourceDirectory
         )
       )
       targetRecords.append(targetRecord)
+
+      for configuration in (target.configFiles ?? [:]).keys.sorted() {
+        guard let path = target.configFiles?[configuration] else { continue }
+        let sourceURL = Self.resolvePath(path, relativeTo: normalizedSourceDirectory)
+        guard FileManager.default.fileExists(atPath: sourceURL.path) else {
+          throw AppleProjectXcodeProjectGenerationError.missingConfigFile(
+            targetName: targetName,
+            configuration: configuration,
+            path: path
+          )
+        }
+        configFileRecords.append(
+          ConfigFileRecord(
+            targetName: targetName,
+            configuration: configuration,
+            displayName: sourceURL.lastPathComponent,
+            projectRelativePath: relativePath(from: normalizedOutputProjectDirectory, to: sourceURL),
+            id: stableID("xcconfig-\(targetName)-\(configuration)")
+          )
+        )
+      }
 
       for file in discoveredFiles {
         fileRecords.append(
@@ -276,6 +349,17 @@ private struct RenderContext {
           )
         )
       }
+
+      for sdk in sdkFrameworkDependencies.sorted() {
+        sdkFrameworkBuildFileRecords.append(
+          SDKFrameworkBuildFileRecord(
+            targetName: targetName,
+            frameworkName: sdk,
+            frameworkFileID: stableID("sdk-framework-file-\(sdk)"),
+            buildFileID: stableID("sdk-framework-build-file-\(targetName)-\(sdk)")
+          )
+        )
+      }
     }
 
     let targetRecordsByName = Dictionary(uniqueKeysWithValues: targetRecords.map { ($0.name, $0) })
@@ -287,6 +371,9 @@ private struct RenderContext {
           continue
         }
         let embedsFramework = target.target.shouldEmbedFrameworkDependencies && dependencyTarget.isFramework
+        let embedsExtensionKitExtension = target.target.shouldEmbedExtensionKitExtensions
+          && dependency.embed == true
+          && dependencyTarget.isExtensionKitExtension
         targetDependencyRecords.append(
           TargetDependencyRecord(
             targetName: target.name,
@@ -298,6 +385,9 @@ private struct RenderContext {
               : nil,
             embedFrameworkBuildFileID: embedsFramework
               ? stableID("target-dependency-embed-framework-build-file-\(target.name)-\(dependencyTargetName)")
+              : nil,
+            embedExtensionKitExtensionBuildFileID: embedsExtensionKitExtension
+              ? stableID("target-dependency-embed-extensionkit-extension-build-file-\(target.name)-\(dependencyTargetName)")
               : nil
           )
         )
@@ -309,9 +399,18 @@ private struct RenderContext {
       if lhs.targetName != rhs.targetName { return lhs.targetName < rhs.targetName }
       return lhs.relativePath < rhs.relativePath
     }
+    self.configFileRecords = configFileRecords.sorted { lhs, rhs in
+      if lhs.targetName != rhs.targetName { return lhs.targetName < rhs.targetName }
+      return lhs.configuration < rhs.configuration
+    }
     self.productRecords = productRecords.sorted { lhs, rhs in
       if lhs.targetName != rhs.targetName { return lhs.targetName < rhs.targetName }
       return lhs.productName < rhs.productName
+    }
+    self.sdkFrameworkRecords = sdkFrameworkRecords
+    self.sdkFrameworkBuildFileRecords = sdkFrameworkBuildFileRecords.sorted { lhs, rhs in
+      if lhs.targetName != rhs.targetName { return lhs.targetName < rhs.targetName }
+      return lhs.frameworkName < rhs.frameworkName
     }
     self.targetDependencyRecords = targetDependencyRecords.sorted { lhs, rhs in
       if lhs.targetName != rhs.targetName { return lhs.targetName < rhs.targetName }
@@ -573,9 +672,13 @@ private struct RenderContext {
 
   private func appendPBXBuildFiles(to lines: inout [String]) {
     let buildFiles = fileRecords.filter { $0.buildFileID != nil } + productRecords.map(FileRecord.product)
+    let sdkFrameworkBuildFiles = sdkFrameworkBuildFileRecords
     let linkedTargetDependencies = targetDependencyRecords.filter { $0.frameworkBuildFileID != nil }
     let embeddedTargetDependencies = targetDependencyRecords.filter { $0.embedFrameworkBuildFileID != nil }
-    guard !buildFiles.isEmpty || !linkedTargetDependencies.isEmpty || !embeddedTargetDependencies.isEmpty else { return }
+    let embeddedExtensionKitTargetDependencies = targetDependencyRecords.filter {
+      $0.embedExtensionKitExtensionBuildFileID != nil
+    }
+    guard !buildFiles.isEmpty || !sdkFrameworkBuildFiles.isEmpty || !linkedTargetDependencies.isEmpty || !embeddedTargetDependencies.isEmpty || !embeddedExtensionKitTargetDependencies.isEmpty else { return }
     lines.append("/* Begin PBXBuildFile section */")
     for file in buildFiles {
       guard let buildFileID = file.buildFileID else { continue }
@@ -589,6 +692,9 @@ private struct RenderContext {
       case .infoPlist:
         break
       }
+    }
+    for framework in sdkFrameworkBuildFiles {
+      lines.append("\t\t\(framework.buildFileID) /* \(framework.frameworkName) in Frameworks */ = {isa = PBXBuildFile; fileRef = \(framework.frameworkFileID) /* \(framework.frameworkName) */; };")
     }
     for dependency in linkedTargetDependencies {
       guard
@@ -607,6 +713,15 @@ private struct RenderContext {
         continue
       }
       lines.append("\t\t\(buildFileID) /* \(dependencyTarget.productFileName) in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = \(dependencyTarget.productFileID) /* \(dependencyTarget.productFileName) */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };")
+    }
+    for dependency in embeddedExtensionKitTargetDependencies {
+      guard
+        let buildFileID = dependency.embedExtensionKitExtensionBuildFileID,
+        let dependencyTarget = targetRecords.first(where: { $0.name == dependency.dependencyTargetName })
+      else {
+        continue
+      }
+      lines.append("\t\t\(buildFileID) /* \(dependencyTarget.productFileName) in Embed ExtensionKit Extensions */ = {isa = PBXBuildFile; fileRef = \(dependencyTarget.productFileID) /* \(dependencyTarget.productFileName) */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };")
     }
     lines.append("/* End PBXBuildFile section */")
     lines.append("")
@@ -632,33 +747,60 @@ private struct RenderContext {
   }
 
   private func appendPBXCopyFilesBuildPhases(to lines: inout [String]) {
-    let targets = targetRecords.filter { $0.embedFrameworksPhaseID != nil }
+    let targets = targetRecords.filter {
+      $0.embedFrameworksPhaseID != nil || $0.embedExtensionKitExtensionsPhaseID != nil
+    }
     guard !targets.isEmpty else { return }
     lines.append("/* Begin PBXCopyFilesBuildPhase section */")
     for target in targets {
-      guard let embedFrameworksPhaseID = target.embedFrameworksPhaseID else { continue }
-      let embeddedDependencies = targetDependencyRecords.filter {
-        $0.targetName == target.name && $0.embedFrameworkBuildFileID != nil
-      }
-      lines.append("\t\t\(embedFrameworksPhaseID) /* Embed Frameworks */ = {")
-      lines.append("\t\t\tisa = PBXCopyFilesBuildPhase;")
-      lines.append("\t\t\tbuildActionMask = 2147483647;")
-      lines.append("\t\t\tdstPath = \"\";")
-      lines.append("\t\t\tdstSubfolderSpec = 10;")
-      lines.append("\t\t\tfiles = (")
-      for dependency in embeddedDependencies {
-        guard
-          let buildFileID = dependency.embedFrameworkBuildFileID,
-          let dependencyTarget = targetRecords.first(where: { $0.name == dependency.dependencyTargetName })
-        else {
-          continue
+      if let embedFrameworksPhaseID = target.embedFrameworksPhaseID {
+        let embeddedDependencies = targetDependencyRecords.filter {
+          $0.targetName == target.name && $0.embedFrameworkBuildFileID != nil
         }
-        lines.append("\t\t\t\t\(buildFileID) /* \(dependencyTarget.productFileName) in Embed Frameworks */,")
+        lines.append("\t\t\(embedFrameworksPhaseID) /* Embed Frameworks */ = {")
+        lines.append("\t\t\tisa = PBXCopyFilesBuildPhase;")
+        lines.append("\t\t\tbuildActionMask = 2147483647;")
+        lines.append("\t\t\tdstPath = \"\";")
+        lines.append("\t\t\tdstSubfolderSpec = 10;")
+        lines.append("\t\t\tfiles = (")
+        for dependency in embeddedDependencies {
+          guard
+            let buildFileID = dependency.embedFrameworkBuildFileID,
+            let dependencyTarget = targetRecords.first(where: { $0.name == dependency.dependencyTargetName })
+          else {
+            continue
+          }
+          lines.append("\t\t\t\t\(buildFileID) /* \(dependencyTarget.productFileName) in Embed Frameworks */,")
+        }
+        lines.append("\t\t\t);")
+        lines.append("\t\t\tname = \"Embed Frameworks\";")
+        lines.append("\t\t\trunOnlyForDeploymentPostprocessing = 0;")
+        lines.append("\t\t};")
       }
-      lines.append("\t\t\t);")
-      lines.append("\t\t\tname = \"Embed Frameworks\";")
-      lines.append("\t\t\trunOnlyForDeploymentPostprocessing = 0;")
-      lines.append("\t\t};")
+      if let embedExtensionKitExtensionsPhaseID = target.embedExtensionKitExtensionsPhaseID {
+        let embeddedDependencies = targetDependencyRecords.filter {
+          $0.targetName == target.name && $0.embedExtensionKitExtensionBuildFileID != nil
+        }
+        lines.append("\t\t\(embedExtensionKitExtensionsPhaseID) /* Embed ExtensionKit Extensions */ = {")
+        lines.append("\t\t\tisa = PBXCopyFilesBuildPhase;")
+        lines.append("\t\t\tbuildActionMask = 2147483647;")
+        lines.append("\t\t\tdstPath = \"$(EXTENSIONS_FOLDER_PATH)\";")
+        lines.append("\t\t\tdstSubfolderSpec = 16;")
+        lines.append("\t\t\tfiles = (")
+        for dependency in embeddedDependencies {
+          guard
+            let buildFileID = dependency.embedExtensionKitExtensionBuildFileID,
+            let dependencyTarget = targetRecords.first(where: { $0.name == dependency.dependencyTargetName })
+          else {
+            continue
+          }
+          lines.append("\t\t\t\t\(buildFileID) /* \(dependencyTarget.productFileName) in Embed ExtensionKit Extensions */,")
+        }
+        lines.append("\t\t\t);")
+        lines.append("\t\t\tname = \"Embed ExtensionKit Extensions\";")
+        lines.append("\t\t\trunOnlyForDeploymentPostprocessing = 0;")
+        lines.append("\t\t};")
+      }
     }
     lines.append("/* End PBXCopyFilesBuildPhase section */")
     lines.append("")
@@ -669,9 +811,15 @@ private struct RenderContext {
     for target in targetRecords {
       lines.append("\t\t\(target.productFileID) /* \(target.productFileName) */ = {isa = PBXFileReference; explicitFileType = \(target.productFileType); includeInIndex = 0; path = \(pbxValue(target.productFileName)); sourceTree = BUILT_PRODUCTS_DIR; };")
     }
+    for framework in sdkFrameworkRecords {
+      lines.append("\t\t\(framework.id) /* \(framework.name) */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = \(pbxValue(framework.name)); path = \(pbxValue(framework.path)); sourceTree = SDKROOT; };")
+    }
     for package in packageRecords {
       guard let path = package.package.path else { continue }
       lines.append("\t\t\(package.groupFileID) /* \(package.displayName) */ = {isa = PBXFileReference; lastKnownFileType = folder; name = \(pbxValue(package.displayName)); path = \(pbxValue(path)); sourceTree = SOURCE_ROOT; };")
+    }
+    for configFile in configFileRecords {
+      lines.append("\t\t\(configFile.id) /* \(configFile.displayName) */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = \(pbxValue(configFile.displayName)); path = \(pbxValue(configFile.projectRelativePath)); sourceTree = SOURCE_ROOT; };")
     }
     for file in fileRecords {
       let fileType = file.kind.fileType.map { " lastKnownFileType = \($0);" } ?? ""
@@ -703,6 +851,9 @@ private struct RenderContext {
       for product in productRecords.filter({ $0.targetName == target.name }) {
         lines.append("\t\t\t\t\(product.buildFileID) /* \(product.productName) in Frameworks */,")
       }
+      for framework in sdkFrameworkBuildFileRecords.filter({ $0.targetName == target.name }) {
+        lines.append("\t\t\t\t\(framework.buildFileID) /* \(framework.frameworkName) in Frameworks */,")
+      }
       lines.append("\t\t\t);")
       lines.append("\t\t\trunOnlyForDeploymentPostprocessing = 0;")
       lines.append("\t\t};")
@@ -714,6 +865,30 @@ private struct RenderContext {
   private func appendPBXGroups(to lines: inout [String]) {
     lines.append("/* Begin PBXGroup section */")
     let localPackages = packageRecords.filter(\.isLocal)
+    if !configFileRecords.isEmpty {
+      lines.append("\t\t\(configurationFilesGroupID) /* Configurations */ = {")
+      lines.append("\t\t\tisa = PBXGroup;")
+      lines.append("\t\t\tchildren = (")
+      for configFile in configFileRecords {
+        lines.append("\t\t\t\t\(configFile.id) /* \(configFile.displayName) */,")
+      }
+      lines.append("\t\t\t);")
+      lines.append("\t\t\tname = Configurations;")
+      lines.append("\t\t\tsourceTree = \"<group>\";")
+      lines.append("\t\t};")
+    }
+    if !sdkFrameworkRecords.isEmpty {
+      lines.append("\t\t\(frameworksGroupID) /* Frameworks */ = {")
+      lines.append("\t\t\tisa = PBXGroup;")
+      lines.append("\t\t\tchildren = (")
+      for framework in sdkFrameworkRecords {
+        lines.append("\t\t\t\t\(framework.id) /* \(framework.name) */,")
+      }
+      lines.append("\t\t\t);")
+      lines.append("\t\t\tname = Frameworks;")
+      lines.append("\t\t\tsourceTree = \"<group>\";")
+      lines.append("\t\t};")
+    }
     if !localPackages.isEmpty {
       lines.append("\t\t\(packagesGroupID) /* Packages */ = {")
       lines.append("\t\t\tisa = PBXGroup;")
@@ -740,8 +915,14 @@ private struct RenderContext {
     lines.append("\t\t\(rootGroupID) = {")
     lines.append("\t\t\tisa = PBXGroup;")
     lines.append("\t\t\tchildren = (")
+    if !sdkFrameworkRecords.isEmpty {
+      lines.append("\t\t\t\t\(frameworksGroupID) /* Frameworks */,")
+    }
     if !localPackages.isEmpty {
       lines.append("\t\t\t\t\(packagesGroupID) /* Packages */,")
+    }
+    if !configFileRecords.isEmpty {
+      lines.append("\t\t\t\t\(configurationFilesGroupID) /* Configurations */,")
     }
     lines.append("\t\t\t\t\(sourcesGroupID) /* Sources */,")
     lines.append("\t\t\t\t\(productsGroupID) /* Products */,")
@@ -756,7 +937,7 @@ private struct RenderContext {
       lines.append("\t\t\t\t\(target.sourceGroupID) /* \(target.name) */,")
     }
     lines.append("\t\t\t);")
-    lines.append("\t\t\tpath = Sources;")
+    lines.append("\t\t\tpath = \(pbxValue(sourcesGroupPath));")
     lines.append("\t\t\tsourceTree = \"<group>\";")
     lines.append("\t\t};")
 
@@ -792,6 +973,9 @@ private struct RenderContext {
       }
       if let embedFrameworksPhaseID = target.embedFrameworksPhaseID {
         lines.append("\t\t\t\t\(embedFrameworksPhaseID) /* Embed Frameworks */,")
+      }
+      if let embedExtensionKitExtensionsPhaseID = target.embedExtensionKitExtensionsPhaseID {
+        lines.append("\t\t\t\t\(embedExtensionKitExtensionsPhaseID) /* Embed ExtensionKit Extensions */,")
       }
       for script in target.target.postBuildScripts ?? [] {
         lines.append("\t\t\t\t\(stableID("postbuild-\(target.name)-\(script.name ?? script.script)")) /* \(script.name ?? "Run Script") */,")
@@ -969,6 +1153,9 @@ private struct RenderContext {
       for config in configurationNames {
         lines.append("\t\t\(stableID("target-config-\(target.name)-\(config)")) /* \(config) */ = {")
         lines.append("\t\t\tisa = XCBuildConfiguration;")
+        if let configFile = configFileRecord(targetName: target.name, configuration: config) {
+          lines.append("\t\t\tbaseConfigurationReference = \(configFile.id) /* \(configFile.displayName) */;")
+        }
         lines.append("\t\t\tbuildSettings = {")
         appendSettings(targetBuildSettings(target: target, configuration: config), to: &lines)
         lines.append("\t\t\t};")
@@ -1081,6 +1268,7 @@ private struct RenderContext {
     if let configs = spec.settings?.configs { names.formUnion(configs.keys) }
     for target in targetRecords {
       if let configs = target.target.settings?.configs { names.formUnion(configs.keys) }
+      if let configFiles = target.target.configFiles { names.formUnion(configFiles.keys) }
     }
     return names.sorted { lhs, rhs in
       let order = ["Debug": 0, "Release": 1]
@@ -1113,7 +1301,9 @@ private struct RenderContext {
       settings["MACOSX_DEPLOYMENT_TARGET"] = .string(deploymentTarget)
     }
     if let infoPath = target.target.infoPath {
-      settings["INFOPLIST_FILE"] = .string(infoPath)
+      settings["INFOPLIST_FILE"] = .string(
+        Self.rebasedPath(infoPath, from: sourceDirectory, to: outputProjectDirectory)
+      )
     }
     return settings
   }
@@ -1241,6 +1431,9 @@ private struct RenderContext {
       settings["SKIP_INSTALL"] = .string("YES")
       settings["VERSIONING_SYSTEM"] = .string("apple-generic")
     }
+    if target.isApplication && target.target.infoPath == nil {
+      settings["GENERATE_INFOPLIST_FILE"] = .string("YES")
+    }
     if target.isUnitTest {
       settings["BUNDLE_LOADER"] = .string("$(TEST_HOST)")
       settings["GENERATE_INFOPLIST_FILE"] = .string("YES")
@@ -1278,6 +1471,30 @@ private struct RenderContext {
     }
   }
 
+  private func configFileRecord(targetName: String, configuration: String) -> ConfigFileRecord? {
+    configFileRecords.first {
+      $0.targetName == targetName && $0.configuration == configuration
+    }
+  }
+
+  private static func resolvePath(_ path: String, relativeTo directory: URL) -> URL {
+    if path.hasPrefix("/") {
+      return URL(fileURLWithPath: path).standardizedFileURL
+    }
+    return directory.appendingPathComponent(path).standardizedFileURL
+  }
+
+  private static func rebasedPath(
+    _ path: String,
+    from sourceDirectory: URL,
+    to projectDirectory: URL
+  ) -> String {
+    relativePath(
+      from: projectDirectory,
+      to: resolvePath(path, relativeTo: sourceDirectory)
+    )
+  }
+
   private static func discoverFiles(
     targetName: String,
     target: AppleProjectTarget,
@@ -1305,6 +1522,10 @@ private struct RenderContext {
       }
       let fileURLs = try collectFileURLs(at: sourceURL)
       for fileURL in fileURLs {
+        let relativePathWithinSource = relativePath(from: sourceURL, to: fileURL)
+        guard !matchesAnySourceExclude(relativePathWithinSource, patterns: source.excludes ?? []) else {
+          continue
+        }
         let relativePath = relativePath(from: sourceGroupRoot, to: fileURL)
         let kind = FileKind(path: relativePath, sourcePath: source.path, infoPath: infoPath)
         let key = fileURL.standardizedFileURL.path
@@ -1331,6 +1552,54 @@ private struct RenderContext {
     }
 
     return discovered.sorted { $0.relativePath < $1.relativePath }
+  }
+
+  /// Pkl `Source.excludes` is a world-state directive, not receipt-only
+  /// metadata. Match it against the path relative to the individual source
+  /// root before creating any PBX reference or build-phase entry.
+  private static func matchesAnySourceExclude(_ path: String, patterns: [String]) -> Bool {
+    patterns.contains { sourceExcludePatternMatches($0, path: path) }
+  }
+
+  private static func sourceExcludePatternMatches(_ pattern: String, path: String) -> Bool {
+    let normalizedPattern = pattern
+      .replacingOccurrences(of: "\\", with: "/")
+      .trimmingCharacters(in: CharacterSet(charactersIn: "/"))
+    let normalizedPath = path
+      .replacingOccurrences(of: "\\", with: "/")
+      .trimmingCharacters(in: CharacterSet(charactersIn: "/"))
+    guard !normalizedPattern.isEmpty else { return false }
+
+    var expression = "^"
+    var index = normalizedPattern.startIndex
+    while index < normalizedPattern.endIndex {
+      let character = normalizedPattern[index]
+      if character == "*" {
+        let next = normalizedPattern.index(after: index)
+        if next < normalizedPattern.endIndex, normalizedPattern[next] == "*" {
+          let afterDoubleStar = normalizedPattern.index(after: next)
+          if afterDoubleStar < normalizedPattern.endIndex, normalizedPattern[afterDoubleStar] == "/" {
+            expression += "(?:.*/)?"
+            index = normalizedPattern.index(after: afterDoubleStar)
+          } else {
+            expression += ".*"
+            index = afterDoubleStar
+          }
+        } else {
+          expression += "[^/]*"
+          index = next
+        }
+      } else if character == "?" {
+        expression += "[^/]"
+        index = normalizedPattern.index(after: index)
+      } else {
+        expression += NSRegularExpression.escapedPattern(for: String(character))
+        index = normalizedPattern.index(after: index)
+      }
+    }
+    expression += "$"
+
+    return normalizedPath.range(of: expression, options: .regularExpression) != nil
   }
 
   private static func sourceGroupRoot(
@@ -1404,6 +1673,7 @@ private struct TargetRecord {
   var resourcesPhaseID: String?
   var frameworksPhaseID: String?
   var embedFrameworksPhaseID: String?
+  var embedExtensionKitExtensionsPhaseID: String?
   var configListID: String
   var sourceGroupID: String
   var sourceGroupPath: String
@@ -1420,6 +1690,10 @@ private struct TargetRecord {
     target.normalizedType == "framework"
   }
 
+  var isExtensionKitExtension: Bool {
+    target.normalizedType == "extensionkit-extension"
+  }
+
   var isUnitTest: Bool {
     target.normalizedType == "bundle.unit-test" || target.normalizedType == "unit-test"
   }
@@ -1431,6 +1705,7 @@ private struct TargetRecord {
   var productFileName: String {
     if isApplication { return "\(productName).app" }
     if isFramework { return "\(productName).framework" }
+    if isExtensionKitExtension { return "\(productName).appex" }
     if isUnitTest { return "\(productName).xctest" }
     return productName
   }
@@ -1438,6 +1713,7 @@ private struct TargetRecord {
   var productFileType: String {
     if isApplication { return "wrapper.application" }
     if isFramework { return "wrapper.framework" }
+    if isExtensionKitExtension { return pbxValue("wrapper.extensionkit-extension") }
     if isUnitTest { return "wrapper.cfbundle" }
     return pbxValue("compiled.mach-o.executable")
   }
@@ -1445,6 +1721,7 @@ private struct TargetRecord {
   var productType: String {
     if isApplication { return pbxValue("com.apple.product-type.application") }
     if isFramework { return pbxValue("com.apple.product-type.framework") }
+    if isExtensionKitExtension { return pbxValue("com.apple.product-type.extensionkit-extension") }
     if isUnitTest { return pbxValue("com.apple.product-type.bundle.unit-test") }
     return pbxValue("com.apple.product-type.tool")
   }
@@ -1474,6 +1751,14 @@ private struct FileRecord {
       kind: .packageProduct(productID: product.id)
     )
   }
+}
+
+private struct ConfigFileRecord {
+  var targetName: String
+  var configuration: String
+  var displayName: String
+  var projectRelativePath: String
+  var id: String
 }
 
 private struct PackageRecord {
@@ -1569,6 +1854,22 @@ private struct ProductRecord {
   var buildFileID: String
 }
 
+private struct SDKFrameworkRecord {
+  var name: String
+  var id: String
+
+  var path: String {
+    "System/Library/Frameworks/\(name)"
+  }
+}
+
+private struct SDKFrameworkBuildFileRecord {
+  var targetName: String
+  var frameworkName: String
+  var frameworkFileID: String
+  var buildFileID: String
+}
+
 private struct TargetDependencyRecord {
   var targetName: String
   var dependencyTargetName: String
@@ -1576,6 +1877,7 @@ private struct TargetDependencyRecord {
   var proxyID: String
   var frameworkBuildFileID: String?
   var embedFrameworkBuildFileID: String?
+  var embedExtensionKitExtensionBuildFileID: String?
 }
 
 private struct SchemeBuildEntry {
@@ -1715,16 +2017,25 @@ private extension AppleProjectTarget {
     normalizedType == "framework"
   }
 
+  var isExtensionKitExtension: Bool {
+    normalizedType == "extensionkit-extension"
+  }
+
   var isXcodeProjectGenerationSupported: Bool {
     normalizedType == "application"
       || normalizedType == "framework"
       || normalizedType == "tool"
+      || normalizedType == "extensionkit-extension"
       || normalizedType == "bundle.unit-test"
       || normalizedType == "unit-test"
   }
 
   var shouldEmbedFrameworkDependencies: Bool {
     normalizedType == "application" || normalizedType == "bundle.unit-test" || normalizedType == "unit-test"
+  }
+
+  var shouldEmbedExtensionKitExtensions: Bool {
+    normalizedType == "application"
   }
 
   var infoPath: String? {

@@ -57,6 +57,7 @@ class Dependency {
   package: String?
   product: String?
   target: String?
+  sdk: String?
   embed: Boolean?
   codeSign: Boolean?
 }

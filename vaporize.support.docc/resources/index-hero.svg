@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 600" fill="none" role="img" aria-labelledby="title">
+  <title id="title">Four-stage Vaporize support flow</title>
+  <path d="M190 300H1410" stroke="#64748B" stroke-width="10" stroke-linecap="round"/>
+  <path d="M380 300H470M730 300H820M1110 300H1200" stroke="#94A3B8" stroke-width="10" stroke-linecap="round"/>
+  <circle cx="190" cy="300" r="72" stroke="#0EA5E9" stroke-width="10"/>
+  <path d="M156 300H224M190 266V334" stroke="#0EA5E9" stroke-width="10" stroke-linecap="round"/>
+  <path d="M486 228H594L648 300L594 372H486L432 300Z" stroke="#7C3AED" stroke-width="10" stroke-linejoin="round"/>
+  <path d="M862 228H1006V372H862Z" stroke="#D97706" stroke-width="10" stroke-linejoin="round"/>
+  <path d="M1240 236H1352L1410 300L1352 364H1240L1182 300Z" stroke="#16A34A" stroke-width="10" stroke-linejoin="round"/>
+</svg>

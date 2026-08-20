@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 600" fill="none" role="img" aria-labelledby="title">
+  <title id="title">Support evidence packet with five independent observations</title>
+  <path d="M298 150H1302V450H298Z" stroke="#7C3AED" stroke-width="10" stroke-linejoin="round"/>
+  <path d="M298 232H1302" stroke="#7C3AED" stroke-width="10" stroke-linecap="round"/>
+  <path d="M454 306V378M627 306V378M800 306V378M973 306V378M1146 306V378" stroke="#64748B" stroke-width="10" stroke-linecap="round"/>
+  <circle cx="454" cy="306" r="48" stroke="#0EA5E9" stroke-width="10"/>
+  <circle cx="627" cy="306" r="48" stroke="#16A34A" stroke-width="10"/>
+  <circle cx="800" cy="306" r="48" stroke="#D97706" stroke-width="10"/>
+  <circle cx="973" cy="306" r="48" stroke="#64748B" stroke-width="10"/>
+  <circle cx="1146" cy="306" r="48" stroke="#0EA5E9" stroke-width="10"/>
+</svg>

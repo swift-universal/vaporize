@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" fill="none" role="img" aria-labelledby="title">
+  <title id="title">Independent toolchain provider lanes</title>
+  <path d="M28 48H76L118 80M28 112H76L118 80" stroke="#64748B" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="28" cy="48" r="13" stroke="#16A34A" stroke-width="6"/>
+  <circle cx="28" cy="112" r="13" stroke="#0EA5E9" stroke-width="6"/>
+  <path d="M118 58L140 80L118 102L96 80Z" stroke="#7C3AED" stroke-width="6" stroke-linejoin="round"/>
+</svg>

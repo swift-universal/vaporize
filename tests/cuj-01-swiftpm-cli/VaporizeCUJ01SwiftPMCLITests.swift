@@ -1,4 +1,6 @@
 import ArgumentParser
+import CommonProcess
+import CommonProcessExecutionKit
 import Foundation
 import Testing
 
@@ -8,6 +10,16 @@ import Testing
 @Test("CUJ-01 exposes the canonical Vaporize command identity")
 func exposesCanonicalVaporizeCommandIdentity() {
   #expect(VaporizeCLI.configuration.commandName == "vaporize.cli@wrkstrm-core.clia.sh")
+}
+
+@Test("CUJ-01 app run receipts name the installed product, not the debug build bundle")
+func appRunReceiptNamesInstalledProduct() {
+  #expect(
+    vaporizeInstalledAppPath(
+      destination: "/tmp/vaporize-installed",
+      product: "disk-cleaner"
+    ) == "/tmp/vaporize-installed/disk-cleaner.app"
+  )
 }
 
 @Test(
@@ -186,6 +198,60 @@ func buildsSwiftPMPackageBuildArguments() throws {
       "--product",
       "tool.cli@org.clia.sh",
     ])
+  #expect(!command.usesIsolatedSwiftPMWorkspace)
+}
+
+@Test("CUJ-01 isolates a SwiftPM build in its requested scratch path")
+func buildsSwiftPMPackageBuildArgumentsWithScratchPath() throws {
+  let command = try VaporizeCLI.parse(coreCommandArguments(.build, [
+    "--artifact",
+    "cli",
+    "--package-path",
+    "/workspace/tool",
+    "--product",
+    "tool.cli@org.clia.sh",
+    "--configuration",
+    "debug",
+    "--scratch-path",
+    "/workspace/.scratch",
+  ]))
+
+  #expect(
+    try command.swiftBuildArguments() == [
+      "build",
+      "--scratch-path",
+      "/workspace/.scratch",
+      "--package-path",
+      "/workspace/tool",
+      "-c",
+      "debug",
+      "--product",
+      "tool.cli@org.clia.sh",
+    ])
+  #expect(command.usesIsolatedSwiftPMWorkspace)
+}
+
+@Test("CUJ-01 resolves scratch runs to the freshly built product, not an installed binary")
+func resolvesScratchRunToFreshProductOutput() throws {
+  let command = try VaporizeCLI.parse(coreCommandArguments(.run, [
+    "--artifact",
+    "cli",
+    "--package-path",
+    "/workspace/tool",
+    "--product",
+    "tool.cli@org.clia.sh",
+    "--configuration",
+    "debug",
+    "--scratch-path",
+    "/workspace/.scratch",
+    "--skip-install",
+  ]))
+
+  #expect(
+    command.sourceBuiltCLIExecutablePath(product: "tool.cli@org.clia.sh")
+      == "/workspace/.scratch/out/Products/Debug/tool.cli@org.clia.sh"
+  )
+  #expect(command.swiftCommandEnvironment()?["SWIFTPM_USE_LOCAL_DEPS"] == "1")
 }
 
 @Test("CUJ-01 keeps TUI as a distinct artifact over shared SwiftPM machinery")
@@ -215,6 +281,33 @@ func buildsSwiftPMTUIArtifactArguments() throws {
     ])
 }
 
+@Test("CUJ-01 accepts language-qualified CLI products")
+func buildsLanguageQualifiedSwiftPMCLIArtifactArguments() throws {
+  let command = try VaporizeCLI.parse(coreCommandArguments(.build, [
+    "--artifact",
+    "cli",
+    "--package-path",
+    "/workspace/tool",
+    "--product",
+    "tool.cli-s@org.collective.clia.sh",
+    "--configuration",
+    "debug",
+    "--skip-install",
+  ]))
+
+  #expect(command.product == "tool.cli-s@org.collective.clia.sh")
+  #expect(
+    try command.swiftBuildArguments() == [
+      "build",
+      "--package-path",
+      "/workspace/tool",
+      "-c",
+      "debug",
+      "--product",
+      "tool.cli-s@org.collective.clia.sh",
+    ])
+}
+
 @Test("CUJ-01 rejects noncanonical SwiftPM CLI build products")
 func rejectsNoncanonicalSwiftPMCLIBuildProducts() throws {
   let command = try VaporizeCLI.parse(coreCommandArguments(.build, [
@@ -233,7 +326,7 @@ func rejectsNoncanonicalSwiftPMCLIBuildProducts() throws {
     Issue.record("Expected noncanonical CLI product name to throw.")
   } catch let error as ValidationError {
     let message = String(describing: error)
-    #expect(message.contains("suggested 'git.cli@swift-universal.clia.sh'"))
+    #expect(message.contains("suggested 'git.cli-s@swift-universal.clia.sh'"))
     assertActionableVaporizeProductValidationError(message)
   } catch {
     Issue.record("Unexpected error: \(error).")
@@ -604,7 +697,7 @@ func rawExperimentalInstallOmitsResourceBundlesAndVaporizeCarriesThem() async th
     target: target
   )
 
-  let directInstall = try runProcess(
+  let directInstall = try await runProcess(
     "/usr/bin/xcrun",
     [
       "swift",
@@ -621,7 +714,7 @@ func rawExperimentalInstallOmitsResourceBundlesAndVaporizeCarriesThem() async th
   if directInstall.status != 0 {
     Issue.record("Direct experimental-install failed: \(directInstall.stderr)")
   }
-  let buildProductsDirectory = try swiftPMBuildProductsDirectory(
+  let buildProductsDirectory = try await swiftPMBuildProductsDirectory(
     package: package,
     product: product
   )
@@ -638,7 +731,7 @@ func rawExperimentalInstallOmitsResourceBundlesAndVaporizeCarriesThem() async th
 
   let hiddenBuild = package.appendingPathComponent(".build-hidden", isDirectory: true)
   try moveBuildDirectory(package: package, to: hiddenBuild)
-  let directRuntime = try runProcess(installedBinary.path, [])
+  let directRuntime = try await runProcess(installedBinary.path, [])
   #expect(directRuntime.status != 0)
   #expect(
     directRuntime.stderr.contains("resource bundle")
@@ -677,7 +770,7 @@ func rawExperimentalInstallOmitsResourceBundlesAndVaporizeCarriesThem() async th
   #expect(installedInfo["VaporizeInstallerVersion"] as? String == "0.1.0")
 
   try moveBuildDirectory(package: package, to: hiddenBuild)
-  let vaporizeRuntime = try runProcess(installedBinary.path, [])
+  let vaporizeRuntime = try await runProcess(installedBinary.path, [])
   #expect(vaporizeRuntime.status == 0)
   #expect(vaporizeRuntime.stdout.trimmingCharacters(in: .whitespacesAndNewlines) == "resource-ok")
 }
@@ -692,26 +785,26 @@ private func runProcess(
   _ executable: String,
   _ arguments: [String],
   environment: [String: String] = [:]
-) throws -> ProcessResult {
-  let process = Process()
-  process.executableURL = URL(fileURLWithPath: executable)
-  process.arguments = arguments
-  var processEnvironment = ProcessInfo.processInfo.environment
-  processEnvironment.merge(environment) { _, new in new }
-  process.environment = processEnvironment
-
-  let stdout = Pipe()
-  let stderr = Pipe()
-  process.standardOutput = stdout
-  process.standardError = stderr
-
-  try process.run()
-  process.waitUntilExit()
-
+) async throws -> ProcessResult {
+  let command = CommandSpec(
+    executable: .path(executable),
+    args: arguments,
+    env: .inherit(updating: environment),
+    workingDirectory: FileManager.default.currentDirectoryPath,
+    logOptions: .init(
+      exposure: .none,
+      tags: ["source": "vaporize-cuj-01-resource-bundle"]
+    ),
+    requestId: "vaporize-cuj-01-\(UUID().uuidString)",
+    runnerKind: .auto,
+    streamingMode: .buffered
+  )
+  try command.validateOrThrow()
+  let output = try await RunnerControllerFactory.run(command: command)
   return ProcessResult(
-    status: process.terminationStatus,
-    stdout: String(decoding: stdout.fileHandleForReading.readDataToEndOfFile(), as: UTF8.self),
-    stderr: String(decoding: stderr.fileHandleForReading.readDataToEndOfFile(), as: UTF8.self)
+    status: Int32(output.exitStatus.exitCode ?? 1),
+    stdout: String(decoding: output.stdout, as: UTF8.self),
+    stderr: String(decoding: output.stderr, as: UTF8.self)
   )
 }
 
@@ -761,8 +854,8 @@ private func writeResourceProbePackage(
   )
 }
 
-private func swiftPMBuildProductsDirectory(package: URL, product: String) throws -> URL {
-  let result = try runProcess(
+private func swiftPMBuildProductsDirectory(package: URL, product: String) async throws -> URL {
+  let result = try await runProcess(
     "/usr/bin/xcrun",
     [
       "swift",

@@ -4,7 +4,7 @@ import Testing
 @testable import VaporizeCLI
 
 @Test("Vaporize persists the source-gate report before surfacing a Bead imprint failure")
-func sourceGateImprintFailurePreservesReportReceipt() throws {
+func sourceGateImprintFailurePreservesReportReceipt() async throws {
   let root = FileManager.default.temporaryDirectory.appendingPathComponent(
     "vaporize-i18n-imprint-\(UUID().uuidString)",
     isDirectory: true
@@ -37,7 +37,7 @@ func sourceGateImprintFailurePreservesReportReceipt() throws {
   )
 
   do {
-    _ = try VaporizeI18nSourceGate.enforce(
+    _ = try await VaporizeI18nSourceGate.enforce(
       productDirectory: root,
       productName: "App",
       surfaceKind: .cli,
@@ -60,7 +60,7 @@ func sourceGateImprintFailurePreservesReportReceipt() throws {
 }
 
 @Test("Vaporize blocking errors explain repair, proof, and the reconciled Bead handoff")
-func sourceGateBlockedErrorIsAssistantActionable() throws {
+func sourceGateBlockedErrorIsAssistantActionable() async throws {
   let root = FileManager.default.temporaryDirectory.appendingPathComponent(
     "vaporize-i18n-actionable-\(UUID().uuidString)",
     isDirectory: true
@@ -82,7 +82,7 @@ func sourceGateBlockedErrorIsAssistantActionable() throws {
   )
 
   do {
-    _ = try VaporizeI18nSourceGate.enforce(
+    _ = try await VaporizeI18nSourceGate.enforce(
       productDirectory: root,
       productName: "App",
       surfaceKind: .cli,
@@ -121,7 +121,7 @@ func sourceGateBlockedErrorIsAssistantActionable() throws {
 }
 
 @Test("Vaporize reuses the complete established identity after a product display rename")
-func sourceGateReusesEstablishedCompleteIdentity() throws {
+func sourceGateReusesEstablishedCompleteIdentity() async throws {
   let root = FileManager.default.temporaryDirectory.appendingPathComponent(
     "vaporize-i18n-complete-identity-\(UUID().uuidString)",
     isDirectory: true
@@ -143,7 +143,7 @@ func sourceGateReusesEstablishedCompleteIdentity() throws {
 
   var firstTarget: String?
   do {
-    _ = try VaporizeI18nSourceGate.enforce(
+    _ = try await VaporizeI18nSourceGate.enforce(
       productDirectory: root,
       productName: "EstablishedProduct",
       surfaceKind: .cli,
@@ -164,7 +164,7 @@ func sourceGateReusesEstablishedCompleteIdentity() throws {
   var secondObservedCount: Int?
   var secondRenderedError: String?
   do {
-    _ = try VaporizeI18nSourceGate.enforce(
+    _ = try await VaporizeI18nSourceGate.enforce(
       productDirectory: root,
       productName: "RenamedDisplayProduct",
       surfaceKind: .cli,

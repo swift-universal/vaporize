@@ -15,6 +15,21 @@ project-generation, validation, or release-evidence run must become durable
 world-state, Vaporize is the owned interface. It wraps lower-level engines with
 typed options, receipts, release gates, and policy boundaries.
 
+## Canonical Identity
+
+Vaporize has distinct coordinates for distinct jobs:
+
+- SwiftPM package: `vaporize@wrkstrm-core.cli`.
+- Executable product and installed filename:
+  `vaporize.cli@wrkstrm-core.clia.sh`.
+- Human display name: `Vaporize`.
+
+The executable convention is `kebab-slug.cli@collective.clia.sh`; package
+coordinates use `kebab-slug@collective.cli`. Do not add an unqualified
+`vaporize` alias: owner-qualified executable identity is part of provenance.
+See `release/v0.0.1/vaporize-cli-identity.su.json` for the typed identity
+record and sidecar mapping.
+
 ## What Vaporize Is
 
 Vaporize is:

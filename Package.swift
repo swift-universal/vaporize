@@ -51,14 +51,19 @@ let swiftlyDependency = localOrRemote(
   url: "https://github.com/swiftlang/swiftly.git",
   from: "1.1.3"
 )
+// Swiftly currently does not compile under the active Xcode beta because its
+// selected Subprocess API predates the beta toolchain.  The installer and all
+// core execution commands remain available without the optional toolchain-
+// selection provider.  Keep the escape hatch explicit and opt-in so ordinary
+// Vaporize builds retain the embedded Swiftly surface.
+let includesSwiftly = ProcessInfo.processInfo.environment["VAPORIZE_DISABLE_SWIFTLY"] != "1"
 let swiftJSONFormatterDependency = localOrRemote(
   path: "../../../../../swift-universal/private/universal/domain/tooling/spm/swift-json-formatter",
   url: "https://github.com/swift-universal/swift-json-formatter.git",
   from: "0.1.0"
 )
-let pklSwiftDependency = Package.Dependency.package(
-  url: "https://github.com/apple/pkl-swift",
-  from: "0.8.2"
+let appleProjectSpecDependency = Package.Dependency.package(
+  path: "../../../universal/domain/build/spm/apple-project-spec"
 )
 let swiftIssueReportingDependency = Package.Dependency.package(
   url: "https://github.com/pointfreeco/swift-issue-reporting",
@@ -78,48 +83,78 @@ let vaporizeJSONSchemaValidationDependency = Package.Dependency.package(
   name: "vaporize-json-schema-validation",
   path: "../vaporize-json-schema-validation@wrkstrm-core.cli"
 )
+let testFixtureLifecycleDependency = Package.Dependency.package(
+  name: "common-test-fixture-lifecycle",
+  path: "../../../../../swift-universal/private/universal/domain/build/spm/common-test-fixture-lifecycle"
+)
+let testServiceAdoptionPolicyDependency = Package.Dependency.package(
+  name: "test-service-adoption-policy@wrkstrm-core",
+  path: "../../../../private/universal/domain/build/spm/test-service-adoption-policy@wrkstrm-core"
+)
+let bumpBuildDependency = Package.Dependency.package(
+  name: "bump-build@takumi-org.cli",
+  path: "../../../../../takumi-org/private/universal/domain/tooling/spm/bump-build@takumi-org.cli"
+)
+
+var packageDependencies: [Package.Dependency] = [
+  commonLogDependency,
+  commonProcessDependency,
+  commonShellDependency,
+  swiftCLIInstallerDependency,
+  swiftCLIUpdaterDependency,
+  swiftJSONFormatterDependency,
+  appleProjectSpecDependency,
+  swiftIssueReportingDependency,
+  translateSourceGateDependency,
+  vaporizeCLICopyDependency,
+  swiftPackageOutputPolicyDependency,
+  vaporizeJSONSchemaValidationDependency,
+  testFixtureLifecycleDependency,
+  testServiceAdoptionPolicyDependency,
+  bumpBuildDependency,
+  .package(url: "https://github.com/apple/swift-argument-parser", from: "1.6.0"),
+]
+
+if includesSwiftly {
+  packageDependencies.append(swiftlyDependency)
+}
+
+var vaporizeCLIDependencies: [Target.Dependency] = [
+  .product(name: "AppleProjectSpecCore", package: "apple-project-spec"),
+  "VaporizeIssueReporting",
+  .product(name: "CommonLog", package: "common-log"),
+  .product(name: "VaporizeJSONSchemaValidation", package: "vaporize-json-schema-validation"),
+  .product(name: "BumpBuildTakumiOrgCore", package: "bump-build@takumi-org.cli"),
+  .product(name: "SwiftCLIInstaller", package: "swift-cli-installer"),
+  .product(name: "SwiftCLIUpdater", package: "swift-cli-updater"),
+  "SwiftAppInstaller",
+  .product(name: "CommonShell", package: "common-shell"),
+  .product(name: "CommonProcess", package: "common-process"),
+  .product(name: "CommonProcessExecutionKit", package: "common-process"),
+  .product(name: "SwiftJSONFormatter", package: "swift-json-formatter"),
+  .product(name: "TranslateSourceGate", package: "TranslateCatalogCore"),
+  .product(name: "VaporizeCLICopy_v000_000_001", package: "VaporizeCLICopy_v000_000_001"),
+  .product(name: "ArgumentParser", package: "swift-argument-parser"),
+]
+
+if includesSwiftly {
+  vaporizeCLIDependencies.append(.product(name: "SwiftlyCommands", package: "swiftly"))
+}
 
 let package = Package(
-  name: "vaporize@wrkstrm-core-cli",
+  name: "vaporize@wrkstrm-core.cli",
   platforms: [
     .macOS("26.0")
   ],
   products: [
-    .library(name: "AppleProjectSpecCore", targets: ["AppleProjectSpecCore"]),
     .library(name: "VaporizeIssueReporting", targets: ["VaporizeIssueReporting"]),
     // SwiftCLIInstaller library LIFTED to swift-universal/.../tooling/spm/swift-cli-installer/
     // (CEO decision 2026-06-14). Consumers now import via swiftCLIInstallerDependency.
     .library(name: "SwiftAppInstaller", targets: ["SwiftAppInstaller"]),
     .executable(name: "vaporize.cli@wrkstrm-core.clia.sh", targets: ["VaporizeCLI"]),
   ],
-  dependencies: [
-    commonLogDependency,
-    commonProcessDependency,
-    commonShellDependency,
-    swiftCLIInstallerDependency,
-    swiftCLIUpdaterDependency,
-    swiftlyDependency,
-    swiftJSONFormatterDependency,
-    pklSwiftDependency,
-    swiftIssueReportingDependency,
-    translateSourceGateDependency,
-    vaporizeCLICopyDependency,
-    swiftPackageOutputPolicyDependency,
-    vaporizeJSONSchemaValidationDependency,
-    .package(url: "https://github.com/apple/swift-argument-parser", from: "1.6.0"),
-    .package(url: "https://github.com/jpsim/Yams", from: "5.1.0"),
-  ],
+  dependencies: packageDependencies,
   targets: [
-    .target(
-      name: "AppleProjectSpecCore",
-      dependencies: [
-        .product(name: "CommonProcess", package: "common-process"),
-        .product(name: "CommonProcessExecutionKit", package: "common-process"),
-        .product(name: "PklSwift", package: "pkl-swift"),
-        .product(name: "Yams", package: "Yams"),
-      ],
-      path: "sources/apple-project-spec-core"
-    ),
     // SwiftCLIInstaller target REMOVED 2026-06-14 — LIFTED to swift-universal
     // package "swift-cli-installer". Consumers below import via
     // .product(name: "SwiftCLIInstaller", package: "swift-cli-installer").
@@ -134,28 +169,16 @@ let package = Package(
     ),
     .executableTarget(
       name: "VaporizeCLI",
-      dependencies: [
-        "AppleProjectSpecCore",
-        "VaporizeIssueReporting",
-        .product(name: "CommonLog", package: "common-log"),
-        .product(name: "VaporizeJSONSchemaValidation", package: "vaporize-json-schema-validation"),
-        .product(name: "SwiftCLIInstaller", package: "swift-cli-installer"),
-        .product(name: "SwiftCLIUpdater", package: "swift-cli-updater"),
-        .product(name: "SwiftlyCommands", package: "swiftly"),
-        "SwiftAppInstaller",
-        .product(name: "CommonShell", package: "common-shell"),
-        .product(name: "CommonProcess", package: "common-process"),
-        .product(name: "CommonProcessExecutionKit", package: "common-process"),
-        .product(name: "SwiftJSONFormatter", package: "swift-json-formatter"),
-        .product(name: "TranslateSourceGate", package: "TranslateCatalogCore"),
-        .product(name: "VaporizeCLICopy_v000_000_001", package: "VaporizeCLICopy_v000_000_001"),
-        .product(name: "ArgumentParser", package: "swift-argument-parser"),
-      ],
+      dependencies: vaporizeCLIDependencies,
       path: "sources/vaporize-cli"
     ),
     .target(
       name: "VaporizeTestSupport",
-      dependencies: ["AppleProjectSpecCore"],
+      dependencies: [
+        .product(name: "AppleProjectSpecCore", package: "apple-project-spec"),
+        .product(name: "TestFixtureLifecycle", package: "common-test-fixture-lifecycle"),
+        .product(name: "TestServiceAdoptionPolicy", package: "test-service-adoption-policy@wrkstrm-core"),
+      ],
       path: "tests/vaporize-test-support"
     ),
     .target(
@@ -168,6 +191,7 @@ let package = Package(
     .testTarget(
       name: "VaporizeLoggingTests",
       dependencies: [
+        "VaporizeTestSupport",
         "VaporizeCLI",
         .product(name: "CommonLog", package: "common-log"),
       ],
@@ -176,6 +200,7 @@ let package = Package(
     .testTarget(
       name: "VaporizeIssueReportingTests",
       dependencies: [
+        "VaporizeTestSupport",
         "VaporizeIssueReporting",
         "VaporizeCLI",
         .product(name: "IssueReporting", package: "swift-issue-reporting"),
@@ -185,9 +210,12 @@ let package = Package(
     .testTarget(
       name: "VaporizeCUJ01SwiftPMCLITests",
       dependencies: [
+        "VaporizeTestSupport",
         .product(name: "SwiftCLIInstaller", package: "swift-cli-installer"),
         "VaporizeCLI",
         .product(name: "ArgumentParser", package: "swift-argument-parser"),
+        .product(name: "CommonProcess", package: "common-process"),
+        .product(name: "CommonProcessExecutionKit", package: "common-process"),
       ],
       path: "tests/cuj-01-swiftpm-cli",
       plugins: [
@@ -197,7 +225,7 @@ let package = Package(
     .testTarget(
       name: "VaporizeCUJ02MacAppTests",
       dependencies: [
-        "AppleProjectSpecCore",
+        .product(name: "AppleProjectSpecCore", package: "apple-project-spec"),
         "SwiftAppInstaller",
         "VaporizeCLI",
         "VaporizeTestSupport",
@@ -207,17 +235,18 @@ let package = Package(
     ),
     .testTarget(
       name: "VaporizeCUJ03PassThroughTests",
-      dependencies: ["VaporizeCLI"],
+      dependencies: ["VaporizeTestSupport", "VaporizeCLI"],
       path: "tests/cuj-03-pass-through"
     ),
     .testTarget(
       name: "VaporizeSwiftUIImportGateTests",
-      dependencies: ["VaporizeCLI"],
+      dependencies: ["VaporizeTestSupport", "VaporizeCLI"],
       path: "tests/swiftui-import-gate"
     ),
     .testTarget(
       name: "VaporizeCUJ04CommonProcessUseTests",
       dependencies: [
+        "VaporizeTestSupport",
         "VaporizeCLI",
         .product(name: "CommonProcess", package: "common-process"),
       ],
@@ -225,12 +254,13 @@ let package = Package(
     ),
     .testTarget(
       name: "VaporizeCUJ05ToolchainTests",
-      dependencies: ["VaporizeCLI"],
+      dependencies: ["VaporizeTestSupport", "VaporizeCLI"],
       path: "tests/cuj-05-toolchain"
     ),
     .testTarget(
       name: "VaporizeCUJ06JSONValidationTests",
       dependencies: [
+        "VaporizeTestSupport",
         "VaporizeCLI",
         .product(name: "SwiftJSONFormatter", package: "swift-json-formatter"),
       ],
@@ -239,6 +269,7 @@ let package = Package(
     .testTarget(
       name: "VaporizeCUJ07VaporInventoryTests",
       dependencies: [
+        "VaporizeTestSupport",
         "VaporizeCLI",
         .product(name: "ArgumentParser", package: "swift-argument-parser"),
       ],
@@ -247,20 +278,20 @@ let package = Package(
     .testTarget(
       name: "VaporizeCUJ08ProjectYMLInspectionTests",
       dependencies: [
-        "AppleProjectSpecCore",
+        .product(name: "AppleProjectSpecCore", package: "apple-project-spec"),
         "VaporizeTestSupport",
       ],
       path: "tests/cuj-08-project-yml-inspection"
     ),
     .testTarget(
       name: "VaporizeCUJ09ReleaseReviewTests",
-      dependencies: [],
+      dependencies: ["VaporizeTestSupport"],
       path: "tests/cuj-09-release-review"
     ),
     .testTarget(
       name: "VaporizeCUJ10YMLPklComparisonTests",
       dependencies: [
-        "AppleProjectSpecCore",
+        .product(name: "AppleProjectSpecCore", package: "apple-project-spec"),
         "VaporizeTestSupport",
       ],
       path: "tests/cuj-10-yml-pkl-comparison"
@@ -268,7 +299,7 @@ let package = Package(
     .testTarget(
       name: "VaporizeCUJ11PklYMLGenerationTests",
       dependencies: [
-        "AppleProjectSpecCore",
+        .product(name: "AppleProjectSpecCore", package: "apple-project-spec"),
         "VaporizeTestSupport",
       ],
       path: "tests/cuj-11-pkl-yml-generation"
@@ -276,7 +307,7 @@ let package = Package(
     .testTarget(
       name: "VaporizeCUJ13YMLPklImportTests",
       dependencies: [
-        "AppleProjectSpecCore",
+        .product(name: "AppleProjectSpecCore", package: "apple-project-spec"),
         "VaporizeCLI",
         "VaporizeTestSupport",
         .product(name: "ArgumentParser", package: "swift-argument-parser"),
@@ -286,7 +317,7 @@ let package = Package(
     .testTarget(
       name: "VaporizeCUJ14PklXcodeProjectGenerationTests",
       dependencies: [
-        "AppleProjectSpecCore",
+        .product(name: "AppleProjectSpecCore", package: "apple-project-spec"),
         "VaporizeCLI",
         "VaporizeTestSupport",
         .product(name: "ArgumentParser", package: "swift-argument-parser"),
@@ -294,9 +325,17 @@ let package = Package(
       path: "tests/cuj-14-pkl-xcodeproj-generation"
     ),
     .testTarget(
+      name: "AppleProjectSpecCoreXcrunMaterializationTests",
+      dependencies: [
+        "VaporizeTestSupport",
+        .product(name: "AppleProjectSpecCore", package: "apple-project-spec"),
+      ],
+      path: "tests/apple-project-spec-core-xcrun-materialization"
+    ),
+    .testTarget(
       name: "VaporizeCUJ14RemotePackageGenerationTests",
       dependencies: [
-        "AppleProjectSpecCore",
+        .product(name: "AppleProjectSpecCore", package: "apple-project-spec"),
         "VaporizeTestSupport",
       ],
       path: "tests/cuj-14-remote-package-generation"
@@ -304,6 +343,7 @@ let package = Package(
     .testTarget(
       name: "VaporizeCUJ15XcodeProductCacheTests",
       dependencies: [
+        "VaporizeTestSupport",
         "SwiftAppInstaller",
         "VaporizeCLI",
         .product(name: "ArgumentParser", package: "swift-argument-parser"),
@@ -313,7 +353,8 @@ let package = Package(
     .testTarget(
       name: "VaporizeCUJ16TargetFeaturesTests",
       dependencies: [
-        "AppleProjectSpecCore",
+        "VaporizeTestSupport",
+        .product(name: "AppleProjectSpecCore", package: "apple-project-spec"),
         "VaporizeCLI",
         .product(name: "ArgumentParser", package: "swift-argument-parser"),
       ],
@@ -322,6 +363,7 @@ let package = Package(
     .testTarget(
       name: "VaporizeCUJ17ReleaseDoctorTests",
       dependencies: [
+        "VaporizeTestSupport",
         "VaporizeCLI",
         .product(name: "ArgumentParser", package: "swift-argument-parser"),
       ],
@@ -330,7 +372,7 @@ let package = Package(
     .testTarget(
       name: "VaporizeCUJ18ListTargetsTests",
       dependencies: [
-        "AppleProjectSpecCore",
+        .product(name: "AppleProjectSpecCore", package: "apple-project-spec"),
         "VaporizeCLI",
         "VaporizeTestSupport",
         .product(name: "ArgumentParser", package: "swift-argument-parser"),
@@ -340,7 +382,7 @@ let package = Package(
     .testTarget(
       name: "VaporizeCUJ19WorkspaceCacheDiscoveryTests",
       dependencies: [
-        "AppleProjectSpecCore",
+        .product(name: "AppleProjectSpecCore", package: "apple-project-spec"),
         "VaporizeCLI",
         "VaporizeTestSupport",
         .product(name: "ArgumentParser", package: "swift-argument-parser"),
@@ -350,6 +392,7 @@ let package = Package(
     .testTarget(
       name: "VaporizeCUJ20XcodeWorkspaceSchemesTests",
       dependencies: [
+        "VaporizeTestSupport",
         "VaporizeCLI",
         .product(name: "ArgumentParser", package: "swift-argument-parser"),
       ],
@@ -381,6 +424,7 @@ let package = Package(
     .testTarget(
       name: "VaporizeCUJ25PortfolioAuditTests",
       dependencies: [
+        "VaporizeTestSupport",
         "VaporizeCLI",
         .product(name: "ArgumentParser", package: "swift-argument-parser"),
       ],
@@ -389,6 +433,7 @@ let package = Package(
     .testTarget(
       name: "VaporizeCUJ26AutomatedProofLedgerTests",
       dependencies: [
+        "VaporizeTestSupport",
         "VaporizeCLI",
         .product(name: "ArgumentParser", package: "swift-argument-parser"),
       ],
@@ -397,6 +442,7 @@ let package = Package(
     .testTarget(
       name: "VaporizeCUJ27ProjectCoverageLedgerTests",
       dependencies: [
+        "VaporizeTestSupport",
         "VaporizeCLI",
         .product(name: "ArgumentParser", package: "swift-argument-parser"),
       ],
@@ -405,7 +451,7 @@ let package = Package(
     .testTarget(
       name: "VaporizeCUJ28SparkleConfigGenerationTests",
       dependencies: [
-        "AppleProjectSpecCore",
+        .product(name: "AppleProjectSpecCore", package: "apple-project-spec"),
         "VaporizeCLI",
         "VaporizeTestSupport",
         .product(name: "ArgumentParser", package: "swift-argument-parser"),
@@ -415,6 +461,7 @@ let package = Package(
     .testTarget(
       name: "VaporizeCUJ29ProductSelfUpdateTests",
       dependencies: [
+        "VaporizeTestSupport",
         "VaporizeCLI",
         .product(name: "SwiftCLIInstaller", package: "swift-cli-installer"),
         .product(name: "SwiftCLIUpdater", package: "swift-cli-updater"),
@@ -425,6 +472,7 @@ let package = Package(
     .testTarget(
       name: "VaporizeCUJ30FleetStatusTests",
       dependencies: [
+        "VaporizeTestSupport",
         "VaporizeCLI",
         .product(name: "SwiftCLIInstaller", package: "swift-cli-installer"),
         .product(name: "SwiftCLIUpdater", package: "swift-cli-updater"),
@@ -435,6 +483,7 @@ let package = Package(
     .testTarget(
       name: "VaporizeCUJ31HomebrewStatusTests",
       dependencies: [
+        "VaporizeTestSupport",
         "VaporizeCLI",
         .product(name: "ArgumentParser", package: "swift-argument-parser"),
       ],
@@ -443,10 +492,16 @@ let package = Package(
     .testTarget(
       name: "VaporizeCUJ12PackageGraphTests",
       dependencies: [
+        "VaporizeTestSupport",
         "VaporizeCLI",
         .product(name: "ArgumentParser", package: "swift-argument-parser"),
       ],
       path: "tests/cuj-12-package-graph"
+    ),
+    .testTarget(
+      name: "VaporizeCUJ32TestServiceAdoptionTests",
+      dependencies: ["VaporizeTestSupport"],
+      path: "tests/cuj-32-test-service-adoption"
     ),
   ]
 )

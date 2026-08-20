@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" fill="none" role="img" aria-labelledby="title">
+  <title id="title">Separate source and installed artifact identities</title>
+  <path d="M26 80H64M96 80H134" stroke="#64748B" stroke-width="6" stroke-linecap="round"/>
+  <path d="M20 50H48L64 80L48 110H20L4 80Z" stroke="#16A34A" stroke-width="6" stroke-linejoin="round"/>
+  <path d="M64 48H96V112H64Z" stroke="#7C3AED" stroke-width="6" stroke-linejoin="round"/>
+  <path d="M112 48H144V112H112Z" stroke="#0EA5E9" stroke-width="6" stroke-linejoin="round"/>
+</svg>

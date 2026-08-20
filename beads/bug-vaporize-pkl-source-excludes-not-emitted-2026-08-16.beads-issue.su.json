@@ -1,0 +1,49 @@
+{
+  "BeadsIssue": "0.1.0",
+  "schemaVersion": "0.1.0",
+  "id": "bug-vaporize-pkl-source-excludes-not-emitted-2026-08-16",
+  "title": "Bug — Pkl source excludes must survive Vaporize Xcode-project generation",
+  "parentId": "FR-VAPORIZE-PKL-PROJECT-GENERATION-move-owned-xcodegen-surfaces-to-pkl",
+  "dependencies": [
+    {
+      "issueId": "bug-vaporize-pkl-source-excludes-not-emitted-2026-08-16",
+      "dependsOnId": "FR-VAPORIZE-PKL-PROJECT-GENERATION-move-owned-xcodegen-surfaces-to-pkl",
+      "type": "parent-child",
+      "createdAt": "2026-08-16T21:46:08Z",
+      "createdBy": "codex from Disk Cleaner V000.000.003 generated-build failure"
+    }
+  ],
+  "createdAt": "2026-08-16T21:46:08Z",
+  "createdBy": "codex from Disk Cleaner V000.000.003 generated-build failure",
+  "owner": "wrkstrm-core",
+  "issueType": "bug",
+  "status": "open",
+  "priority": 0,
+  "labels": ["vaporize", "pkl", "xcodeproj-generation", "source-excludes", "version-composition", "bead-backed"],
+  "description": "AppleProjectSpec Pkl accepts Source.excludes and the generation receipt preserves those values, but AppleProjectXcodeProjectGenerator discovers every file under the source path without applying them. Disk Cleaner V000.000.003 excluded the retained V000.000.002 @main source to compose its renderer, yet generated world-state compiled both @main declarations and failed. Honor exact and glob exclusions before a PBX file reference or build phase is emitted; do not require consumer copies or historical source rewrites.",
+  "acceptanceCriteria": [
+    "A source entry with an exact exclude omits that file from generated PBX file references and source build phases.",
+    "A source entry with a recursive glob exclude omits matching descendants while retaining sibling files.",
+    "The configured Pkl-to-Xcode project proving ground covers exclusion behavior.",
+    "Disk Cleaner V000.000.003 generates and builds with the V000.000.002 renderer included but its historical @main excluded.",
+    "The generation receipt and source signature continue to preserve declared exclusions."
+  ],
+  "risks": [
+    "Treating source exclusions as receipt-only metadata lets Pkl report a topology it did not build, causing duplicate entrypoints or accidentally compiled retired code.",
+    "Over-broad glob matching can silently omit an intended source; tests must show exact exclusion, recursive exclusion, and retained sibling behavior."
+  ],
+  "relatedRefs": [
+    {
+      "link-ref-model": "0.0.5",
+      "t": "Pkl project generation umbrella Bead",
+      "m": [{ "lane": "kind", "v": "bead" }, { "lane": "tag", "v": "parent" }],
+      "tg": [{ "k": "rp", "rt": "mono", "v": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/FR-VAPORIZE-PKL-PROJECT-GENERATION-move-owned-xcodegen-surfaces-to-pkl.beads-issue.su.json" }]
+    },
+    {
+      "link-ref-model": "0.0.5",
+      "t": "Disk Cleaner V000.000.003 consumer Bead",
+      "m": [{ "lane": "kind", "v": "bead" }, { "lane": "tag", "v": "consumer" }],
+      "tg": [{ "k": "rp", "rt": "mono", "v": "private/universal/substrate/collectives/wrkstrm-core/private/apple/apps/disk-cleaner/beads/action-disk-cleaner-standard-operator-surfaces-v000-000-003-2026-08-16.beads-issue.su.json" }]
+    }
+  ]
+}

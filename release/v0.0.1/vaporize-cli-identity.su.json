@@ -1,0 +1,33 @@
+{
+  "VaporizeCLIIdentity": "0.0.1",
+  "schemaVersion": "0.0.1",
+  "linkRefModelVersion": "0.0.5",
+  "tool": "vaporize",
+  "displayName": "Vaporize",
+  "packageCoordinate": "vaporize@wrkstrm-core.cli",
+  "packageHome": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli",
+  "executableProduct": "vaporize.cli@wrkstrm-core.clia.sh",
+  "installedFilename": "vaporize.cli@wrkstrm-core.clia.sh",
+  "metadataSidecar": "vaporize.cli@wrkstrm-core.clia.sh.metadata/Info.plist",
+  "surface": "cli",
+  "collective": "wrkstrm-core",
+  "runtimeSuffix": "clia.sh",
+  "executableNamingConvention": "kebab-slug.cli@collective.clia.sh",
+  "packageNamingConvention": "kebab-slug@collective.cli",
+  "compatibilityPolicy": "The executable product is stable. Do not introduce an unqualified vaporize alias or a second executable spelling; historic package-coordinate references are migration evidence, not new invocation routes.",
+  "claimBoundary": "This identity record defines names and routing coordinates. It does not prove installation, source/install parity, release approval, or fleet availability.",
+  "authorityRefs": [
+    {
+      "link-ref-model": "0.0.5",
+      "t": "Vaporize Package.swift product authority",
+      "m": [{ "lane": "kind", "v": "source" }, { "lane": "tag", "v": "identity-authority" }],
+      "tg": [{ "k": "rp", "rt": "mono", "v": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/Package.swift" }]
+    },
+    {
+      "link-ref-model": "0.0.5",
+      "t": "Identity-normalization Bead",
+      "m": [{ "lane": "kind", "v": "bead" }, { "lane": "tag", "v": "execution-authority" }],
+      "tg": [{ "k": "rp", "rt": "mono", "v": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/action-vaporize-cli-identity-convention-normalization-2026-08-16.beads-issue.su.json" }]
+    }
+  ]
+}

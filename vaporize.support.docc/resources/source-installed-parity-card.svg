@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 540" fill="none" role="img" aria-labelledby="title">
+  <title id="title">Source and installed artifact comparison</title>
+  <path d="M140 270H356M604 270H820" stroke="#64748B" stroke-width="8" stroke-linecap="round"/>
+  <path d="M72 190H184L240 270L184 350H72L16 270Z" stroke="#16A34A" stroke-width="8" stroke-linejoin="round"/>
+  <path d="M356 170H604V370H356Z" stroke="#7C3AED" stroke-width="8" stroke-linejoin="round"/>
+  <path d="M424 270H536M480 214V326" stroke="#7C3AED" stroke-width="8" stroke-linecap="round"/>
+  <path d="M820 190H920V350H820Z" stroke="#0EA5E9" stroke-width="8" stroke-linejoin="round"/>
+</svg>

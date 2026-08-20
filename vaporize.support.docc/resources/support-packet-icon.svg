@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" fill="none" role="img" aria-labelledby="title">
+  <title id="title">Five-field support evidence packet</title>
+  <path d="M30 42H130V118H30Z" stroke="#7C3AED" stroke-width="6" stroke-linejoin="round"/>
+  <path d="M30 60H130" stroke="#7C3AED" stroke-width="6" stroke-linecap="round"/>
+  <circle cx="50" cy="82" r="7" stroke="#0EA5E9" stroke-width="5"/>
+  <circle cx="72" cy="82" r="7" stroke="#16A34A" stroke-width="5"/>
+  <circle cx="94" cy="82" r="7" stroke="#D97706" stroke-width="5"/>
+  <circle cx="61" cy="104" r="7" stroke="#64748B" stroke-width="5"/>
+  <circle cx="83" cy="104" r="7" stroke="#0EA5E9" stroke-width="5"/>
+</svg>

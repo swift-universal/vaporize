@@ -2,7 +2,7 @@ import ArgumentParser
 import Foundation
 import Testing
 
-@testable import AppleProjectSpecCore
+import AppleProjectSpecCore
 @testable import VaporizeCLI
 import VaporizeTestSupport
 

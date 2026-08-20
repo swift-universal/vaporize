@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 540" fill="none" role="img" aria-labelledby="title">
+  <title id="title">Measured build progress timeline</title>
+  <path d="M108 364H852" stroke="#64748B" stroke-width="8" stroke-linecap="round"/>
+  <path d="M192 364V214M374 364V148M556 364V250M738 364V182" stroke="#0EA5E9" stroke-width="8" stroke-linecap="round"/>
+  <circle cx="192" cy="214" r="32" stroke="#16A34A" stroke-width="8"/>
+  <circle cx="374" cy="148" r="32" stroke="#16A34A" stroke-width="8"/>
+  <circle cx="556" cy="250" r="32" stroke="#D97706" stroke-width="8"/>
+  <circle cx="738" cy="182" r="32" stroke="#D97706" stroke-width="8"/>
+  <path d="M512 410H782M512 410V438M782 410V438" stroke="#D97706" stroke-width="8" stroke-linecap="round"/>
+</svg>

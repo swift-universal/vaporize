@@ -21,6 +21,9 @@ feature flag or feature-status story, targetable tests, and release evidence.
 Treat that catalog as the human engineering narrative for future
 `wrkstrm.com/engineering` publication, and treat `release/v0.0.1/evidence/` as
 the linked proof corpus.
+Operator troubleshooting lives in `vaporize.support.docc/`. Start at
+`vaporize.support.docc/index.md` when a toolchain selection, source-installed
+parity, or bounded-build observation requires support evidence.
 
 Vaporize is intentionally not a swift-universal tool. The Xcode project/workspace
 surface is Apple product infrastructure, and the restricted native-tool route is

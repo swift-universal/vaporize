@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>CDDefaultCodeListingLanguage</key>
+  <string>swift</string>
+  <key>CFBundleDevelopmentRegion</key>
+  <string>en</string>
+  <key>CFBundleDisplayName</key>
+  <string>Vaporize Support</string>
+  <key>CFBundleIdentifier</key>
+  <string>com.wrkstrm.vaporize.support</string>
+  <key>CFBundleName</key>
+  <string>VaporizeSupport</string>
+  <key>CFBundlePackageType</key>
+  <string>DOCS</string>
+  <key>CFBundleShortVersionString</key>
+  <string>0.0.1</string>
+  <key>CFBundleVersion</key>
+  <string>0.0.1</string>
+  <key>DocCBundleDisplayName</key>
+  <string>Vaporize Support</string>
+  <key>DocCBundleIdentifier</key>
+  <string>com.wrkstrm.vaporize.support</string>
+  <key>DocCBundleRootReference</key>
+  <string>doc://com.wrkstrm.vaporize.support/documentation/index</string>
+</dict>
+</plist>

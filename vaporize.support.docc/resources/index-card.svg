@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 540" fill="none" role="img" aria-labelledby="title">
+  <title id="title">Vaporize support stations</title>
+  <path d="M146 270H814" stroke="#64748B" stroke-width="8" stroke-linecap="round"/>
+  <circle cx="160" cy="270" r="52" stroke="#0EA5E9" stroke-width="8"/>
+  <path d="M138 270H182M160 248V292" stroke="#0EA5E9" stroke-width="8" stroke-linecap="round"/>
+  <path d="M330 218H394L420 270L394 322H330L304 270Z" stroke="#7C3AED" stroke-width="8" stroke-linejoin="round"/>
+  <path d="M544 218H624V322H544Z" stroke="#D97706" stroke-width="8" stroke-linejoin="round"/>
+  <path d="M710 226H790L826 270L790 314H710L674 270Z" stroke="#16A34A" stroke-width="8" stroke-linejoin="round"/>
+</svg>

@@ -1,0 +1,70 @@
+/// Proving ground for portable AppleProjectSpec materialization.
+///
+/// The Pkl source root and generated .xcodeproj root must remain distinct.
+/// This fixture owns a local Swift package and four xcconfig variants so the
+/// renderer's typed path semantics are exercised through xcrun.
+
+amends "../../../../Pkl/AppleProjectSpec.pkl"
+
+name = "portable-local-package-build-variants"
+
+configs = new {
+  ["Debug"] = "debug"
+  ["Dogfood"] = "release"
+  ["TestFlight"] = "release"
+  ["Release"] = "release"
+}
+
+packages = new {
+  ["PortableFixtureSupport"] = new {
+    path = "Packages/PortableFixtureSupport"
+  }
+}
+
+targets = new {
+  ["PortableBuildVariantApp"] = new {
+    type = "application"
+    platform = "macOS"
+    deploymentTarget = "26.0"
+    sources = new {
+      new {
+        path = "Sources/PortableBuildVariantApp"
+      }
+    }
+    settings = new {
+      base = new {
+        ["CODE_SIGNING_ALLOWED"] = false
+        ["CODE_SIGNING_REQUIRED"] = false
+        ["PRODUCT_BUNDLE_IDENTIFIER"] = "com.wrkstrm.portable-build-variant-app"
+        ["PRODUCT_NAME"] = "PortableBuildVariantApp"
+      }
+    }
+    configFiles = new {
+      ["Debug"] = "Config/Debug.xcconfig"
+      ["Dogfood"] = "Config/Dogfood.xcconfig"
+      ["TestFlight"] = "Config/TestFlight.xcconfig"
+      ["Release"] = "Config/Release.xcconfig"
+    }
+    dependencies = new {
+      new {
+        package = "PortableFixtureSupport"
+        product = "PortableFixtureSupport"
+      }
+    }
+  }
+}
+
+schemes = new {
+  ["PortableBuildVariantApp"] = new {
+    shared = true
+    build = new Mapping {
+      ["targets"] = new Mapping {
+        ["PortableBuildVariantApp"] = "all"
+      }
+    }
+    run = new Mapping {
+      ["config"] = "Debug"
+      ["workingDirectory"] = "$(PROJECT_DIR)"
+    }
+  }
+}

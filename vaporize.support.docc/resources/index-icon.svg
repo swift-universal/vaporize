@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" fill="none" role="img" aria-labelledby="title">
+  <title id="title">Vaporize support evidence path</title>
+  <path d="M28 80H132" stroke="#64748B" stroke-width="6" stroke-linecap="round"/>
+  <circle cx="28" cy="80" r="13" stroke="#0EA5E9" stroke-width="6"/>
+  <circle cx="62" cy="80" r="13" stroke="#7C3AED" stroke-width="6"/>
+  <circle cx="98" cy="80" r="13" stroke="#D97706" stroke-width="6"/>
+  <circle cx="132" cy="80" r="13" stroke="#16A34A" stroke-width="6"/>
+</svg>

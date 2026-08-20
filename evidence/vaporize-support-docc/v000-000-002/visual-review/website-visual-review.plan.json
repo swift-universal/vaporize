@@ -1,0 +1,38 @@
+{
+  "schemaVersion": "0.0.3",
+  "kind": "website-visual-review-plan",
+  "createdAt": "2026-08-17T17:10:00Z",
+  "releaseItemID": "vaporize-support-docc-page-identity-v000-000-002",
+  "reviewedURL": "http://127.0.0.1:8132/documentation/index/",
+  "sourceArtifactDigest": "e155cc2a01a0002585a471655ca84207942d037e0986c782de323560dbedaf4c",
+  "testingPlanSHA256": "04ec3fa69ebda5e593594a4b3a5a29b624d46ea6f14bc0dc6edf22e9ac6f09ba",
+  "captureProfiles": [
+    {
+      "id": "desktop-1440x1200",
+      "viewportClass": "desktop",
+      "width": 1440,
+      "height": 1200,
+      "deviceScaleFactor": 1
+    },
+    {
+      "id": "mobile-390x844",
+      "viewportClass": "mobile",
+      "width": 390,
+      "height": 844,
+      "deviceScaleFactor": 1
+    }
+  ],
+  "requirements": {
+    "requiredSelectors": ["body"],
+    "requiredText": ["Vaporize Support", "Start Here", "Support Boundaries"],
+    "forbiddenText": ["TODO", "The page you're looking for can't be found."],
+    "focusSelectors": [],
+    "contrastSelectors": [],
+    "minimumTextContrastRatio": 4.5,
+    "unclippedTextSelectors": [],
+    "nonOverlappingSelectorPairs": [],
+    "requireNoHorizontalOverflow": true,
+    "maximumConsoleErrors": 0
+  },
+  "maximumReceiptAgeHours": 24
+}

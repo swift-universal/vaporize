@@ -94,6 +94,31 @@ func preservesMultiplePklSourceRootsInGeneratedXcodeProject() async throws {
   #expect(!pbxproj.contains("path = \"SharedFeature.swift\";"))
 }
 
+@Test("CUJ-14 omits exact and recursive Pkl source excludes from generated Xcode world-state")
+func honorsPklSourceExcludesInGeneratedXcodeProject() async throws {
+  let fixture = try makeSourceExcludedPklAppFixture()
+  defer { try? FileManager.default.removeItem(at: fixture.temporaryDirectory) }
+  defer { try? FileManager.default.removeItem(at: fixture.outputDirectory) }
+
+  let outputURL = fixture.outputDirectory.appendingPathComponent("ExcludedGenerated.xcodeproj")
+  let receipt = try await AppleProjectXcodeProjectGenerator.generate(
+    pklURL: fixture.projectPkl,
+    outputURL: outputURL,
+    requestId: "cuj-14-pkl-source-excludes"
+  )
+  let pbxproj = try String(
+    contentsOf: outputURL.appendingPathComponent("project.pbxproj"),
+    encoding: .utf8)
+
+  #expect(receipt.sourceFileCount == 1)
+  #expect(pbxproj.contains("CurrentApp.swift in Sources"))
+  #expect(!pbxproj.contains("HistoricalEntry.swift"))
+  #expect(!pbxproj.contains("GeneratedRetired.swift"))
+  #expect(receipt.pklSignature.targets["ExcludedApp"]?.sources.first?.excludes == [
+    "HistoricalEntry.swift", "Generated/**",
+  ])
+}
+
 @Test("CUJ-14 generates Xcode tool targets with typed release identity from Pkl")
 func generatesToolTargetReleaseIdentityFromPkl() async throws {
   let fixture = try makeTinyPklToolFixture()
@@ -423,6 +448,63 @@ private func makeMultiSourcePklAppFixture() throws -> MultiSourcePklAppFixture {
   )
 }
 
+private func makeSourceExcludedPklAppFixture() throws -> TinyPklAppFixture {
+  let temporaryDirectory = FileManager.default.temporaryDirectory
+    .appendingPathComponent("vaporize-pkl-source-excludes-\(UUID().uuidString)")
+  let outputDirectory = FileManager.default.temporaryDirectory
+    .appendingPathComponent("vaporize-pkl-source-excludes-output-\(UUID().uuidString)")
+  let sourceDirectory = temporaryDirectory.appendingPathComponent("Sources/app")
+  let generatedDirectory = sourceDirectory.appendingPathComponent("Generated")
+  try FileManager.default.createDirectory(at: generatedDirectory, withIntermediateDirectories: true)
+  try Data("import SwiftUI\n@main struct CurrentApp: App { var body: some Scene { WindowGroup { Text(\"Current\") } } }\n".utf8)
+    .write(to: sourceDirectory.appendingPathComponent("CurrentApp.swift"))
+  try Data("import SwiftUI\n@main struct HistoricalEntry: App { var body: some Scene { WindowGroup { Text(\"Historical\") } } }\n".utf8)
+    .write(to: sourceDirectory.appendingPathComponent("HistoricalEntry.swift"))
+  try Data("struct GeneratedRetired {}\n".utf8)
+    .write(to: generatedDirectory.appendingPathComponent("GeneratedRetired.swift"))
+
+  let projectPkl = temporaryDirectory.appendingPathComponent("project.pkl")
+  let schemaAmendsPath = relativePathForPklAmends(
+    from: projectPkl.deletingLastPathComponent(),
+    to: appleProjectSpecPklSchemaURL
+  )
+  try Data("""
+  amends "\(schemaAmendsPath)"
+
+  name = "source-excludes-pkl-app"
+
+  targets = new {
+    ["ExcludedApp"] = new {
+      type = "application"
+      platform = "macOS"
+      sources = new {
+        new {
+          path = "Sources/app"
+          excludes = new {
+            "HistoricalEntry.swift"
+            "Generated/**"
+          }
+        }
+      }
+      settings = new {
+        base = new {
+          ["GENERATE_INFOPLIST_FILE"] = true
+          ["PRODUCT_BUNDLE_IDENTIFIER"] = "com.wrkstrm.source-excludes-pkl-app"
+          ["PRODUCT_NAME"] = "source-excludes-pkl-app"
+          ["SWIFT_VERSION"] = 6.4
+        }
+      }
+    }
+  }
+  """.utf8).write(to: projectPkl)
+
+  return TinyPklAppFixture(
+    temporaryDirectory: temporaryDirectory,
+    outputDirectory: outputDirectory,
+    projectPkl: projectPkl
+  )
+}
+
 private func makeTinyPklToolFixture() throws -> TinyPklToolFixture {
   let temporaryDirectory = FileManager.default.temporaryDirectory
     .appendingPathComponent("vaporize-pkl-xcodeproj-tool-\(UUID().uuidString)")
@@ -635,3 +717,26 @@ targets:
     sources:
       - path: Sources/library
 """
+
+private struct XcrunResult {
+  var status: Int32
+  var stdout: String
+  var stderr: String
+}
+
+private func runXcrun(_ arguments: [String]) throws -> XcrunResult {
+  let process = Process()
+  let standardOutput = Pipe()
+  let standardError = Pipe()
+  process.executableURL = URL(fileURLWithPath: "/usr/bin/xcrun")
+  process.arguments = arguments
+  process.standardOutput = standardOutput
+  process.standardError = standardError
+  try process.run()
+  process.waitUntilExit()
+  return XcrunResult(
+    status: process.terminationStatus,
+    stdout: String(decoding: standardOutput.fileHandleForReading.readDataToEndOfFile(), as: UTF8.self),
+    stderr: String(decoding: standardError.fileHandleForReading.readDataToEndOfFile(), as: UTF8.self)
+  )
+}

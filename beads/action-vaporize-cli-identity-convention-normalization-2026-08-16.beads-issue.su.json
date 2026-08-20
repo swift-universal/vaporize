@@ -1,0 +1,69 @@
+{
+  "BeadsIssue": "0.1.0",
+  "schemaVersion": "0.1.0",
+  "id": "action-vaporize-cli-identity-convention-normalization-2026-08-16",
+  "title": "Action — normalize Vaporize package and executable identity conventions",
+  "parentId": "feature-tool-interface-language-naming-propagation-2026-08-16",
+  "dependencies": [
+    {
+      "issueId": "action-vaporize-cli-identity-convention-normalization-2026-08-16",
+      "dependsOnId": "feature-tool-interface-language-naming-propagation-2026-08-16",
+      "type": "parent-child",
+      "createdAt": "2026-08-16T23:59:00Z",
+      "createdBy": "codex at chairman direction"
+    }
+  ],
+  "createdAt": "2026-08-16T23:59:00Z",
+  "createdBy": "codex at chairman direction",
+  "owner": "wrkstrm-core",
+  "issueType": "migration",
+  "status": "open",
+  "priority": 0,
+  "labels": ["vaporize", "cli-identity", "naming", "swiftpm", "metadata", "bead-backed"],
+  "description": "Adopt the existing Tool Interface and Language Naming Standard for Vaporize. The SwiftPM package coordinate is vaporize@wrkstrm-core.cli, matching the package home. The new canonical executable product is vaporize.cli-s@wrkstrm-core.clia.sh because Vaporize is implemented by a SwiftPM executable target. The former bare cli product is historical compatibility only, not a second active canonical identity. Typed identity documentation distinguishes package coordinate, executable product, installed binary, metadata sidecar, interface, implementation language, owner, and human display name.",
+  "acceptanceCriteria": [
+    "Package.swift declares vaporize@wrkstrm-core.cli as the package name.",
+    "Package.swift declares vaporize.cli-s@wrkstrm-core.clia.sh as the single active executable product.",
+    "The command parser, docs, source-generated receipts, and current identity record use the Tool Interface and Language Naming Standard rather than restating a local grammar.",
+    "The former vaporize.cli@wrkstrm-core.clia.sh spelling is retained only where source compatibility or historical evidence requires it; it is never presented as a second canonical identity.",
+    "The refreshed installed metadata sidecar names the language-qualified canonical executable, CLI interface, Swift language code, unique version, and unique build after installed-runtime parity is repaired in its separate bug Bead.",
+    "Focused source build and installed --version checks are recorded separately under the language-qualified canonical executable name."
+  ],
+  "risks": [
+    "Changing the executable name without a declared migration leaves exact routes and installed artifacts split; the source migration and installed-runtime cutover must be independently receipted.",
+    "Treating the former bare cli spelling as a language claim would rewrite historical provenance; it remains a language-null compatibility record.",
+    "Reinstalling without unique version/build metadata would leave two materially different source states indistinguishable in fleet evidence."
+  ],
+  "relatedRefs": [
+    {
+      "link-ref-model": "0.0.5",
+      "t": "Parent tool interface and language naming propagation feature",
+      "m": [{ "lane": "kind", "v": "bead" }, { "lane": "tag", "v": "parent" }],
+      "tg": [{ "k": "rp", "rt": "mono", "v": "private/universal/substrate/collectives/wrkstrm-core/beads/feature-tool-interface-language-naming-propagation-2026-08-16.beads-issue.su.json" }]
+    },
+    {
+      "link-ref-model": "0.0.5",
+      "t": "Vaporize Package.swift identity authority",
+      "m": [{ "lane": "kind", "v": "source" }, { "lane": "tag", "v": "identity-authority" }],
+      "tg": [{ "k": "rp", "rt": "mono", "v": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/Package.swift" }]
+    },
+    {
+      "link-ref-model": "0.0.5",
+      "t": "Canonical tool interface and language naming standard",
+      "m": [{ "lane": "kind", "v": "standard" }, { "lane": "tag", "v": "identity-authority" }],
+      "tg": [{ "k": "rp", "rt": "mono", "v": "private/universal/substrate/collectives/wrkstrm-core/private/universal/kura-spaces/collections/tools/tool-interface-language-naming.v0.0.1.standard.docc/v0.0.1.tool-interface-language-naming-standard.su.json" }]
+    },
+    {
+      "link-ref-model": "0.0.5",
+      "t": "Installed CLI source-parity bug",
+      "m": [{ "lane": "kind", "v": "bead" }, { "lane": "tag", "v": "installed-proof-blocker" }],
+      "tg": [{ "k": "rp", "rt": "mono", "v": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/bug-vaporize-installed-cli-source-exclude-parity-2026-08-16.beads-issue.su.json" }]
+    },
+    {
+      "link-ref-model": "0.0.5",
+      "t": "Wrkstrm CTO accountable owner job",
+      "m": [{ "lane": "kind", "v": "job" }, { "lane": "slug", "v": "position-wrkstrm-org-cto" }, { "lane": "tag", "v": "accountable-owner" }],
+      "tg": [{ "k": "rp", "rt": "mono", "v": "private/universal/substrate/collectives/wrkstrm/private/universal/kura-spaces/jobs/position-wrkstrm-org-cto.org-job.json" }]
+    }
+  ]
+}

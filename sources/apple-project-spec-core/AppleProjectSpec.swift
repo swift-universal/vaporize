@@ -145,6 +145,7 @@ public struct AppleProjectDependency: Codable, Equatable, Sendable {
   public var package: String?
   public var product: String?
   public var target: String?
+  public var sdk: String?
   public var embed: Bool?
   public var codeSign: Bool?
 }
@@ -498,6 +499,7 @@ public enum AppleProjectPklRenderer {
     appendOptional("package", dependency.package.map(renderString), indent: level + 2, to: &lines)
     appendOptional("product", dependency.product.map(renderString), indent: level + 2, to: &lines)
     appendOptional("target", dependency.target.map(renderString), indent: level + 2, to: &lines)
+    appendOptional("sdk", dependency.sdk.map(renderString), indent: level + 2, to: &lines)
     appendOptional("embed", dependency.embed.map(renderBool), indent: level + 2, to: &lines)
     appendOptional("codeSign", dependency.codeSign.map(renderBool), indent: level + 2, to: &lines)
     lines.append("\(indent(level))}")
@@ -968,6 +970,7 @@ public struct AppleProjectDependencySignature: Codable, Equatable, Sendable {
   public var package: String?
   public var product: String?
   public var target: String?
+  public var sdk: String?
   public var embed: Bool?
   public var codeSign: Bool?
 
@@ -975,6 +978,7 @@ public struct AppleProjectDependencySignature: Codable, Equatable, Sendable {
     self.package = dependency.package
     self.product = dependency.product
     self.target = dependency.target
+    self.sdk = dependency.sdk
     self.embed = dependency.embed
     self.codeSign = dependency.codeSign
   }

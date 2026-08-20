@@ -1,3 +1,4 @@
+import AppleProjectSpecCore
 import Foundation
 import TranslateSourceGate
 import VaporizeCLICopy_v000_000_001
@@ -41,11 +42,15 @@ enum VaporizeI18nSourceGate {
     productName: String,
     surfaceKind: TranslateSourceSurfaceKind,
     enforcement: TranslateSourceGateEnforcement
-  ) throws -> Result {
+  ) async throws -> Result {
     let productDirectory = productDirectory.standardizedFileURL
-    let sources = try TranslateSourceGateFileSystem.discoverSwiftSources(
-      below: productDirectory
+    let sourceRoots = try await declaredSourceRoots(
+      productDirectory: productDirectory,
+      productName: productName
     )
+    let sources = try sourceRoots.flatMap {
+      try TranslateSourceGateFileSystem.discoverSwiftSources(below: $0)
+    }
     let catalogRoot = TranslateSourceGateFileSystem.findCanonicalCatalogPackagesRoot(
       startingAt: productDirectory
     )
@@ -118,6 +123,41 @@ enum VaporizeI18nSourceGate {
       )
     }
     return Result(report: report, receiptURL: receiptURL)
+  }
+
+  /// Pkl owns an Apple product's target-to-source boundary.  Scanning the
+  /// project root also traverses generated build directories and vendored
+  /// SwiftPM checkouts, incorrectly treating dependency copy as product copy.
+  private static func declaredSourceRoots(
+    productDirectory: URL,
+    productName: String
+  ) async throws -> [URL] {
+    let pklURL = productDirectory.appendingPathComponent("project.pkl")
+    guard FileManager.default.fileExists(atPath: pklURL.path) else {
+      return [productDirectory]
+    }
+
+    let specification = try await AppleProjectPklLoader.load(url: pklURL)
+    let targetSources = specification.targets.compactMap { targetName, target -> [AppleProjectSource]? in
+      guard targetName == productName
+        || target.settings?.base?["PRODUCT_NAME"]?.stringValue == productName
+      else { return nil }
+      return target.sources
+    }.flatMap { $0 }
+
+    guard !targetSources.isEmpty else {
+      return [productDirectory]
+    }
+
+    return try targetSources.map { source in
+      let root = productDirectory.appendingPathComponent(source.path).standardizedFileURL
+      var isDirectory: ObjCBool = false
+      guard FileManager.default.fileExists(atPath: root.path, isDirectory: &isDirectory), isDirectory.boolValue
+      else {
+        throw CocoaError(.fileNoSuchFile, userInfo: [NSFilePathErrorKey: root.path])
+      }
+      return root
+    }
   }
 }
 
