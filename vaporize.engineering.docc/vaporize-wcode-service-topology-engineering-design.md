@@ -309,6 +309,46 @@ before build with the requested range, installed candidates, first incompatible
 capability, and an exact next action. It never moves the repository or silently
 selects a different runtime floor to make an SDK fit.
 
+### Wrkstrm Windows Client Support Matrix
+
+The default product policy supports only the final Windows 10 feature release
+and every released Windows 11 feature release. Product support and Microsoft's
+servicing state are separate facts: an ended Microsoft servicing window does
+not silently remove a Wrkstrm support lane, and a Microsoft-supported release
+does not count as Wrkstrm runtime proof.
+
+| WCode lane | Feature release | Build family | Distribution | Product support | Microsoft servicing at policy revision |
+| --- | --- | ---: | --- | --- | --- |
+| `windows-10-22h2` | Windows 10 22H2 | 19045 | Broad | Supported | End of updates |
+| `windows-11-21h2` | Windows 11 21H2 | 22000 | Broad | Supported | End of updates |
+| `windows-11-22h2` | Windows 11 22H2 | 22621 | Broad | Supported | End of updates |
+| `windows-11-23h2` | Windows 11 23H2 | 22631 | Broad | Supported | Edition-dependent |
+| `windows-11-24h2` | Windows 11 24H2 | 26100 | Broad | Supported | Active |
+| `windows-11-25h2` | Windows 11 25H2 | 26200 | Broad | Supported | Active |
+| `windows-11-26h1` | Windows 11 26H1 | 28000 | Hardware-specific | Supported | Hardware-specific active release |
+
+The build family establishes lane identity and the deployment baseline, such
+as `10.0.19045.0`; it does not pin a stale cumulative-update revision. A test
+host must be updated to the latest applicable servicing revision before WCode
+can issue evidence. Windows 11 26H1 remains a separate lane because it is a
+hardware-optimized release and is not an update path for existing 24H2 or 25H2
+devices.
+
+Every lane begins as `declared`. It becomes `verified` only after the same app
+version has separate WCode build, run, and install receipts from that release
+family. The organizational `maximumTestedOS` is then the highest exact observed
+build among verified lanes; selecting SDK 28000 alone does not establish it.
+
+The versioned policy vocabulary and canonical initial matrix live at:
+
+```text
+schema-universal/private/universal/domain/platforms/schema-families/windows-platform-support-policy-schemas/v0.0.1/
+```
+
+WCode consumes a project-owned policy instance. The default policy is this
+matrix. A product-specific difference must be explicit, reviewable, and named
+in the receipt; SDK or runtime resolution cannot rewrite the release lanes.
+
 ### Conditional Compilation Boundary
 
 Conditional compilation is allowed only where a package must bind a concrete
@@ -387,6 +427,7 @@ using an unrelated installed Vaporize binary as a fallback.
 | Pilot build | one Windows app | WCode creates the expected app artifact from the declared source. | Run, install, signing, or fleet parity. |
 | Pilot run | same Windows app | WCode launches the exact built artifact with declared arguments and environment. | Installation or release. |
 | Pilot install | same Windows app | WCode places and verifies the exact app at the declared destination. | Signing, distribution, or release. |
+| Windows support matrix | one lane for Windows 10 22H2 and one lane for every Windows 11 feature release | Each lane has separate build, run, and install receipts for the same app version. | Microsoft servicing, signing, store readiness, or untested architectures. |
 
 Tests use injected spy services for routing and focused real adapters for
 platform behavior. Tests do not compile different expectations for each OS in
@@ -543,3 +584,4 @@ release, installation fleet, signing identity, or public Windows support claim.
 - `service-universal/private/universal/domain/runtime/spm/common-service-context/CommonServiceContext.docc/index.md`
 - `swift-universal/private/universal/spm/domain/system/common-process-foundation-runner`
 - `swift-universal/private/universal/spm/domain/system/common-process-subprocess-runner`
+- `schema-universal/private/universal/domain/platforms/schema-families/windows-platform-support-policy-schemas/v0.0.1/`
