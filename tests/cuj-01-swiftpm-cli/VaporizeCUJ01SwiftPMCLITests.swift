@@ -7,6 +7,21 @@ import Testing
 @testable import SwiftCLIInstaller
 @testable import VaporizeCLI
 
+@Test("File-system path resolution preserves Windows drive roots")
+func fileSystemPathResolutionPreservesWindowsDriveRoots() {
+  let base = URL(fileURLWithPath: "C:/c/s")
+  let resolved = VaporizeFileSystemPathResolution.absoluteURL(
+    for: "D:/products/town/scripts/wcode-lifecycle.ps1",
+    relativeTo: base
+  )
+
+  #expect(VaporizeFileSystemPathResolution.isAbsolute(resolved.path))
+  #expect(
+    resolved.path.replacingOccurrences(of: "\\", with: "/")
+      == "D:/products/town/scripts/wcode-lifecycle.ps1"
+  )
+}
+
 @Test("CUJ-01 exposes the canonical Vaporize command identity")
 func exposesCanonicalVaporizeCommandIdentity() {
   #expect(VaporizeCLI.configuration.commandName == "vaporize.cli@wrkstrm-core.clia.sh")
@@ -22,40 +37,71 @@ func appRunReceiptNamesInstalledProduct() {
   )
 }
 
-@Test(
-  "CUJ-01 models every core operation as adjacent Swift and Xcode authorities on macOS",
-  arguments: VaporizeCoreOperation.allCases,
-  [VaporizeCoreExecutionAuthority.swift, .xcode]
-)
-func modelsParallelMacOSCoreCommandAuthorities(
-  operation: VaporizeCoreOperation,
-  authority: VaporizeCoreExecutionAuthority
-) throws {
-  let plan = try VaporizeCoreExecutionPlan.resolve(
-    operation: operation,
-    arguments: [authority.rawValue, "--fixture-argument"],
-    platform: .macOS
+#if os(macOS)
+  @Test(
+    "CUJ-01 models every core operation as adjacent Swift and Xcode authorities on macOS",
+    arguments: VaporizeCoreOperation.allCases,
+    [VaporizeCoreExecutionAuthority.swift, .xcode]
   )
+  func modelsParallelMacOSCoreCommandAuthorities(
+    operation: VaporizeCoreOperation,
+    authority: VaporizeCoreExecutionAuthority
+  ) throws {
+    let plan = try VaporizeCoreExecutionPlan.resolve(
+      operation: operation,
+      arguments: [authority.rawValue, "--fixture-argument"],
+      platform: .macOS
+    )
 
-  #expect(plan.operation == operation)
-  #expect(plan.executionAuthority == authority)
-  #expect(plan.forwardedArguments == ["--fixture-argument"])
-  #expect(!plan.commandCollapsed)
-  #expect(
-    plan.alternateCommandPrefix
-      == "vaporize.cli@wrkstrm-core.clia.sh \(operation.rawValue) \(authority.alternate.rawValue)"
+    #expect(plan.operation == operation)
+    #expect(plan.executionAuthority == authority)
+    #expect(plan.forwardedArguments == ["--fixture-argument"])
+    #expect(!plan.commandCollapsed)
+    let alternate = try #require(authority.alternate)
+    #expect(
+      plan.alternateCommandPrefix
+        == "vaporize.cli@wrkstrm-core.clia.sh \(operation.rawValue) \(alternate.rawValue)"
+    )
+  }
+#endif
+
+#if os(Windows)
+  @Test(
+    "CUJ-01 models Windows swift-win and WCode as non-interchangeable authorities",
+    arguments: VaporizeCoreOperation.allCases,
+    [VaporizeCoreExecutionAuthority.swiftWin, .wcode]
   )
-}
+  func modelsWindowsCoreCommandAuthorities(
+    operation: VaporizeCoreOperation,
+    authority: VaporizeCoreExecutionAuthority
+  ) throws {
+    let plan = try VaporizeCoreExecutionPlan.resolve(
+      operation: operation,
+      arguments: [authority.rawValue, "--fixture-argument"],
+      platform: .windows
+    )
+
+    #expect(plan.operation == operation)
+    #expect(plan.executionAuthority == authority)
+    #expect(plan.forwardedArguments == ["--fixture-argument"])
+    #expect(!plan.commandCollapsed)
+    #expect(plan.alternateCommandPrefix == nil)
+    #expect(
+      plan.alternateCommand(invocation: ["vaporize", operation.rawValue, authority.rawValue])
+        == nil
+    )
+  }
+#endif
 
 @Test(
-  "CUJ-01 collapses every non-macOS core command to pure Swift",
+  "CUJ-01 collapses every non-macOS, non-Windows core command to pure Swift",
   arguments: VaporizeCoreOperation.allCases
 )
-func collapsesNonMacOSCoreCommandsToPureSwift(operation: VaporizeCoreOperation) throws {
+func collapsesOtherCoreCommandsToPureSwift(operation: VaporizeCoreOperation) throws {
   let plan = try VaporizeCoreExecutionPlan.resolve(
     operation: operation,
     arguments: ["--filter", "Fixture"],
-    platform: .nonMacOS
+    platform: .other
   )
 
   #expect(plan.executionAuthority == .swift)
@@ -66,53 +112,86 @@ func collapsesNonMacOSCoreCommandsToPureSwift(operation: VaporizeCoreOperation) 
     _ = try VaporizeCoreExecutionPlan.resolve(
       operation: operation,
       arguments: ["swift"],
-      platform: .nonMacOS
+      platform: .other
     )
   }
   #expect(throws: Error.self) {
     _ = try VaporizeCoreExecutionPlan.resolve(
       operation: operation,
       arguments: ["xcode"],
-      platform: .nonMacOS
+      platform: .other
     )
   }
-}
-
-@Test("CUJ-01 requires an explicit authority on macOS")
-func requiresExplicitMacOSCoreCommandAuthority() {
   #expect(throws: Error.self) {
     _ = try VaporizeCoreExecutionPlan.resolve(
-      operation: .build,
-      arguments: [],
-      platform: .macOS
+      operation: operation,
+      arguments: ["swift-win"],
+      platform: .other
+    )
+  }
+  #expect(throws: Error.self) {
+    _ = try VaporizeCoreExecutionPlan.resolve(
+      operation: operation,
+      arguments: ["wcode"],
+      platform: .other
     )
   }
 }
 
-@Test("CUJ-01 derives the exact adjacent authority retry without losing options")
-func derivesExactAdjacentAuthorityRetry() throws {
-  let plan = try VaporizeCoreExecutionPlan.resolve(
-    operation: .test,
-    arguments: ["swift", "--filter", "A B"],
-    platform: .macOS
-  )
+#if os(macOS)
+  @Test("CUJ-01 requires an explicit authority on macOS")
+  func requiresExplicitMacOSCoreCommandAuthority() {
+    #expect(throws: Error.self) {
+      _ = try VaporizeCoreExecutionPlan.resolve(
+        operation: .build,
+        arguments: [],
+        platform: .macOS
+      )
+    }
+  }
+#endif
 
-  #expect(
-    plan.alternateCommand(
-      invocation: [
-        "/tmp/vaporize",
-        "test",
-        "swift",
-        "--package-path",
-        "/workspace/tool",
-        "--",
-        "--filter",
-        "A B",
-      ]
+#if os(Windows)
+  @Test("CUJ-01 requires a Windows authority and excludes Apple authorities")
+  func requiresExplicitWindowsCoreCommandAuthority() {
+    for arguments in [[], ["swift"], ["xcode"]] {
+      #expect(throws: Error.self) {
+        _ = try VaporizeCoreExecutionPlan.resolve(
+          operation: .build,
+          arguments: arguments,
+          platform: .windows
+        )
+      }
+    }
+  }
+#endif
+
+#if os(macOS)
+  @Test("CUJ-01 derives the exact adjacent authority retry without losing options")
+  func derivesExactAdjacentAuthorityRetry() throws {
+    let plan = try VaporizeCoreExecutionPlan.resolve(
+      operation: .test,
+      arguments: ["swift", "--filter", "A B"],
+      platform: .macOS
     )
-      == "vaporize.cli@wrkstrm-core.clia.sh test xcode --package-path /workspace/tool -- --filter 'A B'"
-  )
-}
+
+    #expect(
+      plan.alternateCommand(
+        invocation: [
+          "/tmp/vaporize",
+          "test",
+          "swift",
+          "--package-path",
+          "/workspace/tool",
+          "--",
+          "--filter",
+          "A B",
+        ]
+      )
+        == "vaporize.cli@wrkstrm-core.clia.sh test xcode --package-path /workspace/tool -- --filter 'A B'"
+    )
+  }
+#endif
 
 @Test("CUJ-01 removes the global swift-source compatibility option")
 func removesSwiftSourceCompatibilityOption() {
@@ -752,7 +831,7 @@ func rawExperimentalInstallOmitsResourceBundlesAndVaporizeCarriesThem() async th
       productBuildDate: "2026-07-03T00:00:00Z",
       installerVersion: "0.1.0",
       installerBuild: "test",
-      swiftToolchainSource: .xcode
+      swiftToolchainSource: .defaultSwift
     )
   )
   try await installer.run()
@@ -987,6 +1066,105 @@ private func assertActionableVaporizeProductValidationError(
   )
 }
 
+#if os(Windows)
+  @Test("CUJ-01 routes Windows app lifecycle configuration through WCode")
+  func parsesWCodeAppLifecycleConfiguration() throws {
+    let command = try VaporizeCLI.parse([
+      "build",
+      "wcode",
+      "--artifact", "app",
+      "--package-path", "C:\\workspace\\town",
+      "--product", "TownWindowsDemo",
+      "--configuration", "debug",
+      "--wcode-environment", "SCUI_DEFAULT_BACKEND=WinUIBackend",
+      "--wcode-environment", "WCODE_THEME=night",
+      "--destination", "C:\\Apps\\Town",
+      "--force",
+      "--skip-build",
+      "--skip-install",
+      "--launch",
+      "--",
+      "--app-argument",
+    ])
+
+    #expect(try command.wcodeSwiftBuildArguments() == [
+      "build",
+      "--package-path", "C:\\workspace\\town",
+      "-c", "debug",
+      "--product", "TownWindowsDemo",
+    ])
+    #expect(try command.wcodeSwiftRunArguments() == [
+      "run",
+      "--package-path", "C:\\workspace\\town",
+      "-c", "debug",
+      "TownWindowsDemo",
+      "--app-argument",
+    ])
+    let environment = try command.wcodeBuildEnvironment()
+    let expectedWCodeEnvironment = [
+      "WCODE_PACKAGE_PATH": "C:/workspace/town",
+      "WCODE_PRODUCT": "TownWindowsDemo",
+      "WCODE_CONFIGURATION": "debug",
+      "WCODE_ARTIFACT": "app",
+      "WCODE_DESTINATION": "C:\\Apps\\Town",
+      "WCODE_FORCE_REINSTALL": "1",
+      "WCODE_SKIP_BUILD": "1",
+      "WCODE_SKIP_INSTALL": "1",
+      "WCODE_LAUNCH": "1",
+      "WCODE_ARGUMENTS_JSON": "[\"--app-argument\"]",
+      "SCUI_DEFAULT_BACKEND": "WinUIBackend",
+      "WCODE_THEME": "night",
+    ]
+    for (name, value) in expectedWCodeEnvironment {
+      #expect(environment[name] == value)
+    }
+  }
+
+  @Test("CUJ-01 rejects malformed WCode environment assignments")
+  func rejectsMalformedWCodeEnvironmentAssignment() throws {
+    let command = try VaporizeCLI.parse([
+      "build",
+      "wcode",
+      "--artifact", "app",
+      "--package-path", "C:\\workspace\\town",
+      "--product", "TownWindowsDemo",
+      "--wcode-environment", "NOT_AN_ASSIGNMENT",
+    ])
+
+    #expect(throws: Error.self) {
+      _ = try command.wcodeBuildEnvironment()
+    }
+  }
+
+  @Test("CUJ-01 lets WCode own Windows app build install and run")
+  func letsWCodeOwnWindowsAppLifecycle() {
+    for operation in [VaporizeCoreOperation.build, .install, .run] {
+      #expect(
+        VaporizeCLI.windowsArtifactAuthorityGuidance(
+          operation: operation,
+          authority: .wcode,
+          artifact: .app
+        ) == nil
+      )
+    }
+  }
+
+  @Test("CUJ-01 directs a SwiftPM app install to the matching WCode operation")
+  func directsSwiftWinAppInstallToWCode() throws {
+    let guidance = try #require(
+      VaporizeCLI.windowsArtifactAuthorityGuidance(
+        operation: .install,
+        authority: .swiftWin,
+        artifact: .app
+      )
+    )
+
+    #expect(guidance.contains("swift-win cannot install an app artifact"))
+    #expect(guidance.contains("vaporize install wcode --artifact app"))
+    #expect(guidance.contains("--wcode-build-script <script.ps1>"))
+  }
+#endif
+
 private func coreCommandArguments(
   _ operation: VaporizeCoreOperation,
   authority: VaporizeCoreExecutionAuthority = .swift,
@@ -994,8 +1172,12 @@ private func coreCommandArguments(
 ) -> [String] {
   #if os(macOS)
     [operation.rawValue, authority.rawValue] + arguments
+  #elseif os(Windows)
+    let windowsAuthority: VaporizeCoreExecutionAuthority =
+      authority == .swift ? .swiftWin : authority
+    return [operation.rawValue, windowsAuthority.rawValue] + arguments
   #else
-    precondition(authority == .swift, "Xcode authority is not part of the non-macOS CLI surface")
+    precondition(authority == .swift, "Explicit platform authority is not part of this CLI surface")
     [operation.rawValue] + arguments
   #endif
 }

@@ -59,7 +59,11 @@ func acceptsRelocatedDigikomaProvenance() throws {
   )
 
   #expect(receipt.overallStatus == "pass")
-  #expect(receipt.generatedXcconfigs.allSatisfy(\.generatedByDigikomaReleaseFeatures))
+  #expect(
+    receipt.generatedXcconfigs.allSatisfy {
+      $0.generatedByDigikomaReleaseFeatures
+    }
+  )
   #expect(receipt.releaseFeaturesSwift.generatedByDigikomaReleaseFeatures == true)
 }
 
