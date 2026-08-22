@@ -277,6 +277,38 @@ is not permission to try another authority.
 7. A generated command cannot re-enter application lifecycle selection.
 8. One receipt names one selected implementation and one operation.
 
+### Windows Platform Version Policy
+
+WCode treats the compiler SDK, application runtime, deployment floor, and app
+identity as independent version axes. Selecting a modern compiler SDK must not
+silently raise the oldest Windows version an app may run on.
+
+| Field | Meaning | Selection rule |
+| --- | --- | --- |
+| `compileSDK` | Windows SDK used for headers, libraries, metadata, and tools. | Exact version or `latestCompatible`; the resolved installed version is receipted. |
+| `windowsAppSDK` | Windows App SDK and matching Windows App Runtime. | Exact stable version unless the project explicitly opts into another channel. |
+| `minimumOS` | Oldest Windows build on which installation and launch are supported. | Project-owned and configurable; never inferred from `compileSDK`. |
+| `maximumTestedOS` | Highest Windows build with recorded runtime evidence. | Derived only from a completed test lane, not from the newest installed SDK. |
+| `applicationVersion` | Four-part Windows package/application identity version. | Product-owned and independent of every SDK version. |
+| `compatibilityPolicy` | Whether WCode requires exact, latest-compatible, or bounded SDK selection. | Explicit project input with no ambient fallback. |
+
+For MSIX, WCode maps `minimumOS` and `maximumTestedOS` to the corresponding
+`TargetDeviceFamily` values. For unpackaged apps, it emits the appropriate
+application compatibility manifest and preserves the same receipt facts.
+
+An app may compile against the newest stable SDK and continue to support
+Windows 10 when all selected capabilities exist at the declared floor or are
+protected by runtime availability checks and tested fallbacks. Windows Runtime
+APIs use contract or member availability checks. Windows App SDK APIs use the
+runtime's version-adaptive mechanism or a tested failure fallback; compile-time
+`#if` is not runtime availability evidence.
+
+WCode may select an older installed compiler SDK only when it satisfies the
+project's bounded SDK policy and every required capability. Otherwise it fails
+before build with the requested range, installed candidates, first incompatible
+capability, and an exact next action. It never moves the repository or silently
+selects a different runtime floor to make an SDK fit.
+
 ### Conditional Compilation Boundary
 
 Conditional compilation is allowed only where a package must bind a concrete
@@ -322,6 +354,9 @@ contract or assigning CLI replacement to WCode automatically.
 7. Service registration never changes an active invocation's implementation.
 8. Canonical paths remain stable; long path support is a host prerequisite, not
    a reason to shorten or relocate repositories.
+9. Resolving a newer compiler SDK never mutates `minimumOS`.
+10. Receipts record requested and resolved compiler SDK, Windows App SDK,
+    minimum OS, maximum tested OS, and application version independently.
 
 ## Error and Next-Step Contract
 
