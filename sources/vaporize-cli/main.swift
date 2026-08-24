@@ -92,6 +92,27 @@ struct VaporizeCLI: AsyncParsableCommand {
 
       \(swiftlyToolchainSelectionAvailability)
     """
+  #elseif os(Windows)
+    static let platformToolchainSelectionAbstract = ""
+    static let coreCommandAuthorityDiscussion = """
+      Core execution commands on Windows:
+        vaporize install|build|run swift-win [options]
+        vaporize install|build|run wcode --artifact app [options]
+      `swift-win` is limited to raw SwiftPM products defined by Package.swift.
+      `wcode` owns Windows application lifecycle work, including any declared
+      custom PowerShell phase and app-scoped environment. WCode is not a
+      SwiftPM retry lane, so Vaporize does not suggest one authority as the
+      other's retry.
+      """
+    static let toolchainSelectionDiscussion = """
+      \(coreCommandAuthorityDiscussion)
+
+      Toolchain selection structure:
+        vaporize toolchain-selection swift -- use [swiftly-use-options] [selector]
+      Selection does not own toolchain lifecycle, general inspection, or execution.
+
+      \(swiftlyToolchainSelectionAvailability)
+      """
   #else
     static let platformToolchainSelectionAbstract = ""
     static let coreCommandAuthorityDiscussion = """
@@ -299,6 +320,24 @@ struct VaporizeCLI: AsyncParsableCommand {
     name: .customLong("launch"),
     help: ArgumentHelp(VaporizeCLICopy_v000_000_001.CLI.vaporizeLaunchAppAfterInstallAppMode))
   var launch: Bool = false
+
+  #if os(Windows)
+    @Option(
+      name: .customLong("wcode-build-script"),
+      help: ArgumentHelp(
+        "PowerShell lifecycle phase for a WCode app. It receives WCODE_OPERATION, WCODE_PACKAGE_PATH, WCODE_PRODUCT, WCODE_CONFIGURATION, WCODE_ARTIFACT, WCODE_ARGUMENTS_JSON, and lifecycle flags in its environment."
+      )
+    )
+    var wcodeBuildScript: String?
+
+    @Option(
+      name: .customLong("wcode-environment"),
+      help: ArgumentHelp(
+        "Environment assignment NAME=VALUE applied to a WCode app lifecycle operation. Repeat for each assignment."
+      )
+    )
+    var wcodeEnvironmentAssignments: [String] = []
+  #endif
 
   @Option(
     name: .customLong("xcode-project"),
@@ -716,6 +755,14 @@ struct VaporizeCLI: AsyncParsableCommand {
         artifactPath = product.map { installedCLIPath(product: $0) }
       }
     case .app:
+      #if os(Windows)
+        if recorder.authority == .wcode {
+          // A WCode lifecycle phase may package or install to a project-specific
+          // location. Do not claim an Apple .app destination in the receipt.
+          artifactPath = nil
+          break
+        }
+      #endif
       if let product {
         // SwiftAppInstaller may locate a debug-named build bundle, but it
         // installs it under the product name. The receipt must name the
@@ -751,30 +798,70 @@ struct VaporizeCLI: AsyncParsableCommand {
       operation: operation,
       arguments: forwardedArguments
     )
-    if resolvedDeveloperDirectory != nil, plan.executionAuthority != .xcode {
-      throw ValidationError(
-        vaporizeCopyFill(
-          VaporizeCLICopy_v000_000_001.CLI.vaporizeDeveloperDirBelongsToTheA1,
-          ["\(operation.rawValue)"])
-      )
-    }
+    #if os(macOS)
+      if resolvedDeveloperDirectory != nil, plan.executionAuthority != .xcode {
+        throw ValidationError(
+          vaporizeCopyFill(
+            VaporizeCLICopy_v000_000_001.CLI.vaporizeDeveloperDirBelongsToTheA1,
+            ["\(operation.rawValue)"])
+        )
+      }
+    #endif
     return plan
   }
 
   private func validateArtifactAuthority(_ plan: VaporizeCoreExecutionPlan) throws {
-    guard artifact == .app, plan.executionAuthority != .xcode else { return }
     #if os(macOS)
+      guard artifact == .app, plan.executionAuthority != .xcode else { return }
       throw ValidationError(
         vaporizeCopyFill(
           VaporizeCLICopy_v000_000_001.CLI.vaporizeVaporizeAppArtifactsRequireTheXcode,
           ["\(plan.operation.rawValue)"])
       )
+    #elseif os(Windows)
+      if let guidance = Self.windowsArtifactAuthorityGuidance(
+        operation: plan.operation,
+        authority: plan.executionAuthority,
+        artifact: artifact
+      ) {
+        throw ValidationError(guidance)
+      }
     #else
+      guard artifact == .app else { return }
       throw ValidationError(
         VaporizeCLICopy_v000_000_001.CLI.vaporizeVaporizeAppArtifactsRequireXcodeAnd
       )
     #endif
   }
+
+  #if os(Windows)
+    static func windowsArtifactAuthorityGuidance(
+      operation: VaporizeCoreOperation,
+      authority: VaporizeCoreExecutionAuthority,
+      artifact: ArtifactKind
+    ) -> String? {
+      switch (artifact, authority) {
+      case (.cli, .wcode), (.tui, .wcode):
+        return """
+          wcode only owns Windows app artifacts; it cannot \(operation.rawValue) a \(artifact.rawValue).
+          next: use `vaporize \(operation.rawValue) swift-win --artifact \(artifact.rawValue) --package-path <package> --product <product>` for a raw Package.swift product.
+          """
+      case (.app, .swiftWin):
+        return """
+          swift-win cannot \(operation.rawValue) an app artifact; swift-win is limited to raw Package.swift products.
+          next: use `vaporize \(operation.rawValue) wcode --artifact app --package-path <package> --product <app-product> --configuration <debug|release>`.
+          For app-specific tooling, pass `--wcode-build-script <script.ps1>`; it receives the requested WCode lifecycle operation.
+          """
+      case (.app, .wcode) where operation == .test:
+        return """
+          WCode owns Windows app build, install, and run lifecycle operations; app testing has no WCode contract yet.
+          next: use `vaporize build wcode`, `vaporize install wcode`, or `vaporize run wcode` with `--artifact app` as appropriate.
+          """
+      default:
+        return nil
+      }
+    }
+  #endif
 
   /// Resolves and advances the one declared app build-number source before an
   /// Xcode build starts. The changed Pkl value, the Xcode override, and later
@@ -782,6 +869,14 @@ struct VaporizeCLI: AsyncParsableCommand {
   func prepareAppBuildNumberIdentity(for mode: Mode) async throws
     -> AppBuildNumberIdentity?
   {
+    #if os(Windows)
+      guard !autoIncrementBuild else {
+        throw ValidationError(
+          "--auto-increment-build belongs to the Xcode app lifecycle and is not available to WCode."
+        )
+      }
+      return nil
+    #else
     guard autoIncrementBuild else { return nil }
     guard artifact == .app else {
       throw ValidationError(VaporizeCLICopy_v000_000_001.CLI.vaporizeAutoIncrementBuildRequiresArtifactApp)
@@ -829,6 +924,7 @@ struct VaporizeCLI: AsyncParsableCommand {
       sourceCarrierPath: stamped.sourcePath,
       receipt: receipt
     )
+    #endif
   }
 
   private func sourceWorktreeIsDirty(packagePath: String) async throws -> Bool {
@@ -882,13 +978,14 @@ struct VaporizeCLI: AsyncParsableCommand {
     switch plan.executionAuthority {
     case .swift:
       return .defaultSwift
-    case .xcode:
-      #if os(macOS)
+    #if os(macOS)
+      case .xcode:
         return .xcode
-      #else
-        throw ValidationError(
-          VaporizeCLICopy_v000_000_001.CLI.vaporizeTheXcodeAssistedSwiftAuthorityIs)
-      #endif
+    #endif
+    #if os(Windows)
+      case .swiftWin, .wcode:
+        return .defaultSwift
+    #endif
     }
   }
 
@@ -1018,6 +1115,12 @@ struct VaporizeCLI: AsyncParsableCommand {
     case .cli, .tui:
       try await installCLI()
     case .app:
+      #if os(Windows)
+        if try usesWCodeExecutionAuthority(for: .install) {
+          try await runWCodeApp(operation: .install)
+          return
+        }
+      #endif
       try await installApp(launchApp: launchApp, buildIdentity: buildIdentity)
     }
   }
@@ -1120,6 +1223,12 @@ struct VaporizeCLI: AsyncParsableCommand {
         try await installCLI()
       }
     case .app:
+      #if os(Windows)
+        if try usesWCodeExecutionAuthority(for: .build) {
+          try await runWCodeApp(operation: .build)
+          return
+        }
+      #endif
       if skipInstall {
         try await buildAppOnly(buildIdentity: buildIdentity)
       } else {
@@ -1205,6 +1314,12 @@ struct VaporizeCLI: AsyncParsableCommand {
       }
       try await runInstalledCLI()
     case .app:
+      #if os(Windows)
+        if try usesWCodeExecutionAuthority(for: .run) {
+          try await runWCodeApp(operation: .run)
+          return
+        }
+      #endif
       if !skipInstall {
         try await installApp(launchApp: true, buildIdentity: buildIdentity)
       } else {
@@ -1403,9 +1518,15 @@ struct VaporizeCLI: AsyncParsableCommand {
         == "CURRENT_PROJECT_VERSION"
     }
     guard !hasConflictingBuildNumber else {
+      #if os(Windows)
+        throw ValidationError(
+          "--auto-increment-build cannot be combined with a manual CURRENT_PROJECT_VERSION setting."
+        )
+      #else
       throw ValidationError(
         VaporizeCLICopy_v000_000_001.CLI.vaporizeAutoIncrementBuildCannotComposeManualCurrentProjectVersion
       )
+      #endif
     }
     return xcodeBuildSettings + [buildIdentity.xcodeBuildSetting]
   }
@@ -1479,12 +1600,10 @@ struct VaporizeCLI: AsyncParsableCommand {
   }
 
   private func absoluteURL(for path: String) -> URL {
-    if path.hasPrefix("/") {
-      return URL(fileURLWithPath: path).standardizedFileURL
-    }
-    return URL(fileURLWithPath: FileManager.default.currentDirectoryPath)
-      .appendingPathComponent(path)
-      .standardizedFileURL
+    VaporizeFileSystemPathResolution.absoluteURL(
+      for: path,
+      relativeTo: URL(fileURLWithPath: FileManager.default.currentDirectoryPath)
+    )
   }
 
   private func installedCLIBinDirectory() -> URL {
@@ -1692,6 +1811,123 @@ struct VaporizeCLI: AsyncParsableCommand {
       "--product", product,
     ]
   }
+
+  #if os(Windows)
+    func wcodeSwiftBuildArguments() throws -> [String] {
+      let packagePath = try requirePackagePath()
+      let product = try requireProduct()
+      return ["build"] + (try swiftPMWorkspaceArguments(packagePath: packagePath)) + [
+        "--package-path", packagePath,
+        "-c", configuration.rawValue,
+        "--product", product,
+      ]
+    }
+
+    func wcodeSwiftRunArguments() throws -> [String] {
+      let packagePath = try requirePackagePath()
+      let product = try requireProduct()
+      return ["run"] + (try swiftPMWorkspaceArguments(packagePath: packagePath)) + [
+        "--package-path", packagePath,
+        "-c", configuration.rawValue,
+        product,
+      ] + (try coreForwardedArguments())
+    }
+
+    func wcodeBuildEnvironment() throws -> [String: String] {
+      let packagePath = try requirePackagePath()
+      let product = try requireProduct()
+      var environment = swiftCommandEnvironment() ?? [:]
+      environment["WCODE_PACKAGE_PATH"] = absoluteURL(for: packagePath).path
+      environment["WCODE_PRODUCT"] = product
+      environment["WCODE_CONFIGURATION"] = configuration.rawValue
+      environment["WCODE_ARTIFACT"] = artifact.rawValue
+      environment["WCODE_DESTINATION"] = destination
+      environment["WCODE_FORCE_REINSTALL"] = forceReinstall ? "1" : "0"
+      environment["WCODE_SKIP_BUILD"] = skipBuild ? "1" : "0"
+      environment["WCODE_SKIP_INSTALL"] = skipInstall ? "1" : "0"
+      environment["WCODE_LAUNCH"] = launch ? "1" : "0"
+      environment["WCODE_ARGUMENTS_JSON"] = String(
+        decoding: try JSONEncoder().encode(try coreForwardedArguments()),
+        as: UTF8.self
+      )
+
+      for assignment in wcodeEnvironmentAssignments {
+        let parts = assignment.split(separator: "=", maxSplits: 1, omittingEmptySubsequences: false)
+        guard parts.count == 2,
+          !parts[0].trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+        else {
+          throw ValidationError("--wcode-environment must use NAME=VALUE; received '\(assignment)'.")
+        }
+        environment[String(parts[0])] = String(parts[1])
+      }
+      return environment
+    }
+
+    private func usesWCodeExecutionAuthority(for mode: Mode) throws -> Bool {
+      try coreExecutionPlan(for: mode)?.executionAuthority == .wcode
+    }
+
+    private func runWCodeApp(operation: VaporizeCoreOperation) async throws {
+      var environment = try wcodeBuildEnvironment()
+      environment["WCODE_OPERATION"] = operation.rawValue
+      let product = try requireProduct()
+
+      if let script = wcodeBuildScript?.trimmingCharacters(in: .whitespacesAndNewlines),
+        !script.isEmpty
+      {
+        try await runExecutable(
+          executable: .name("powershell.exe"),
+          arguments: [
+            "-NoLogo",
+            "-NoProfile",
+            "-NonInteractive",
+            "-ExecutionPolicy", "Bypass",
+            "-File", absoluteURL(for: script).path,
+          ],
+          sourceTag: "vaporize-wcode",
+          environment: environment,
+          additionalTags: [
+            "artifact": "app",
+            "executionAuthority": "wcode",
+            "operation": operation.rawValue,
+            "appPhase": "declared-script",
+          ]
+        )
+        return
+      }
+
+      guard operation != .install else {
+        throw ValidationError(
+          "WCode cannot install an app without a declared lifecycle script. next: use `vaporize install wcode --artifact app --package-path <package> --product <app-product> --wcode-build-script <script.ps1>`. The script receives WCODE_OPERATION=install plus destination, reinstall, and launch flags."
+        )
+      }
+
+      let arguments: [String]
+      switch operation {
+      case .build:
+        arguments = try wcodeSwiftBuildArguments()
+      case .run:
+        arguments = try wcodeSwiftRunArguments()
+      case .install, .test:
+        throw ValidationError("WCode has no direct SwiftPM fallback for \(operation.rawValue) app execution.")
+      }
+      let invocation = try swiftCommandInvocation(arguments: arguments)
+      try await runExecutable(
+        executable: invocation.executable,
+        arguments: invocation.arguments,
+        sourceTag: "vaporize-wcode",
+        environment: environment,
+        additionalTags: [
+          "artifact": "app",
+          "executionAuthority": "wcode",
+          "toolchainResolver": invocation.resolver,
+          "product": product,
+          "operation": operation.rawValue,
+          "appPhase": operation == .build ? "swiftpm-app-target" : "swiftpm-app-run",
+        ]
+      )
+    }
+  #endif
 
   func swiftTestArguments() throws -> [String] {
     let packagePath = try requirePackagePath()
@@ -3740,7 +3976,10 @@ enum VaporizeInvocation {
 
   static func isToolchainProxy(arguments: [String]) -> Bool {
     guard let executable = arguments.first, !executable.isEmpty else { return false }
-    let executableName = URL(fileURLWithPath: executable).lastPathComponent
+    var executableName = URL(fileURLWithPath: executable).lastPathComponent
+    if executableName.lowercased().hasSuffix(".exe") {
+      executableName.removeLast(4)
+    }
     return !canonicalExecutableNames.contains(executableName)
   }
 

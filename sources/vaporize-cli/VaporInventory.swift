@@ -294,10 +294,9 @@ struct VaporInventoryScanner {
   /// Resolve `path` to an absolute path, expanding `~` and normalizing.
   static func resolveAbsolutePath(_ path: String) -> String {
     let expanded = (path as NSString).expandingTildeInPath
-    if (expanded as NSString).isAbsolutePath {
-      return (expanded as NSString).standardizingPath
-    }
-    let cwd = FileManager.default.currentDirectoryPath
-    return ((cwd as NSString).appendingPathComponent(expanded) as NSString).standardizingPath
+    return VaporizeFileSystemPathResolution.absoluteURL(
+      for: expanded,
+      relativeTo: URL(fileURLWithPath: FileManager.default.currentDirectoryPath)
+    ).path
   }
 }

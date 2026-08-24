@@ -1,5 +1,5 @@
 import ArgumentParser
-import CryptoKit
+import Crypto
 import Foundation
 import SwiftCLIInstaller
 import SwiftCLIUpdater

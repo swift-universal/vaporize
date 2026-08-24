@@ -278,18 +278,14 @@ enum MaintainerSwiftPMConfiguration {
   }
 
   private static func absoluteURL(for path: String, fileManager: FileManager) -> URL {
-    if path.hasPrefix("/") {
-      return URL(fileURLWithPath: path, isDirectory: true)
-    }
-    return URL(fileURLWithPath: fileManager.currentDirectoryPath, isDirectory: true)
-      .appendingPathComponent(path, isDirectory: true)
+    VaporizeFileSystemPathResolution.absoluteURL(
+      for: path,
+      relativeTo: URL(fileURLWithPath: fileManager.currentDirectoryPath, isDirectory: true)
+    )
   }
 
   private static func standardizedPath(_ path: String, relativeTo base: URL) -> String {
-    if path.hasPrefix("/") {
-      return URL(fileURLWithPath: path).standardizedFileURL.path
-    }
-    return base.appendingPathComponent(path).standardizedFileURL.path
+    VaporizeFileSystemPathResolution.absoluteURL(for: path, relativeTo: base).path
   }
 
   private static func standardizedLocation(_ location: String, relativeTo base: URL) -> String {

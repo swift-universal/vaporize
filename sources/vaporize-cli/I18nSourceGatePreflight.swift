@@ -51,12 +51,16 @@ enum VaporizeI18nSourceGate {
     let sources = try sourceRoots.flatMap {
       try TranslateSourceGateFileSystem.discoverSwiftSources(below: $0)
     }
+    let importedModules = try sourceImportedModules(sources)
     let catalogRoot = TranslateSourceGateFileSystem.findCanonicalCatalogPackagesRoot(
       startingAt: productDirectory
     )
     let approvedPackages =
       try catalogRoot.map {
-        try ApprovedCopyPackageReceiptDiscovery.discover(below: [$0])
+        try ApprovedCopyPackageReceiptDiscovery.discover(
+          below: [$0],
+          matchingModules: importedModules
+        )
       } ?? []
     let identity = try I18nSourceGateBeadImprint.resolvedIdentity(
       owningHome: productDirectory,
@@ -123,6 +127,32 @@ enum VaporizeI18nSourceGate {
       )
     }
     return Result(report: report, receiptURL: receiptURL)
+  }
+
+  private static func sourceImportedModules(_ sources: [URL]) throws -> Set<String> {
+    let scopedImportKinds: Set<String> = [
+      "class", "enum", "func", "let", "protocol", "struct", "typealias", "var",
+    ]
+    var modules: Set<String> = []
+    for source in sources {
+      let contents = try String(contentsOf: source, encoding: .utf8)
+      for rawLine in contents.split(whereSeparator: \.isNewline) {
+        var line = rawLine.trimmingCharacters(in: .whitespaces)
+        if line.hasPrefix("@testable ") {
+          line.removeFirst("@testable ".count)
+        }
+        guard line.hasPrefix("import ") else { continue }
+        let tokens = line.split(whereSeparator: \.isWhitespace).map(String.init)
+        guard tokens.count >= 2 else { continue }
+        let moduleToken = scopedImportKinds.contains(tokens[1]) && tokens.count >= 3
+          ? tokens[2]
+          : tokens[1]
+        if let module = moduleToken.split(separator: ".").first {
+          modules.insert(String(module))
+        }
+      }
+    }
+    return modules
   }
 
   /// Pkl owns an Apple product's target-to-source boundary.  Scanning the

@@ -90,6 +90,9 @@ func distinguishesVaporizeCommandsFromLinkedToolchainProxies() {
     "/opt/wrkstrm/bin/vaporize.cli@wrkstrm-core.clia.sh"
   ]))
   #expect(!VaporizeInvocation.isToolchainProxy(arguments: ["vaporize"]))
+  #expect(!VaporizeInvocation.isToolchainProxy(arguments: [
+    "C:\\tools\\vaporize.cli@wrkstrm-core.clia.sh.exe"
+  ]))
   #expect(VaporizeInvocation.isToolchainProxy(arguments: ["/tmp/toolchain-bin/swift"]))
   #expect(VaporizeInvocation.isToolchainProxy(arguments: ["clang"]))
 }

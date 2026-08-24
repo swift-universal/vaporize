@@ -28,23 +28,18 @@ let commonLogDependency = Package.Dependency.package(
 // swift-cli-installer LIFTED 2026-06-14 from sources/swift-cli-installer to
 // swift-universal/private/universal/domain/tooling/spm/swift-cli-installer/
 // per CEO decision + [[no-code-gets-left-behind]] doctrine.
-let swiftCLIInstallerDependency: Package.Dependency = if ProcessInfo.useLocalDeps {
-  .package(
-    path: "../../../../../swift-universal/private/universal/domain/tooling/spm/swift-cli-installer"
-  )
-} else {
-  .package(
-    url: "https://github.com/swift-universal/swift-cli-installer.git",
-    from: "0.0.1"
-  )
-}
+// This package was lifted into the shared topology and is not independently
+// published. Keep the dependency edge local in both dependency modes.
+let swiftCLIInstallerDependency = Package.Dependency.package(
+  path: "../../../../../swift-universal/private/universal/domain/tooling/spm/swift-cli-installer"
+)
 // Consume/verify half of CLI Sparkle (appcast parse, SemanticVersion compare,
 // EdDSA verify, atomic replace) — consumed, not reimplemented, per
 // FR-CLI-SPARKLE-SELF-UPDATE-VAPORIZE-PKL-SCAFFOLDER-2026-07-14 component C.
-let swiftCLIUpdaterDependency = localOrRemote(
+// Like the installer, the updater is topology-owned and has no standalone
+// remote repository.
+let swiftCLIUpdaterDependency = Package.Dependency.package(
   path: "../../../../../swift-universal/private/universal/domain/tooling/spm/swift-cli-updater",
-  url: "https://github.com/swift-universal/swift-cli-updater.git",
-  from: "0.0.1"
 )
 let swiftlyDependency = localOrRemote(
   path: "../../../../../../upstreams/swiftlang/public/universal/tooling/swift/swiftly",
@@ -113,6 +108,7 @@ var packageDependencies: [Package.Dependency] = [
   testServiceAdoptionPolicyDependency,
   bumpBuildDependency,
   .package(url: "https://github.com/apple/swift-argument-parser", from: "1.6.0"),
+  .package(url: "https://github.com/apple/swift-crypto.git", from: "3.15.1"),
 ]
 
 if includesSwiftly {
@@ -466,6 +462,7 @@ let package = Package(
         .product(name: "SwiftCLIInstaller", package: "swift-cli-installer"),
         .product(name: "SwiftCLIUpdater", package: "swift-cli-updater"),
         .product(name: "ArgumentParser", package: "swift-argument-parser"),
+        .product(name: "Crypto", package: "swift-crypto"),
       ],
       path: "tests/cuj-29-product-self-update"
     ),
