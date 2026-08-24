@@ -3,6 +3,54 @@ import Testing
 
 @testable import VaporizeCLI
 
+@Test("Vaporize resolves Bead ownership to the nearest product Kura space")
+func sourceGateFindsProductKuraSpace() throws {
+  let repository = FileManager.default.temporaryDirectory.appendingPathComponent(
+    "vaporize-product-home-\(UUID().uuidString)",
+    isDirectory: true
+  )
+  defer { try? FileManager.default.removeItem(at: repository) }
+  let product = repository.appendingPathComponent(
+    "private/apple/spm/example-product",
+    isDirectory: true
+  )
+  let kuraSpace = repository.appendingPathComponent(
+    "product-state/kura-spaces",
+    isDirectory: true
+  )
+  try FileManager.default.createDirectory(at: product, withIntermediateDirectories: true)
+  try FileManager.default.createDirectory(at: kuraSpace, withIntermediateDirectories: true)
+
+  let resolved = try VaporizeI18nSourceGate.findProductKuraSpace(startingAt: product)
+
+  #expect(resolved == kuraSpace.resolvingSymlinksInPath().standardizedFileURL)
+  #expect(resolved != product)
+}
+
+@Test("Vaporize never escapes the failing product repository for a Kura space")
+func sourceGateDoesNotBorrowParentKuraSpace() throws {
+  let parent = FileManager.default.temporaryDirectory.appendingPathComponent(
+    "vaporize-parent-home-\(UUID().uuidString)",
+    isDirectory: true
+  )
+  defer { try? FileManager.default.removeItem(at: parent) }
+  let repository = parent.appendingPathComponent("product", isDirectory: true)
+  let product = repository.appendingPathComponent("sources/example", isDirectory: true)
+  try FileManager.default.createDirectory(at: product, withIntermediateDirectories: true)
+  try FileManager.default.createDirectory(
+    at: repository.appendingPathComponent(".git", isDirectory: true),
+    withIntermediateDirectories: true
+  )
+  try FileManager.default.createDirectory(
+    at: parent.appendingPathComponent("kura-spaces/beads", isDirectory: true),
+    withIntermediateDirectories: true
+  )
+
+  #expect(throws: VaporizeProductKuraSpaceError.self) {
+    try VaporizeI18nSourceGate.findProductKuraSpace(startingAt: product)
+  }
+}
+
 @Test("Vaporize persists the source-gate report before surfacing a Bead imprint failure")
 func sourceGateImprintFailurePreservesReportReceipt() async throws {
   let root = FileManager.default.temporaryDirectory.appendingPathComponent(
@@ -25,14 +73,17 @@ func sourceGateImprintFailurePreservesReportReceipt() async throws {
     encoding: .utf8
   )
 
-  let beadsDirectory = root.appendingPathComponent("beads", isDirectory: true)
+  let beadsDirectory = root.appendingPathComponent(
+    "product-state/kura-spaces/beads",
+    isDirectory: true
+  )
   try FileManager.default.createDirectory(
     at: beadsDirectory,
     withIntermediateDirectories: true
   )
   try Data("{}\n".utf8).write(
     to: beadsDirectory.appendingPathComponent(
-      "BUG-I18N-malformed.beads-issue.json"
+      "bug-i18n-malformed.beads-issue.json"
     )
   )
 
@@ -69,6 +120,10 @@ func sourceGateBlockedErrorIsAssistantActionable() async throws {
 
   try FileManager.default.createDirectory(
     at: root.appendingPathComponent("Sources/App", isDirectory: true),
+    withIntermediateDirectories: true
+  )
+  try FileManager.default.createDirectory(
+    at: root.appendingPathComponent("product-state/kura-spaces/beads", isDirectory: true),
     withIntermediateDirectories: true
   )
   try """
@@ -109,7 +164,7 @@ func sourceGateBlockedErrorIsAssistantActionable() async throws {
       #expect(rendered.contains("digikoma-cli-error-triage.spec.json"))
       #expect(rendered.contains("no installed command is claimed"))
       #expect(rendered.contains("Signal: NEW"))
-      #expect(rendered.contains("Bead handling: Created BUG-I18N-"))
+      #expect(rendered.contains("Bead handling: Created bug-i18n-"))
       #expect(rendered.contains("Assistant cast:"))
       #expect(rendered.contains("do not create a duplicate manually") == false)
     case .beadImprintFailed:
@@ -129,6 +184,10 @@ func sourceGateReusesEstablishedCompleteIdentity() async throws {
   defer { try? FileManager.default.removeItem(at: root) }
   try FileManager.default.createDirectory(
     at: root.appendingPathComponent("Sources/App", isDirectory: true),
+    withIntermediateDirectories: true
+  )
+  try FileManager.default.createDirectory(
+    at: root.appendingPathComponent("product-state/kura-spaces/beads", isDirectory: true),
     withIntermediateDirectories: true
   )
   try """
@@ -152,7 +211,10 @@ func sourceGateReusesEstablishedCompleteIdentity() async throws {
   } catch let error as VaporizeI18nSourceGateError {
     if case .blocked(let report, _, _, _) = error { firstTarget = report.targetName }
   }
-  let beads = root.appendingPathComponent("beads", isDirectory: true)
+  let beads = root.appendingPathComponent(
+    "product-state/kura-spaces/beads",
+    isDirectory: true
+  )
   let firstIssueNames = try FileManager.default.contentsOfDirectory(
     at: beads,
     includingPropertiesForKeys: nil

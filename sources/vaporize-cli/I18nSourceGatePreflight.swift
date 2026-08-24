@@ -30,7 +30,19 @@ enum VaporizeI18nSourceGateError: Error, LocalizedError {
     }
   }
 }
+enum VaporizeProductKuraSpaceError: Error, LocalizedError {
+  case unavailable(productDirectory: String)
+  case ambiguous(productDirectory: String, candidates: [String])
 
+  var errorDescription: String? {
+    switch self {
+    case .unavailable(let productDirectory):
+      "Vaporize could not find the failing product's kura-spaces/beads home from \(productDirectory). Source-gate Bugs were not written."
+    case .ambiguous(let productDirectory, let candidates):
+      "Vaporize found more than one possible kura-spaces/beads home from \(productDirectory): \(candidates.joined(separator: ", ")). Source-gate Bugs were not written."
+    }
+  }
+}
 enum VaporizeI18nSourceGate {
   struct Result: Sendable {
     var report: TranslateSourceGateReport
@@ -44,6 +56,7 @@ enum VaporizeI18nSourceGate {
     enforcement: TranslateSourceGateEnforcement
   ) async throws -> Result {
     let productDirectory = productDirectory.standardizedFileURL
+    let productKuraSpace = try findProductKuraSpace(startingAt: productDirectory)
     let sourceRoots = try await declaredSourceRoots(
       productDirectory: productDirectory,
       productName: productName
@@ -63,7 +76,7 @@ enum VaporizeI18nSourceGate {
         )
       } ?? []
     let identity = try I18nSourceGateBeadImprint.resolvedIdentity(
-      owningHome: productDirectory,
+      owningHome: productKuraSpace,
       requestedTargetName: productName,
       fallbackOwnerID: productName
     )
@@ -82,12 +95,10 @@ enum VaporizeI18nSourceGate {
       relativeTo: productDirectory,
       policy: policy
     )
-    let receiptURL =
-      productDirectory
-      .appendingPathComponent(".build/i18n-source-gate", isDirectory: true)
-      .appendingPathComponent(
-        "\(safeFileName(productName)).\(enforcement.rawValue).json"
-      )
+    let receiptURL = try I18nSourceGateBeadImprint.defaultReportReceiptURL(
+      report: report,
+      owningHome: productKuraSpace
+    )
     try FileManager.default.createDirectory(
       at: receiptURL.deletingLastPathComponent(),
       withIntermediateDirectories: true
@@ -99,7 +110,7 @@ enum VaporizeI18nSourceGate {
     do {
       imprintReceipt = try I18nSourceGateBeadImprint.reconcile(
         report: report,
-        owningHome: productDirectory,
+        owningHome: productKuraSpace,
         ownerID: identity.ownerID,
         reportReceiptURL: receiptURL,
         mode: .write,
@@ -127,6 +138,70 @@ enum VaporizeI18nSourceGate {
       )
     }
     return Result(report: report, receiptURL: receiptURL)
+  }
+
+  static func findProductKuraSpace(startingAt productDirectory: URL) throws -> URL {
+    var cursor = productDirectory.resolvingSymlinksInPath().standardizedFileURL
+    while true {
+      let candidates = try kuraSpacesWithBeads(below: cursor, maximumDepth: 4)
+      if candidates.count == 1 {
+        return candidates[0]
+      }
+      if candidates.count > 1 {
+        throw VaporizeProductKuraSpaceError.ambiguous(
+          productDirectory: productDirectory.path,
+          candidates: candidates.map(\.path).sorted()
+        )
+      }
+      if FileManager.default.fileExists(
+        atPath: cursor.appendingPathComponent(".git").path
+      ) {
+        break
+      }
+      let parent = cursor.deletingLastPathComponent()
+      if parent.path == cursor.path { break }
+      cursor = parent
+    }
+    throw VaporizeProductKuraSpaceError.unavailable(productDirectory: productDirectory.path)
+  }
+
+  private static func kuraSpacesWithBeads(below root: URL, maximumDepth: Int) throws -> [URL] {
+    let excludedDirectoryNames: Set<String> = [
+      ".build", ".git", "Packages", "Tests", "fixtures", "history", "tests", "verification",
+    ]
+    let rootComponentCount = root.pathComponents.count
+    guard let enumerator = FileManager.default.enumerator(
+      at: root,
+      includingPropertiesForKeys: [.isDirectoryKey],
+      options: [.skipsHiddenFiles]
+    ) else { return [] }
+
+    var matches: [(url: URL, depth: Int)] = []
+    for case let candidate as URL in enumerator {
+      let depth = candidate.pathComponents.count - rootComponentCount
+      if depth > maximumDepth {
+        enumerator.skipDescendants()
+        continue
+      }
+      let values = try candidate.resourceValues(forKeys: [.isDirectoryKey])
+      guard values.isDirectory == true else { continue }
+      if excludedDirectoryNames.contains(candidate.lastPathComponent) {
+        enumerator.skipDescendants()
+        continue
+      }
+      guard candidate.lastPathComponent == "kura-spaces" else { continue }
+      let beads = candidate.appendingPathComponent("beads", isDirectory: true)
+      var beadsIsDirectory: ObjCBool = false
+      if FileManager.default.fileExists(atPath: beads.path, isDirectory: &beadsIsDirectory),
+        beadsIsDirectory.boolValue
+      {
+        matches.append((candidate.resolvingSymlinksInPath().standardizedFileURL, depth))
+      }
+      enumerator.skipDescendants()
+    }
+    guard let minimumDepth = matches.map(\.depth).min() else { return [] }
+    return Array(Set(matches.filter { $0.depth == minimumDepth }.map(\.url)))
+      .sorted { $0.path < $1.path }
   }
 
   private static func sourceImportedModules(_ sources: [URL]) throws -> Set<String> {
@@ -189,10 +264,4 @@ enum VaporizeI18nSourceGate {
       return root
     }
   }
-}
-
-private func safeFileName(_ value: String) -> String {
-  let allowed = CharacterSet.alphanumerics.union(CharacterSet(charactersIn: "-._"))
-  let scalars = value.unicodeScalars.map { allowed.contains($0) ? Character(String($0)) : "-" }
-  return String(scalars)
 }
