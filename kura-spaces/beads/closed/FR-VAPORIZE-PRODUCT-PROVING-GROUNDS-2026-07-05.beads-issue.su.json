@@ -3,7 +3,9 @@
   "schemaVersion": "0.1.0",
   "id": "FR-VAPORIZE-PRODUCT-PROVING-GROUNDS-2026-07-05",
   "title": "Adopt product proving-ground passports for vaporware products",
-  "status": "done",
+  "status": "closed",
+  "closedAt": "2026-07-05T06:43:59Z",
+  "closeReason": "The product proving-ground passport and automated evidence ledger were implemented and refreshed through commit 8c9f7f5a.",
   "priority": 1,
   "issueType": "feature",
   "labels": [

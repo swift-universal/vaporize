@@ -3,7 +3,9 @@
   "schemaVersion": "0.1.0",
   "id": "BUG-VAPORIZE-RUN-MISSES-DOMAIN-INSTALLED-CLI-2026-07-03",
   "title": "Vaporize run misses CLIs installed under domain-specific bin paths",
-  "status": "open",
+  "status": "closed",
+  "closedAt": "2026-07-03T01:19:19Z",
+  "closeReason": "Implemented by commit 8f48a897; Vaporize now resolves domain-installed CLI candidates before falling back to the flat SwiftPM bin path.",
   "priority": 1,
   "issueType": "bug",
   "labels": [

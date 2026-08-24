@@ -7,6 +7,8 @@
   "createdBy": "codex at operator direction",
   "issueType": "bug",
   "status": "closed",
+  "closedAt": "2026-08-18T06:44:19Z",
+  "closeReason": "Implemented and verified by commit 8c6a232f: forced CLI replacement preserves the isolated SwiftPM workspace and the installed binary reaches xcodebuild for app-test requests.",
   "priority": 1,
   "labels": ["vaporize", "xcode", "test", "launch-review", "ttd"],
   "description": "Vaporize source already dispatched `test xcode --artifact app` to Xcode, but the installed binary was stale. Refresh initially failed because the CLI installer discarded `--scratch-path` and rebuilt from the incompatible local world state. The installer now carries the isolated workspace through replacement build and product lookup; the refreshed installed binary reaches xcodebuild for app-test requests. The separate Launch Review Xcode world-state migration remains tracked by bug-launch-review-vaporize-generated-xcodeproj-world-state-stale-2026-08-18.",

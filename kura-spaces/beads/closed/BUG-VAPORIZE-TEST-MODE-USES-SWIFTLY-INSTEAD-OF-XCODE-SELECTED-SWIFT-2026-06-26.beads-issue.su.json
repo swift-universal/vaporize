@@ -3,7 +3,9 @@
   "schemaVersion": "0.1.0",
   "id": "BUG-VAPORIZE-TEST-MODE-USES-SWIFTLY-INSTEAD-OF-XCODE-SELECTED-SWIFT-2026-06-26",
   "title": "vaporize test mode resolved bare swift through Swiftly 6.3.2 instead of Xcode-selected Swift 6.4",
-  "status": "fix-landed-savepointed",
+  "status": "closed",
+  "closedAt": "2026-06-26T11:25:13Z",
+  "closeReason": "The Xcode-selected Swift routing fix was verified and savepointed by commit a5bc417c, including the focused CUJ-01 regression.",
   "priority": 1,
   "issueType": "bug",
   "labels": [

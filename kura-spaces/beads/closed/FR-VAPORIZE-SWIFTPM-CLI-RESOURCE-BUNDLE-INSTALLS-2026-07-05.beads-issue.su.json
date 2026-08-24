@@ -3,7 +3,9 @@
   "schemaVersion": "0.1.0",
   "id": "FR-VAPORIZE-SWIFTPM-CLI-RESOURCE-BUNDLE-INSTALLS-2026-07-05",
   "title": "Preserve SwiftPM CLI resource bundles during Vaporize installs",
-  "status": "done",
+  "status": "closed",
+  "closedAt": "2026-07-05T05:49:44Z",
+  "closeReason": "The resource-bundle install path and CUJ-22 proving ground were completed, with the release-doctor receipt refreshed by commit 46304c31.",
   "priority": 1,
   "issueType": "feature",
   "labels": [

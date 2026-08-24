@@ -7,6 +7,8 @@
   "createdBy": "Claude/Opus 4.8 — operator directive: 'we should not have a project.yml - i think vaporize should give the option to upgrade to a pkl project.'",
   "issueType": "feature",
   "status": "closed",
+  "closedAt": "2026-07-09T07:37:39Z",
+  "closeReason": "Implemented by commit 9d303891 with the dry-run/apply upgrade mode, parity gate, and first collective-app migration proof.",
   "priority": 2,
   "labels": ["feature", "vaporize", "project-pkl", "xcodegen-migration", "apple-project-spec"],
   "description": "project.yml is legacy XcodeGen; project.pkl (AppleProjectSpec Pkl) is the target project shape (concourse, creative-selection-v0.2, translate, wrkstrm-bootstrap.app already migrated). Vaporize owns all the primitives (import-project-yml, compare-project-yml-pkl, generate-xcodeproj) but has no single front door that UPGRADES an app: import -> parity-gate -> retire the yml. REQUEST: add a vaporize mode 'upgrade-project-yml-to-pkl' that (1) imports the project.yml to a sibling project.pkl via AppleProjectSpecPklImporter, (2) parity-gates by loading the generated pkl back and comparing to the yml via AppleProjectSpecComparator — NEVER retiring the yml unless parity is clean (no silent data loss), (3) dry-run by default (preview + parity result), and on --apply retires the project.yml so the app is pkl-only. The parity-gated retire decision is factored into a filesystem-free planner (AppleProjectPklUpgradePlanner) with a proving-ground option-space test. First consumer/proof: migrate the collective app to project.pkl. Owning modification request: 2026-07-09-vaporize-upgrade-project-yml-to-pkl.vaporware-modification-request.su.json."

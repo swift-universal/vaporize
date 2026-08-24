@@ -3,7 +3,9 @@
   "schemaVersion": "0.1.0",
   "id": "BUG-VAPORIZE-XCODE-APP-INSTALL-DERIVED-DATA-LOCATE-2026-07-07",
   "title": "vaporize install --artifact app --xcode-project drives xcodebuild but reports 'App bundle not found' because the locator never searched the xcodebuild DerivedData output",
-  "status": "fix-landed",
+  "status": "closed",
+  "closedAt": "2026-07-08T10:24:55Z",
+  "closeReason": "The resolved DerivedData path is shared by xcodebuild invocation and post-build app discovery; the implementation is present in commit d23b9bc0 and covered by the recorded CUJ-02 verification.",
   "priority": 1,
   "issueType": "bug",
   "labels": [
