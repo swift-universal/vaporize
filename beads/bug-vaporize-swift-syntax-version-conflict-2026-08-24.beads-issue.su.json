@@ -1,0 +1,36 @@
+{
+  "BeadsIssue": "0.1.0",
+  "schemaVersion": "0.1.0",
+  "id": "bug-vaporize-swift-syntax-version-conflict-2026-08-24",
+  "title": "Restore Vaporize dependency resolution after relocation",
+  "status": "open",
+  "priority": 1,
+  "issueType": "bug",
+  "labels": [
+    "vaporize",
+    "swiftpm",
+    "dependency-resolution",
+    "swift-syntax",
+    "windows"
+  ],
+  "createdAt": "2026-08-24",
+  "createdBy": "Codex with operator direction",
+  "description": "Vaporize dependency resolution must complete from its relocated swift-universal product repository. The original SwiftSyntax constraint conflict is resolved; Windows resolution now fails while checking out a swift-log revision.",
+  "historicalContent": {
+    "expectedBehavior": "Vaporize resolves and tests from its canonical swift-universal path in both default and SPM_USE_LOCAL_DEPS modes.",
+    "currentEvidence": [
+      "swift package dump-package succeeds after replacing the stale swift-universal/swift-universal relative paths with repository-root-derived paths.",
+      "wrkstrm-core common-service was upgraded to swift-syntax 602.0.0 and its 26 tests passed in commit cfc92f08830e3ce44f9cdc14a970d0ed78f5ef86.",
+      "A later Vaporize resolution attempt failed while checking out swift-log revision 30cfcd8df00eab82f3af0b165f61a20622830ec5."
+    ],
+    "acceptanceCriteria": [
+      "TranslateCatalogCore and common-service admit one compatible SwiftSyntax release line.",
+      "Resolve the swift-log checkout without suppressing dependency diagnostics.",
+      "Run Vaporize tests from private/product-lines/vaporize on Windows.",
+      "Run dependency resolution in default and local-dependency modes.",
+      "Do not bypass the conflict by removing either dependency or suppressing SwiftPM diagnostics."
+    ],
+    "scopeBoundary": "Coordinate the owning package manifests; do not silently widen shared dependency constraints without their test suites and release evidence."
+  },
+  "sourceLocation": "Package.swift"
+}

@@ -7,23 +7,70 @@ func localOrRemote(path: String, url: String, from version: Version) -> Package.
   return .package(url: url, from: version)
 }
 
+func ancestor(named component: String, from start: URL) -> URL? {
+  var current = start
+  while true {
+    if current.lastPathComponent == component { return current }
+    let parent = current.deletingLastPathComponent()
+    if parent.path == current.path { return nil }
+    current = parent
+  }
+}
+
+let manifestDirectory = URL(filePath: #filePath)
+  .deletingLastPathComponent()
+  .standardizedFileURL
+guard let swiftUniversalDirectory = ancestor(
+  named: "swift-universal",
+  from: manifestDirectory
+) else {
+  fatalError("Vaporize must live beneath the swift-universal repository")
+}
+let collectivesDirectory = swiftUniversalDirectory.deletingLastPathComponent()
+let substrateDirectory = collectivesDirectory.deletingLastPathComponent()
+
+func repositoryPath(_ root: URL, _ relativePath: String) -> String {
+  root.appendingPathComponent(relativePath).standardizedFileURL.path
+}
+
 let commonShellDependency: Package.Dependency = if ProcessInfo.useLocalDeps {
   .package(
-    path: "../../../../../swift-universal/private/universal/domain/dispatch/spm/common-shell"
+    path: repositoryPath(
+      swiftUniversalDirectory,
+      "private/universal/domain/dispatch/spm/common-shell"
+    )
   )
 } else {
-  .package(name: "common-shell", path: "../../../../../swift-universal/private/universal/domain/dispatch/spm/common-shell")
+  .package(
+    name: "common-shell",
+    path: repositoryPath(
+      swiftUniversalDirectory,
+      "private/universal/domain/dispatch/spm/common-shell"
+    )
+  )
 }
 let commonProcessDependency: Package.Dependency = if ProcessInfo.useLocalDeps {
   .package(
-    path: "../../../../../swift-universal/private/universal/domain/dispatch/spm/common-process"
+    path: repositoryPath(
+      swiftUniversalDirectory,
+      "private/universal/domain/dispatch/spm/common-process"
+    )
   )
 } else {
-  .package(name: "common-process", path: "../../../../../swift-universal/private/universal/domain/dispatch/spm/common-process")
+  .package(
+    name: "common-process",
+    path: repositoryPath(
+      swiftUniversalDirectory,
+      "private/universal/domain/dispatch/spm/common-process"
+    )
+  )
 }
 let commonLogDependency = Package.Dependency.package(
   name: "common-log",
-  path: "../../../../../swift-universal/private/universal/spm/domain/system/common-log"
+  path: repositoryPath(
+    swiftUniversalDirectory,
+    "private/universal/spm/domain/system/common-log"
+  )
 )
 // swift-cli-installer LIFTED 2026-06-14 from sources/swift-cli-installer to
 // swift-universal/private/universal/domain/tooling/spm/swift-cli-installer/
@@ -31,7 +78,10 @@ let commonLogDependency = Package.Dependency.package(
 // This package was lifted into the shared topology and is not independently
 // published. Keep the dependency edge local in both dependency modes.
 let swiftCLIInstallerDependency = Package.Dependency.package(
-  path: "../../../../../swift-universal/private/universal/domain/tooling/spm/swift-cli-installer"
+  path: repositoryPath(
+    swiftUniversalDirectory,
+    "private/universal/domain/tooling/spm/swift-cli-installer"
+  )
 )
 // Consume/verify half of CLI Sparkle (appcast parse, SemanticVersion compare,
 // EdDSA verify, atomic replace) — consumed, not reimplemented, per
@@ -39,10 +89,16 @@ let swiftCLIInstallerDependency = Package.Dependency.package(
 // Like the installer, the updater is topology-owned and has no standalone
 // remote repository.
 let swiftCLIUpdaterDependency = Package.Dependency.package(
-  path: "../../../../../swift-universal/private/universal/domain/tooling/spm/swift-cli-updater",
+  path: repositoryPath(
+    swiftUniversalDirectory,
+    "private/universal/domain/tooling/spm/swift-cli-updater"
+  ),
 )
 let swiftlyDependency = localOrRemote(
-  path: "../../../../../../upstreams/swiftlang/public/universal/tooling/swift/swiftly",
+  path: repositoryPath(
+    substrateDirectory,
+    "upstreams/swiftlang/public/universal/tooling/swift/swiftly"
+  ),
   url: "https://github.com/swiftlang/swiftly.git",
   from: "1.1.3"
 )
@@ -53,42 +109,69 @@ let swiftlyDependency = localOrRemote(
 // Vaporize builds retain the embedded Swiftly surface.
 let includesSwiftly = ProcessInfo.processInfo.environment["VAPORIZE_DISABLE_SWIFTLY"] != "1"
 let swiftJSONFormatterDependency = localOrRemote(
-  path: "../../../../../swift-universal/private/universal/domain/tooling/spm/swift-json-formatter",
+  path: repositoryPath(
+    swiftUniversalDirectory,
+    "private/universal/domain/tooling/spm/swift-json-formatter"
+  ),
   url: "https://github.com/swift-universal/swift-json-formatter.git",
   from: "0.1.0"
 )
 let appleProjectSpecDependency = Package.Dependency.package(
-  path: "../../../universal/domain/build/spm/apple-project-spec"
+  path: repositoryPath(
+    collectivesDirectory,
+    "wrkstrm-core/private/universal/domain/build/spm/apple-project-spec"
+  )
 )
 let swiftIssueReportingDependency = Package.Dependency.package(
   url: "https://github.com/pointfreeco/swift-issue-reporting",
   exact: "2.0.0"
 )
 let translateSourceGateDependency = Package.Dependency.package(
-  path: "../../../../../i18n-universal/private/universal/domain/catalogs/spm/TranslateCatalogCore"
+  path: repositoryPath(
+    collectivesDirectory,
+    "i18n-universal/private/universal/domain/catalogs/spm/TranslateCatalogCore"
+  )
 )
 let vaporizeCLICopyDependency = Package.Dependency.package(
-  path: "../../../../../i18n-universal/private/universal/domain/catalogs/spm/VaporizeCLICopy_v000_000_001"
+  path: repositoryPath(
+    collectivesDirectory,
+    "i18n-universal/private/universal/domain/catalogs/spm/VaporizeCLICopy_v000_000_001"
+  )
 )
 let swiftPackageOutputPolicyDependency = Package.Dependency.package(
   name: "swift-package-output-policy",
-  path: "../../../../../swift-universal/private/universal/domain/build/spm/swift-package-output-policy"
+  path: repositoryPath(
+    swiftUniversalDirectory,
+    "private/universal/domain/build/spm/swift-package-output-policy"
+  )
 )
 let vaporizeJSONSchemaValidationDependency = Package.Dependency.package(
   name: "vaporize-json-schema-validation",
-  path: "../vaporize-json-schema-validation@wrkstrm-core.cli"
+  path: repositoryPath(
+    collectivesDirectory,
+    "wrkstrm-core/private/apple/spm/vaporize-json-schema-validation@wrkstrm-core.cli"
+  )
 )
 let testFixtureLifecycleDependency = Package.Dependency.package(
   name: "common-test-fixture-lifecycle",
-  path: "../../../../../swift-universal/private/universal/domain/build/spm/common-test-fixture-lifecycle"
+  path: repositoryPath(
+    swiftUniversalDirectory,
+    "private/universal/domain/build/spm/common-test-fixture-lifecycle"
+  )
 )
 let testServiceAdoptionPolicyDependency = Package.Dependency.package(
   name: "test-service-adoption-policy@wrkstrm-core",
-  path: "../../../../private/universal/domain/build/spm/test-service-adoption-policy@wrkstrm-core"
+  path: repositoryPath(
+    collectivesDirectory,
+    "wrkstrm-core/private/universal/domain/build/spm/test-service-adoption-policy@wrkstrm-core"
+  )
 )
 let bumpBuildDependency = Package.Dependency.package(
   name: "bump-build@takumi-org.cli",
-  path: "../../../../../takumi-org/private/universal/domain/tooling/spm/bump-build@takumi-org.cli"
+  path: repositoryPath(
+    collectivesDirectory,
+    "takumi-org/private/universal/domain/tooling/spm/bump-build@takumi-org.cli"
+  )
 )
 
 var packageDependencies: [Package.Dependency] = [
