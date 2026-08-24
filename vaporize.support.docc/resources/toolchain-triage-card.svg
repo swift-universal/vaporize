@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 540" fill="none" role="img" aria-labelledby="title">
-  <title id="title">Xcode and Swiftly triage lanes</title>
+  <title id="title">Xcode and Temper-owned Swift triage lanes</title>
   <path d="M166 176H492L676 270M166 364H492L676 270" stroke="#64748B" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
   <circle cx="166" cy="176" r="52" stroke="#16A34A" stroke-width="8"/>
   <circle cx="166" cy="364" r="52" stroke="#0EA5E9" stroke-width="8"/>

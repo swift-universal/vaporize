@@ -418,15 +418,6 @@
       "color": "red"
     },
     {
-      "id": "provider.swift",
-      "label": "swift (all supported hosts)",
-      "rank": 7,
-      "lane": 0,
-      "status": "neutral",
-      "borderStyle": "rounded",
-      "color": "blue"
-    },
-    {
       "id": "provider.xcode",
       "label": "xcode (#if os(macOS))",
       "rank": 7,
@@ -436,30 +427,12 @@
       "color": "blue"
     },
     {
-      "id": "operation.swift-use",
-      "label": "use",
-      "rank": 8,
-      "lane": 0,
-      "status": "neutral",
-      "borderStyle": "rounded",
-      "color": "green"
-    },
-    {
       "id": "operation.xcode-select",
       "label": "select",
       "rank": 8,
       "lane": 1,
       "status": "neutral",
       "borderStyle": "dashed",
-      "color": "green"
-    },
-    {
-      "id": "argument.swift-selector",
-      "label": "[swiftly-use-options] [selector]",
-      "rank": 9,
-      "lane": 0,
-      "status": "neutral",
-      "borderStyle": "rounded",
       "color": "green"
     },
     {
@@ -736,27 +709,12 @@
     },
     {
       "from": "mode.toolchain-selection",
-      "to": "provider.swift",
-      "kind": "sequential"
-    },
-    {
-      "from": "mode.toolchain-selection",
       "to": "provider.xcode",
-      "kind": "sequential"
-    },
-    {
-      "from": "provider.swift",
-      "to": "operation.swift-use",
       "kind": "sequential"
     },
     {
       "from": "provider.xcode",
       "to": "operation.xcode-select",
-      "kind": "sequential"
-    },
-    {
-      "from": "operation.swift-use",
-      "to": "argument.swift-selector",
       "kind": "sequential"
     },
     {

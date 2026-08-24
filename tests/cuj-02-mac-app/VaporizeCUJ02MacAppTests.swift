@@ -148,12 +148,12 @@ func preparesAutoIncrementedAppBuildIdentity() async throws {
   try FileManager.default.createDirectory(at: root, withIntermediateDirectories: true)
   defer { try? FileManager.default.removeItem(at: root) }
 
-  let git = Process()
-  git.executableURL = URL(fileURLWithPath: "/usr/bin/git")
-  git.arguments = ["init", root.path]
-  try git.run()
-  git.waitUntilExit()
-  #expect(git.terminationStatus == 0)
+  let git = try await VaporizeTestCommand.run(
+    executablePath: "/usr/bin/git",
+    arguments: ["init", root.path],
+    sourceTag: "vaporize-cuj-02-git-init"
+  )
+  #expect(git.exitCode == 0)
 
   let pkl = root.appendingPathComponent("project.pkl")
   try """

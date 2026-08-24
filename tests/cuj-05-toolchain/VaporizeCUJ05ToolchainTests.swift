@@ -4,32 +4,6 @@ import Testing
 
 @testable import VaporizeCLI
 
-@Test("CUJ-05 parses Swift selection with the embedded Swiftly use grammar")
-func parsesSwiftSelection() throws {
-  let request = try ToolchainSelectionRequest(arguments: [
-    "--", "swift", "--", "use", "--global-default", "6.4",
-  ])
-
-  #expect(request.operation == .swiftUse(["--global-default", "6.4"]))
-}
-
-@Test("CUJ-05 permits reporting the active Swift selection")
-func parsesSwiftSelectionLookup() throws {
-  let request = try ToolchainSelectionRequest(arguments: ["swift", "use"])
-
-  #expect(request.operation == .swiftUse([]))
-}
-
-@Test("CUJ-05 parses toolchain-selection through Vaporize")
-func parsesToolchainSelectionThroughVaporize() throws {
-  let command = try VaporizeCLI.parse([
-    "toolchain-selection", "swift", "--", "use", "--print-location",
-  ])
-
-  #expect(command.mode == .toolchainSelection)
-  #expect(command.forwardedArguments == ["swift", "use", "--print-location"])
-}
-
 @Test("CUJ-05 removes the former overloaded toolchain mode")
 func rejectsFormerToolchainMode() {
   #expect(throws: Error.self) {
@@ -37,78 +11,32 @@ func rejectsFormerToolchainMode() {
   }
 }
 
-@Test("CUJ-05 exposes only selection providers compiled for the host platform")
-func exposesOnlyCompiledSelectionProviders() {
-  #if os(macOS)
-    #expect(ToolchainSelectionRequest.Provider.allCases == [.swift, .xcode])
-    #expect(ToolchainSelectionRequest.Provider(rawValue: "xcode") == .xcode)
-    #expect(VaporizeCLI.toolchainSelectionDiscussion.contains("toolchain-selection xcode"))
-  #else
-    #expect(ToolchainSelectionRequest.Provider.allCases == [.swift])
-    #expect(ToolchainSelectionRequest.Provider(rawValue: "xcode") == nil)
-    #expect(!VaporizeCLI.toolchainSelectionDiscussion.contains("xcode"))
-  #endif
-}
-
-@Test("CUJ-05 requires an explicit compiled selection provider")
-func rejectsSelectionWithoutProvider() {
-  #expect(throws: Error.self) {
-    _ = try ToolchainSelectionRequest(arguments: ["use", "6.4"])
-  }
-}
-
-@Test(
-  "CUJ-05 rejects Swift lifecycle inspection and execution from selection",
-  arguments: [
-    ["swift", "install", "6.4"],
-    ["swift", "list"],
-    ["swift", "update"],
-    ["swift", "uninstall", "6.3.2"],
-    ["swift", "run", "swift", "--version"],
-    ["swift", "swift", "test"],
-    ["swift", "docc", "convert", "Product.docc"],
-  ]
-)
-func rejectsNonSelectionSwiftOperations(arguments: [String]) {
-  #expect(throws: Error.self) {
-    _ = try ToolchainSelectionRequest(arguments: arguments)
-  }
-}
-
-@Test("CUJ-05 rejects Xcode as a Swift selection")
-func rejectsXcodeAsSwiftSelection() {
-  #expect(throws: Error.self) {
-    _ = try ToolchainSelectionRequest(arguments: [
-      "swift", "use", "--global-default", "xcode",
-    ])
-  }
-}
-
-@Test("CUJ-05 distinguishes Vaporize commands from embedded Swiftly proxy links")
-func distinguishesVaporizeCommandsFromLinkedToolchainProxies() {
-  #expect(!VaporizeInvocation.isToolchainProxy(arguments: [
-    "/opt/wrkstrm/bin/vaporize.cli@wrkstrm-core.clia.sh"
-  ]))
-  #expect(!VaporizeInvocation.isToolchainProxy(arguments: ["vaporize"]))
-  #expect(!VaporizeInvocation.isToolchainProxy(arguments: [
-    "C:\\tools\\vaporize.cli@wrkstrm-core.clia.sh.exe"
-  ]))
-  #expect(VaporizeInvocation.isToolchainProxy(arguments: ["/tmp/toolchain-bin/swift"]))
-  #expect(VaporizeInvocation.isToolchainProxy(arguments: ["clang"]))
-}
-
-@Test("CUJ-05 resolves a relative Vaporize executable for Swiftly proxy links")
-func resolvesRelativeVaporizeExecutableForProxyLinks() {
-  let path = VaporizeInvocation.executablePath(
-    arguments: ["build/vaporize.cli@wrkstrm-core.clia.sh"],
-    currentDirectory: "/tmp/vaporize-host",
-    environmentPath: nil
-  )
-
-  #expect(path == "/tmp/vaporize-host/build/vaporize.cli@wrkstrm-core.clia.sh")
-}
-
 #if os(macOS)
+  @Test("CUJ-05 parses Xcode selection through Vaporize")
+  func parsesToolchainSelectionThroughVaporize() throws {
+    let command = try VaporizeCLI.parse([
+      "toolchain-selection", "xcode", "--", "select", "--print-path",
+    ])
+
+    #expect(command.mode == .toolchainSelection)
+    #expect(command.forwardedArguments == ["xcode", "select", "--print-path"])
+  }
+
+  @Test("CUJ-05 exposes only the Xcode selection provider")
+  func exposesOnlyXcodeSelectionProvider() {
+    #expect(ToolchainSelectionRequest.Provider.allCases == [.xcode])
+    #expect(ToolchainSelectionRequest.Provider(rawValue: "swift") == nil)
+    #expect(VaporizeCLI.toolchainSelectionDiscussion.contains("toolchain-selection xcode"))
+    #expect(VaporizeCLI.toolchainSelectionDiscussion.contains("Temper owns Swift"))
+  }
+
+  @Test("CUJ-05 requires the explicit Xcode selection provider")
+  func rejectsSelectionWithoutProvider() {
+    #expect(throws: Error.self) {
+      _ = try ToolchainSelectionRequest(arguments: ["select", "--print-path"])
+    }
+  }
+
   @Test("CUJ-05 routes Xcode selection-state lookup through xcode-select")
   func routesXcodeSelectionLookup() throws {
     let request = try ToolchainSelectionRequest(arguments: [
@@ -164,6 +92,17 @@ func resolvesRelativeVaporizeExecutableForProxyLinks() {
   func rejectsNonSelectionXcodeOperations(arguments: [String]) {
     #expect(throws: Error.self) {
       _ = try ToolchainSelectionRequest(arguments: arguments)
+    }
+  }
+#endif
+
+#if !os(macOS)
+  @Test("CUJ-05 omits toolchain selection where Vaporize has no platform provider")
+  func omitsToolchainSelectionWithoutPlatformProvider() {
+    #expect(throws: Error.self) {
+      _ = try VaporizeCLI.parse([
+        "toolchain-selection", "swift", "--", "use", "6.4",
+      ])
     }
   }
 #endif

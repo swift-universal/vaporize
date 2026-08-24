@@ -91,7 +91,7 @@ meaningful, but it is not a substitute for the later owner-specific gates.
 ## Repeatable Technical Receipt
 
 From the `vaporize@wrkstrm-core.cli` package root, the focused proof was
-exercised with:
+originally exercised with the then-required compatibility flag:
 
 ```sh
 VAPORIZE_DISABLE_SWIFTLY=1 xcrun swift test --skip-update \
@@ -115,11 +115,10 @@ xcrun xcodebuild build ... -sdk macosx CODE_SIGNING_ALLOWED=NO
 The observed build output contained `PORTABLE_VARIANT = dogfood` and
 `** BUILD SUCCEEDED **`.
 
-`VAPORIZE_DISABLE_SWIFTLY=1` is a current source-build test environment
-constraint while the package is cohosted with Vaporize's conditional toolchain
-dependencies. It keeps the proof bounded to `AppleProjectSpecCore`; it does
-not prove that the installed Vaporize product or a separate generator package
-has the same behavior. The dedicated package extraction is therefore a
+`VAPORIZE_DISABLE_SWIFTLY=1` is historical receipt syntax. Vaporize no longer
+embeds Swiftly and the flag has no active manifest or test behavior. Current
+replays omit it. The focused proof still does not establish installed-product
+or separate-generator parity; the dedicated package extraction remains a
 separate open Bead rather than hidden scope.
 
 ## Linked Corrective Work

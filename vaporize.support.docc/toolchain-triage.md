@@ -5,14 +5,14 @@
   @PageColor(blue)
   @TitleHeading("Toolchain Triage")
   @PageImage(purpose: icon, source: "toolchain-triage-icon", alt: "Two independent toolchain lanes converge on a diagnosis point.")
-  @PageImage(purpose: card, source: "toolchain-triage-card", alt: "Parallel Xcode and Swiftly provider lanes that remain distinct until diagnosis.")
+  @PageImage(purpose: card, source: "toolchain-triage-card", alt: "Xcode selection and Temper-owned Swift lanes remain distinct until diagnosis.")
 }
 
-@Image(source: "toolchain-triage-hero", alt: "Independent Xcode and Swiftly selection lanes each lead to a shared evidence diagnosis without crossing state boundaries.")
+@Image(source: "toolchain-triage-hero", alt: "Independent Xcode and Temper-owned Swift lanes each lead to a shared evidence diagnosis without crossing state boundaries.")
 
 Use this page when a Swift or Xcode operation fails before a project begins to
 compile. The goal is to identify whether the failure belongs to Xcode, the
-Vaporize executable, the Swiftly proxy, or the selected toolchain.
+Vaporize executable, Temper, or the selected Swift toolchain.
 
 ## Inspect Xcode Without Changing it
 
@@ -41,15 +41,13 @@ machine-wide Xcode selection and must be an explicit later action.
 
 ```sh
 vaporize.cli@wrkstrm-core.clia.sh --version
-vaporize.cli@wrkstrm-core.clia.sh toolchain-selection --help
 ```
 
-The toolchain help must say that the build includes the embedded Swiftly
-provider before the Swift selection command can work. If it says the provider
-was omitted, this is an installed-artifact capability defect. Do not describe
-it as an Xcode failure.
+Vaporize version and receipt evidence identify the materialization tool. On
+macOS, `toolchain-selection --help` describes only the Xcode selection lane.
+Swift selection is not a Vaporize artifact capability.
 
-## Inspect the Swift Proxy
+## Inspect Swift Ownership
 
 ```sh
 command -v swift
@@ -57,18 +55,17 @@ ls -l "$(command -v swift)"
 readlink "$(command -v swift)"
 ```
 
-The shell `swift` can be a Swiftly proxy link to Vaporize. When it is, a
-provider-less installed Vaporize artifact causes `swift --version` to fail even
-though `xcrun swift --version` succeeds. That is a source-installed parity
-problem; continue with <doc:source-installed-parity>.
+The shell `swift` must not proxy through Vaporize. If its link resolves to a
+Vaporize executable, record that stale topology and repair selection through
+Temper. Compare `swift --version` with `xcrun swift --version` on macOS without
+conflating their ownership boundaries.
 
-## Query, Do Not Select, Swiftly State
+## Query Temper State
 
-With a provider-bearing Vaporize artifact, the following asks Swiftly to report
-its active state without requesting a new selector:
+Temper owns Swift state. Query it without requesting a new selector:
 
 ```sh
-vaporize.cli@wrkstrm-core.clia.sh toolchain-selection swift -- use --format json
+temper swift use --format json
 ```
 
 Only append a selector after choosing its scope. For example,
@@ -80,6 +77,6 @@ selection exists. Record the output receipt before and after that change.
 | Observation | Meaning | Next page |
 | --- | --- | --- |
 | `xcrun swift --version` fails | Xcode/Command Line Tools lane is unavailable. | Escalate with <doc:support-packet>. |
-| Xcode Swift works; Vaporize says provider omitted | Installed Vaporize capability is incomplete. | <doc:source-installed-parity> |
-| Provider is present; no Swiftly proxy link is active | Selection has not been made or is scoped elsewhere. | Choose scope, then use the Swift provider. |
+| Xcode Swift works; `swift` on `PATH` fails | Temper or selected-Swift state is unavailable. | Query Temper state and inspect the `swift` link. |
+| `swift` links to Vaporize | A retired proxy topology is still installed. | Record identity, then repair the link through Temper. |
 | Build is taking time with active compiler CPU | The build is active, not necessarily stalled. | <doc:bounded-build-observation> |

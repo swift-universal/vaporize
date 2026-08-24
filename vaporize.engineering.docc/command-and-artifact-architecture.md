@@ -35,17 +35,16 @@ better receipts.
 
 ## Toolchain Selection
 
-Toolchain selection is state selection, not a generic toolchain bridge. The
-provider is explicit and the two selection domains are independent:
+Vaporize toolchain selection is macOS Xcode state selection, not a generic
+toolchain bridge:
 
 ```text
-vaporize toolchain-selection swift -- use [swiftly-use-options] [selector]
 vaporize toolchain-selection xcode -- select <xcode-select-options>  # macOS only
 ```
 
-The Swift provider compiles Swiftly's `use` implementation into Vaporize. The
-Xcode provider is omitted outside macOS and owns only the `xcode-select`
-selection-state operations: print, switch, and reset.
+Temper owns Swift toolchain selection and lifecycle. Vaporize uses the selected
+`swift` on `PATH`. Its Xcode provider is omitted outside macOS and owns only the
+`xcode-select` selection-state operations: print, switch, and reset.
 
 Toolchain acquisition, lifecycle, general inspection, and execution do not
 belong to this command. The complete reasoning and current ownership gaps are

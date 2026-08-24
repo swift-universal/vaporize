@@ -30,16 +30,15 @@ expected. It favors small observations before any mutation.
 ## Operating Contract
 
 Vaporize owns the assistant-facing materialization boundary for build, test,
-install, and run operations. It does not make Xcode selection, Swiftly
-selection, installed-runtime proof, release readiness, and human approval the
-same claim.
+install, and run operations. It does not make Xcode selection, Temper-owned
+Swift selection, installed-runtime proof, release readiness, and human approval
+the same claim.
 
-On macOS, the provider domains are intentionally separate:
+On macOS, ownership remains explicit:
 
-- `toolchain-selection swift -- use <selector>` is the embedded Swiftly
-  selection surface.
 - `toolchain-selection xcode -- select <xcode-select-options>` owns the active
   Xcode developer-directory selection.
+- `temper swift use <selector>` owns Swift toolchain selection and lifecycle.
 
 Use the smallest provider that owns the state you need to inspect or change.
 Do not silently replace the global `swift` path to solve an Xcode-selection
@@ -60,8 +59,8 @@ review authority.
 
 ## Current Incident Pattern
 
-The initial support case is a canonical Vaporize installation that omitted its
-embedded Swiftly provider while a provider-bearing source Release artifact
-existed. The symptom was a broken ordinary `swift` proxy, not a broken Xcode.
-<doc:source-installed-parity> shows how to prove that distinction without
-replacing the installed tool during diagnosis.
+When source behavior differs from the installed Vaporize artifact, compare the
+two exact binaries and their receipts before promotion. Vaporize is no longer a
+Swift proxy; a broken ordinary `swift` command belongs to Temper or the selected
+toolchain boundary. <doc:source-installed-parity> shows how to prove source and
+installed identity without replacing the installed tool during diagnosis.

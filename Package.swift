@@ -93,20 +93,6 @@ let swiftCLIUpdaterDependency = Package.Dependency.package(
     "private/universal/domain/tooling/spm/swift-cli-updater"
   ),
 )
-let swiftlyDependency = localOrRemote(
-  path: repositoryPath(
-    collectivesDirectory,
-    "wrkstrm-upstreams/private/upstreams/swiftlang/spm/swiftly"
-  ),
-  url: "https://github.com/swiftlang/swiftly.git",
-  from: "1.1.3"
-)
-// Swiftly currently does not compile under the active Xcode beta because its
-// selected Subprocess API predates the beta toolchain.  The installer and all
-// core execution commands remain available without the optional toolchain-
-// selection provider.  Keep the escape hatch explicit and opt-in so ordinary
-// Vaporize builds retain the embedded Swiftly surface.
-let includesSwiftly = ProcessInfo.processInfo.environment["VAPORIZE_DISABLE_SWIFTLY"] != "1"
 let swiftJSONFormatterDependency = localOrRemote(
   path: repositoryPath(
     swiftUniversalDirectory,
@@ -173,7 +159,7 @@ let bumpBuildDependency = Package.Dependency.package(
   )
 )
 
-var packageDependencies: [Package.Dependency] = [
+let packageDependencies: [Package.Dependency] = [
   commonLogDependency,
   commonProcessDependency,
   commonShellDependency,
@@ -193,11 +179,7 @@ var packageDependencies: [Package.Dependency] = [
   .package(url: "https://github.com/apple/swift-crypto.git", from: "3.15.1"),
 ]
 
-if includesSwiftly {
-  packageDependencies.append(swiftlyDependency)
-}
-
-var vaporizeCLIDependencies: [Target.Dependency] = [
+let vaporizeCLIDependencies: [Target.Dependency] = [
   .product(name: "AppleProjectSpecCore", package: "apple-project-spec"),
   "VaporizeIssueReporting",
   .product(name: "CommonLog", package: "common-log"),
@@ -214,10 +196,6 @@ var vaporizeCLIDependencies: [Target.Dependency] = [
   .product(name: "VaporizeCLICopy_v000_000_001", package: "VaporizeCLICopy_v000_000_001"),
   .product(name: "ArgumentParser", package: "swift-argument-parser"),
 ]
-
-if includesSwiftly {
-  vaporizeCLIDependencies.append(.product(name: "SwiftlyCommands", package: "swiftly"))
-}
 
 let package = Package(
   name: "vaporize@wrkstrm-core.cli",
@@ -254,6 +232,8 @@ let package = Package(
       name: "VaporizeTestSupport",
       dependencies: [
         .product(name: "AppleProjectSpecCore", package: "apple-project-spec"),
+        .product(name: "CommonProcess", package: "common-process"),
+        .product(name: "CommonProcessExecutionKit", package: "common-process"),
         .product(name: "TestFixtureLifecycle", package: "common-test-fixture-lifecycle"),
         .product(name: "TestServiceAdoptionPolicy", package: "test-service-adoption-policy@wrkstrm-core"),
       ],

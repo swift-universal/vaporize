@@ -14,12 +14,11 @@ A source build proves that source can materialize an artifact. An installed
 binary proves only the exact bytes currently installed. Neither statement
 implies the other.
 
-## The Provider-Loss Pattern
+## The Source-Installed Drift Pattern
 
-Vaporize normally embeds Swiftly. A prior Release artifact can nevertheless
-lack that provider if it was materialized in a feature-reduced configuration.
-If the shell `swift` proxy targets that artifact, ordinary Swift invocation
-fails even while Xcode's own compiler works.
+An installed Vaporize artifact can lag source behavior, dependency fixes, or
+command ownership changes. Diagnose this as artifact drift. Vaporize does not
+own the shell `swift` proxy; Swift selection and lifecycle belong to Temper.
 
 Diagnose this with identities, never visual similarity or version text alone.
 
@@ -54,11 +53,12 @@ terminal.
 Run help against the exact candidate path, not the installed path:
 
 ```sh
-<candidate-vaporize-path> toolchain-selection --help
+<candidate-vaporize-path> --version
 ```
 
-The candidate must report the embedded Swiftly provider. Preserve its digest,
-build authority, selected Xcode identity, and output path with the evidence.
+Preserve the candidate digest, build authority, selected Xcode identity, and
+output path with the evidence. On macOS, inspect `toolchain-selection --help`
+only when the Xcode developer-directory selection surface is under review.
 
 ## Promotion Is a Separate Step
 

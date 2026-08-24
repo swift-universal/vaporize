@@ -385,7 +385,7 @@ struct VaporizeCUJ22ResourceCLIInstallTests {
     try await command.run()
 
     let installedResourceBundleNames = fixture.installedResourceBundleNames()
-    let output = try fixture.runInstalledProductAwayFromBuildProducts()
+    let output = try await fixture.runInstalledProductAwayFromBuildProducts()
     let trimmedStdout = output.stdout.trimmingCharacters(in: .whitespacesAndNewlines)
     let status = output.exitCode == 0 && trimmedStdout == scenario.expectedStdout ? "pass" : "fail"
 
@@ -417,7 +417,7 @@ struct VaporizeCUJ22ResourceCLIInstallTests {
     try await command.run()
 
     let installedResourceBundleNames = fixture.installedResourceBundleNames()
-    let output = try fixture.runInstalledProductAwayFromBuildProducts()
+    let output = try await fixture.runInstalledProductAwayFromBuildProducts()
     let trimmedStdout = output.stdout.trimmingCharacters(in: .whitespacesAndNewlines)
     let status = output.exitCode == 0 && trimmedStdout == scenario.expectedStdout ? "pass" : "fail"
 
@@ -673,31 +673,19 @@ private struct ResourceProbeFixture {
     )
   }
 
-  func runInstalledProductAwayFromBuildProducts() throws -> ProcessOutput {
+  func runInstalledProductAwayFromBuildProducts() async throws -> VaporizeTestCommandOutput {
     let hiddenBuild = packageRoot.appendingPathComponent(".build-hidden-\(UUID().uuidString)", isDirectory: true)
     try moveBuildDirectory(to: hiddenBuild)
     defer { try? restoreBuildDirectory(from: hiddenBuild) }
 
-    return try runInstalledProduct()
+    return try await runInstalledProduct()
   }
 
-  func runInstalledProduct() throws -> ProcessOutput {
-    let process = Process()
-    process.executableURL = installedExecutableURL()
-    process.currentDirectoryURL = FileManager.default.temporaryDirectory
-
-    let stdout = Pipe()
-    let stderr = Pipe()
-    process.standardOutput = stdout
-    process.standardError = stderr
-
-    try process.run()
-    process.waitUntilExit()
-
-    return ProcessOutput(
-      exitCode: process.terminationStatus,
-      stdout: String(data: stdout.fileHandleForReading.readDataToEndOfFile(), encoding: .utf8) ?? "",
-      stderr: String(data: stderr.fileHandleForReading.readDataToEndOfFile(), encoding: .utf8) ?? ""
+  func runInstalledProduct() async throws -> VaporizeTestCommandOutput {
+    try await VaporizeTestCommand.run(
+      executablePath: installedExecutableURL().path,
+      workingDirectory: FileManager.default.temporaryDirectory.path,
+      sourceTag: "vaporize-cuj-22-resource-probe"
     )
   }
 
@@ -782,32 +770,20 @@ private struct CheckedInResourceVaultFixture {
     self.packageRoot = packageRoot
   }
 
-  func runInstalledProductAwayFromBuildProducts() throws -> ProcessOutput {
+  func runInstalledProductAwayFromBuildProducts() async throws -> VaporizeTestCommandOutput {
     let hiddenBuild = packageRoot.appendingPathComponent(".build-hidden-\(UUID().uuidString)", isDirectory: true)
     try moveBuildDirectory(to: hiddenBuild)
     defer { try? restoreBuildDirectory(from: hiddenBuild) }
 
-    return try runInstalledProduct()
+    return try await runInstalledProduct()
   }
 
-  func runInstalledProduct() throws -> ProcessOutput {
-    let process = Process()
-    process.executableURL = installedExecutableURL()
-    process.arguments = ["catalog"]
-    process.currentDirectoryURL = FileManager.default.temporaryDirectory
-
-    let stdout = Pipe()
-    let stderr = Pipe()
-    process.standardOutput = stdout
-    process.standardError = stderr
-
-    try process.run()
-    process.waitUntilExit()
-
-    return ProcessOutput(
-      exitCode: process.terminationStatus,
-      stdout: String(data: stdout.fileHandleForReading.readDataToEndOfFile(), encoding: .utf8) ?? "",
-      stderr: String(data: stderr.fileHandleForReading.readDataToEndOfFile(), encoding: .utf8) ?? ""
+  func runInstalledProduct() async throws -> VaporizeTestCommandOutput {
+    try await VaporizeTestCommand.run(
+      executablePath: installedExecutableURL().path,
+      arguments: ["catalog"],
+      workingDirectory: FileManager.default.temporaryDirectory.path,
+      sourceTag: "vaporize-cuj-22-resource-vault"
     )
   }
 
@@ -922,12 +898,6 @@ private enum ProvingGroundPathError: Error, CustomStringConvertible {
       return "missing package manifest at \(path)"
     }
   }
-}
-
-private struct ProcessOutput {
-  var exitCode: Int32
-  var stdout: String
-  var stderr: String
 }
 
 private func simulatedReceipt(

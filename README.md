@@ -116,19 +116,17 @@ ordering metadata, never product build numbers. A legacy manifest with no
 `build.buildNumber` is reported as `unrecorded`, never guessed from install
 time, a tap commit, or an artifact timestamp.
 
-`toolchain-selection` requires an explicit, compiled provider and owns only
-active selection state:
+`toolchain-selection` is a macOS-only Vaporize surface for active Xcode
+developer-directory state:
 
 ```text
-vaporize toolchain-selection swift -- use [swiftly-use-options] [selector]
 vaporize toolchain-selection xcode -- select <xcode-select-options>  # macOS only
 ```
 
-The `swift` provider exists on every supported platform and compiles Swiftly's
-`use` implementation into Vaporize. The sibling `xcode` provider and its
-`xcode-select` implementation are compiled only on macOS, so a Linux build
-exposes no Xcode selection provider. Swiftly lifecycle/inspection/execution and
-arbitrary `xcrun` execution are deliberately outside this command.
+Temper owns Swift toolchain selection and lifecycle. Vaporize executes the
+already selected `swift` from `PATH`; it does not embed a Swift toolchain
+manager or act as a toolchain proxy. The `xcode-select` provider is compiled
+only on macOS. Arbitrary `xcrun` execution remains outside this command.
 
 On macOS the four core execution commands expose adjacent authority siblings:
 
@@ -392,16 +390,14 @@ vaporize use \
 The spec is decoded before execution, invalid executable refs are rejected, and
 receipts record the process result without serializing environment values.
 
-## Toolchain selection and JSON validation
+## Xcode selection and JSON validation
 
-Toolchain selection compiles Swiftly's `use` operation into Vaporize. It reports
-or changes the selected default Swift without launching an installed `swiftly`
-CLI:
+Use Temper to inspect, install, or select Swift toolchains:
 
 ```bash
-vaporize toolchain-selection swift -- use
-vaporize toolchain-selection swift -- use 6.4.x-snapshot
-vaporize toolchain-selection swift -- use --global-default 6.4.x-snapshot
+temper swift use
+temper swift use 6.4.x-snapshot
+temper swift use --global-default 6.4.x-snapshot
 ```
 
 Until Swift 6.4 has a stable Swift.org release, `6.4.x-snapshot` selects the
@@ -429,9 +425,9 @@ vaporize test xcode --package-path <package> --configuration debug
 ```
 
 The full mode-and-option responsibility map is documented in
-`vaporize.engineering.docc/command-ownership-map.md`. Swift toolchain lifecycle
-and generic Xcode inspection remain explicit command-design gaps; they are not
-smuggled into selection.
+`vaporize.engineering.docc/command-ownership-map.md`. Temper owns Swift
+toolchain lifecycle; generic Xcode inspection remains outside Vaporize's
+selection boundary.
 
 Release packet JSON validation also stays inside Vaporize:
 

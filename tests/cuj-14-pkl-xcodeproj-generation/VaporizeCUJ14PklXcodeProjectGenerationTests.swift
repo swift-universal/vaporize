@@ -717,26 +717,3 @@ targets:
     sources:
       - path: Sources/library
 """
-
-private struct XcrunResult {
-  var status: Int32
-  var stdout: String
-  var stderr: String
-}
-
-private func runXcrun(_ arguments: [String]) throws -> XcrunResult {
-  let process = Process()
-  let standardOutput = Pipe()
-  let standardError = Pipe()
-  process.executableURL = URL(fileURLWithPath: "/usr/bin/xcrun")
-  process.arguments = arguments
-  process.standardOutput = standardOutput
-  process.standardError = standardError
-  try process.run()
-  process.waitUntilExit()
-  return XcrunResult(
-    status: process.terminationStatus,
-    stdout: String(decoding: standardOutput.fileHandleForReading.readDataToEndOfFile(), as: UTF8.self),
-    stderr: String(decoding: standardError.fileHandleForReading.readDataToEndOfFile(), as: UTF8.self)
-  )
-}

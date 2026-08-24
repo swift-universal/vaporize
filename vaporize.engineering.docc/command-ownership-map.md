@@ -68,21 +68,15 @@ parameters rather than being flattened into peer command nodes.
 
 ## Toolchain Selection Contract
 
-The public grammar is:
+The Vaporize public grammar is macOS-only:
 
 ```text
-vaporize toolchain-selection swift -- use [swiftly-use-options] [selector]
 vaporize toolchain-selection xcode -- select [xcode-select-options]  # macOS only
 ```
 
-`swift` and `xcode` name independent selection domains. Selecting Swift does
-not select Xcode, and selecting Xcode does not select the default Swift used on
-`PATH`.
-
-The Swift provider compiles Swiftly's `use` implementation into Vaporize. It
-does not locate or launch an installed `swiftly` executable. Other Swiftly
-operations such as `install`, `list`, `update`, `uninstall`, and `run` are not
-owned by `toolchain-selection`.
+Temper owns Swift toolchain selection and lifecycle. Vaporize resolves the
+already selected `swift` from `PATH`; it does not embed a Swift selection
+provider or proxy executable names into a toolchain manager.
 
 The Xcode provider is compiled only on macOS and delegates selection state to
 `/usr/bin/xcode-select`. Arbitrary `xcrun` execution, Xcode version inspection,

@@ -1,0 +1,51 @@
+{
+  "BeadsIssue": "0.1.0",
+  "schemaVersion": "0.1.0",
+  "id": "refactor-vaporize-transfer-swift-toolchain-selection-to-temper-2026-08-24",
+  "title": "Transfer Swift toolchain selection ownership from Vaporize to Temper",
+  "status": "closed",
+  "priority": 1,
+  "issueType": "refactor",
+  "labels": [
+    "vaporize",
+    "temper",
+    "swiftly",
+    "command-ownership",
+    "dependency-boundary"
+  ],
+  "createdAt": "2026-08-24",
+  "createdBy": "Codex with operator direction",
+  "closedAt": "2026-08-24T15:22:48Z",
+  "delivery": {
+    "result": "implemented-and-verified",
+    "verification": [
+      "swift package dump-package succeeded from canonical Vaporize on Windows.",
+      "swift build succeeded from canonical Vaporize on Windows.",
+      "VaporizeCUJ05ToolchainTests passed all 3 focused tests.",
+      "The complete Vaporize test graph compiled while running the focused suite.",
+      "Active Package.swift, sources, and tests contain no Swiftly dependency or VAPORIZE_DISABLE_SWIFTLY flag.",
+      "Active sources and tests contain no direct Foundation Process or Pipe construction. Test subprocesses use CommonProcess through VaporizeTestCommand."
+    ],
+    "ownershipBoundary": "Temper owns Swift toolchain selection and lifecycle. Vaporize consumes the selected swift from PATH and retains only its macOS xcode-select provider."
+  },
+  "description": "Vaporize still embeds Swiftly's command surface and proxy behavior even though Temper now owns Swift toolchain specialization. This duplicates ownership and couples Vaporize builds to an unrelated lifecycle dependency.",
+  "historicalContent": {
+    "expectedBehavior": "Vaporize executes builds with the already selected swift on PATH and retains only its macOS-specific xcode-select lane. Temper owns Swift toolchain selection and lifecycle.",
+    "currentEvidence": [
+      "Package.swift conditionally adds swiftlang/swiftly and SwiftlyCommands.",
+      "VaporizeExecutable dispatches non-canonical executable names through SwiftlyProxy.",
+      "toolchain-selection swift compiles SwiftlyCommandRunner into the Vaporize CLI.",
+      "VAPORIZE_DISABLE_SWIFTLY exists solely to make source builds work without that optional graph."
+    ],
+    "acceptanceCriteria": [
+      "Remove the Swiftly package and target dependencies from Vaporize.",
+      "Remove Swiftly proxy dispatch and toolchain-selection swift from the public command surface.",
+      "Remove VAPORIZE_DISABLE_SWIFTLY from active build and test paths.",
+      "Retain selected-swift execution through PATH and macOS-only xcode-select behavior.",
+      "Update active CUJs and product documentation to identify Temper as the Swift toolchain owner.",
+      "Build and run focused tests successfully from canonical Vaporize on Windows."
+    ],
+    "scopeBoundary": "Historical receipts and incident records remain immutable evidence; this refactor changes active code, tests, manifests, and current product documentation only."
+  },
+  "sourceLocation": "Package.swift"
+}
