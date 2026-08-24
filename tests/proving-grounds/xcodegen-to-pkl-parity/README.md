@@ -1,7 +1,7 @@
 # XcodeGen-To-Pkl Parity Proving Grounds
 
 Each child directory contains a legacy XcodeGen-shaped `project.yml` and a
-checked-in AppleProjectSpec `project.pkl` parity specimen.
+checked-in XcodeProjectDefinition `project.pkl` parity specimen.
 
 The CUJ-10 and CUJ-13 tests use these fixtures in two ways:
 

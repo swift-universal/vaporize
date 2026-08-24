@@ -1,4 +1,4 @@
-import AppleProjectSpecCore
+import XcodeProjectDefinitionCore
 import ArgumentParser
 import Foundation
 import Testing
@@ -24,14 +24,14 @@ func parsesPklXcodeProjectGenerationMode() throws {
   #expect(command.vaporOutputFormat == .json)
 }
 
-@Test("CUJ-14 generates .xcodeproj world-state from AppleProjectSpec Pkl")
+@Test("CUJ-14 generates .xcodeproj world-state from XcodeProjectDefinition Pkl")
 func generatesXcodeProjectWorldStateFromPkl() async throws {
   let fixture = try makeTinyPklAppFixture()
   defer { try? FileManager.default.removeItem(at: fixture.temporaryDirectory) }
   defer { try? FileManager.default.removeItem(at: fixture.outputDirectory) }
 
   let outputURL = fixture.outputDirectory.appendingPathComponent("TinyGenerated.xcodeproj")
-  let receipt = try await AppleProjectXcodeProjectGenerator.generate(
+  let receipt = try await XcodeProjectGenerator.generate(
     pklURL: fixture.projectPkl,
     outputURL: outputURL,
     requestId: "cuj-14-pkl-xcodeproj-generation"
@@ -76,7 +76,7 @@ func preservesMultiplePklSourceRootsInGeneratedXcodeProject() async throws {
   defer { try? FileManager.default.removeItem(at: fixture.outputDirectory) }
 
   let outputURL = fixture.outputDirectory.appendingPathComponent("MultiSourceGenerated.xcodeproj")
-  let receipt = try await AppleProjectXcodeProjectGenerator.generate(
+  let receipt = try await XcodeProjectGenerator.generate(
     pklURL: fixture.projectPkl,
     outputURL: outputURL,
     requestId: "cuj-14-multiple-pkl-source-roots"
@@ -101,7 +101,7 @@ func honorsPklSourceExcludesInGeneratedXcodeProject() async throws {
   defer { try? FileManager.default.removeItem(at: fixture.outputDirectory) }
 
   let outputURL = fixture.outputDirectory.appendingPathComponent("ExcludedGenerated.xcodeproj")
-  let receipt = try await AppleProjectXcodeProjectGenerator.generate(
+  let receipt = try await XcodeProjectGenerator.generate(
     pklURL: fixture.projectPkl,
     outputURL: outputURL,
     requestId: "cuj-14-pkl-source-excludes"
@@ -126,7 +126,7 @@ func generatesToolTargetReleaseIdentityFromPkl() async throws {
   defer { try? FileManager.default.removeItem(at: fixture.outputDirectory) }
 
   let outputURL = fixture.outputDirectory.appendingPathComponent("TinyToolGenerated.xcodeproj")
-  let receipt = try await AppleProjectXcodeProjectGenerator.generate(
+  let receipt = try await XcodeProjectGenerator.generate(
     pklURL: fixture.projectPkl,
     outputURL: outputURL,
     requestId: "cuj-14-pkl-tool-release-identity"
@@ -155,12 +155,12 @@ func xcodeProjectRenderingIsDeterministic() throws {
   let fixture = try makeTinyPklAppFixture()
   defer { try? FileManager.default.removeItem(at: fixture.temporaryDirectory) }
 
-  let spec = try decodeAppleProjectYML(tinyPklAppYML)
-  let first = try AppleProjectXcodeProjectRenderer.render(
+  let spec = try decodeXcodeProjectYML(tinyPklAppYML)
+  let first = try XcodeProjectRenderer.render(
     spec: spec,
     projectDirectory: fixture.temporaryDirectory
   )
-  let second = try AppleProjectXcodeProjectRenderer.render(
+  let second = try XcodeProjectRenderer.render(
     spec: spec,
     projectDirectory: fixture.temporaryDirectory
   )
@@ -179,7 +179,7 @@ func generatesFrameworkAppTestGraphAndSharedSchemeFromPkl() async throws {
   let manifest = try #require(JSONSerialization.jsonObject(with: manifestData) as? [String: Any])
 
   let outputURL = fixture.outputDirectory.appendingPathComponent("PklGroundGenerated.xcodeproj")
-  let receipt = try await AppleProjectXcodeProjectGenerator.generate(
+  let receipt = try await XcodeProjectGenerator.generate(
     pklURL: fixture.projectPkl,
     outputURL: outputURL,
     requestId: "cuj-14-pkl-project-generation-proving-ground"
@@ -236,7 +236,7 @@ func generatesAboveParityPklProjectGenerationProvingGrounds() async throws {
     let manifestData = try Data(contentsOf: ground.passportJSONURL)
     let manifest = try #require(JSONSerialization.jsonObject(with: manifestData) as? [String: Any])
     let outputURL = outputDirectory.appendingPathComponent("BeyondGenerated.xcodeproj")
-    let receipt = try await AppleProjectXcodeProjectGenerator.generate(
+    let receipt = try await XcodeProjectGenerator.generate(
       pklURL: ground.projectPklURL,
       outputURL: outputURL,
       requestId: "cuj-14-above-parity-\(ground.slug)"
@@ -272,14 +272,14 @@ func generatesAboveParityPklProjectGenerationProvingGrounds() async throws {
 
 @Test("CUJ-14 rejects unsupported Xcode target types from Pkl")
 func rejectsUnsupportedXcodeTargetTypesFromPkl() throws {
-  let spec = try decodeAppleProjectYML(tinyUnsupportedTargetYML)
+  let spec = try decodeXcodeProjectYML(tinyUnsupportedTargetYML)
   do {
-    _ = try AppleProjectXcodeProjectRenderer.render(
+    _ = try XcodeProjectRenderer.render(
       spec: spec,
       projectDirectory: FileManager.default.temporaryDirectory
     )
     Issue.record("Expected unsupported target type to fail.")
-  } catch AppleProjectXcodeProjectGenerationError.unsupportedTargetType(let targetName, let type) {
+  } catch XcodeProjectGenerationError.unsupportedTargetType(let targetName, let type) {
     #expect(targetName == "TinyLibrary")
     #expect(type == "staticLibrary")
   } catch {
@@ -368,13 +368,13 @@ private func makeTinyPklAppFixture() throws -> TinyPklAppFixture {
   try Data("{\"info\":{\"author\":\"xcode\"}}\n".utf8)
     .write(to: assetDirectory.appendingPathComponent("Contents.json"))
 
-  let spec = try decodeAppleProjectYML(tinyPklAppYML)
+  let spec = try decodeXcodeProjectYML(tinyPklAppYML)
   let projectPkl = temporaryDirectory.appendingPathComponent("project.pkl")
   let schemaAmendsPath = relativePathForPklAmends(
     from: projectPkl.deletingLastPathComponent(),
-    to: appleProjectSpecPklSchemaURL
+    to: xcodeProjectDefinitionPklSchemaURL
   )
-  let data = AppleProjectPklRenderer.renderData(
+  let data = XcodeProjectPklRenderer.renderData(
     spec: spec,
     schemaAmendsPath: schemaAmendsPath,
     sourcePath: "project.yml"
@@ -408,7 +408,7 @@ private func makeMultiSourcePklAppFixture() throws -> MultiSourcePklAppFixture {
   let projectPkl = temporaryDirectory.appendingPathComponent("project.pkl")
   let schemaAmendsPath = relativePathForPklAmends(
     from: projectPkl.deletingLastPathComponent(),
-    to: appleProjectSpecPklSchemaURL
+    to: xcodeProjectDefinitionPklSchemaURL
   )
   try Data("""
   amends "\(schemaAmendsPath)"
@@ -466,7 +466,7 @@ private func makeSourceExcludedPklAppFixture() throws -> TinyPklAppFixture {
   let projectPkl = temporaryDirectory.appendingPathComponent("project.pkl")
   let schemaAmendsPath = relativePathForPklAmends(
     from: projectPkl.deletingLastPathComponent(),
-    to: appleProjectSpecPklSchemaURL
+    to: xcodeProjectDefinitionPklSchemaURL
   )
   try Data("""
   amends "\(schemaAmendsPath)"
@@ -518,13 +518,13 @@ private func makeTinyPklToolFixture() throws -> TinyPklToolFixture {
   try Data("import Foundation\nprint(\"tiny tool\")\n".utf8)
     .write(to: sourceDirectory.appendingPathComponent("main.swift"))
 
-  let spec = try decodeAppleProjectYML(tinyPklToolYML)
+  let spec = try decodeXcodeProjectYML(tinyPklToolYML)
   let projectPkl = temporaryDirectory.appendingPathComponent("project.pkl")
   let schemaAmendsPath = relativePathForPklAmends(
     from: projectPkl.deletingLastPathComponent(),
-    to: appleProjectSpecPklSchemaURL
+    to: xcodeProjectDefinitionPklSchemaURL
   )
-  let data = AppleProjectPklRenderer.renderData(
+  let data = XcodeProjectPklRenderer.renderData(
     spec: spec,
     schemaAmendsPath: schemaAmendsPath,
     sourcePath: "project.yml"
@@ -556,13 +556,13 @@ private func makeTinyPklSuiteFixture() throws -> TinyPklSuiteFixture {
   try Data("import Testing\n@testable import TinyCore\n@Test func tinyCoreValue() { #expect(TinyCore.value == 1) }\n".utf8)
     .write(to: testDirectory.appendingPathComponent("TinyCoreTests.swift"))
 
-  let spec = try decodeAppleProjectYML(tinyPklSuiteYML)
+  let spec = try decodeXcodeProjectYML(tinyPklSuiteYML)
   let projectPkl = temporaryDirectory.appendingPathComponent("project.pkl")
   let schemaAmendsPath = relativePathForPklAmends(
     from: projectPkl.deletingLastPathComponent(),
-    to: appleProjectSpecPklSchemaURL
+    to: xcodeProjectDefinitionPklSchemaURL
   )
-  let data = AppleProjectPklRenderer.renderData(
+  let data = XcodeProjectPklRenderer.renderData(
     spec: spec,
     schemaAmendsPath: schemaAmendsPath,
     sourcePath: "project.yml"

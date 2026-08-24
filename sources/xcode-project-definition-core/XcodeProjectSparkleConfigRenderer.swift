@@ -3,7 +3,7 @@ import Foundation
 /// Typed failures for Sparkle self-update config generation. Every case names
 /// exactly which value is missing so a tool never ships with a placeholder or
 /// empty Sparkle identity (see [[tooling-silent-fallback-to-wrong-state-not-error-loud]]).
-public enum AppleProjectSparkleConfigRendererError: Error, CustomStringConvertible, Equatable {
+public enum XcodeProjectSparkleConfigRendererError: Error, CustomStringConvertible, Equatable {
   case targetNotFound(targetName: String, availableTargets: [String])
   case missingReleaseIdentity(targetName: String)
   case missingSparkleFeedURL(targetName: String)
@@ -36,16 +36,16 @@ public enum AppleProjectSparkleConfigRendererError: Error, CustomStringConvertib
 }
 
 /// Renders the compiled-in `SparkleConfig.swift` for a CLI tool target from an
-/// evaluated `AppleProjectSpec`. The target's `releaseIdentity` (sparkleFeedURL
+/// evaluated `XcodeProjectDefinition`. The target's `releaseIdentity` (sparkleFeedURL
 /// + sparklePublicEDKey + shortVersion) is the single typed source for the
 /// tool's self-update identity; the generated file compiles against the
 /// swift-universal `SwiftCLIUpdater` library's `SparkleConfig` initializer.
 ///
 /// Boundary: source-text generation only. Wiring the generated file into the
 /// install/run lane and the self-update verb is a separate component (Lane C).
-public enum AppleProjectSparkleConfigRenderer {
+public enum XcodeProjectSparkleConfigRenderer {
   public static func renderData(
-    spec: AppleProjectSpec,
+    spec: XcodeProjectDefinition,
     targetName: String,
     sourcePath: String? = nil
   ) throws -> Data {
@@ -53,37 +53,37 @@ public enum AppleProjectSparkleConfigRenderer {
   }
 
   public static func render(
-    spec: AppleProjectSpec,
+    spec: XcodeProjectDefinition,
     targetName: String,
     sourcePath: String? = nil
   ) throws -> String {
     guard let target = spec.targets[targetName] else {
-      throw AppleProjectSparkleConfigRendererError.targetNotFound(
+      throw XcodeProjectSparkleConfigRendererError.targetNotFound(
         targetName: targetName,
         availableTargets: spec.targets.keys.sorted()
       )
     }
     guard let identity = target.releaseIdentity else {
-      throw AppleProjectSparkleConfigRendererError.missingReleaseIdentity(targetName: targetName)
+      throw XcodeProjectSparkleConfigRendererError.missingReleaseIdentity(targetName: targetName)
     }
     guard let sparkleFeedURL = identity.sparkleFeedURL, !sparkleFeedURL.isEmpty else {
-      throw AppleProjectSparkleConfigRendererError.missingSparkleFeedURL(targetName: targetName)
+      throw XcodeProjectSparkleConfigRendererError.missingSparkleFeedURL(targetName: targetName)
     }
     guard
       let feedURL = URL(string: sparkleFeedURL),
       let scheme = feedURL.scheme, !scheme.isEmpty,
       let host = feedURL.host, !host.isEmpty
     else {
-      throw AppleProjectSparkleConfigRendererError.invalidSparkleFeedURL(
+      throw XcodeProjectSparkleConfigRendererError.invalidSparkleFeedURL(
         targetName: targetName,
         sparkleFeedURL: sparkleFeedURL
       )
     }
     guard let sparklePublicEDKey = identity.sparklePublicEDKey, !sparklePublicEDKey.isEmpty else {
-      throw AppleProjectSparkleConfigRendererError.missingSparklePublicEDKey(targetName: targetName)
+      throw XcodeProjectSparkleConfigRendererError.missingSparklePublicEDKey(targetName: targetName)
     }
     guard let shortVersion = identity.shortVersion, !shortVersion.isEmpty else {
-      throw AppleProjectSparkleConfigRendererError.missingShortVersion(targetName: targetName)
+      throw XcodeProjectSparkleConfigRendererError.missingShortVersion(targetName: targetName)
     }
 
     let productName = target.settings?.base?["PRODUCT_NAME"]?.stringValue ?? targetName

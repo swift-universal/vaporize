@@ -1,4 +1,4 @@
-import AppleProjectSpecCore
+import XcodeProjectDefinitionCore
 import ArgumentParser
 import Foundation
 import Testing

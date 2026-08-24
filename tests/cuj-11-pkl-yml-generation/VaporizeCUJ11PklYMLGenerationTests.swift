@@ -1,14 +1,14 @@
-import AppleProjectSpecCore
+import XcodeProjectDefinitionCore
 import Foundation
 import Testing
 import VaporizeTestSupport
 
-@Test("CUJ-11 generates transitional AppleProjectSpec YAML from Concourse project.pkl")
+@Test("CUJ-11 generates transitional XcodeProjectDefinition YAML from Concourse project.pkl")
 func generatesTransitionalProjectYMLFromPklSpecimen() async throws {
   let (receipt, _, _) = try await generateConcourseYMLFixture(requestId: "concourse-project-yml-generation-test")
 
   #expect(receipt.receiptKind == "vaporize-pkl-project-yml-generation")
-  #expect(receipt.generationPhase == "pkl-to-transitional-apple-project-spec-yaml")
+  #expect(receipt.generationPhase == "pkl-to-transitional-xcode-project-definition-yaml")
   #expect(receipt.generatorStatus == "transitional-yaml-only")
   #expect(receipt.buildableWorldStateGenerated == false)
   #expect(receipt.xcodeProjectGenerated == false)
@@ -23,9 +23,9 @@ func generatedYMLComparesBackToPkl() async throws {
   )
   defer { try? FileManager.default.removeItem(at: temporaryDirectory) }
 
-  let generatedSpec = try AppleProjectYMLReader.load(url: generatedYML)
-  let pklSpec = try await AppleProjectPklLoader.load(url: concourseProjectPklURL)
-  let comparison = AppleProjectSpecComparator.receipt(
+  let generatedSpec = try XcodeProjectYMLReader.load(url: generatedYML)
+  let pklSpec = try await XcodeProjectPklLoader.load(url: concourseProjectPklURL)
+  let comparison = XcodeProjectDefinitionComparator.receipt(
     ymlSpec: generatedSpec,
     pklSpec: pklSpec,
     ymlPath: generatedYML.path,
@@ -38,9 +38,9 @@ func generatedYMLComparesBackToPkl() async throws {
   #expect(comparison.mismatchCount == 0)
 }
 
-@Test("CUJ-11 renderer output decodes back into AppleProjectSpec")
-func rendererOutputDecodesBackIntoAppleProjectSpec() throws {
-  let spec = try decodeAppleProjectYML(
+@Test("CUJ-11 renderer output decodes back into XcodeProjectDefinition")
+func rendererOutputDecodesBackIntoXcodeProjectDefinition() throws {
+  let spec = try decodeXcodeProjectYML(
     """
     name: render-fixture
     settings:
@@ -55,8 +55,8 @@ func rendererOutputDecodesBackIntoAppleProjectSpec() throws {
             GENERATE_INFOPLIST_FILE: false
     """
   )
-  let rendered = try AppleProjectYMLRenderer.renderData(spec: spec)
-  let decoded = try AppleProjectYMLReader.decode(data: rendered)
+  let rendered = try XcodeProjectYMLRenderer.renderData(spec: spec)
+  let decoded = try XcodeProjectYMLReader.decode(data: rendered)
 
   #expect(decoded == spec)
   #expect(String(decoding: rendered, as: UTF8.self).contains("SWIFT_VERSION: '6.4'"))
@@ -72,7 +72,7 @@ private func generateConcourseYMLFixture(
     at: temporaryDirectory,
     withIntermediateDirectories: true
   )
-  let receipt = try await AppleProjectSpecYMLGenerator.generate(
+  let receipt = try await XcodeProjectDefinitionYMLGenerator.generate(
     pklURL: concourseProjectPklURL,
     outputURL: generatedYML,
     requestId: requestId

@@ -3,7 +3,7 @@
 /// Boundary: this fixture drives the project-generation proving ground; it is
 /// not fleet build parity and it is not release approval.
 
-amends "../../../Pkl/AppleProjectSpec.pkl"
+amends "../../../Pkl/XcodeProjectDefinition.pkl"
 
 name = "pkl-project-generation-proving-ground"
 

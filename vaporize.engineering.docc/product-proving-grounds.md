@@ -20,7 +20,7 @@ proving ground that drives the standard generator tracks.
 The Pkl migration proving grounds have two layers:
 
 - `tests/proving-grounds/xcodegen-to-pkl-parity` holds multiple checked-in
-  XcodeGen `project.yml` plus AppleProjectSpec `project.pkl` pairs. CUJ-10
+  XcodeGen `project.yml` plus XcodeProjectDefinition `project.pkl` pairs. CUJ-10
   compares the stored pairs, and CUJ-13 regenerates Pkl from every YAML fixture
   to prove the importer creates the same project signature.
 - `tests/proving-grounds/pkl-project-generation` holds Pkl-forward generation

@@ -1,4 +1,4 @@
-import AppleProjectSpecCore
+import XcodeProjectDefinitionCore
 import ArgumentParser
 import Foundation
 import Testing
@@ -26,8 +26,8 @@ func parsesSparkleConfigGenerationMode() throws {
 
 @Test("CUJ-28 renders compiled-in SparkleConfig.swift for a tool target with full release identity")
 func rendersSparkleConfigForToolTargetWithFullReleaseIdentity() throws {
-  let spec = try decodeAppleProjectYML(sparkleToolYML)
-  let rendered = try AppleProjectSparkleConfigRenderer.render(
+  let spec = try decodeXcodeProjectYML(sparkleToolYML)
+  let rendered = try XcodeProjectSparkleConfigRenderer.render(
     spec: spec,
     targetName: "TinyTool",
     sourcePath: "project.pkl"
@@ -51,9 +51,9 @@ func rendersSparkleConfigForToolTargetWithFullReleaseIdentity() throws {
 
 @Test("CUJ-28 falls back to the target name when PRODUCT_NAME is not set")
 func fallsBackToTargetNameWithoutProductNameSetting() throws {
-  var spec = try decodeAppleProjectYML(sparkleToolYML)
+  var spec = try decodeXcodeProjectYML(sparkleToolYML)
   spec.targets["TinyTool"]?.settings = nil
-  let rendered = try AppleProjectSparkleConfigRenderer.render(spec: spec, targetName: "TinyTool")
+  let rendered = try XcodeProjectSparkleConfigRenderer.render(spec: spec, targetName: "TinyTool")
 
   #expect(rendered.contains("productName: \"TinyTool\","))
 }
@@ -63,8 +63,8 @@ func rendersSparkleConfigFromEvaluatedPklFixture() async throws {
   let fixture = try makeSparkleToolPklFixture()
   defer { try? FileManager.default.removeItem(at: fixture.temporaryDirectory) }
 
-  let spec = try await AppleProjectPklLoader.load(url: fixture.projectPkl)
-  let rendered = try AppleProjectSparkleConfigRenderer.render(
+  let spec = try await XcodeProjectPklLoader.load(url: fixture.projectPkl)
+  let rendered = try XcodeProjectSparkleConfigRenderer.render(
     spec: spec,
     targetName: "TinyTool",
     sourcePath: fixture.projectPkl.path
@@ -83,77 +83,77 @@ func rendersSparkleConfigFromEvaluatedPklFixture() async throws {
 
 @Test("CUJ-28 missing sparklePublicEDKey is a typed error, never a silent emission")
 func missingSparklePublicEDKeyIsATypedError() throws {
-  var spec = try decodeAppleProjectYML(sparkleToolYML)
+  var spec = try decodeXcodeProjectYML(sparkleToolYML)
   spec.targets["TinyTool"]?.releaseIdentity?.sparklePublicEDKey = nil
 
   #expect(
-    throws: AppleProjectSparkleConfigRendererError.missingSparklePublicEDKey(
+    throws: XcodeProjectSparkleConfigRendererError.missingSparklePublicEDKey(
       targetName: "TinyTool")
   ) {
-    try AppleProjectSparkleConfigRenderer.render(spec: spec, targetName: "TinyTool")
+    try XcodeProjectSparkleConfigRenderer.render(spec: spec, targetName: "TinyTool")
   }
 }
 
 @Test("CUJ-28 missing sparkleFeedURL is a typed error")
 func missingSparkleFeedURLIsATypedError() throws {
-  var spec = try decodeAppleProjectYML(sparkleToolYML)
+  var spec = try decodeXcodeProjectYML(sparkleToolYML)
   spec.targets["TinyTool"]?.releaseIdentity?.sparkleFeedURL = nil
 
   #expect(
-    throws: AppleProjectSparkleConfigRendererError.missingSparkleFeedURL(targetName: "TinyTool")
+    throws: XcodeProjectSparkleConfigRendererError.missingSparkleFeedURL(targetName: "TinyTool")
   ) {
-    try AppleProjectSparkleConfigRenderer.render(spec: spec, targetName: "TinyTool")
+    try XcodeProjectSparkleConfigRenderer.render(spec: spec, targetName: "TinyTool")
   }
 }
 
 @Test("CUJ-28 non-URL sparkleFeedURL is a typed error")
 func invalidSparkleFeedURLIsATypedError() throws {
-  var spec = try decodeAppleProjectYML(sparkleToolYML)
+  var spec = try decodeXcodeProjectYML(sparkleToolYML)
   spec.targets["TinyTool"]?.releaseIdentity?.sparkleFeedURL = "not a url"
 
   #expect(
-    throws: AppleProjectSparkleConfigRendererError.invalidSparkleFeedURL(
+    throws: XcodeProjectSparkleConfigRendererError.invalidSparkleFeedURL(
       targetName: "TinyTool",
       sparkleFeedURL: "not a url")
   ) {
-    try AppleProjectSparkleConfigRenderer.render(spec: spec, targetName: "TinyTool")
+    try XcodeProjectSparkleConfigRenderer.render(spec: spec, targetName: "TinyTool")
   }
 }
 
 @Test("CUJ-28 missing shortVersion is a typed error")
 func missingShortVersionIsATypedError() throws {
-  var spec = try decodeAppleProjectYML(sparkleToolYML)
+  var spec = try decodeXcodeProjectYML(sparkleToolYML)
   spec.targets["TinyTool"]?.releaseIdentity?.shortVersion = nil
 
   #expect(
-    throws: AppleProjectSparkleConfigRendererError.missingShortVersion(targetName: "TinyTool")
+    throws: XcodeProjectSparkleConfigRendererError.missingShortVersion(targetName: "TinyTool")
   ) {
-    try AppleProjectSparkleConfigRenderer.render(spec: spec, targetName: "TinyTool")
+    try XcodeProjectSparkleConfigRenderer.render(spec: spec, targetName: "TinyTool")
   }
 }
 
 @Test("CUJ-28 missing releaseIdentity is a typed error")
 func missingReleaseIdentityIsATypedError() throws {
-  var spec = try decodeAppleProjectYML(sparkleToolYML)
+  var spec = try decodeXcodeProjectYML(sparkleToolYML)
   spec.targets["TinyTool"]?.releaseIdentity = nil
 
   #expect(
-    throws: AppleProjectSparkleConfigRendererError.missingReleaseIdentity(targetName: "TinyTool")
+    throws: XcodeProjectSparkleConfigRendererError.missingReleaseIdentity(targetName: "TinyTool")
   ) {
-    try AppleProjectSparkleConfigRenderer.render(spec: spec, targetName: "TinyTool")
+    try XcodeProjectSparkleConfigRenderer.render(spec: spec, targetName: "TinyTool")
   }
 }
 
 @Test("CUJ-28 unknown target is a typed error naming the available targets")
 func unknownTargetIsATypedError() throws {
-  let spec = try decodeAppleProjectYML(sparkleToolYML)
+  let spec = try decodeXcodeProjectYML(sparkleToolYML)
 
   #expect(
-    throws: AppleProjectSparkleConfigRendererError.targetNotFound(
+    throws: XcodeProjectSparkleConfigRendererError.targetNotFound(
       targetName: "NoSuchTool",
       availableTargets: ["TinyTool"])
   ) {
-    try AppleProjectSparkleConfigRenderer.render(spec: spec, targetName: "NoSuchTool")
+    try XcodeProjectSparkleConfigRenderer.render(spec: spec, targetName: "NoSuchTool")
   }
 }
 
@@ -170,13 +170,13 @@ private func makeSparkleToolPklFixture() throws -> SparkleToolPklFixture {
     withIntermediateDirectories: true
   )
 
-  let spec = try decodeAppleProjectYML(sparkleToolYML)
+  let spec = try decodeXcodeProjectYML(sparkleToolYML)
   let projectPkl = temporaryDirectory.appendingPathComponent("project.pkl")
   let schemaAmendsPath = relativePathForPklAmends(
     from: projectPkl.deletingLastPathComponent(),
-    to: appleProjectSpecPklSchemaURL
+    to: xcodeProjectDefinitionPklSchemaURL
   )
-  let data = AppleProjectPklRenderer.renderData(
+  let data = XcodeProjectPklRenderer.renderData(
     spec: spec,
     schemaAmendsPath: schemaAmendsPath,
     sourcePath: "project.yml"

@@ -1,4 +1,4 @@
-import AppleProjectSpecCore
+import XcodeProjectDefinitionCore
 import ArgumentParser
 import BumpBuildTakumiOrgCore
 import CommonProcess
@@ -447,12 +447,12 @@ struct VaporizeCLI: AsyncParsableCommand {
 
   @Option(
     name: .customLong("pkl-path"),
-    help: ArgumentHelp(VaporizeCLICopy_v000_000_001.CLI.vaporizePathToAnAppleprojectspecPklRecord))
+    help: ArgumentHelp(VaporizeCLICopy_v000_000_001.CLI.vaporizePathToAnXcodeProjectDefinitionPklRecord))
   var pklPath: String?
 
   @Option(
     name: .customLong("pkl-schema-path"),
-    help: ArgumentHelp(VaporizeCLICopy_v000_000_001.CLI.vaporizePathToAppleprojectspecPklForImport))
+    help: ArgumentHelp(VaporizeCLICopy_v000_000_001.CLI.vaporizePathToXcodeProjectDefinitionPklForImport))
   var pklSchemaPath: String?
 
   @Option(
@@ -2829,8 +2829,8 @@ struct VaporizeCLI: AsyncParsableCommand {
     }
 
     let requestId = "vaporize-inspect-project-yml-\(UUID().uuidString)"
-    let spec = try AppleProjectYMLReader.load(url: URL(fileURLWithPath: vaporScanPath))
-    let receipt = AppleProjectYMLReader.receipt(
+    let spec = try XcodeProjectYMLReader.load(url: URL(fileURLWithPath: vaporScanPath))
+    let receipt = XcodeProjectYMLReader.receipt(
       for: spec,
       path: vaporScanPath,
       requestId: requestId
@@ -2912,9 +2912,9 @@ struct VaporizeCLI: AsyncParsableCommand {
     }
 
     let requestId = "vaporize-compare-project-yml-pkl-\(UUID().uuidString)"
-    let ymlSpec = try AppleProjectYMLReader.loadForPklMigration(url: URL(fileURLWithPath: vaporScanPath))
-    let pklSpec = try await AppleProjectPklLoader.load(url: URL(fileURLWithPath: pklPath))
-    let receipt = AppleProjectSpecComparator.receipt(
+    let ymlSpec = try XcodeProjectYMLReader.loadForPklMigration(url: URL(fileURLWithPath: vaporScanPath))
+    let pklSpec = try await XcodeProjectPklLoader.load(url: URL(fileURLWithPath: pklPath))
+    let receipt = XcodeProjectDefinitionComparator.receipt(
       ymlSpec: ymlSpec,
       pklSpec: pklSpec,
       ymlPath: vaporScanPath,
@@ -2962,13 +2962,13 @@ struct VaporizeCLI: AsyncParsableCommand {
     }
 
     let outputURL = URL(fileURLWithPath: generatedOutputPath).standardizedFileURL
-    let schemaURL = try resolvedAppleProjectSpecSchemaURL()
+    let schemaURL = try resolvedXcodeProjectDefinitionSchemaURL()
     let schemaAmendsPath = relativePath(
       from: outputURL.deletingLastPathComponent(),
       to: schemaURL
     )
     let requestId = "vaporize-import-project-yml-\(UUID().uuidString)"
-    let receipt = try AppleProjectSpecPklImporter.generate(
+    let receipt = try XcodeProjectDefinitionPklImporter.generate(
       ymlURL: URL(fileURLWithPath: vaporScanPath).standardizedFileURL,
       outputURL: outputURL,
       schemaAmendsPath: schemaAmendsPath,
@@ -3000,7 +3000,7 @@ struct VaporizeCLI: AsyncParsableCommand {
   /// yml to a sibling project.pkl, parity-gate by loading the pkl back and
   /// comparing to the yml, and — only on a clean parity with --apply — retire the
   /// project.yml. Dry-run (preview) by default. The retire-or-keep decision is the
-  /// filesystem-free AppleProjectPklUpgradePlanner (see its proving ground).
+  /// filesystem-free XcodeProjectPklUpgradePlanner (see its proving ground).
   private func upgradeProjectYMLToPkl() async throws {
     guard let vaporScanPath, !vaporScanPath.isEmpty else {
       throw ValidationError(
@@ -3022,9 +3022,9 @@ struct VaporizeCLI: AsyncParsableCommand {
     let requestId = "vaporize-upgrade-project-yml-to-pkl-\(UUID().uuidString)"
 
     // 1. Import: project.yml -> project.pkl.
-    let schemaURL = try resolvedAppleProjectSpecSchemaURL()
+    let schemaURL = try resolvedXcodeProjectDefinitionSchemaURL()
     let schemaAmendsPath = relativePath(from: pklURL.deletingLastPathComponent(), to: schemaURL)
-    let importReceipt = try AppleProjectSpecPklImporter.generate(
+    let importReceipt = try XcodeProjectDefinitionPklImporter.generate(
       ymlURL: ymlURL,
       outputURL: pklURL,
       schemaAmendsPath: schemaAmendsPath,
@@ -3032,9 +3032,9 @@ struct VaporizeCLI: AsyncParsableCommand {
     )
 
     // 2. Parity gate: load the generated pkl back and compare to the yml.
-    let ymlSpec = try AppleProjectYMLReader.loadForPklMigration(url: ymlURL)
-    let pklSpec = try await AppleProjectPklLoader.load(url: pklURL)
-    let comparison = AppleProjectSpecComparator.receipt(
+    let ymlSpec = try XcodeProjectYMLReader.loadForPklMigration(url: ymlURL)
+    let pklSpec = try await XcodeProjectPklLoader.load(url: pklURL)
+    let comparison = XcodeProjectDefinitionComparator.receipt(
       ymlSpec: ymlSpec,
       pklSpec: pklSpec,
       ymlPath: ymlURL.path,
@@ -3043,7 +3043,7 @@ struct VaporizeCLI: AsyncParsableCommand {
     )
 
     // 3. Decide (pure), then act.
-    let decision = AppleProjectPklUpgradePlanner.decide(
+    let decision = XcodeProjectPklUpgradePlanner.decide(
       parityMatched: comparison.matched,
       mismatches: comparison.mismatches,
       apply: applyUpgrade
@@ -3083,7 +3083,7 @@ struct VaporizeCLI: AsyncParsableCommand {
     }
 
     let requestId = "vaporize-generate-project-yml-\(UUID().uuidString)"
-    let receipt = try await AppleProjectSpecYMLGenerator.generate(
+    let receipt = try await XcodeProjectDefinitionYMLGenerator.generate(
       pklURL: URL(fileURLWithPath: pklPath),
       outputURL: URL(fileURLWithPath: generatedOutputPath),
       requestId: requestId
@@ -3120,7 +3120,7 @@ struct VaporizeCLI: AsyncParsableCommand {
     }
 
     let requestId = "vaporize-generate-xcodeproj-\(UUID().uuidString)"
-    let receipt = try await AppleProjectXcodeProjectGenerator.generate(
+    let receipt = try await XcodeProjectGenerator.generate(
       pklURL: URL(fileURLWithPath: pklPath),
       outputURL: URL(fileURLWithPath: generatedOutputPath),
       requestId: requestId
@@ -3164,8 +3164,8 @@ struct VaporizeCLI: AsyncParsableCommand {
         VaporizeCLICopy_v000_000_001.CLI.vaporizeOutputIsRequiredForGenerateSparkle)
     }
 
-    let spec = try await AppleProjectPklLoader.load(url: URL(fileURLWithPath: pklPath))
-    let data = try AppleProjectSparkleConfigRenderer.renderData(
+    let spec = try await XcodeProjectPklLoader.load(url: URL(fileURLWithPath: pklPath))
+    let data = try XcodeProjectSparkleConfigRenderer.renderData(
       spec: spec,
       targetName: targetName,
       sourcePath: pklPath
@@ -3181,26 +3181,26 @@ struct VaporizeCLI: AsyncParsableCommand {
 
   private func listTargets() async throws {
     let requestId = "vaporize-list-targets-\(UUID().uuidString)"
-    let productCacheOptions = AppleProjectProductCacheDiscoveryOptions(
+    let productCacheOptions = XcodeProjectProductCacheDiscoveryOptions(
       workspacePath: xcodeProductCacheWorkspace,
       derivedDataPath: xcodeProductCacheDerivedDataPath,
       configurationName: configuration.rawValue.capitalized
     )
-    let receipt: AppleProjectTargetDiscoveryReceipt
+    let receipt: XcodeProjectTargetDiscoveryReceipt
     if let pklPath, !pklPath.isEmpty {
-      receipt = try await AppleProjectTargetDiscovery.discover(
+      receipt = try await XcodeProjectTargetDiscovery.discover(
         pklURL: URL(fileURLWithPath: pklPath),
         requestId: requestId,
         productCacheOptions: productCacheOptions
       )
     } else if let vaporScanPath, !vaporScanPath.isEmpty {
-      receipt = try await AppleProjectTargetDiscovery.discover(
+      receipt = try await XcodeProjectTargetDiscovery.discover(
         path: vaporScanPath,
         requestId: requestId,
         productCacheOptions: productCacheOptions
       )
     } else if let packagePath, !packagePath.isEmpty {
-      receipt = try await AppleProjectTargetDiscovery.discover(
+      receipt = try await XcodeProjectTargetDiscovery.discover(
         projectDirectoryURL: URL(fileURLWithPath: packagePath),
         requestId: requestId,
         productCacheOptions: productCacheOptions
@@ -3391,7 +3391,7 @@ struct VaporizeCLI: AsyncParsableCommand {
     }
   }
 
-  private func resolvedAppleProjectSpecSchemaURL() throws -> URL {
+  private func resolvedXcodeProjectDefinitionSchemaURL() throws -> URL {
     let fileManager = FileManager.default
 
     if let pklSchemaPath, !pklSchemaPath.isEmpty {
@@ -3409,7 +3409,7 @@ struct VaporizeCLI: AsyncParsableCommand {
     if let packagePath, !packagePath.isEmpty {
       candidates.append(
         URL(fileURLWithPath: packagePath)
-          .appendingPathComponent("Pkl/AppleProjectSpec.pkl")
+          .appendingPathComponent("Pkl/XcodeProjectDefinition.pkl")
           .standardizedFileURL
       )
     }
@@ -3419,13 +3419,13 @@ struct VaporizeCLI: AsyncParsableCommand {
         .deletingLastPathComponent()
         .deletingLastPathComponent()
         .deletingLastPathComponent()
-        .appendingPathComponent("Pkl/AppleProjectSpec.pkl")
+        .appendingPathComponent("Pkl/XcodeProjectDefinition.pkl")
         .standardizedFileURL
     )
 
     let currentDirectory = URL(fileURLWithPath: fileManager.currentDirectoryPath)
     candidates.append(
-      currentDirectory.appendingPathComponent("Pkl/AppleProjectSpec.pkl").standardizedFileURL)
+      currentDirectory.appendingPathComponent("Pkl/XcodeProjectDefinition.pkl").standardizedFileURL)
 
     for candidate in candidates where fileManager.fileExists(atPath: candidate.path) {
       return candidate

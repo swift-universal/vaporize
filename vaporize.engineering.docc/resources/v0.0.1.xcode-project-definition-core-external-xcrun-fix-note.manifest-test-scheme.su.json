@@ -1,12 +1,12 @@
 {
   "schemaVersion": "0.0.1",
   "kind": "manifest-test-scheme",
-  "slug": "apple-project-spec-core-external-xcrun-fix-note-manifest-test-scheme",
-  "upgrade": "apple-project-spec-core-external-xcrun-fix-note-v0.0.1",
-  "scope": "AppleProjectSpecCore materializes a Pkl-owned application project outside its source root, retaining source-root-relative package paths, target xcconfig projection, and generated application Info.plist behavior.",
+  "slug": "xcode-project-definition-core-external-xcrun-fix-note-manifest-test-scheme",
+  "upgrade": "xcode-project-definition-core-external-xcrun-fix-note-v0.0.1",
+  "scope": "XcodeProjectDefinitionCore materializes a Pkl-owned application project outside its source root, retaining source-root-relative package paths, target xcconfig projection, and generated application Info.plist behavior.",
   "commands": [
-    "xcrun swift test --package-path private/universal/substrate/collectives/wrkstrm-core/private/universal/domain/build/spm/apple-project-spec --filter AppleProjectPklResourceContractTests",
-    "xcrun swift build --package-path private/universal/substrate/collectives/wrkstrm-core/private/universal/domain/build/spm/apple-project-spec --product apple-project-spec.cli-s@wrkstrm-core.clia.sh",
+    "xcrun swift test --package-path private/universal/substrate/collectives/wrkstrm-core/private/universal/domain/build/spm/xcode-project-definition --filter XcodeProjectPklResourceContractTests",
+    "xcrun swift build --package-path private/universal/substrate/collectives/wrkstrm-core/private/universal/domain/build/spm/xcode-project-definition --product xcode-project-definition.cli-s@wrkstrm-core.clia.sh",
     "xcrun xcodebuild -project <generated-project> -scheme <scheme> -configuration Dogfood -showBuildSettings",
     "xcrun xcodebuild -project <generated-project> -scheme <scheme> -configuration Dogfood -sdk macosx CODE_SIGNING_ALLOWED=NO build"
   ],

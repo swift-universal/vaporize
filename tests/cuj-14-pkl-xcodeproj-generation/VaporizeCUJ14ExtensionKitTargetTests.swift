@@ -1,4 +1,4 @@
-import AppleProjectSpecCore
+import XcodeProjectDefinitionCore
 import Foundation
 import Testing
 import VaporizeTestSupport
@@ -24,7 +24,7 @@ func generatesEmbeddedExtensionKitExtensionFromPkl() async throws {
   let projectPkl = temporaryDirectory.appendingPathComponent("project.pkl")
   let schemaAmendsPath = relativePathForPklAmends(
     from: temporaryDirectory,
-    to: appleProjectSpecPklSchemaURL
+    to: xcodeProjectDefinitionPklSchemaURL
   )
   try Data(
     """
@@ -75,7 +75,7 @@ func generatesEmbeddedExtensionKitExtensionFromPkl() async throws {
   ).write(to: projectPkl)
 
   let outputURL = outputDirectory.appendingPathComponent("ExtensionKitGenerated.xcodeproj")
-  let receipt = try await AppleProjectXcodeProjectGenerator.generate(
+  let receipt = try await XcodeProjectGenerator.generate(
     pklURL: projectPkl,
     outputURL: outputURL,
     requestId: "extensionkit-pkl-xcodeproj-generation"

@@ -2,7 +2,7 @@
 /// Source: project.yml
 /// Boundary: migration specimen only; Pkl is the forward project truth.
 
-amends "../../../../Pkl/AppleProjectSpec.pkl"
+amends "../../../../Pkl/XcodeProjectDefinition.pkl"
 
 name = "parity-test-host-suite"
 

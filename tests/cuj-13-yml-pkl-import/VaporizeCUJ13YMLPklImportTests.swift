@@ -1,4 +1,4 @@
-import AppleProjectSpecCore
+import XcodeProjectDefinitionCore
 import Foundation
 import Testing
 import VaporizeTestSupport
@@ -14,7 +14,7 @@ func parsesLegacyYMLImportMode() throws {
     "--output-path",
     "project.pkl",
     "--pkl-schema-path",
-    "Pkl/AppleProjectSpec.pkl",
+    "Pkl/XcodeProjectDefinition.pkl",
     "--format",
     "json",
   ])
@@ -22,7 +22,7 @@ func parsesLegacyYMLImportMode() throws {
   #expect(command.mode == .importProjectYML)
   #expect(command.vaporScanPath == "project.yml")
   #expect(command.generatedOutputPath == "project.pkl")
-  #expect(command.pklSchemaPath == "Pkl/AppleProjectSpec.pkl")
+  #expect(command.pklSchemaPath == "Pkl/XcodeProjectDefinition.pkl")
   #expect(command.vaporOutputFormat == .json)
 }
 
@@ -33,10 +33,10 @@ func importsConcourseYMLIntoPklParitySpecimen() async throws {
   )
   defer { try? FileManager.default.removeItem(at: temporaryDirectory) }
 
-  let generatedSpec = try await AppleProjectPklLoader.load(url: generatedPkl)
+  let generatedSpec = try await XcodeProjectPklLoader.load(url: generatedPkl)
 
   #expect(FileManager.default.fileExists(atPath: generatedPkl.path))
-  #expect(receipt.receiptKind == "vaporize-apple-project-yml-pkl-import")
+  #expect(receipt.receiptKind == "vaporize-xcode-project-yml-pkl-import")
   #expect(receipt.migrationPhase == "legacy-yaml-to-pkl-import")
   #expect(receipt.importerStatus == "pkl-parity-specimen")
   #expect(receipt.buildableWorldStateGenerated == false)
@@ -52,9 +52,9 @@ func importedPklComparesBackToSourceYML() async throws {
   )
   defer { try? FileManager.default.removeItem(at: temporaryDirectory) }
 
-  let ymlSpec = try AppleProjectYMLReader.load(url: concourseProjectYMLURL)
-  let pklSpec = try await AppleProjectPklLoader.load(url: generatedPkl)
-  let comparison = AppleProjectSpecComparator.receipt(
+  let ymlSpec = try XcodeProjectYMLReader.load(url: concourseProjectYMLURL)
+  let pklSpec = try await XcodeProjectPklLoader.load(url: generatedPkl)
+  let comparison = XcodeProjectDefinitionComparator.receipt(
     ymlSpec: ymlSpec,
     pklSpec: pklSpec,
     ymlPath: concourseProjectYMLURL.path,
@@ -79,25 +79,25 @@ func importsEveryXcodeGenParityProvingGroundIntoPkl() async throws {
 
     let schemaAmendsPath = relativePathForPklAmends(
       from: generatedPkl.deletingLastPathComponent(),
-      to: appleProjectSpecPklSchemaURL
+      to: xcodeProjectDefinitionPklSchemaURL
     )
-    let receipt = try AppleProjectSpecPklImporter.generate(
+    let receipt = try XcodeProjectDefinitionPklImporter.generate(
       ymlURL: ground.projectYMLURL,
       outputURL: generatedPkl,
       schemaAmendsPath: schemaAmendsPath,
       requestId: "xcodegen-to-pkl-proving-ground-import-\(ground.slug)"
     )
-    let ymlSpec = try AppleProjectYMLReader.load(url: ground.projectYMLURL)
-    let generatedSpec = try await AppleProjectPklLoader.load(url: generatedPkl)
-    let checkedInSpec = try await AppleProjectPklLoader.load(url: ground.projectPklURL)
-    let generatedComparison = AppleProjectSpecComparator.receipt(
+    let ymlSpec = try XcodeProjectYMLReader.load(url: ground.projectYMLURL)
+    let generatedSpec = try await XcodeProjectPklLoader.load(url: generatedPkl)
+    let checkedInSpec = try await XcodeProjectPklLoader.load(url: ground.projectPklURL)
+    let generatedComparison = XcodeProjectDefinitionComparator.receipt(
       ymlSpec: ymlSpec,
       pklSpec: generatedSpec,
       ymlPath: ground.projectYMLURL.path,
       pklPath: generatedPkl.path,
       requestId: "xcodegen-to-pkl-proving-ground-generated-comparison-\(ground.slug)"
     )
-    let checkedInComparison = AppleProjectSpecComparator.receipt(
+    let checkedInComparison = XcodeProjectDefinitionComparator.receipt(
       ymlSpec: ymlSpec,
       pklSpec: checkedInSpec,
       ymlPath: ground.projectYMLURL.path,
@@ -105,7 +105,7 @@ func importsEveryXcodeGenParityProvingGroundIntoPkl() async throws {
       requestId: "xcodegen-to-pkl-proving-ground-checked-in-comparison-\(ground.slug)"
     )
 
-    #expect(receipt.receiptKind == "vaporize-apple-project-yml-pkl-import")
+    #expect(receipt.receiptKind == "vaporize-xcode-project-yml-pkl-import")
     #expect(receipt.projectName == ground.expectedProjectName)
     #expect(receipt.targetNames == ground.expectedTargetNames)
     #expect(receipt.packageNames == ground.expectedPackageNames)
@@ -118,7 +118,7 @@ func importsEveryXcodeGenParityProvingGroundIntoPkl() async throws {
 
 @Test("CUJ-13 Pkl renderer preserves nested values and script strings")
 func pklRendererPreservesNestedValuesAndScripts() async throws {
-  let spec = try decodeAppleProjectYML(
+  let spec = try decodeXcodeProjectYML(
     """
     name: import-fixture
     targets:
@@ -155,17 +155,17 @@ func pklRendererPreservesNestedValuesAndScripts() async throws {
 
   let schemaAmendsPath = relativePathForPklAmends(
     from: generatedPkl.deletingLastPathComponent(),
-    to: appleProjectSpecPklSchemaURL
+    to: xcodeProjectDefinitionPklSchemaURL
   )
-  let data = AppleProjectPklRenderer.renderData(
+  let data = XcodeProjectPklRenderer.renderData(
     spec: spec,
     schemaAmendsPath: schemaAmendsPath,
     sourcePath: "fixture/project.yml"
   )
   try data.write(to: generatedPkl)
 
-  let decoded = try await AppleProjectPklLoader.load(url: generatedPkl)
-  let comparison = AppleProjectSpecComparator.receipt(
+  let decoded = try await XcodeProjectPklLoader.load(url: generatedPkl)
+  let comparison = XcodeProjectDefinitionComparator.receipt(
     ymlSpec: spec,
     pklSpec: decoded,
     ymlPath: "fixture/project.yml",
@@ -179,7 +179,7 @@ func pklRendererPreservesNestedValuesAndScripts() async throws {
 
 private func importConcoursePklFixture(
   requestId: String
-) throws -> (AppleProjectYMLImportReceipt, URL, URL) {
+) throws -> (XcodeProjectYMLImportReceipt, URL, URL) {
   let temporaryDirectory = FileManager.default.temporaryDirectory
     .appendingPathComponent("vaporize-yml-pkl-import-\(UUID().uuidString)")
   let generatedPkl = temporaryDirectory.appendingPathComponent("concourse.imported.project.pkl")
@@ -189,9 +189,9 @@ private func importConcoursePklFixture(
   )
   let schemaAmendsPath = relativePathForPklAmends(
     from: generatedPkl.deletingLastPathComponent(),
-    to: appleProjectSpecPklSchemaURL
+    to: xcodeProjectDefinitionPklSchemaURL
   )
-  let receipt = try AppleProjectSpecPklImporter.generate(
+  let receipt = try XcodeProjectDefinitionPklImporter.generate(
     ymlURL: concourseProjectYMLURL,
     outputURL: generatedPkl,
     schemaAmendsPath: schemaAmendsPath,

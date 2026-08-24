@@ -1,0 +1,37 @@
+{
+  "BeadsIssue": "0.1.0",
+  "schemaVersion": "0.1.0",
+  "id": "refactor-vaporize-xcode-project-definition-terminology-2026-08-24",
+  "title": "Adopt descriptive Xcode project-definition terminology",
+  "status": "closed",
+  "priority": 0,
+  "issueType": "refactor",
+  "labels": [
+    "vaporize",
+    "xcode-project-definition",
+    "terminology",
+    "pkl"
+  ],
+  "createdAt": "2026-08-24",
+  "closedAt": "2026-08-24T16:14:00Z",
+  "createdBy": "Codex with operator direction",
+  "description": "Replace AppleProjectSpec naming in Vaporize's active Swift, Pkl, test-support, CLI-copy, and engineering surfaces with names that identify the typed Xcode project-definition responsibility.",
+  "resolution": "Vaporize now consumes XcodeProjectDefinitionCore from the xcode-project-definition package and uses XcodeProjectDefinition throughout active implementation and tests. The canonical Pkl module is XcodeProjectDefinition.pkl; AppleProjectSpec.pkl remains a deprecated compatibility shim for existing project declarations.",
+  "historicalContent": {
+    "canonicalNames": {
+      "package": "xcode-project-definition",
+      "module": "XcodeProjectDefinitionCore",
+      "model": "XcodeProjectDefinition",
+      "pklModule": "Pkl/XcodeProjectDefinition.pkl"
+    },
+    "verification": [
+      "swift package dump-package passed against the renamed dependency and product.",
+      "swift package resolve completed and refreshed Package.resolved.",
+      "All 30 changed Vaporize Swift files passed swiftc frontend parsing.",
+      "The owning Vaporize CLI copy package passed its generated-resource test on Windows.",
+      "The complete Xcode definition build is macOS-scoped; on Windows it stops in upstream pkl-swift before reaching the renamed sources."
+    ],
+    "compatibilityBoundary": "Historical release evidence and closed receipts retain the terminology they originally recorded. Only the Pkl filename shim remains in the active product surface."
+  },
+  "sourceLocation": "Package.swift"
+}

@@ -4,8 +4,8 @@ enum OwnedSurfaceKind: String, Codable, CaseIterable {
   case swiftPackage = "swift-package"
   case xcodeProject = "xcode-project"
   case xcodeWorkspace = "xcode-workspace"
-  case appleProjectYML = "apple-project-yml"
-  case appleProjectPKL = "apple-project-pkl"
+  case xcodeProjectYML = "xcode-project-yml"
+  case xcodeProjectPKL = "xcode-project-pkl"
 }
 
 enum OwnedSurfaceOwnershipScope: String, Codable, CaseIterable {
@@ -33,8 +33,8 @@ struct OwnedSurfaceInventorySummary: Codable, Equatable {
   var swiftPackages: Int = 0
   var xcodeProjects: Int = 0
   var xcodeWorkspaces: Int = 0
-  var appleProjectYML: Int = 0
-  var appleProjectPKL: Int = 0
+  var xcodeProjectYML: Int = 0
+  var xcodeProjectPKL: Int = 0
   var activeOwnedSurfaces: Int = 0
   var activeOwnedSwiftPackages: Int = 0
   var generatedOwnedSurfaces: Int = 0
@@ -59,8 +59,8 @@ struct OwnedSurfaceInventorySummary: Codable, Equatable {
     case .swiftPackage: swiftPackages += 1
     case .xcodeProject: xcodeProjects += 1
     case .xcodeWorkspace: xcodeWorkspaces += 1
-    case .appleProjectYML: appleProjectYML += 1
-    case .appleProjectPKL: appleProjectPKL += 1
+    case .xcodeProjectYML: xcodeProjectYML += 1
+    case .xcodeProjectPKL: xcodeProjectPKL += 1
     }
     switch surface.ownershipScope {
     case .activeOwned:
@@ -184,9 +184,9 @@ struct OwnedSurfaceInventoryScanner {
       if candidate.lastPathComponent == "Package.swift" {
         surfaces.append(record(for: candidate, kind: .swiftPackage))
       } else if candidate.lastPathComponent == "project.yml" {
-        surfaces.append(record(for: candidate, kind: .appleProjectYML))
+        surfaces.append(record(for: candidate, kind: .xcodeProjectYML))
       } else if candidate.lastPathComponent == "project.pkl" {
-        surfaces.append(record(for: candidate, kind: .appleProjectPKL))
+        surfaces.append(record(for: candidate, kind: .xcodeProjectPKL))
       }
     }
 
@@ -291,7 +291,7 @@ struct OwnedSurfaceInventoryScanner {
     {
       return clean(components[privateIndex + 1])
     }
-    if kind == .xcodeProject || kind == .xcodeWorkspace || kind == .appleProjectYML || kind == .appleProjectPKL {
+    if kind == .xcodeProject || kind == .xcodeWorkspace || kind == .xcodeProjectYML || kind == .xcodeProjectPKL {
       return "apple"
     }
     return "unclassified"
@@ -400,7 +400,7 @@ struct OwnedSurfaceInventoryScanner {
       return url.deletingLastPathComponent().lastPathComponent
     case .xcodeProject, .xcodeWorkspace:
       return stripSurfaceSuffixes(url.lastPathComponent)
-    case .appleProjectYML, .appleProjectPKL:
+    case .xcodeProjectYML, .xcodeProjectPKL:
       return url.deletingLastPathComponent().lastPathComponent
     }
   }
@@ -491,8 +491,8 @@ enum OwnedSurfaceInventoryRenderer {
     lines.append("  Package.swift:       \(result.summary.swiftPackages)")
     lines.append("  .xcodeproj:          \(result.summary.xcodeProjects)")
     lines.append("  .xcworkspace:        \(result.summary.xcodeWorkspaces)")
-    lines.append("  project.yml:         \(result.summary.appleProjectYML)")
-    lines.append("  project.pkl:         \(result.summary.appleProjectPKL)")
+    lines.append("  project.yml:         \(result.summary.xcodeProjectYML)")
+    lines.append("  project.pkl:         \(result.summary.xcodeProjectPKL)")
     lines.append("")
     lines.append("ownership scope")
     lines.append("  active-owned surfaces:         \(result.summary.activeOwnedSurfaces)")

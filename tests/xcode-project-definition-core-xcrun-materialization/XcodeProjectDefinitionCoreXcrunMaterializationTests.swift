@@ -1,9 +1,9 @@
-import AppleProjectSpecCore
+import XcodeProjectDefinitionCore
 import Foundation
 import Testing
 import VaporizeTestSupport
 
-@Test("AppleProjectSpecCore materializes an external project that xcrun builds")
+@Test("XcodeProjectDefinitionCore materializes an external project that xcrun builds")
 func materializesPortablePklProjectThroughXcrun() async throws {
   let packageRoot = URL(fileURLWithPath: #filePath)
     .deletingLastPathComponent()
@@ -12,14 +12,14 @@ func materializesPortablePklProjectThroughXcrun() async throws {
   let fixtureRoot = packageRoot
     .appendingPathComponent("tests/proving-grounds/pkl-project-generation/portable-local-package-build-variants")
   let outputDirectory = FileManager.default.temporaryDirectory
-    .appendingPathComponent("apple-project-spec-cli-xcrun-output-\(UUID().uuidString)")
+    .appendingPathComponent("xcode-project-definition-cli-xcrun-output-\(UUID().uuidString)")
   defer { try? FileManager.default.removeItem(at: outputDirectory) }
 
   let outputProject = outputDirectory.appendingPathComponent("PortableGenerated.xcodeproj")
-  let receipt = try await AppleProjectXcodeProjectGenerator.generate(
+  let receipt = try await XcodeProjectGenerator.generate(
     pklURL: fixtureRoot.appendingPathComponent("project.pkl"),
     outputURL: outputProject,
-    requestId: "apple-project-spec-core-xcrun-materialization"
+    requestId: "xcode-project-definition-core-xcrun-materialization"
   )
 
   #expect(receipt.receiptKind == "vaporize-pkl-xcodeproj-generation")
@@ -62,6 +62,6 @@ private func runXcrun(_ arguments: [String]) async throws -> VaporizeTestCommand
   try await VaporizeTestCommand.run(
     executablePath: "/usr/bin/xcrun",
     arguments: arguments,
-    sourceTag: "apple-project-spec-core-xcrun-materialization"
+    sourceTag: "xcode-project-definition-core-xcrun-materialization"
   )
 }

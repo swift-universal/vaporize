@@ -34,7 +34,7 @@ The rule is simple:
 
 The current v0.0.1 shape is:
 
-- `AppleProjectSpecCore`: Apple project modeling, YAML/Pkl parity, Pkl-backed
+- `XcodeProjectDefinitionCore`: Apple project modeling, YAML/Pkl parity, Pkl-backed
   project generation, and target feature inspection. This is Apple/Xcode
   bounded and should remain in `wrkstrm-core`.
 - `SwiftAppInstaller`: Apple app install/build/open/uninstall orchestration,
@@ -97,7 +97,7 @@ Each new major Vaporize feature should land with:
 - Decide whether the policy-neutral part of `SwiftCLIInstaller` belongs in a
   Swift Universal package.
 - Keep Apple project generation and target-feature inspection in
-  `AppleProjectSpecCore` until there is a stronger wrkstrm-core Apple project
+  `XcodeProjectDefinitionCore` until there is a stronger wrkstrm-core Apple project
   module boundary.
 - Avoid adding new project-generation, workspace-cache, benchmark, or
   app-minimums feature bodies directly to the CLI router.

@@ -2,7 +2,7 @@ import ArgumentParser
 import Foundation
 import Testing
 
-import AppleProjectSpecCore
+import XcodeProjectDefinitionCore
 @testable import VaporizeCLI
 import VaporizeTestSupport
 
@@ -33,7 +33,7 @@ func discoversMissingWorkspaceCacheCandidatesFromTargetFacts() throws {
     .appendingPathComponent("vaporize-workspace-cache-missing-\(UUID().uuidString)")
   defer { try? FileManager.default.removeItem(at: cacheRoot) }
 
-  let receipt = try AppleProjectTargetDiscovery.discover(
+  let receipt = try XcodeProjectTargetDiscovery.discover(
     projectYMLURL: concourseProjectYMLURL,
     requestId: "workspace-cache-missing",
     productCacheOptions: .init(
@@ -63,7 +63,7 @@ func reportsWarmWorkspaceCacheProducts() async throws {
   let warmApp = cacheRoot.appendingPathComponent("Build/Products/Release/creative-selection-v0.2.app")
   try FileManager.default.createDirectory(at: warmApp, withIntermediateDirectories: true)
 
-  let receipt = try await AppleProjectTargetDiscovery.discover(
+  let receipt = try await XcodeProjectTargetDiscovery.discover(
     pklURL: creativeSelectionProjectPklURL,
     requestId: "workspace-cache-warm",
     productCacheOptions: .init(
@@ -85,7 +85,7 @@ func reportsWarmWorkspaceCacheProducts() async throws {
 
 @Test("CUJ-19 excludes non-buildable targets from workspace cache candidates")
 func excludesNonBuildableTargetsFromWorkspaceCacheCandidates() throws {
-  let spec = try decodeAppleProjectYML(
+  let spec = try decodeXcodeProjectYML(
     """
     name: Mixed
     targets:
@@ -109,9 +109,9 @@ func excludesNonBuildableTargetsFromWorkspaceCacheCandidates() throws {
   let ymlURL = temporaryDirectory.appendingPathComponent("project.yml")
   defer { try? FileManager.default.removeItem(at: temporaryDirectory) }
   try FileManager.default.createDirectory(at: temporaryDirectory, withIntermediateDirectories: true)
-  try AppleProjectYMLRenderer.renderData(spec: spec).write(to: ymlURL)
+  try XcodeProjectYMLRenderer.renderData(spec: spec).write(to: ymlURL)
 
-  let receipt = try AppleProjectTargetDiscovery.discover(
+  let receipt = try XcodeProjectTargetDiscovery.discover(
     projectYMLURL: ymlURL,
     requestId: "workspace-cache-mixed",
     productCacheOptions: .init(
@@ -129,8 +129,8 @@ func excludesNonBuildableTargetsFromWorkspaceCacheCandidates() throws {
 
 @Test("CUJ-19 rejects incomplete workspace cache discovery configuration")
 func rejectsIncompleteWorkspaceCacheDiscoveryConfiguration() throws {
-  #expect(throws: AppleProjectTargetDiscoveryError.self) {
-    try AppleProjectTargetDiscovery.discover(
+  #expect(throws: XcodeProjectTargetDiscoveryError.self) {
+    try XcodeProjectTargetDiscovery.discover(
       projectYMLURL: concourseProjectYMLURL,
       requestId: "workspace-cache-missing-derived-data",
       productCacheOptions: .init(
@@ -141,8 +141,8 @@ func rejectsIncompleteWorkspaceCacheDiscoveryConfiguration() throws {
     )
   }
 
-  #expect(throws: AppleProjectTargetDiscoveryError.self) {
-    try AppleProjectTargetDiscovery.discover(
+  #expect(throws: XcodeProjectTargetDiscoveryError.self) {
+    try XcodeProjectTargetDiscovery.discover(
       projectYMLURL: concourseProjectYMLURL,
       requestId: "workspace-cache-missing-workspace",
       productCacheOptions: .init(

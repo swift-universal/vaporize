@@ -2,23 +2,23 @@ import Foundation
 import PklSwift
 import Yams
 
-public struct AppleProjectSpec: Codable, Equatable, Sendable {
+public struct XcodeProjectDefinition: Codable, Equatable, Sendable {
   public var name: String
-  public var options: AppleProjectOptions?
+  public var options: XcodeProjectOptions?
   public var configs: [String: String]?
-  public var settings: AppleProjectSettings?
-  public var packages: [String: AppleProjectPackage]
-  public var targets: [String: AppleProjectTarget]
-  public var schemes: [String: AppleProjectScheme]
+  public var settings: XcodeProjectSettings?
+  public var packages: [String: XcodeProjectPackage]
+  public var targets: [String: XcodeProjectTarget]
+  public var schemes: [String: XcodeProjectScheme]
 
   public init(
     name: String,
-    options: AppleProjectOptions? = nil,
+    options: XcodeProjectOptions? = nil,
     configs: [String: String]? = nil,
-    settings: AppleProjectSettings? = nil,
-    packages: [String: AppleProjectPackage] = [:],
-    targets: [String: AppleProjectTarget] = [:],
-    schemes: [String: AppleProjectScheme] = [:]
+    settings: XcodeProjectSettings? = nil,
+    packages: [String: XcodeProjectPackage] = [:],
+    targets: [String: XcodeProjectTarget] = [:],
+    schemes: [String: XcodeProjectScheme] = [:]
   ) {
     self.name = name
     self.options = options
@@ -42,27 +42,27 @@ public struct AppleProjectSpec: Codable, Equatable, Sendable {
   public init(from decoder: Decoder) throws {
     let container = try decoder.container(keyedBy: CodingKeys.self)
     self.name = try container.decode(String.self, forKey: .name)
-    self.options = try container.decodeIfPresent(AppleProjectOptions.self, forKey: .options)
+    self.options = try container.decodeIfPresent(XcodeProjectOptions.self, forKey: .options)
     self.configs = try container.decodeIfPresent([String: String].self, forKey: .configs)
-    self.settings = try container.decodeIfPresent(AppleProjectSettings.self, forKey: .settings)
-    self.packages = try container.decodeIfPresent([String: AppleProjectPackage].self, forKey: .packages) ?? [:]
-    self.targets = try container.decodeIfPresent([String: AppleProjectTarget].self, forKey: .targets) ?? [:]
-    self.schemes = try container.decodeIfPresent([String: AppleProjectScheme].self, forKey: .schemes) ?? [:]
+    self.settings = try container.decodeIfPresent(XcodeProjectSettings.self, forKey: .settings)
+    self.packages = try container.decodeIfPresent([String: XcodeProjectPackage].self, forKey: .packages) ?? [:]
+    self.targets = try container.decodeIfPresent([String: XcodeProjectTarget].self, forKey: .targets) ?? [:]
+    self.schemes = try container.decodeIfPresent([String: XcodeProjectScheme].self, forKey: .schemes) ?? [:]
   }
 }
 
-public struct AppleProjectOptions: Codable, Equatable, Sendable {
+public struct XcodeProjectOptions: Codable, Equatable, Sendable {
   public var minimumXcodeGenVersion: String?
   public var useBaseInternationalization: Bool?
   public var createIntermediateGroups: Bool?
 }
 
-public struct AppleProjectSettings: Codable, Equatable, Sendable {
-  public var base: [String: AppleProjectValue]?
-  public var configs: [String: [String: AppleProjectValue]]?
+public struct XcodeProjectSettings: Codable, Equatable, Sendable {
+  public var base: [String: XcodeProjectValue]?
+  public var configs: [String: [String: XcodeProjectValue]]?
 }
 
-public struct AppleProjectReleaseIdentity: Codable, Equatable, Sendable {
+public struct XcodeProjectReleaseIdentity: Codable, Equatable, Sendable {
   public var bundleIdentifier: String?
   public var shortVersion: String?
   public var buildVersion: String?
@@ -73,7 +73,7 @@ public struct AppleProjectReleaseIdentity: Codable, Equatable, Sendable {
   public var sparklePublicEDKey: String?
 }
 
-public struct AppleProjectPackage: Codable, Equatable, Sendable {
+public struct XcodeProjectPackage: Codable, Equatable, Sendable {
   public var path: String?
   public var url: String?
   public var from: String?
@@ -82,21 +82,21 @@ public struct AppleProjectPackage: Codable, Equatable, Sendable {
   public var revision: String?
 }
 
-public struct AppleProjectTarget: Codable, Equatable, Sendable {
+public struct XcodeProjectTarget: Codable, Equatable, Sendable {
   public var type: String?
   public var platform: String?
-  public var deploymentTarget: AppleProjectValue?
-  public var sources: [AppleProjectSource]?
-  public var info: AppleProjectInfo?
-  public var releaseIdentity: AppleProjectReleaseIdentity?
-  public var settings: AppleProjectSettings?
+  public var deploymentTarget: XcodeProjectValue?
+  public var sources: [XcodeProjectSource]?
+  public var info: XcodeProjectInfo?
+  public var releaseIdentity: XcodeProjectReleaseIdentity?
+  public var settings: XcodeProjectSettings?
   public var configFiles: [String: String]?
-  public var dependencies: [AppleProjectDependency]?
-  public var preBuildScripts: [AppleProjectBuildScript]?
-  public var postBuildScripts: [AppleProjectBuildScript]?
+  public var dependencies: [XcodeProjectDependency]?
+  public var preBuildScripts: [XcodeProjectBuildScript]?
+  public var postBuildScripts: [XcodeProjectBuildScript]?
 }
 
-public struct AppleProjectSource: Codable, Equatable, Sendable {
+public struct XcodeProjectSource: Codable, Equatable, Sendable {
   public var path: String
   public var name: String?
   public var type: String?
@@ -136,12 +136,12 @@ public struct AppleProjectSource: Codable, Equatable, Sendable {
   }
 }
 
-public struct AppleProjectInfo: Codable, Equatable, Sendable {
+public struct XcodeProjectInfo: Codable, Equatable, Sendable {
   public var path: String?
-  public var properties: [String: AppleProjectValue]?
+  public var properties: [String: XcodeProjectValue]?
 }
 
-public struct AppleProjectDependency: Codable, Equatable, Sendable {
+public struct XcodeProjectDependency: Codable, Equatable, Sendable {
   public var package: String?
   public var product: String?
   public var target: String?
@@ -150,27 +150,27 @@ public struct AppleProjectDependency: Codable, Equatable, Sendable {
   public var codeSign: Bool?
 }
 
-public struct AppleProjectBuildScript: Codable, Equatable, Sendable {
+public struct XcodeProjectBuildScript: Codable, Equatable, Sendable {
   public var name: String?
   public var basedOnDependencyAnalysis: Bool?
   public var script: String
 }
 
-public struct AppleProjectScheme: Codable, Equatable, Sendable {
+public struct XcodeProjectScheme: Codable, Equatable, Sendable {
   public var shared: Bool?
-  public var build: AppleProjectValue?
-  public var run: AppleProjectValue?
-  public var test: AppleProjectValue?
+  public var build: XcodeProjectValue?
+  public var run: XcodeProjectValue?
+  public var test: XcodeProjectValue?
 }
 
-public enum AppleProjectValue: Codable, Equatable, Sendable {
+public enum XcodeProjectValue: Codable, Equatable, Sendable {
   case null
   case bool(Bool)
   case int(Int)
   case double(Double)
   case string(String)
-  case array([AppleProjectValue])
-  case object([String: AppleProjectValue])
+  case array([XcodeProjectValue])
+  case object([String: XcodeProjectValue])
 
   public init(from decoder: Decoder) throws {
     let container = try decoder.singleValueContainer()
@@ -184,9 +184,9 @@ public enum AppleProjectValue: Codable, Equatable, Sendable {
       self = .double(value)
     } else if let value = try? container.decode(String.self) {
       self = .string(value)
-    } else if let value = try? container.decode([AppleProjectValue].self) {
+    } else if let value = try? container.decode([XcodeProjectValue].self) {
       self = .array(value)
-    } else if let value = try? container.decode([String: AppleProjectValue].self) {
+    } else if let value = try? container.decode([String: XcodeProjectValue].self) {
       self = .object(value)
     } else {
       throw DecodingError.dataCorruptedError(in: container, debugDescription: "Unsupported YAML value.")
@@ -236,24 +236,24 @@ public enum AppleProjectValue: Codable, Equatable, Sendable {
   }
 }
 
-public enum AppleProjectYMLReader {
-  public static func load(url: URL) throws -> AppleProjectSpec {
+public enum XcodeProjectYMLReader {
+  public static func load(url: URL) throws -> XcodeProjectDefinition {
     let data = try Data(contentsOf: url)
     return try decode(data: data)
   }
 
-  public static func decode(data: Data) throws -> AppleProjectSpec {
-    try YAMLDecoder().decode(AppleProjectSpec.self, from: data)
+  public static func decode(data: Data) throws -> XcodeProjectDefinition {
+    try YAMLDecoder().decode(XcodeProjectDefinition.self, from: data)
   }
 
   public static func receipt(
-    for spec: AppleProjectSpec,
+    for spec: XcodeProjectDefinition,
     path: String,
     requestId: String
-  ) -> AppleProjectYMLInspectionReceipt {
+  ) -> XcodeProjectYMLInspectionReceipt {
     let targetSummaries = spec.targets
       .map { name, target in
-        AppleProjectTargetSummary(
+        XcodeProjectTargetSummary(
           name: name,
           type: target.type,
           platform: target.platform,
@@ -265,7 +265,7 @@ public enum AppleProjectYMLReader {
       }
       .sorted { $0.name < $1.name }
 
-    return AppleProjectYMLInspectionReceipt(
+    return XcodeProjectYMLInspectionReceipt(
       path: path,
       requestId: requestId,
       projectName: spec.name,
@@ -279,7 +279,7 @@ public enum AppleProjectYMLReader {
   }
 }
 
-public enum AppleProjectPklLoaderError: Error, CustomStringConvertible {
+public enum XcodeProjectPklLoaderError: Error, CustomStringConvertible {
   case evaluationFailed(path: String, underlying: Error)
 
   public var description: String {
@@ -290,14 +290,14 @@ public enum AppleProjectPklLoaderError: Error, CustomStringConvertible {
   }
 }
 
-public enum AppleProjectPklLoader {
-  public static func load(url: URL) async throws -> AppleProjectSpec {
+public enum XcodeProjectPklLoader {
+  public static func load(url: URL) async throws -> XcodeProjectDefinition {
     do {
       return try await PklSwift.withEvaluator { evaluator in
-        try await evaluator.evaluateModule(source: .path(url.path), as: AppleProjectSpec.self)
+        try await evaluator.evaluateModule(source: .path(url.path), as: XcodeProjectDefinition.self)
       }
     } catch {
-      throw AppleProjectPklLoaderError.evaluationFailed(
+      throw XcodeProjectPklLoaderError.evaluationFailed(
         path: url.path,
         underlying: error
       )
@@ -305,16 +305,16 @@ public enum AppleProjectPklLoader {
   }
 }
 
-public enum AppleProjectYMLRenderer {
-  public static func renderData(spec: AppleProjectSpec) throws -> Data {
+public enum XcodeProjectYMLRenderer {
+  public static func renderData(spec: XcodeProjectDefinition) throws -> Data {
     let yaml = try YAMLEncoder().encode(spec)
     return Data(yaml.utf8)
   }
 }
 
-public enum AppleProjectPklRenderer {
+public enum XcodeProjectPklRenderer {
   public static func renderData(
-    spec: AppleProjectSpec,
+    spec: XcodeProjectDefinition,
     schemaAmendsPath: String,
     sourcePath: String? = nil
   ) -> Data {
@@ -322,7 +322,7 @@ public enum AppleProjectPklRenderer {
   }
 
   public static func render(
-    spec: AppleProjectSpec,
+    spec: XcodeProjectDefinition,
     schemaAmendsPath: String,
     sourcePath: String? = nil
   ) -> String {
@@ -391,7 +391,7 @@ public enum AppleProjectPklRenderer {
     return lines.joined(separator: "\n")
   }
 
-  private static func renderPackage(_ package: AppleProjectPackage, indent level: Int) -> String {
+  private static func renderPackage(_ package: XcodeProjectPackage, indent level: Int) -> String {
     var lines = ["new {"]
     appendOptional("path", package.path.map(renderString), indent: level + 2, to: &lines)
     appendOptional("url", package.url.map(renderString), indent: level + 2, to: &lines)
@@ -403,7 +403,7 @@ public enum AppleProjectPklRenderer {
     return lines.joined(separator: "\n")
   }
 
-  private static func renderTarget(_ target: AppleProjectTarget, indent level: Int) -> String {
+  private static func renderTarget(_ target: XcodeProjectTarget, indent level: Int) -> String {
     var lines = ["new {"]
     appendOptional("type", target.type.map(renderString), indent: level + 2, to: &lines)
     appendOptional("platform", target.platform.map(renderString), indent: level + 2, to: &lines)
@@ -436,7 +436,7 @@ public enum AppleProjectPklRenderer {
     return lines.joined(separator: "\n")
   }
 
-  private static func renderSource(_ source: AppleProjectSource, indent level: Int) -> String {
+  private static func renderSource(_ source: XcodeProjectSource, indent level: Int) -> String {
     var lines = ["new {"]
     appendAssignment("path", renderString(source.path), indent: level + 2, to: &lines)
     appendOptional("name", source.name.map(renderString), indent: level + 2, to: &lines)
@@ -449,7 +449,7 @@ public enum AppleProjectPklRenderer {
     return lines.joined(separator: "\n")
   }
 
-  private static func renderInfo(_ info: AppleProjectInfo, indent level: Int) -> String {
+  private static func renderInfo(_ info: XcodeProjectInfo, indent level: Int) -> String {
     var lines = ["new {"]
     appendOptional("path", info.path.map(renderString), indent: level + 2, to: &lines)
     if let properties = info.properties, !properties.isEmpty {
@@ -460,7 +460,7 @@ public enum AppleProjectPklRenderer {
   }
 
   private static func renderReleaseIdentity(
-    _ identity: AppleProjectReleaseIdentity,
+    _ identity: XcodeProjectReleaseIdentity,
     indent level: Int
   ) -> String {
     var lines = ["new {"]
@@ -476,7 +476,7 @@ public enum AppleProjectPklRenderer {
     return lines.joined(separator: "\n")
   }
 
-  private static func renderSettings(_ settings: AppleProjectSettings, indent level: Int) -> String {
+  private static func renderSettings(_ settings: XcodeProjectSettings, indent level: Int) -> String {
     var lines = ["new {"]
     if let base = settings.base, !base.isEmpty {
       appendAssignment("base", renderMapping(base, indent: level + 2), indent: level + 2, to: &lines)
@@ -494,7 +494,7 @@ public enum AppleProjectPklRenderer {
     return lines.joined(separator: "\n")
   }
 
-  private static func renderDependency(_ dependency: AppleProjectDependency, indent level: Int) -> String {
+  private static func renderDependency(_ dependency: XcodeProjectDependency, indent level: Int) -> String {
     var lines = ["new {"]
     appendOptional("package", dependency.package.map(renderString), indent: level + 2, to: &lines)
     appendOptional("product", dependency.product.map(renderString), indent: level + 2, to: &lines)
@@ -506,7 +506,7 @@ public enum AppleProjectPklRenderer {
     return lines.joined(separator: "\n")
   }
 
-  private static func renderBuildScript(_ script: AppleProjectBuildScript, indent level: Int) -> String {
+  private static func renderBuildScript(_ script: XcodeProjectBuildScript, indent level: Int) -> String {
     var lines = ["new {"]
     appendOptional("name", script.name.map(renderString), indent: level + 2, to: &lines)
     appendOptional("basedOnDependencyAnalysis", script.basedOnDependencyAnalysis.map(renderBool), indent: level + 2, to: &lines)
@@ -515,7 +515,7 @@ public enum AppleProjectPklRenderer {
     return lines.joined(separator: "\n")
   }
 
-  private static func renderScheme(_ scheme: AppleProjectScheme, indent level: Int) -> String {
+  private static func renderScheme(_ scheme: XcodeProjectScheme, indent level: Int) -> String {
     var lines = ["new {"]
     appendOptional("shared", scheme.shared.map(renderBool), indent: level + 2, to: &lines)
     appendOptional("build", scheme.build.map { renderValue($0, indent: level + 2) }, indent: level + 2, to: &lines)
@@ -526,7 +526,7 @@ public enum AppleProjectPklRenderer {
   }
 
   private static func renderMapping(
-    _ values: [String: AppleProjectValue],
+    _ values: [String: XcodeProjectValue],
     indent level: Int,
     constructor: String? = nil
   ) -> String {
@@ -555,7 +555,7 @@ public enum AppleProjectPklRenderer {
     return lines.joined(separator: "\n")
   }
 
-  private static func renderValue(_ value: AppleProjectValue, indent level: Int) -> String {
+  private static func renderValue(_ value: XcodeProjectValue, indent level: Int) -> String {
     switch value {
     case .null:
       return "null"
@@ -639,15 +639,15 @@ public enum AppleProjectPklRenderer {
   }
 }
 
-public enum AppleProjectSpecPklImporter {
+public enum XcodeProjectDefinitionPklImporter {
   public static func generate(
     ymlURL: URL,
     outputURL: URL,
     schemaAmendsPath: String,
     requestId: String
-  ) throws -> AppleProjectYMLImportReceipt {
-    let spec = try AppleProjectYMLReader.load(url: ymlURL)
-    let data = AppleProjectPklRenderer.renderData(
+  ) throws -> XcodeProjectYMLImportReceipt {
+    let spec = try XcodeProjectYMLReader.load(url: ymlURL)
+    let data = XcodeProjectPklRenderer.renderData(
       spec: spec,
       schemaAmendsPath: schemaAmendsPath,
       sourcePath: ymlURL.lastPathComponent
@@ -658,7 +658,7 @@ public enum AppleProjectSpecPklImporter {
     )
     try data.write(to: outputURL)
 
-    return AppleProjectYMLImportReceipt(
+    return XcodeProjectYMLImportReceipt(
       ymlPath: ymlURL.path,
       outputPath: outputURL.path,
       schemaAmendsPath: schemaAmendsPath,
@@ -670,19 +670,19 @@ public enum AppleProjectSpecPklImporter {
       targetNames: spec.targets.keys.sorted(),
       packageNames: spec.packages.keys.sorted(),
       generatedByteCount: data.count,
-      ymlSignature: AppleProjectSpecParitySignature(spec: spec)
+      ymlSignature: XcodeProjectDefinitionParitySignature(spec: spec)
     )
   }
 }
 
-public enum AppleProjectSpecYMLGenerator {
+public enum XcodeProjectDefinitionYMLGenerator {
   public static func generate(
     pklURL: URL,
     outputURL: URL,
     requestId: String
   ) async throws -> PklProjectGenerationReceipt {
-    let spec = try await AppleProjectPklLoader.load(url: pklURL)
-    let data = try AppleProjectYMLRenderer.renderData(spec: spec)
+    let spec = try await XcodeProjectPklLoader.load(url: pklURL)
+    let data = try XcodeProjectYMLRenderer.renderData(spec: spec)
     try FileManager.default.createDirectory(
       at: outputURL.deletingLastPathComponent(),
       withIntermediateDirectories: true
@@ -700,23 +700,23 @@ public enum AppleProjectSpecYMLGenerator {
       targetNames: spec.targets.keys.sorted(),
       packageNames: spec.packages.keys.sorted(),
       generatedByteCount: data.count,
-      pklSignature: AppleProjectSpecParitySignature(spec: spec)
+      pklSignature: XcodeProjectDefinitionParitySignature(spec: spec)
     )
   }
 }
 
-public enum AppleProjectSpecComparator {
+public enum XcodeProjectDefinitionComparator {
   public static func receipt(
-    ymlSpec: AppleProjectSpec,
-    pklSpec: AppleProjectSpec,
+    ymlSpec: XcodeProjectDefinition,
+    pklSpec: XcodeProjectDefinition,
     ymlPath: String,
     pklPath: String,
     requestId: String
-  ) -> AppleProjectSpecComparisonReceipt {
-    let ymlSignature = AppleProjectSpecParitySignature(spec: ymlSpec)
-    let pklSignature = AppleProjectSpecParitySignature(spec: pklSpec)
+  ) -> XcodeProjectDefinitionComparisonReceipt {
+    let ymlSignature = XcodeProjectDefinitionParitySignature(spec: ymlSpec)
+    let pklSignature = XcodeProjectDefinitionParitySignature(spec: pklSpec)
     let mismatchDescriptions = mismatches(yml: ymlSignature, pkl: pklSignature)
-    return AppleProjectSpecComparisonReceipt(
+    return XcodeProjectDefinitionComparisonReceipt(
       ymlPath: ymlPath,
       pklPath: pklPath,
       requestId: requestId,
@@ -729,8 +729,8 @@ public enum AppleProjectSpecComparator {
   }
 
   private static func mismatches(
-    yml: AppleProjectSpecParitySignature,
-    pkl: AppleProjectSpecParitySignature
+    yml: XcodeProjectDefinitionParitySignature,
+    pkl: XcodeProjectDefinitionParitySignature
   ) -> [String] {
     var mismatches: [String] = []
     appendMismatch("projectName", yml.projectName, pkl.projectName, to: &mismatches)
@@ -755,7 +755,7 @@ public enum AppleProjectSpecComparator {
   }
 }
 
-public enum VaporizeAppleProjectReceiptSchema {
+public enum VaporizeXcodeProjectReceiptSchema {
   public static let schemaFamilySlug = "vaporize-schemas"
   public static let schemaFamilyVersion = "0.0.1"
 
@@ -763,13 +763,13 @@ public enum VaporizeAppleProjectReceiptSchema {
     "private/universal/domain/tooling/schema-families/vaporize-schemas/v0.0.1/json/vaporize-schemas-v000-000-001/schemas"
 
   public static let inspectionSchemaRef =
-    "\(schemaRoot)/apple-project-yml-inspection-receipt/apple-project-yml-inspection-receipt.schema.json"
+    "\(schemaRoot)/xcode-project-yml-inspection-receipt/xcode-project-yml-inspection-receipt.schema.json"
   public static let comparisonSchemaRef =
-    "\(schemaRoot)/apple-project-yml-pkl-comparison-receipt/apple-project-yml-pkl-comparison-receipt.schema.json"
+    "\(schemaRoot)/xcode-project-yml-pkl-comparison-receipt/xcode-project-yml-pkl-comparison-receipt.schema.json"
   public static let generationSchemaRef =
     "\(schemaRoot)/pkl-project-yml-generation-receipt/pkl-project-yml-generation-receipt.schema.json"
   public static let importSchemaRef =
-    "\(schemaRoot)/apple-project-yml-pkl-import-receipt/apple-project-yml-pkl-import-receipt.schema.json"
+    "\(schemaRoot)/xcode-project-yml-pkl-import-receipt/xcode-project-yml-pkl-import-receipt.schema.json"
   public static let xcodeProjectGenerationSchemaRef =
     "\(schemaRoot)/pkl-xcode-project-generation-receipt/pkl-xcode-project-generation-receipt.schema.json"
   public static let targetFeaturesInspectionSchemaRef =
@@ -778,12 +778,12 @@ public enum VaporizeAppleProjectReceiptSchema {
     "\(schemaRoot)/project-target-discovery-receipt/project-target-discovery-receipt.schema.json"
 }
 
-public struct AppleProjectSpecComparisonReceipt: Codable, Equatable, Sendable {
+public struct XcodeProjectDefinitionComparisonReceipt: Codable, Equatable, Sendable {
   public var schemaVersion = "0.1.0"
-  public var schemaFamilySlug = VaporizeAppleProjectReceiptSchema.schemaFamilySlug
-  public var schemaFamilyVersion = VaporizeAppleProjectReceiptSchema.schemaFamilyVersion
-  public var schemaRef = VaporizeAppleProjectReceiptSchema.comparisonSchemaRef
-  public var receiptKind = "vaporize-apple-project-yml-pkl-comparison"
+  public var schemaFamilySlug = VaporizeXcodeProjectReceiptSchema.schemaFamilySlug
+  public var schemaFamilyVersion = VaporizeXcodeProjectReceiptSchema.schemaFamilyVersion
+  public var schemaRef = VaporizeXcodeProjectReceiptSchema.comparisonSchemaRef
+  public var receiptKind = "vaporize-xcode-project-yml-pkl-comparison"
   public var migrationPhase = "pkl-parity-specimen"
   public var ymlPath: String
   public var pklPath: String
@@ -791,17 +791,17 @@ public struct AppleProjectSpecComparisonReceipt: Codable, Equatable, Sendable {
   public var matched: Bool
   public var mismatchCount: Int
   public var mismatches: [String]
-  public var ymlSignature: AppleProjectSpecParitySignature
-  public var pklSignature: AppleProjectSpecParitySignature
+  public var ymlSignature: XcodeProjectDefinitionParitySignature
+  public var pklSignature: XcodeProjectDefinitionParitySignature
 }
 
 public struct PklProjectGenerationReceipt: Codable, Equatable, Sendable {
   public var schemaVersion = "0.1.0"
-  public var schemaFamilySlug = VaporizeAppleProjectReceiptSchema.schemaFamilySlug
-  public var schemaFamilyVersion = VaporizeAppleProjectReceiptSchema.schemaFamilyVersion
-  public var schemaRef = VaporizeAppleProjectReceiptSchema.generationSchemaRef
+  public var schemaFamilySlug = VaporizeXcodeProjectReceiptSchema.schemaFamilySlug
+  public var schemaFamilyVersion = VaporizeXcodeProjectReceiptSchema.schemaFamilyVersion
+  public var schemaRef = VaporizeXcodeProjectReceiptSchema.generationSchemaRef
   public var receiptKind = "vaporize-pkl-project-yml-generation"
-  public var generationPhase = "pkl-to-transitional-apple-project-spec-yaml"
+  public var generationPhase = "pkl-to-transitional-xcode-project-definition-yaml"
   public var generatorStatus = "transitional-yaml-only"
   public var pklPath: String
   public var outputPath: String
@@ -815,16 +815,16 @@ public struct PklProjectGenerationReceipt: Codable, Equatable, Sendable {
   public var generatedByteCount: Int
   public var buildableWorldStateGenerated = false
   public var xcodeProjectGenerated = false
-  public var boundary = "Generates transitional AppleProjectSpec YAML from Pkl; does not rewrite checked-in project.yml and does not generate .xcodeproj world-state."
-  public var pklSignature: AppleProjectSpecParitySignature
+  public var boundary = "Generates transitional XcodeProjectDefinition YAML from Pkl; does not rewrite checked-in project.yml and does not generate .xcodeproj world-state."
+  public var pklSignature: XcodeProjectDefinitionParitySignature
 }
 
-public struct AppleProjectYMLImportReceipt: Codable, Equatable, Sendable {
+public struct XcodeProjectYMLImportReceipt: Codable, Equatable, Sendable {
   public var schemaVersion = "0.1.0"
-  public var schemaFamilySlug = VaporizeAppleProjectReceiptSchema.schemaFamilySlug
-  public var schemaFamilyVersion = VaporizeAppleProjectReceiptSchema.schemaFamilyVersion
-  public var schemaRef = VaporizeAppleProjectReceiptSchema.importSchemaRef
-  public var receiptKind = "vaporize-apple-project-yml-pkl-import"
+  public var schemaFamilySlug = VaporizeXcodeProjectReceiptSchema.schemaFamilySlug
+  public var schemaFamilyVersion = VaporizeXcodeProjectReceiptSchema.schemaFamilyVersion
+  public var schemaRef = VaporizeXcodeProjectReceiptSchema.importSchemaRef
+  public var receiptKind = "vaporize-xcode-project-yml-pkl-import"
   public var migrationPhase = "legacy-yaml-to-pkl-import"
   public var importerStatus = "pkl-parity-specimen"
   public var ymlPath: String
@@ -840,20 +840,20 @@ public struct AppleProjectYMLImportReceipt: Codable, Equatable, Sendable {
   public var generatedByteCount: Int
   public var buildableWorldStateGenerated = false
   public var xcodeProjectGenerated = false
-  public var boundary = "Imports legacy XcodeGen YAML into an AppleProjectSpec Pkl parity specimen; does not generate .xcodeproj world-state."
-  public var ymlSignature: AppleProjectSpecParitySignature
+  public var boundary = "Imports legacy XcodeGen YAML into an XcodeProjectDefinition Pkl parity specimen; does not generate .xcodeproj world-state."
+  public var ymlSignature: XcodeProjectDefinitionParitySignature
 }
 
-public struct AppleProjectSpecParitySignature: Codable, Equatable, Sendable {
+public struct XcodeProjectDefinitionParitySignature: Codable, Equatable, Sendable {
   public var projectName: String
   public var options: [String: String]
   public var configs: [String: String]
   public var settingsBase: [String: String]
-  public var packages: [String: AppleProjectPackageSignature]
-  public var targets: [String: AppleProjectTargetSignature]
-  public var schemes: [String: AppleProjectSchemeSignature]
+  public var packages: [String: XcodeProjectPackageSignature]
+  public var targets: [String: XcodeProjectTargetSignature]
+  public var schemes: [String: XcodeProjectSchemeSignature]
 
-  public init(spec: AppleProjectSpec) {
+  public init(spec: XcodeProjectDefinition) {
     self.projectName = spec.name
     self.options = [
       "minimumXcodeGenVersion": spec.options?.minimumXcodeGenVersion,
@@ -862,13 +862,13 @@ public struct AppleProjectSpecParitySignature: Codable, Equatable, Sendable {
     ].compactMapValues { $0 }
     self.configs = spec.configs ?? [:]
     self.settingsBase = signatureMap(spec.settings?.base)
-    self.packages = spec.packages.mapValues { AppleProjectPackageSignature(package: $0) }
-    self.targets = spec.targets.mapValues { AppleProjectTargetSignature(target: $0) }
-    self.schemes = spec.schemes.mapValues { AppleProjectSchemeSignature(scheme: $0) }
+    self.packages = spec.packages.mapValues { XcodeProjectPackageSignature(package: $0) }
+    self.targets = spec.targets.mapValues { XcodeProjectTargetSignature(target: $0) }
+    self.schemes = spec.schemes.mapValues { XcodeProjectSchemeSignature(scheme: $0) }
   }
 }
 
-public struct AppleProjectPackageSignature: Codable, Equatable, Sendable {
+public struct XcodeProjectPackageSignature: Codable, Equatable, Sendable {
   public var path: String?
   public var url: String?
   public var from: String?
@@ -876,7 +876,7 @@ public struct AppleProjectPackageSignature: Codable, Equatable, Sendable {
   public var exact: String?
   public var revision: String?
 
-  public init(package: AppleProjectPackage) {
+  public init(package: XcodeProjectPackage) {
     self.path = package.path
     self.url = package.url
     self.from = package.from
@@ -886,46 +886,46 @@ public struct AppleProjectPackageSignature: Codable, Equatable, Sendable {
   }
 }
 
-public struct AppleProjectTargetSignature: Codable, Equatable, Sendable {
+public struct XcodeProjectTargetSignature: Codable, Equatable, Sendable {
   public var type: String?
   public var platform: String?
   public var deploymentTarget: String?
   public var sourcePaths: [String]
-  public var sources: [AppleProjectSourceSignature]
-  public var info: AppleProjectInfoSignature?
-  public var releaseIdentity: AppleProjectReleaseIdentitySignature?
+  public var sources: [XcodeProjectSourceSignature]
+  public var info: XcodeProjectInfoSignature?
+  public var releaseIdentity: XcodeProjectReleaseIdentitySignature?
   public var settingsBase: [String: String]
   public var settingConfigs: [String: [String: String]]
   public var configFiles: [String: String]
-  public var dependencies: [AppleProjectDependencySignature]
-  public var preBuildScripts: [AppleProjectBuildScriptSignature]
-  public var postBuildScripts: [AppleProjectBuildScriptSignature]
+  public var dependencies: [XcodeProjectDependencySignature]
+  public var preBuildScripts: [XcodeProjectBuildScriptSignature]
+  public var postBuildScripts: [XcodeProjectBuildScriptSignature]
 
-  public init(target: AppleProjectTarget) {
+  public init(target: XcodeProjectTarget) {
     self.type = target.type
     self.platform = target.platform
     self.deploymentTarget = target.deploymentTarget?.stringValue
     self.sourcePaths = (target.sources ?? []).map(\.path)
-    self.sources = (target.sources ?? []).map(AppleProjectSourceSignature.init)
-    self.info = target.info.map(AppleProjectInfoSignature.init)
-    self.releaseIdentity = target.releaseIdentity.map(AppleProjectReleaseIdentitySignature.init)
+    self.sources = (target.sources ?? []).map(XcodeProjectSourceSignature.init)
+    self.info = target.info.map(XcodeProjectInfoSignature.init)
+    self.releaseIdentity = target.releaseIdentity.map(XcodeProjectReleaseIdentitySignature.init)
     self.settingsBase = signatureMap(target.settings?.base)
     self.settingConfigs = (target.settings?.configs ?? [:]).mapValues(signatureMap)
     self.configFiles = target.configFiles ?? [:]
-    self.dependencies = (target.dependencies ?? []).map(AppleProjectDependencySignature.init)
-    self.preBuildScripts = (target.preBuildScripts ?? []).map(AppleProjectBuildScriptSignature.init)
-    self.postBuildScripts = (target.postBuildScripts ?? []).map(AppleProjectBuildScriptSignature.init)
+    self.dependencies = (target.dependencies ?? []).map(XcodeProjectDependencySignature.init)
+    self.preBuildScripts = (target.preBuildScripts ?? []).map(XcodeProjectBuildScriptSignature.init)
+    self.postBuildScripts = (target.postBuildScripts ?? []).map(XcodeProjectBuildScriptSignature.init)
   }
 }
 
-public struct AppleProjectSourceSignature: Codable, Equatable, Sendable {
+public struct XcodeProjectSourceSignature: Codable, Equatable, Sendable {
   public var path: String
   public var name: String?
   public var type: String?
   public var optional: Bool?
   public var excludes: [String]
 
-  public init(source: AppleProjectSource) {
+  public init(source: XcodeProjectSource) {
     self.path = source.path
     self.name = source.name
     self.type = source.type
@@ -934,17 +934,17 @@ public struct AppleProjectSourceSignature: Codable, Equatable, Sendable {
   }
 }
 
-public struct AppleProjectInfoSignature: Codable, Equatable, Sendable {
+public struct XcodeProjectInfoSignature: Codable, Equatable, Sendable {
   public var path: String?
-  public var properties: [String: AppleProjectValue]
+  public var properties: [String: XcodeProjectValue]
 
-  public init(info: AppleProjectInfo) {
+  public init(info: XcodeProjectInfo) {
     self.path = info.path
     self.properties = info.properties ?? [:]
   }
 }
 
-public struct AppleProjectReleaseIdentitySignature: Codable, Equatable, Sendable {
+public struct XcodeProjectReleaseIdentitySignature: Codable, Equatable, Sendable {
   public var bundleIdentifier: String?
   public var shortVersion: String?
   public var buildVersion: String?
@@ -954,7 +954,7 @@ public struct AppleProjectReleaseIdentitySignature: Codable, Equatable, Sendable
   public var sparkleFeedURL: String?
   public var sparklePublicEDKey: String?
 
-  public init(releaseIdentity: AppleProjectReleaseIdentity) {
+  public init(releaseIdentity: XcodeProjectReleaseIdentity) {
     self.bundleIdentifier = releaseIdentity.bundleIdentifier
     self.shortVersion = releaseIdentity.shortVersion
     self.buildVersion = releaseIdentity.buildVersion
@@ -966,7 +966,7 @@ public struct AppleProjectReleaseIdentitySignature: Codable, Equatable, Sendable
   }
 }
 
-public struct AppleProjectDependencySignature: Codable, Equatable, Sendable {
+public struct XcodeProjectDependencySignature: Codable, Equatable, Sendable {
   public var package: String?
   public var product: String?
   public var target: String?
@@ -974,7 +974,7 @@ public struct AppleProjectDependencySignature: Codable, Equatable, Sendable {
   public var embed: Bool?
   public var codeSign: Bool?
 
-  public init(dependency: AppleProjectDependency) {
+  public init(dependency: XcodeProjectDependency) {
     self.package = dependency.package
     self.product = dependency.product
     self.target = dependency.target
@@ -984,25 +984,25 @@ public struct AppleProjectDependencySignature: Codable, Equatable, Sendable {
   }
 }
 
-public struct AppleProjectBuildScriptSignature: Codable, Equatable, Sendable {
+public struct XcodeProjectBuildScriptSignature: Codable, Equatable, Sendable {
   public var name: String?
   public var basedOnDependencyAnalysis: Bool?
   public var normalizedScript: String
 
-  public init(script: AppleProjectBuildScript) {
+  public init(script: XcodeProjectBuildScript) {
     self.name = script.name
     self.basedOnDependencyAnalysis = script.basedOnDependencyAnalysis
     self.normalizedScript = script.script.normalizedProjectScript
   }
 }
 
-public struct AppleProjectSchemeSignature: Codable, Equatable, Sendable {
+public struct XcodeProjectSchemeSignature: Codable, Equatable, Sendable {
   public var shared: Bool?
-  public var build: AppleProjectValue?
-  public var run: AppleProjectValue?
-  public var test: AppleProjectValue?
+  public var build: XcodeProjectValue?
+  public var run: XcodeProjectValue?
+  public var test: XcodeProjectValue?
 
-  public init(scheme: AppleProjectScheme) {
+  public init(scheme: XcodeProjectScheme) {
     self.shared = scheme.shared
     self.build = scheme.build
     self.run = scheme.run
@@ -1010,7 +1010,7 @@ public struct AppleProjectSchemeSignature: Codable, Equatable, Sendable {
   }
 }
 
-private func signatureMap(_ values: [String: AppleProjectValue]?) -> [String: String] {
+private func signatureMap(_ values: [String: XcodeProjectValue]?) -> [String: String] {
   guard let values else { return [:] }
   return values.compactMapValues(\.stringValue)
 }
@@ -1024,9 +1024,9 @@ extension String {
   }
 }
 
-public enum AppleProjectAppBundleNameResolver {
+public enum XcodeProjectAppBundleNameResolver {
   public static func appBundleName(
-    in spec: AppleProjectSpec,
+    in spec: XcodeProjectDefinition,
     targetName: String,
     configuration: String
   ) -> String? {
@@ -1055,15 +1055,15 @@ public enum AppleProjectAppBundleNameResolver {
     return expandedName.isEmpty ? nil : expandedName
   }
 
-  private static func singleTarget(in spec: AppleProjectSpec) -> AppleProjectTarget? {
+  private static func singleTarget(in spec: XcodeProjectDefinition) -> XcodeProjectTarget? {
     guard spec.targets.count == 1 else { return nil }
     return spec.targets.first?.value
   }
 
   private static func configValues(
-    in settings: AppleProjectSettings?,
+    in settings: XcodeProjectSettings?,
     configuration: String
-  ) -> [String: AppleProjectValue]? {
+  ) -> [String: XcodeProjectValue]? {
     guard let configs = settings?.configs else { return nil }
     if let exact = configs[configuration] {
       return exact
@@ -1074,7 +1074,7 @@ public enum AppleProjectAppBundleNameResolver {
   }
 
   private static func merge(
-    _ values: [String: AppleProjectValue]?,
+    _ values: [String: XcodeProjectValue]?,
     into settings: inout [String: String]
   ) {
     guard let values else { return }
@@ -1107,12 +1107,12 @@ public enum AppleProjectAppBundleNameResolver {
   }
 }
 
-public struct AppleProjectYMLInspectionReceipt: Codable, Equatable, Sendable {
+public struct XcodeProjectYMLInspectionReceipt: Codable, Equatable, Sendable {
   public var schemaVersion = "0.1.0"
-  public var schemaFamilySlug = VaporizeAppleProjectReceiptSchema.schemaFamilySlug
-  public var schemaFamilyVersion = VaporizeAppleProjectReceiptSchema.schemaFamilyVersion
-  public var schemaRef = VaporizeAppleProjectReceiptSchema.inspectionSchemaRef
-  public var receiptKind = "vaporize-apple-project-yml-inspection"
+  public var schemaFamilySlug = VaporizeXcodeProjectReceiptSchema.schemaFamilySlug
+  public var schemaFamilyVersion = VaporizeXcodeProjectReceiptSchema.schemaFamilyVersion
+  public var schemaRef = VaporizeXcodeProjectReceiptSchema.inspectionSchemaRef
+  public var receiptKind = "vaporize-xcode-project-yml-inspection"
   public var bridgeStatus = "legacy-xcodegen-yaml-read-only"
   public var migrationPhase = "swift-yaml-read-parity"
   public var path: String
@@ -1123,10 +1123,10 @@ public struct AppleProjectYMLInspectionReceipt: Codable, Equatable, Sendable {
   public var schemeCount: Int
   public var targetNames: [String]
   public var packageNames: [String]
-  public var targetSummaries: [AppleProjectTargetSummary]
+  public var targetSummaries: [XcodeProjectTargetSummary]
 }
 
-public struct AppleProjectTargetSummary: Codable, Equatable, Sendable {
+public struct XcodeProjectTargetSummary: Codable, Equatable, Sendable {
   public var name: String
   public var type: String?
   public var platform: String?

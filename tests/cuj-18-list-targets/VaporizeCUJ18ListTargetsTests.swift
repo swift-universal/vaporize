@@ -1,5 +1,5 @@
 import ArgumentParser
-import AppleProjectSpecCore
+import XcodeProjectDefinitionCore
 import Foundation
 import Testing
 import VaporizeTestSupport
@@ -26,14 +26,14 @@ func parsesListTargetsCLIArguments() throws {
 
 @Test("CUJ-18 discovers targets from legacy project YAML")
 func discoversTargetsFromProjectYML() throws {
-  let receipt = try AppleProjectTargetDiscovery.discover(
+  let receipt = try XcodeProjectTargetDiscovery.discover(
     projectYMLURL: concourseProjectYMLURL,
     requestId: "list-targets-yml"
   )
 
   #expect(receipt.receiptKind == "vaporize-project-target-discovery")
-  #expect(receipt.schemaRef == VaporizeAppleProjectReceiptSchema.targetDiscoverySchemaRef)
-  #expect(receipt.discoveryPhase == "apple-project-target-discovery-first-slice")
+  #expect(receipt.schemaRef == VaporizeXcodeProjectReceiptSchema.targetDiscoverySchemaRef)
+  #expect(receipt.discoveryPhase == "xcode-project-target-discovery-first-slice")
   #expect(receipt.inputKind == "project-yml")
   #expect(receipt.projectName == "concourse")
   #expect(receipt.targetNames == expectedConcourseTargetNames)
@@ -46,7 +46,7 @@ func discoversTargetsFromProjectYML() throws {
 
 @Test("CUJ-18 discovers targets from Pkl forward truth")
 func discoversTargetsFromProjectPkl() async throws {
-  let receipt = try await AppleProjectTargetDiscovery.discover(
+  let receipt = try await XcodeProjectTargetDiscovery.discover(
     pklURL: concourseProjectPklURL,
     requestId: "list-targets-pkl"
   )
@@ -88,7 +88,7 @@ func directoryInputFallsBackToProjectYML() async throws {
     to: root.appendingPathComponent("project.yml")
   )
 
-  let receipt = try await AppleProjectTargetDiscovery.discover(
+  let receipt = try await XcodeProjectTargetDiscovery.discover(
     projectDirectoryURL: root,
     requestId: "list-targets-directory"
   )
@@ -107,8 +107,8 @@ func rejectsDirectoryWithoutProjectSpec() async throws {
   try FileManager.default.createDirectory(at: root, withIntermediateDirectories: true)
   defer { try? FileManager.default.removeItem(at: root) }
 
-  await #expect(throws: AppleProjectTargetDiscoveryError.self) {
-    _ = try await AppleProjectTargetDiscovery.discover(
+  await #expect(throws: XcodeProjectTargetDiscoveryError.self) {
+    _ = try await XcodeProjectTargetDiscovery.discover(
       projectDirectoryURL: root,
       requestId: "list-targets-empty"
     )

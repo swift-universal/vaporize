@@ -14,7 +14,7 @@ import Foundation
 ///
 /// Kept filesystem-free so the whole option space is unit-testable; the CLI
 /// runs the import + comparison and hands the result here.
-public enum AppleProjectPklUpgradePlanner {
+public enum XcodeProjectPklUpgradePlanner {
 
   public enum Decision: Equatable, Sendable {
     /// Parity mismatch: the generated pkl does not reproduce the yml. The yml is

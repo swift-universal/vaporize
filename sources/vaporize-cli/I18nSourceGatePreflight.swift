@@ -1,4 +1,4 @@
-import AppleProjectSpecCore
+import XcodeProjectDefinitionCore
 import Foundation
 import TranslateSourceGate
 import VaporizeCLICopy_v000_000_001
@@ -242,8 +242,8 @@ enum VaporizeI18nSourceGate {
       return [productDirectory]
     }
 
-    let specification = try await AppleProjectPklLoader.load(url: pklURL)
-    let targetSources = specification.targets.compactMap { targetName, target -> [AppleProjectSource]? in
+    let specification = try await XcodeProjectPklLoader.load(url: pklURL)
+    let targetSources = specification.targets.compactMap { targetName, target -> [XcodeProjectSource]? in
       guard targetName == productName
         || target.settings?.base?["PRODUCT_NAME"]?.stringValue == productName
       else { return nil }

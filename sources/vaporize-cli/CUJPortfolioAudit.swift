@@ -1474,7 +1474,7 @@ struct CUJPortfolioAuditScanner {
   private func implementationHome(for surface: OwnedSurfaceRecord, root: URL) -> String {
     let url = URL(fileURLWithPath: surface.path)
     switch surface.kind {
-    case .swiftPackage, .appleProjectYML, .appleProjectPKL:
+    case .swiftPackage, .xcodeProjectYML, .xcodeProjectPKL:
       return relativePath(url.deletingLastPathComponent(), root: root)
     case .xcodeProject, .xcodeWorkspace:
       return relativePath(url.deletingLastPathComponent(), root: root)

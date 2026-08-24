@@ -1,4 +1,4 @@
-import AppleProjectSpecCore
+import XcodeProjectDefinitionCore
 import Foundation
 
 public let vaporizeTestPackageRoot = URL(fileURLWithPath: #filePath)
@@ -24,12 +24,12 @@ public let expectedConcoursePackageNames = [
   "swift-snapshot-testing",
 ]
 
-public let appleProjectSpecPklSchemaURL = vaporizeTestPackageRoot
-  .appendingPathComponent("Pkl/AppleProjectSpec.pkl")
+public let xcodeProjectDefinitionPklSchemaURL = vaporizeTestPackageRoot
+  .appendingPathComponent("Pkl/XcodeProjectDefinition.pkl")
   .standardizedFileURL
 
-public func decodeAppleProjectYML(_ yaml: String) throws -> AppleProjectSpec {
-  try AppleProjectYMLReader.decode(data: Data(yaml.utf8))
+public func decodeXcodeProjectYML(_ yaml: String) throws -> XcodeProjectDefinition {
+  try XcodeProjectYMLReader.decode(data: Data(yaml.utf8))
 }
 
 public func relativePathForPklAmends(from baseDirectory: URL, to target: URL) -> String {

@@ -3,7 +3,7 @@
 /// Boundary: this proves generated project world-state shape, not signing,
 /// notarization, Sparkle publishing, or fleet build parity.
 
-amends "../../../../Pkl/AppleProjectSpec.pkl"
+amends "../../../../Pkl/XcodeProjectDefinition.pkl"
 
 name = "pkl-beyond-resourceful-sparkle-app"
 

@@ -1,4 +1,4 @@
-import AppleProjectSpecCore
+import XcodeProjectDefinitionCore
 import Foundation
 import Testing
 import VaporizeTestSupport
@@ -28,18 +28,18 @@ func preservesSDKFrameworkDependenciesThroughYMLToPklParity() async throws {
     """.utf8
   ).write(to: ymlURL)
 
-  let receipt = try AppleProjectSpecPklImporter.generate(
+  let receipt = try XcodeProjectDefinitionPklImporter.generate(
     ymlURL: ymlURL,
     outputURL: pklURL,
     schemaAmendsPath: relativePathForPklAmends(
       from: temporaryDirectory,
-      to: appleProjectSpecPklSchemaURL
+      to: xcodeProjectDefinitionPklSchemaURL
     ),
     requestId: "sdk-framework-yml-pkl-parity"
   )
-  let ymlSpec = try AppleProjectYMLReader.load(url: ymlURL)
-  let pklSpec = try await AppleProjectPklLoader.load(url: pklURL)
-  let comparison = AppleProjectSpecComparator.receipt(
+  let ymlSpec = try XcodeProjectYMLReader.load(url: ymlURL)
+  let pklSpec = try await XcodeProjectPklLoader.load(url: pklURL)
+  let comparison = XcodeProjectDefinitionComparator.receipt(
     ymlSpec: ymlSpec,
     pklSpec: pklSpec,
     ymlPath: ymlURL.path,

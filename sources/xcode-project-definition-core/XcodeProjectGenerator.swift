@@ -1,6 +1,6 @@
 import Foundation
 
-public enum AppleProjectXcodeProjectGenerationError: Error, CustomStringConvertible {
+public enum XcodeProjectGenerationError: Error, CustomStringConvertible {
   case noBuildableTargets
   case unsupportedTargetType(targetName: String, type: String?)
   case missingSourcePath(targetName: String, path: String)
@@ -11,7 +11,7 @@ public enum AppleProjectXcodeProjectGenerationError: Error, CustomStringConverti
   public var description: String {
     switch self {
     case .noBuildableTargets:
-      return "AppleProjectSpec does not contain any application, framework, tool, or unit-test targets."
+      return "XcodeProjectDefinition does not contain any application, framework, tool, or unit-test targets."
     case .unsupportedTargetType(let targetName, let type):
       return "Target \(targetName) has unsupported type \(type ?? "<nil>")."
     case .missingSourcePath(let targetName, let path):
@@ -26,13 +26,13 @@ public enum AppleProjectXcodeProjectGenerationError: Error, CustomStringConverti
   }
 }
 
-public enum AppleProjectXcodeProjectGenerator {
+public enum XcodeProjectGenerator {
   public static func generate(
     pklURL: URL,
     outputURL: URL,
     requestId: String
   ) async throws -> PklXcodeProjectGenerationReceipt {
-    let spec = try await AppleProjectPklLoader.load(url: pklURL)
+    let spec = try await XcodeProjectPklLoader.load(url: pklURL)
     return try generate(
       spec: spec,
       sourcePath: pklURL.path,
@@ -43,7 +43,7 @@ public enum AppleProjectXcodeProjectGenerator {
   }
 
   public static func generate(
-    spec: AppleProjectSpec,
+    spec: XcodeProjectDefinition,
     sourcePath: String,
     sourceDirectory: URL? = nil,
     outputURL: URL,
@@ -52,7 +52,7 @@ public enum AppleProjectXcodeProjectGenerator {
     let projectURL = normalizedProjectURL(outputURL, projectName: spec.name)
     let sourceRoot = sourceDirectory?.standardizedFileURL
       ?? projectURL.deletingLastPathComponent().standardizedFileURL
-    let rendered = try AppleProjectXcodeProjectRenderer.render(
+    let rendered = try XcodeProjectRenderer.render(
       spec: spec,
       projectDirectory: sourceRoot,
       outputProjectDirectory: projectURL.deletingLastPathComponent(),
@@ -103,7 +103,7 @@ public enum AppleProjectXcodeProjectGenerator {
       sourceFileCount: rendered.sourceFileCount,
       resourceFileCount: rendered.resourceFileCount,
       generatedByteCount: generatedByteCount,
-      pklSignature: AppleProjectSpecParitySignature(spec: spec)
+      pklSignature: XcodeProjectDefinitionParitySignature(spec: spec)
     )
   }
 
@@ -116,38 +116,38 @@ public enum AppleProjectXcodeProjectGenerator {
   }
 }
 
-public struct AppleRenderedXcodeProject: Equatable, Sendable {
+public struct RenderedXcodeProject: Equatable, Sendable {
   public var pbxproj: String
   public var workspace: String
-  public var schemeFiles: [AppleRenderedXcodeSchemeFile]
+  public var schemeFiles: [RenderedXcodeSchemeFile]
   public var targetNames: [String]
   public var sourceFileCount: Int
   public var resourceFileCount: Int
 }
 
-public struct AppleRenderedXcodeSchemeFile: Equatable, Sendable {
+public struct RenderedXcodeSchemeFile: Equatable, Sendable {
   public var fileName: String
   public var contents: String
 }
 
-public enum AppleProjectXcodeProjectRenderer {
+public enum XcodeProjectRenderer {
   public static func render(
-    spec: AppleProjectSpec,
+    spec: XcodeProjectDefinition,
     projectDirectory: URL,
     outputProjectDirectory: URL? = nil,
     projectFileName: String? = nil
-  ) throws -> AppleRenderedXcodeProject {
+  ) throws -> RenderedXcodeProject {
     let buildableTargets = spec.targets
       .filter { _, target in target.isXcodeProjectGenerationSupported }
       .sorted { $0.key < $1.key }
     guard !buildableTargets.isEmpty else {
       if let first = spec.targets.sorted(by: { $0.key < $1.key }).first {
-        throw AppleProjectXcodeProjectGenerationError.unsupportedTargetType(
+        throw XcodeProjectGenerationError.unsupportedTargetType(
           targetName: first.key,
           type: first.value.type
         )
       }
-      throw AppleProjectXcodeProjectGenerationError.noBuildableTargets
+      throw XcodeProjectGenerationError.noBuildableTargets
     }
 
     let context = try RenderContext(
@@ -156,7 +156,7 @@ public enum AppleProjectXcodeProjectRenderer {
       sourceDirectory: projectDirectory,
       outputProjectDirectory: outputProjectDirectory ?? projectDirectory
     )
-    return AppleRenderedXcodeProject(
+    return RenderedXcodeProject(
       pbxproj: context.renderPBXProj(),
       workspace: context.renderWorkspace(),
       schemeFiles: context.renderSharedSchemes(
@@ -170,7 +170,7 @@ public enum AppleProjectXcodeProjectRenderer {
 }
 
 private struct RenderContext {
-  var spec: AppleProjectSpec
+  var spec: XcodeProjectDefinition
   var sourceDirectory: URL
   var outputProjectDirectory: URL
   var sourcesGroupPath: String
@@ -192,8 +192,8 @@ private struct RenderContext {
   var projectConfigListID = stableID("project-config-list")
 
   init(
-    spec: AppleProjectSpec,
-    buildableTargets: [(key: String, value: AppleProjectTarget)],
+    spec: XcodeProjectDefinition,
+    buildableTargets: [(key: String, value: XcodeProjectTarget)],
     sourceDirectory: URL,
     outputProjectDirectory: URL
   ) throws {
@@ -224,7 +224,7 @@ private struct RenderContext {
       )
     }
     if let package = packageRecords.first(where: \.hasUnsupportedRemoteRequirement) {
-      throw AppleProjectXcodeProjectGenerationError.unsupportedRemotePackageRequirement(
+      throw XcodeProjectGenerationError.unsupportedRemotePackageRequirement(
         packageName: package.name
       )
     }
@@ -297,7 +297,7 @@ private struct RenderContext {
         guard let path = target.configFiles?[configuration] else { continue }
         let sourceURL = Self.resolvePath(path, relativeTo: normalizedSourceDirectory)
         guard FileManager.default.fileExists(atPath: sourceURL.path) else {
-          throw AppleProjectXcodeProjectGenerationError.missingConfigFile(
+          throw XcodeProjectGenerationError.missingConfigFile(
             targetName: targetName,
             configuration: configuration,
             path: path
@@ -331,7 +331,7 @@ private struct RenderContext {
       for dependency in target.dependencies ?? [] {
         if let dependencyTargetName = dependency.target {
           guard supportedTargetNames.contains(dependencyTargetName) else {
-            throw AppleProjectXcodeProjectGenerationError.unknownTargetDependency(
+            throw XcodeProjectGenerationError.unknownTargetDependency(
               targetName: targetName,
               dependencyTargetName: dependencyTargetName
             )
@@ -465,14 +465,14 @@ private struct RenderContext {
     """
   }
 
-  func renderSharedSchemes(projectFileName: String) -> [AppleRenderedXcodeSchemeFile] {
+  func renderSharedSchemes(projectFileName: String) -> [RenderedXcodeSchemeFile] {
     spec.schemes.keys.sorted().compactMap { schemeName in
       guard let scheme = spec.schemes[schemeName],
         scheme.shared != false
       else {
         return nil
       }
-      return AppleRenderedXcodeSchemeFile(
+      return RenderedXcodeSchemeFile(
         fileName: "\(schemeName.sanitizedSchemeFileName).xcscheme",
         contents: renderScheme(name: schemeName, scheme: scheme, projectFileName: projectFileName)
       )
@@ -481,7 +481,7 @@ private struct RenderContext {
 
   private func renderScheme(
     name: String,
-    scheme: AppleProjectScheme,
+    scheme: XcodeProjectScheme,
     projectFileName: String
   ) -> String {
     let buildEntries = schemeBuildEntries(name: name, scheme: scheme)
@@ -596,7 +596,7 @@ private struct RenderContext {
 
   private func schemeBuildEntries(
     name: String,
-    scheme: AppleProjectScheme
+    scheme: XcodeProjectScheme
   ) -> [SchemeBuildEntry] {
     let targetMap = Dictionary(uniqueKeysWithValues: targetRecords.map { ($0.name, $0) })
     let targets = schemeBuildTargetValues(scheme)
@@ -609,7 +609,7 @@ private struct RenderContext {
     }.sorted { $0.target.name < $1.target.name }
   }
 
-  private func schemeBuildTargetValues(_ scheme: AppleProjectScheme) -> [(String, AppleProjectValue)] {
+  private func schemeBuildTargetValues(_ scheme: XcodeProjectScheme) -> [(String, XcodeProjectValue)] {
     guard let buildObject = scheme.build?.objectValue,
       let targetsObject = buildObject["targets"]?.objectValue
     else {
@@ -621,7 +621,7 @@ private struct RenderContext {
     }
   }
 
-  private func schemeTestTargets(_ scheme: AppleProjectScheme) -> [TargetRecord] {
+  private func schemeTestTargets(_ scheme: XcodeProjectScheme) -> [TargetRecord] {
     let targetMap = Dictionary(uniqueKeysWithValues: targetRecords.map { ($0.name, $0) })
     guard let testObject = scheme.test?.objectValue,
       let targetsValue = testObject["targets"]
@@ -643,7 +643,7 @@ private struct RenderContext {
 
   private func schemeLaunchTarget(
     name: String,
-    scheme: AppleProjectScheme,
+    scheme: XcodeProjectScheme,
     buildEntries: [SchemeBuildEntry]
   ) -> TargetRecord? {
     let targetMap = Dictionary(uniqueKeysWithValues: targetRecords.map { ($0.name, $0) })
@@ -662,11 +662,11 @@ private struct RenderContext {
     return targetRecords.first(where: \.isRunnable)
   }
 
-  private func schemeConfiguration(_ value: AppleProjectValue?) -> String? {
+  private func schemeConfiguration(_ value: XcodeProjectValue?) -> String? {
     value?.objectValue?["config"]?.stringValue ?? value?.objectValue?["configuration"]?.stringValue
   }
 
-  private func schemeWorkingDirectory(_ value: AppleProjectValue?) -> String? {
+  private func schemeWorkingDirectory(_ value: XcodeProjectValue?) -> String? {
     value?.objectValue?["workingDirectory"]?.stringValue
   }
 
@@ -1309,7 +1309,7 @@ private struct RenderContext {
   }
 
   private func applyReleaseIdentity(
-    _ identity: AppleProjectReleaseIdentity?,
+    _ identity: XcodeProjectReleaseIdentity?,
     target: TargetRecord,
     into settings: inout [String: PBXSettingValue]
   ) {
@@ -1447,9 +1447,9 @@ private struct RenderContext {
   }
 
   private func configValues(
-    in settings: AppleProjectSettings?,
+    in settings: XcodeProjectSettings?,
     configuration: String
-  ) -> [String: AppleProjectValue]? {
+  ) -> [String: XcodeProjectValue]? {
     guard let configs = settings?.configs else { return nil }
     if let exact = configs[configuration] {
       return exact
@@ -1460,7 +1460,7 @@ private struct RenderContext {
   }
 
   private func merge(
-    _ values: [String: AppleProjectValue]?,
+    _ values: [String: XcodeProjectValue]?,
     into settings: inout [String: PBXSettingValue]
   ) {
     guard let values else { return }
@@ -1497,7 +1497,7 @@ private struct RenderContext {
 
   private static func discoverFiles(
     targetName: String,
-    target: AppleProjectTarget,
+    target: XcodeProjectTarget,
     projectDirectory: URL
   ) throws -> [DiscoveredFile] {
     let fileManager = FileManager.default
@@ -1515,7 +1515,7 @@ private struct RenderContext {
       let exists = fileManager.fileExists(atPath: sourceURL.path, isDirectory: &isDirectory)
       guard exists else {
         if source.optional == true { continue }
-        throw AppleProjectXcodeProjectGenerationError.missingSourcePath(
+        throw XcodeProjectGenerationError.missingSourcePath(
           targetName: targetName,
           path: source.path
         )
@@ -1603,7 +1603,7 @@ private struct RenderContext {
   }
 
   private static func sourceGroupRoot(
-    target: AppleProjectTarget,
+    target: XcodeProjectTarget,
     projectDirectory: URL
   ) -> URL {
     let firstSource = target.sources?.first?.path ?? "Sources"
@@ -1619,7 +1619,7 @@ private struct RenderContext {
   }
 
   private static func sourceGroupPath(
-    target: AppleProjectTarget,
+    target: XcodeProjectTarget,
     projectDirectory: URL
   ) -> String {
     let sourcesRoot = projectDirectory.appendingPathComponent("Sources", isDirectory: true)
@@ -1665,7 +1665,7 @@ private struct RenderContext {
 
 private struct TargetRecord {
   var name: String
-  var target: AppleProjectTarget
+  var target: XcodeProjectTarget
   var productName: String
   var id: String
   var productFileID: String
@@ -1763,7 +1763,7 @@ private struct ConfigFileRecord {
 
 private struct PackageRecord {
   var name: String
-  var package: AppleProjectPackage
+  var package: XcodeProjectPackage
   var id: String
   var groupFileID: String
 
@@ -1814,7 +1814,7 @@ private enum RemoteSwiftPackageRequirement {
   case exactVersion(String)
   case revision(String)
 
-  init?(package: AppleProjectPackage) {
+  init?(package: XcodeProjectPackage) {
     if let from = package.from {
       self = .upToNextMajorVersion(from)
     } else if let branch = package.branch {
@@ -1914,7 +1914,7 @@ private struct SchemeBuildFlags {
     self.buildForAnalyzing = buildForAnalyzing
   }
 
-  init(value: AppleProjectValue) {
+  init(value: XcodeProjectValue) {
     if value.boolValue == true {
       self = .all
       return
@@ -1988,7 +1988,7 @@ private enum PBXSettingValue: Equatable {
   case string(String)
   case list([String])
 
-  init?(value: AppleProjectValue) {
+  init?(value: XcodeProjectValue) {
     switch value {
     case .null:
       return nil
@@ -2008,7 +2008,7 @@ private enum PBXSettingValue: Equatable {
   }
 }
 
-private extension AppleProjectTarget {
+private extension XcodeProjectTarget {
   var normalizedType: String {
     type ?? "application"
   }
@@ -2048,13 +2048,13 @@ private extension AppleProjectTarget {
   }
 }
 
-private extension AppleProjectValue {
-  var arrayValue: [AppleProjectValue]? {
+private extension XcodeProjectValue {
+  var arrayValue: [XcodeProjectValue]? {
     if case .array(let value) = self { return value }
     return nil
   }
 
-  var objectValue: [String: AppleProjectValue]? {
+  var objectValue: [String: XcodeProjectValue]? {
     if case .object(let value) = self { return value }
     return nil
   }
@@ -2152,9 +2152,9 @@ private func relativePath(from base: URL, to target: URL) -> String {
 
 public struct PklXcodeProjectGenerationReceipt: Codable, Equatable, Sendable {
   public var schemaVersion = "0.1.0"
-  public var schemaFamilySlug = VaporizeAppleProjectReceiptSchema.schemaFamilySlug
-  public var schemaFamilyVersion = VaporizeAppleProjectReceiptSchema.schemaFamilyVersion
-  public var schemaRef = VaporizeAppleProjectReceiptSchema.xcodeProjectGenerationSchemaRef
+  public var schemaFamilySlug = VaporizeXcodeProjectReceiptSchema.schemaFamilySlug
+  public var schemaFamilyVersion = VaporizeXcodeProjectReceiptSchema.schemaFamilyVersion
+  public var schemaRef = VaporizeXcodeProjectReceiptSchema.xcodeProjectGenerationSchemaRef
   public var receiptKind = "vaporize-pkl-xcodeproj-generation"
   public var generationPhase = "pkl-to-xcodeproj-world-state"
   public var generatorStatus = "xcodeproj-world-state-generated"
@@ -2174,6 +2174,6 @@ public struct PklXcodeProjectGenerationReceipt: Codable, Equatable, Sendable {
   public var generatedByteCount: Int
   public var buildableWorldStateGenerated = true
   public var xcodeProjectGenerated = true
-  public var boundary = "Generates .xcodeproj world-state from evaluated AppleProjectSpec Pkl; current slice supports macOS application, framework, tool, unit-test, target-dependency, local package, and shared-scheme world-state."
-  public var pklSignature: AppleProjectSpecParitySignature
+  public var boundary = "Generates .xcodeproj world-state from evaluated XcodeProjectDefinition Pkl; current slice supports macOS application, framework, tool, unit-test, target-dependency, local package, and shared-scheme world-state."
+  public var pklSignature: XcodeProjectDefinitionParitySignature
 }

@@ -220,11 +220,11 @@ func sourceVersionStatusResolvesVersionedPklProductLineCarrier() async throws {
     targets: Mapping<String, Target> = new {}
     schemes: Mapping<String, Scheme> = new {}
     """,
-    to: appHome.appendingPathComponent("AppleProjectSpec.pkl")
+    to: appHome.appendingPathComponent("XcodeProjectDefinition.pkl")
   )
   try writeText(
     """
-    amends "AppleProjectSpec.pkl"
+    amends "XcodeProjectDefinition.pkl"
 
     name = "tiny-pkl-app"
 
@@ -266,7 +266,7 @@ func sourceVersionStatusResolvesVersionedPklProductLineCarrier() async throws {
   #expect(unit.owner == "spaces-universal")
   #expect(unit.targetRef.path == projectPkl.path)
   #expect(unit.targetRef.target == "TinyPklApp")
-  #expect(unit.carrierKind == .pklAppleProject)
+  #expect(unit.carrierKind == .pklXcodeProject)
   #expect(unit.authorityStatus == .sourceDeclared)
   #expect(unit.versionPolicyStatus == .compliant)
   #expect(unit.buildNumberStatus == .sourceDeclared)

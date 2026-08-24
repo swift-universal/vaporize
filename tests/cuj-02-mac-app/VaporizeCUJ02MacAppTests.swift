@@ -1,4 +1,4 @@
-import AppleProjectSpecCore
+import XcodeProjectDefinitionCore
 import ArgumentParser
 import Foundation
 import Testing
@@ -480,13 +480,13 @@ func appBundleNameControlsLocatedBundleWithoutChangingInstallProduct() throws {
 
 @Test("CUJ-02 bundle resolver expands Concourse debug and release wrapper names")
 func bundleResolverExpandsConcourseWrapperNames() throws {
-  let spec = try AppleProjectYMLReader.load(url: concourseProjectYMLURL)
+  let spec = try XcodeProjectYMLReader.load(url: concourseProjectYMLURL)
 
   #expect(
-    AppleProjectAppBundleNameResolver.appBundleName(
+    XcodeProjectAppBundleNameResolver.appBundleName(
       in: spec, targetName: "concourse", configuration: "Debug") == "concourse-0.0.1-debug")
   #expect(
-    AppleProjectAppBundleNameResolver.appBundleName(
+    XcodeProjectAppBundleNameResolver.appBundleName(
       in: spec, targetName: "concourse", configuration: "Release") == "concourse-0.0.1-testflight")
 }
 
@@ -575,7 +575,7 @@ func retainsLegacyYMLWrapperDiscoveryWhenNoPklIsPresent() async throws {
 
 @Test("CUJ-02 bundle resolver uses case-insensitive configuration names")
 func bundleResolverUsesCaseInsensitiveConfigurationNames() throws {
-  let spec = try decodeAppleProjectYML(
+  let spec = try decodeXcodeProjectYML(
     """
     name: app
     targets:
@@ -590,13 +590,13 @@ func bundleResolverUsesCaseInsensitiveConfigurationNames() throws {
   )
 
   #expect(
-    AppleProjectAppBundleNameResolver.appBundleName(
+    XcodeProjectAppBundleNameResolver.appBundleName(
       in: spec, targetName: "mac", configuration: "debug") == "mac-debug")
 }
 
 @Test("CUJ-02 bundle resolver falls back to the single target")
 func bundleResolverFallsBackToSingleTarget() throws {
-  let spec = try decodeAppleProjectYML(
+  let spec = try decodeXcodeProjectYML(
     """
     name: app
     targets:
@@ -611,13 +611,13 @@ func bundleResolverFallsBackToSingleTarget() throws {
   )
 
   #expect(
-    AppleProjectAppBundleNameResolver.appBundleName(
+    XcodeProjectAppBundleNameResolver.appBundleName(
       in: spec, targetName: "missing", configuration: "Release") == "only")
 }
 
 @Test("CUJ-02 bundle resolver rejects unresolved wrapper placeholders")
 func bundleResolverRejectsUnresolvedWrapperPlaceholders() throws {
-  let spec = try decodeAppleProjectYML(
+  let spec = try decodeXcodeProjectYML(
     """
     name: app
     targets:
@@ -632,7 +632,7 @@ func bundleResolverRejectsUnresolvedWrapperPlaceholders() throws {
   )
 
   #expect(
-    AppleProjectAppBundleNameResolver.appBundleName(
+    XcodeProjectAppBundleNameResolver.appBundleName(
       in: spec, targetName: "mac", configuration: "Debug") == nil)
 }
 
@@ -660,12 +660,12 @@ private func makeAppBundleIdentityFixture(
   try Data(yml.utf8).write(to: sourceRoot.appendingPathComponent("project.yml"))
 
   if let pklWrapperName {
-    let spec = try decodeAppleProjectYML(appBundleIdentityYML(wrapperName: pklWrapperName))
-    let pkl = AppleProjectPklRenderer.renderData(
+    let spec = try decodeXcodeProjectYML(appBundleIdentityYML(wrapperName: pklWrapperName))
+    let pkl = XcodeProjectPklRenderer.renderData(
       spec: spec,
       schemaAmendsPath: relativePathForPklAmends(
         from: sourceRoot,
-        to: appleProjectSpecPklSchemaURL
+        to: xcodeProjectDefinitionPklSchemaURL
       ),
       sourcePath: "project.yml"
     )

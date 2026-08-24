@@ -34,7 +34,7 @@ inventory classifies it as active-owned.
 ## Pkl Authority
 
 For a Pkl app, the scanner evaluates the active `project.pkl` composition
-entrypoint through `AppleProjectPklLoader`. A payload such as
+entrypoint through `XcodeProjectPklLoader`. A payload such as
 `project-v000_000_001.pkl` remains the versioned source declaration that the
 entrypoint composes. The report records the entrypoint as the reproducible
 evaluation carrier; it does not infer a payload filename, edit Pkl, or fall

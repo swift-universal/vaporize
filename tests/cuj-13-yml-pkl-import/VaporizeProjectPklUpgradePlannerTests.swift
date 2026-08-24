@@ -1,9 +1,9 @@
-import AppleProjectSpecCore
+import XcodeProjectDefinitionCore
 import Foundation
 import Testing
 
 /// Proving ground for the parity-gated upgrade decision
-/// (`AppleProjectPklUpgradePlanner`), the retire-or-keep core of
+/// (`XcodeProjectPklUpgradePlanner`), the retire-or-keep core of
 /// `vaporize upgrade-project-yml-to-pkl` (FR-VAPORIZE-UPGRADE-PROJECT-YML-TO-PKL).
 /// Sweeps the full (parityMatched × apply) option space and pins the invariant
 /// that matters: the project.yml is retired on exactly ONE combination
@@ -16,7 +16,7 @@ private let upgradeCases: [(parityMatched: Bool, apply: Bool)] = [
 
 @Test("upgrade decision across the full (parity × apply) option space", arguments: upgradeCases)
 func decisionAcrossOptionSpace(parityMatched: Bool, apply: Bool) {
-  let decision = AppleProjectPklUpgradePlanner.decide(
+  let decision = XcodeProjectPklUpgradePlanner.decide(
     parityMatched: parityMatched,
     mismatches: parityMatched ? [] : ["targets"],
     apply: apply)
@@ -38,7 +38,7 @@ func retiresOnExactlyOneCombination() {
   var retireCount = 0
   for parityMatched in [true, false] {
     for apply in [true, false] {
-      if case .upgraded(retireYml: true) = AppleProjectPklUpgradePlanner.decide(
+      if case .upgraded(retireYml: true) = XcodeProjectPklUpgradePlanner.decide(
         parityMatched: parityMatched, mismatches: [], apply: apply) {
         retireCount += 1
       }
@@ -51,7 +51,7 @@ func retiresOnExactlyOneCombination() {
 /// mismatched field names for the loud CLI error.
 @Test("parity mismatch blocks retirement even with --apply, and carries mismatches")
 func parityMismatchBlocksEvenWithApply() {
-  let decision = AppleProjectPklUpgradePlanner.decide(
+  let decision = XcodeProjectPklUpgradePlanner.decide(
     parityMatched: false, mismatches: ["packages", "schemes"], apply: true)
   #expect(decision == .blockedByParity(mismatches: ["packages", "schemes"]))
   if case .upgraded = decision {
@@ -63,6 +63,6 @@ func parityMismatchBlocksEvenWithApply() {
 @Test("clean parity without --apply is a preview (no retirement)")
 func cleanParityWithoutApplyIsPreview() {
   #expect(
-    AppleProjectPklUpgradePlanner.decide(parityMatched: true, mismatches: [], apply: false)
+    XcodeProjectPklUpgradePlanner.decide(parityMatched: true, mismatches: [], apply: false)
       == .previewed)
 }

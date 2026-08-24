@@ -1,4 +1,4 @@
-import AppleProjectSpecCore
+import XcodeProjectDefinitionCore
 import Foundation
 
 /// The policy outcome for one source-declared marketing version. Build numbers
@@ -29,7 +29,7 @@ enum SourceVersionTargetKind: String, Codable, Equatable {
 
 enum SourceVersionCarrierKind: String, Codable, Equatable {
   case xcodegenProjectYML = "xcodegen-project-yml"
-  case pklAppleProject = "pkl-apple-project"
+  case pklXcodeProject = "pkl-xcode-project"
   case swiftPMRuntimeSourceAppVersion = "swiftpm-runtime-source-app-version"
 }
 
@@ -142,11 +142,11 @@ struct SourceVersionStatusScanner {
     var findings: [SourceVersionStatusFinding] = []
 
     let projectYMLSurfaces = surfaces.filter {
-      $0.kind == .appleProjectYML && Self.isDirectAppHomeSurface($0)
+      $0.kind == .xcodeProjectYML && Self.isDirectAppHomeSurface($0)
     }
     let projectYMLPaths = Set(projectYMLSurfaces.map(\.path))
     let projectPKLSurfaces = surfaces.filter {
-      $0.kind == .appleProjectPKL
+      $0.kind == .xcodeProjectPKL
         && Self.isDirectAppHomeSurface($0)
         && !projectYMLPaths.contains(
           URL(fileURLWithPath: $0.path)
@@ -160,7 +160,7 @@ struct SourceVersionStatusScanner {
     for surface in projectYMLSurfaces {
       let sourceURL = URL(fileURLWithPath: surface.path)
       do {
-        let spec = try AppleProjectYMLReader.load(url: sourceURL)
+        let spec = try XcodeProjectYMLReader.load(url: sourceURL)
         for (targetName, target) in spec.targets where Self.isApplicationTarget(target) {
           units.append(
             Self.xcodeUnit(
@@ -187,7 +187,7 @@ struct SourceVersionStatusScanner {
     for surface in projectPKLSurfaces {
       let sourceURL = URL(fileURLWithPath: surface.path)
       do {
-        let spec = try await AppleProjectPklLoader.load(url: sourceURL)
+        let spec = try await XcodeProjectPklLoader.load(url: sourceURL)
         for (targetName, target) in spec.targets where Self.isApplicationTarget(target) {
           units.append(
             Self.xcodeUnit(
@@ -196,7 +196,7 @@ struct SourceVersionStatusScanner {
               spec: spec,
               targetName: targetName,
               target: target,
-              carrierKind: .pklAppleProject
+              carrierKind: .pklXcodeProject
             )
           )
         }
@@ -333,7 +333,7 @@ struct SourceVersionStatusScanner {
     return contents.contains { $0.pathExtension == "xcodeproj" }
   }
 
-  private static func isApplicationTarget(_ target: AppleProjectTarget) -> Bool {
+  private static func isApplicationTarget(_ target: XcodeProjectTarget) -> Bool {
     let type = target.type?.trimmingCharacters(in: .whitespacesAndNewlines).lowercased() ?? ""
     return type == "application"
       || type == "application.watchapp2"
@@ -343,9 +343,9 @@ struct SourceVersionStatusScanner {
   private static func xcodeUnit(
     surface: OwnedSurfaceRecord,
     projectSourceURL: URL,
-    spec: AppleProjectSpec,
+    spec: XcodeProjectDefinition,
     targetName: String,
-    target: AppleProjectTarget,
+    target: XcodeProjectTarget,
     carrierKind: SourceVersionCarrierKind
   ) -> SourceVersionStatusUnit {
     let configurations = configurationNames(spec: spec, target: target).map { configuration in
@@ -408,9 +408,9 @@ struct SourceVersionStatusScanner {
     key: String,
     infoKey: String,
     projectSourceURL: URL,
-    spec: AppleProjectSpec,
+    spec: XcodeProjectDefinition,
     targetName: String,
-    target: AppleProjectTarget,
+    target: XcodeProjectTarget,
     configuration: String
   ) -> ResolvedSourceValue {
     let targetPrefix = "\(projectSourceURL.path)#targets.\(targetName)"
@@ -452,7 +452,7 @@ struct SourceVersionStatusScanner {
 
   private static func settingsValue(
     key: String,
-    settings: AppleProjectSettings?,
+    settings: XcodeProjectSettings?,
     prefix: String,
     configuration: String
   ) -> ResolvedSourceValue? {
@@ -480,7 +480,7 @@ struct SourceVersionStatusScanner {
     return value
   }
 
-  private static func configurationNames(spec: AppleProjectSpec, target: AppleProjectTarget) -> [String] {
+  private static func configurationNames(spec: XcodeProjectDefinition, target: XcodeProjectTarget) -> [String] {
     var names: Set<String> = ["Debug", "Release"]
     if let configs = spec.configs { names.formUnion(configs.keys) }
     if let configs = spec.settings?.configs { names.formUnion(configs.keys) }

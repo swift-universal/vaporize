@@ -1,8 +1,8 @@
-import AppleProjectSpecCore
+import XcodeProjectDefinitionCore
 import Foundation
 
 /// Inputs for resolving the app-bundle identity associated with an Xcode
-/// project emitted from an AppleProjectSpec Pkl record.
+/// project emitted from an XcodeProjectDefinition Pkl record.
 ///
 /// `sourceRootPath` is the resolved source root for the generated project. In
 /// Vaporize app mode it is the required `--package-path`, so a generated
@@ -26,10 +26,10 @@ enum XcodeAppBundleIdentityResolver {
 
     for url in candidateProjectPklURLs(for: request)
     where fileManager.fileExists(atPath: url.path) {
-      guard let spec = try? await AppleProjectPklLoader.load(url: url) else {
+      guard let spec = try? await XcodeProjectPklLoader.load(url: url) else {
         continue
       }
-      if let bundleName = AppleProjectAppBundleNameResolver.appBundleName(
+      if let bundleName = XcodeProjectAppBundleNameResolver.appBundleName(
         in: spec,
         targetName: request.targetName,
         configuration: request.configuration
@@ -40,10 +40,10 @@ enum XcodeAppBundleIdentityResolver {
 
     for url in candidateProjectYMLURLs(for: request)
     where fileManager.fileExists(atPath: url.path) {
-      guard let spec = try? AppleProjectYMLReader.load(url: url) else {
+      guard let spec = try? XcodeProjectYMLReader.load(url: url) else {
         continue
       }
-      if let bundleName = AppleProjectAppBundleNameResolver.appBundleName(
+      if let bundleName = XcodeProjectAppBundleNameResolver.appBundleName(
         in: spec,
         targetName: request.targetName,
         configuration: request.configuration

@@ -1,13 +1,13 @@
-import AppleProjectSpecCore
+import XcodeProjectDefinitionCore
 import Foundation
 import Testing
 import VaporizeTestSupport
 
 @Test("CUJ-10 compares Concourse project.yml with the Pkl parity specimen")
 func comparesConcourseProjectYMLWithPklSpecimen() async throws {
-  let ymlSpec = try AppleProjectYMLReader.load(url: concourseProjectYMLURL)
-  let pklSpec = try await AppleProjectPklLoader.load(url: concourseProjectPklURL)
-  let receipt = AppleProjectSpecComparator.receipt(
+  let ymlSpec = try XcodeProjectYMLReader.load(url: concourseProjectYMLURL)
+  let pklSpec = try await XcodeProjectPklLoader.load(url: concourseProjectPklURL)
+  let receipt = XcodeProjectDefinitionComparator.receipt(
     ymlSpec: ymlSpec,
     pklSpec: pklSpec,
     ymlPath: concourseProjectYMLURL.path,
@@ -15,7 +15,7 @@ func comparesConcourseProjectYMLWithPklSpecimen() async throws {
     requestId: "concourse-project-yml-pkl-comparison-test"
   )
 
-  #expect(receipt.receiptKind == "vaporize-apple-project-yml-pkl-comparison")
+  #expect(receipt.receiptKind == "vaporize-xcode-project-yml-pkl-comparison")
   #expect(receipt.matched == true)
   #expect(receipt.mismatchCount == 0)
   #expect(receipt.pklSignature.projectName == "concourse")
@@ -27,9 +27,9 @@ func comparesCheckedInXcodeGenToPklParityProvingGrounds() async throws {
   #expect(xcodeGenToPklParityProvingGrounds.count >= 5)
 
   for ground in xcodeGenToPklParityProvingGrounds {
-    let ymlSpec = try AppleProjectYMLReader.load(url: ground.projectYMLURL)
-    let pklSpec = try await AppleProjectPklLoader.load(url: ground.projectPklURL)
-    let receipt = AppleProjectSpecComparator.receipt(
+    let ymlSpec = try XcodeProjectYMLReader.load(url: ground.projectYMLURL)
+    let pklSpec = try await XcodeProjectPklLoader.load(url: ground.projectPklURL)
+    let receipt = XcodeProjectDefinitionComparator.receipt(
       ymlSpec: ymlSpec,
       pklSpec: pklSpec,
       ymlPath: ground.projectYMLURL.path,
@@ -37,7 +37,7 @@ func comparesCheckedInXcodeGenToPklParityProvingGrounds() async throws {
       requestId: "xcodegen-to-pkl-parity-\(ground.slug)"
     )
 
-    #expect(receipt.receiptKind == "vaporize-apple-project-yml-pkl-comparison")
+    #expect(receipt.receiptKind == "vaporize-xcode-project-yml-pkl-comparison")
     #expect(receipt.matched == true)
     #expect(receipt.mismatchCount == 0)
     #expect(receipt.pklSignature.projectName == ground.expectedProjectName)
@@ -55,18 +55,18 @@ func pklLoaderWrapsEvaluationFailuresWithSourcePath() async throws {
     .appendingPathComponent("missing-\(UUID().uuidString).pkl")
 
   do {
-    _ = try await AppleProjectPklLoader.load(url: missingPkl)
+    _ = try await XcodeProjectPklLoader.load(url: missingPkl)
     Issue.record("Expected Pkl load to fail for missing file.")
-  } catch let error as AppleProjectPklLoaderError {
+  } catch let error as XcodeProjectPklLoaderError {
     #expect(String(describing: error).contains(missingPkl.path))
   } catch {
-    Issue.record("Expected AppleProjectPklLoaderError, got \(error).")
+    Issue.record("Expected XcodeProjectPklLoaderError, got \(error).")
   }
 }
 
 @Test("CUJ-10 comparator reports targeted mismatch sections")
 func comparatorReportsTargetedMismatchSections() throws {
-  let ymlSpec = try decodeAppleProjectYML(
+  let ymlSpec = try decodeXcodeProjectYML(
     """
     name: app-a
     options:
@@ -85,7 +85,7 @@ func comparatorReportsTargetedMismatchSections() throws {
           - Sources/App
     """
   )
-  let pklSpec = try decodeAppleProjectYML(
+  let pklSpec = try decodeXcodeProjectYML(
     """
     name: app-b
     options:
@@ -105,7 +105,7 @@ func comparatorReportsTargetedMismatchSections() throws {
     """
   )
 
-  let receipt = AppleProjectSpecComparator.receipt(
+  let receipt = XcodeProjectDefinitionComparator.receipt(
     ymlSpec: ymlSpec,
     pklSpec: pklSpec,
     ymlPath: "fixture/project.yml",
@@ -120,7 +120,7 @@ func comparatorReportsTargetedMismatchSections() throws {
 
 @Test("CUJ-10 comparator normalizes multi-line scripts")
 func comparatorNormalizesMultiLineScripts() throws {
-  let ymlSpec = try decodeAppleProjectYML(
+  let ymlSpec = try decodeXcodeProjectYML(
     """
     name: script-app
     targets:
@@ -137,7 +137,7 @@ func comparatorNormalizesMultiLineScripts() throws {
                 echo done
     """
   )
-  let pklSpec = try decodeAppleProjectYML(
+  let pklSpec = try decodeXcodeProjectYML(
     """
     name: script-app
     targets:
@@ -152,7 +152,7 @@ func comparatorNormalizesMultiLineScripts() throws {
     """
   )
 
-  let receipt = AppleProjectSpecComparator.receipt(
+  let receipt = XcodeProjectDefinitionComparator.receipt(
     ymlSpec: ymlSpec,
     pklSpec: pklSpec,
     ymlPath: "fixture/project.yml",

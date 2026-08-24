@@ -24,7 +24,7 @@ The current stages are:
 4. Generate transitional YAML from Pkl.
 5. Generate first-slice `.xcodeproj` world-state from Pkl.
 6. Discover target, package, scheme, and buildable-candidate facts from
-   AppleProjectSpec.
+   XcodeProjectDefinition.
 7. Discover expected shared workspace DerivedData product-cache candidates from
    buildable target facts.
 8. Prove build parity across owned Apple surfaces.

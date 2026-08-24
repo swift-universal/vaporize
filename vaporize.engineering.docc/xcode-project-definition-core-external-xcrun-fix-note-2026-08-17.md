@@ -1,15 +1,15 @@
-# AppleProjectSpecCore: External `xcrun` Materialization Fix Note
+# XcodeProjectDefinitionCore: External `xcrun` Materialization Fix Note
 
 @Metadata {
   @PageKind(article)
   @PageColor(blue)
   @TitleHeading("External Xcode Materialization Fix Note")
-  @PageImage(purpose: icon, source: "apple-project-spec-core-external-xcrun-fix-note-2026-08-17-icon", alt: "A source declaration becomes a verified external project")
-  @PageImage(purpose: card, source: "apple-project-spec-core-external-xcrun-fix-note-2026-08-17-card", alt: "Pkl source, generated project, xcrun execution, and proof remain distinct")
+  @PageImage(purpose: icon, source: "xcode-project-definition-core-external-xcrun-fix-note-2026-08-17-icon", alt: "A source declaration becomes a verified external project")
+  @PageImage(purpose: card, source: "xcode-project-definition-core-external-xcrun-fix-note-2026-08-17-card", alt: "Pkl source, generated project, xcrun execution, and proof remain distinct")
   @Available(macOS, introduced: "0.0.1")
 }
 
-@Image(source: "apple-project-spec-core-external-xcrun-fix-note-2026-08-17-hero", alt: "Four separate stations show Pkl source, generated Xcode project, xcrun build proof, and later migration authority")
+@Image(source: "xcode-project-definition-core-external-xcrun-fix-note-2026-08-17-hero", alt: "Four separate stations show Pkl source, generated Xcode project, xcrun build proof, and later migration authority")
 
 **Recorded:** 2026-08-17  
 **Technical owner:** Wrkstrm CTO  
@@ -17,7 +17,7 @@
 **State:** technical proof recorded; product migration and release remain open.
 
 This is a bounded fix record for Pkl-to-Xcode project materialization. It
-documents work in the reusable `AppleProjectSpecCore` generator and gives the
+documents work in the reusable `XcodeProjectDefinitionCore` generator and gives the
 reader a repeatable proof route. The later additive package extraction is
 recorded separately; this note does not claim an installed Vaporize runtime,
 fleet migration, release readiness, or human approval.
@@ -39,9 +39,9 @@ authority.
 
 | Defect | Concrete consequence | Correct owner |
 | --- | --- | --- |
-| Local Swift package paths were written relative to the generated project | An output project under a temporary directory resolved a source-relative package path from `/tmp`, not from the Pkl source root | `AppleProjectSpecCore` renderer |
-| Target `.xcconfig` declarations were not materialized | A Pkl configuration could exist without becoming an Xcode configuration-file reference or target base configuration | `AppleProjectSpecCore` renderer |
-| An application with no explicit Info.plist received no generated-plist setting | Xcode could fail late because the application had neither an Info.plist path nor `GENERATE_INFOPLIST_FILE = YES` | `AppleProjectSpecCore` renderer |
+| Local Swift package paths were written relative to the generated project | An output project under a temporary directory resolved a source-relative package path from `/tmp`, not from the Pkl source root | `XcodeProjectDefinitionCore` renderer |
+| Target `.xcconfig` declarations were not materialized | A Pkl configuration could exist without becoming an Xcode configuration-file reference or target base configuration | `XcodeProjectDefinitionCore` renderer |
+| An application with no explicit Info.plist received no generated-plist setting | Xcode could fail late because the application had neither an Info.plist path nor `GENERATE_INFOPLIST_FILE = YES` | `XcodeProjectDefinitionCore` renderer |
 
 The tempting but wrong fix would have been a Vaporize CLI-only path rewrite.
 That would leave direct users of the generator with the same output defect.
@@ -76,11 +76,11 @@ source root, confirms the Dogfood setting, then builds it with `xcrun`.
 
 | Claim | Evidence recorded | Status |
 | --- | --- | --- |
-| Reusable generator source changed | `AppleProjectXcodeProjectGenerator.swift` now owns source/output root separation, xcconfig materialization, and generated application plist behavior | recorded |
+| Reusable generator source changed | `XcodeProjectGenerator.swift` now owns source/output root separation, xcconfig materialization, and generated application plist behavior | recorded |
 | Regression contract | A focused Swift Testing target materializes the persistent fixture in an external directory | passed |
 | Xcode configuration projection | `xcrun xcodebuild -showBuildSettings` reports `PORTABLE_VARIANT = dogfood` | passed |
 | Generated-project build | unsigned macOS `xcrun xcodebuild build` returned `** BUILD SUCCEEDED **` | passed |
-| Standalone generator package and `cli-s` | The additive `apple-project-spec` package now exposes `AppleProjectSpecCore` and `apple-project-spec.cli-s`; its focused package proof remains distinct from this historical Vaporize-hosted receipt | extracted separately |
+| Standalone generator package and `cli-s` | The additive `xcode-project-definition` package now exposes `XcodeProjectDefinitionCore` and `xcode-project-definition.cli-s`; its focused package proof remains distinct from this historical Vaporize-hosted receipt | extracted separately |
 | Canonical Hello World consumer migration | Its historical project remains preserved until the migration Bead completes | open |
 | Installed Vaporize behavior | This record runs a source-target test, not an installed executable | not exercised |
 | Fleet Pkl parity, release, and human approval | Outside this correction's authority | not claimed |
@@ -95,13 +95,13 @@ originally exercised with the then-required compatibility flag:
 
 ```sh
 VAPORIZE_DISABLE_SWIFTLY=1 xcrun swift test --skip-update \
-  --filter AppleProjectSpecCoreXcrunMaterializationTests
+  --filter XcodeProjectDefinitionCoreXcrunMaterializationTests
 ```
 
 The test result was:
 
 ```text
-Test "AppleProjectSpecCore materializes an external project that xcrun builds" passed
+Test "XcodeProjectDefinitionCore materializes an external project that xcrun builds" passed
 Test run with 1 test in 0 suites passed
 ```
 
@@ -123,32 +123,32 @@ separate open Bead rather than hidden scope.
 
 ## Linked Corrective Work
 
-- `bug-apple-project-spec-core-source-root-relative-package-paths-v000-000-001-2026-08-17`
-- `feature-apple-project-spec-core-xcconfig-materialization-v000-000-001-2026-08-17`
-- `bug-apple-project-spec-core-application-generated-info-plist-v000-000-001-2026-08-17`
+- `bug-xcode-project-definition-core-source-root-relative-package-paths-v000-000-001-2026-08-17`
+- `feature-xcode-project-definition-core-xcconfig-materialization-v000-000-001-2026-08-17`
+- `bug-xcode-project-definition-core-application-generated-info-plist-v000-000-001-2026-08-17`
 
 The following independently-closeable architectural work remains open:
 
-- `feature-apple-project-spec-core-cli-xcrun-materialization-v000-000-001-2026-08-17`
+- `feature-xcode-project-definition-core-cli-xcrun-materialization-v000-000-001-2026-08-17`
 
 ### Final Command Topology
 
 | Layer | Canonical artifact | Responsibility |
 | --- | --- | --- |
-| Shared implementation | `AppleProjectSpecCore` library | The one Pkl parser, PBX renderer, and generator-receipt implementation. |
-| CLI 1 | `apple-project-spec.cli-s` | Standalone operator and integration-test surface over the shared library. |
+| Shared implementation | `XcodeProjectDefinitionCore` library | The one Pkl parser, PBX renderer, and generator-receipt implementation. |
+| CLI 1 | `xcode-project-definition.cli-s` | Standalone operator and integration-test surface over the shared library. |
 | CLI 2 | `foundry.cli-s@wrkstrm-core.clia.sh` | Existing Foundry source-workflow CLI; later links the shared library directly. |
 
 There is no adapter CLI between these two frontends, and Foundry does not shell
 out to CLI 1. Both CLIs invoke the same library.
 
-The additive AppleProjectSpecCore **library** and CLI 1 now exist as the
-separate `apple-project-spec` package. The standalone tool proves the
+The additive XcodeProjectDefinitionCore **library** and CLI 1 now exist as the
+separate `xcode-project-definition` package. The standalone tool proves the
 library's real request-to-receipt behavior without Foundry; it does not carry
 a second renderer.
 
 The next, independently-closeable move is
-`feature-foundry-apple-project-spec-library-adoption-v000-000-001-2026-08-17`:
+`feature-foundry-xcode-project-definition-library-adoption-v000-000-001-2026-08-17`:
 the existing Foundry CLI links the extracted library directly, makes the
 source-to-derived request explicit, and retains CLI 1 for independent testing.
 Only after that can a consumer migration move through Foundry. The legacy
@@ -167,4 +167,4 @@ See <doc:project-generation-and-migration> for the wider Pkl migration model
 and <doc:release-evidence-and-gates> for the gates this note does not satisfy.
 
 The `0.0.1` manifest test scheme is bundled at
-`resources/v0.0.1.apple-project-spec-core-external-xcrun-fix-note.manifest-test-scheme.su.json`.
+`resources/v0.0.1.xcode-project-definition-core-external-xcrun-fix-note.manifest-test-scheme.su.json`.

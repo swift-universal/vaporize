@@ -1,4 +1,4 @@
-import AppleProjectSpecCore
+import XcodeProjectDefinitionCore
 import Foundation
 import Testing
 import VaporizeTestSupport
@@ -10,7 +10,7 @@ func emitsConcourseSnapshotTestingRemotePackageReference() async throws {
   defer { try? FileManager.default.removeItem(at: outputDirectory) }
 
   let outputURL = outputDirectory.appendingPathComponent("ConcourseGenerated.xcodeproj")
-  let receipt = try await AppleProjectXcodeProjectGenerator.generate(
+  let receipt = try await XcodeProjectGenerator.generate(
     pklURL: concourseProjectPklURL,
     outputURL: outputURL,
     requestId: "cuj-14-concourse-remote-snapshot-testing"
@@ -56,7 +56,7 @@ func rejectsRemotePackageWithoutRequirement() throws {
   try Data("import Foundation\nprint(\"remote\")\n".utf8)
     .write(to: sourceDirectory.appendingPathComponent("main.swift"))
 
-  let spec = try decodeAppleProjectYML("""
+  let spec = try decodeXcodeProjectYML("""
   name: unpinned-remote-package
   packages:
     UnpinnedRemote:
@@ -73,12 +73,12 @@ func rejectsRemotePackageWithoutRequirement() throws {
   """)
 
   do {
-    _ = try AppleProjectXcodeProjectRenderer.render(
+    _ = try XcodeProjectRenderer.render(
       spec: spec,
       projectDirectory: temporaryDirectory
     )
     Issue.record("Expected an unpinned remote package to be rejected.")
-  } catch AppleProjectXcodeProjectGenerationError.unsupportedRemotePackageRequirement(let packageName) {
+  } catch XcodeProjectGenerationError.unsupportedRemotePackageRequirement(let packageName) {
     #expect(packageName == "UnpinnedRemote")
   } catch {
     Issue.record("Unexpected error: \(error)")

@@ -1,10 +1,10 @@
-/// Proving ground for portable AppleProjectSpec materialization.
+/// Proving ground for portable XcodeProjectDefinition materialization.
 ///
 /// The Pkl source root and generated .xcodeproj root must remain distinct.
 /// This fixture owns a local Swift package and four xcconfig variants so the
 /// renderer's typed path semantics are exercised through xcrun.
 
-amends "../../../../Pkl/AppleProjectSpec.pkl"
+amends "../../../../Pkl/XcodeProjectDefinition.pkl"
 
 name = "portable-local-package-build-variants"
 
