@@ -38,7 +38,7 @@ enum VaporizeExecutable {
 }
 
 struct VaporizeCLI: AsyncParsableCommand {
-  /// Hard-coded for Phase 0 - see ``FR-CRAZE-VAPORWARE-AWARENESS`` Phase 0 scope.
+  /// Hard-coded for Phase 0 - see ``FR-VAPORIZE-VAPORWARE-AWARENESS-make-vaporize-the-substrate-canonical-vaporware-collapse-gate-in-code`` Phase 0 scope.
   /// Phase 1+ will derive this from Package.swift via a build-time plugin.
   static let vaporizeVersion = "0.0.1"
   static let buildIdentifier =

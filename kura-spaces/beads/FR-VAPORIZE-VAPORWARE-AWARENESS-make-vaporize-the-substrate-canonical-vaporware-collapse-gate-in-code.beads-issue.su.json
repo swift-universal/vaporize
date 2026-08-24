@@ -1,8 +1,8 @@
 {
   "BeadsIssue": "0.1.0",
   "schemaVersion": "0.1.0",
-  "id": "FR-CRAZE-VAPORWARE-AWARENESS-make-craze-the-substrate-canonical-vaporware-collapse-gate-in-code",
-  "title": "Make craze vaporware-aware in code — read CrateModel + x-craze-collapse-path annotations, emit craze-collapse-receipts, become the substrate-canonical vaporware-collapse gate in IMPLEMENTATION not just doctrine",
+  "id": "FR-VAPORIZE-VAPORWARE-AWARENESS-make-vaporize-the-substrate-canonical-vaporware-collapse-gate-in-code",
+  "title": "Make Vaporize vaporware-aware in code — read CrateModel + x-craze-collapse-path annotations, emit vaporize-collapse-receipts, become the substrate-canonical vaporware-collapse gate in IMPLEMENTATION not just doctrine",
   "status": "open",
   "priority": 2,
   "issueType": "feature",
@@ -22,9 +22,9 @@
     "problemStatement": "craze TODAY is install/build/run/pass/setup — it has NO awareness of substrate-vapor concept in code. The axiom names craze as the substrate-canonical vaporware-collapse gate, but the CLI doesn't read typed records, doesn't honor x-craze-collapse-path annotations, doesn't emit collapse-receipts, doesn't refuse permanent-vapor invocation, doesn't enumerate vapor at a path. The axiom is doctrine-only until craze gains code-side awareness. This bead bridges the doctrine layer (typed records authored across 2 fan-in cycles) to the implementation layer (craze CLI behavior).",
     "dependsOn": [
       {
-        "bead": "FR-CRAZE-LIST-TARGETS-substrate-canonical-target-discovery",
+        "bead": "FR-VAPORIZE-LIST-TARGETS-substrate-canonical-target-discovery",
         "relation": "sibling - list-targets is one mode this bead composes with",
-        "path": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/FR-CRAZE-LIST-TARGETS-substrate-canonical-target-discovery.issue.json"
+        "path": "private/universal/substrate/collectives/swift-universal/private/product-lines/vaporize/kura-spaces/beads/FR-VAPORIZE-LIST-TARGETS-substrate-canonical-target-discovery.beads-issue.su.json"
       },
       {
         "bead": "FR-VAPOR-COORDINATION-CUT-v0.0.1-COORDINATED-SCHEMA-UNIVERSAL-CRAZE-BUILDS-VAPORWARE",
@@ -113,7 +113,7 @@
     "linkedTypedRecords": {
       "triggeringAxiom": "private/universal/substrate/collectives/spaces-universal/private/universal/kura-spaces/axioms/craze-builds-vaporware-typed-records-are-substrate-vapor-craze-is-the-collapse-gate.axiom.su.json",
       "schemaPrerequisite": "private/universal/substrate/collectives/schema-universal/private/universal/beads/FR-VAPOR-COORDINATION-CUT-v0.0.1-COORDINATED-SCHEMA-UNIVERSAL-CRAZE-BUILDS-VAPORWARE.issue.json",
-      "siblingDiscoveryBead": "private/universal/substrate/collectives/wrkstrm-core/private/apple/spm/vaporize@wrkstrm-core.cli/beads/FR-CRAZE-LIST-TARGETS-substrate-canonical-target-discovery.issue.json",
+      "siblingDiscoveryBead": "private/universal/substrate/collectives/swift-universal/private/product-lines/vaporize/kura-spaces/beads/FR-VAPORIZE-LIST-TARGETS-substrate-canonical-target-discovery.beads-issue.su.json",
       "cameronDraftSwiftCodableSketches": "private/universal/substrate/collectives/spaces-universal/private/universal/kura-spaces/csuite-fan-in-requests/2026-06-10-craze-builds-vaporware-identity-reframe/first-pass-drafts/swift-engineer-cameron-draft.contribution.json",
       "cycle1VaporInventoryEvidence": "private/universal/substrate/collectives/spaces-universal/private/universal/kura-spaces/csuite-fan-in-requests/2026-06-11-vapor-identification-product-lines-and-families/cycle1-aggregation-packet.json"
     },

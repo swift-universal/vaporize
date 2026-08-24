@@ -1,8 +1,8 @@
 {
   "BeadsIssue": "0.1.0",
   "schemaVersion": "0.1.0",
-  "id": "FR-CRAZE-LIST-TARGETS-substrate-canonical-target-discovery",
-  "title": "craze list-targets: substrate-canonical typed target discovery (find AND build through one gate)",
+  "id": "FR-VAPORIZE-LIST-TARGETS-substrate-canonical-target-discovery",
+  "title": "vaporize list-targets: substrate-canonical typed target discovery (find AND build through one gate)",
   "status": "open",
   "priority": 2,
   "issueType": "feature",
