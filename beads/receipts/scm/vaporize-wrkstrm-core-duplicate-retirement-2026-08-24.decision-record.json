@@ -1,0 +1,34 @@
+{
+  "repository_root": "C:/c/s/private/universal/substrate/collectives/wrkstrm-core",
+  "branch": "main",
+  "upstream": "origin/main",
+  "head": "cfc92f08830e3ce44f9cdc14a970d0ed78f5ef86",
+  "fetched_remote_tip": "cfc92f08830e3ce44f9cdc14a970d0ed78f5ef86",
+  "candidate_tree": "3748d2614aebc8f03a8d36b77378896d2ce81c19",
+  "tracked_paths_before": 21999,
+  "tracked_paths_after": 18786,
+  "staged_additions": 0,
+  "staged_modifications": 1,
+  "staged_renames": 0,
+  "staged_deletions": 3213,
+  "deletion_percentage": 14.61,
+  "staged_paths_attachment": {
+    "encoding": "UTF-8 lines from git diff --cached --name-status, joined with LF and terminated by LF",
+    "sha256": "cb1e6306833f7b87e5f988d659776850d84cd814abaa8d4a4d21c507a9ea83ea",
+    "line_count": 3214,
+    "complete_path_set": [
+      "D private/apple/spm/vaporize@wrkstrm-core.cli/** (all 3213 paths tracked by HEAD under this exact directory)",
+      "M private/product-lines/concourse/apps/concourse/project.pkl"
+    ],
+    "reproduction": "git diff --cached --name-status"
+  },
+  "submodule_reachability_evidence": "No gitlinks are staged in wrkstrm-core. Canonical Vaporize commit a582c934722c4ec47207da71fca0e3a759893360 is reachable from origin/main at https://github.com/swift-universal/vaporize.",
+  "other_worktrees_and_processes": "git worktree list reports only the main wrkstrm-core worktree at C:/c/s/.git/modules/private/universal/substrate/collectives/wrkstrm-core. No unexplained wrkstrm-core mutation was observed during the final evidence run.",
+  "recovery_ref": "refs/heads/safety/vaporize-old-copy-pre-removal-2026-08-24 at 588795b9b24cdf5b8485bfc2fdffa56f35dfa5d0",
+  "authorization_reference": "In the active 2026-08-24 session, after the exact old wrkstrm-core duplicate path and preservation plan were stated, rismay explicitly confirmed that the changes were authorized and requested removal of the other Vaporize copies. The same session had already authorized committing and pushing this migration.",
+  "retirement_reason": "Vaporize was extracted with history into its canonical standalone swift-universal product repository. Keeping the former wrkstrm-core source tree would create two mutable copies and ambiguous ownership.",
+  "reviewer": "rismay",
+  "risk_classification": "red threshold; explicit human-reviewed controlled repository migration",
+  "decision": "proceed",
+  "recorded_at": "2026-08-24T14:22:07Z"
+}
