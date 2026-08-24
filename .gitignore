@@ -1,2 +1,3 @@
 .build/
 *.profraw
+*.swift-package-source-policy.stamp

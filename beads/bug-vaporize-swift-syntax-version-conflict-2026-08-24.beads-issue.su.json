@@ -21,16 +21,18 @@
     "currentEvidence": [
       "swift package dump-package succeeds after replacing the stale swift-universal/swift-universal relative paths with repository-root-derived paths.",
       "wrkstrm-core common-service was upgraded to swift-syntax 602.0.0 and its 26 tests passed in commit cfc92f08830e3ce44f9cdc14a970d0ed78f5ef86.",
-      "A later Vaporize resolution attempt failed while checking out swift-log revision 30cfcd8df00eab82f3af0b165f61a20622830ec5."
+      "Default-mode resolution combines revision 30cfcd8df00eab82f3af0b165f61a20622830ec5 from wrkstrm-upstreams/swift-log with the apple/swift-log URL, so checkout fails because Apple does not contain that tree.",
+      "With SPM_USE_LOCAL_DEPS=1 and VAPORIZE_DISABLE_SWIFTLY=1, dependency resolution succeeds and the complete Windows build finishes, while SwiftPM warns that the local fork and apple/swift-log share the swift-log identity."
     ],
     "acceptanceCriteria": [
       "TranslateCatalogCore and common-service admit one compatible SwiftSyntax release line.",
-      "Resolve the swift-log checkout without suppressing dependency diagnostics.",
+      "Give apple/swift-log and the workstream fork one unambiguous package-identity strategy across common-log and common-process transitive dependencies.",
+      "Resolve and build in both default and SPM_USE_LOCAL_DEPS modes without an invalid mixed-source lockfile.",
       "Run Vaporize tests from private/product-lines/vaporize on Windows.",
       "Run dependency resolution in default and local-dependency modes.",
       "Do not bypass the conflict by removing either dependency or suppressing SwiftPM diagnostics."
     ],
-    "scopeBoundary": "Coordinate the owning package manifests; do not silently widen shared dependency constraints without their test suites and release evidence."
+    "scopeBoundary": "Coordinate the owning common-log, common-process, and upstream package manifests; do not suppress SwiftPM diagnostics or replace the temporal fork release with an unrelated Apple revision."
   },
   "sourceLocation": "Package.swift"
 }

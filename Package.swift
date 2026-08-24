@@ -27,7 +27,6 @@ guard let swiftUniversalDirectory = ancestor(
   fatalError("Vaporize must live beneath the swift-universal repository")
 }
 let collectivesDirectory = swiftUniversalDirectory.deletingLastPathComponent()
-let substrateDirectory = collectivesDirectory.deletingLastPathComponent()
 
 func repositoryPath(_ root: URL, _ relativePath: String) -> String {
   root.appendingPathComponent(relativePath).standardizedFileURL.path
@@ -96,8 +95,8 @@ let swiftCLIUpdaterDependency = Package.Dependency.package(
 )
 let swiftlyDependency = localOrRemote(
   path: repositoryPath(
-    substrateDirectory,
-    "upstreams/swiftlang/public/universal/tooling/swift/swiftly"
+    collectivesDirectory,
+    "wrkstrm-upstreams/private/upstreams/swiftlang/spm/swiftly"
   ),
   url: "https://github.com/swiftlang/swiftly.git",
   from: "1.1.3"

@@ -1,0 +1,39 @@
+{
+  "BeadsIssue": "0.1.0",
+  "schemaVersion": "0.1.0",
+  "id": "bug-vaporize-windows-test-baseline-2026-08-24",
+  "title": "Drain Vaporize Windows test-baseline failures",
+  "status": "open",
+  "priority": 1,
+  "issueType": "bug",
+  "labels": [
+    "vaporize",
+    "windows",
+    "swift-testing",
+    "migration-verification"
+  ],
+  "createdAt": "2026-08-24",
+  "createdBy": "Codex with operator direction",
+  "description": "Vaporize now resolves and compiles from private/product-lines/vaporize in consistent local-dependency mode, but the Windows test run exits with failures across fixture assumptions, command authority, generated documentation, i18n expectations, and missing host tooling.",
+  "historicalContent": {
+    "expectedBehavior": "The complete Vaporize suite passes on Windows from its standalone swift-universal product repository and produces a durable summary receipt.",
+    "currentEvidence": [
+      "SPM_USE_LOCAL_DEPS=1 and VAPORIZE_DISABLE_SWIFTLY=1 swift test completed the 3,303-step build in 144.24 seconds.",
+      "Generated-manual assertions observe CRLF content and an empty parsed option set.",
+      "Maintainer SwiftPM authority tests report Windows authority and Package.resolved snapshot failures.",
+      "i18n source-gate tests disagree with the current lowercase Bead identity and error rendering.",
+      "AppleProjectSpecCore xcrun materialization cannot run because the pkl command is absent from PATH.",
+      "Swift emitted repeated nonfatal incremental dependency-graph warnings at long .build paths."
+    ],
+    "acceptanceCriteria": [
+      "Classify every failing target as a product defect, Windows expectation defect, or missing host prerequisite.",
+      "Make generated-manual and snapshot assertions portable across Windows line endings and filesystem semantics.",
+      "Exercise Windows core commands through an explicit swift-win or wcode authority.",
+      "Provision or explicitly gate the pkl-dependent materialization test with actionable diagnostics.",
+      "Run the complete suite successfully on Windows and save a concise target-level summary receipt.",
+      "Track long-path incremental-cache warnings separately if they persist after the functional failures are drained."
+    ],
+    "scopeBoundary": "Do not weaken product assertions merely to make Windows green; preserve platform intent and split independently owned failures into child beads before implementation."
+  },
+  "sourceLocation": "tests"
+}
