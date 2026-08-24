@@ -1,0 +1,65 @@
+{
+  "BeadsIssue": "0.1.0",
+  "schemaVersion": "0.1.0",
+  "id": "FR-VAPORIZE-WINDOWS-PLATFORM-UPGRADE-DISCIPLINE-2026-08-21",
+  "title": "Document and prove Vaporize's staged Windows platform-upgrade discipline",
+  "status": "open",
+  "priority": 1,
+  "issueType": "feature",
+  "labels": [
+    "vaporize",
+    "windows",
+    "wcode",
+    "swift-win",
+    "platform-upgrade",
+    "engineering-docs",
+    "proof-lane",
+    "bead-tracking"
+  ],
+  "createdAt": "2026-08-21T00:00:00Z",
+  "createdBy": "codex after operator requested a slow, calculated Windows platform upgrade process",
+  "historicalContent": {
+    "slug": "FR-VAPORIZE-WINDOWS-PLATFORM-UPGRADE-DISCIPLINE-2026-08-21",
+    "kind": "bead-feature-request",
+    "createdAt": "2026-08-21T00:00:00Z",
+    "createdBy": "codex",
+    "assignee": "wrkstrm-core",
+    "severity": "high",
+    "sourceType": "operator-requested-engineering-documentation-and-upgrade-discipline",
+    "sourceLocation": "Codex session 2026-08-21: operator established WCode as the Windows application lifecycle authority and asked that the Windows upgrade move slowly and deliberately with Bead tracking.",
+    "description": "Vaporize must document and prove a repeatable Windows platform-upgrade path. swift-win remains the raw Package.swift authority and must reject application artifacts with a WCode next-step pointer. WCode owns application build, run, install, deployment, and custom tooling. The upgrade process must proceed as an evidence-first pilot: preflight the toolchain and Vaporize package, prove authority routing, build one app, run that same app, install it through an explicit WCode lifecycle script, then expand one platform variable at a time.",
+    "implementedFirstSlice": {
+      "engineeringDoc": "vaporize.engineering.docc/windows-platform-upgrade-process.md",
+      "readmeContract": "README.md#Windows-platform-upgrade-process",
+      "executionOwner": "sources/vaporize-cli/main.swift",
+      "authorityModel": "sources/vaporize-cli/VaporizeCoreExecutionPlan.swift",
+      "focusedCoverage": "tests/cuj-01-swiftpm-cli/VaporizeCUJ01SwiftPMCLITests.swift"
+    },
+    "acceptanceCriteria": [
+      "Engineering DocC names swift-win as the Package.swift-only authority and WCode as the Windows app lifecycle authority.",
+      "The lifecycle script contract documents WCODE_OPERATION, app identity, lifecycle flags, and WCODE_ARGUMENTS_JSON.",
+      "The process has ordered preflight, authority, build, run, install, and expansion gates with stated stop conditions.",
+      "Focused Windows authority coverage proves WCode owns app build/install/run and swift-win points an app install to the matching WCode operation.",
+      "A missing local Vaporize dependency is recorded as a Vaporize preflight blocker rather than misclassified as an app/platform failure.",
+      "At least one Windows app pilot records separate build, run, and install evidence before fleet/platform expansion is claimed.",
+      "WCode app test support remains explicitly tracked as a follow-up rather than silently invoking an Apple test path."
+    ],
+    "knownBlockingState": {
+      "observedAt": "2026-08-21",
+      "blocker": "The focused Vaporize test invocation cannot access its required local swift-log package checkout.",
+      "requiredNextAction": "Restore the declared local dependency, then rerun the focused CUJ-01 test bundle before beginning the pilot application gate."
+    },
+    "linkedTypedRecords": {
+      "engineeringDoc": "vaporize.engineering.docc/windows-platform-upgrade-process.md",
+      "commandOwnership": "vaporize.engineering.docc/command-ownership-map.md",
+      "featureCatalog": "vaporize.engineering.docc/feature-catalog.md",
+      "workstreamDiscipline": "beads/FR-VAPORIZE-WORKSTREAM-PROCESS-MODERNIZATION-2026-06-26.beads-issue.su.json"
+    }
+  },
+  "composesWith": [
+    "[[vaporize-builds-vaporware-warehouse-stores-vaporware]]",
+    "[[typed-receipts-over-ad-hoc-terminal-proof]]",
+    "[[component-bugs-file-at-component-home-not-consumer]]",
+    "[[owner-home-bead-precedes-job-board-projection]]"
+  ]
+}
