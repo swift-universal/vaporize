@@ -1,0 +1,31 @@
+{
+  "BeadsIssue": "0.1.0",
+  "schemaVersion": "0.1.0",
+  "id": "BUG-VAPORIZE-SWIFTUI-IMPORT-GATE-ISOLATED-RENDERER-TARGETS-2026-08-24",
+  "title": "Make the SwiftUI import gate target-aware for isolated renderer services",
+  "status": "open",
+  "priority": 0,
+  "issueType": "bug",
+  "labels": [
+    "vaporize",
+    "swiftui-import-gate",
+    "visual-variants",
+    "production-safety",
+    "target-isolation"
+  ],
+  "createdAt": "2026-08-24",
+  "createdBy": "operator (rismay) with Codex typed capture",
+  "description": "Vaporize currently marks an entire package as SwiftUniversalUI-adopted when any manifest text names SwiftUniversalUI, then scans every Swift source below the package. This incorrectly blocks a protected classic SwiftUI target when a separate experimental target in the same package adopts SwiftUniversalUI. Concourse now intentionally keeps its production SwiftUI renderer and experimental SwiftCrossUI renderer in separate files and targets so redesign work cannot interfere with the live UI.",
+  "acceptanceCriteria": [
+    "The import gate resolves the selected product to its actual target source roots instead of scanning unrelated targets package-wide.",
+    "A classic renderer target may continue importing SwiftUI directly while a separate experimental target imports SwiftUniversalUI.",
+    "The selected experimental target still hard-fails on direct SwiftUI imports.",
+    "Receipts record selected product, resolved targets, scanned source roots, exemptions, and findings.",
+    "Tests cover a package containing isolated classic-SwiftUI and SwiftUniversalUI renderer targets."
+  ],
+  "evidence": {
+    "observedPackage": "private/universal/substrate/collectives/wrkstrm-core/private/product-lines/concourse/apps/concourse",
+    "currentHeuristic": "packageDependsOnWrapper plus recursive package source scan",
+    "safeInterimProof": "vaporize test swift-win without a product runs both isolated policy and boundary suites"
+  }
+}
