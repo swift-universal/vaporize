@@ -250,13 +250,18 @@ enum MaintainerSwiftPMConfiguration {
   ) -> URL? {
     var candidate = absoluteURL(for: packagePath, fileManager: fileManager)
       .standardizedFileURL
-    while candidate.path != "/" {
+    while true {
       if candidate.lastPathComponent == "substrate" {
         return candidate
       }
-      candidate.deleteLastPathComponent()
+      let parent = candidate.deletingLastPathComponent().standardizedFileURL
+      // On Windows the volume root (for example, C:\) is its own parent;
+      // comparing against Unix "/" alone leaves this walk spinning forever.
+      guard parent.path != candidate.path else {
+        return nil
+      }
+      candidate = parent
     }
-    return nil
   }
 
   private static func registryURL(

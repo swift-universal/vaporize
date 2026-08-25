@@ -45,6 +45,16 @@ struct MaintainerSwiftPMAuthorityTests {
     )
   }
 
+  @Test("authority root walk terminates outside a substrate volume")
+  func authorityRootWalkTerminatesOutsideSubstrateVolume() throws {
+    let package = FileManager.default.temporaryDirectory
+      .appendingPathComponent("vaporize-outside-substrate-\\(UUID().uuidString)")
+    try FileManager.default.createDirectory(at: package, withIntermediateDirectories: true)
+    defer { try? FileManager.default.removeItem(at: package) }
+
+    #expect(try MaintainerSwiftPMConfiguration.editableDependencies(packagePath: package.path).isEmpty)
+  }
+
   @Test("pins and workspace state select the complete maintainer authority closure")
   func pinsAndWorkspaceSelectCompleteAuthorityClosure() throws {
     let fixture = try MaintainerAuthorityFixture(
