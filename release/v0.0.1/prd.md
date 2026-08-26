@@ -1,7 +1,7 @@
 # Vaporize v0.0.1 - PRD
 
 **Status:** release-prep draft; blocked pending fleet Pkl-backed Xcode world-state parity
-**Updated:** 2026-07-11T02:51:43Z
+**Updated:** 2026-08-25T21:30:00Z
 **Component:** `vaporize@wrkstrm-core.cli`
 **Release target:** internal essential substrate CLI
 **Tool classification:** `internal-essential-tool`
@@ -202,6 +202,17 @@ future hardware or other material-domain request families.
   `x-vaporize-collapse-path` records, with legacy `x-craze-collapse-path`
   read-only fallback.
 - Preserve graph analysis through the `graph` forwarder.
+- Own the contextual package-supply decision above SwiftPM so one temporal
+  dependency request can consume maintained source or an admitted provisioned
+  product without changing logical identity.
+- Preserve platform-, architecture-, configuration-, toolchain-, channel-, and
+  representation-specific SwiftPM resolutions as an admitted matrix rather
+  than treating one root `Package.resolved` as universal truth.
+- Use Git as the temporal catalog and admission ledger, with an optional
+  artifact depot carrying large payload bytes behind an admitted record.
+- Emit correlated package-supply events to a durable local outbox and project
+  requested, resolved, and provisioned X-of-Y build intelligence outside the
+  build's critical path.
 - Block final internal v0.0.1 release until substrate-owned XcodeGen project
   generation is replaced by a Pkl-backed owned path across the required fleet
   or remaining surfaces are explicitly quarantined.
@@ -222,6 +233,12 @@ future hardware or other material-domain request families.
 - Do not remove historical compatibility understanding for legacy `craze`
   records; this release can classify legacy annotation keys while naming
   Vaporize as the forward canonical surface.
+- Do not replace SwiftPM as the dependency resolver or compiler. Vaporize owns
+  context, policy, orchestration, admission, and evidence around SwiftPM.
+- Do not treat an artifact depot, Git revision, or payload digest as the normal
+  temporal compatibility authority.
+- Do not allow a client product miss to publish producer-private source or let
+  build correctness depend on remote analytics availability.
 
 ## Audience
 
@@ -278,6 +295,33 @@ Supporting audiences:
 | FR-033 | Product proving-ground passports | Vaporware products carry a typed proving-ground profile naming product class, owning bead, CUJs, required tracks, scenarios, targetable tests, receipts, release-doctor checks, and boundaries. The adoption gate fails missing tracks, missing CUJs, missing receipt refs, missing targetable test bundles, and unknown track slugs. This proves release-review evidence shape; it does not approve the release or replace product-specific behavioral tests. |
 | FR-034 | Canonical automated-proof ledger | `cuj-audit --proof-ledger-path <path>` writes a typed cross-portfolio ledger that binds each CUJ definition to declared proof references, resolvable owning-package tests, saved green execution receipts, last-proven chronons, and explicit remaining obligations. The canonical ledger lives in the `vaporware-cuj-state-workstream`; executable tests and green receipts remain in their owning implementation and evidence homes. Only explicit green receipt results count as saved evidence, and automation never substitutes for required human approval. |
 | FR-035 | Fine-grained implementation-project CUJ coverage | `cuj-audit --project-ledger-path <json> --project-ledger-csv-path <csv>` writes one row per active-owned implementation project with owner, domain, product line, exact surface paths, mapping method and confidence, composite `(projectKey, definitionID)` references, definition source classes, proof-state and obligation counts, typed/binding/executable/evidence/chronon/structural/strict proof legs, completion basis points, coverage band, and quantified next actions. Harness runtime `jobs/` snapshots, dependency checkouts, generated state, and projections do not enter the active-owned denominator. Aggregate-only reporting does not satisfy this requirement. |
+| FR-036 | Contextual dependency representation | A logical dependency request selects either a canonical in-place maintained source checkout or an admitted provisioned product without changing the dependency's identity or temporal compatibility requirement. The active root package remains source; development dependencies prefer products when compatible products exist. The direct-local route must not create a SwiftPM editable checkout. `pri`, `pro`, and `pub` are visibility projections, not three unrelated package identities. |
+| FR-037 | Temporal compatibility authority | Dependency requirements use Calendar-Origin temporal versions in `Major.YYMM.DDHHR` form with SwiftPM `from:` semantics: the selected coordinate is in `[from, nextMajor(from))`. A commit revision and artifact digest are provenance and integrity evidence after selection; neither becomes the normal public compatibility selector. |
+| FR-038 | Contextual resolution matrix | Vaporize derives product, platform, architecture, configuration, toolchain, release channel, and dependency-representation context from the active command; configuration comes from parsed SwiftPM/Vaporize build parameters, not from the logical dependency declaration. SwiftPM computes `Package.resolved`; Vaporize captures, validates, and admits the result as a contextual resolution artifact. The root `Package.resolved` is the current projection and must not overwrite or impersonate the admitted multi-context matrix. |
+| FR-039 | Git-backed admitted-build discovery | Provisioned Git repositories are the temporal catalog and admission ledger. Vaporize may fetch refs or inspect remotes without pulling into the user's working tree, selects only compatible admitted build records, and treats an optional artifact depot as payload storage behind the selected Git record rather than a peer version authority. |
+| FR-040 | Explicit freshness and adoption policy | `locked`, `refresh`, `update-compatible`, and `offline` are distinct policies. Discovery may report a newer compatible resolution or artifact, but only an explicit adoption policy may update the selected graph or contextual `Package.resolved`; a fetch alone never silently advances the build. |
+| FR-041 | Product hit, product miss, and producer retry | A compatible product hit consumes the admitted product without compiling that dependency from source. A client product miss returns typed `ProvisioningRequired`. An authorized producer lane may build from source, verify, admit, and retry product selection exactly once; it must not loop or publish from an untrusted client lane. |
+| FR-042 | Provisioned payload size and privacy gates | Artifacts at or above 100 MiB are never committed to Git. Smaller exceptional payloads may be embedded only under explicit policy; normal large payloads live in the artifact depot. A provisioned repository or payload must not expose producer source paths, usernames, environment values, secrets, private topology, raw logs, signing material, or unstripped debug information. |
+| FR-043 | Release source-closure policy | Developer workflows may build the active package from source while consuming admitted products for dependencies. Large product release workflows rebuild the entire dependency closure from admitted source under the selected temporal graph and record that source-closure proof; a product-first development build is not release-source proof. |
+| FR-044 | Observable package-supply state machine | Vaporize records typed transitions from requested through resolution discovery, selection, artifact lookup, product hit or miss, build, verification, admission, and terminal success or failure. Every terminal and interrupted path produces a durable local receipt or recoverable state record correlated through CommonLog, Service Context, and Distributed Tracing identifiers. |
+| FR-045 | Non-blocking build intelligence | Build observations enter a durable local outbox before asynchronous projection. Normal builds do not depend on remote analytics availability. The projector reports requested, resolved, and provisioned X-of-Y coverage; product-hit rate; source/product ratio; missing and stale contexts; build duration; and freshness posture. A release admission policy may separately require acknowledgement of its receipt. |
+| FR-046 | Schema Universal contracts | Schema Universal owns typed package-resolution context, request, artifact, and receipt models; build-run event and receipt models; artifact observation and admission models; portfolio projection and coverage-cell models; and performance and freshness summaries. Vaporize implementation cannot call the architecture complete while these records remain ad hoc dictionaries or log parsing conventions. |
+| FR-047 | Cross-platform service and proof boundaries | Package discovery, resolution, provision, admission, and observation are service contracts with separate operating-system test suites. Service implementations do not use compile-time platform branches to combine unrelated OS behavior, and all process execution routes through CommonProcess. Platform-specific manifests and prerequisite sets are selected as data or policy. |
+| FR-048 | Source and product gate isolation | Source selection continues through maintainer-authority and source gates at the canonical in-place checkout. Product selection uses admission, compatibility, integrity, privacy, and payload-availability gates instead. The provisioned-product route is separate from the legacy SwiftPM edit-mode path: it must not call `swift package edit`, restore away a legitimate resolution update, or mutate a maintainer's source checkout. |
+| FR-049 | CLI one-turn application lifecycle | Vaporize models every invocation as launch, service composition, policy activation, workflow selection, execution, typed receipt, and termination. CLI and app are not architectural opposites; their interface and lifetime differ. |
+| FR-050 | Canonical feature-policy composition | The Vaporize CLI composition root depends on `CommonFeatureFlags`, declares the library-product flag in `ReleaseFlagSnapshot.compiledFeatures` with compiled/default value OFF, instantiates `OverridableFeatureFlagService`, and injects `PolicyEvaluatorService` into workflow selection. These are the four current WarehouseKit feature-flag integration obligations. |
+| FR-051 | Sibling workflow isolation | Policy selects either the unchanged legacy SwiftPM executable workflow service or a separate SwiftPM library-product build/test workflow service before execution. Workflow services do not read ambient flag state, and the new workflow does not overload the legacy artifact path. |
+| FR-052 | Exact flag-off compatibility | With the feature OFF or with no new options supplied, existing callers retain current manifest, planning, resolution, process request, exit, and receipt behavior. The invocation performs no depot lookup, network probe, product selection, or implicit fallback. |
+| FR-053 | Typed feature graph and build receipts | A Beads v0.0.3 parent feature and typed dependency edges own readiness across analysis, product-document deltas, implementation, experiment, analytics, human decision, flag/dead-branch removal, and closure validation. Schema Universal owns the library-product build/test and analytics receipt contracts; Vaporize does not invent app-local substitutes. |
+| FR-054 | Contextual carrier policy | One logical dependency and Calendar-Origin temporal requirement select the best admitted carrier for the active context: XCFramework on Apple, target-triple artifact on Linux/Windows, or SDK/NDK/API/architecture-specific carrier on Android. A miss selects explicit source fallback or typed `ProvisioningRequired`; the depot remains optional payload data behind the admitted record. |
+| FR-055 | Experiment decision and mandatory cleanup | The existing library-only problem bead is the implementation child of the parent feature. Vaporize reuses `feature-gated-cli-dependency-experiment`; analytics receipts are required before a human promotion/rejection decision, and every decision is followed by removal of the temporary flag and losing branch. Parent closure is blocked until validation proves cleanup and final unflagged behavior. |
+
+FR-036 through FR-055 define the next package-supply and build-intelligence
+lane. They are requirements-defined and implementation-pending. They do not
+expand the v0.0.1 executable proof count or release claim until their pre-code
+review, schema contracts, targetable tests, and receipts land. Their journeys
+are CUJ-28 through CUJ-42 and their engineering contract is
+<doc:package-supply-and-build-intelligence>.
 
 ## Release Criteria
 

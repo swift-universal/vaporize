@@ -14,6 +14,87 @@ The architectural unit is not "run a command." The unit is a bounded
 engineering operation with named inputs, predictable outputs, and evidence that
 can be referenced later.
 
+## CLI Application Lifecycle And Feature Selection
+
+Vaporize is an application even though its interface is a CLI. Each invocation
+has one bounded lifecycle:
+
+```text
+launch
+  -> compose services
+  -> activate policy
+  -> select workflow
+  -> execute
+  -> emit receipt
+  -> terminate
+```
+
+Experimental behavior is selected at the composition root before either
+workflow executes. `CommonFeatureFlags` is the canonical flag service.
+Vaporize's composition root must declare the feature in
+`ReleaseFlagSnapshot.compiledFeatures`, construct
+`OverridableFeatureFlagService`, and inject its `PolicyEvaluatorService` into a
+workflow selector. The compiled and runtime default for the SwiftPM
+library-product feature is OFF.
+
+The selector hands one typed request to one of two sibling services:
+
+- the existing legacy SwiftPM executable workflow, unchanged; or
+- the new SwiftPM library-product build/test workflow.
+
+Neither workflow reads ambient feature state. Policy selection happens once,
+before execution. With the flag OFF—or with no new feature input—the complete
+legacy plan remains the production plan: no depot lookup, no network probe, no
+product-carrier selection, no resolution change, and no new receipt shape. The
+new service does not extend or reinterpret the legacy artifact enum/path.
+
+The current WarehouseKit `FeatureFlagIntegrationAudit` supplies four mechanical
+integration gates: a `Package.swift` `CommonFeatureFlags` dependency, a
+`PolicyEvaluatorService` injection point, a
+`ReleaseFlagSnapshot.compiledFeatures` declaration, and an
+`OverridableFeatureFlagService` instantiation. Those checks are necessary but
+not sufficient; targetable flag-off equivalence, flag-on behavior, typed
+receipts, and launch-review documentation remain separate validation gates.
+
+## Feature Bead Graph Gate
+
+This feature is represented by a Beads v0.0.3 parent feature and a dependency
+graph whose readiness can be computed. Before implementation, the graph must
+define at least:
+
+- CUJ, PRD, and design references;
+- legacy and experimental sibling workflow service references;
+- `CommonFeatureFlags`, `ReleaseFlagModel`, flag default, and policy evaluator;
+- Schema Universal request, result, and receipt dependencies;
+- platform, runtime, toolchain, and carrier scope;
+- acceptance and validation gates;
+- rollout, rollback, mandatory flag removal, dead-branch cleanup, and closure
+  validation; and
+- child bead and child workstream references.
+
+The existing
+`FR-VAPORIZE-BUILD-TEST-LIBRARY-ONLY-PRODUCT-2026-07-08` bead is the observed
+implementation-problem child, not a second feature. The already-defined
+`feature-gated-cli-dependency-experiment` is the specialized execution workflow
+for the Vaporize experiment; its stages must be reused rather than copied into
+the feature graph.
+
+The required lifecycle tail is not optional backlog:
+
+```text
+flagged implementation
+  -> experiment plan and run
+  -> analytics receipts
+  -> human decision
+  -> remove flag and dead branch
+  -> closure validation
+```
+
+Analytics receipts are required evidence for the human decision. Whether the
+candidate is promoted or rejected, the temporary flag and losing branch must be
+removed. The parent feature cannot close until closure validation proves that
+cleanup and the final unflagged behavior.
+
 ## Command Families
 
 The current v0.0.1 command surface includes these families:
@@ -146,6 +227,24 @@ DerivedData path so future projects can reuse the same product cache.
 The current proof covers cache-first lookup and shared workspace invocation. It
 does not yet prove fleet-level disk savings or automatic workspace
 scheme/product discovery.
+
+## Planned Package-Supply Boundary
+
+Vaporize's next package-supply lane treats a build as more than a command plus
+an output path. It binds a logical temporal dependency request to a contextual
+SwiftPM resolution and then selects maintained source or an admitted provisioned
+product.
+
+Git remains the temporal catalog and admission ledger. An optional artifact
+depot carries large payload bytes behind the admitted Git record. SwiftPM
+remains the resolver and compiler. Vaporize supplies policy and context,
+captures `Package.resolved`, verifies provisioned payloads, and emits the state
+machine and build-intelligence receipts.
+
+This lane is requirements-defined and implementation-pending. Its full PRD,
+CUJs, visibility rules, freshness policies, privacy boundary, schema inventory,
+and X-of-Y coverage model are in
+<doc:package-supply-and-build-intelligence>.
 
 ## Receipts
 

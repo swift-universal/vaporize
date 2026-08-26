@@ -35,6 +35,7 @@ and explicit disposition of remaining XcodeGen surfaces.
 - <doc:modularity-and-ownership-boundaries>
 - <doc:vaporware-modification-request-discipline>
 - <doc:command-and-artifact-architecture>
+- <doc:package-supply-and-build-intelligence>
 - <doc:command-ownership-map>
 - <doc:vaporize-wcode-service-topology-engineering-design>
 - <doc:swiftpm-cli-resource-bundle-installs>

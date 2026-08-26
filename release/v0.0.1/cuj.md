@@ -1,7 +1,7 @@
 # Vaporize v0.0.1 - Critical User Journeys
 
 **Status:** release-prep draft; blocked pending fleet Pkl project-generation parity
-**Updated:** 2026-07-11T02:51:43Z
+**Updated:** 2026-08-25T21:30:00Z
 **Component:** `vaporize@wrkstrm-core.cli`
 **Tool classification:** `internal-essential-tool`
 
@@ -30,6 +30,18 @@ one product-level journey.
 | Assistant audits CUJ coverage across canonical product homes and active-owned implementation projects without hand scans | CUJ-25 |
 | Assistant uses one canonical ledger to find executable CUJ proofs, saved green receipts, and remaining proof obligations | CUJ-26 |
 | Assistant inspects CUJ coverage and next actions for every active-owned implementation project without reducing the census to aggregate counts | CUJ-27 |
+| Developer chooses maintained source or an admitted provisioned dependency product under one temporal requirement | CUJ-28, CUJ-29, CUJ-39 |
+| Client receives a typed product miss while an authorized producer may provision and retry once | CUJ-30 |
+| Developer refreshes discovery, explicitly adopts a compatible update, or builds offline without hidden graph mutation | CUJ-31 |
+| Release and platform owners preserve distinct contextual SwiftPM resolutions instead of overwriting one root lock file | CUJ-32 |
+| Client retrieves a large admitted payload without committing it to Git or exposing producer-private information | CUJ-33, CUJ-34 |
+| Release owner proves a full source-closure build rather than treating product-first development as release proof | CUJ-35 |
+| Operator follows a correlated package-supply state machine and recovers truthful terminal state after interruption | CUJ-36 |
+| Portfolio owner sees requested, resolved, and provisioned X-of-Y build coverage without putting analytics in the build's critical path | CUJ-37 |
+| Platform owner supplies a platform-specific manifest and proves its services through a separate OS test suite | CUJ-38 |
+| Existing user invokes Vaporize with the library-product feature disabled and receives exact legacy behavior | CUJ-40 |
+| Developer explicitly enables the experiment and builds/tests a SwiftPM library product through a sibling service | CUJ-41 |
+| Product owner reviews experiment analytics, decides, and closes only after flag and dead-branch removal | CUJ-42 |
 
 ## CUJ-01 - Assistant Builds And Installs A SwiftPM CLI
 
@@ -686,6 +698,14 @@ Current active-CUJ requirement:
 - CUJ-state coverage artifact:
   `release/v0.0.1/evidence/cuj-state-coverage.json`
 
+### Requirements-Defined Package-Supply Journeys
+
+CUJ-28 through CUJ-42 are product-line requirements, not v0.0.1 executable
+claims. They do not enter the 132-test or 14-evidence-check floor above until a
+pre-code PRD review fixes their targetable test obligations and Schema Universal
+contracts. Until then, release evidence must report them as
+`requirements-defined; implementation-pending`, never `proven`.
+
 ## CUJ-24 - Assistant Trusts Install Integrity
 
 1. Assistant runs a Vaporize install (`--artifact cli` or `--artifact app`).
@@ -806,6 +826,281 @@ Acceptance:
   one row per project.
 - `VaporizeCUJ27ProjectCoverageLedgerTests` proves CLI paths, one-row-per-project
   dimensions, CSV completeness, typed JSON round trip, rollups, and boundaries.
+
+## CUJ-28 - Developer Selects Maintained Local Source
+
+1. A developer requests a logical dependency with a Calendar-Origin temporal
+   `from:` requirement and chooses the source representation.
+2. Vaporize resolves the maintained `pri` source home as a canonical in-place
+   checkout without changing the dependency identity or compatibility range.
+3. SwiftPM computes the graph for the command's platform, architecture,
+   configuration, toolchain, and release channel.
+4. Vaporize records the contextual resolution and runs maintainer/source gates
+   before compiling.
+
+Acceptance:
+
+- Source selection never rewrites the dependency as a product-only identity.
+- The direct-local route creates no SwiftPM editable checkout; any legacy
+  maintainer edit-mode cleanup cannot restore away an explicitly adopted
+  resolution update.
+- Process execution uses CommonProcess.
+
+## CUJ-29 - Developer Consumes An Admitted Provisioned Product
+
+1. A developer selects product representation for a compatible dependency.
+2. Vaporize checks local and permitted remote `pro` Git records for a compatible
+   admitted build matching the derived build context.
+3. It verifies admission, integrity, privacy, and payload availability.
+4. SwiftPM consumes the provisioned product without compiling that dependency
+   from source, while the active root package continues to build from source.
+
+Acceptance:
+
+- Git is the temporal catalog and admission ledger.
+- An artifact digest verifies the selected payload; it does not select the
+  dependency.
+- The receipt distinguishes a true product hit from a source build.
+
+## CUJ-30 - Client Receives ProvisioningRequired Or Producer Provisions Once
+
+1. Vaporize finds no compatible admitted product for the requested context.
+2. In client mode, it returns typed `ProvisioningRequired` with the missing
+   context and does not compile or publish private source.
+3. In an authorized producer mode, it builds from source, verifies the output,
+   admits the contextual resolution and product record, and retries lookup once.
+4. The retry either returns the admitted product or a typed terminal failure.
+
+Acceptance:
+
+- Client and producer authority are explicit policy, not inferred from a
+  writable directory.
+- Provisioning cannot retry indefinitely.
+- Only a trusted admission lane publishes `pro` state.
+
+## CUJ-31 - Developer Controls Freshness And Adoption
+
+1. The developer chooses `locked`, `refresh`, `update-compatible`, or `offline`.
+2. `refresh` fetches or inspects Git refs without pulling into the user's
+   working tree and reports newer compatible candidates.
+3. `update-compatible` explicitly adopts a compatible candidate and permits
+   SwiftPM to update the contextual resolution projection.
+4. `locked` holds the admitted selection; `offline` uses only locally available
+   admitted records and payloads.
+
+Acceptance:
+
+- Discovery, selection, and adoption are separate recorded states.
+- A fetch never silently changes `Package.resolved` or the active graph.
+- An offline miss is typed and explains which local record or payload is absent.
+
+## CUJ-32 - Release Owner Preserves A Contextual Resolution Matrix
+
+1. A release owner requests builds across two or more platform, architecture,
+   configuration, toolchain, channel, or dependency-representation contexts.
+2. SwiftPM computes `Package.resolved` for each supplied context.
+3. Vaporize captures and validates each resolution as a separately keyed
+   artifact, then admits the trusted records to Git.
+4. The root `Package.resolved` remains only the current working projection.
+
+Acceptance:
+
+- Parallel builds cannot overwrite another context's admitted resolution.
+- A missing client context returns `ProvisioningRequired` rather than borrowing
+  a similar but incompatible lock file.
+- The producer and admission lane are named in the receipt.
+
+## CUJ-33 - Client Retrieves A Depot-Backed Payload
+
+1. Vaporize selects an admitted Git record whose payload is stored in the
+   optional artifact depot.
+2. The record supplies the payload coordinate, expected size, and integrity
+   evidence.
+3. Vaporize retrieves or reuses the payload, verifies it, and makes it available
+   to the provisioned package contract.
+4. The receipt binds the Git admission record to the verified depot payload.
+
+Acceptance:
+
+- The depot is a data plane behind Git, not a competing version selector.
+- Artifacts at or above 100 MiB are never committed to Git.
+- A missing, truncated, or mismatched payload fails before consumption.
+
+## CUJ-34 - Provisioner Blocks Private-Information Leakage
+
+1. An authorized producer prepares a candidate `pro` repository or depot
+   payload from a `pri` source build.
+2. Vaporize scans manifest metadata, paths, logs, symbols, environment-derived
+   values, and packaging inputs at the provision boundary.
+3. Any producer source path, username, environment secret, private topology,
+   raw receipt/log, signing material, or prohibited debug information blocks
+   admission.
+4. A clean candidate receives a privacy-gate receipt that can be referenced by
+   the admitted build record.
+
+Acceptance:
+
+- Redaction after publication is not considered a passing strategy.
+- Privacy evidence records categories and findings without copying the secret.
+- `pro` remains private and client-facing; it is not public merely because it
+  omits source.
+
+## CUJ-35 - Release Owner Rebuilds The Full Closure From Source
+
+1. A release owner selects a large-product release channel and source-closure
+   policy.
+2. Vaporize resolves the admitted temporal graph, materializes trusted source
+   for every dependency, and builds the complete closure in the requested
+   configuration.
+3. It verifies the release products and records source provenance for every
+   dependency.
+4. The release receipt explicitly distinguishes this build from product-first
+   developer acceleration.
+
+Acceptance:
+
+- A product-first development receipt cannot satisfy the source-closure gate.
+- Release channel and debug/release configuration remain separate axes.
+- Debug/release is derived from the Vaporize/SwiftPM command context, not baked
+  into each logical dependency declaration.
+
+## CUJ-36 - Operator Follows And Recovers The Supply State Machine
+
+1. An operator starts a package-supply operation and receives one correlation
+   identity across CommonLog, Service Context, Distributed Tracing, events, and
+   the final receipt.
+2. Vaporize records requested, resolution discovery, selection, artifact lookup,
+   hit/miss, build, verification, admission, and terminal transitions as they
+   occur.
+3. If the process fails or is interrupted, the durable local outbox retains the
+   last truthful transition and terminal or recoverable disposition.
+4. A later projector can reconstruct the operation without scraping console
+   text or guessing from missing output.
+
+Acceptance:
+
+- Human-readable logs are a projection; typed receipts and events are durable
+  truth.
+- Every failure names the last completed state and the unmet transition.
+- Remote analytics availability cannot block the build.
+
+## CUJ-37 - Portfolio Owner Reads X-Of-Y Build Intelligence
+
+1. The build-intelligence projector consumes local outbox observations
+   asynchronously.
+2. It groups demand by product, platform, architecture, configuration,
+   toolchain, channel, and dependency representation.
+3. It reports requested, resolved, and provisioned X-of-Y coverage plus product
+   hit rate, source/product ratio, stale and missing contexts, duration, and
+   freshness posture.
+4. The owner drills from a summary cell to its admitted resolution, build, and
+   artifact receipts.
+
+Acceptance:
+
+- Requested, resolved, and provisioned are never collapsed into one success
+  counter.
+- Git supplies historical admission facts; the projection remains rebuildable.
+- Analytics can lag without changing build correctness.
+
+## CUJ-38 - Platform Owner Selects A Platform Manifest And OS Proof Suite
+
+1. Vaporize derives the platform environment before prerequisite, resolution,
+   and provision planning.
+2. Policy selects the matching manifest and service implementations as data.
+3. The platform-specific test suite proves discovery, process execution,
+   resolution, failure, and receipt behavior on that OS.
+4. The same logical service contract returns comparable typed results across
+   supported platforms.
+
+Acceptance:
+
+- Service implementations do not hide different OS behavior behind compile-time
+  conditional branches.
+- Each supported OS has a separate test suite.
+- All subprocess work uses CommonProcess.
+
+## CUJ-39 - Package Author Declares One Temporal Dependency Request
+
+1. A package author declares a logical dependency coordinate, its local and
+   permitted remote locations, and a Calendar-Origin `from:` version.
+2. The author may optionally permit source or product representation without
+   encoding command configuration into the declaration. An admitted product
+   record may identify an embedded payload or a depot locator; the depot is not
+   a third representation or a dependency-selection route.
+3. Vaporize derives debug/release, platform, architecture, toolchain, and release
+   channel from the active command context.
+4. The selected representation produces the same logical dependency identity
+   and a context-specific receipt.
+
+Acceptance:
+
+- The declaration does not pin ordinary compatibility to an instantly stale
+  hash.
+- `Major.YYMM.DDHHR` compatibility remains inside the declared major.
+- Local and permitted remote repository endpoints describe supply routes for
+  the same dependency identity. A depot locator is payload data attached to the
+  Git-selected admitted record, never a competing route or version authority.
+
+## CUJ-40 - Existing User Receives Exact Legacy Behavior
+
+1. A user launches Vaporize without enabling the SwiftPM library-product
+   feature and supplies an existing command or manifest.
+2. The CLI composes `CommonFeatureFlags`, activates the compiled/default OFF
+   policy, and selects the legacy workflow service.
+3. The unchanged service plans and executes the operation and emits its current
+   receipt.
+4. The CLI terminates without consulting a depot, probing a network, selecting
+   a product carrier, or mutating resolution state for the experiment.
+
+Acceptance:
+
+- Golden proof covers command planning, arguments, process requests, exit
+  behavior, manifest output, resolution behavior, and receipt bytes or an
+  explicitly documented semantic normalization.
+- The legacy workflow implementation is not edited to host the experiment.
+- Rollback is policy-only: OFF selects legacy behavior on the next launch.
+
+## CUJ-41 - Developer Runs The Library-Product Sibling Workflow
+
+1. A developer explicitly enables the compiled-disabled feature for a
+   library-only SwiftPM fixture.
+2. `PolicyEvaluatorService` selects the library-product sibling before
+   execution.
+3. The sibling builds and tests the named library product without requiring a
+   CLI-shaped product identity.
+4. Vaporize emits a Schema Universal-owned typed receipt naming the workflow,
+   product kind, actual platform context, and outcome, then terminates.
+
+Acceptance:
+
+- WarehouseKit audit proves the `CommonFeatureFlags` dependency,
+  `PolicyEvaluatorService` injection, `ReleaseFlagSnapshot.compiledFeatures`,
+  and `OverridableFeatureFlagService` construction obligations.
+- The first proof names the carrier actually tested and makes no universal
+  carrier claim.
+- A carrier miss produces explicit source fallback or typed
+  `ProvisioningRequired`; the depot remains optional.
+
+## CUJ-42 - Product Owner Decides And Removes The Experiment
+
+1. The Beads v0.0.3 feature graph has completed impact analysis, product
+   document deltas, flagged sibling implementation, and the existing
+   `feature-gated-cli-dependency-experiment` plan/run stages.
+2. The analytics child produces typed cohort receipts before asking for a
+   decision.
+3. A human promotes or rejects the candidate from those receipts.
+4. The cleanup child removes the temporary flag and losing branch, and closure
+   validation proves the surviving unflagged behavior before the parent closes.
+
+Acceptance:
+
+- `parentId` and typed `blocks` edges make every readiness transition
+  computable.
+- `FR-VAPORIZE-BUILD-TEST-LIBRARY-ONLY-PRODUCT-2026-07-08` remains the mapped
+  implementation-problem child rather than a duplicate.
+- No decision occurs without analytics receipts, and no decision completes the
+  feature while the flag or dead branch remains.
 
 ## Deferred CUJ - Assistant Proves Fleet Pkl-Backed Apple Project Build Parity
 
