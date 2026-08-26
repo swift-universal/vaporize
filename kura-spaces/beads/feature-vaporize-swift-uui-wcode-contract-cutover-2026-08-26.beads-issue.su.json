@@ -1,0 +1,32 @@
+{
+  "beads-issue-model": "0.0.1",
+  "id": "feature-vaporize-swift-uui-wcode-contract-cutover-2026-08-26",
+  "title": "Cut Vaporize WCode fixtures and guidance over to SwiftUUI",
+  "createdAt": "2026-08-26T22:58:29Z",
+  "updatedAt": "2026-08-26T22:58:29Z",
+  "createdBy": "Codex at operator direction",
+  "sourceSystem": "swift-universal/vaporize",
+  "sourceType": "feature-request",
+  "owner": "vaporize",
+  "issueType": "feature",
+  "status": "closed",
+  "priority": 1,
+  "labels": [
+    "vaporize",
+    "wcode",
+    "swift-uui",
+    "windows",
+    "hard-cutover"
+  ],
+  "description": "Replace the retired SCUI backend environment key in Vaporize's current Windows WCode documentation and CUJ-01 fixture. The only admitted key is SWIFTUUI_DEFAULT_BACKEND; no compatibility translation or alias was added.",
+  "acceptanceCriteria": "The current WCode Windows-upgrade command and its executable CUJ fixture use SWIFTUUI_DEFAULT_BACKEND, active Vaporize surfaces contain no retired SCUI key, Package.swift describes successfully, and the focused Windows lifecycle-configuration test passes.",
+  "implementationReceipt": {
+    "closedAt": "2026-08-26T22:58:29Z",
+    "identityAudit": "The two current Vaporize surfaces contain no SCUI or SwiftCrossUI identity.",
+    "manifest": "swift package describe --type json passed on Windows.",
+    "focusedTest": "CUJ-01 routes Windows app lifecycle configuration through WCode passed 1 of 1 in 0.014 seconds.",
+    "knownWarnings": [
+      "SwiftPM reports existing duplicate local and remote package identities; the focused assertion still passed."
+    ]
+  }
+}

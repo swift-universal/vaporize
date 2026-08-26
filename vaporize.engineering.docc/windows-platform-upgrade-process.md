@@ -130,7 +130,7 @@ swift package dump-package
 swift test --filter VaporizeCUJ01SwiftPMCLITests
 
 # 1. Build and run the chosen Windows app through its app authority.
-vaporize build wcode --artifact app --package-path <package> --product <app-product> --configuration debug --wcode-environment SCUI_DEFAULT_BACKEND=WinUIBackend --analyze --receipt-path <build-receipt.json>
+vaporize build wcode --artifact app --package-path <package> --product <app-product> --configuration debug --wcode-environment SWIFTUUI_DEFAULT_BACKEND=WinUIBackend --analyze --receipt-path <build-receipt.json>
 vaporize run wcode --artifact app --package-path <package> --product <app-product> --configuration debug --analyze --receipt-path <run-receipt.json> -- <app-arguments>
 
 # 2. Let the project own deployment details, but preserve Vaporize's lifecycle boundary.

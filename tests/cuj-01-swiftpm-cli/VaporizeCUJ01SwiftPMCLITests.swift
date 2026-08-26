@@ -1076,7 +1076,7 @@ private func assertActionableVaporizeProductValidationError(
       "--package-path", "C:\\workspace\\town",
       "--product", "TownWindowsDemo",
       "--configuration", "debug",
-      "--wcode-environment", "SCUI_DEFAULT_BACKEND=WinUIBackend",
+      "--wcode-environment", "SWIFTUUI_DEFAULT_BACKEND=WinUIBackend",
       "--wcode-environment", "WCODE_THEME=night",
       "--destination", "C:\\Apps\\Town",
       "--force",
@@ -1112,7 +1112,7 @@ private func assertActionableVaporizeProductValidationError(
       "WCODE_SKIP_INSTALL": "1",
       "WCODE_LAUNCH": "1",
       "WCODE_ARGUMENTS_JSON": "[\"--app-argument\"]",
-      "SCUI_DEFAULT_BACKEND": "WinUIBackend",
+      "SWIFTUUI_DEFAULT_BACKEND": "WinUIBackend",
       "WCODE_THEME": "night",
     ]
     for (name, value) in expectedWCodeEnvironment {
