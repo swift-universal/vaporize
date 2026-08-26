@@ -15,6 +15,8 @@ enum VaporizeI18nSourceGateError: Error, LocalizedError {
     receiptPath: String,
     failure: String
   )
+  case baselineCaptured(path: String)
+  case baselineRejected(reason: String, receiptPath: String)
 
   var errorDescription: String? {
     switch self {
@@ -27,6 +29,10 @@ enum VaporizeI18nSourceGateError: Error, LocalizedError {
 ))])
     case .beadImprintFailed(let report, let receiptPath, let failure):
       return vaporizeCopyFill(VaporizeCLICopy_v000_000_001.CLI.vaporizeA1VA2CompletedForA3, [String(describing: report.standard.title), String(describing: report.standard.version), String(describing: report.targetName), String(describing: receiptPath), String(describing: failure)])
+    case .baselineCaptured(let path):
+      return "International Law baseline captured at \(path). The ratchet is set: pre-existing findings are frozen for this binding, and any newly observed finding will still block. Rerun without --write-i18n-baseline to dispatch."
+    case .baselineRejected(let reason, let receiptPath):
+      return "International Law baseline was rejected: \(reason). Report receipt: \(receiptPath). The ratchet held; resolve the new findings or repair the baseline binding."
     }
   }
 }
@@ -53,7 +59,8 @@ enum VaporizeI18nSourceGate {
     productDirectory: URL,
     productName: String,
     surfaceKind: TranslateSourceSurfaceKind,
-    enforcement: TranslateSourceGateEnforcement
+    enforcement: TranslateSourceGateEnforcement,
+    writeBaseline: Bool = false
   ) async throws -> Result {
     let productDirectory = productDirectory.standardizedFileURL
     let productKuraSpace = try findProductKuraSpace(startingAt: productDirectory)
@@ -111,6 +118,7 @@ enum VaporizeI18nSourceGate {
       imprintReceipt = try I18nSourceGateBeadImprint.reconcile(
         report: report,
         owningHome: productKuraSpace,
+        repairHome: productDirectory,
         ownerID: identity.ownerID,
         reportReceiptURL: receiptURL,
         mode: .write,
@@ -129,15 +137,80 @@ enum VaporizeI18nSourceGate {
       )
     }
 
-    guard report.passed else {
-      throw VaporizeI18nSourceGateError.blocked(
-        report: report,
-        imprintReceipt: imprintReceipt,
-        receiptPath: receiptURL.path,
-        imprintReceiptPath: imprintReceiptURL.path
+    if writeBaseline, !report.passed {
+      let baseline = try InternationalLawBaseline(report: report)
+      let baselineURL = try baselineFileURL(
+        kuraSpace: productKuraSpace,
+        targetName: identity.targetName,
+        enforcement: enforcement
       )
+      try FileManager.default.createDirectory(
+        at: baselineURL.deletingLastPathComponent(),
+        withIntermediateDirectories: true
+      )
+      try baseline.jsonData().write(to: baselineURL, options: .atomic)
+      throw VaporizeI18nSourceGateError.baselineCaptured(path: baselineURL.path)
+    }
+
+    if !report.passed {
+      let baselineURL = try baselineFileURL(
+        kuraSpace: productKuraSpace,
+        targetName: identity.targetName,
+        enforcement: enforcement
+      )
+      if FileManager.default.fileExists(atPath: baselineURL.path) {
+        let baseline = try InternationalLawBaseline.decodeJSON(
+          try Data(contentsOf: baselineURL)
+        )
+        let comparison = InternationalLawBaselineComparison(
+          baseline: baseline,
+          current: report
+        )
+        if comparison.passed {
+          print(
+            "International Law baseline held: \(comparison.knownFindingCount) frozen finding(s), \(comparison.newFindings.count) new. Ratchet intact."
+          )
+        } else {
+          var reasons: [String] = comparison.blockers.map { "blocker: \($0.rawValue)" }
+          if !comparison.newFindings.isEmpty {
+            reasons.append(
+              "\(comparison.newFindings.count) newly observed finding(s) beyond the frozen baseline"
+            )
+          }
+          throw VaporizeI18nSourceGateError.baselineRejected(
+            reason: reasons.joined(separator: "; "),
+            receiptPath: receiptURL.path
+          )
+        }
+      } else {
+        throw VaporizeI18nSourceGateError.blocked(
+          report: report,
+          imprintReceipt: imprintReceipt,
+          receiptPath: receiptURL.path,
+          imprintReceiptPath: imprintReceiptURL.path
+        )
+      }
     }
     return Result(report: report, receiptURL: receiptURL)
+  }
+
+  /// Baseline file contract: one JSON file per (target, enforcement) binding,
+  /// under the owning kura-spaces home. The binding inside the file - not the
+  /// filename - is the authority; the name only keeps files apart.
+  static func baselineFileURL(
+    kuraSpace: URL,
+    targetName: String,
+    enforcement: TranslateSourceGateEnforcement
+  ) throws -> URL {
+    let safeTarget = targetName.map { character -> Character in
+      let allowed = character.isLetter || character.isNumber
+        || character == "-" || character == "." || character == "_" || character == "@"
+      return allowed ? character : "_"
+    }
+    let fileName = "\(String(safeTarget)).\(enforcement.rawValue).international-law-baseline.json"
+    return kuraSpace
+      .appendingPathComponent("international-law-baselines", isDirectory: true)
+      .appendingPathComponent(fileName)
   }
 
   static func findProductKuraSpace(startingAt productDirectory: URL) throws -> URL {

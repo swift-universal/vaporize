@@ -1,0 +1,15 @@
+{
+  "id": "bug-vaporize-i18n-baseline-test-switches-non-exhaustive-2026-08-26",
+  "issueType": "bug",
+  "owner": "vaporize",
+  "title": "Keep i18n baseline error tests exhaustive",
+  "description": "The existing International Law baseline implementation added baselineCaptured and baselineRejected to VaporizeI18nSourceGateError, but two focused test switches did not handle the new cases. Swift 6.4 therefore rejected the test target before any test could run.",
+  "acceptanceCriteria": "Both switches explicitly reject unexpected baseline-handling cases; the focused VaporizeI18nSourceGatePreflightTests build and pass on Windows.",
+  "createdAt": "2026-08-26T11:48:00Z",
+  "updatedAt": "2026-08-26T11:48:00Z",
+  "createdBy": "codex during operator-authorized existing-work intake",
+  "labels": ["vaporize", "i18n", "windows", "swift-testing", "compile-error"],
+  "priority": 1,
+  "status": "closed",
+  "sourceLocation": "tests/cuj-01-swiftpm-cli/VaporizeI18nSourceGatePreflightTests.swift"
+}

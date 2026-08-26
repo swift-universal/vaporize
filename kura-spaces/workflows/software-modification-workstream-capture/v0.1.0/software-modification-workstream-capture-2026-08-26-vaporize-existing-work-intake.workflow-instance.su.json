@@ -1,0 +1,33 @@
+{
+  "schemaVersion": "0.8.0",
+  "WorkflowInstanceModel": "0.8.0",
+  "kind": "workflow-instance",
+  "slug": "software-modification-workstream-capture-2026-08-26-vaporize-existing-work-intake",
+  "title": "Software modification - Vaporize existing work intake",
+  "updated": "2026-08-26T12:15:00Z",
+  "workflowRef": {
+    "LinkRefModel": "0.5.0",
+    "sv": "0.5.0",
+    "t": "Software modification workstream capture",
+    "tg": [{"k": "rp", "rt": "mono", "v": "private/universal/substrate/collectives/spaces-universal/private/universal/kura-spaces/workflows/software-modification-workstream-capture/v0.1.0/software-modification-workstream-capture.workflow.su.json"}]
+  },
+  "beadTrackingRefs": [
+    {"LinkRefModel": "0.5.0", "sv": "0.5.0", "t": "International Law baseline preflight", "tg": [{"k": "rp", "rt": "current-file", "v": "../../../beads/bug-vaporize-preflight-does-not-consume-international-law-baseline-2026-08-25.beads-issue.su.json"}]},
+    {"LinkRefModel": "0.5.0", "sv": "0.5.0", "t": "Package-supply product feature", "tg": [{"k": "rp", "rt": "current-file", "v": "../../../beads/feature-vaporize-feature-flagged-swiftpm-library-product-workflow-2026-08-25.beads-issue.su.json"}]},
+    {"LinkRefModel": "0.5.0", "sv": "0.5.0", "t": "Installed CLI presence proof", "tg": [{"k": "rp", "rt": "current-file", "v": "../../../beads/BUG-VAPORIZE-CLI-INSTALL-NO-POST-INSTALL-PRESENCE-CHECK-2026-07-08.beads-issue.su.json"}]}
+  ],
+  "receiptRefs": [
+    {"LinkRefModel": "0.5.0", "sv": "0.5.0", "t": "Operator-authorized existing-work intake", "tg": [{"k": "rp", "rt": "current-file", "v": "requests/2026-08-26-vaporize-existing-work-intake.vaporware-modification-request.su.json"}]}
+  ],
+  "stateResults": [
+    {"schemaVersion": "0.1.0", "WorkflowInstanceStateResultModel": "0.1.0", "kind": "workflow-instance-state-result", "stateId": "author-modification-request", "outcome": "completed", "summary": "The operator explicitly authorized preserving and committing existing work, including old work."},
+    {"schemaVersion": "0.1.0", "WorkflowInstanceStateResultModel": "0.1.0", "kind": "workflow-instance-state-result", "stateId": "workspace-preflight", "outcome": "completed", "summary": "The standalone Vaporize repository contained 56 pre-existing dirty paths; all 45 JSON records decode and no dirty file reaches 100 MiB."},
+    {"schemaVersion": "0.1.0", "WorkflowInstanceStateResultModel": "0.1.0", "kind": "workflow-instance-state-result", "stateId": "build-and-test", "outcome": "completed", "summary": "The focused Windows build exposed three test defects, each captured as a closed error Bead and repaired. VaporizeI18nSourceGatePreflightTests then passed 5/5; the resolved graph points at controlled local Swift Log, Swift Configuration, Swift Service Lifecycle, and Swift NIO Extras paths without identity warnings."},
+    {"schemaVersion": "0.1.0", "WorkflowInstanceStateResultModel": "0.1.0", "kind": "workflow-instance-state-result", "stateId": "emit-through-savepoint", "outcome": "in-progress", "summary": "Validated source, documentation, generated evidence, and lockfile slices are being emitted as separate exact-file Savepoints."}
+  ],
+  "notes": [
+    "The pre-existing work is not attributed to Codex merely because Codex validates and persists it.",
+    "The SwiftPM duplicate-identity warning was corrected at its wrkstrm-upstreams ownership boundaries and the consumer graph was revalidated.",
+    "No parent Swift Universal gitlink advancement or push is included."
+  ]
+}

@@ -1,0 +1,49 @@
+{
+  "VaporwareModificationRequestPacket": "0.1.0",
+  "schemaVersion": "0.1.0",
+  "kind": "vaporware-modification-request",
+  "slug": "2026-08-26-vaporize-existing-work-intake",
+  "title": "Validate and preserve existing Vaporize work in small commits",
+  "status": "captured-after-operator-authorization",
+  "createdAt": "2026-08-26T11:48:00Z",
+  "updatedAt": "2026-08-26T11:48:00Z",
+  "createdBy": "codex",
+  "operatorAttestation": {
+    "quote": "i agree. but we commit too. even old stuff.",
+    "capturedAt": "2026-08-26T11:48:00Z",
+    "capturedBy": "codex",
+    "contextQuote": "Existing unrelated work is preserved at its owning boundary rather than left permanently dirty or mixed into a temporal-identity commit."
+  },
+  "requestClass": "existing-work-intake",
+  "workflowRef": "private/universal/substrate/collectives/spaces-universal/private/universal/kura-spaces/workflows/software-modification-workstream-capture/v0.1.0/software-modification-workstream-capture.workflow.su.json",
+  "targetMap": {
+    "targetKind": "product-repository",
+    "canonicalRefs": [
+      {
+        "path": "private/universal/substrate/collectives/swift-universal/private/product-lines/vaporize",
+        "artifactKind": "git-repository",
+        "owner": "vaporize"
+      }
+    ]
+  },
+  "changeUnits": [
+    {"id": "i18n-baseline", "requestedBehavior": "Preserve the International Law baseline implementation, tests, Bead, and generated source-gate evidence."},
+    {"id": "package-supply-docs", "requestedBehavior": "Preserve the package-supply PRD, CUJs, and DocC design as requirements-defined work."},
+    {"id": "windows-executable-resolution", "requestedBehavior": "Preserve Windows installed-executable discovery and its resolved dependency graph."}
+  ],
+  "evidencePlan": {
+    "focusedProof": [
+      "Parse every dirty JSON record.",
+      "Exclude files at or above 100 MiB.",
+      "Run the focused i18n preflight tests and the relevant CUJ-01 Windows tests.",
+      "Commit each coherent slice through exact-file Savepoints."
+    ]
+  },
+  "returnReceipt": {
+    "status": "authorized-awaiting-validation-and-savepoints",
+    "changedRefs": [],
+    "commits": [],
+    "owed": ["Resolve separately Beaded dependency-identity warnings without folding that graph repair into this intake."],
+    "honestNote": "The intake preserves existing work; it does not claim authorship of the pre-existing source, tests, documentation, or generated evidence."
+  }
+}

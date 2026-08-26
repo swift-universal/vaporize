@@ -1,0 +1,15 @@
+{
+  "id": "bug-vaporize-i18n-artifact-binding-expectations-were-stale-2026-08-26",
+  "issueType": "bug",
+  "owner": "vaporize",
+  "title": "Align i18n artifact-binding tests with resolved target semantics",
+  "description": "The source gate now emits the explicit target-resolved state and scopes commits to files that actually contain findings, but the focused test still expected the older resolved state and included Package.swift despite no manifest finding.",
+  "acceptanceCriteria": "The test expects target-resolved and the finding-backed source-only commit scope; the focused source-gate test suite passes.",
+  "createdAt": "2026-08-26T12:05:00Z",
+  "updatedAt": "2026-08-26T12:05:00Z",
+  "createdBy": "codex during operator-authorized existing-work intake",
+  "labels": ["vaporize", "i18n", "swift-testing", "artifact-binding", "stale-expectation"],
+  "priority": 1,
+  "status": "closed",
+  "sourceLocation": "tests/cuj-01-swiftpm-cli/VaporizeI18nSourceGatePreflightTests.swift"
+}

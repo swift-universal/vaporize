@@ -208,6 +208,13 @@ struct VaporizeCLI: AsyncParsableCommand {
     help: ArgumentHelp(VaporizeCLICopy_v000_000_001.CLI.vaporizeProductNameBinaryOrAppBundle))
   var product: String?
 
+  @Flag(
+    name: .customLong("write-i18n-baseline"),
+    help: ArgumentHelp(
+      "Capture the current i18n source-gate findings as an International Law baseline (a ratchet, not a waiver) instead of dispatching. Pre-existing findings freeze; new ones still block."
+    ))
+  var writeI18nBaseline: Bool = false
+
   @Option(
     name: .customLong("product-version"),
     help: ArgumentHelp(
@@ -1007,20 +1014,29 @@ struct VaporizeCLI: AsyncParsableCommand {
     case .cli: selectedSurfaceKind = .cli
     case .tui: selectedSurfaceKind = .tui
     }
-    let result = try await VaporizeI18nSourceGate.enforce(
-      productDirectory: URL(fileURLWithPath: selectedPackagePath, isDirectory: true),
-      productName: selectedProduct,
-      surfaceKind: selectedSurfaceKind,
-      enforcement: gateEnforcement
-    )
-    print(
-      vaporizeCopyFill(
-        VaporizeCLICopy_v000_000_001.CLI.vaporizeVaporizeA1VA2PassedFor,
-        [
-          "\(result.report.standard.title)", "\(result.report.standard.version)",
-          "\(selectedProduct)", "\(result.receiptURL.path)",
-        ])
-    )
+    do {
+      let result = try await VaporizeI18nSourceGate.enforce(
+        productDirectory: URL(fileURLWithPath: selectedPackagePath, isDirectory: true),
+        productName: selectedProduct,
+        surfaceKind: selectedSurfaceKind,
+        enforcement: gateEnforcement,
+        writeBaseline: writeI18nBaseline
+      )
+      print(
+        vaporizeCopyFill(
+          VaporizeCLICopy_v000_000_001.CLI.vaporizeVaporizeA1VA2PassedFor,
+          [
+            "\(result.report.standard.title)", "\(result.report.standard.version)",
+            "\(selectedProduct)", "\(result.receiptURL.path)",
+          ])
+      )
+    } catch let error as VaporizeI18nSourceGateError {
+      if case .baselineCaptured = error {
+        print(error.localizedDescription)
+        return
+      }
+      throw error
+    }
   }
 
   private func enforceSwiftUIImportPolicy(for mode: Mode) throws {
@@ -1320,14 +1336,20 @@ struct VaporizeCLI: AsyncParsableCommand {
     // failure mode that left savepoint.cli@kura-org.clia.sh as a lone .bak with no live
     // binary (BUG-SAVEPOINT-CLI-MISSING-FROM-SWIFTPM-BIN-2026-07-08). Fail loudly here
     // instead of reporting a silent success with no installed tool.
-    let installedPath = installedCLIPath(product: product)
-    guard FileManager.default.isExecutableFile(atPath: installedPath) else {
+    let installedDirectory = installedCLIBinDirectory()
+    guard
+      let installedExecutable = InstalledExecutableLocator().executableURL(
+        product: product,
+        in: installedDirectory
+      )
+    else {
       throw ValidationError(
         vaporizeCopyFill(
           VaporizeCLICopy_v000_000_001.CLI.vaporizeInstallReportedSuccessButNoExecutable,
-          ["\(product)", "\(installedPath)"])
+          ["\(product)", "\(installedDirectory.path)"])
       )
     }
+    let installedPath = installedExecutable.path
     try publishInstalledCLI(toDomain: installDomain, product: product)
     // Positive presence confirmation: name the verified path so a multi-binary suite
     // reinstall (one invocation per product) emits one confirmation each — any single
@@ -1617,6 +1639,12 @@ struct VaporizeCLI: AsyncParsableCommand {
     for path in discoveredDomainCLIPaths(product: product) {
       append(path)
     }
+    append(
+      InstalledExecutableLocator().executableURL(
+        product: product,
+        in: installedCLIBinDirectory()
+      )?.path
+    )
     append(installedCLIPath(product: product))
 
     return candidates
@@ -1668,8 +1696,11 @@ struct VaporizeCLI: AsyncParsableCommand {
       return []
     }
 
+    let locator = InstalledExecutableLocator()
     var matches: [String] = []
-    for case let url as URL in enumerator where url.lastPathComponent == product {
+    for case let url as URL in enumerator
+      where locator.recognizes(executableURL: url, as: product)
+    {
       let path = url.standardizedFileURL.path
       if fileManager.isExecutableFile(atPath: path) {
         matches.append(path)
@@ -1706,8 +1737,16 @@ struct VaporizeCLI: AsyncParsableCommand {
     guard !domainComponents.isEmpty else { return }
 
     let fileManager = FileManager.default
-    let target = URL(fileURLWithPath: installedCLIPath(product: product))
-    let link = domainPath(forComponents: domainComponents).appendingPathComponent(product)
+    guard
+      let target = InstalledExecutableLocator().executableURL(
+        product: product,
+        in: installedCLIBinDirectory()
+      )
+    else {
+      return
+    }
+    let link = domainPath(forComponents: domainComponents)
+      .appendingPathComponent(target.lastPathComponent)
 
     if fileManager.fileExists(atPath: link.path) {
       try fileManager.removeItem(at: link)
@@ -1734,8 +1773,11 @@ struct VaporizeCLI: AsyncParsableCommand {
     else {
       return
     }
+    let locator = InstalledExecutableLocator()
     for case let url as URL in enumerator {
-      guard url.lastPathComponent == product else { continue }
+      guard locator.recognizes(executableURL: url, as: product) else {
+        continue
+      }
       do {
         try removeDomainCLI(at: url)
       } catch {
@@ -1745,11 +1787,14 @@ struct VaporizeCLI: AsyncParsableCommand {
   }
 
   private func removeDomainCLI(product: String, domain: String) throws {
-    guard let domainPath = domainSpecificCLIPath(product: product, domain: domain) else {
-      return
-    }
-    let link = URL(fileURLWithPath: domainPath)
-    guard FileManager.default.fileExists(atPath: link.path) else {
+    let components = safeDomainPathComponents(domain)
+    guard !components.isEmpty else { return }
+    guard
+      let link = InstalledExecutableLocator().executableURL(
+        product: product,
+        in: domainPath(forComponents: components)
+      )
+    else {
       return
     }
     try removeDomainCLI(at: link)

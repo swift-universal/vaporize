@@ -19,7 +19,14 @@ func sourceGateFindsProductKuraSpace() throws {
     isDirectory: true
   )
   try FileManager.default.createDirectory(at: product, withIntermediateDirectories: true)
-  try FileManager.default.createDirectory(at: kuraSpace, withIntermediateDirectories: true)
+  try FileManager.default.createDirectory(
+    at: kuraSpace.appendingPathComponent("beads", isDirectory: true),
+    withIntermediateDirectories: true
+  )
+  try FileManager.default.createDirectory(
+    at: repository.appendingPathComponent(".git", isDirectory: true),
+    withIntermediateDirectories: true
+  )
 
   let resolved = try VaporizeI18nSourceGate.findProductKuraSpace(startingAt: product)
 
@@ -104,6 +111,8 @@ func sourceGateImprintFailurePreservesReportReceipt() async throws {
       #expect(error.localizedDescription.contains("Report receipt:"))
     case .blocked:
       Issue.record("Expected the explicit Bead imprint error after report persistence.")
+    case .baselineCaptured, .baselineRejected:
+      Issue.record("Expected Bead reconciliation, not baseline handling.")
     }
   } catch {
     Issue.record("Unexpected error: \(error)")
@@ -125,6 +134,9 @@ func sourceGateBlockedErrorIsAssistantActionable() async throws {
   try FileManager.default.createDirectory(
     at: root.appendingPathComponent("product-state/kura-spaces/beads", isDirectory: true),
     withIntermediateDirectories: true
+  )
+  try Data("// swift-tools-version: 6.0\n".utf8).write(
+    to: root.appendingPathComponent("Package.swift")
   )
   try """
   import Foundation
@@ -167,8 +179,35 @@ func sourceGateBlockedErrorIsAssistantActionable() async throws {
       #expect(rendered.contains("Bead handling: Created bug-i18n-"))
       #expect(rendered.contains("Assistant cast:"))
       #expect(rendered.contains("do not create a duplicate manually") == false)
+      let spawnCastURL = try #require(
+        try FileManager.default.contentsOfDirectory(
+          at: root.appendingPathComponent("product-state/kura-spaces/beads"),
+          includingPropertiesForKeys: nil
+        ).first { $0.lastPathComponent.hasSuffix(".i18n-bead-artifact-binding.su.json") }
+      )
+      let spawnCast = try #require(
+        JSONSerialization.jsonObject(with: Data(contentsOf: spawnCastURL))
+          as? [String: Any]
+      )
+      #expect(
+        (spawnCast["target"] as? [String: Any])?["state"] as? String == "target-resolved"
+      )
+      #expect((spawnCast["workPoem"] as? [String: Any])?["boundary"] as? String == ".")
+      #expect(
+        (spawnCast["commitScope"] as? [String]) == ["Sources/App/main.swift"]
+      )
+      #expect(
+        (spawnCast["reportReceiptRef"] as? String)?
+          .hasPrefix("product-state/kura-spaces/beads/") == true
+      )
+      #expect(
+        (spawnCast["verifier"] as? String)?.contains("--owning-home product-state/kura-spaces")
+          == true
+      )
     case .beadImprintFailed:
       Issue.record("Expected reconciliation to succeed before the descriptive block.")
+    case .baselineCaptured, .baselineRejected:
+      Issue.record("Expected the source gate to block, not baseline handling.")
     }
   } catch {
     Issue.record("Unexpected error: \(error)")

@@ -1,0 +1,15 @@
+{
+  "id": "bug-vaporize-product-kura-space-test-fixture-was-unbounded-2026-08-26",
+  "issueType": "bug",
+  "owner": "vaporize",
+  "title": "Bound the product Kura-space ownership test fixture",
+  "description": "The Windows test fixture created a kura-spaces directory without its required beads directory and without a repository boundary. Ownership discovery therefore climbed into the user profile and attempted to enumerate WSL's ext4.vhdx.",
+  "acceptanceCriteria": "The fixture contains both the required beads directory and a local .git boundary; focused ownership discovery never traverses outside the fixture and passes on Windows.",
+  "createdAt": "2026-08-26T12:05:00Z",
+  "updatedAt": "2026-08-26T12:05:00Z",
+  "createdBy": "codex during operator-authorized existing-work intake",
+  "labels": ["vaporize", "windows", "swift-testing", "fixture-boundary", "filesystem-error"],
+  "priority": 1,
+  "status": "closed",
+  "sourceLocation": "tests/cuj-01-swiftpm-cli/VaporizeI18nSourceGatePreflightTests.swift"
+}

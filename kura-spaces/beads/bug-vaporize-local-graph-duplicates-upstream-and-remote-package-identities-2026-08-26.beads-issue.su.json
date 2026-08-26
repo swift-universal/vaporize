@@ -1,0 +1,15 @@
+{
+  "id": "bug-vaporize-local-graph-duplicates-upstream-and-remote-package-identities-2026-08-26",
+  "issueType": "bug",
+  "owner": "vaporize",
+  "title": "Remove duplicate local and remote identities from the Vaporize graph",
+  "description": "A Windows local-dependency test build resolved swift-configuration, swift-service-lifecycle, and swift-log through both controlled local upstream packages and remote dependency chains. The bypasses were owned by Hummingbird and Swift NIO Extras, so their manifests and the missing NIO Extras checkout were corrected in wrkstrm-upstreams.",
+  "acceptanceCriteria": "The Vaporize local dependency graph resolves each package identity through one authoritative route and the focused Windows build emits no conflicting-identity warnings.",
+  "createdAt": "2026-08-26T11:48:00Z",
+  "updatedAt": "2026-08-26T12:15:00Z",
+  "createdBy": "codex during operator-authorized existing-work intake",
+  "labels": ["vaporize", "swiftpm", "local-deps", "upstreams", "future-error"],
+  "priority": 1,
+  "status": "closed",
+  "sourceLocation": "Package.swift"
+}

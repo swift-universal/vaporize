@@ -1,0 +1,29 @@
+{
+    "id":  "bug-vaporize-preflight-does-not-consume-international-law-baseline-2026-08-25",
+    "issueType":  "bug",
+    "sourceType":  "citizens-arrest",
+    "sourceSystem":  "component-design-system-product-lines",
+    "owner":  "private/universal/substrate/collectives/swift-universal/private/product-lines/vaporize/kura-spaces/beads",
+    "title":  "CITIZEN\u0027S ARREST: Vaporize blocks legacy products with no working path to legitimacy - the InternationalLawBaseline ratchet exists but the preflight never reads it",
+    "description":  "Filed at the owning home, citizen\u0027s-arrest style. Observed 2026-08-25 while dispatching the swift-windows-ui hello-world demo through \u0027vaporize run swift-win\u0027 on Windows: the i18n source gate correctly blocked dispatch (I18N001/I18N002, four typed beads auto-filed with spawn casts - the gate itself worked beautifully). But then the flow dead-ends. The ONLY sanctioned relief valve, InternationalLawBaseline (TranslateCatalogCore/Sources/TranslateSourceGate/InternationalLawBaseline.swift), is fully implemented - formatVersion 0.1.0, binding identity, scannedFiles completeness guard, structural-anchor entries, ratchet semantics \u0027a ratchet not a waiver\u0027 - and referenced by NOTHING. I18nSourceGatePreflight.swift does not consume it. There is no CLI flag, no baseline-capture command, no documented flow that says: gate blocks legacy product -\u003e freeze pre-existing findings as baseline -\u003e dispatch succeeds -\u003e ratchet prevents regression. Instructions are unclear to the point of absent. An operator holding a legitimate legacy product and a working gate has no documented path from one to the other. RESOLUTION 2026-08-25 (liberated): Proven by:",
+    "acceptanceCriteria":  "I18nSourceGatePreflight consumes InternationalLawBaseline: pre-existing structural-anchor findings frozen at baseline pass; any newly observed finding still fails. A baseline capture surface exists (CLI mode or documented file contract) with the binding identity preventing cross-boundary reuse. The flow gate-block -\u003e baseline-freeze -\u003e dispatch is documented where the gate error message points, so the next operator is not left holding a block with no lever. The swift-windows-ui hello-world demo dispatches through vaporize after its pre-existing findings are baselined, and any newly introduced string fails as the ratchet demands.",
+    "createdAt":  "2026-08-25T00:00:00Z",
+    "updatedAt":  "2026-08-25T00:00:00Z",
+    "firstObservedAt":  "2026-08-25T00:00:00Z",
+    "lastObservedAt":  "2026-08-25T00:00:00Z",
+    "createdBy":  "claude from operator direction, component-design-system product-lines sprint",
+    "labels":  [
+                   "vaporize",
+                   "i18n-source-gate",
+                   "international-law-baseline",
+                   "instructions-unclear",
+                   "severity-high"
+               ],
+    "priority":  0,
+    "status":  "closed",
+    "observationCount":  1,
+    "recurrenceCount":  0,
+    "sourceLocation":  "private/universal/substrate/collectives/swift-universal/private/product-lines/vaporize/sources/vaporize-cli/I18nSourceGatePreflight.swift",
+    "externalRef":  "private/universal/substrate/collectives/i18n-universal/private/universal/domain/catalogs/spm/TranslateCatalogCore/Sources/TranslateSourceGate/InternationalLawBaseline.swift",
+    "dependencies":  null
+}
