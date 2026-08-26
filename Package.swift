@@ -71,6 +71,12 @@ let commonLogDependency = Package.Dependency.package(
     "private/universal/spm/domain/system/common-log"
   )
 )
+let vaporizeCoreDependency = Package.Dependency.package(
+  path: repositoryPath(
+    swiftUniversalDirectory,
+    "private/universal/domain/build/spm/vaporize-core"
+  )
+)
 // swift-cli-installer LIFTED 2026-06-14 from sources/swift-cli-installer to
 // swift-universal/private/universal/domain/tooling/spm/swift-cli-installer/
 // per CEO decision + [[no-code-gets-left-behind]] doctrine.
@@ -161,6 +167,7 @@ let bumpBuildDependency = Package.Dependency.package(
 
 let packageDependencies: [Package.Dependency] = [
   commonLogDependency,
+  vaporizeCoreDependency,
   commonProcessDependency,
   commonShellDependency,
   swiftCLIInstallerDependency,
@@ -180,6 +187,7 @@ let packageDependencies: [Package.Dependency] = [
 ]
 
 let vaporizeCLIDependencies: [Target.Dependency] = [
+  .product(name: "VaporizeCore", package: "vaporize-core"),
   .product(name: "XcodeProjectDefinitionCore", package: "xcode-project-definition"),
   "VaporizeIssueReporting",
   .product(name: "CommonLog", package: "common-log"),

@@ -1,0 +1,18 @@
+{
+  "acceptanceCriteria" : "Package.swift depends on vaporize-core and VaporizeCoreExecutionPlan.swift re-exports the shared implementation; vaporize-core Windows tests pass; the frontend test result records any dependency-resolution blocker without overstating compilation.",
+  "beads-issue-model" : "0.0.1",
+  "createdAt" : "2026-08-26T08:33:48Z",
+  "description" : "Rebind the existing Vaporize CLI execution-plan surface to the cross-platform vaporize-core library without retaining a duplicate implementation.",
+  "id" : "feature-vaporize-core-consumption-2026-08-26",
+  "issueType" : "feature",
+  "labels" : [
+    "vaporize-core",
+    "shared-library",
+    "windows"
+  ],
+  "owner" : "vaporize",
+  "priority" : 1,
+  "status" : "completed",
+  "title" : "Consume the shared Vaporize core seam",
+  "updatedAt" : "2026-08-26T08:33:48Z"
+}
