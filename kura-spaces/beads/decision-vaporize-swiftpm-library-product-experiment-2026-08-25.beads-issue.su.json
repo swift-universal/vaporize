@@ -1,0 +1,24 @@
+{
+  "beads-issue-model": "0.0.1",
+  "id": "decision-vaporize-swiftpm-library-product-experiment-2026-08-25",
+  "title": "Decide the library-product workflow outcome",
+  "description": "A named human reviews persisted typed analytics and records promote, reject, extend, or redesign. Extend is an interim receipt and does not complete this decision Bead; a terminal outcome stops exposure and defines—but does not execute—the surviving behavior and cleanup obligations. The feature cannot close while temporary selection, a losing executable branch, an active exposure, or an unreconciled lease remains.",
+  "design": "Decision authority is human and product-scoped. Promote selects treatment; reject retains control. Extend stops exposure and revokes the old delivery.execute, feature.policy.write, feature.exposure.execute, rollback.execute, credential.use, network.connect, push, and publish leases, creates a new bounded experiment and analytics child cycle with new independent owner decisions and expiry, and leaves this Bead open. Redesign opens a successor parent request and must also reject or explicitly retire the current candidate before this Bead can close. Only a terminal outcome creates a new cleanup snapshot and boundary authority; no legacy VMR or old lease can be reused.",
+  "acceptanceCriteria": "Every receipt cites the persisted analytics and exposure decision. An extend receipt revokes the prior delivery/exposure leases, records a new bounded window and guardrails, adds a new experiment/analytics child cycle, and does not satisfy this Bead's blocking dependency or unblock removal. Redesign opens a successor parent and records the current candidate's terminal rejection or retirement. Only terminal promote, reject, or redesign-with-current-candidate-disposition closes this Bead, stops exposure, preserves all evidence, and requires a new digest-bound cleanup snapshot, repository-owner delegation, shard, and lease before cleanup source work. The feature remains open until cleanup, validation, persistence, operational retirement, revocation, and governance closure complete.",
+  "notes": "Extend is never indefinite exposure and never falls through to cleanup as a completed decision. Redesign cannot reuse the prior accepted snapshot as source authorization when change units differ.",
+  "issueType": "decision",
+  "priority": 1,
+  "status": "open",
+  "parentId": "feature-vaporize-feature-flagged-swiftpm-library-product-workflow-2026-08-25",
+  "owner": "vaporize product line, swift-universal",
+  "labels": ["vaporize", "human-decision", "promote", "reject", "extend", "redesign"],
+  "createdAt": "2026-08-25T23:06:00Z",
+  "createdBy": "Locke commissioned Codex agent",
+  "sourceSystem": "vaporize-product-line",
+  "sourceLocation": "private/universal/substrate/collectives/swift-universal/private/product-lines/vaporize/kura-spaces/beads",
+  "awaitType": "human",
+  "dependencies": [
+    {"issueId": "decision-vaporize-swiftpm-library-product-experiment-2026-08-25", "dependsOnId": "feature-vaporize-feature-flagged-swiftpm-library-product-workflow-2026-08-25", "type": "parent-child", "createdAt": "2026-08-25T23:06:00Z", "createdBy": "Locke commissioned Codex agent"},
+    {"issueId": "decision-vaporize-swiftpm-library-product-experiment-2026-08-25", "dependsOnId": "analytics-vaporize-swiftpm-library-product-experiment-2026-08-25", "type": "blocks", "createdAt": "2026-08-25T23:06:00Z", "createdBy": "Locke commissioned Codex agent"}
+  ]
+}

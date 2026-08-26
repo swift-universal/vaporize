@@ -1,0 +1,17 @@
+{
+  "beads-issue-model": "0.0.1",
+  "id": "analysis-vaporize-swiftpm-library-product-impact-and-dependencies-2026-08-25",
+  "title": "Analyze library-product impact, product authority, and boundary leases",
+  "description": "Inventory the one-turn CLI lifecycle, legacy baselines, sibling services, CommonFeatureFlags obligations, Schema Universal receipts, contextual carriers, optional depot, backward compatibility, accepted Vaporize product contract, implementation steward, exact Git boundary, staged source-access decisions, closed worker and runtime operations, independent authority planes, and required capability finalizers before implementation.",
+  "issueType": "task",
+  "priority": 1,
+  "status": "open",
+  "parentId": "feature-vaporize-feature-flagged-swiftpm-library-product-workflow-2026-08-25",
+  "labels": ["vaporize", "analysis", "dependencies", "backward-compatibility", "product-authority", "lease-plan"],
+  "createdAt": "2026-08-25T23:01:00Z",
+  "createdBy": "Locke commissioned Codex agent",
+  "acceptanceCriteria": "Name sibling services and WarehouseKit's four obligations; prove default OFF and no-option equivalence; resolve a non-empty exact required boundary set, the product owner, Vaporize repository owner, delivery owner, environment policy-plane owners, their independent delegation and issuer receipts, implementation steward, Git boundary, read roots, write roots, approved build/test commands, commit scope, governance.write roots, and the closed delivery.execute, feature.policy.write, feature.exposure.execute, rollback.execute, credential.use, network.connect, vcs.push, and release.publish operations; define an idempotent non-success finalizer for every lease issuer; prove no-option behavior performs no depot/network/product lookup or resolution change and that no authority plane implies another.",
+  "dependencies": [
+    {"issueId":"analysis-vaporize-swiftpm-library-product-impact-and-dependencies-2026-08-25","dependsOnId":"feature-vaporize-feature-flagged-swiftpm-library-product-workflow-2026-08-25","type":"parent-child","createdAt":"2026-08-25T23:01:00Z","createdBy":"Locke commissioned Codex agent"}
+  ]
+}

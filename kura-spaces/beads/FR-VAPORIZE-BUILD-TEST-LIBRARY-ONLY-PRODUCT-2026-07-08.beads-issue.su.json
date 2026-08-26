@@ -2,18 +2,53 @@
   "BeadsIssue": "0.1.0",
   "schemaVersion": "0.1.0",
   "id": "FR-VAPORIZE-BUILD-TEST-LIBRARY-ONLY-PRODUCT-2026-07-08",
+  "parentId": "feature-vaporize-feature-flagged-swiftpm-library-product-workflow-2026-08-25",
   "title": "vaporize build/test cannot target a library-only product — --product demands a canonical CLI name",
   "status": "open",
   "priority": 3,
   "issueType": "task",
-  "labels": ["vaporize", "build", "library-product", "recorded-build-gate"],
+  "owner": "vaporize product line, swift-universal",
+  "labels": ["vaporize", "build", "library-product", "recorded-build-gate", "accepted-vmr-required", "boundary-lease-required"],
   "createdAt": "2026-07-08",
   "createdBy": "Claude Opus 4.8 mono harness",
+  "sourceSystem": "vaporize-product-line",
+  "sourceLocation": "private/universal/substrate/collectives/swift-universal/private/product-lines/vaporize/kura-spaces/beads",
   "description": "vaporize build (and test) require --product, and --product validation demands the canonical CLI product shape <tool>.<surface>@<collective>.clia.sh (exactly one @). A library-only SwiftPM package with no executable — e.g. the SchemaSets aggregator index (product 'SchemaSets') relocated into schema-universal on 2026-07-08 — has no product name of that shape, so `vaporize build --product SchemaSets` is refused ('noncanonical CLI product name'). The refusal is correct per the no-silent-fallback axiom and routed me to the package's own documented `swift build --package-path ...` gate, but it means library aggregators / pure schema-set packages have NO recorded-build-gate path through vaporize. Since vaporize is the canonical build/test/receipt gate, library-only packages are currently un-gateable.",
+  "design": "This implementation remains owned by the Vaporize product line at the exact Swift Universal boundary private/universal/substrate/collectives/swift-universal/private/product-lines/vaporize. It becomes ready only after its analysis and documentation blockers close, a digest-bound accepted modification snapshot freezes exact change units, and an active WorkstreamWorkerLease plus instruction packet grants write/build/test authority for this boundary and exact target paths. A legacy v0.1.0 VaporwareModificationRequest may be retained as compatibility provenance but cannot independently authorize the lease. The lease must exclude experiment exposure authority.",
   "acceptanceCriteria": [
     "vaporize build/test can target a library product (or a whole package with no executable), either by accepting a library product name or a --library/--all-products mode that builds the package graph without requiring a canonical CLI product.",
     "A recorded receipt is emitted for the library build/test so aggregators (schema sets, kits) get the same gate coverage as CLIs.",
-    "The error message for a genuinely-noncanonical CLI name is preserved; only library-only packages gain the new path."
+    "The error message for a genuinely-noncanonical CLI name is preserved; only library-only packages gain the new path.",
+    "Before any source edit, a digest-bound accepted modification snapshot identifies this parent graph, the exact product boundary, exact source paths, change units, rollback obligations, and validation plan; any legacy v0.1.0 VMR is compatibility provenance only.",
+    "Before any source edit, an active per-boundary WorkstreamWorkerLease and receiver-readable instruction packet grant only the required write/build/test capabilities and cite the accepted-delta digest plus independent Vaporize repository-owner delegation.",
+    "Implementation receipts, validation commands, changed files, and persistence state return to this child and its parent graph; any discovered bug is filed as a linked child.",
+    "The validated candidate is persisted through one explicit-file Savepoint at the Vaporize Git boundary, and the implementation lease is revoked before any experiment delivery.",
+    "Implementation completion and candidate commit do not authorize delivery.execute, feature.policy.write, feature.exposure.execute, rollback.execute, push, or release; the experiment child requires separate product, delivery-owner, environment policy-plane-owner, and repository-owner decisions plus bounded purpose-specific leases.",
+    "The implementation lease registers an independently reachable finalizer that revokes source, build, test, artifact, commit, credential, and network capabilities and preserves dirty work and evidence on failure, cancellation, abandonment, timeout, process loss, or runner loss."
+  ],
+  "notes": "An expired, revoked, wrong-boundary, or read-only lease blocks source work. Chat intent, parent status, a legacy VMR packet, and an implementation commit do not substitute for the frozen accepted-delta digest, repository-owner delegation, and active lease evidence.",
+  "dependencies": [
+    {
+      "issueId": "FR-VAPORIZE-BUILD-TEST-LIBRARY-ONLY-PRODUCT-2026-07-08",
+      "dependsOnId": "feature-vaporize-feature-flagged-swiftpm-library-product-workflow-2026-08-25",
+      "type": "parent-child",
+      "createdAt": "2026-08-25T23:03:00Z",
+      "createdBy": "Locke commissioned Codex agent"
+    },
+    {
+      "issueId": "FR-VAPORIZE-BUILD-TEST-LIBRARY-ONLY-PRODUCT-2026-07-08",
+      "dependsOnId": "analysis-vaporize-swiftpm-library-product-impact-and-dependencies-2026-08-25",
+      "type": "blocks",
+      "createdAt": "2026-08-25T23:03:00Z",
+      "createdBy": "Locke commissioned Codex agent"
+    },
+    {
+      "issueId": "FR-VAPORIZE-BUILD-TEST-LIBRARY-ONLY-PRODUCT-2026-07-08",
+      "dependsOnId": "docs-vaporize-swiftpm-library-product-prd-cuj-design-delta-2026-08-25",
+      "type": "blocks",
+      "createdAt": "2026-08-25T23:03:00Z",
+      "createdBy": "Locke commissioned Codex agent"
+    }
   ],
   "composesWith": [
     "FR-VAPORIZE-JSON-SCHEMA-PATTERN-KEYWORD-SUPPORT-2026-07-06",

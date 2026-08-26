@@ -1,0 +1,18 @@
+{
+  "beads-issue-model": "0.0.1",
+  "id": "docs-vaporize-swiftpm-library-product-prd-cuj-design-delta-2026-08-25",
+  "title": "Complete the library-product PRD, CUJ, design, and authority delta",
+  "description": "Finalize the product contract for lifecycle, sibling workflows, flag-off equivalence, flag-on receipts, carriers, product, repository, delivery, and environment policy-plane ownership, staged leases, rollback, exposure guardrails, analytics, human disposition, evidence retention, cleanup, non-success finalization, revocation, and closure before source implementation.",
+  "issueType": "task",
+  "priority": 1,
+  "status": "open",
+  "parentId": "feature-vaporize-feature-flagged-swiftpm-library-product-workflow-2026-08-25",
+  "labels": ["vaporize", "prd", "cuj", "design", "authority", "pre-code"],
+  "createdAt": "2026-08-25T23:02:00Z",
+  "createdBy": "Locke commissioned Codex agent",
+  "acceptanceCriteria": "CUJ, PRD, and DocC agree on intersecting product/repository authority; independent delivery-owner and environment policy-plane-owner authority; read versus implementation decisions; a declared but runtime-inactive default-OFF policy contract; exact legacy behavior; sibling selection; frozen accepted delta; closed source, delivery, policy, exposure, rollback, credential, network, push, and publish operations; receipts; rollback; candidate persistence before exposure; exposure window and kill switch; analytics persistence before disposition; decision-bound cleanup authority; cleanup persistence; operational retirement; failure/cancel/abandon/timeout/process-loss finalization; lease revocation; and governance-only parent closure.",
+  "dependencies": [
+    {"issueId":"docs-vaporize-swiftpm-library-product-prd-cuj-design-delta-2026-08-25","dependsOnId":"feature-vaporize-feature-flagged-swiftpm-library-product-workflow-2026-08-25","type":"parent-child","createdAt":"2026-08-25T23:02:00Z","createdBy":"Locke commissioned Codex agent"},
+    {"issueId":"docs-vaporize-swiftpm-library-product-prd-cuj-design-delta-2026-08-25","dependsOnId":"analysis-vaporize-swiftpm-library-product-impact-and-dependencies-2026-08-25","type":"blocks","createdAt":"2026-08-25T23:02:00Z","createdBy":"Locke commissioned Codex agent"}
+  ]
+}

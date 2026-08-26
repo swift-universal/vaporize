@@ -1,0 +1,97 @@
+{
+  "VaporwareModificationRequestPacket": "0.1.0",
+  "schemaVersion": "0.1.0",
+  "kind": "vaporware-modification-request",
+  "slug": "2026-08-25-vaporize-product-scoped-feature-graph-correction",
+  "title": "Correct the Vaporize product-scoped feature planning graph",
+  "status": "accepted-record-correction",
+  "createdAt": "2026-08-26T05:32:00Z",
+  "updatedAt": "2026-08-26T06:12:48Z",
+  "createdBy": "Codex",
+  "operatorAttestation": {
+    "quote": "let's write the corrections. please fix proposal",
+    "capturedAt": "2026-08-26T05:32:00Z",
+    "capturedBy": "Codex",
+    "contextQuote": "all code changes go through this",
+    "processCorrection": "Correct the Vaporize planning Beads without touching production source and bind persistence to the Vaporize Git boundary only."
+  },
+  "requestClass": "product-planning-record-correction",
+  "workflowRef": "private/universal/substrate/collectives/spaces-universal/private/universal/kura-spaces/workflows/software-modification-workstream-capture/v0.1.0/software-modification-workstream-capture.workflow.su.json",
+  "owningBeadRef": "kura-spaces/beads/feature-vaporize-feature-flagged-swiftpm-library-product-workflow-2026-08-25.beads-issue.su.json",
+  "targetMap": {
+    "targetKind": "vaporize-boundary-planning-graph-correction",
+    "canonicalRefs": [
+      {
+        "path": "kura-spaces/beads",
+        "artifactKind": "vaporize-parent-and-linked-feature-planning-graph",
+        "owner": "vaporize-product-line"
+      }
+    ],
+    "coordinationRefs": [
+      {
+        "path": "private/universal/substrate/collectives/spaces-universal/private/universal/kura-spaces/workstreams/2026-08-25-product-scoped-code-change-authorization/.docc/index.md",
+        "relationship": "canonical-cross-substrate-proposal",
+        "authority": "spaces-universal"
+      }
+    ]
+  },
+  "currentContract": {
+    "purpose": "Correct the Vaporize planning exemplar before any library-product source implementation begins.",
+    "observedGap": "The earlier graph did not require candidate persistence before exposure, independent delivery-owner and environment policy-plane-owner authority, non-empty exact-cover boundary and target sets, closed runtime operations, non-success capability finalizers, append-only evidence persistence before disposition, terminal versus interim decision semantics, decision-bound cleanup authority, cleanup persistence, operational retirement, or governance-only closure.",
+    "releaseMode": "record-only-forward-correction",
+    "approvalBoundary": "Operator approval authorizes only the named Beads records in the Vaporize boundary. It grants no source read, source write, build, test, commit of production code, push, release, or feature exposure authority."
+  },
+  "changeUnits": [
+    {
+      "id": "vaporize-feature-planning-graph",
+      "targetPath": "kura-spaces/beads",
+      "files": [
+        "feature-vaporize-feature-flagged-swiftpm-library-product-workflow-2026-08-25.beads-issue.su.json",
+        "analysis-vaporize-swiftpm-library-product-impact-and-dependencies-2026-08-25.beads-issue.su.json",
+        "docs-vaporize-swiftpm-library-product-prd-cuj-design-delta-2026-08-25.beads-issue.su.json",
+        "FR-VAPORIZE-BUILD-TEST-LIBRARY-ONLY-PRODUCT-2026-07-08.beads-issue.su.json",
+        "experiment-vaporize-swiftpm-library-product-plan-and-run-2026-08-25.beads-issue.su.json",
+        "analytics-vaporize-swiftpm-library-product-experiment-2026-08-25.beads-issue.su.json",
+        "decision-vaporize-swiftpm-library-product-experiment-2026-08-25.beads-issue.su.json",
+        "removal-vaporize-swiftpm-library-product-flag-and-dead-branch-2026-08-25.beads-issue.su.json",
+        "validation-vaporize-swiftpm-library-product-feature-closure-2026-08-25.beads-issue.su.json"
+      ],
+      "requestedBehavior": "Keep one parent and linked child graph whose blocking order is analysis, requirements, implementation, candidate persistence, independently owned delivery and runtime-policy authorization, bounded experiment, persisted analytics, terminal disposition, newly authorized cleanup, cleanup persistence, operational retirement, revocation, and governance closure, with non-success finalizers at every lease-issuing phase.",
+      "evidenceRequired": [
+        "Every JSON record parses.",
+        "Every local dependency reference resolves and the blocking DAG is acyclic.",
+        "Only a terminal disposition can unblock cleanup.",
+        "Delivery, policy mutation, exposure, rollback, credentials, network, push, and publish are closed operations with independent owner delegations and no authority implication.",
+        "Boundary, exposure, cleanup, and retirement sets are non-empty and exactly cover their frozen required sets; empty, partial, duplicate, extra, and mismatched inputs cannot pass fan-in.",
+        "Failure, cancellation, abandonment, withdrawal, supersession, timeout, guardrail stop, process loss, and runner loss leave zero active capabilities and preserve dirty work and evidence.",
+        "The graph explicitly rejects legacy VMR packets as independent code authority.",
+        "No production source or product documentation is changed."
+      ],
+      "nonGoals": [
+        "Do not implement library-product build or test support.",
+        "Do not issue a source or execution worker lease.",
+        "Do not expose a feature or mutate existing experiment evidence.",
+        "Do not commit any unrelated dirty Vaporize file."
+      ]
+    }
+  ],
+  "preflight": {
+    "sourceState": "The Vaporize boundary was dirty before this record correction; all unrelated source, Package.resolved, documentation, and existing graph work remain excluded.",
+    "boundaryState": "This request covers only the nine named Beads records plus its own compatibility request and workflow receipt inside the Vaporize Git boundary.",
+    "buildValidation": "Validate JSON, dependency topology, lifecycle language, and exact-file dirty attribution; no production build is required."
+  },
+  "returnReceipt": {
+    "status": "planning-graph-validated",
+    "proof": [
+      "All 11 Vaporize-boundary planning and compatibility JSON records parse.",
+      "The nine-record parent/child graph resolves every local dependency and its blocking DAG is acyclic.",
+      "The graph now binds independent product, repository, delivery, and environment policy-plane authority; non-empty exact-cover target sets; candidate persistence; per-target feature exposure; persisted analytics; terminal disposition; new cleanup authority; per-target operational retirement; non-success finalizers; revocation; and governance-only closure.",
+      "No production source, Package.resolved, release documentation, engineering documentation, or unrelated generated Bead was admitted to this record-only slice.",
+      "The exact Vaporize persistence slice is nine Beads plus two boundary-local compatibility records."
+    ],
+    "validationLimits": [
+      "This legacy v0.1.0 packet is compatibility provenance for record persistence and cannot authorize source work.",
+      "The corrected feature graph is a planning exemplar, not proof that the future authorization broker is active."
+    ]
+  }
+}

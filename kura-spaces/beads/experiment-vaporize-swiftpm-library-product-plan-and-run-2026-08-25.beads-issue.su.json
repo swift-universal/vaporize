@@ -1,0 +1,24 @@
+{
+  "beads-issue-model": "0.0.1",
+  "id": "experiment-vaporize-swiftpm-library-product-plan-and-run-2026-08-25",
+  "title": "Plan and run the library-product control/treatment experiment",
+  "description": "After dark implementation, rollback proof, candidate Savepoint, and implementation-lease revocation, reuse feature-gated-cli-dependency-experiment to exercise legacy control and library-product treatment using only persisted candidate SHAs, independently delegated delivery and environment policy-plane authority, a default-OFF policy contract, no silent fallback, a bounded window, typed cohort receipts, and a non-success capability finalizer.",
+  "design": "Implementation authority does not grant delivery or exposure authority. Source implementation only declares the default-OFF policy contract and identifier; it does not mutate the runtime policy plane. Before running either cohort, a separate named human product decision approves the experiment, the delivery owner delegates delivery.execute, each environment policy-plane owner delegates feature.policy.write, feature.exposure.execute, and rollback.execute, and the Vaporize repository owner separately delegates any vcs.push or release.publish operation. Exposure must remain inside the named environment, cohort, and window, and every runtime lease must be independently revocable and finalizable.",
+  "acceptanceCriteria": "False proves legacy control and true proves treatment through the same acceptance path. Before exposure, the candidate SHA and Savepoint artifact resolve, the implementation lease is revoked, a product decision records hypothesis and bounds, the delivery owner delegates delivery.execute, each environment policy-plane owner delegates feature.policy.write, feature.exposure.execute, and rollback.execute, and the Vaporize repository owner separately delegates any vcs.push or release.publish operation; credential.use and network.connect are separately itemized only when required. One stable target coordinate and independently owned lease chain expands per environment/cohort intersection, and every required target must fan in before aggregate analytics or disposition. No silent fallback is allowed. Every run emits immutable cohort and build/test receipts naming the actual carrier, exact operation leases, accepted-delta digest, boundary, and measurement window. Expiry or a guardrail breach invokes rollback.execute, stops exposure, revokes all runtime capabilities, preserves evidence, and emits the abort receipt. Failure, cancellation, abandonment, timeout, process loss, or runner loss quiesces delivery, stops exposure, records a rollback-executed or rollback-not-required disposition per affected target, and runs the same idempotent finalizer without source authority.",
+  "notes": "The implementation lease cannot be reused as implicit experiment permission. Exposure starts only from the separately accepted decision and active bounded experiment authority.",
+  "issueType": "task",
+  "priority": 1,
+  "status": "open",
+  "parentId": "feature-vaporize-feature-flagged-swiftpm-library-product-workflow-2026-08-25",
+  "owner": "vaporize product line, swift-universal",
+  "labels": ["vaporize", "experiment", "control-treatment", "exposure-decision", "rollback", "kill-switch", "expiry"],
+  "createdAt": "2026-08-25T23:04:00Z",
+  "createdBy": "Locke commissioned Codex agent",
+  "sourceSystem": "vaporize-product-line",
+  "sourceFormula": "feature-gated-cli-dependency-experiment/v0.1.0",
+  "sourceLocation": "private/universal/substrate/collectives/swift-universal/private/product-lines/vaporize/kura-spaces/beads",
+  "dependencies": [
+    {"issueId": "experiment-vaporize-swiftpm-library-product-plan-and-run-2026-08-25", "dependsOnId": "feature-vaporize-feature-flagged-swiftpm-library-product-workflow-2026-08-25", "type": "parent-child", "createdAt": "2026-08-25T23:04:00Z", "createdBy": "Locke commissioned Codex agent"},
+    {"issueId": "experiment-vaporize-swiftpm-library-product-plan-and-run-2026-08-25", "dependsOnId": "FR-VAPORIZE-BUILD-TEST-LIBRARY-ONLY-PRODUCT-2026-07-08", "type": "blocks", "createdAt": "2026-08-25T23:04:00Z", "createdBy": "Locke commissioned Codex agent"}
+  ]
+}

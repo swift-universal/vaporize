@@ -1,0 +1,23 @@
+{
+  "beads-issue-model": "0.0.1",
+  "id": "analytics-vaporize-swiftpm-library-product-experiment-2026-08-25",
+  "title": "Produce library-product experiment analytics receipts",
+  "description": "Project typed cohort observations into append-only decision evidence for correctness, build/test completion, duration, carrier context, failures, compatibility, and exposure guardrails, then persist that evidence before disposition. Persisted analytics are a prerequisite for decision.",
+  "design": "Analytics has read access to immutable experiment inputs and append-only authority for new evidence records. It may not rewrite raw observations, delete failed runs, mutate product source, change exposure, or select the decision outcome. Corrections supersede prior evidence with explicit lineage.",
+  "acceptanceCriteria": "Immutable typed analytics fan in every required environment/cohort target and bind both cohorts, product exposure decision, delivery-owner and environment policy-plane delegations, exact delivery.execute, feature.policy.write, feature.exposure.execute, rollback.execute, credential.use, network.connect, push, and publish leases, accepted-delta digest, candidate SHAs, raw observations, abort/finalizer receipts, and build/test receipts; reject any missing, duplicate, wrong-environment, wrong-cohort, or wrong-owner target receipt; quantify success and guardrail metrics; disclose missing contexts, failures, limitations, and recommendation; preserve failed and superseded evidence; and persist the complete evidence manifest through a governance-only exact-file Savepoint before human decision. The persisted digest makes later cleanup unable to erase or rewrite the decision basis.",
+  "notes": "Cleanup removes temporary executable selection machinery, never analytics, raw observations, decisions, or validation receipts.",
+  "issueType": "task",
+  "priority": 1,
+  "status": "open",
+  "parentId": "feature-vaporize-feature-flagged-swiftpm-library-product-workflow-2026-08-25",
+  "owner": "vaporize product line, swift-universal",
+  "labels": ["vaporize", "analytics", "experiment-receipts", "decision-input", "immutable-evidence"],
+  "createdAt": "2026-08-25T23:05:00Z",
+  "createdBy": "Locke commissioned Codex agent",
+  "sourceSystem": "vaporize-product-line",
+  "sourceLocation": "private/universal/substrate/collectives/swift-universal/private/product-lines/vaporize/kura-spaces/beads",
+  "dependencies": [
+    {"issueId": "analytics-vaporize-swiftpm-library-product-experiment-2026-08-25", "dependsOnId": "feature-vaporize-feature-flagged-swiftpm-library-product-workflow-2026-08-25", "type": "parent-child", "createdAt": "2026-08-25T23:05:00Z", "createdBy": "Locke commissioned Codex agent"},
+    {"issueId": "analytics-vaporize-swiftpm-library-product-experiment-2026-08-25", "dependsOnId": "experiment-vaporize-swiftpm-library-product-plan-and-run-2026-08-25", "type": "blocks", "createdAt": "2026-08-25T23:05:00Z", "createdBy": "Locke commissioned Codex agent"}
+  ]
+}

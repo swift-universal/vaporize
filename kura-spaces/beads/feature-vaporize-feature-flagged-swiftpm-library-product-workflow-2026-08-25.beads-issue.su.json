@@ -1,0 +1,20 @@
+{
+  "beads-issue-model": "0.0.1",
+  "id": "feature-vaporize-feature-flagged-swiftpm-library-product-workflow-2026-08-25",
+  "title": "Feature · ship and retire a product-authorized SwiftPM library-product experiment",
+  "description": "Govern Vaporize's library-only SwiftPM build/test capability through intersecting product and repository authority, staged source-analysis and implementation decisions, a frozen accepted modification snapshot, expiring per-boundary worker leases, dark implementation, candidate persistence before independently authorized delivery and environment policy-plane exposure, persisted analytics, human disposition, new decision-bound cleanup authority, mandatory temporary-selection and losing-code removal, cleanup persistence, operational retirement, capability finalization, and governance-only closure.",
+  "issueType": "feature",
+  "priority": 1,
+  "status": "open",
+  "labels": ["vaporize", "swiftpm", "library-product", "feature-flag", "product-authority", "worker-lease", "beads-v0.0.3"],
+  "createdAt": "2026-08-25T23:00:00Z",
+  "createdBy": "Locke commissioned Codex agent",
+  "sourceSystem": "vaporize-product-line",
+  "sourceType": "feature-graph",
+  "sourceLocation": "kura-spaces/beads",
+  "acceptanceCriteria": "The existing library-only bead remains the implementation child. Product approval and Vaporize repository-owner delegation precede source access; implementation acceptance does not imply delivery or exposure; rollback and one exact-file candidate Savepoint precede exposure; delivery.execute is delegated by the delivery owner; feature.policy.write, feature.exposure.execute, and rollback.execute are delegated by each environment policy-plane owner; one independently owned lease and receipt chain expands per environment/cohort target and all targets fan in before analytics, disposition, cleanup, or closure; push and publish remain repository-owner decisions; persisted analytics precede disposition; disposition mints new cleanup authority; cleanup is persisted and operationally retired; evidence remains immutable; every lease-issuing phase has an independently reachable non-success finalizer; and all capabilities are revoked before governance-only closure persistence.",
+  "notes": "This graph is the first planning exemplar for the product-scoped code-change proposal. It does not itself grant source access while the Beads gate, lease, broker, and Savepoint enforcement repairs remain open.",
+  "dependencies": [
+    {"issueId":"feature-vaporize-feature-flagged-swiftpm-library-product-workflow-2026-08-25","dependsOnId":"validation-vaporize-swiftpm-library-product-feature-closure-2026-08-25","type":"blocks","createdAt":"2026-08-25T23:00:00Z","createdBy":"Locke commissioned Codex agent"}
+  ]
+}

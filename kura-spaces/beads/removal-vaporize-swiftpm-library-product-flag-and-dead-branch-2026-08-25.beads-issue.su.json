@@ -1,0 +1,23 @@
+{
+  "beads-issue-model": "0.0.1",
+  "id": "removal-vaporize-swiftpm-library-product-flag-and-dead-branch-2026-08-25",
+  "title": "Remove the library-product experiment flag and losing executable branch",
+  "description": "After human disposition and exposure-lease revocation, freeze a new cleanup delta, obtain Vaporize repository-owner delegation, issue a new cleanup lease, retain selected behavior, remove the temporary flag, experiment-only selector, losing executable sibling branch, and obsolete executable tests/docs, and persist cleanup while preserving all experiment, analytics, decision, validation, and persistence evidence.",
+  "design": "Cleanup is a new mutation stage at the Vaporize product boundary. It unequivocally requires a new digest-bound cleanup snapshot, Vaporize repository-owner delegation, shard revision, authority digest, and active exact-path write/build/test/commit lease tied to the terminal human decision. Neither the legacy VMR nor the original implementation lease can authorize cleanup. Cleanup authority never permits altering or deleting evidence records and registers its own independently reachable non-success finalizer. Retirement delivery later requires new delivery-owner, environment policy-plane-owner, and repository-owner delegations; cleanup source authority implies none of them.",
+  "acceptanceCriteria": "Before source cleanup, resolve a non-empty exact required cleanup-boundary set, the new decision-bound accepted-delta digest, one cleanup shard, repository-owner delegation, and active cleanup lease per boundary. Reject empty, partial, duplicate, extra, wrong-owner, wrong-revision, or wrong-artifact sets before expansion. Remove the temporary config key or compiled feature entry, runtime selector, losing executable branch, and obsolete executable tests/docs; retain one ordinary workflow and no reachable dead experiment path; retain immutable raw observations, analytics, human decision, receipts, and audit history; validate the evidence manifest; persist changed paths through one explicit-file cleanup Savepoint at the Vaporize boundary; revoke the cleanup source lease before retirement delivery begins; and prove failure, cancellation, abandonment, timeout, process loss, or runner loss finalizes cleanup authority without discarding dirty work or evidence.",
+  "notes": "Evidence is not stale code. No decision outcome authorizes deleting the evidence that supported it.",
+  "issueType": "task",
+  "priority": 1,
+  "status": "open",
+  "parentId": "feature-vaporize-feature-flagged-swiftpm-library-product-workflow-2026-08-25",
+  "owner": "vaporize product line, swift-universal",
+  "labels": ["vaporize", "feature-flag-removal", "dead-code", "cleanup", "evidence-retention", "boundary-lease-required"],
+  "createdAt": "2026-08-25T23:07:00Z",
+  "createdBy": "Locke commissioned Codex agent",
+  "sourceSystem": "vaporize-product-line",
+  "sourceLocation": "private/universal/substrate/collectives/swift-universal/private/product-lines/vaporize/kura-spaces/beads",
+  "dependencies": [
+    {"issueId": "removal-vaporize-swiftpm-library-product-flag-and-dead-branch-2026-08-25", "dependsOnId": "feature-vaporize-feature-flagged-swiftpm-library-product-workflow-2026-08-25", "type": "parent-child", "createdAt": "2026-08-25T23:07:00Z", "createdBy": "Locke commissioned Codex agent"},
+    {"issueId": "removal-vaporize-swiftpm-library-product-flag-and-dead-branch-2026-08-25", "dependsOnId": "decision-vaporize-swiftpm-library-product-experiment-2026-08-25", "type": "blocks", "createdAt": "2026-08-25T23:07:00Z", "createdBy": "Locke commissioned Codex agent"}
+  ]
+}

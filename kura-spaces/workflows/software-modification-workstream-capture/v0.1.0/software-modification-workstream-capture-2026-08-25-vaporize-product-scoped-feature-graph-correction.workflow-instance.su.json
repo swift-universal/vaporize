@@ -1,0 +1,111 @@
+{
+  "schemaVersion": "0.0.8",
+  "WorkflowInstanceModel": "0.0.8",
+  "kind": "workflow-instance",
+  "slug": "software-modification-workstream-capture-2026-08-25-vaporize-product-scoped-feature-graph-correction",
+  "title": "Software-modification compatibility receipt - Vaporize feature planning graph correction",
+  "updated": "2026-08-26T06:12:48Z",
+  "workflowRef": {
+    "link-ref-model": "0.0.5",
+    "t": "Software modification workstream capture v0.1.0 compatibility formula",
+    "tg": [
+      {
+        "k": "rp",
+        "rt": "mono",
+        "v": "private/universal/substrate/collectives/spaces-universal/private/universal/kura-spaces/workflows/software-modification-workstream-capture/v0.1.0/software-modification-workstream-capture.workflow.su.json"
+      }
+    ]
+  },
+  "beadTrackingRefs": [
+    {
+      "link-ref-model": "0.0.5",
+      "t": "Vaporize product-scoped feature planning graph",
+      "m": [
+        {"lane": "kind", "v": "bead-feature"},
+        {"lane": "slug", "v": "feature-vaporize-feature-flagged-swiftpm-library-product-workflow-2026-08-25"}
+      ],
+      "tg": [
+        {
+          "k": "rp",
+          "rt": "current-file",
+          "v": "../../../beads/feature-vaporize-feature-flagged-swiftpm-library-product-workflow-2026-08-25.beads-issue.su.json"
+        }
+      ]
+    }
+  ],
+  "receiptRefs": [
+    {
+      "link-ref-model": "0.0.5",
+      "t": "Boundary-local compatibility request",
+      "tg": [
+        {
+          "k": "rp",
+          "rt": "current-file",
+          "v": "requests/2026-08-25-vaporize-product-scoped-feature-graph-correction.vaporware-modification-request.su.json"
+        }
+      ]
+    }
+  ],
+  "stateResults": [
+    {
+      "schemaVersion": "0.1.0",
+      "WorkflowInstanceStateResultModel": "0.1.0",
+      "kind": "workflow-instance-state-result",
+      "stateId": "author-modification-request",
+      "outcome": "completed",
+      "summary": "The record-only Vaporize boundary correction is frozen in a compatibility request linked to the product-line parent Bead."
+    },
+    {
+      "schemaVersion": "0.1.0",
+      "WorkflowInstanceStateResultModel": "0.1.0",
+      "kind": "workflow-instance-state-result",
+      "stateId": "workspace-preflight",
+      "outcome": "completed",
+      "summary": "The pre-existing dirty baseline was recorded and the eleven exact planning and compatibility records were isolated from unrelated source, lock-file, and documentation changes."
+    },
+    {
+      "schemaVersion": "0.1.0",
+      "WorkflowInstanceStateResultModel": "0.1.0",
+      "kind": "workflow-instance-state-result",
+      "stateId": "update-prd-and-cuj",
+      "outcome": "completed-before-record-implementation",
+      "summary": "The Spaces Universal proposal defines the authority and lifecycle contract before this Vaporize planning graph correction."
+    },
+    {
+      "schemaVersion": "0.1.0",
+      "WorkflowInstanceStateResultModel": "0.1.0",
+      "kind": "workflow-instance-state-result",
+      "stateId": "implement-change",
+      "outcome": "record-only-proposal-correction",
+      "summary": "Only the nine named Vaporize Beads and two boundary-local compatibility records are in scope; no production source is authorized or changed."
+    },
+    {
+      "schemaVersion": "0.1.0",
+      "WorkflowInstanceStateResultModel": "0.1.0",
+      "kind": "workflow-instance-state-result",
+      "stateId": "build-and-test",
+      "outcome": "completed",
+      "summary": "All eleven scoped JSON records parse; the nine-record graph resolves every local dependency and its blocking DAG is acyclic; lifecycle and authority language matches the reviewed v3 proposal; and unrelated production work remains excluded."
+    },
+    {
+      "schemaVersion": "0.1.0",
+      "WorkflowInstanceStateResultModel": "0.1.0",
+      "kind": "workflow-instance-state-result",
+      "stateId": "emit-through-savepoint",
+      "outcome": "exact-file-emission-requested",
+      "summary": "The validated eleven-file Vaporize planning slice is ready for one boundary-local explicit-file Savepoint; unrelated dirty work remains excluded."
+    },
+    {
+      "schemaVersion": "0.1.0",
+      "WorkflowInstanceStateResultModel": "0.1.0",
+      "kind": "workflow-instance-state-result",
+      "stateId": "launch-review",
+      "outcome": "not-applicable-to-planning-record-correction",
+      "summary": "The operator approved correction of the planning graph, not activation or release of the feature."
+    }
+  ],
+  "notes": [
+    "This WorkflowInstanceModel exists only because installed Savepoint currently requires workflow compatibility provenance.",
+    "The Vaporize parent Bead remains canonical planning custody; this legacy VMR cannot authorize product source work."
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "beads-issue-model": "0.0.1",
+  "id": "validation-vaporize-swiftpm-library-product-feature-closure-2026-08-25",
+  "title": "Validate final unflagged library-product feature closure",
+  "description": "Prove final post-decision behavior, cleanup persistence, authorized delivery, operational policy retirement, evidence retention, QA sign-off, execution-lease revocation, and governance-only closure persistence before the parent advances through QA, launch, and closure.",
+  "design": "Closure is verification, not new product authority. It reads the final boundary state and receipts, verifies exact files through Savepoint, proves every implementation, experiment, and cleanup lease is revoked or expired, and returns the commit/receipt binding to the parent graph.",
+  "acceptanceCriteria": "Tests prove selected unflagged behavior and receipts. Searches find no temporary flag, selector, or losing executable branch. Immutable experiment, analytics, decision, candidate-Savepoint, cleanup-Savepoint, delivery, abort-finalizer, and validation evidence remains resolvable by digest. Cleanup source authority is revoked before one independently owned retirement lease per environment target uses separately authorized delivery.execute and feature.policy.write to prove the survivor is ordinary behavior and retire temporary policy. A typed downstream environment-owner operational-retirement and QA receipt gate binds every target and cleanup digest, and all targets fan in before closure. Every source, build, test, commit, delivery.execute, feature.policy.write, feature.exposure.execute, rollback.execute, credential.use, network.connect, vcs.push, and release.publish lease is revoked or expired, no kill-switch obligation remains open, QA sign-off exists before qa-verified, and a one-shot governance-only lease persists revocation plus parent closure without access to source paths and is consumed on success. Negative fixtures for analysis, implementation, candidate persistence, delivery, experiment, analytics, cleanup, retirement, and governance persistence prove failure, cancellation, abandonment, withdrawal, supersession, timeout, guardrail stop, process loss, and runner loss leave zero active capabilities, preserve dirty work and evidence, record per-target rollback disposition, and never silently close the parent.",
+  "notes": "A commit without exact-file graph binding, or a closed implementation with an active lease, is not closure.",
+  "issueType": "task",
+  "priority": 1,
+  "status": "open",
+  "parentId": "feature-vaporize-feature-flagged-swiftpm-library-product-workflow-2026-08-25",
+  "owner": "vaporize product line, swift-universal",
+  "labels": ["vaporize", "validation", "closure", "launch-review", "savepoint-binding", "lease-revocation"],
+  "createdAt": "2026-08-25T23:08:00Z",
+  "createdBy": "Locke commissioned Codex agent",
+  "sourceSystem": "vaporize-product-line",
+  "sourceLocation": "private/universal/substrate/collectives/swift-universal/private/product-lines/vaporize/kura-spaces/beads",
+  "dependencies": [
+    {"issueId": "validation-vaporize-swiftpm-library-product-feature-closure-2026-08-25", "dependsOnId": "feature-vaporize-feature-flagged-swiftpm-library-product-workflow-2026-08-25", "type": "parent-child", "createdAt": "2026-08-25T23:08:00Z", "createdBy": "Locke commissioned Codex agent"},
+    {"issueId": "validation-vaporize-swiftpm-library-product-feature-closure-2026-08-25", "dependsOnId": "removal-vaporize-swiftpm-library-product-flag-and-dead-branch-2026-08-25", "type": "blocks", "createdAt": "2026-08-25T23:08:00Z", "createdBy": "Locke commissioned Codex agent"}
+  ]
+}
