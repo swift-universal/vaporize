@@ -1,0 +1,38 @@
+{
+  "acceptanceCriteria" : "- Replace the literal with the matching accessor from the approved generated copy package; add catalog copy through the catalog workflow when no accessor exists.\n- Repair the reported source coordinate and only the predeclared catalog or dependency scope; do not invent replacement wording in product code.\n- Rerun the exact complete source-gate verifier from the Bead spawn cast. Only authoritative complete absence permits automatic closure.\n- Use an existing matching generated accessor at the reported sink, or first complete i18n package provisioning without inventing replacement wording in product code.\n- Rerun the exact complete source-gate verifier from the Bead spawn cast. Only authoritative complete absence permits automatic closure.\n- The structural law break no longer appears at this source coordinate.\n- The canonical Bead, detector evidence, spawn cast, and strict Bead World projection remain decodable.",
+  "createdAt" : "2026-08-25T22:32:18Z",
+  "createdBy" : "translate-source-gate",
+  "dependencies" : [
+    {
+      "createdAt" : "2026-08-25T22:32:18Z",
+      "createdBy" : "translate-source-gate",
+      "dependsOnId" : "EPIC-I18N-SOURCE-CONSUMPTION-ENFORCEMENT-ADOPTION-2026-07-18",
+      "issueId" : "bug-i18n-i18n002-d5cd8cfceb9d07baa8273c0fa35458fbc76287b160c8906eba7baca761015006",
+      "type" : "parent-child"
+    }
+  ],
+  "description" : "What happened: User-facing string literal must come from an approved generated i18n copy package.\n\nWhy it matters: Raw product copy bypasses the approved catalog, so wording can drift and cannot be localized consistently.\n\nNext move: Replace the literal with the matching accessor from the approved generated copy package; add catalog copy through the catalog workflow when no accessor exists.\n\nBoundary: Repair the reported source coordinate and only the predeclared catalog or dependency scope; do not invent replacement wording in product code.\n\nCompletion route: conditional-repair — Use an existing matching generated accessor at the reported sink, or first complete i18n package provisioning without inventing replacement wording in product code.\n\nCompletion owner: consumer owner; i18n-universal catalog owner when no matching approved accessor exists\n\nCompletion workflow: private/universal/substrate/collectives/spaces-universal/private/universal/kura-spaces/workflows/i18n-active-copy-lifecycle/v0.1.0/i18n-active-copy-lifecycle.workflow.su.json\n\nCompletion evidence: Rerun the exact complete source-gate verifier from the Bead spawn cast. Only authoritative complete absence permits automatic closure.\n\nIdentity: translate-source-gate observed I18N002 at the stable source coordinate Sources/vaporize-cli/main.swift. Diagnostic line, column, message, visibility, and time are evidence, not identity.",
+  "externalRef" : "private/universal/substrate/collectives/swift-universal/private/product-lines/vaporize/kura-spaces/beads/bug-i18n-i18n002-d5cd8cfceb9d07baa8273c0fa35458fbc76287b160c8906eba7baca761015006.i18n-bead-artifact-binding.su.json",
+  "firstObservedAt" : "2026-08-25T22:32:18Z",
+  "id" : "bug-i18n-i18n002-d5cd8cfceb9d07baa8273c0fa35458fbc76287b160c8906eba7baca761015006",
+  "issueType" : "bug",
+  "labels" : [
+    "bug",
+    "detector-authored",
+    "i18n-universal",
+    "i18n-source-consumption-enforcement",
+    "i18n002",
+    "spawn-ready"
+  ],
+  "lastObservedAt" : "2026-08-25T22:32:18Z",
+  "observationCount" : 1,
+  "owner" : "private/universal/substrate/collectives/swift-universal/private/product-lines/vaporize/kura-spaces",
+  "priority" : 2,
+  "recurrenceCount" : 0,
+  "sourceLocation" : "private/universal/substrate/collectives/swift-universal/private/product-lines/vaporize/kura-spaces/beads/bug-i18n-i18n002-d5cd8cfceb9d07baa8273c0fa35458fbc76287b160c8906eba7baca761015006.i18n-source-gate-evidence.json",
+  "sourceSystem" : "translate-source-gate",
+  "sourceType" : "i18n-source-gate-finding",
+  "status" : "open",
+  "title" : "Resolve I18N002 at Sources/vaporize-cli/main.swift",
+  "updatedAt" : "2026-08-25T22:32:18Z"
+}
