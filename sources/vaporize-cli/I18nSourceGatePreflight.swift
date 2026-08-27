@@ -256,8 +256,11 @@ enum VaporizeI18nSourceGate {
         enumerator.skipDescendants()
         continue
       }
-      let values = try candidate.resourceValues(forKeys: [.isDirectoryKey])
-      guard values.isDirectory == true else { continue }
+      guard let isDirectory = directoryStatus(at: candidate) else {
+        enumerator.skipDescendants()
+        continue
+      }
+      guard isDirectory else { continue }
       if excludedDirectoryNames.contains(candidate.lastPathComponent) {
         enumerator.skipDescendants()
         continue
@@ -275,6 +278,15 @@ enum VaporizeI18nSourceGate {
     guard let minimumDepth = matches.map(\.depth).min() else { return [] }
     return Array(Set(matches.filter { $0.depth == minimumDepth }.map(\.url)))
       .sorted { $0.path < $1.path }
+  }
+
+  /// Directory enumeration is a live filesystem observation. An entry can
+  /// disappear between `FileManager` yielding its URL and Foundation reading
+  /// its metadata; dangling Windows reparse points surface the same condition
+  /// as Cocoa error 4. Treat that candidate as unavailable and keep the
+  /// ownership search bounded instead of aborting every build and install.
+  static func directoryStatus(at candidate: URL) -> Bool? {
+    try? candidate.resourceValues(forKeys: [.isDirectoryKey]).isDirectory
   }
 
   private static func sourceImportedModules(_ sources: [URL]) throws -> Set<String> {

@@ -3,6 +3,14 @@ import Testing
 
 @testable import VaporizeCLI
 
+@Test("Vaporize ignores a vanished entry while discovering its Kura space")
+func sourceGateTreatsVanishedEntryAsUnavailable() {
+  let missing = FileManager.default.temporaryDirectory
+    .appendingPathComponent("vaporize-vanished-\(UUID().uuidString)")
+
+  #expect(VaporizeI18nSourceGate.directoryStatus(at: missing) == nil)
+}
+
 @Test("Vaporize resolves Bead ownership to the nearest product Kura space")
 func sourceGateFindsProductKuraSpace() throws {
   let repository = FileManager.default.temporaryDirectory.appendingPathComponent(

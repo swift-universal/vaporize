@@ -1,0 +1,36 @@
+{
+  "BeadsIssue": "0.1.0",
+  "schemaVersion": "0.1.0",
+  "id": "bug-vaporize-windows-source-gate-vanished-entry-2026-08-26",
+  "title": "Ignore vanished entries during Vaporize source-gate discovery",
+  "status": "closed",
+  "priority": 1,
+  "issueType": "bug",
+  "labels": [
+    "vaporize",
+    "windows",
+    "filesystem",
+    "source-gate",
+    "savepoint"
+  ],
+  "createdAt": "2026-08-26",
+  "createdBy": "Codex with operator direction",
+  "description": "Vaporize aborted a Windows Savepoint installation before build when live directory enumeration encountered an entry that had vanished or could no longer be resolved, surfacing NSCocoaErrorDomain Code 4 instead of continuing discovery.",
+  "historicalContent": {
+    "expectedBehavior": "Source-gate discovery skips transiently unavailable entries while preserving ordinary file and directory traversal semantics.",
+    "currentEvidence": [
+      "The original Savepoint install failed during mandatory i18n source-gate discovery with NSCocoaErrorDomain Code 4 and WindowsError Code 3.",
+      "Vaporize now treats an unavailable resource-value observation as a vanished entry and skips only that entry's descendants.",
+      "All six sourceGate tests pass on Windows, including the vanished-entry regression fixture.",
+      "A real debug Savepoint CLI installation completed and the installed executable hash matched the built artifact."
+    ],
+    "acceptanceCriteria": [
+      "A vanished discovery candidate does not abort the source gate.",
+      "Ordinary files remain distinguishable from unavailable entries.",
+      "Existing source-gate traversal tests remain green.",
+      "Vaporize installs the Savepoint CLI successfully on Windows."
+    ],
+    "scopeBoundary": "This fix changes only source-gate filesystem observation; it does not weaken i18n findings or alter build and installation policy."
+  },
+  "sourceLocation": "sources/vaporize-cli/I18nSourceGatePreflight.swift"
+}
