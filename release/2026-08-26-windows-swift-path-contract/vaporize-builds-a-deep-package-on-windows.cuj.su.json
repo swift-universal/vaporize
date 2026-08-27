@@ -1,0 +1,21 @@
+{
+  "schemaVersion": "0.1.0",
+  "kind": "critical-user-journey",
+  "id": "vaporize-builds-a-deep-package-on-windows@0.1.0",
+  "title": "Assistant builds a deep Swift package on Windows",
+  "persona": "assistant building a canonical deeply nested Swift package",
+  "steps": [
+    "The assistant invokes Vaporize with the canonical package path and no scratch override.",
+    "Vaporize predicts whether inline SwiftPM descendants exceed the Windows-safe budget.",
+    "For a deep package, Vaporize derives a stable short path beneath the configured Windows scratch root.",
+    "Vaporize supplies --scratch-path consistently to build, test, run, install, or self-update.",
+    "The assistant receives warnings if even the shortened root has insufficient path headroom."
+  ],
+  "provenBy": [
+    "VaporizeCUJ01SwiftPMCLITests.WindowsSwiftPMPathPolicyTests",
+    "tests/cuj-01-swiftpm-cli/WindowsSwiftPMPathPolicyTests.swift"
+  ],
+  "deferred": [
+    "A scratch lease service reserves disk capacity, expires abandoned work, and reclaims successful operation state."
+  ]
+}

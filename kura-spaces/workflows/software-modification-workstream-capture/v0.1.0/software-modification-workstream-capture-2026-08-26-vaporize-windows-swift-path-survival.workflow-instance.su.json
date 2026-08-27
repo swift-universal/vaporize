@@ -1,0 +1,99 @@
+{
+  "schemaVersion": "0.8.0",
+  "WorkflowInstanceModel": "0.8.0",
+  "kind": "workflow-instance",
+  "slug": "software-modification-workstream-capture-2026-08-26-vaporize-windows-swift-path-survival",
+  "title": "Software modification - Vaporize Windows Swift path survival",
+  "updated": "2026-08-27T03:24:00Z",
+  "workflowRef": {
+    "LinkRefModel": "0.5.0",
+    "sv": "0.5.0",
+    "t": "Software modification workstream capture",
+    "tg": [
+      {
+        "k": "rp",
+        "rt": "mono",
+        "v": "private/universal/substrate/collectives/spaces-universal/private/universal/kura-spaces/workflows/software-modification-workstream-capture/v0.1.0/software-modification-workstream-capture.workflow.su.json"
+      }
+    ]
+  },
+  "beadTrackingRefs": [
+    {
+      "LinkRefModel": "0.5.0",
+      "sv": "0.5.0",
+      "t": "Windows Swift path survival",
+      "tg": [
+        {
+          "k": "rp",
+          "rt": "current-file",
+          "v": "../../../beads/feature-vaporize-windows-swift-path-survival-2026-08-26.beads-issue.su.json"
+        }
+      ]
+    }
+  ],
+  "stateResults": [
+    {
+      "schemaVersion": "0.1.0",
+      "WorkflowInstanceStateResultModel": "0.1.0",
+      "kind": "workflow-instance-state-result",
+      "stateId": "author-modification-request",
+      "outcome": "completed",
+      "summary": "The operator directed path shortening as a prerequisite for making Swift reliable on Windows and rejected unowned scratch leakage."
+    },
+    {
+      "schemaVersion": "0.1.0",
+      "WorkflowInstanceStateResultModel": "0.1.0",
+      "kind": "workflow-instance-state-result",
+      "stateId": "workspace-preflight",
+      "outcome": "completed",
+      "summary": "The canonical standalone Vaporize repository was clean before implementation."
+    },
+    {
+      "schemaVersion": "0.1.0",
+      "WorkflowInstanceStateResultModel": "0.1.0",
+      "kind": "workflow-instance-state-result",
+      "stateId": "implement-change",
+      "outcome": "completed",
+      "summary": "Admitted a typed Windows SwiftPM path-budget plan, conditionally selected a short deterministic scratch path, preserved explicit overrides, and bound the behavior to CUJ-01."
+    },
+    {
+      "schemaVersion": "0.1.0",
+      "WorkflowInstanceStateResultModel": "0.1.0",
+      "kind": "workflow-instance-state-result",
+      "stateId": "build-and-test",
+      "outcome": "completed",
+      "summary": "swift test --filter WindowsSwiftPMPathPolicyTests passed 6 tests in one suite on x86_64 Windows. SwiftPM refreshed Package.resolved to the graph exercised by that build."
+    },
+    {
+      "schemaVersion": "0.1.0",
+      "WorkflowInstanceStateResultModel": "0.1.0",
+      "kind": "workflow-instance-state-result",
+      "stateId": "emit-through-savepoint",
+      "outcome": "pending-savepoint",
+      "summary": "Persist only after executable Windows evidence is green."
+    }
+  ],
+  "receiptRefs": [
+    {
+      "LinkRefModel": "0.5.0",
+      "sv": "0.5.0",
+      "t": "Windows SwiftPM path-survival CUJ and focused test",
+      "tg": [
+        {
+          "k": "rp",
+          "rt": "current-file",
+          "v": "../../../../release/2026-08-26-windows-swift-path-contract/vaporize-builds-a-deep-package-on-windows.cuj.su.json"
+        },
+        {
+          "k": "rp",
+          "rt": "current-file",
+          "v": "../../../../tests/cuj-01-swiftpm-cli/WindowsSwiftPMPathPolicyTests.swift"
+        }
+      ]
+    }
+  ],
+  "notes": [
+    "The observed Git/SwiftPM path failure and the later DocC archive failure are separate defects and remain separately classified.",
+    "Scratch leasing, quota enforcement, expiry, cleanup, and pressure notification are the next bounded product slice."
+  ]
+}

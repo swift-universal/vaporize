@@ -1,0 +1,29 @@
+{
+  "schemaVersion": "0.1.0",
+  "kind": "product-requirements-document",
+  "id": "vaporize-windows-swift-path@0.1.0",
+  "title": "Vaporize Windows Swift path survival",
+  "status": "implementation",
+  "requirements": [
+    {
+      "id": "FR-WSP-001",
+      "requirement": "Predict conservative descendant path pressure before choosing the inline SwiftPM workspace."
+    },
+    {
+      "id": "FR-WSP-002",
+      "requirement": "Select a short deterministic per-package SwiftPM scratch path for deep Windows packages."
+    },
+    {
+      "id": "FR-WSP-003",
+      "requirement": "Preserve short-package, non-Windows, and explicit --scratch-path behavior."
+    },
+    {
+      "id": "FR-WSP-004",
+      "requirement": "Warn actionably when an operator-selected scratch root still exceeds the safe budget."
+    },
+    {
+      "id": "FR-WSP-005",
+      "requirement": "Keep disk-space leasing and cleanup explicit follow-on work; path shortening must not be represented as lifecycle ownership."
+    }
+  ]
+}

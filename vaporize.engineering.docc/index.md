@@ -39,6 +39,7 @@ and explicit disposition of remaining XcodeGen surfaces.
 - <doc:command-ownership-map>
 - <doc:vaporize-wcode-service-topology-engineering-design>
 - <doc:swiftpm-cli-resource-bundle-installs>
+- <doc:windows-swift-path-survival>
 - <doc:project-generation-and-migration>
 - <doc:pkl-xcode-app-test-authority>
 - <doc:pkl-source-version-status>

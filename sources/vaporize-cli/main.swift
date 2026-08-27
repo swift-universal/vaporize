@@ -1145,7 +1145,7 @@ struct VaporizeCLI: AsyncParsableCommand {
       swiftToolchainSource: try selectedSwiftToolchainSource(),
       developerDirectory: resolvedDeveloperDirectory,
       swiftPMConfigPath: try resolvedSwiftPMConfigurationPath(packagePath: packagePath),
-      swiftPMScratchPath: resolvedSwiftPMScratchPath()
+      swiftPMScratchPath: resolvedSwiftPMScratchPath(packagePath: packagePath)
     )
     try await SwiftCLIInstaller(request: request).run()
     try publishInstalledCLI(toDomain: updateDomain, product: product)
@@ -1323,7 +1323,7 @@ struct VaporizeCLI: AsyncParsableCommand {
       swiftToolchainSource: try selectedSwiftToolchainSource(),
       developerDirectory: resolvedDeveloperDirectory,
       swiftPMConfigPath: try resolvedSwiftPMConfigurationPath(packagePath: packagePath),
-      swiftPMScratchPath: resolvedSwiftPMScratchPath(),
+      swiftPMScratchPath: resolvedSwiftPMScratchPath(packagePath: packagePath),
       selfUpdateIdentity: try resolvedSelfUpdateIdentity()
     )
     try await measureCoreProcess {
@@ -1599,8 +1599,7 @@ struct VaporizeCLI: AsyncParsableCommand {
 
   func sourceBuiltCLIExecutablePath(product: String) -> String {
     precondition(usesIsolatedSwiftPMWorkspace)
-    let scratchPath = swiftPMScratchPath!
-      .trimmingCharacters(in: .whitespacesAndNewlines)
+    let scratchPath = resolvedSwiftPMScratchPath(packagePath: packagePath!)!
     return absoluteURL(for: scratchPath)
       .appendingPathComponent("out/Products/\(configuration.rawValue.capitalized)/\(product)")
       .path
@@ -1955,19 +1954,35 @@ struct VaporizeCLI: AsyncParsableCommand {
 
   private func swiftPMWorkspaceArguments(packagePath: String) throws -> [String] {
     var arguments = try swiftPMConfigurationArguments(packagePath: packagePath)
-    if let scratchPath = resolvedSwiftPMScratchPath() {
+    if let scratchPath = resolvedSwiftPMScratchPath(packagePath: packagePath) {
       arguments += ["--scratch-path", scratchPath]
     }
     return arguments
   }
 
-  private func resolvedSwiftPMScratchPath() -> String? {
-    guard let swiftPMScratchPath = swiftPMScratchPath?.trimmingCharacters(in: .whitespacesAndNewlines),
+  private func resolvedSwiftPMScratchPath(packagePath: String) -> String? {
+    if let swiftPMScratchPath = swiftPMScratchPath?
+      .trimmingCharacters(in: .whitespacesAndNewlines),
       !swiftPMScratchPath.isEmpty
-    else {
-      return nil
+    {
+      return absoluteURL(for: swiftPMScratchPath).path
     }
-    return absoluteURL(for: swiftPMScratchPath).path
+
+    #if os(Windows)
+      guard
+        let plan = VaporizeSwiftPMPathPolicy.windowsPlan(
+          packagePath: absoluteURL(for: packagePath).path
+        )
+      else {
+        return nil
+      }
+      for warning in plan.warnings {
+        VaporizeLogging.command.warning("swiftpm-path-budget \(warning)")
+      }
+      return plan.scratchPath
+    #else
+      return nil
+    #endif
   }
 
   /// A scratch workspace is an isolated, read-only consumption of the
@@ -1975,8 +1990,19 @@ struct VaporizeCLI: AsyncParsableCommand {
   /// Package.resolved through `swift package edit`; the mirrors already name
   /// the authoritative local upstream homes.
   var usesIsolatedSwiftPMWorkspace: Bool {
-    guard let swiftPMScratchPath else { return false }
-    return !swiftPMScratchPath.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+    if let swiftPMScratchPath,
+      !swiftPMScratchPath.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+    {
+      return true
+    }
+    #if os(Windows)
+      guard let packagePath, !packagePath.isEmpty else { return false }
+      return VaporizeSwiftPMPathPolicy.windowsPlan(
+        packagePath: absoluteURL(for: packagePath).path
+      ) != nil
+    #else
+      return false
+    #endif
   }
 
   private func resolvedSwiftPMConfigurationPath(packagePath: String) throws -> String? {
