@@ -1,0 +1,53 @@
+{
+  "beads-issue-model": "v0001_2608_27025",
+  "id": "feature-vaporize-wcode-xcconfig-projection-levels-v0001-2608-27060-2026-08-27",
+  "title": "Compose portable configuration into Vaporize and WCode Levels",
+  "issueType": "feature",
+  "priority": 0,
+  "status": "open",
+  "owner": "vaporize-wcode",
+  "createdAt": "2026-08-27T06:12:36Z",
+  "updatedAt": "2026-08-27T06:12:36Z",
+  "sourceType": "cross-collective-feature-request",
+  "description": "Use Schema Universal configuration selections and Wrkstrm Core XCConfig services to project build inputs, receipt Vaporize builds, and give WCode a Windows-first Levels-style inspector and source-authorized editor without changing the existing macOS Xcode UI.",
+  "instructions": [
+    "Update the Vaporize and WCode PRD and CUJs before implementation, including open, inspect, search, edit, preview, save, reopen, build, rollback, and failure journeys.",
+    "Consume versioned Schema Universal configuration and projection contracts and Wrkstrm Core XCConfig services through local-or-remote dependency policy; do not fork either model locally.",
+    "Project one portable selection into owned xcconfig and Swift build inputs and record manifest, platform, configuration, lane, feature status, adapter, output digest, Package.resolved, invocation, artifact, and runtime receipts separately.",
+    "Implement read-only Levels inspection and source editing as separate sibling services, each selected by feature policy and independently reversible.",
+    "Show effective values, winning and shadowed sources, line provenance, conditions, generated-versus-source authority, and typed diagnostics without reparsing text in the view.",
+    "Keep the macOS AppKit and Xcode paths unchanged; select the new WCode service only for the admitted Windows experiment until lane review approves otherwise.",
+    "Use CommonProcess for any tool execution, common-log for state and receipt logging, and separate Windows and macOS service test suites.",
+    "Reconcile the stale canonical-home record before claiming WCode has a standalone product home; until then this Vaporize repository is the operational WCode implementation boundary."
+  ],
+  "acceptanceCriteria": [
+    "A Windows user opens an xcconfig-backed project in WCode and can inspect effective values and provenance without Xcode installed.",
+    "An unchanged file remains byte-identical and an edit changes only the selected source-authorized node.",
+    "Generated projections are read-only by default and identify their upstream typed manifest and digest.",
+    "The same feature selection produces equivalent declared behavior in xcconfig and Swift build inputs.",
+    "Vaporize receipts distinguish repeated attempts, no-change retries, failures, artifacts, installed runtimes, and human review authority.",
+    "Windows UI tests cover focus, keyboard input, pointer selection, copy/paste, scrolling, resizing, diagnostics, and rollback.",
+    "The existing macOS generator and UI suites remain unchanged and green before any release-lane promotion."
+  ],
+  "parentRef": "wrkstrm-core/private/universal/domain/build/spm/xcode-project-definition/kura-spaces/beads/feature-xcode-project-definition-cross-platform-xcconfig-program-v0001-2608-27060-2026-08-27.beads-issue.su.json",
+  "prerequisites": [
+    "wrkstrm-core project configFiles parity contract and package",
+    "wrkstrm-core XcconfigCore lossless resolver contract and package",
+    "schema-universal cross-platform configuration projection schema release",
+    "explicit WCode read and edit feature-status policies",
+    "swift-universal/private/universal/kura-spaces/beads/bug-vaporize-wcode-canonical-home-record-drift-2026-08-27.beads-issue.su.json closes before standalone WCode ownership is claimed"
+  ],
+  "relatedTypedRecords": [
+    "kura-spaces/workflows/software-modification-workstream-capture/vaporize-wcode-xcconfig-projection-levels/workflow-instance/v0001-2608-26051/vaporize-wcode-xcconfig-projection-levels-2026-08-27/vaporize-wcode-xcconfig-projection-levels-2026-08-27.workflow-instance.su.json",
+    "kura-spaces/beads/feature-vaporize-wcode-pkl-resource-lifecycle-2026-08-26.beads-issue.su.json",
+    "swift-universal/private/universal/kura-spaces/beads/bug-vaporize-wcode-canonical-home-record-drift-2026-08-27.beads-issue.su.json",
+    "vaporize.engineering.docc/vaporize-wcode-service-topology-engineering-design.md"
+  ],
+  "prohibitions": [
+    "Do not copy XCConfig or Schema Universal implementations into Vaporize.",
+    "Do not edit the production macOS view or generator to test the Windows sibling.",
+    "Do not use Foundation Process, PowerShell lifecycle scripts, print, or an untyped completion callback.",
+    "Do not log secret values or full private configuration files.",
+    "Do not claim Xcode conformance, signing, publication, or launch approval from a Windows WCode test."
+  ]
+}

@@ -1,0 +1,66 @@
+{
+  "workflow-instance-model": "v0001_2608_26051",
+  "slug": "vaporize-wcode-xcconfig-projection-levels-2026-08-27",
+  "title": "Plan Vaporize and WCode XCConfig composition",
+  "updated": "2026-08-27T06:12:36Z",
+  "workflowRef": {
+    "link-ref-model": "0.0.5",
+    "t": "Software modification workstream capture",
+    "m": [
+      {
+        "lane": "kind",
+        "v": "workflow"
+      }
+    ],
+    "tg": [
+      {
+        "k": "rp",
+        "rt": "mono",
+        "v": "private/universal/substrate/collectives/spaces-universal/private/universal/kura-spaces/workflows/software-modification-workstream-capture/v0.1.0/software-modification-workstream-capture.workflow.su.json"
+      }
+    ]
+  },
+  "beadTrackingRefs": [
+    {
+      "link-ref-model": "0.0.5",
+      "t": "Vaporize WCode XCConfig projection and Levels",
+      "m": [
+        {
+          "lane": "kind",
+          "v": "bead"
+        }
+      ],
+      "tg": [
+        {
+          "k": "rp",
+          "rt": "vaporize",
+          "v": "kura-spaces/beads/feature-vaporize-wcode-xcconfig-projection-levels-v0001-2608-27060-2026-08-27.beads-issue.su.json"
+        }
+      ]
+    }
+  ],
+  "receiptRefs": [
+    {
+      "link-ref-model": "0.0.5",
+      "t": "Vaporize WCode XCConfig feature request",
+      "m": [
+        {
+          "lane": "kind",
+          "v": "feature-request"
+        }
+      ],
+      "tg": [
+        {
+          "k": "rp",
+          "rt": "vaporize",
+          "v": "kura-spaces/beads/feature-vaporize-wcode-xcconfig-projection-levels-v0001-2608-27060-2026-08-27.beads-issue.su.json"
+        }
+      ]
+    }
+  ],
+  "notes": [
+    "The Vaporize repository was clean before this planning slice and is an independent nested Git boundary.",
+    "This record changes no WCode behavior; separate read and edit feature-status policies are required before implementation selection.",
+    "Vaporize is the current operational WCode implementation home, while the parent swift-universal canonical-home record remains stale and requires separate reconciliation."
+  ]
+}
