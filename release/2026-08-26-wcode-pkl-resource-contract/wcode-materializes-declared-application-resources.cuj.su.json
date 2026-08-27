@@ -1,0 +1,31 @@
+{
+  "schemaVersion": "0.1.0",
+  "kind": "critical-user-journey",
+  "id": "wcode-materializes-declared-application-resources@0.1.0",
+  "title": "WCode materializes application resources declared in canonical Pkl",
+  "persona": "assistant building and running a Windows Swift application through Vaporize WCode",
+  "steps": [
+    "The assistant explicitly selects WCode with a package path, safe single-component product, target, platform, and configuration.",
+    "WCode resolves project.pkl and evaluates it through PklSwift against the canonical project-definition contract.",
+    "WCode selects exactly one target and plans its first-class resources independently from Xcode/PBX source build phases.",
+    "The resource service validates every package-relative source and resource-root-relative destination before writing.",
+    "The service stages copy resources in a temporary sibling, refuses collisions and unsupported processing, then publishes the complete resource root.",
+    "WCode exposes the resource root to the built application and records per-resource outcomes in the lifecycle receipt.",
+    "Installation remains inside the admitted per-user Programs root and copies only the selected executable, canonical resource root, and exact runtime artifact names explicitly admitted with repeated --wcode-runtime-artifact options.",
+    "No PowerShell process or lifecycle script participates in build, staging, installation, or launch."
+  ],
+  "provenBy": [
+    "XcodeProjectDefinitionCoreTests portable target resource decoding",
+    "WCodeResourceLifecycleTests"
+  ],
+  "failureJourneys": [
+    "A required source is missing.",
+    "A source or destination attempts to escape its allowed root.",
+    "Two declarations resolve to the same destination.",
+    "A process mode or filter contract is not implemented.",
+    "The selected target or platform is absent or ambiguous.",
+    "The product or runtime artifact is not one safe Windows filename component.",
+    "The install destination is not a strict descendant of the admitted per-user Programs root.",
+    "A caller attempts to overwrite a reserved WCODE_ environment value."
+  ]
+}

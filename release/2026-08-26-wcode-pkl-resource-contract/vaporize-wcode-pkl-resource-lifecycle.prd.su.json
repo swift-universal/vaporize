@@ -1,0 +1,61 @@
+{
+  "schemaVersion": "0.1.0",
+  "kind": "product-requirements-document",
+  "id": "vaporize-wcode-pkl-resource-lifecycle@0.1.0",
+  "title": "Vaporize WCode canonical Pkl resource lifecycle",
+  "status": "implementation",
+  "requirements": [
+    {
+      "id": "FR-WPR-001",
+      "requirement": "Use project.pkl, amending the canonical project-definition module, as the source of application-resource intent."
+    },
+    {
+      "id": "FR-WPR-002",
+      "requirement": "Model target resources independently from Xcode source build phases with path, copy or process mode, optional destination, includes, excludes, and optionality."
+    },
+    {
+      "id": "FR-WPR-003",
+      "requirement": "Select one explicit target and platform before planning resources; target or platform ambiguity fails closed."
+    },
+    {
+      "id": "FR-WPR-004",
+      "requirement": "Confine source paths to the package root and destination paths to a namespaced WCode resource root, refusing traversal and collisions before publication."
+    },
+    {
+      "id": "FR-WPR-005",
+      "requirement": "Perform resource planning, staging, install copying, and launch composition in Swift services without invoking PowerShell or accepting a lifecycle script callback."
+    },
+    {
+      "id": "FR-WPR-006",
+      "requirement": "Keep Package.swift Bundle.module resources and Pkl application-shell resources distinct. Installation copies only the executable, the canonical Pkl resource root, and exact runtime artifact names explicitly admitted by the caller; it never infers a product closure by sweeping a shared build-products directory."
+    },
+    {
+      "id": "FR-WPR-007",
+      "requirement": "Return typed per-resource outcomes suitable for declaration, evaluation, materialization, bundle-inventory, and runtime receipts."
+    },
+    {
+      "id": "FR-WPR-008",
+      "requirement": "Reject unsupported process or filter semantics rather than silently degrading to copy or arbitrary script execution."
+    },
+    {
+      "id": "FR-WPR-009",
+      "requirement": "Continue generating macOS .xcodeproj output from the same canonical project.pkl by projecting portable copy resources into PBX Resources phases without changing existing Xcode-specific source build-phase behavior. PBX world-state generation and native macOS xcodebuild are separate evidence lanes; mixed-platform target selection remains gated by its owning bug bead."
+    },
+    {
+      "id": "FR-WPR-010",
+      "requirement": "Validate the WCode product as one safe Windows filename component, validate project and resource intent before compilation, and confine every derived resource path beneath the selected build-products directory."
+    },
+    {
+      "id": "FR-WPR-011",
+      "requirement": "Confine application installation to a strict descendant of the admitted per-user Programs root. Force reinstall may replace only that bounded destination and may not target an arbitrary filesystem directory."
+    },
+    {
+      "id": "FR-WPR-012",
+      "requirement": "Reserve every WCODE_ environment key for the lifecycle service and reject caller attempts to override contract state."
+    },
+    {
+      "id": "FR-WPR-013",
+      "requirement": "The explicit wcode command authority is the feature-selection gate. No existing SwiftPM or Xcode command silently enters this lifecycle."
+    }
+  ]
+}

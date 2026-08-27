@@ -1,0 +1,28 @@
+{
+  "schemaVersion": "0.1.0",
+  "kind": "critical-user-journey",
+  "id": "xcode-generates-macos-project-from-canonical-pkl@0.1.0",
+  "title": "Xcode adapter generates a macOS project from canonical Pkl resources",
+  "persona": "assistant generating a macOS application project through Vaporize",
+  "steps": [
+    "The assistant selects the Xcode authority and a project.pkl that amends the canonical XcodeProjectDefinition module.",
+    "Vaporize evaluates the complete Xcode project definition, including existing Xcode-specific sources and portable target resources.",
+    "The Xcode adapter preserves sources, settings, dependencies, schemes, build phases, and release identity.",
+    "Portable copy resources are projected into the selected target's PBX Resources phase.",
+    "Vaporize writes a valid .xcodeproj and records the generated project and resource mapping without invoking WCode or PowerShell."
+  ],
+  "provenBy": [
+    "XcodeProjectDefinitionCoreTests portable-resource PBX materialization test",
+    "existing XcodeProjectDefinitionCore XcodeGen compatibility suite",
+    "VaporizeCUJ14PklXcodeProjectGenerationTests generatesXcodeProjectWorldStateFromPkl"
+  ],
+  "evidenceScope": "The listed tests prove Pkl evaluation and generated PBX world state. Native xcodebuild validation remains pending in the macOS release lane, and mixed-platform target selection remains tracked by the canonical wrkstrm-core bug bead.",
+  "blockingRefs": [
+    "wrkstrm-core/private/universal/kura-spaces/beads/bug-xcode-generator-mixed-platform-target-selection-2026-08-26.beads-issue.su.json"
+  ],
+  "failureJourneys": [
+    "A portable process resource has no admitted Xcode processor.",
+    "A required resource path is missing.",
+    "Adding portable resources changes an existing sources[].buildPhase projection."
+  ]
+}

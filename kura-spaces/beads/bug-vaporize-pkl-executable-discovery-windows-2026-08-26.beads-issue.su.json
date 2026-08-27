@@ -1,0 +1,36 @@
+{
+  "BeadsIssue": "0.1.0",
+  "schemaVersion": "0.1.0",
+  "id": "bug-vaporize-pkl-executable-discovery-windows-2026-08-26",
+  "title": "Discover an installed Pkl executable when Windows PATH is stale",
+  "createdAt": "2026-08-27T04:32:00Z",
+  "updatedAt": "2026-08-27T04:32:00Z",
+  "createdBy": "codex",
+  "sourceSystem": "vaporize-xcode-project-generation-cuj",
+  "sourceType": "test-discovery",
+  "owner": "swift-universal-vaporize",
+  "issueType": "bug",
+  "status": "open",
+  "priority": 1,
+  "labels": ["vaporize", "pkl", "windows", "executable-discovery", "winget", "xcode-project-generation"],
+  "description": "Pkl was installed through WinGet at AppData/Local/Microsoft/WinGet/Links/pkl.exe, but the active process PATH predated that link. PklSwift therefore reported that it could not find the pkl command. Vaporize's Xcode-project CUJ passed when that existing directory was added only to the test process PATH. WCode and generate-xcodeproj need typed executable discovery so an already-provisioned tool does not appear absent.",
+  "design": "Add a bounded Pkl executable resolver behind the evaluation service. Prefer explicit configuration, then PATH, then admitted platform installation locations. Return the selected executable and resolver provenance in logs and receipts. Keep process execution in CommonProcess/CommonShell; do not launch through PowerShell or mutate the machine PATH.",
+  "acceptanceCriteria": [
+    "An already-installed WinGet Pkl executable is found when the parent process PATH is stale.",
+    "PATH remains the normal discovery lane and explicit configuration has deterministic precedence.",
+    "The selected Pkl path and resolver provenance are observable without leaking unrelated environment values.",
+    "Both WCode project loading and generate-xcodeproj use the same resolver service.",
+    "Windows and macOS discovery have separate targetable test suites without platform branches inside the service."
+  ],
+  "relatedTypedRecords": [
+    "kura-spaces/beads/feature-vaporize-wcode-pkl-resource-lifecycle-2026-08-26.beads-issue.su.json",
+    "release/2026-08-26-wcode-pkl-resource-contract/xcode-generates-macos-project-from-canonical-pkl.cuj.su.json"
+  ],
+  "authorizationBoundary": "Planning record only. This slice does not authorize changing PklSwift, mutating PATH, downloading an executable, or adding an untyped subprocess fallback.",
+  "prohibitions": [
+    "Do not mutate the user or system PATH.",
+    "Do not download or install Pkl implicitly during project evaluation.",
+    "Do not invoke PowerShell to locate or launch Pkl.",
+    "Do not duplicate Pkl discovery separately in WCode and Xcode command handlers."
+  ]
+}

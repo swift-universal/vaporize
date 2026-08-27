@@ -11,14 +11,14 @@ import Testing
 func fileSystemPathResolutionPreservesWindowsDriveRoots() {
   let base = URL(fileURLWithPath: "C:/c/s")
   let resolved = VaporizeFileSystemPathResolution.absoluteURL(
-    for: "D:/products/town/scripts/wcode-lifecycle.ps1",
+    for: "D:/products/town/Resources/theme.json",
     relativeTo: base
   )
 
   #expect(VaporizeFileSystemPathResolution.isAbsolute(resolved.path))
   #expect(
     resolved.path.replacingOccurrences(of: "\\", with: "/")
-      == "D:/products/town/scripts/wcode-lifecycle.ps1"
+      == "D:/products/town/Resources/theme.json"
   )
 }
 
@@ -1077,7 +1077,9 @@ private func assertActionableVaporizeProductValidationError(
       "--product", "TownWindowsDemo",
       "--configuration", "debug",
       "--wcode-environment", "SWIFTUUI_DEFAULT_BACKEND=WinUIBackend",
-      "--wcode-environment", "WCODE_THEME=night",
+      "--wcode-environment", "APP_THEME=night",
+      "--wcode-runtime-artifact", "Runtime.dll",
+      "--wcode-runtime-artifact", "Town_Target.resources",
       "--destination", "C:\\Apps\\Town",
       "--force",
       "--skip-build",
@@ -1093,13 +1095,6 @@ private func assertActionableVaporizeProductValidationError(
       "-c", "debug",
       "--product", "TownWindowsDemo",
     ])
-    #expect(try command.wcodeSwiftRunArguments() == [
-      "run",
-      "--package-path", "C:\\workspace\\town",
-      "-c", "debug",
-      "TownWindowsDemo",
-      "--app-argument",
-    ])
     let environment = try command.wcodeBuildEnvironment()
     let expectedWCodeEnvironment = [
       "WCODE_PACKAGE_PATH": "C:/workspace/town",
@@ -1113,11 +1108,12 @@ private func assertActionableVaporizeProductValidationError(
       "WCODE_LAUNCH": "1",
       "WCODE_ARGUMENTS_JSON": "[\"--app-argument\"]",
       "SWIFTUUI_DEFAULT_BACKEND": "WinUIBackend",
-      "WCODE_THEME": "night",
+      "APP_THEME": "night",
     ]
     for (name, value) in expectedWCodeEnvironment {
       #expect(environment[name] == value)
     }
+    #expect(command.wcodeRuntimeArtifactNames == ["Runtime.dll", "Town_Target.resources"])
   }
 
   @Test("CUJ-01 rejects malformed WCode environment assignments")
@@ -1133,6 +1129,83 @@ private func assertActionableVaporizeProductValidationError(
 
     #expect(throws: Error.self) {
       _ = try command.wcodeBuildEnvironment()
+    }
+  }
+
+  @Test("CUJ-01 reserves WCODE environment names for the lifecycle contract")
+  func rejectsReservedWCodeEnvironmentAssignment() throws {
+    let command = try VaporizeCLI.parse([
+      "build",
+      "wcode",
+      "--artifact", "app",
+      "--package-path", "C:\\workspace\\town",
+      "--product", "TownWindowsDemo",
+      "--wcode-environment", "wCoDe_Product=spoofed",
+    ])
+
+    #expect(throws: Error.self) {
+      _ = try command.wcodeBuildEnvironment()
+    }
+  }
+
+  @Test("CUJ-01 validates a WCode product before constructing build paths")
+  func rejectsUnsafeWCodeProduct() throws {
+    let command = try VaporizeCLI.parse([
+      "build",
+      "wcode",
+      "--artifact", "app",
+      "--package-path", "C:\\workspace\\town",
+      "--product", "..\\TownWindowsDemo",
+    ])
+
+    #expect(
+      throws: WCodeResourceLifecycleError.unsafeProductName("..\\TownWindowsDemo")
+    ) {
+      _ = try command.wcodeSwiftBuildArguments()
+    }
+  }
+
+  @Test("CUJ-01 confines WCode installs to LOCALAPPDATA Programs")
+  func confinesWCodeInstallDestination() throws {
+    let localApplicationData = FileManager.default.temporaryDirectory
+      .appendingPathComponent("vaporize-wcode-install-\(UUID().uuidString)", isDirectory: true)
+    defer { try? FileManager.default.removeItem(at: localApplicationData) }
+
+    let command = try VaporizeCLI.parse([
+      "install",
+      "wcode",
+      "--artifact", "app",
+      "--package-path", "C:\\workspace\\town",
+      "--product", "TownWindowsDemo",
+    ])
+    let allowedRoot = command.wcodeInstallRootURL(environment: [
+      "LOCALAPPDATA": localApplicationData.path
+    ])
+    let defaultDestination = try command.wcodeInstallDestinationURL(
+      product: "TownWindowsDemo",
+      allowedInstallRoot: allowedRoot
+    )
+    #expect(
+      defaultDestination.path.lowercased()
+        == allowedRoot.appendingPathComponent("TownWindowsDemo").path.lowercased()
+    )
+
+    let outsideDestination = localApplicationData
+      .appendingPathComponent("Outside/TownWindowsDemo", isDirectory: true)
+    let outsideCommand = try VaporizeCLI.parse([
+      "install",
+      "wcode",
+      "--artifact", "app",
+      "--package-path", "C:\\workspace\\town",
+      "--product", "TownWindowsDemo",
+      "--destination", outsideDestination.path,
+      "--force",
+    ])
+    #expect(throws: WCodeResourceLifecycleError.self) {
+      _ = try outsideCommand.wcodeInstallDestinationURL(
+        product: "TownWindowsDemo",
+        allowedInstallRoot: allowedRoot
+      )
     }
   }
 
@@ -1161,7 +1234,7 @@ private func assertActionableVaporizeProductValidationError(
 
     #expect(guidance.contains("swift-win cannot install an app artifact"))
     #expect(guidance.contains("vaporize install wcode --artifact app"))
-    #expect(guidance.contains("--wcode-build-script <script.ps1>"))
+    #expect(guidance.contains("project.pkl"))
   }
 #endif
 

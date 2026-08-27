@@ -1,0 +1,90 @@
+{
+  "BeadsIssue": "0.1.0",
+  "schemaVersion": "0.1.0",
+  "id": "feature-vaporize-wcode-pkl-resource-lifecycle-2026-08-26",
+  "title": "Make canonical Pkl the WCode application-resource contract",
+  "createdAt": "2026-08-27T03:10:00Z",
+  "updatedAt": "2026-08-27T05:11:12Z",
+  "createdBy": "Codex at operator direction",
+  "sourceSystem": "swift-universal/vaporize",
+  "sourceType": "feature-request",
+  "owner": "vaporize-wcode",
+  "issueType": "feature",
+  "status": "in_progress",
+  "priority": 0,
+  "labels": [
+    "vaporize",
+    "wcode",
+    "pkl",
+    "resources",
+    "windows",
+    "application-lifecycle",
+    "no-powershell"
+  ],
+  "description": "Replace WCode's PowerShell lifecycle callback with a typed application-resource path without weakening macOS Xcode project generation. A package's project.pkl amends the canonical XcodeProjectDefinition Pkl module and declares portable target resources. Vaporize evaluates that record through PklSwift; the Xcode adapter projects it into .xcodeproj Resources phases on macOS, while WCode plans, validates, stages, installs, and receipts it through Swift services on Windows.",
+  "design": "Add an additive target.resources declaration to the canonical Pkl and Swift read model. Keep sources[].buildPhase as the existing Xcode/PBX-specific migration surface and do not reinterpret it as the Windows contract. The Xcode adapter maps portable copy resources into PBX resource build phases and continues producing macOS .xcodeproj output. WCode selects one declared target, resolves resource sources beneath the package root, confines destinations beneath a namespaced resource root, refuses traversal and collisions, skips only optional missing resources, and fails closed for unsupported processing semantics. Package.swift remains the source and dependency compilation graph; Bundle.module resources remain Package.swift-owned. PowerShell may be a terminal guest profile, but it is not a build, staging, installation, or launch authority.",
+  "acceptanceCriteria": [
+    "The canonical project-definition Pkl module and matching Swift model expose a backward-compatible target.resources collection.",
+    "The Xcode adapter projects portable copy resources into generated macOS .xcodeproj Resources phases while preserving every existing sources[].buildPhase behavior.",
+    "A focused WCode Swift service loads project.pkl through PklSwift, selects the requested target, and produces a deterministic resource plan.",
+    "Copy resources are staged without invoking PowerShell; required missing resources, path escape, destination collision, and unsupported processing fail before publication.",
+    "The resource root and per-resource disposition are available for lifecycle receipts and runtime environment composition.",
+    "Package.swift Bundle.module resources remain distinct; installation copies a SwiftPM .bundle, .resources directory, or .dll only when its exact safe filename is explicitly admitted.",
+    "Typed PRD and CUJ records describe the canonical Pkl path and explicitly prohibit a PowerShell escape hatch.",
+    "Focused Windows-capable schema and staging tests pass before the service is selected by the CLI.",
+    "Product, runtime-artifact, resource-root, and install-destination paths fail closed before they can escape their admitted roots.",
+    "The lifecycle receipt records the selected runtime closure and materialization or installation outcomes.",
+    "User environment assignments cannot override reserved WCODE_ lifecycle state."
+  ],
+  "childWork": [
+    {
+      "owner": "wrkstrm-core/xcode-project-definition",
+      "purpose": "Add the portable target.resources vocabulary to the canonical Pkl and Swift project-definition read model without weakening existing PBX resource behavior."
+    },
+    {
+      "owner": "wrkstrm-core/xcode-project-definition",
+      "purpose": "Select Xcode targets by declared platform so a mixed Windows and macOS manifest does not project the Windows sibling into the generated .xcodeproj.",
+      "trackingRef": "wrkstrm-core/private/universal/kura-spaces/beads/bug-xcode-generator-mixed-platform-target-selection-2026-08-26.beads-issue.su.json"
+    },
+    {
+      "owner": "schema-universal",
+      "purpose": "Complete the forward resource-verification receipt schema so declaration, evaluation, staging, bundle inventory, and runtime proof remain distinct.",
+      "trackingRef": "private/universal/kura-spaces/beads/feature-vaporize-pkl-resource-verification-receipt-schema-v000-000-001-2026-08-18.beads-issue.su.json"
+    },
+    {
+      "owner": "vaporize-wcode",
+      "purpose": "Implement and prove the Swift resource planner/stager, then compose it into build, run, and install after the overlapping Windows path-survival CLI slice is persisted."
+    },
+    {
+      "owner": "swift-universal-vaporize",
+      "purpose": "Eliminate the live Vaporize-local XcodeProjectDefinition Pkl schema drift without breaking current amendment edges or installed-CLI portability.",
+      "trackingRef": "kura-spaces/beads/bug-vaporize-local-xcode-project-definition-schema-drift-2026-08-26.beads-issue.su.json"
+    },
+    {
+      "owner": "swift-universal-vaporize",
+      "purpose": "Resolve an already-installed Pkl executable through typed Windows discovery when the parent process has a stale PATH.",
+      "trackingRef": "kura-spaces/beads/bug-vaporize-pkl-executable-discovery-windows-2026-08-26.beads-issue.su.json"
+    }
+  ],
+  "relatedTypedRecords": [
+    "kura-spaces/workflows/software-modification-workstream-capture/v0.1.0/software-modification-workstream-capture-2026-08-26-vaporize-wcode-pkl-resource-lifecycle.workflow-instance.su.json",
+    "release/2026-08-26-wcode-pkl-resource-contract/vaporize-wcode-pkl-resource-lifecycle.prd.su.json",
+    "release/2026-08-26-wcode-pkl-resource-contract/wcode-materializes-declared-application-resources.cuj.su.json",
+    "release/2026-08-26-wcode-pkl-resource-contract/xcode-generates-macos-project-from-canonical-pkl.cuj.su.json",
+    "kura-spaces/beads/bug-vaporize-local-xcode-project-definition-schema-drift-2026-08-26.beads-issue.su.json",
+    "kura-spaces/beads/bug-vaporize-pkl-executable-discovery-windows-2026-08-26.beads-issue.su.json",
+    "vaporize.engineering.docc/vaporize-wcode-service-topology-engineering-design.md",
+    "vaporize.engineering.docc/windows-platform-upgrade-process.md"
+  ],
+  "authorizationBoundary": "This feature authorizes the additive canonical resource model, the isolated WCode Swift planning/staging service, explicit WCode CLI composition, focused tests, and associated product records. Existing Windows path-resolution behavior remains intact and is exercised by the shared CLI suite.",
+  "prohibitions": [
+    "Do not invoke powershell.exe or a .ps1 callback for build, resource staging, installation, or application launch.",
+    "Do not treat XcodeProjectSourceBuildPhase.resources as a portable Windows resource declaration.",
+    "Do not remove or bypass macOS Xcode project generation while adding the Windows adapter.",
+    "Do not let a resource source escape the package root or a destination escape the WCode resource root.",
+    "Do not silently run an unsupported process mode or filter rule.",
+    "Do not represent Pkl staging as Bundle.module compilation.",
+    "Do not sweep a shared SwiftPM build-products directory and call every sibling artifact part of the selected product.",
+    "Do not allow --force to replace a destination outside the admitted per-user Programs root."
+  ]
+}

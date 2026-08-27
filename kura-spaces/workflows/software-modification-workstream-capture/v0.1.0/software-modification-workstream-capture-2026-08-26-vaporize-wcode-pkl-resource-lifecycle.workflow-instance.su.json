@@ -1,0 +1,123 @@
+{
+  "schemaVersion": "0.8.0",
+  "WorkflowInstanceModel": "0.8.0",
+  "kind": "workflow-instance",
+  "slug": "software-modification-workstream-capture-2026-08-26-vaporize-wcode-pkl-resource-lifecycle",
+  "title": "Software modification - Vaporize WCode canonical Pkl resources",
+  "updated": "2026-08-27T05:11:12Z",
+  "workflowRef": {
+    "LinkRefModel": "0.5.0",
+    "sv": "0.5.0",
+    "t": "Software modification workstream capture",
+    "tg": [
+      {
+        "k": "rp",
+        "rt": "mono",
+        "v": "private/universal/substrate/collectives/spaces-universal/private/universal/kura-spaces/workflows/software-modification-workstream-capture/v0.1.0/software-modification-workstream-capture.workflow.su.json"
+      }
+    ]
+  },
+  "beadTrackingRefs": [
+    {
+      "LinkRefModel": "0.5.0",
+      "sv": "0.5.0",
+      "t": "WCode canonical Pkl resource lifecycle",
+      "tg": [
+        {
+          "k": "rp",
+          "rt": "current-file",
+          "v": "../../../beads/feature-vaporize-wcode-pkl-resource-lifecycle-2026-08-26.beads-issue.su.json"
+        }
+      ]
+    }
+  ],
+  "featureFlagDisposition": {
+    "createdFeatureFlag": false,
+    "attachedFeatureStatus": "feature-vaporize-wcode-pkl-resource-lifecycle-2026-08-26",
+    "noFlagReason": "WCode is already an explicit operator-selected command authority and remains unavailable to existing SwiftPM and Xcode command paths. This change does not make WCode a default or silently select it. A policy-controlled default would require a separate flagged feature request."
+  },
+  "stateResults": [
+    {
+      "schemaVersion": "0.1.0",
+      "WorkflowInstanceStateResultModel": "0.1.0",
+      "kind": "workflow-instance-state-result",
+      "stateId": "author-modification-request",
+      "outcome": "completed",
+      "summary": "The operator required canonical Pkl resource declarations and explicitly rejected PowerShell as WCode lifecycle infrastructure."
+    },
+    {
+      "schemaVersion": "0.1.0",
+      "WorkflowInstanceStateResultModel": "0.1.0",
+      "kind": "workflow-instance-state-result",
+      "stateId": "workspace-preflight",
+      "outcome": "completed-with-existing-changes",
+      "summary": "The Vaporize boundary already contained the admitted Windows Swift path-survival behavior. WCode composition preserves that behavior, and the explicit candidate review found no unrelated tracked deletion or nested repository boundary."
+    },
+    {
+      "schemaVersion": "0.1.0",
+      "WorkflowInstanceStateResultModel": "0.1.0",
+      "kind": "workflow-instance-state-result",
+      "stateId": "implement-change",
+      "outcome": "completed",
+      "summary": "WCode now resolves canonical project.pkl intent, builds through SwiftPM, stages resources and runtime artifacts through typed Swift services, and runs or installs the exact executable without a script callback."
+    },
+    {
+      "schemaVersion": "0.1.0",
+      "WorkflowInstanceStateResultModel": "0.1.0",
+      "kind": "workflow-instance-state-result",
+      "stateId": "build-and-test",
+      "outcome": "completed-on-windows",
+      "summary": "The hardened WCode lifecycle suite passed 8 of 8 tests and the complete WCode-focused selection passed 15 tests on Windows. The tests cover exact runtime closure, path confinement, bounded force reinstall, reserved lifecycle environment keys, and compatible typed receipt emission. With the already-installed WinGet Pkl directory added only to the test process PATH, Vaporize's existing CUJ-14 generated a real .xcodeproj world state and project.pbxproj from XcodeProjectDefinition Pkl. Native xcodebuild remains a macOS release-lane check."
+    },
+    {
+      "schemaVersion": "0.1.0",
+      "WorkflowInstanceStateResultModel": "0.1.0",
+      "kind": "workflow-instance-state-result",
+      "stateId": "emit-through-savepoint",
+      "outcome": "ready-for-savepoint",
+      "summary": "The exact WCode feature files are green and ready for explicit-file persistence."
+    }
+  ],
+  "receiptRefs": [
+    {
+      "LinkRefModel": "0.5.0",
+      "sv": "0.5.0",
+      "t": "WCode resource lifecycle implementation",
+      "tg": [
+        {
+          "k": "rp",
+          "rt": "vaporize",
+          "v": "sources/vaporize-cli/WCodeResourceLifecycle.swift"
+        }
+      ]
+    },
+    {
+      "LinkRefModel": "0.5.0",
+      "sv": "0.5.0",
+      "t": "WCode focused lifecycle tests",
+      "tg": [
+        {
+          "k": "rp",
+          "rt": "vaporize",
+          "v": "tests/cuj-01-swiftpm-cli/WCodeResourceLifecycleTests.swift"
+        }
+      ]
+    },
+    {
+      "LinkRefModel": "0.5.0",
+      "sv": "0.5.0",
+      "t": "Vaporize macOS Xcode project generation CUJ",
+      "tg": [
+        {
+          "k": "rp",
+          "rt": "vaporize",
+          "v": "tests/cuj-14-pkl-xcodeproj-generation/VaporizeCUJ14PklXcodeProjectGenerationTests.swift"
+        }
+      ]
+    }
+  ],
+  "notes": [
+    "PowerShell remains a possible guest shell selected by a terminal profile; that is outside this lifecycle contract.",
+    "Package.swift continues to own compiler-visible Bundle.module resources."
+  ]
+}

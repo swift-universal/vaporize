@@ -77,6 +77,19 @@ Vaporize facade
   parse -> validate authority -> resolve -> perform once -> receipt
 ```
 
+Both adapters consume the same canonical project intent without claiming the
+same output:
+
+```text
+project.pkl -> canonical XcodeProjectDefinition
+  -> Xcode adapter -> macOS .xcodeproj + PBX Resources phases
+  -> WCode adapter -> Windows executable lifecycle + staged resource root
+```
+
+The portable layer is additive. Xcode-specific settings, schemes, source build
+phases, and project-generation behavior remain in the canonical definition and
+the Xcode adapter.
+
 The command grammar continues to name explicit authorities. The authority name
 selects a registered service; it does not open a platform implementation branch
 inside Vaporize.
@@ -93,6 +106,14 @@ The initial implementation placed that distinction directly into Vaporize with
 and local execution fallback. Continuing in that direction would make
 Vaporize a collection of operating-system implementations rather than a stable
 artifact facade.
+
+The resource correction is now explicit: a package's `project.pkl` is the
+declarative authority, evaluated through PklSwift against the canonical
+project-definition module. A first-class target `resources` collection carries
+portable intent. Existing `sources[].buildPhase` remains an Xcode/PBX concern
+and is not reused as the Windows contract. WCode materializes the portable
+declarations through Swift services; it never delegates lifecycle authority to
+PowerShell.
 
 The repository already demonstrates the intended split. `CommonProcessService`
 owns only the execution protocol and capability descriptor. Foundation and
@@ -124,9 +145,14 @@ without importing platform SDKs or implementing platform behavior.
 ### Known Limitations
 
 - WCode app testing has no accepted contract yet.
-- No canonical WCode implementation package has been identified in the current
-  checkout; its historical home must be located before new implementation code
-  is created.
+- The additive Pkl resource model and isolated Swift planner/stager are the
+  first implementation slice. CLI composition is gated by the explicit WCode
+  authority and does not change the SwiftPM or Xcode authorities.
+- Resource `process` mode and include/exclude filters are refused until typed
+  processors and cross-platform matching semantics are admitted.
+- Transitive runtime-artifact discovery is not inferred from a shared SwiftPM
+  products directory. The first install slice accepts exact runtime artifact
+  names and receipts the selected closure.
 - `CommonProcessService` currently consumes common-process schema v0.0.1 while
   the active CommonProcess package consumes v0.0.3.
 - Windows CLI self-replacement is a separate executable-installation problem;
@@ -136,8 +162,11 @@ without importing platform SDKs or implementing platform behavior.
 
 - Vaporize directly imports `CommonProcess` and `CommonProcessExecutionKit`.
 - Platform selection and backend execution are interleaved in the flat CLI.
-- The current WCode prototype transports lifecycle behavior through a generic
-  PowerShell script option rather than a typed service implementation.
+- The removed generic PowerShell callback must not reappear as a build,
+  resource, install, or launch escape hatch.
+- Vaporize contains a stale local mirror of the canonical project-definition
+  Pkl module; consumers must resolve the canonical module instead of advancing
+  that copy.
 - Portable CommonProcess source exposes Unix `pid_t`.
 - Existing runner adapters contain Unix path and executable assumptions.
 
@@ -205,6 +234,15 @@ and a receipt that identifies the implementation and artifact involved.
 | `readiness` | A selected required service must be registered at host bootstrap. | ServiceContext readiness tests. |
 | `path-stability` | Canonical repositories and declared dependency paths are not moved as a repair technique. | Git topology receipt and exact pointer review. |
 | `bounded-evidence` | Build, run, install, signing, and release remain distinct proof claims. | Typed receipts and release-gate review. |
+| `canonical-pkl-resources` | project.pkl declares portable target resources against the canonical project-definition module. | Pkl decode fixtures and source-provenance receipt. |
+| `no-script-lifecycle` | WCode performs build, staging, install, and launch through typed Swift services without PowerShell callbacks. | Focused lifecycle tests plus a source-boundary scan for PowerShell and script callbacks. |
+| `resource-confinement` | Sources stay beneath the package root and destinations stay beneath the resource root; collisions and unsupported semantics fail closed. | Planner and stager negative tests. |
+| `macos-xcode-continuity` | The Xcode adapter continues generating .xcodeproj output and maps portable copy resources into PBX Resources phases. | Focused PBX materialization test plus existing Xcode compatibility suite. |
+| `safe-product-identity` | A WCode product and runtime artifact are each one safe Windows filename component before any derived path or process work. | Traversal, reserved-name, and unrelated-sibling tests. |
+| `explicit-runtime-closure` | Installation copies only the executable, canonical resource root, and exact admitted runtime artifact names. | A shared-products fixture proves unrelated DLLs and bundles are excluded. |
+| `bounded-install-root` | Installation is a strict descendant of the admitted per-user Programs root, including under force replacement. | Negative preservation test against an outside destination. |
+| `reserved-environment` | Callers cannot override any `WCODE_` lifecycle key. | Parser/service refusal test. |
+| `validation-order` | Pkl target and resource intent are validated before compilation. | Command-flow review plus focused planner rejection tests; an injected process-spy integration test remains follow-up evidence. |
 
 ## Proposed System
 
@@ -214,7 +252,7 @@ and a receipt that identifies the implementation and artifact involved.
 | --- | --- | --- | --- |
 | Application lifecycle schemas | schema-universal | Version request, support, output, diagnostic, and receipt models. | Import WCode, Xcode, SwiftPM, PowerShell, or platform SDKs. |
 | Application lifecycle service | service-universal | Define the minimum protocol and descriptors. | Run a process, select a backend, or contain an SDK implementation. |
-| WCode adapter | canonical WCode home | Implement Windows app build, run, install, resource staging, packaging, and declared custom tooling. | Accept CLI/TUI ownership or call Vaporize recursively. |
+| WCode adapter | canonical WCode home | Evaluate canonical Pkl intent and implement Windows app build, run, install, resource staging, packaging, and typed custom capabilities. | Accept CLI/TUI ownership, call Vaporize recursively, or invoke an arbitrary lifecycle script. |
 | Xcode adapter | Apple tooling home | Implement Apple app project/workspace build, test where contracted, run, and install/materialization operations. | Become the general SwiftPM lane or leak Xcode types into the service contract. |
 | Swift package lane | swift-win plus process/build services | Build and run raw Package.swift CLI/TUI products. | Claim application lifecycle or installation. |
 | Service composition | common-service-context | Register concrete services and report required capability readiness. | Construct hidden fallback implementations. |
@@ -397,6 +435,11 @@ contract or assigning CLI replacement to WCode automatically.
 9. Resolving a newer compiler SDK never mutates `minimumOS`.
 10. Receipts record requested and resolved compiler SDK, Windows App SDK,
     minimum OS, maximum tested OS, and application version independently.
+11. A shared build-products directory is not evidence that every sibling
+    runtime artifact belongs to the selected product.
+12. Force replacement remains bounded by the selected install root.
+13. PBX world-state generation and native macOS `xcodebuild` are separate
+    receipt claims; neither implies mixed-platform target selection is solved.
 
 ## Error and Next-Step Contract
 
@@ -426,7 +469,7 @@ using an unrelated installed Vaporize binary as a fallback.
 | Process | command execution adapter | Windows executable discovery, environment, output, exit status, and cancellation behave correctly. | App packaging or install. |
 | Pilot build | one Windows app | WCode creates the expected app artifact from the declared source. | Run, install, signing, or fleet parity. |
 | Pilot run | same Windows app | WCode launches the exact built artifact with declared arguments and environment. | Installation or release. |
-| Pilot install | same Windows app | WCode places and verifies the exact app at the declared destination. | Signing, distribution, or release. |
+| Pilot install | same Windows app | WCode places the executable, explicit runtime closure, and resource root beneath the admitted per-user Programs root. | Automatic dependency closure, signing, distribution, or release. |
 | Windows support matrix | one lane for Windows 10 22H2 and one lane for every Windows 11 feature release | Each lane has separate build, run, and install receipts for the same app version. | Microsoft servicing, signing, store readiness, or untested architectures. |
 
 Tests use injected spy services for routing and focused real adapters for
@@ -531,6 +574,8 @@ homes must be found and advanced.
 | Platform tests are conditionally omitted. | Shared policy appears green without being exercised. | Keep facade tests platform-neutral and adapters independently testable. |
 | Pilot success is overclaimed. | One app is treated as Windows platform parity. | Separate contract, adapter, build, run, install, and fleet evidence. |
 | Paths are changed during dependency repair. | Canonical topology and submodule pointers break. | Record exact paths and use long-path tooling; prohibit opportunistic moves. |
+| Shared build output is mistaken for one product's runtime closure. | Unrelated code or private resources are installed or leaked. | Require exact artifact names, reject unsafe components, and receipt the selected closure. |
+| Force install accepts an arbitrary directory. | A user-selected path can replace unrelated or system data. | Require a strict descendant of the admitted per-user Programs root before staging. |
 
 ## Success Criteria
 

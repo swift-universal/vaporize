@@ -20,6 +20,69 @@ enum VaporizeExecutable {
   }
 }
 
+private final class WCodeLifecycleReceiptRetention: @unchecked Sendable {
+  private let lock = NSLock()
+  private var value: WCodeLifecycleReceipt?
+
+  func retain(_ receipt: WCodeLifecycleReceipt) {
+    lock.lock()
+    value = receipt
+    lock.unlock()
+  }
+
+  func retainedReceipt() -> WCodeLifecycleReceipt? {
+    lock.lock()
+    defer { lock.unlock() }
+    return value
+  }
+}
+
+private enum WCodeLifecycleReceiptContext {
+  @TaskLocal static var current: WCodeLifecycleReceiptRetention?
+}
+
+struct WCodeCombinedCoreExecutionReceipt: Codable, Equatable, Sendable {
+  let schemaVersion: String
+  let receiptKind: String
+  let operation: String
+  let executionAuthority: String
+  let toolchainResolver: String
+  let packagePath: String
+  let product: String?
+  let configuration: String
+  let startedAt: Date
+  let finishedAt: Date
+  let commandElapsedNanoseconds: UInt64
+  let dependencyPreparationNanoseconds: UInt64
+  let dependencyRestoreNanoseconds: UInt64
+  let processExecutionNanoseconds: UInt64
+  let succeeded: Bool
+  let artifactPath: String?
+  let failureDescription: String?
+  let wcodeLifecycle: WCodeLifecycleReceipt
+
+  init(core: VaporizeCoreExecutionReceipt, wcodeLifecycle: WCodeLifecycleReceipt) {
+    schemaVersion = core.schemaVersion
+    receiptKind = core.receiptKind
+    operation = core.operation
+    executionAuthority = core.executionAuthority
+    toolchainResolver = core.toolchainResolver
+    packagePath = core.packagePath
+    product = core.product
+    configuration = core.configuration
+    startedAt = core.startedAt
+    finishedAt = core.finishedAt
+    commandElapsedNanoseconds = core.commandElapsedNanoseconds
+    dependencyPreparationNanoseconds = core.dependencyPreparationNanoseconds
+    dependencyRestoreNanoseconds = core.dependencyRestoreNanoseconds
+    processExecutionNanoseconds = core.processExecutionNanoseconds
+    succeeded = core.succeeded
+    artifactPath = core.artifactPath
+    failureDescription = core.failureDescription
+    self.wcodeLifecycle = wcodeLifecycle
+  }
+}
+
 struct VaporizeCLI: AsyncParsableCommand {
   /// Hard-coded for Phase 0 - see ``FR-VAPORIZE-VAPORWARE-AWARENESS-make-vaporize-the-substrate-canonical-vaporware-collapse-gate-in-code`` Phase 0 scope.
   /// Phase 1+ will derive this from Package.swift via a build-time plugin.
@@ -72,10 +135,11 @@ struct VaporizeCLI: AsyncParsableCommand {
         vaporize install|build|run swift-win [options]
         vaporize install|build|run wcode --artifact app [options]
       `swift-win` is limited to raw SwiftPM products defined by Package.swift.
-      `wcode` owns Windows application lifecycle work, including any declared
-      custom PowerShell phase and app-scoped environment. WCode is not a
-      SwiftPM retry lane, so Vaporize does not suggest one authority as the
-      other's retry.
+      `wcode` owns Windows application lifecycle work. It builds the selected
+      SwiftPM product, materializes the Windows target's canonical project.pkl
+      resources, and runs or installs the exact resulting executable. WCode is
+      not a SwiftPM retry lane, so Vaporize does not suggest one authority as
+      the other's retry.
       """
     static let toolchainSelectionDiscussion = coreCommandAuthorityDiscussion
   #else
@@ -289,20 +353,20 @@ struct VaporizeCLI: AsyncParsableCommand {
 
   #if os(Windows)
     @Option(
-      name: .customLong("wcode-build-script"),
-      help: ArgumentHelp(
-        "PowerShell lifecycle phase for a WCode app. It receives WCODE_OPERATION, WCODE_PACKAGE_PATH, WCODE_PRODUCT, WCODE_CONFIGURATION, WCODE_ARTIFACT, WCODE_ARGUMENTS_JSON, and lifecycle flags in its environment."
-      )
-    )
-    var wcodeBuildScript: String?
-
-    @Option(
       name: .customLong("wcode-environment"),
       help: ArgumentHelp(
         "Environment assignment NAME=VALUE applied to a WCode app lifecycle operation. Repeat for each assignment."
       )
     )
     var wcodeEnvironmentAssignments: [String] = []
+
+    @Option(
+      name: .customLong("wcode-runtime-artifact"),
+      help: ArgumentHelp(
+        "Exact .dll file or .bundle/.resources directory name to carry with a WCode app. Repeat for each runtime artifact."
+      )
+    )
+    var wcodeRuntimeArtifactNames: [String] = []
   #endif
 
   @Option(
@@ -628,69 +692,76 @@ struct VaporizeCLI: AsyncParsableCommand {
     plan: VaporizeCoreExecutionPlan
   ) async throws {
     let recorder = VaporizeCoreExecutionRecorder(plan: plan)
+    let wcodeReceiptRetention = WCodeLifecycleReceiptRetention()
     VaporizeLogging.command.info(
       "operation=\(plan.operation.rawValue) authority=\(plan.executionAuthority.rawValue) resolver=\(plan.toolchainResolver) state=begin"
     )
-    try await VaporizeCoreExecutionInstrumentation.$current.withValue(recorder) {
-      do {
-        try await recorder.measure(.coreCommand) {
-          do {
-            try validateArtifactAuthority(plan)
-            let buildIdentity = try await prepareAppBuildNumberIdentity(for: mode)
-            switch mode {
-            case .install:
-              try await withMaintainerDependencyAuthority(packagePath: try requirePackagePath()) {
-                try await installArtifact(launchApp: launch, buildIdentity: buildIdentity)
-              }
-            case .build:
-              try await withMaintainerDependencyAuthority(packagePath: try requirePackagePath()) {
-                try await buildArtifact(buildIdentity: buildIdentity)
-              }
-            case .test:
-              if artifact == .app {
-                try await testArtifact()
-              } else {
+    try await WCodeLifecycleReceiptContext.$current.withValue(wcodeReceiptRetention) {
+      try await VaporizeCoreExecutionInstrumentation.$current.withValue(recorder) {
+        do {
+          try await recorder.measure(.coreCommand) {
+            do {
+              try validateArtifactAuthority(plan)
+              let buildIdentity = try await prepareAppBuildNumberIdentity(for: mode)
+              switch mode {
+              case .install:
                 try await withMaintainerDependencyAuthority(packagePath: try requirePackagePath()) {
+                  try await installArtifact(launchApp: launch, buildIdentity: buildIdentity)
+                }
+              case .build:
+                try await withMaintainerDependencyAuthority(packagePath: try requirePackagePath()) {
+                  try await buildArtifact(buildIdentity: buildIdentity)
+                }
+              case .test:
+                if artifact == .app {
                   try await testArtifact()
+                } else {
+                  try await withMaintainerDependencyAuthority(
+                    packagePath: try requirePackagePath()
+                  ) {
+                    try await testArtifact()
+                  }
                 }
-              }
-            case .run:
-              if skipInstall {
-                try await runArtifact(buildIdentity: buildIdentity)
-              } else {
-                try await withMaintainerDependencyAuthority(packagePath: try requirePackagePath()) {
+              case .run:
+                if skipInstall {
                   try await runArtifact(buildIdentity: buildIdentity)
+                } else {
+                  try await withMaintainerDependencyAuthority(
+                    packagePath: try requirePackagePath()
+                  ) {
+                    try await runArtifact(buildIdentity: buildIdentity)
+                  }
                 }
+              default:
+                preconditionFailure("non-core mode reached core command dispatch")
               }
-            default:
-              preconditionFailure("non-core mode reached core command dispatch")
-            }
-            if let buildIdentity {
-              try writeBuildNumberReceipt(buildIdentity.receipt)
-            }
-          } catch {
-            if let alternate = plan.alternateCommand(invocation: CommandLine.arguments) {
-              VaporizeLogging.command.warning(
-                "adjacent-authority-retry command=\(VaporizeLogging.redacted(alternate))"
+              if let buildIdentity {
+                try writeBuildNumberReceipt(buildIdentity.receipt)
+              }
+            } catch {
+              if let alternate = plan.alternateCommand(invocation: CommandLine.arguments) {
+                VaporizeLogging.command.warning(
+                  "adjacent-authority-retry command=\(VaporizeLogging.redacted(alternate))"
+                )
+              }
+              VaporizeLogging.command.error(
+                "operation=\(plan.operation.rawValue) state=failed error=\(VaporizeLogging.redacted(String(describing: error)))"
               )
+              throw error
             }
-            VaporizeLogging.command.error(
-              "operation=\(plan.operation.rawValue) state=failed error=\(VaporizeLogging.redacted(String(describing: error)))"
-            )
-            throw error
           }
+        } catch {
+          try? await emitCoreExecutionReceipt(
+            from: recorder,
+            succeeded: false,
+            failureDescription: String(describing: error)
+          )
+          try emitRetainedTestReceipt(from: recorder)
+          throw error
         }
-      } catch {
-        try? await emitCoreExecutionReceipt(
-          from: recorder,
-          succeeded: false,
-          failureDescription: String(describing: error)
-        )
         try emitRetainedTestReceipt(from: recorder)
-        throw error
+        try await emitCoreExecutionReceipt(from: recorder, succeeded: true, failureDescription: nil)
       }
-      try emitRetainedTestReceipt(from: recorder)
-      try await emitCoreExecutionReceipt(from: recorder, succeeded: true, failureDescription: nil)
     }
     VaporizeLogging.command.info(
       "operation=\(plan.operation.rawValue) authority=\(plan.executionAuthority.rawValue) state=end"
@@ -725,9 +796,9 @@ struct VaporizeCLI: AsyncParsableCommand {
     case .app:
       #if os(Windows)
         if recorder.authority == .wcode {
-          // A WCode lifecycle phase may package or install to a project-specific
-          // location. Do not claim an Apple .app destination in the receipt.
-          artifactPath = nil
+          let lifecycle = WCodeLifecycleReceiptContext.current?.retainedReceipt()
+          artifactPath = lifecycle?.install?.installedExecutablePath
+            ?? lifecycle?.artifactLayout.executablePath
           break
         }
       #endif
@@ -740,16 +811,25 @@ struct VaporizeCLI: AsyncParsableCommand {
         artifactPath = nil
       }
     }
-    try emitReceiptIfRequested(
-      recorder.receipt(
-        packagePath: packagePath,
-        product: product,
-        configuration: configuration.rawValue,
-        succeeded: succeeded,
-        artifactPath: artifactPath,
-        failureDescription: failureDescription
-      )
+    let coreReceipt = recorder.receipt(
+      packagePath: packagePath,
+      product: product,
+      configuration: configuration.rawValue,
+      succeeded: succeeded,
+      artifactPath: artifactPath,
+      failureDescription: failureDescription
     )
+    #if os(Windows)
+      if recorder.authority == .wcode,
+        let lifecycle = WCodeLifecycleReceiptContext.current?.retainedReceipt()
+      {
+        try emitReceiptIfRequested(
+          WCodeCombinedCoreExecutionReceipt(core: coreReceipt, wcodeLifecycle: lifecycle)
+        )
+        return
+      }
+    #endif
+    try emitReceiptIfRequested(coreReceipt)
   }
 
   func coreExecutionPlan(for mode: Mode) throws -> VaporizeCoreExecutionPlan? {
@@ -818,7 +898,7 @@ struct VaporizeCLI: AsyncParsableCommand {
         return """
           swift-win cannot \(operation.rawValue) an app artifact; swift-win is limited to raw Package.swift products.
           next: use `vaporize \(operation.rawValue) wcode --artifact app --package-path <package> --product <app-product> --configuration <debug|release>`.
-          For app-specific tooling, pass `--wcode-build-script <script.ps1>`; it receives the requested WCode lifecycle operation.
+          WCode reads `<package>/project.pkl`; pass `--pkl-path` to override it and `--target` when the project target differs from the SwiftPM product.
           """
       case (.app, .wcode) where operation == .test:
         return """
@@ -1818,9 +1898,13 @@ struct VaporizeCLI: AsyncParsableCommand {
   }
 
   #if os(Windows)
+    func wcodeValidatedProduct() throws -> String {
+      try WCodeResourceLifecycle.validateProductName(try requireProduct())
+    }
+
     func wcodeSwiftBuildArguments() throws -> [String] {
       let packagePath = try requirePackagePath()
-      let product = try requireProduct()
+      let product = try wcodeValidatedProduct()
       return ["build"] + (try swiftPMWorkspaceArguments(packagePath: packagePath)) + [
         "--package-path", packagePath,
         "-c", configuration.rawValue,
@@ -1828,19 +1912,16 @@ struct VaporizeCLI: AsyncParsableCommand {
       ]
     }
 
-    func wcodeSwiftRunArguments() throws -> [String] {
-      let packagePath = try requirePackagePath()
-      let product = try requireProduct()
-      return ["run"] + (try swiftPMWorkspaceArguments(packagePath: packagePath)) + [
-        "--package-path", packagePath,
-        "-c", configuration.rawValue,
-        product,
-      ] + (try coreForwardedArguments())
+    func wcodeSwiftBinPathArguments() throws -> [String] {
+      try wcodeSwiftBuildArguments() + ["--show-bin-path"]
     }
 
     func wcodeBuildEnvironment() throws -> [String: String] {
+      try wcodeBuildEnvironment(product: wcodeValidatedProduct())
+    }
+
+    private func wcodeBuildEnvironment(product: String) throws -> [String: String] {
       let packagePath = try requirePackagePath()
-      let product = try requireProduct()
       var environment = swiftCommandEnvironment() ?? [:]
       environment["WCODE_PACKAGE_PATH"] = absoluteURL(for: packagePath).path
       environment["WCODE_PRODUCT"] = product
@@ -1863,7 +1944,13 @@ struct VaporizeCLI: AsyncParsableCommand {
         else {
           throw ValidationError("--wcode-environment must use NAME=VALUE; received '\(assignment)'.")
         }
-        environment[String(parts[0])] = String(parts[1])
+        let name = parts[0].trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !name.lowercased().hasPrefix("wcode_") else {
+          throw ValidationError(
+            "--wcode-environment cannot override reserved WCODE_* name '\(name)'."
+          )
+        }
+        environment[name] = String(parts[1])
       }
       return environment
     }
@@ -1872,64 +1959,240 @@ struct VaporizeCLI: AsyncParsableCommand {
       try coreExecutionPlan(for: mode)?.executionAuthority == .wcode
     }
 
-    private func runWCodeApp(operation: VaporizeCoreOperation) async throws {
-      var environment = try wcodeBuildEnvironment()
-      environment["WCODE_OPERATION"] = operation.rawValue
-      let product = try requireProduct()
-
-      if let script = wcodeBuildScript?.trimmingCharacters(in: .whitespacesAndNewlines),
-        !script.isEmpty
-      {
-        try await runExecutable(
-          executable: .name("powershell.exe"),
-          arguments: [
-            "-NoLogo",
-            "-NoProfile",
-            "-NonInteractive",
-            "-ExecutionPolicy", "Bypass",
-            "-File", absoluteURL(for: script).path,
-          ],
-          sourceTag: "vaporize-wcode",
-          environment: environment,
-          additionalTags: [
-            "artifact": "app",
-            "executionAuthority": "wcode",
-            "operation": operation.rawValue,
-            "appPhase": "declared-script",
-          ]
-        )
-        return
+    func wcodeProjectURL() throws -> URL {
+      let packagePath = try requirePackagePath()
+      let explicitPath = pklPath?.trimmingCharacters(in: .whitespacesAndNewlines)
+      let projectURL: URL
+      if let explicitPath, !explicitPath.isEmpty {
+        projectURL = absoluteURL(for: explicitPath)
+      } else {
+        projectURL = absoluteURL(for: packagePath).appendingPathComponent("project.pkl")
       }
-
-      guard operation != .install else {
+      var isDirectory: ObjCBool = false
+      guard FileManager.default.fileExists(atPath: projectURL.path, isDirectory: &isDirectory),
+        !isDirectory.boolValue
+      else {
         throw ValidationError(
-          "WCode cannot install an app without a declared lifecycle script. next: use `vaporize install wcode --artifact app --package-path <package> --product <app-product> --wcode-build-script <script.ps1>`. The script receives WCODE_OPERATION=install plus destination, reinstall, and launch flags."
+          "WCode requires canonical project.pkl at \(projectURL.path). next: create it or pass --pkl-path <project.pkl>."
         )
       }
+      return projectURL.standardizedFileURL
+    }
 
-      let arguments: [String]
-      switch operation {
-      case .build:
-        arguments = try wcodeSwiftBuildArguments()
-      case .run:
-        arguments = try wcodeSwiftRunArguments()
-      case .install, .test:
-        throw ValidationError("WCode has no direct SwiftPM fallback for \(operation.rawValue) app execution.")
+    func wcodeSelectedTargetName(product: String) -> String {
+      let explicitTarget = targetName?.trimmingCharacters(in: .whitespacesAndNewlines)
+      return explicitTarget.flatMap { $0.isEmpty ? nil : $0 } ?? product
+    }
+
+    func wcodeInstallRootURL(
+      environment: [String: String] = ProcessInfo.processInfo.environment
+    ) -> URL {
+      let localApplicationData = environment["LOCALAPPDATA"]?
+        .trimmingCharacters(in: .whitespacesAndNewlines)
+      let localRoot: URL
+      if let localApplicationData, !localApplicationData.isEmpty {
+        localRoot = URL(fileURLWithPath: localApplicationData, isDirectory: true)
+      } else {
+        localRoot = FileManager.default.homeDirectoryForCurrentUser
+          .appendingPathComponent("AppData/Local", isDirectory: true)
       }
-      let invocation = try swiftCommandInvocation(arguments: arguments)
-      try await runExecutable(
+      return localRoot
+        .appendingPathComponent("Programs", isDirectory: true)
+        .standardizedFileURL
+    }
+
+    func wcodeInstallDestinationURL(
+      product: String,
+      allowedInstallRoot: URL? = nil
+    ) throws -> URL {
+      let product = try WCodeResourceLifecycle.validateProductName(product)
+      let allowedInstallRoot = allowedInstallRoot ?? wcodeInstallRootURL()
+      let requested = destination.trimmingCharacters(in: .whitespacesAndNewlines)
+      let normalized = requested.replacingOccurrences(of: "\\", with: "/")
+      let candidate: URL
+      if normalized == "/Applications" {
+        candidate = allowedInstallRoot
+          .appendingPathComponent(product, isDirectory: true)
+          .standardizedFileURL
+      } else {
+        candidate = absoluteURL(for: requested).standardizedFileURL
+      }
+      return try WCodeResourceLifecycle.validatedInstallDestination(
+        candidate,
+        allowedInstallRoot: allowedInstallRoot
+      )
+    }
+
+    private func wcodeBuildProductsDirectory(
+      environment: [String: String]
+    ) async throws -> URL {
+      let invocation = try swiftCommandInvocation(arguments: wcodeSwiftBinPathArguments())
+      let output = try await runExecutableForOutput(
         executable: invocation.executable,
         arguments: invocation.arguments,
         sourceTag: "vaporize-wcode",
         environment: environment,
         additionalTags: [
           "artifact": "app",
+          "appPhase": "swiftpm-show-bin-path",
           "executionAuthority": "wcode",
           "toolchainResolver": invocation.resolver,
-          "product": product,
-          "operation": operation.rawValue,
-          "appPhase": operation == .build ? "swiftpm-app-target" : "swiftpm-app-run",
         ]
+      )
+      let reportedLines = output.split(whereSeparator: \.isNewline).map {
+        String($0).trimmingCharacters(in: .whitespacesAndNewlines)
+      }
+      let directory = reportedLines.reversed().lazy.compactMap { line -> URL? in
+        guard !line.isEmpty else { return nil }
+        let candidate = absoluteURL(for: line).standardizedFileURL
+        var isDirectory: ObjCBool = false
+        guard FileManager.default.fileExists(atPath: candidate.path, isDirectory: &isDirectory),
+          isDirectory.boolValue
+        else {
+          return nil
+        }
+        return candidate
+      }.first
+      guard let directory else {
+        throw ValidationError(
+          "swift build --show-bin-path did not report an existing WCode products directory."
+        )
+      }
+      return directory
+    }
+
+    private func runWCodeApp(operation: VaporizeCoreOperation) async throws {
+      let product = try wcodeValidatedProduct()
+      var environment = try wcodeBuildEnvironment(product: product)
+      environment["WCODE_OPERATION"] = operation.rawValue
+      let projectURL = try wcodeProjectURL()
+      let selectedTarget = wcodeSelectedTargetName(product: product)
+      environment["WCODE_PROJECT_PATH"] = projectURL.path
+      environment["WCODE_TARGET"] = selectedTarget
+
+      let installRoot: URL?
+      let installDestination: URL?
+      if operation == .install {
+        let resolvedRoot = wcodeInstallRootURL()
+        let resolvedDestination = try wcodeInstallDestinationURL(
+          product: product,
+          allowedInstallRoot: resolvedRoot
+        )
+        installRoot = resolvedRoot
+        installDestination = resolvedDestination
+        environment["WCODE_DESTINATION"] = resolvedDestination.path
+      } else {
+        installRoot = nil
+        installDestination = nil
+      }
+
+      let buildProductsDirectory = try await wcodeBuildProductsDirectory(environment: environment)
+      let resourcePlan = try await WCodeResourceLifecycle.loadPlan(
+        projectURL: projectURL,
+        targetName: selectedTarget,
+        expectedPlatform: "Windows",
+        projectRoot: projectURL.deletingLastPathComponent(),
+        product: product,
+        buildProductsDirectory: buildProductsDirectory
+      )
+
+      if !skipBuild {
+        let invocation = try swiftCommandInvocation(arguments: wcodeSwiftBuildArguments())
+        try await runExecutable(
+          executable: invocation.executable,
+          arguments: invocation.arguments,
+          sourceTag: "vaporize-wcode",
+          environment: environment,
+          additionalTags: [
+            "artifact": "app",
+            "appPhase": "swiftpm-app-target",
+            "executionAuthority": "wcode",
+            "operation": operation.rawValue,
+            "product": product,
+            "toolchainResolver": invocation.resolver,
+          ]
+        )
+      }
+
+      let materialization = try WCodeResourceLifecycle.materialize(resourcePlan)
+      environment["WCODE_RESOURCE_ROOT"] = materialization.resourceRoot
+      let layout = try WCodeResourceLifecycle.builtArtifactLayout(
+        product: product,
+        buildProductsDirectory: buildProductsDirectory,
+        runtimeArtifactNames: wcodeRuntimeArtifactNames
+      )
+      WCodeLifecycleReceiptContext.current?.retain(
+        WCodeLifecycleReceipt(
+          materialization: materialization,
+          artifactLayout: layout,
+          install: nil
+        )
+      )
+
+      var installReceipt: WCodeArtifactInstallReceipt?
+      switch operation {
+      case .build:
+        break
+      case .run:
+        try await runExecutable(
+          executable: .path(layout.executablePath),
+          arguments: try coreForwardedArguments(),
+          sourceTag: "vaporize-wcode",
+          environment: environment,
+          additionalTags: [
+            "artifact": "app",
+            "appPhase": "built-app-run",
+            "executionAuthority": "wcode",
+            "operation": operation.rawValue,
+            "product": product,
+          ]
+        )
+      case .install:
+        if !skipInstall {
+          guard let installDestination, let installRoot else {
+            throw ValidationError("WCode install location was not resolved.")
+          }
+          let installed = try WCodeResourceLifecycle.install(
+            layout,
+            destination: installDestination,
+            allowedInstallRoot: installRoot,
+            force: forceReinstall
+          )
+          installReceipt = installed
+          WCodeLifecycleReceiptContext.current?.retain(
+            WCodeLifecycleReceipt(
+              materialization: materialization,
+              artifactLayout: layout,
+              install: installed
+            )
+          )
+          if launch {
+            environment["WCODE_DESTINATION"] = installed.destinationPath
+            environment["WCODE_RESOURCE_ROOT"] = installed.installedResourceRoot
+            try await runExecutable(
+              executable: .path(installed.installedExecutablePath),
+              arguments: try coreForwardedArguments(),
+              sourceTag: "vaporize-wcode",
+              environment: environment,
+              additionalTags: [
+                "artifact": "app",
+                "appPhase": "installed-app-launch",
+                "executionAuthority": "wcode",
+                "operation": operation.rawValue,
+                "product": product,
+              ]
+            )
+          }
+        }
+      case .test:
+        throw ValidationError("WCode has no application test lifecycle contract.")
+      }
+      WCodeLifecycleReceiptContext.current?.retain(
+        WCodeLifecycleReceipt(
+          materialization: materialization,
+          artifactLayout: layout,
+          install: installReceipt
+        )
       )
     }
   #endif
@@ -3866,6 +4129,24 @@ struct VaporizeCLI: AsyncParsableCommand {
     environment: [String: String]? = nil,
     additionalTags: [String: String] = [:]
   ) async throws {
+    let output = try await runExecutableForOutput(
+      executable: executable,
+      arguments: arguments,
+      sourceTag: sourceTag,
+      environment: environment,
+      additionalTags: additionalTags
+    )
+    guard !output.isEmpty else { return }
+    print(output, terminator: output.hasSuffix("\n") ? "" : "\n")
+  }
+
+  private func runExecutableForOutput(
+    executable: Executable,
+    arguments: [String],
+    sourceTag: String,
+    environment: [String: String]? = nil,
+    additionalTags: [String: String] = [:]
+  ) async throws -> String {
     var shell = CommonShell()
     var tags = ["source": sourceTag, "level": "L1"]
     tags.merge(additionalTags) { _, new in new }
@@ -3873,7 +4154,7 @@ struct VaporizeCLI: AsyncParsableCommand {
       exposure: .summary,
       tags: tags
     )
-    let output = try await measureCoreProcess {
+    return try await measureCoreProcess {
       try await shell.run(
         host: .direct,
         executable: executable,
@@ -3882,8 +4163,6 @@ struct VaporizeCLI: AsyncParsableCommand {
         runnerKind: .auto
       )
     }
-    guard !output.isEmpty else { return }
-    print(output, terminator: output.hasSuffix("\n") ? "" : "\n")
   }
 
   private func measureCoreProcess<Result>(
