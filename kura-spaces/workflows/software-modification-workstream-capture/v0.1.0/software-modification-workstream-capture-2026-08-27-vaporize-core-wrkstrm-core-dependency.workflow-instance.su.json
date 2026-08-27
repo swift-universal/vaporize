@@ -1,0 +1,45 @@
+{
+  "schemaVersion": "0.8.0",
+  "WorkflowInstanceModel": "0.8.0",
+  "kind": "workflow-instance",
+  "slug": "software-modification-workstream-capture-2026-08-27-vaporize-core-wrkstrm-core-dependency",
+  "title": "Software modification - VaporizeCore wrkstrm-core dependency",
+  "updated": "2026-08-27T07:20:00Z",
+  "workflowRef": {
+    "LinkRefModel": "0.5.0",
+    "sv": "0.5.0",
+    "t": "Software modification workstream capture",
+    "tg": [{
+      "k": "rp",
+      "rt": "mono",
+      "v": "private/universal/substrate/collectives/spaces-universal/private/universal/kura-spaces/workflows/software-modification-workstream-capture/v0.1.0/software-modification-workstream-capture.workflow.su.json"
+    }]
+  },
+  "beadTrackingRefs": [{
+    "LinkRefModel": "0.5.0",
+    "sv": "0.5.0",
+    "t": "VaporizeCore ownership dependency migration",
+    "tg": [{ "k": "rp", "rt": "current-file", "v": "../../../beads/migration-vaporize-core-wrkstrm-core-dependency-2026-08-27.beads-issue.su.json" }]
+  }],
+  "stateResults": [{
+    "schemaVersion": "0.1.0",
+    "WorkflowInstanceStateResultModel": "0.1.0",
+    "kind": "workflow-instance-state-result",
+    "stateId": "implement-change",
+    "outcome": "completed",
+    "summary": "Vaporize now resolves VaporizeCore from the wrkstrm-core collective."
+  }, {
+    "schemaVersion": "0.1.0",
+    "WorkflowInstanceStateResultModel": "0.1.0",
+    "kind": "workflow-instance-state-result",
+    "stateId": "build-and-test",
+    "outcome": "completed",
+    "summary": "Swift package resolution completed against the relocated package."
+  }],
+  "receiptRefs": [{
+    "LinkRefModel": "0.5.0",
+    "sv": "0.5.0",
+    "t": "Vaporize package dependency declaration",
+    "tg": [{ "k": "rp", "rt": "current-file", "v": "../../../../Package.swift" }]
+  }]
+}

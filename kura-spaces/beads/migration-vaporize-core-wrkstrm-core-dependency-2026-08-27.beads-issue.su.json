@@ -1,0 +1,23 @@
+{
+  "BeadsIssue": "0.1.0",
+  "schemaVersion": "0.1.0",
+  "id": "migration-vaporize-core-wrkstrm-core-dependency-2026-08-27",
+  "title": "Consume VaporizeCore from its engineering owner",
+  "status": "qa-verified",
+  "priority": 0,
+  "issueType": "migration",
+  "owner": "vaporize",
+  "createdAt": "2026-08-27T07:05:00Z",
+  "updatedAt": "2026-08-27T07:12:00Z",
+  "createdBy": "Codex at operator direction",
+  "description": "Redirect the standalone Vaporize product to the VaporizeCore package now owned by wrkstrm-core.",
+  "instructions": [
+    "Resolve vaporize-core from the sibling wrkstrm-core collective.",
+    "Do not move the Vaporize product line or unrelated universal language dependencies in this slice.",
+    "Prove the updated Swift package graph resolves before closing the migration."
+  ],
+  "acceptanceCriteria": [
+    "Package.swift points at wrkstrm-core/private/universal/domain/build/spm/vaporize-core.",
+    "SwiftPM resolves the Vaporize package graph with the moved core."
+  ]
+}

@@ -20,10 +20,12 @@ func ancestor(named component: String, from start: URL) -> URL? {
 let manifestDirectory = URL(filePath: #filePath)
   .deletingLastPathComponent()
   .standardizedFileURL
-guard let swiftUniversalDirectory = ancestor(
-  named: "swift-universal",
-  from: manifestDirectory
-) else {
+guard
+  let swiftUniversalDirectory = ancestor(
+    named: "swift-universal",
+    from: manifestDirectory
+  )
+else {
   fatalError("Vaporize must live beneath the swift-universal repository")
 }
 let collectivesDirectory = swiftUniversalDirectory.deletingLastPathComponent()
@@ -32,38 +34,40 @@ func repositoryPath(_ root: URL, _ relativePath: String) -> String {
   root.appendingPathComponent(relativePath).standardizedFileURL.path
 }
 
-let commonShellDependency: Package.Dependency = if ProcessInfo.useLocalDeps {
-  .package(
-    path: repositoryPath(
-      swiftUniversalDirectory,
-      "private/universal/domain/dispatch/spm/common-shell"
+let commonShellDependency: Package.Dependency =
+  if ProcessInfo.useLocalDeps {
+    .package(
+      path: repositoryPath(
+        swiftUniversalDirectory,
+        "private/universal/domain/dispatch/spm/common-shell"
+      )
     )
-  )
-} else {
-  .package(
-    name: "common-shell",
-    path: repositoryPath(
-      swiftUniversalDirectory,
-      "private/universal/domain/dispatch/spm/common-shell"
+  } else {
+    .package(
+      name: "common-shell",
+      path: repositoryPath(
+        swiftUniversalDirectory,
+        "private/universal/domain/dispatch/spm/common-shell"
+      )
     )
-  )
-}
-let commonProcessDependency: Package.Dependency = if ProcessInfo.useLocalDeps {
-  .package(
-    path: repositoryPath(
-      swiftUniversalDirectory,
-      "private/universal/domain/dispatch/spm/common-process"
+  }
+let commonProcessDependency: Package.Dependency =
+  if ProcessInfo.useLocalDeps {
+    .package(
+      path: repositoryPath(
+        swiftUniversalDirectory,
+        "private/universal/domain/dispatch/spm/common-process"
+      )
     )
-  )
-} else {
-  .package(
-    name: "common-process",
-    path: repositoryPath(
-      swiftUniversalDirectory,
-      "private/universal/domain/dispatch/spm/common-process"
+  } else {
+    .package(
+      name: "common-process",
+      path: repositoryPath(
+        swiftUniversalDirectory,
+        "private/universal/domain/dispatch/spm/common-process"
+      )
     )
-  )
-}
+  }
 let commonLogDependency = Package.Dependency.package(
   name: "common-log",
   path: repositoryPath(
@@ -73,7 +77,7 @@ let commonLogDependency = Package.Dependency.package(
 )
 let vaporizeCoreDependency = Package.Dependency.package(
   path: repositoryPath(
-    swiftUniversalDirectory,
+    collectivesDirectory.appendingPathComponent("wrkstrm-core"),
     "private/universal/domain/build/spm/vaporize-core"
   )
 )
@@ -243,14 +247,15 @@ let package = Package(
         .product(name: "CommonProcess", package: "common-process"),
         .product(name: "CommonProcessExecutionKit", package: "common-process"),
         .product(name: "TestFixtureLifecycle", package: "common-test-fixture-lifecycle"),
-        .product(name: "TestServiceAdoptionPolicy", package: "test-service-adoption-policy@wrkstrm-core"),
+        .product(
+          name: "TestServiceAdoptionPolicy", package: "test-service-adoption-policy@wrkstrm-core"),
       ],
       path: "tests/vaporize-test-support"
     ),
     .target(
       name: "VaporizeIssueReporting",
       dependencies: [
-        .product(name: "IssueReporting", package: "swift-issue-reporting"),
+        .product(name: "IssueReporting", package: "swift-issue-reporting")
       ],
       path: "sources/vaporize-issue-reporting"
     ),
@@ -285,7 +290,7 @@ let package = Package(
       ],
       path: "tests/cuj-01-swiftpm-cli",
       plugins: [
-        .plugin(name: "CommonLogOutputPolicyPlugin", package: "swift-package-output-policy"),
+        .plugin(name: "CommonLogOutputPolicyPlugin", package: "swift-package-output-policy")
       ]
     ),
     .testTarget(
@@ -467,7 +472,7 @@ let package = Package(
     .testTarget(
       name: "VaporizeCUJ21CUJStateTests",
       dependencies: [
-        "VaporizeTestSupport",
+        "VaporizeTestSupport"
       ],
       path: "tests/cuj-21-cuj-state"
     ),
@@ -483,7 +488,7 @@ let package = Package(
     .testTarget(
       name: "VaporizeCUJ23ProductProvingGroundTests",
       dependencies: [
-        "VaporizeTestSupport",
+        "VaporizeTestSupport"
       ],
       path: "tests/cuj-23-product-proving-grounds"
     ),
