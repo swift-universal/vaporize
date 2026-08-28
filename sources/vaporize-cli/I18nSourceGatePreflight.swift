@@ -64,6 +64,10 @@ enum VaporizeI18nSourceGate {
   ) async throws -> Result {
     let productDirectory = productDirectory.standardizedFileURL
     let productKuraSpace = try findProductKuraSpace(startingAt: productDirectory)
+    let repairHome = commonOwningHome(
+      productDirectory: productDirectory,
+      kuraSpace: productKuraSpace
+    )
     let sourceRoots = try await declaredSourceRoots(
       productDirectory: productDirectory,
       productName: productName
@@ -99,7 +103,7 @@ enum VaporizeI18nSourceGate {
     )
     let report = try TranslateSourceGate.evaluate(
       sourceURLs: sources,
-      relativeTo: productDirectory,
+      relativeTo: repairHome,
       policy: policy
     )
     let receiptURL = try I18nSourceGateBeadImprint.defaultReportReceiptURL(
@@ -118,7 +122,7 @@ enum VaporizeI18nSourceGate {
       imprintReceipt = try I18nSourceGateBeadImprint.reconcile(
         report: report,
         owningHome: productKuraSpace,
-        repairHome: productDirectory,
+        repairHome: repairHome,
         ownerID: identity.ownerID,
         reportReceiptURL: receiptURL,
         mode: .write,
@@ -236,6 +240,37 @@ enum VaporizeI18nSourceGate {
       cursor = parent
     }
     throw VaporizeProductKuraSpaceError.unavailable(productDirectory: productDirectory.path)
+  }
+
+  /// Returns the narrowest directory that owns both the product sources and
+  /// the Bead home discovered for that product. A package can live several
+  /// levels below its repository's owner-local Kura space.
+  static func commonOwningHome(productDirectory: URL, kuraSpace: URL) -> URL {
+    let kuraSpace = kuraSpace.resolvingSymlinksInPath().standardizedFileURL
+    var candidate = productDirectory.resolvingSymlinksInPath().standardizedFileURL
+    while !contains(kuraSpace, inside: candidate) {
+      let parent = candidate.deletingLastPathComponent()
+      if parent.path == candidate.path { return candidate }
+      candidate = parent
+    }
+    return candidate
+  }
+
+  private static func contains(_ child: URL, inside root: URL) -> Bool {
+    let childPath = comparableFileSystemPath(child)
+    let rootPath = comparableFileSystemPath(root)
+    guard childPath != rootPath else { return true }
+    let prefix = rootPath.hasSuffix("/") ? rootPath : rootPath + "/"
+    return childPath.hasPrefix(prefix)
+  }
+
+  private static func comparableFileSystemPath(_ url: URL) -> String {
+    let path = url.standardizedFileURL.path.replacingOccurrences(of: "\\", with: "/")
+    #if os(Windows)
+    return path.lowercased()
+    #else
+    return path
+    #endif
   }
 
   private static func kuraSpacesWithBeads(below root: URL, maximumDepth: Int) throws -> [URL] {

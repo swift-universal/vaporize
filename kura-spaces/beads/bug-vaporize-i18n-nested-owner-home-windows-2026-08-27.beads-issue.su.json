@@ -1,0 +1,29 @@
+{
+  "BeadsIssue": "0.1.0",
+  "schemaVersion": "0.1.0",
+  "id": "bug-vaporize-i18n-nested-owner-home-windows-2026-08-27",
+  "title": "Bug — Vaporize must reconcile nested Windows packages through their repository-owned Bead home",
+  "createdAt": "2026-08-27T11:36:00Z",
+  "createdBy": "codex at operator direction",
+  "owner": "swift-universal",
+  "issueType": "bug",
+  "status": "closed",
+  "priority": 0,
+  "labels": ["vaporize", "windows", "i18n-source-gate", "beads", "production"],
+  "description": "Vaporize discovered i18n-universal's repository-owned Kura/Bead home but passed the nested Translate CLI package directory as repairHome. Containment correctly rejected that impossible boundary before the Windows build could start.",
+  "acceptanceCriteria": [
+    "Vaporize derives the narrowest common owning directory for a nested package and its discovered Bead home.",
+    "The Windows regression test is stored under the Vaporize CUJ package's windows directory and references this Bead.",
+    "Vaporize reaches the ordinary source-gate result for Translate instead of failing Bead path containment.",
+    "The Translate Windows build is executed through Vaporize's swift-win authority."
+  ],
+  "risks": [
+    "Weakening containment could allow repair artifacts outside the product repository; the fix must change the declared owning root without disabling path validation."
+  ],
+  "evidence": {
+    "validationRequestId": "vaporize-test-2B94905A-8335-4D3C-8F67-B71C60246941",
+    "validation": "Vaporize swift-win passed the nested repository-owned Bead home regression test using Swift Testing."
+  },
+  "closedAt": "2026-08-28T09:40:00Z",
+  "resolution": "Vaporize derives the common owning home shared by a nested package and its repository-owned Kura space without weakening containment."
+}
