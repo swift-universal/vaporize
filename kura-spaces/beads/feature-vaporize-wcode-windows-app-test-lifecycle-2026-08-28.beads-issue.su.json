@@ -1,0 +1,46 @@
+{
+  "BeadsIssue": "0.1.0",
+  "schemaVersion": "0.1.0",
+  "id": "feature-vaporize-wcode-windows-app-test-lifecycle-2026-08-28",
+  "title": "Feature — Make WCode the Windows application test lifecycle authority",
+  "createdAt": "2026-08-28T19:01:19Z",
+  "createdBy": "codex at chairman direction",
+  "sourceSystem": "vaporize-wcode-lifecycle-review",
+  "sourceType": "operator-identified-ownership-gap",
+  "owner": "wrkstrm-core",
+  "issueType": "feature",
+  "status": "open",
+  "priority": 1,
+  "labels": [
+    "application-testing",
+    "vaporize",
+    "wcode",
+    "windows"
+  ],
+  "description": "Vaporize assigns Windows application build, install, and run lifecycle to WCode but rejects application testing. Visual and UI-test packages therefore rebuild private staging and launch infrastructure instead of composing the engineering-owned lifecycle service.",
+  "acceptanceCriteria": [
+    "`vaporize test wcode --artifact app` is a supported canonical operation.",
+    "The operation builds the selected SwiftPM application product, materializes its runtime artifacts and project.pkl resources, launches the exact staged executable, and exposes its process and installation identity to a caller-supplied test journey.",
+    "Run and test share one WCode materialization and launch contract rather than maintaining independent executable-location logic.",
+    "The test lifecycle can retain a launched application for interactive inspection or terminate it deterministically after an automated journey.",
+    "Typed lifecycle and test receipts distinguish build, materialization, launch, assertion, screenshot, and teardown outcomes.",
+    "SwiftUUI Museum Windows visual tests pass through the new lifecycle without owning SwiftPM build, runtime-bundle copying, or raw process launch."
+  ],
+  "implementationInstructions": [
+    "Extend the existing WCode application authority; do not create a second Windows app runner.",
+    "Promote build, materialization, executable location, environment projection, launch, and teardown into reusable Vaporize/WCode services callable by both `run` and `test`.",
+    "Keep UI automation and domain assertions in the consuming test package; Vaporize owns lifecycle orchestration and typed process evidence.",
+    "Support caller-declared runtime artifacts and the canonical project.pkl resource projection.",
+    "Add CUJ coverage for successful launch, retained interactive launch, assertion failure, application crash, missing runtime artifact, and deterministic teardown.",
+    "Use CommonProcess and existing Vaporize issue reporting; do not introduce raw Process or print-based diagnostics.",
+    "Preserve existing `vaporize run wcode --artifact app` behavior while routing it through the shared lifecycle service."
+  ],
+  "relatedPaths": [
+    "Sources/vaporize-cli/main.swift",
+    "Sources/vaporize-cli/VaporizeTestReceipt.swift",
+    "Tests/cuj-01-swiftpm-cli/VaporizeCUJ01SwiftPMCLITests.swift",
+    "Tests/cuj-32-test-service-adoption/VaporizeCUJ32TestServiceAdoptionTests.swift"
+  ],
+  "blockers": [],
+  "notes": "The 2026-08-28 source review found the explicit guard `WCode has no application test lifecycle contract.` SwiftUUI's Museum demonstrates the resulting duplication by building, copying its WinUI runtime bundle, staging into a temporary directory, launching, and tearing down inside win-ui-testing."
+}
