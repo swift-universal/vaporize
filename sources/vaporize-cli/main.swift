@@ -2206,6 +2206,7 @@ struct VaporizeCLI: AsyncParsableCommand {
 
   func swiftTestArguments() throws -> [String] {
     let packagePath = try requirePackagePath()
+    let forwardedArguments = try coreForwardedArguments()
     var arguments =
       ["test"] + (try swiftPMWorkspaceArguments(packagePath: packagePath)) + [
         "--package-path", packagePath,
@@ -2213,9 +2214,10 @@ struct VaporizeCLI: AsyncParsableCommand {
       ]
     arguments += VaporizeWindowsSwiftTestingPolicy.testArguments(
       configuration: configuration.rawValue,
-      isWindowsHost: VaporizeWindowsSwiftTestingPolicy.isWindowsHost
+      isWindowsHost: VaporizeWindowsSwiftTestingPolicy.isWindowsHost,
+      forwardedArguments: forwardedArguments
     )
-    arguments.append(contentsOf: try coreForwardedArguments())
+    arguments.append(contentsOf: forwardedArguments)
     return arguments
   }
 

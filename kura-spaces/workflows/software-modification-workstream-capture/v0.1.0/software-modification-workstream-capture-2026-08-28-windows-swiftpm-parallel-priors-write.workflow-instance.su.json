@@ -1,0 +1,66 @@
+{
+  "schemaVersion": "0.0.8",
+  "WorkflowInstanceModel": "0.0.8",
+  "kind": "workflow-instance",
+  "slug": "software-modification-workstream-capture-2026-08-28-windows-swiftpm-parallel-priors-write",
+  "title": "Software modification - Windows SwiftPM parallel priors write",
+  "updated": "2026-08-28T09:00:00Z",
+  "workflowRef": {
+    "link-ref-model": "0.0.5",
+    "t": "Software modification workstream capture",
+    "tg": [{
+      "k": "rp",
+      "rt": "mono",
+      "v": "private/universal/substrate/collectives/spaces-universal/private/universal/kura-spaces/workflows/software-modification-workstream-capture/v0.1.0/software-modification-workstream-capture.workflow.su.json"
+    }]
+  },
+  "beadTrackingRefs": [{
+    "link-ref-model": "0.0.5",
+    "t": "Windows SwiftPM parallel priors write bug",
+    "tg": [{
+      "k": "rp",
+      "rt": "swift-universal",
+      "v": "private/product-lines/vaporize/kura-spaces/beads/bug-vaporize-windows-swiftpm-parallel-priors-write-2026-08-28.beads-issue.su.json"
+    }]
+  }],
+  "stateResults": [
+    {
+      "schemaVersion": "0.1.0",
+      "WorkflowInstanceStateResultModel": "0.1.0",
+      "kind": "workflow-instance-state-result",
+      "stateId": "workspace-preflight",
+      "outcome": "completed-with-unrelated-dirt",
+      "summary": "The exact Windows Swift Testing policy files were clean; unrelated active i18n and maintainer-configuration work remains outside this slice."
+    },
+    {
+      "schemaVersion": "0.1.0",
+      "WorkflowInstanceStateResultModel": "0.1.0",
+      "kind": "workflow-instance-state-result",
+      "stateId": "implement-change",
+      "outcome": "completed",
+      "summary": "Windows SwiftPM tests now default to one job while preserving explicit caller job counts and the release WMO workaround."
+    },
+    {
+      "schemaVersion": "0.1.0",
+      "WorkflowInstanceStateResultModel": "0.1.0",
+      "kind": "workflow-instance-state-result",
+      "stateId": "validate-change",
+      "outcome": "completed",
+      "summary": "The new debug Vaporize binary injected --jobs 1 without a caller job flag and passed 4 focused Swift Testing tests in 1 suite; request vaporize-test-9D5C7F59-4D35-4F62-B497-88B3E12D1FA4."
+    }
+  ],
+  "receiptRefs": [{
+    "link-ref-model": "0.0.5",
+    "t": "Windows Swift Testing policy tests",
+    "tg": [{
+      "k": "rp",
+      "rt": "swift-universal",
+      "v": "private/product-lines/vaporize/tests/cuj-01-swiftpm-cli/windows/windows-release-swift-testing-policy-tests.swift"
+    }]
+  }],
+  "notes": [
+    "This is a direct production Windows build fix; no experiment is required.",
+    "The caller can opt back into parallelism by passing --jobs or -j explicitly.",
+    "The cold serialized Vaporize graph took 1,081.08 seconds; a higher measured Windows concurrency ceiling is a separate performance optimization."
+  ]
+}

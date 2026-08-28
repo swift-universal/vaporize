@@ -1,0 +1,28 @@
+{
+  "BeadsIssue": "0.1.0",
+  "schemaVersion": "0.1.0",
+  "id": "bug-vaporize-windows-swiftpm-parallel-priors-write-2026-08-28",
+  "title": "Serialize Windows SwiftPM tests by default",
+  "createdAt": "2026-08-28T09:00:00Z",
+  "createdBy": "Codex with operator direction",
+  "issueType": "bug",
+  "status": "closed",
+  "priority": 0,
+  "labels": ["vaporize", "swiftpm", "windows", "production"],
+  "owningBoundary": "private/product-lines/vaporize",
+  "description": "Large Windows SwiftPM test graphs can fail while parallel compiler tasks contend on incremental .priors dependency files, reporting NSCocoaErrorDomain 512 before the executable finishes linking.",
+  "acceptanceCriteria": [
+    "Windows Vaporize SwiftPM tests default to one build job.",
+    "An explicit caller-provided --jobs or -j value remains authoritative.",
+    "Release tests retain the Windows Swift Testing WMO workaround.",
+    "Focused Windows Swift Testing policy tests pass through Vaporize."
+  ],
+  "evidence": {
+    "failureRequestId": "vaporize-test-199BC939-1477-480F-B354-EE5E1892BEDE",
+    "diagnosticRequestId": "vaporize-test-B4BF11A9-2A34-4535-AF46-7776D2F04EF7",
+    "validationRequestId": "vaporize-test-9D5C7F59-4D35-4F62-B497-88B3E12D1FA4",
+    "validation": "The new Vaporize binary injected --jobs 1 without a caller job flag and passed 4 focused Swift Testing tests in 1 suite. The cold serialized graph took 1,081.08 seconds, so callers retain an explicit job-count override."
+  },
+  "closedAt": "2026-08-28T09:00:00Z",
+  "resolution": "Vaporize now serializes Windows SwiftPM test builds unless the caller explicitly selects a job count."
+}
