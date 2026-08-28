@@ -117,6 +117,14 @@ let xcodeProjectDefinitionDependency = Package.Dependency.package(
     "wrkstrm-core/private/universal/domain/build/spm/xcode-project-definition"
   )
 )
+let pklSwiftDependency = localOrRemote(
+  path: repositoryPath(
+    collectivesDirectory,
+    "wrkstrm-upstreams/private/upstreams/apple/spm/pkl-swift"
+  ),
+  url: "https://github.com/wrkstrm-upstreams/pkl-swift.git",
+  from: "0.10.0"
+)
 let swiftIssueReportingDependency = Package.Dependency.package(
   url: "https://github.com/pointfreeco/swift-issue-reporting",
   exact: "2.0.0"
@@ -178,6 +186,7 @@ let packageDependencies: [Package.Dependency] = [
   swiftCLIUpdaterDependency,
   swiftJSONFormatterDependency,
   xcodeProjectDefinitionDependency,
+  pklSwiftDependency,
   swiftIssueReportingDependency,
   translateSourceGateDependency,
   vaporizeCLICopyDependency,
@@ -192,6 +201,7 @@ let packageDependencies: [Package.Dependency] = [
 
 let vaporizeCLIDependencies: [Target.Dependency] = [
   .product(name: "VaporizeCore", package: "vaporize-core"),
+  "VaporizeProjectModel",
   .product(name: "XcodeProjectDefinitionCore", package: "xcode-project-definition"),
   "VaporizeIssueReporting",
   .product(name: "CommonLog", package: "common-log"),
@@ -215,6 +225,7 @@ let package = Package(
     .macOS("26.0")
   ],
   products: [
+    .library(name: "VaporizeProjectModel", targets: ["VaporizeProjectModel"]),
     .library(name: "VaporizeIssueReporting", targets: ["VaporizeIssueReporting"]),
     // SwiftCLIInstaller library LIFTED to swift-universal/.../tooling/spm/swift-cli-installer/
     // (CEO decision 2026-06-14). Consumers now import via swiftCLIInstallerDependency.
@@ -223,6 +234,13 @@ let package = Package(
   ],
   dependencies: packageDependencies,
   targets: [
+    .target(
+      name: "VaporizeProjectModel",
+      dependencies: [
+        .product(name: "PklSwift", package: "pkl-swift")
+      ],
+      path: "sources/vaporize-project-model"
+    ),
     // SwiftCLIInstaller target REMOVED 2026-06-14 — LIFTED to swift-universal
     // package "swift-cli-installer". Consumers below import via
     // .product(name: "SwiftCLIInstaller", package: "swift-cli-installer").
@@ -260,6 +278,11 @@ let package = Package(
       path: "sources/vaporize-issue-reporting"
     ),
     .testTarget(
+      name: "VaporizeProjectModelTests",
+      dependencies: ["VaporizeProjectModel"],
+      path: "tests/vaporize-project-model"
+    ),
+    .testTarget(
       name: "VaporizeLoggingTests",
       dependencies: [
         "VaporizeTestSupport",
@@ -282,6 +305,7 @@ let package = Package(
       name: "VaporizeCUJ01SwiftPMCLITests",
       dependencies: [
         "VaporizeTestSupport",
+        "VaporizeProjectModel",
         .product(name: "SwiftCLIInstaller", package: "swift-cli-installer"),
         "VaporizeCLI",
         .product(name: "ArgumentParser", package: "swift-argument-parser"),

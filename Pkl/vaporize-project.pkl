@@ -1,0 +1,32 @@
+/// Vaporize-owned cross-platform project truth.
+///
+/// Adapter-specific declarations remain inherited while a project migrates.
+/// Xcode consumes `targets`; WCode and SwiftPM consume `platformTargets`.
+extends "../../../../../wrkstrm-core/private/universal/domain/build/spm/xcode-project-definition/Pkl/XcodeProjectDefinition.pkl"
+
+typealias VaporizePlatform = "macos" | "windows" | "linux"
+typealias VaporizeAdapter = "xcode" | "swiftpm" | "wcode"
+typealias VaporizePresentation = "swiftui" | "swift-uui"
+typealias VaporizeUIBackend = "appkit" | "uikit" | "winui"
+
+class VaporizePlatformResource {
+  path: String
+  mode: "copy" | "process"
+  destination: String?
+  includes: Listing<String>?
+  excludes: Listing<String>?
+  optional: Boolean = false
+}
+
+class VaporizePlatformTarget {
+  platform: VaporizePlatform
+  adapter: VaporizeAdapter
+  product: String
+  packagePath: String?
+  entryPoint: String?
+  presentation: VaporizePresentation?
+  backend: VaporizeUIBackend?
+  resources: Listing<VaporizePlatformResource>?
+}
+
+platformTargets: Mapping<String, VaporizePlatformTarget> = new {}

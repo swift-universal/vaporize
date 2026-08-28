@@ -1,5 +1,5 @@
 import Foundation
-import XcodeProjectDefinitionCore
+import VaporizeProjectModel
 
 enum WCodeResourceLifecycleError: Error, Equatable, CustomStringConvertible {
   case targetNotFound(String)
@@ -8,7 +8,7 @@ enum WCodeResourceLifecycleError: Error, Equatable, CustomStringConvertible {
   case emptyPath(target: String)
   case absolutePath(String)
   case pathTraversal(String)
-  case unsupportedMode(path: String, mode: XcodeProjectResourceMode)
+  case unsupportedMode(path: String, mode: VaporizePlatformResourceMode)
   case unsupportedFilters(path: String)
   case missingRequiredResource(String)
   case symbolicLinkNotAllowed(String)
@@ -192,7 +192,7 @@ enum WCodeResourceLifecycle {
     buildProductsDirectory: URL,
     fileManager: FileManager = .default
   ) async throws -> WCodeResourcePlan {
-    let project = try await XcodeProjectPklLoader.load(url: projectURL)
+    let project = try await VaporizeProjectLoader.load(url: projectURL)
     return try plan(
       project: project,
       projectURL: projectURL,
@@ -206,7 +206,7 @@ enum WCodeResourceLifecycle {
   }
 
   static func plan(
-    project: XcodeProjectDefinition,
+    project: VaporizeProject,
     projectURL: URL,
     targetName: String,
     expectedPlatform: String,
@@ -215,14 +215,10 @@ enum WCodeResourceLifecycle {
     buildProductsDirectory: URL,
     fileManager: FileManager = .default
   ) throws -> WCodeResourcePlan {
-    guard let target = project.targets[targetName] else {
+    guard let target = project.platformTargets[targetName] else {
       throw WCodeResourceLifecycleError.targetNotFound(targetName)
     }
-    guard let platform = target.platform?.trimmingCharacters(in: .whitespacesAndNewlines),
-      !platform.isEmpty
-    else {
-      throw WCodeResourceLifecycleError.platformNotDeclared(target: targetName)
-    }
+    let platform = target.platform.rawValue
     guard platform.caseInsensitiveCompare(expectedPlatform) == .orderedSame else {
       throw WCodeResourceLifecycleError.platformMismatch(
         target: targetName,

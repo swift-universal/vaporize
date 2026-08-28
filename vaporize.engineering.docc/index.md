@@ -38,6 +38,7 @@ and explicit disposition of remaining XcodeGen surfaces.
 - <doc:package-supply-and-build-intelligence>
 - <doc:command-ownership-map>
 - <doc:vaporize-wcode-service-topology-engineering-design>
+- <doc:cross-platform-project-ownership>
 - <doc:windows-platform-upgrade-process>
 - <doc:swiftpm-cli-resource-bundle-installs>
 - <doc:windows-swift-path-survival>

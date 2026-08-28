@@ -1,7 +1,7 @@
 import ArgumentParser
 import Foundation
 import Testing
-import XcodeProjectDefinitionCore
+import VaporizeProjectModel
 
 @testable import VaporizeCLI
 
@@ -15,9 +15,9 @@ struct WCodeResourceLifecycleTests {
     try fixture.write("nested", to: "AppResources/Help/index.txt")
 
     let project = try fixture.project(resources: [
-      XcodeProjectResource(path: "AppResources/theme.txt", mode: .copy, destination: "theme.txt"),
-      XcodeProjectResource(path: "AppResources/Help", mode: .copy, destination: "Help"),
-      XcodeProjectResource(path: "AppResources/missing.txt", mode: .copy, optional: true),
+      VaporizePlatformResource(path: "AppResources/theme.txt", mode: .copy, destination: "theme.txt"),
+      VaporizePlatformResource(path: "AppResources/Help", mode: .copy, destination: "Help"),
+      VaporizePlatformResource(path: "AppResources/missing.txt", mode: .copy, optional: true),
     ])
     let plan = try WCodeResourceLifecycle.plan(
       project: project,
@@ -53,7 +53,7 @@ struct WCodeResourceLifecycleTests {
     #expect(throws: WCodeResourceLifecycleError.pathTraversal("../secret.txt")) {
       _ = try WCodeResourceLifecycle.plan(
         project: try fixture.project(resources: [
-          XcodeProjectResource(path: "../secret.txt", mode: .copy)
+          VaporizePlatformResource(path: "../secret.txt", mode: .copy)
         ]),
         projectURL: fixture.root.appendingPathComponent("project.pkl"),
         targetName: "WrktrmlWindows",
@@ -67,8 +67,8 @@ struct WCodeResourceLifecycleTests {
     #expect(throws: WCodeResourceLifecycleError.self) {
       _ = try WCodeResourceLifecycle.plan(
         project: try fixture.project(resources: [
-          XcodeProjectResource(path: "Resources/one.txt", mode: .copy, destination: "Assets"),
-          XcodeProjectResource(
+          VaporizePlatformResource(path: "Resources/one.txt", mode: .copy, destination: "Assets"),
+          VaporizePlatformResource(
             path: "Resources/two.txt", mode: .copy, destination: "Assets/two.txt"),
         ]),
         projectURL: fixture.root.appendingPathComponent("project.pkl"),
@@ -94,7 +94,7 @@ struct WCodeResourceLifecycleTests {
     ) {
       _ = try WCodeResourceLifecycle.plan(
         project: try fixture.project(resources: [
-          XcodeProjectResource(path: "Resources/theme.json", mode: .process)
+          VaporizePlatformResource(path: "Resources/theme.json", mode: .process)
         ]),
         projectURL: fixture.root.appendingPathComponent("project.pkl"),
         targetName: "WrktrmlWindows",
@@ -108,7 +108,7 @@ struct WCodeResourceLifecycleTests {
     #expect(throws: WCodeResourceLifecycleError.unsupportedFilters(path: "Resources/theme.json")) {
       _ = try WCodeResourceLifecycle.plan(
         project: try fixture.project(resources: [
-          XcodeProjectResource(
+          VaporizePlatformResource(
             path: "Resources/theme.json",
             mode: .copy,
             includes: ["*.json"]
@@ -130,13 +130,13 @@ struct WCodeResourceLifecycleTests {
     defer { fixture.remove() }
     let project = try fixture.project(
       targetName: "WrktrmlMac",
-      platform: "macOS",
+      platform: .macos,
       resources: []
     )
 
     #expect(
       throws: WCodeResourceLifecycleError.platformMismatch(
-        target: "WrktrmlMac", expected: "Windows", actual: "macOS")
+        target: "WrktrmlMac", expected: "Windows", actual: "macos")
     ) {
       _ = try WCodeResourceLifecycle.plan(
         project: project,
@@ -156,7 +156,7 @@ struct WCodeResourceLifecycleTests {
     defer { fixture.remove() }
     try fixture.write("first", to: "Resources/value.txt")
     let project = try fixture.project(resources: [
-      XcodeProjectResource(path: "Resources/value.txt", mode: .copy, destination: "value.txt")
+      VaporizePlatformResource(path: "Resources/value.txt", mode: .copy, destination: "value.txt")
     ])
     let plan = try WCodeResourceLifecycle.plan(
       project: project,
@@ -456,7 +456,7 @@ private struct Fixture {
 
   init() throws {
     let base = FileManager.default.temporaryDirectory
-      .appendingPathComponent("wcode-pkl-resources-\(UUID().uuidString)")
+      .appendingPathComponent("wcode-pkl-resources-\(UUID().uuidString.lowercased())")
     try FileManager.default.createDirectory(at: base, withIntermediateDirectories: false)
     self.root = base
     self.output = base.appendingPathComponent("build/Wrktrml.resources")
@@ -473,29 +473,23 @@ private struct Fixture {
 
   func project(
     targetName: String = "WrktrmlWindows",
-    platform: String = "Windows",
-    resources: [XcodeProjectResource]
-  ) throws -> XcodeProjectDefinition {
-    let data = try JSONEncoder().encode(
-      FixtureProject(
-        name: "wrktrml",
-        targets: [targetName: FixtureTarget(platform: platform, resources: resources)]
-      )
+    platform: VaporizePlatform = .windows,
+    resources: [VaporizePlatformResource]
+  ) throws -> VaporizeProject {
+    VaporizeProject(
+      name: "wrktrml",
+      platformTargets: [
+        targetName: VaporizePlatformTarget(
+          platform: platform,
+          adapter: .wcode,
+          product: "Wrktrml",
+          resources: resources
+        )
+      ]
     )
-    return try JSONDecoder().decode(XcodeProjectDefinition.self, from: data)
   }
 
   func remove() {
     try? FileManager.default.removeItem(at: root)
   }
-}
-
-private struct FixtureProject: Encodable {
-  let name: String
-  let targets: [String: FixtureTarget]
-}
-
-private struct FixtureTarget: Encodable {
-  let platform: String
-  let resources: [XcodeProjectResource]
 }

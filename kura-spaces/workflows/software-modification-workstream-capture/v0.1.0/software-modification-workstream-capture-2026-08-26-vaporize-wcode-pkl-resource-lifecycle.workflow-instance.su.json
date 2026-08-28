@@ -4,7 +4,7 @@
   "kind": "workflow-instance",
   "slug": "software-modification-workstream-capture-2026-08-26-vaporize-wcode-pkl-resource-lifecycle",
   "title": "Software modification - Vaporize WCode canonical Pkl resources",
-  "updated": "2026-08-27T05:11:12Z",
+  "updated": "2026-08-28T08:28:00Z",
   "workflowRef": {
     "LinkRefModel": "0.5.0",
     "sv": "0.5.0",
@@ -76,6 +76,14 @@
       "stateId": "emit-through-savepoint",
       "outcome": "ready-for-savepoint",
       "summary": "The exact WCode feature files are green and ready for explicit-file persistence."
+    },
+    {
+      "schemaVersion": "0.1.0",
+      "WorkflowInstanceStateResultModel": "0.1.0",
+      "kind": "workflow-instance-state-result",
+      "stateId": "cross-platform-project-owner-correction",
+      "outcome": "completed-with-bounded-graph-blocker",
+      "summary": "Vaporize now owns typed platformTargets and WCode consumes that neutral model. Pkl evaluation, isolated Swift typechecking, a real Windows Savepoint build, thin-entry tests, and Xcode adapter regeneration passed. The full Vaporize package test graph remains blocked before compilation by its pre-existing missing os-service-contract-schemas local dependency."
     }
   ],
   "receiptRefs": [
@@ -99,7 +107,7 @@
         {
           "k": "rp",
           "rt": "vaporize",
-          "v": "tests/cuj-01-swiftpm-cli/WCodeResourceLifecycleTests.swift"
+          "v": "tests/cuj-01-swiftpm-cli/wcode-resource-lifecycle-tests.swift"
         }
       ]
     },
