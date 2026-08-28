@@ -1,0 +1,71 @@
+{
+  "schemaVersion": "0.8.0",
+  "WorkflowInstanceModel": "0.8.0",
+  "kind": "workflow-instance",
+  "slug": "software-modification-workstream-capture-2026-08-28-wcode-app-test-lifecycle",
+  "title": "Software modification - Vaporize WCode application test lifecycle",
+  "updated": "2026-08-28T19:40:00Z",
+  "workflowRef": {
+    "LinkRefModel": "0.5.0",
+    "sv": "0.5.0",
+    "t": "Software modification workstream capture",
+    "tg": [
+      {
+        "k": "rp",
+        "rt": "mono",
+        "v": "private/universal/substrate/collectives/spaces-universal/private/universal/kura-spaces/workflows/software-modification-workstream-capture/v0.1.0/software-modification-workstream-capture.workflow.su.json"
+      }
+    ]
+  },
+  "beadTrackingRefs": [
+    {
+      "LinkRefModel": "0.5.0",
+      "sv": "0.5.0",
+      "t": "Vaporize WCode Windows app test lifecycle",
+      "tg": [
+        {
+          "k": "rp",
+          "rt": "vaporize",
+          "v": "kura-spaces/beads/feature-vaporize-wcode-windows-app-test-lifecycle-2026-08-28.beads-issue.su.json"
+        }
+      ]
+    }
+  ],
+  "receiptRefs": [
+    {
+      "LinkRefModel": "0.5.0",
+      "sv": "0.5.0",
+      "t": "Focused WCode app-test contract tests",
+      "tg": [
+        {
+          "k": "rp",
+          "rt": "vaporize",
+          "v": "tests/cuj-01-swiftpm-cli/VaporizeCUJ01SwiftPMCLITests.swift"
+        },
+        {
+          "k": "rp",
+          "rt": "vaporize",
+          "v": "tests/cuj-01-swiftpm-cli/wcode-resource-lifecycle-tests.swift"
+        }
+      ]
+    }
+  ],
+  "stateResults": [
+    {
+      "schemaVersion": "0.1.0",
+      "WorkflowInstanceStateResultModel": "0.1.0",
+      "kind": "workflow-instance-state-result",
+      "stateId": "implement-change",
+      "outcome": "completed-as-first-contract-slice",
+      "summary": "WCode app testing accepts an explicit driver product, builds it, launches the exact materialized app through CommonProcess retained lifecycle, passes reserved live-process identity, tears down after success or failure, and retains typed combined evidence."
+    },
+    {
+      "schemaVersion": "0.1.0",
+      "WorkflowInstanceStateResultModel": "0.1.0",
+      "kind": "workflow-instance-state-result",
+      "stateId": "verify-change",
+      "outcome": "partially-completed-blocked-by-product-governance",
+      "summary": "Parser and required-driver CUJs pass and the CLI compiles. The real SwiftUUI Museum dispatch reached and was correctly blocked by the shared i18n source gate before lifecycle execution; no copy baseline was minted implicitly."
+    }
+  ]
+}

@@ -1218,7 +1218,7 @@ private func assertActionableVaporizeProductValidationError(
 
   @Test("CUJ-01 lets WCode own Windows app build install and run")
   func letsWCodeOwnWindowsAppLifecycle() {
-    for operation in [VaporizeCoreOperation.build, .install, .run] {
+    for operation in [VaporizeCoreOperation.build, .install, .run, .test] {
       #expect(
         VaporizeCLI.windowsArtifactAuthorityGuidance(
           operation: operation,
@@ -1226,6 +1226,49 @@ private func assertActionableVaporizeProductValidationError(
           artifact: .app
         ) == nil
       )
+    }
+  }
+
+  @Test("CUJ-01 parses a WCode application test driver")
+  func parsesWCodeApplicationTestDriver() throws {
+    let command = try VaporizeCLI.parse([
+      "test",
+      "wcode",
+      "--artifact", "app",
+      "--package-path", "C:\\workspace\\museum",
+      "--product", "museum.app",
+      "--wcode-test-product", "museum-windows-visual-tests",
+      "--configuration", "debug",
+    ])
+
+    #expect(try command.wcodeValidatedTestProduct() == "museum-windows-visual-tests")
+    #expect(try command.wcodeTestDriverBuildArguments() == [
+      "build",
+      "--package-path", "C:\\workspace\\museum",
+      "-c", "debug",
+      "--product", "museum-windows-visual-tests",
+    ])
+    #expect(
+      VaporizeCLI.windowsArtifactAuthorityGuidance(
+        operation: .test,
+        authority: .wcode,
+        artifact: .app
+      ) == nil
+    )
+  }
+
+  @Test("CUJ-01 requires a WCode application test driver")
+  func requiresWCodeApplicationTestDriver() throws {
+    let command = try VaporizeCLI.parse([
+      "test",
+      "wcode",
+      "--artifact", "app",
+      "--package-path", "C:\\workspace\\museum",
+      "--product", "museum.app",
+    ])
+
+    #expect(throws: Error.self) {
+      _ = try command.wcodeValidatedTestProduct()
     }
   }
 

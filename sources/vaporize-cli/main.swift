@@ -367,6 +367,14 @@ struct VaporizeCLI: AsyncParsableCommand {
       )
     )
     var wcodeRuntimeArtifactNames: [String] = []
+
+    @Option(
+      name: .customLong("wcode-test-product"),
+      help: ArgumentHelp(
+        "SwiftPM executable product that drives a WCode application test after Vaporize launches the app."
+      )
+    )
+    var wcodeTestProduct: String?
   #endif
 
   @Option(
@@ -780,9 +788,27 @@ struct VaporizeCLI: AsyncParsableCommand {
     succeeded: Bool,
     failureDescription: String?
   ) async throws {
-    // Tests retain their richer dedicated receipt. Build/install/run receive
-    // the shared timing record requested through --analyze or --receipt-path.
-    guard recorder.operation != .test else { return }
+    // Swift package tests retain their richer dedicated receipt. WCode app
+    // tests emit the shared execution record composed with lifecycle evidence.
+    if recorder.operation == .test {
+      #if os(Windows)
+        guard recorder.authority == .wcode,
+          let lifecycle = WCodeLifecycleReceiptContext.current?.retainedReceipt()
+        else { return }
+        let coreReceipt = recorder.receipt(
+          packagePath: try requirePackagePath(),
+          product: product?.trimmingCharacters(in: .whitespacesAndNewlines),
+          configuration: configuration.rawValue,
+          succeeded: succeeded,
+          artifactPath: lifecycle.artifactLayout.executablePath,
+          failureDescription: failureDescription
+        )
+        try emitReceiptIfRequested(
+          WCodeCombinedCoreExecutionReceipt(core: coreReceipt, wcodeLifecycle: lifecycle)
+        )
+      #endif
+      return
+    }
     let packagePath = try requirePackagePath()
     let product = product?.trimmingCharacters(in: .whitespacesAndNewlines)
     let artifactPath: String?
@@ -899,11 +925,6 @@ struct VaporizeCLI: AsyncParsableCommand {
           swift-win cannot \(operation.rawValue) an app artifact; swift-win is limited to raw Package.swift products.
           next: use `vaporize \(operation.rawValue) wcode --artifact app --package-path <package> --product <app-product> --configuration <debug|release>`.
           WCode reads `<package>/project.pkl`; pass `--pkl-path` to override it and `--target` when the project target differs from the SwiftPM product.
-          """
-      case (.app, .wcode) where operation == .test:
-        return """
-          WCode owns Windows app build, install, and run lifecycle operations; app testing has no WCode contract yet.
-          next: use `vaporize build wcode`, `vaporize install wcode`, or `vaporize run wcode` with `--artifact app` as appropriate.
           """
       default:
         return nil
@@ -1299,6 +1320,12 @@ struct VaporizeCLI: AsyncParsableCommand {
     case .cli, .tui:
       try await runSwiftTests()
     case .app:
+      #if os(Windows)
+        if try usesWCodeExecutionAuthority(for: .test) {
+          try await runWCodeApp(operation: .test)
+          return
+        }
+      #endif
       try await runXcodeAppTests()
     }
   }
@@ -1923,6 +1950,40 @@ struct VaporizeCLI: AsyncParsableCommand {
       try wcodeSwiftBuildArguments() + ["--show-bin-path"]
     }
 
+    func wcodeTestDriverBuildArguments() throws -> [String] {
+      let packagePath = try requirePackagePath()
+      let driverProduct = try wcodeValidatedTestProduct()
+      return ["build"] + (try swiftPMWorkspaceArguments(packagePath: packagePath)) + [
+        "--package-path", packagePath,
+        "-c", configuration.rawValue,
+        "--product", driverProduct,
+      ]
+    }
+
+    func wcodeValidatedTestProduct() throws -> String {
+      guard let rawProduct = wcodeTestProduct?.trimmingCharacters(in: .whitespacesAndNewlines),
+        !rawProduct.isEmpty
+      else {
+        throw ValidationError(
+          "WCode application testing requires --wcode-test-product <driver-product>."
+        )
+      }
+      return try WCodeResourceLifecycle.validateProductName(rawProduct)
+    }
+
+    func wcodeTestDriverExecutable(
+      product: String,
+      buildProductsDirectory: URL
+    ) throws -> URL {
+      let executable = buildProductsDirectory.appendingPathComponent(product + ".exe")
+      guard FileManager.default.fileExists(atPath: executable.path) else {
+        throw ValidationError(
+          "WCode test build did not produce the expected driver executable: \(executable.path)"
+        )
+      }
+      return executable.standardizedFileURL
+    }
+
     func wcodeBuildEnvironment() throws -> [String: String] {
       try wcodeBuildEnvironment(product: wcodeValidatedProduct())
     }
@@ -2132,7 +2193,8 @@ struct VaporizeCLI: AsyncParsableCommand {
         WCodeLifecycleReceipt(
           materialization: materialization,
           artifactLayout: layout,
-          install: nil
+          install: nil,
+          test: nil
         )
       )
 
@@ -2170,7 +2232,8 @@ struct VaporizeCLI: AsyncParsableCommand {
             WCodeLifecycleReceipt(
               materialization: materialization,
               artifactLayout: layout,
-              install: installed
+              install: installed,
+              test: nil
             )
           )
           if launch {
@@ -2192,13 +2255,92 @@ struct VaporizeCLI: AsyncParsableCommand {
           }
         }
       case .test:
-        throw ValidationError("WCode has no application test lifecycle contract.")
+        let driverProduct = try wcodeValidatedTestProduct()
+        let invocation = try swiftCommandInvocation(arguments: wcodeTestDriverBuildArguments())
+        try await runExecutable(
+          executable: invocation.executable,
+          arguments: invocation.arguments,
+          sourceTag: "vaporize-wcode",
+          environment: environment,
+          additionalTags: [
+            "artifact": "app",
+            "appPhase": "test-driver-build",
+            "executionAuthority": "wcode",
+            "operation": operation.rawValue,
+            "product": driverProduct,
+            "toolchainResolver": invocation.resolver,
+          ]
+        )
+        let driverExecutable = try wcodeTestDriverExecutable(
+          product: driverProduct,
+          buildProductsDirectory: buildProductsDirectory
+        )
+        let application = try RetainedProcessService().launch(
+          RetainedProcessRequest(
+            executablePath: layout.executablePath,
+            environmentUpdates: environment,
+            workingDirectory: buildProductsDirectory.path
+          )
+        )
+        environment["WCODE_TEST_APPLICATION_EXECUTABLE"] = layout.executablePath
+        environment["WCODE_TEST_APPLICATION_PROCESS_ID"] = String(application.processIdentifier)
+        environment["WCODE_TEST_APPLICATION_RESOURCE_ROOT"] = materialization.resourceRoot
+        do {
+          try await runExecutable(
+            executable: .path(driverExecutable.path),
+            arguments: try coreForwardedArguments(),
+            sourceTag: "vaporize-wcode",
+            environment: environment,
+            additionalTags: [
+              "artifact": "app",
+              "appPhase": "application-test-driver",
+              "executionAuthority": "wcode",
+              "operation": operation.rawValue,
+              "product": driverProduct,
+            ]
+          )
+          application.terminate()
+          let exitStatus = await application.waitForExit()
+          WCodeLifecycleReceiptContext.current?.retain(
+            WCodeLifecycleReceipt(
+              materialization: materialization,
+              artifactLayout: layout,
+              install: nil,
+              test: WCodeApplicationTestReceipt(
+                driverProduct: driverProduct,
+                driverExecutablePath: driverExecutable.path,
+                applicationProcessIdentifier: application.processIdentifier,
+                driverSucceeded: true,
+                applicationExitStatus: String(describing: exitStatus)
+              )
+            )
+          )
+        } catch {
+          application.terminate()
+          let exitStatus = await application.waitForExit()
+          WCodeLifecycleReceiptContext.current?.retain(
+            WCodeLifecycleReceipt(
+              materialization: materialization,
+              artifactLayout: layout,
+              install: nil,
+              test: WCodeApplicationTestReceipt(
+                driverProduct: driverProduct,
+                driverExecutablePath: driverExecutable.path,
+                applicationProcessIdentifier: application.processIdentifier,
+                driverSucceeded: false,
+                applicationExitStatus: String(describing: exitStatus)
+              )
+            )
+          )
+          throw error
+        }
       }
       WCodeLifecycleReceiptContext.current?.retain(
         WCodeLifecycleReceipt(
           materialization: materialization,
           artifactLayout: layout,
-          install: installReceipt
+          install: installReceipt,
+          test: WCodeLifecycleReceiptContext.current?.retainedReceipt()?.test
         )
       )
     }

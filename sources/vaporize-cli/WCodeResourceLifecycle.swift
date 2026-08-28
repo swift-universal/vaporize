@@ -134,10 +134,19 @@ struct WCodeArtifactInstallReceipt: Codable, Equatable, Sendable {
   let installedArtifactPaths: [String]
 }
 
+struct WCodeApplicationTestReceipt: Codable, Equatable, Sendable {
+  let driverProduct: String
+  let driverExecutablePath: String
+  let applicationProcessIdentifier: Int32
+  let driverSucceeded: Bool
+  let applicationExitStatus: String
+}
+
 struct WCodeLifecycleReceipt: Codable, Equatable, Sendable {
   let materialization: WCodeResourceMaterializationReceipt
   let artifactLayout: WCodeBuiltArtifactLayout
   let install: WCodeArtifactInstallReceipt?
+  let test: WCodeApplicationTestReceipt?
 }
 
 enum WCodeResourceLifecycle {

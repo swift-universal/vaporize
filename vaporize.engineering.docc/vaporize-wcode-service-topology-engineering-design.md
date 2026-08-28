@@ -144,7 +144,12 @@ without importing platform SDKs or implementing platform behavior.
 
 ### Known Limitations
 
-- WCode app testing has no accepted contract yet.
+- WCode app testing now has a first accepted process contract: Vaporize builds
+  an explicitly named driver product, launches the built app, passes the app's
+  executable, process identifier, and resource root through reserved
+  `WCODE_TEST_APPLICATION_*` environment values, waits for the driver, and
+  owns deterministic app teardown. Richer test-driver discovery and a fully
+  extracted application-lifecycle service remain future work.
 - The additive Pkl resource model and isolated Swift planner/stager are the
   first implementation slice. CLI composition is gated by the explicit WCode
   authority and does not change the SwiftPM or Xcode authorities.
@@ -243,6 +248,7 @@ and a receipt that identifies the implementation and artifact involved.
 | `bounded-install-root` | Installation is a strict descendant of the admitted per-user Programs root, including under force replacement. | Negative preservation test against an outside destination. |
 | `reserved-environment` | Callers cannot override any `WCODE_` lifecycle key. | Parser/service refusal test. |
 | `validation-order` | Pkl target and resource intent are validated before compilation. | Command-flow review plus focused planner rejection tests; an injected process-spy integration test remains follow-up evidence. |
+| `wcode-app-test-lifecycle` | `test wcode --artifact app` launches exactly one app, invokes one explicit driver product against its live process identity, and tears the app down after driver success or failure. | CommonProcess retained-process tests, Vaporize parser/routing tests, driver attach tests, and a real app journey receipt. |
 
 ## Proposed System
 
@@ -306,8 +312,9 @@ is not permission to try another authority.
 1. Artifact validation occurs before service lookup or process execution.
 2. `swift-win + app` always refuses with a WCode command.
 3. `wcode + cli/tui` always refuses with a swift-win command.
-4. `wcode + app + test` remains unsupported until a versioned test contract is
-   accepted.
+4. `wcode + app + test` requires `--wcode-test-product`; Vaporize owns app
+   launch and teardown while the driver owns assertions against the supplied
+   live process identity.
 5. `xcode` is never available merely because the host is macOS; its service
    must be registered and ready.
 6. An adapter may use lower-level command execution services internally, but it
@@ -409,6 +416,28 @@ Before that migration, the common-process schema v0.0.1/v0.0.3 mismatch must be
 resolved by a versioned contract or an explicit adapter. The mismatch must not
 be hidden by type aliases or copied models.
 
+For app tests that must inspect a live process, CommonProcess exposes a
+retained-process lifecycle handle. This is deliberately smaller than an app
+test framework: it returns the live process identifier, supports awaiting the
+typed exit status, and permits deterministic termination. Vaporize composes
+that lifecycle with a separately built driver executable. Test frameworks such
+as WinUI automation attach to the supplied process; they do not rebuild,
+restage, relaunch, or terminate the application themselves.
+
+The initial command shape is:
+
+```text
+vaporize test wcode --artifact app \
+  --package-path <package> \
+  --product <app-product> \
+  --wcode-test-product <driver-product>
+```
+
+`--wcode-environment NAME=VALUE` applies before app launch and is inherited by
+the driver. Names beginning with `WCODE_` remain reserved. The driver receives
+`WCODE_TEST_APPLICATION_EXECUTABLE`, `WCODE_TEST_APPLICATION_PROCESS_ID`, and
+`WCODE_TEST_APPLICATION_RESOURCE_ROOT` only after the app has launched.
+
 ### Self-Update Boundary
 
 Feed parsing and signature verification are portable capabilities. Replacing a
@@ -470,6 +499,7 @@ using an unrelated installed Vaporize binary as a fallback.
 | Pilot build | one Windows app | WCode creates the expected app artifact from the declared source. | Run, install, signing, or fleet parity. |
 | Pilot run | same Windows app | WCode launches the exact built artifact with declared arguments and environment. | Installation or release. |
 | Pilot install | same Windows app | WCode places the executable, explicit runtime closure, and resource root beneath the admitted per-user Programs root. | Automatic dependency closure, signing, distribution, or release. |
+| Pilot app test | same Windows app plus explicit driver product | Vaporize launches the exact built app, the driver attaches to the supplied live PID, and the combined receipt records driver outcome plus app teardown. | Fleet parity, signing, distribution, or release. |
 | Windows support matrix | one lane for Windows 10 22H2 and one lane for every Windows 11 feature release | Each lane has separate build, run, and install receipts for the same app version. | Microsoft servicing, signing, store readiness, or untested architectures. |
 
 Tests use injected spy services for routing and focused real adapters for
@@ -522,8 +552,8 @@ packaging, or destination.
 
 ### Phase 7: Expand Deliberately
 
-Add one platform variable or app at a time. WCode app testing receives a new
-contract and Bead only after build, run, and install evidence is stable.
+Add one platform variable or app at a time. Expand WCode app testing beyond the
+explicit executable-driver contract only through a new contract and Bead.
 
 ## Alternatives Considered
 
@@ -616,7 +646,9 @@ release, installation fleet, signing identity, or public Windows support claim.
    vocabulary without breaking pinned consumers?
 7. What independent service owns Windows CLI executable replacement and
    relaunch?
-8. What evidence must exist before `test wcode --artifact app` is designed?
+8. What additional evidence is required before the explicit executable-driver
+   app-test contract grows discovery, parallel applications, or another test
+   transport?
 
 ## Related Material
 

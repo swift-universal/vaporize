@@ -9,7 +9,7 @@
   "sourceType": "operator-identified-ownership-gap",
   "owner": "wrkstrm-core",
   "issueType": "feature",
-  "status": "open",
+  "status": "in_progress",
   "priority": 1,
   "labels": [
     "application-testing",
@@ -41,6 +41,11 @@
     "Tests/cuj-01-swiftpm-cli/VaporizeCUJ01SwiftPMCLITests.swift",
     "Tests/cuj-32-test-service-adoption/VaporizeCUJ32TestServiceAdoptionTests.swift"
   ],
-  "blockers": [],
-  "notes": "The 2026-08-28 source review found the explicit guard `WCode has no application test lifecycle contract.` SwiftUUI's Museum demonstrates the resulting duplication by building, copying its WinUI runtime bundle, staging into a temporary directory, launching, and tearing down inside win-ui-testing."
+  "blockers": [
+    "The real SwiftUUI Museum dispatch reaches Vaporize's shared i18n source gate and is blocked by its existing missing-passport and loose-copy findings. Capturing an International Law baseline or provisioning approved copy requires an explicit product-governance disposition."
+  ],
+  "relatedTypedRecords": [
+    "kura-spaces/workflows/software-modification-workstream-capture/v0.1.0/software-modification-workstream-capture-2026-08-28-wcode-app-test-lifecycle.workflow-instance.su.json"
+  ],
+  "notes": "The 2026-08-28 source review found the explicit guard `WCode has no application test lifecycle contract.` The first implementation slice now supports an explicit executable driver, launches the app through CommonProcess retained lifecycle, exports reserved live-process identity, tears down on driver success or failure, and emits combined lifecycle evidence. Parser/routing tests and the retained-process tests pass. SwiftUUI Museum no longer needs to own build or launch in its driver, but the full real-app receipt remains blocked at the shared i18n source gate; retained interactive inspection and richer failure CUJs also remain open."
 }

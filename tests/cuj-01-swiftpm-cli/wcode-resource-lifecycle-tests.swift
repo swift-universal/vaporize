@@ -313,7 +313,8 @@ struct WCodeResourceLifecycleTests {
     let lifecycleReceipt = WCodeLifecycleReceipt(
       materialization: materialization,
       artifactLayout: layout,
-      install: receipt
+      install: receipt,
+      test: nil
     )
     let encodedReceipt = try JSONEncoder().encode(lifecycleReceipt)
     #expect(
