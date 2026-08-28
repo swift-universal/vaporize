@@ -42,6 +42,7 @@ and explicit disposition of remaining XcodeGen surfaces.
 - <doc:swiftpm-cli-resource-bundle-installs>
 - <doc:windows-swift-path-survival>
 - <doc:project-generation-and-migration>
+- <doc:canonical-pkl-definition-bundling-and-short-project-references>
 - <doc:pkl-xcode-app-test-authority>
 - <doc:pkl-source-version-status>
 - <doc:temporal-candidate-and-explicit-release-request-v001-2608-18050>

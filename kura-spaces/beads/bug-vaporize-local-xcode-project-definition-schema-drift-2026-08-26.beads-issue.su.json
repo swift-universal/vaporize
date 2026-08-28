@@ -4,7 +4,7 @@
   "id": "bug-vaporize-local-xcode-project-definition-schema-drift-2026-08-26",
   "title": "Remove Vaporize local XcodeProjectDefinition schema drift safely",
   "createdAt": "2026-08-27T04:18:00Z",
-  "updatedAt": "2026-08-27T04:18:00Z",
+  "updatedAt": "2026-08-28T02:15:00Z",
   "createdBy": "codex",
   "sourceSystem": "vaporize-schema-callsite-audit",
   "sourceType": "implementation-discovery",
@@ -12,25 +12,33 @@
   "issueType": "bug",
   "status": "open",
   "priority": 1,
-  "labels": ["vaporize", "pkl", "xcode-project-definition", "schema-drift", "macos", "packaging", "migration"],
+  "labels": ["vaporize", "pkl", "xcode-project-definition", "schema-drift", "macos", "windows", "packaging", "migration", "short-project-references"],
   "description": "Vaporize/Pkl/XcodeProjectDefinition.pkl is an older full duplicate of the canonical wrkstrm-core definition. It remains a live filesystem dependency for import/upgrade commands, fixtures, and downstream project.pkl amendment edges, but it is not packaged as an installed CLI resource. Deleting it now would break macOS project declarations; authoring it independently permits silent schema drift.",
-  "design": "Keep the canonical full schema in wrkstrm-core. First convert the Vaporize-local path into a compatibility forwarder that amends the canonical module, preserving current edges. Add a small canonical package resource/URL service so an installed Vaporize executable can resolve an immutable versioned schema without relying on a source checkout. Retarget resolver, fixture, and application edges incrementally; remove the forwarder only after the live edge count reaches zero.",
+  "design": "Treat the canonical Pkl definition, its Swift read model, the importer, and the platform generators as one version-coherent code-generation product owned by wrkstrm-core. Bundle the definition as a production SwiftPM resource and expose a typed service carrying its URL, temporal release identity, content digest, safe materialization operation, and clear diagnostics. First convert the Vaporize-local path into a compatibility forwarder that preserves current edges. Replace #filePath, current-directory, and repository-depth discovery with a portable amendment strategy such as a versioned Pkl package reference or a versioned colocated materialization. Retarget resolver, fixture, and application edges incrementally; remove the forwarder only after the live edge count reaches zero. Evolve the definition into universal fundamentals plus platform adapters so concrete project declarations contain only their meaningful differences rather than repeated Xcode, macOS, or Windows boilerplate.",
   "acceptanceCriteria": [
     "The full authored XcodeProjectDefinition schema has one canonical home in wrkstrm-core.",
+    "The canonical code-generation product bundles the exact Pkl definition matching its Swift read model as a production resource.",
+    "A typed definition-resource service exposes the bundled URL, temporal release identity, content digest, safe materialization operation, and actionable diagnostics.",
     "All current Vaporize-local amendment edges continue to generate macOS .xcodeproj world state during migration.",
     "The installed Vaporize CLI can resolve the canonical versioned schema without #filePath access to a source checkout.",
+    "A generated project declaration can move between admitted macOS and Windows environments without rewriting a monorepo-relative or absolute bundle path.",
+    "The canonical definition separates universal project fundamentals from Xcode, macOS, and Windows adapter fields and supports convention-sized project declarations.",
+    "Tests fail clearly when the bundled Pkl definition and compiled Swift model are not version-compatible.",
     "Resolver, test-support, fixture, and downstream application edges migrate with an auditable zero-edge removal gate.",
     "The compatibility forwarder is removed only after a callsite audit reports zero consumers and macOS generation tests pass."
   ],
   "relatedTypedRecords": [
     "kura-spaces/beads/feature-vaporize-wcode-pkl-resource-lifecycle-2026-08-26.beads-issue.su.json",
-    "release/2026-08-26-wcode-pkl-resource-contract/xcode-generates-macos-project-from-canonical-pkl.cuj.su.json"
+    "release/2026-08-26-wcode-pkl-resource-contract/xcode-generates-macos-project-from-canonical-pkl.cuj.su.json",
+    "vaporize.engineering.docc/canonical-pkl-definition-bundling-and-short-project-references.md"
   ],
   "authorizationBoundary": "Planning record only. This slice does not authorize deleting or rewriting the Vaporize-local Pkl compatibility path, bulk-retargeting downstream manifests, or changing installed-resource packaging.",
   "prohibitions": [
     "Do not delete Vaporize/Pkl/XcodeProjectDefinition.pkl while any tracked project.pkl still amends it.",
     "Do not maintain two independently authored full schemas.",
     "Do not embed a transient absolute bundle path into generated project.pkl records.",
-    "Do not claim installed-CLI portability from source-checkout #filePath fallback."
+    "Do not claim installed-CLI portability from source-checkout #filePath fallback.",
+    "Do not classify Xcode schemes, build phases, or XcodeGen compatibility versions as universal project fundamentals.",
+    "Do not make project declarations shorter by weakening types or hiding platform-specific behavior without an explicit adapter boundary."
   ]
 }

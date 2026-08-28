@@ -43,6 +43,13 @@ and the generated world-state.
 That ownership matters because future features should be added to the model
 instead of inherited from a general-purpose generator by accident.
 
+The definition is part of the generator product, not an ambient repository
+file. The canonical code-generation package must eventually bundle the exact
+Pkl definition that matches its Swift model and expose it through a typed
+runtime resource service. See
+<doc:canonical-pkl-definition-bundling-and-short-project-references> for the
+future bundling, portable amendment, and convention-sized declaration design.
+
 ## Release Identity
 
 XcodeGen let owned projects express release identity as untyped target build
