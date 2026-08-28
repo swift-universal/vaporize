@@ -1,0 +1,23 @@
+{
+  "BeadsIssue": "0.1.0",
+  "schemaVersion": "0.1.0",
+  "id": "bug-vaporize-windows-source-built-cli-exe-2026-08-27",
+  "title": "Bug - Vaporize must run the Windows executable emitted by SwiftPM",
+  "createdAt": "2026-08-27T11:55:00Z",
+  "createdBy": "codex at operator direction",
+  "owner": "swift-universal",
+  "issueType": "bug",
+  "status": "open",
+  "priority": 0,
+  "labels": ["vaporize", "windows", "swiftpm", "common-process", "production"],
+  "description": "Vaporize's swift-win run path used the extensionless Swift product name after a successful build. SwiftPM emits a .exe on Windows, so CommonProcess correctly rejected the nonexistent extensionless path.",
+  "acceptanceCriteria": [
+    "Vaporize adds .exe only when resolving a source-built CLI executable on Windows.",
+    "The Windows CUJ regression is stored under the platform test surface and references this Bead.",
+    "Vaporize build swift-win succeeds for Translate.",
+    "Vaporize run swift-win executes Translate --help without callers spelling .exe."
+  ],
+  "risks": [
+    "Adding the suffix outside the platform-specific artifact-resolution boundary could corrupt product identity or non-Windows paths."
+  ]
+}

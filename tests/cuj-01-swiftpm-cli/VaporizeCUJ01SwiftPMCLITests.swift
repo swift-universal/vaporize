@@ -326,10 +326,17 @@ func resolvesScratchRunToFreshProductOutput() throws {
     "--skip-install",
   ]))
 
-  #expect(
-    command.sourceBuiltCLIExecutablePath(product: "tool.cli@org.clia.sh")
-      == "/workspace/.scratch/out/Products/Debug/tool.cli@org.clia.sh"
-  )
+  #if os(Windows)
+    #expect(
+      command.sourceBuiltCLIExecutablePath(product: "tool.cli@org.clia.sh")
+        == "/workspace/.scratch/out/Products/Debug/tool.cli@org.clia.sh.exe"
+    )
+  #else
+    #expect(
+      command.sourceBuiltCLIExecutablePath(product: "tool.cli@org.clia.sh")
+        == "/workspace/.scratch/out/Products/Debug/tool.cli@org.clia.sh"
+    )
+  #endif
   #expect(command.swiftCommandEnvironment()?["SWIFTPM_USE_LOCAL_DEPS"] == "1")
 }
 

@@ -1,0 +1,23 @@
+{
+  "BeadsIssue": "0.1.0",
+  "schemaVersion": "0.1.0",
+  "id": "bug-vaporize-windows-release-swift-testing-wmo-2026-08-28",
+  "title": "Bug - Windows release WMO drops Swift Testing registration",
+  "createdAt": "2026-08-28T08:24:00Z",
+  "createdBy": "codex at operator direction",
+  "owner": "swift-universal",
+  "issueType": "bug",
+  "status": "in_progress",
+  "priority": 0,
+  "labels": ["vaporize", "windows", "swift-testing", "swiftpm", "production"],
+  "description": "Swift 6.4's default Windows SwiftPM build system compiled release test targets with WMO but omitted the Swift Testing registration object, producing a successful zero-test run. Debug executed all four tests. Disabling WMO at the Vaporize Windows release-test authority restored registration without changing test sources or Package.swift.",
+  "acceptanceCriteria": [
+    "Vaporize keeps Swift Testing and #expect in platform test sources.",
+    "Vaporize adds -Xswiftc -no-whole-module-optimization only to Windows release test invocations.",
+    "Debug and non-Windows test invocations retain their default compilation model.",
+    "The DocC browser Windows release suite executes four tests rather than reporting a zero-test success."
+  ],
+  "risks": [
+    "The workaround increases Windows release-test compilation time until SwiftPM preserves Swift Testing registration under WMO."
+  ]
+}

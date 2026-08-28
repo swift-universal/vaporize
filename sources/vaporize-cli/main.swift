@@ -1680,8 +1680,15 @@ struct VaporizeCLI: AsyncParsableCommand {
   func sourceBuiltCLIExecutablePath(product: String) -> String {
     precondition(usesIsolatedSwiftPMWorkspace)
     let scratchPath = resolvedSwiftPMScratchPath(packagePath: packagePath!)!
+    #if os(Windows)
+      let executableName = product.lowercased().hasSuffix(".exe") ? product : "\(product).exe"
+    #else
+      let executableName = product
+    #endif
     return absoluteURL(for: scratchPath)
-      .appendingPathComponent("out/Products/\(configuration.rawValue.capitalized)/\(product)")
+      .appendingPathComponent(
+        "out/Products/\(configuration.rawValue.capitalized)/\(executableName)"
+      )
       .path
   }
 
@@ -2204,6 +2211,10 @@ struct VaporizeCLI: AsyncParsableCommand {
         "--package-path", packagePath,
         "-c", configuration.rawValue,
       ]
+    arguments += VaporizeWindowsSwiftTestingPolicy.testArguments(
+      configuration: configuration.rawValue,
+      isWindowsHost: VaporizeWindowsSwiftTestingPolicy.isWindowsHost
+    )
     arguments.append(contentsOf: try coreForwardedArguments())
     return arguments
   }

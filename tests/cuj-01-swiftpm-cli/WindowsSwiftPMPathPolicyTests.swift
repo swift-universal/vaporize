@@ -74,6 +74,7 @@ struct WindowsSwiftPMPathPolicyTests {
 
   #if os(Windows)
     @Test("Deep Windows build command adopts the planned scratch path")
+    // bead: [[bug-vaporize-windows-source-built-cli-exe-2026-08-27]]
     func deepBuildCommandAdoptsScratchPath() throws {
       let packagePath = "C:/" + String(repeating: "deep-package/", count: 16)
       let command = try VaporizeCLI.parse([
@@ -92,7 +93,7 @@ struct WindowsSwiftPMPathPolicyTests {
       #expect(command.usesIsolatedSwiftPMWorkspace)
       #expect(
         command.sourceBuiltCLIExecutablePath(product: "tool.cli@org.clia.sh")
-          == "\(plan.scratchPath)/out/Products/Debug/tool.cli@org.clia.sh"
+          == "\(plan.scratchPath)/out/Products/Debug/tool.cli@org.clia.sh.exe"
       )
     }
 
