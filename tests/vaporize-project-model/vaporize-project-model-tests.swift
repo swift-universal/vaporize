@@ -16,10 +16,12 @@ struct VaporizeProjectModelTests {
       .deletingLastPathComponent()
       .deletingLastPathComponent()
       .appendingPathComponent("Pkl/vaporize-project.pkl")
-    let escapedSchemaPath = schemaURL.path.replacingOccurrences(of: "\\", with: "\\\\")
+    // Pkl module imports are URIs. A raw Windows drive path (for example, C:/...)
+    // has no `file:` scheme and is correctly rejected by Pkl's module allowlist.
+    let schemaModuleURI = schemaURL.absoluteString
     let projectURL = fixtureRoot.appendingPathComponent("project.pkl")
     let declaration = """
-      amends "\(escapedSchemaPath)"
+      amends "\(schemaModuleURI)"
 
       name = "savepoint"
       platformTargets = new {

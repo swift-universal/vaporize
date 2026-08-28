@@ -4,7 +4,7 @@
   "kind": "workflow-instance",
   "slug": "software-modification-workstream-capture-2026-08-26-vaporize-wcode-pkl-resource-lifecycle",
   "title": "Software modification - Vaporize WCode canonical Pkl resources",
-  "updated": "2026-08-28T08:28:00Z",
+  "updated": "2026-08-28T09:03:00Z",
   "workflowRef": {
     "LinkRefModel": "0.5.0",
     "sv": "0.5.0",
@@ -82,8 +82,8 @@
       "WorkflowInstanceStateResultModel": "0.1.0",
       "kind": "workflow-instance-state-result",
       "stateId": "cross-platform-project-owner-correction",
-      "outcome": "completed-with-bounded-graph-blocker",
-      "summary": "Vaporize now owns typed platformTargets and WCode consumes that neutral model. Pkl evaluation, isolated Swift typechecking, a real Windows Savepoint build, thin-entry tests, and Xcode adapter regeneration passed. The full Vaporize package test graph remains blocked before compilation by its pre-existing missing os-service-contract-schemas local dependency."
+      "outcome": "completed-on-windows",
+      "summary": "Vaporize owns typed platformTargets and WCode consumes that neutral model. The dependency graph now resolves the moved OS service contract through schema-universal's canonical temporal package path. Pkl evaluation uses a portable file URI for the moved schema location; the focused project-model test passed 1 of 1 and the WCode resource-lifecycle suite passed 8 of 8 on Windows."
     }
   ],
   "receiptRefs": [
