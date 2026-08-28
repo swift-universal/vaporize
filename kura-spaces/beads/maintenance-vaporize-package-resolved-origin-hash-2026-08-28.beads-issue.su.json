@@ -1,0 +1,28 @@
+{
+  "BeadsIssue": "0.1.0",
+  "schemaVersion": "0.1.0",
+  "id": "maintenance-vaporize-package-resolved-origin-hash-2026-08-28",
+  "title": "Persist the resolved Vaporize package origin hash",
+  "createdAt": "2026-08-28T09:55:00Z",
+  "createdBy": "Codex with operator direction",
+  "issueType": "task",
+  "status": "closed",
+  "priority": 1,
+  "labels": ["vaporize", "swiftpm", "package-resolved", "windows"],
+  "owningBoundary": "private/product-lines/vaporize/Package.resolved",
+  "description": "Persist SwiftPM's refreshed origin hash so the checked-in lockfile matches the package manifest graph exercised by current Windows builds.",
+  "acceptanceCriteria": [
+    "Package.resolved retains its existing dependency pins.",
+    "The refreshed origin hash is committed after successful Vaporize Windows resolution and tests.",
+    "The lockfile remains valid JSON."
+  ],
+  "evidence": {
+    "validationRequestIds": [
+      "vaporize-test-9D5C7F59-4D35-4F62-B497-88B3E12D1FA4",
+      "vaporize-test-2B94905A-8335-4D3C-8F67-B71C60246941"
+    ],
+    "validation": "Two current Windows Vaporize test runs resolved the graph and passed with the refreshed lockfile origin hash."
+  },
+  "closedAt": "2026-08-28T09:55:00Z",
+  "resolution": "Committed the resolver-produced origin hash without changing dependency pins."
+}

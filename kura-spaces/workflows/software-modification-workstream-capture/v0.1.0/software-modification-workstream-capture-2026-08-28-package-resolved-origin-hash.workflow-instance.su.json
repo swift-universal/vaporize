@@ -1,0 +1,57 @@
+{
+  "schemaVersion": "0.0.8",
+  "WorkflowInstanceModel": "0.0.8",
+  "kind": "workflow-instance",
+  "slug": "software-modification-workstream-capture-2026-08-28-package-resolved-origin-hash",
+  "title": "Software modification - Vaporize Package.resolved origin hash",
+  "updated": "2026-08-28T09:55:00Z",
+  "workflowRef": {
+    "link-ref-model": "0.0.5",
+    "t": "Software modification workstream capture",
+    "tg": [{
+      "k": "rp",
+      "rt": "mono",
+      "v": "private/universal/substrate/collectives/spaces-universal/private/universal/kura-spaces/workflows/software-modification-workstream-capture/v0.1.0/software-modification-workstream-capture.workflow.su.json"
+    }]
+  },
+  "beadTrackingRefs": [{
+    "link-ref-model": "0.0.5",
+    "t": "Vaporize resolved origin hash",
+    "tg": [{
+      "k": "rp",
+      "rt": "swift-universal",
+      "v": "private/product-lines/vaporize/kura-spaces/beads/maintenance-vaporize-package-resolved-origin-hash-2026-08-28.beads-issue.su.json"
+    }]
+  }],
+  "stateResults": [
+    {
+      "schemaVersion": "0.1.0",
+      "WorkflowInstanceStateResultModel": "0.1.0",
+      "kind": "workflow-instance-state-result",
+      "stateId": "workspace-preflight",
+      "outcome": "completed-with-stat-noise",
+      "summary": "Package.resolved was the only remaining content diff; three other paths were Windows stat/line-ending markers with empty diffs."
+    },
+    {
+      "schemaVersion": "0.1.0",
+      "WorkflowInstanceStateResultModel": "0.1.0",
+      "kind": "workflow-instance-state-result",
+      "stateId": "validate-change",
+      "outcome": "completed",
+      "summary": "The lockfile decoded successfully and two Vaporize swift-win test runs resolved and passed against the current graph."
+    }
+  ],
+  "receiptRefs": [{
+    "link-ref-model": "0.0.5",
+    "t": "Resolved Vaporize package graph",
+    "tg": [{
+      "k": "rp",
+      "rt": "swift-universal",
+      "v": "private/product-lines/vaporize/Package.resolved"
+    }]
+  }],
+  "notes": [
+    "No dependency pin changed in this slice.",
+    "The lockfile update is persisted rather than discarded as resolver residue."
+  ]
+}
