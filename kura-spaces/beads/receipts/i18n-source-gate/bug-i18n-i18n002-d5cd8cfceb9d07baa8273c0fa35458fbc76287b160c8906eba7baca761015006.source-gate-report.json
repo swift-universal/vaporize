@@ -158,15 +158,41 @@
     "i18n-universal.wrkstrm-core.vaporize-cli.xcode-component-to-download-in-setup",
     "i18n-universal.wrkstrm-core.vaporize-cli.xcode-workspace-is-required-for-list"
   ],
-  "enforcement" : "development",
+  "enforcement" : "release",
   "findings" : [
+    {
+      "containsInterpolation" : true,
+      "literalSource" : "\"International Law baseline captured at \\(path). The ratchet is set: pre-existing findings are frozen for this binding, and any newly observed finding will still block. Rerun without --write-i18n-baseline to dispatch.\"",
+      "location" : {
+        "column" : 14,
+        "file" : "Sources/vaporize-cli/I18nSourceGatePreflight.swift",
+        "line" : 33
+      },
+      "message" : "User-facing string literal must come from an approved generated i18n copy package.",
+      "rule" : "I18N002",
+      "sink" : "LocalizedError.errorDescription",
+      "structuralAnchor" : "sha256:57e9e90ec55315969422d61a6c1cc0c629256c7588288443a8debd684d1f407f"
+    },
+    {
+      "containsInterpolation" : true,
+      "literalSource" : "\"International Law baseline was rejected: \\(reason). Report receipt: \\(receiptPath). The ratchet held; resolve the new findings or repair the baseline binding.\"",
+      "location" : {
+        "column" : 14,
+        "file" : "Sources/vaporize-cli/I18nSourceGatePreflight.swift",
+        "line" : 35
+      },
+      "message" : "User-facing string literal must come from an approved generated i18n copy package.",
+      "rule" : "I18N002",
+      "sink" : "LocalizedError.errorDescription",
+      "structuralAnchor" : "sha256:fcb0e3973bc5ea15539bd19ac54e7755fc7ab85ddae1d9daecbeabd4b2cdb8f0"
+    },
     {
       "containsInterpolation" : true,
       "literalSource" : "\"Vaporize could not find the failing product's kura-spaces/beads home from \\(productDirectory). Source-gate Bugs were not written.\"",
       "location" : {
         "column" : 7,
         "file" : "Sources/vaporize-cli/I18nSourceGatePreflight.swift",
-        "line" : 40
+        "line" : 46
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -179,7 +205,7 @@
       "location" : {
         "column" : 7,
         "file" : "Sources/vaporize-cli/I18nSourceGatePreflight.swift",
-        "line" : 42
+        "line" : 48
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -193,7 +219,7 @@
       "location" : {
         "column" : 126,
         "file" : "Sources/vaporize-cli/I18nSourceGatePreflight.swift",
-        "line" : 42
+        "line" : 48
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -201,46 +227,17 @@
       "structuralAnchor" : "sha256:cc1ee3458ee6763af3ff82a18d05e70ba35129ac10b27e11c0446565df79acd9"
     },
     {
-      "containsInterpolation" : false,
-      "literalSource" : "\"The Xcode execution authority is available only on macOS.\"",
-      "literalValue" : "The Xcode execution authority is available only on macOS.",
+      "containsInterpolation" : true,
+      "literalSource" : "\"International Law baseline held: \\(comparison.knownFindingCount) frozen finding(s), \\(comparison.newFindings.count) new. Ratchet intact.\"",
       "location" : {
-        "column" : 31,
-        "file" : "Sources/vaporize-cli/VaporizeCoreExecutionPlan.swift",
-        "line" : 108
+        "column" : 13,
+        "file" : "Sources/vaporize-cli/I18nSourceGatePreflight.swift",
+        "line" : 175
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
-      "sink" : "ArgumentParser.ValidationError",
-      "structuralAnchor" : "sha256:83f41c094a974d8774053380aa4712b374bfc25f69fb87f7bf700cdc725527ea"
-    },
-    {
-      "containsInterpolation" : false,
-      "literalSource" : "\"Windows core execution commands require the swift-win or wcode authority.\"",
-      "literalValue" : "Windows core execution commands require the swift-win or wcode authority.",
-      "location" : {
-        "column" : 11,
-        "file" : "Sources/vaporize-cli/VaporizeCoreExecutionPlan.swift",
-        "line" : 118
-      },
-      "message" : "User-facing string literal must come from an approved generated i18n copy package.",
-      "rule" : "I18N002",
-      "sink" : "ArgumentParser.ValidationError",
-      "structuralAnchor" : "sha256:08554b504f29e6d5beb7e247b2d72ebc6684ca3395b574476dd75321adeb9f68"
-    },
-    {
-      "containsInterpolation" : false,
-      "literalSource" : "\"The WCode execution authority is available only on Windows.\"",
-      "literalValue" : "The WCode execution authority is available only on Windows.",
-      "location" : {
-        "column" : 31,
-        "file" : "Sources/vaporize-cli/VaporizeCoreExecutionPlan.swift",
-        "line" : 128
-      },
-      "message" : "User-facing string literal must come from an approved generated i18n copy package.",
-      "rule" : "I18N002",
-      "sink" : "ArgumentParser.ValidationError",
-      "structuralAnchor" : "sha256:72bc6b69bfc3aa54e5e4c9fbc17a3565291ce4d503a1c9a2644ea000bee20440"
+      "sink" : "Swift.print",
+      "structuralAnchor" : "sha256:91490cbf676196f7f2be46cc2a867a7e89a16d2527cd320235af1191aeab93f9"
     },
     {
       "containsInterpolation" : false,
@@ -249,7 +246,7 @@
       "location" : {
         "column" : 11,
         "file" : "Sources/vaporize-cli/main.swift",
-        "line" : 836
+        "line" : 923
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -263,7 +260,7 @@
       "location" : {
         "column" : 11,
         "file" : "Sources/vaporize-cli/main.swift",
-        "line" : 1490
+        "line" : 1586
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -276,39 +273,80 @@
       "location" : {
         "column" : 33,
         "file" : "Sources/vaporize-cli/main.swift",
-        "line" : 1849
+        "line" : 1945
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
       "sink" : "ArgumentParser.ValidationError",
-      "structuralAnchor" : "sha256:e1cbe629b0d5873f2694ab7f7b3923646948fe1f0fdbef493eb3090072fd7d8c"
-    },
-    {
-      "containsInterpolation" : false,
-      "literalSource" : "\"WCode cannot install an app without a declared lifecycle script. next: use `vaporize install wcode --artifact app --package-path <package> --product <app-product> --wcode-build-script <script.ps1>`. The script receives WCODE_OPERATION=install plus destination, reinstall, and launch flags.\"",
-      "literalValue" : "WCode cannot install an app without a declared lifecycle script. next: use `vaporize install wcode --artifact app --package-path <package> --product <app-product> --wcode-build-script <script.ps1>`. The script receives WCODE_OPERATION=install plus destination, reinstall, and launch flags.",
-      "location" : {
-        "column" : 11,
-        "file" : "Sources/vaporize-cli/main.swift",
-        "line" : 1891
-      },
-      "message" : "User-facing string literal must come from an approved generated i18n copy package.",
-      "rule" : "I18N002",
-      "sink" : "ArgumentParser.ValidationError",
-      "structuralAnchor" : "sha256:c55a8028a3f2d0dec07a6be13f32da4557cc6b6864c43bdc03e8692a2713ec3c"
+      "structuralAnchor" : "sha256:f46ead3099ab3d8018e80bd20596400c0dedabd02f7ead9d3ac636470940eb69"
     },
     {
       "containsInterpolation" : true,
-      "literalSource" : "\"WCode has no direct SwiftPM fallback for \\(operation.rawValue) app execution.\"",
+      "literalSource" : "\"--wcode-environment cannot override reserved WCODE_* name '\\(name)'.\"",
       "location" : {
-        "column" : 31,
+        "column" : 13,
         "file" : "Sources/vaporize-cli/main.swift",
-        "line" : 1902
+        "line" : 1950
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
       "sink" : "ArgumentParser.ValidationError",
-      "structuralAnchor" : "sha256:2ad3643a86cbdf321c0725952147e441b9fc1e4a9aeb10942365c36f49a0d901"
+      "structuralAnchor" : "sha256:099b0ed061da26bcbd3cd52a02632c445a0492f0353157170afa24cf39afeff9"
+    },
+    {
+      "containsInterpolation" : true,
+      "literalSource" : "\"WCode requires canonical project.pkl at \\(projectURL.path). next: create it or pass --pkl-path <project.pkl>.\"",
+      "location" : {
+        "column" : 11,
+        "file" : "Sources/vaporize-cli/main.swift",
+        "line" : 1976
+      },
+      "message" : "User-facing string literal must come from an approved generated i18n copy package.",
+      "rule" : "I18N002",
+      "sink" : "ArgumentParser.ValidationError",
+      "structuralAnchor" : "sha256:cca03e621f0eff8f8ddf9da1c115bc693a5eed28a835ddbd04fc5c0789586081"
+    },
+    {
+      "containsInterpolation" : false,
+      "literalSource" : "\"swift build --show-bin-path did not report an existing WCode products directory.\"",
+      "literalValue" : "swift build --show-bin-path did not report an existing WCode products directory.",
+      "location" : {
+        "column" : 11,
+        "file" : "Sources/vaporize-cli/main.swift",
+        "line" : 2058
+      },
+      "message" : "User-facing string literal must come from an approved generated i18n copy package.",
+      "rule" : "I18N002",
+      "sink" : "ArgumentParser.ValidationError",
+      "structuralAnchor" : "sha256:5843162240ab0d84ecc6c3df8393c3beaf961b90505145bcba6d183a1ae36f3d"
+    },
+    {
+      "containsInterpolation" : false,
+      "literalSource" : "\"WCode install location was not resolved.\"",
+      "literalValue" : "WCode install location was not resolved.",
+      "location" : {
+        "column" : 35,
+        "file" : "Sources/vaporize-cli/main.swift",
+        "line" : 2153
+      },
+      "message" : "User-facing string literal must come from an approved generated i18n copy package.",
+      "rule" : "I18N002",
+      "sink" : "ArgumentParser.ValidationError",
+      "structuralAnchor" : "sha256:d973f8fe50df32222ad67b5d24ef148e00850d8c71dda0eeeddd2be6af6e5c6b"
+    },
+    {
+      "containsInterpolation" : false,
+      "literalSource" : "\"WCode has no application test lifecycle contract.\"",
+      "literalValue" : "WCode has no application test lifecycle contract.",
+      "location" : {
+        "column" : 31,
+        "file" : "Sources/vaporize-cli/main.swift",
+        "line" : 2188
+      },
+      "message" : "User-facing string literal must come from an approved generated i18n copy package.",
+      "rule" : "I18N002",
+      "sink" : "ArgumentParser.ValidationError",
+      "structuralAnchor" : "sha256:b5d2fa1845262622479565204fe9e26af1fa0c636d91b7bb5f5db001a52aec71"
     }
   ],
   "formatVersion" : "0.3.0",
@@ -492,6 +530,7 @@
     "SwiftJSONFormatter",
     "TranslateSourceGate",
     "VaporizeCLICopy_v000_000_001",
+    "VaporizeCore",
     "VaporizeIssueReporting",
     "VaporizeJSONSchemaValidation",
     "XcodeProjectDefinitionCore",
@@ -509,7 +548,7 @@
   "placeholders" : [
 
   ],
-  "scannedFileCount" : 35,
+  "scannedFileCount" : 37,
   "scannedFiles" : [
     "Sources/swift-app-installer/SwiftAppInstaller.swift",
     "Sources/swift-app-installer/XcodeAppInputResolver.swift",
@@ -533,7 +572,9 @@
     "Sources/vaporize-cli/VaporizeCoreExecutionInstrumentation.swift",
     "Sources/vaporize-cli/VaporizeCoreExecutionPlan.swift",
     "Sources/vaporize-cli/VaporizeLogging.swift",
+    "Sources/vaporize-cli/VaporizeSwiftPMPathPolicy.swift",
     "Sources/vaporize-cli/VaporizeTestReceipt.swift",
+    "Sources/vaporize-cli/WCodeResourceLifecycle.swift",
     "Sources/vaporize-cli/XcodeAppBundleIdentityResolver.swift",
     "Sources/vaporize-cli/XcodeWorkspaceSchemes.swift",
     "Sources/vaporize-cli/file-system-path-resolution.swift",
@@ -682,8 +723,6 @@
     "i18n-universal.wrkstrm-core.vaporize-cli.typed-xcodebuild-destination-repeat-for-multiple",
     "i18n-universal.wrkstrm-core.vaporize-cli.upgrade-project-yml-to-pkl-no",
     "i18n-universal.wrkstrm-core.vaporize-cli.valid-json-a1",
-    "i18n-universal.wrkstrm-core.vaporize-cli.vaporize-a1-is-already-the-collapsed",
-    "i18n-universal.wrkstrm-core.vaporize-cli.vaporize-a1-requires-an-execution-authority",
     "i18n-universal.wrkstrm-core.vaporize-cli.vaporize-a1-v-a2-passed-for",
     "i18n-universal.wrkstrm-core.vaporize-cli.vaporize-app-artifacts-require-the-xcode",
     "i18n-universal.wrkstrm-core.vaporize-cli.vaporize-app-artifacts-require-xcode-and",

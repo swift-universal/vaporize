@@ -1,0 +1,65 @@
+{
+  "schemaVersion": "0.0.8",
+  "WorkflowInstanceModel": "0.0.8",
+  "kind": "workflow-instance",
+  "slug": "software-modification-workstream-capture-2026-08-28-i18n-source-gate-snapshot",
+  "title": "Software modification - Vaporize i18n source-gate snapshot",
+  "updated": "2026-08-28T09:50:00Z",
+  "workflowRef": {
+    "link-ref-model": "0.0.5",
+    "t": "Software modification workstream capture",
+    "tg": [{
+      "k": "rp",
+      "rt": "mono",
+      "v": "private/universal/substrate/collectives/spaces-universal/private/universal/kura-spaces/workflows/software-modification-workstream-capture/v0.1.0/software-modification-workstream-capture.workflow.su.json"
+    }]
+  },
+  "beadTrackingRefs": [{
+    "link-ref-model": "0.0.5",
+    "t": "Vaporize i18n source-gate snapshot",
+    "tg": [{
+      "k": "rp",
+      "rt": "swift-universal",
+      "v": "private/product-lines/vaporize/kura-spaces/beads/task-vaporize-i18n-source-gate-snapshot-2026-08-28.beads-issue.su.json"
+    }]
+  }],
+  "stateResults": [
+    {
+      "schemaVersion": "0.1.0",
+      "WorkflowInstanceStateResultModel": "0.1.0",
+      "kind": "workflow-instance-state-result",
+      "stateId": "workspace-preflight",
+      "outcome": "completed-with-unrelated-dirt",
+      "summary": "The generated source-gate records form a complete separable snapshot inside the active Vaporize worktree."
+    },
+    {
+      "schemaVersion": "0.1.0",
+      "WorkflowInstanceStateResultModel": "0.1.0",
+      "kind": "workflow-instance-state-result",
+      "stateId": "persist-generated-evidence",
+      "outcome": "completed",
+      "summary": "Captured 20 findings as 80 generated Bead, binding, detector-evidence, and receipt records."
+    },
+    {
+      "schemaVersion": "0.1.0",
+      "WorkflowInstanceStateResultModel": "0.1.0",
+      "kind": "workflow-instance-state-result",
+      "stateId": "validate-change",
+      "outcome": "completed",
+      "summary": "Every generated JSON record decoded successfully and the exact snapshot passed git diff whitespace validation."
+    }
+  ],
+  "receiptRefs": [{
+    "link-ref-model": "0.0.5",
+    "t": "Generated i18n source-gate receipts",
+    "tg": [{
+      "k": "rp",
+      "rt": "swift-universal",
+      "v": "private/product-lines/vaporize/kura-spaces/beads/receipts/i18n-source-gate"
+    }]
+  }],
+  "notes": [
+    "Open generated findings remain open work; persistence makes them durable and discoverable rather than silently abandoning them.",
+    "The snapshot intentionally excludes implementation and Package.resolved changes."
+  ]
+}

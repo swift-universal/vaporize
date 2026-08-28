@@ -1,0 +1,26 @@
+{
+  "BeadsIssue": "0.1.0",
+  "schemaVersion": "0.1.0",
+  "id": "task-vaporize-i18n-source-gate-snapshot-2026-08-28",
+  "title": "Persist the Vaporize i18n source-gate snapshot",
+  "createdAt": "2026-08-28T09:50:00Z",
+  "createdBy": "Codex with operator direction",
+  "issueType": "task",
+  "status": "closed",
+  "priority": 1,
+  "labels": ["vaporize", "i18n", "source-gate", "beads", "evidence"],
+  "owningBoundary": "private/product-lines/vaporize/kura-spaces/beads",
+  "description": "Persist the complete generated source-gate finding snapshot instead of allowing validated Bead and receipt work to accumulate uncommitted between sessions.",
+  "acceptanceCriteria": [
+    "Every dirty generated i18n finding has its Bead, artifact binding, detector evidence, and source-gate receipt persisted together.",
+    "All generated JSON records decode successfully.",
+    "The snapshot remains separate from implementation and lockfile changes."
+  ],
+  "evidence": {
+    "findingCount": 20,
+    "generatedRecordCount": 80,
+    "validation": "All generated JSON records decoded successfully and passed git diff whitespace validation."
+  },
+  "closedAt": "2026-08-28T09:50:00Z",
+  "resolution": "Persisted the complete generated Vaporize i18n source-gate snapshot as one exact evidence savepoint."
+}

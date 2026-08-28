@@ -1,5 +1,7 @@
 {
   "acceptanceCriteria" : "- Replace the literal with the matching accessor from the approved generated copy package; add catalog copy through the catalog workflow when no accessor exists.\n- Repair the reported source coordinate and only the predeclared catalog or dependency scope; do not invent replacement wording in product code.\n- Rerun the exact complete source-gate verifier from the Bead spawn cast. Only authoritative complete absence permits automatic closure.\n- Use an existing matching generated accessor at the reported sink, or first complete i18n package provisioning without inventing replacement wording in product code.\n- Rerun the exact complete source-gate verifier from the Bead spawn cast. Only authoritative complete absence permits automatic closure.\n- The structural law break no longer appears at this source coordinate.\n- The canonical Bead, detector evidence, spawn cast, and strict Bead World projection remain decodable.",
+  "closeReason" : "Finding absent from a complete i18n Source Consumption Enforcement v0.1.0 scan.",
+  "closedAt" : "2026-08-27T11:45:30Z",
   "createdAt" : "2026-08-25T22:32:18Z",
   "createdBy" : "translate-source-gate",
   "dependencies" : [
@@ -32,7 +34,7 @@
   "sourceLocation" : "private/universal/substrate/collectives/swift-universal/private/product-lines/vaporize/kura-spaces/beads/bug-i18n-i18n002-4dacd85ed1696cfb5bb6eb3aaeba70cbd782ae6374cefdc63e146583833735c2.i18n-source-gate-evidence.json",
   "sourceSystem" : "translate-source-gate",
   "sourceType" : "i18n-source-gate-finding",
-  "status" : "open",
+  "status" : "closed",
   "title" : "Resolve I18N002 at Sources/vaporize-cli/VaporizeCoreExecutionPlan.swift",
-  "updatedAt" : "2026-08-25T22:32:18Z"
+  "updatedAt" : "2026-08-27T11:45:30Z"
 }
