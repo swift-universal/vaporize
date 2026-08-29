@@ -158,7 +158,7 @@
     "i18n-universal.wrkstrm-core.vaporize-cli.xcode-component-to-download-in-setup",
     "i18n-universal.wrkstrm-core.vaporize-cli.xcode-workspace-is-required-for-list"
   ],
-  "enforcement" : "development",
+  "enforcement" : "release",
   "findings" : [
     {
       "containsInterpolation" : true,
@@ -246,7 +246,7 @@
       "location" : {
         "column" : 11,
         "file" : "Sources/vaporize-cli/main.swift",
-        "line" : 923
+        "line" : 944
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -260,7 +260,7 @@
       "location" : {
         "column" : 11,
         "file" : "Sources/vaporize-cli/main.swift",
-        "line" : 1586
+        "line" : 1613
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -268,12 +268,39 @@
       "structuralAnchor" : "sha256:4782e9203cf3f1a9b7420a3d3edbc4e490b1bac1721786cf72c3c672253dcf2f"
     },
     {
+      "containsInterpolation" : false,
+      "literalSource" : "\"WCode application testing requires --wcode-test-product <driver-product>.\"",
+      "literalValue" : "WCode application testing requires --wcode-test-product <driver-product>.",
+      "location" : {
+        "column" : 11,
+        "file" : "Sources/vaporize-cli/main.swift",
+        "line" : 1968
+      },
+      "message" : "User-facing string literal must come from an approved generated i18n copy package.",
+      "rule" : "I18N002",
+      "sink" : "ArgumentParser.ValidationError",
+      "structuralAnchor" : "sha256:ba47b45f612575997dc44e4e243a8d9a1c92deb70fd406972e5a1a5a58034313"
+    },
+    {
+      "containsInterpolation" : true,
+      "literalSource" : "\"WCode test build did not produce the expected driver executable: \\(executable.path)\"",
+      "location" : {
+        "column" : 11,
+        "file" : "Sources/vaporize-cli/main.swift",
+        "line" : 1981
+      },
+      "message" : "User-facing string literal must come from an approved generated i18n copy package.",
+      "rule" : "I18N002",
+      "sink" : "ArgumentParser.ValidationError",
+      "structuralAnchor" : "sha256:d41bbd102b2ca852dc142d0bb516c75024f4ea6a9b3bcd06e86b92abbcdbf2a0"
+    },
+    {
       "containsInterpolation" : true,
       "literalSource" : "\"--wcode-environment must use NAME=VALUE; received '\\(assignment)'.\"",
       "location" : {
         "column" : 33,
         "file" : "Sources/vaporize-cli/main.swift",
-        "line" : 1945
+        "line" : 2013
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -286,7 +313,7 @@
       "location" : {
         "column" : 13,
         "file" : "Sources/vaporize-cli/main.swift",
-        "line" : 1950
+        "line" : 2018
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -299,7 +326,7 @@
       "location" : {
         "column" : 11,
         "file" : "Sources/vaporize-cli/main.swift",
-        "line" : 1976
+        "line" : 2044
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -313,7 +340,7 @@
       "location" : {
         "column" : 11,
         "file" : "Sources/vaporize-cli/main.swift",
-        "line" : 2058
+        "line" : 2126
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
@@ -327,26 +354,12 @@
       "location" : {
         "column" : 35,
         "file" : "Sources/vaporize-cli/main.swift",
-        "line" : 2153
+        "line" : 2222
       },
       "message" : "User-facing string literal must come from an approved generated i18n copy package.",
       "rule" : "I18N002",
       "sink" : "ArgumentParser.ValidationError",
       "structuralAnchor" : "sha256:d973f8fe50df32222ad67b5d24ef148e00850d8c71dda0eeeddd2be6af6e5c6b"
-    },
-    {
-      "containsInterpolation" : false,
-      "literalSource" : "\"WCode has no application test lifecycle contract.\"",
-      "literalValue" : "WCode has no application test lifecycle contract.",
-      "location" : {
-        "column" : 31,
-        "file" : "Sources/vaporize-cli/main.swift",
-        "line" : 2188
-      },
-      "message" : "User-facing string literal must come from an approved generated i18n copy package.",
-      "rule" : "I18N002",
-      "sink" : "ArgumentParser.ValidationError",
-      "structuralAnchor" : "sha256:b5d2fa1845262622479565204fe9e26af1fa0c636d91b7bb5f5db001a52aec71"
     }
   ],
   "formatVersion" : "0.3.0",
@@ -533,6 +546,7 @@
     "VaporizeCore",
     "VaporizeIssueReporting",
     "VaporizeJSONSchemaValidation",
+    "VaporizeProjectModel",
     "XcodeProjectDefinitionCore",
     "Yams",
     "os"
@@ -548,7 +562,7 @@
   "placeholders" : [
 
   ],
-  "scannedFileCount" : 37,
+  "scannedFileCount" : 39,
   "scannedFiles" : [
     "Sources/swift-app-installer/SwiftAppInstaller.swift",
     "Sources/swift-app-installer/XcodeAppInputResolver.swift",
@@ -574,6 +588,7 @@
     "Sources/vaporize-cli/VaporizeLogging.swift",
     "Sources/vaporize-cli/VaporizeSwiftPMPathPolicy.swift",
     "Sources/vaporize-cli/VaporizeTestReceipt.swift",
+    "Sources/vaporize-cli/VaporizeWindowsSwiftTestingPolicy.swift",
     "Sources/vaporize-cli/WCodeResourceLifecycle.swift",
     "Sources/vaporize-cli/XcodeAppBundleIdentityResolver.swift",
     "Sources/vaporize-cli/XcodeWorkspaceSchemes.swift",
@@ -581,6 +596,7 @@
     "Sources/vaporize-cli/main.swift",
     "Sources/vaporize-issue-reporting/VaporizeIssueEvent.swift",
     "Sources/vaporize-issue-reporting/VaporizeIssueReporter.swift",
+    "Sources/vaporize-project-model/vaporize-project-model.swift",
     "Sources/xcode-project-definition-core/VaporizeTargetFeaturesInspector.swift",
     "Sources/xcode-project-definition-core/XcodeProjectDefinition.swift",
     "Sources/xcode-project-definition-core/XcodeProjectGenerator.swift",

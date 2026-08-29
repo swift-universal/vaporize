@@ -24,8 +24,8 @@
     "i18n002",
     "spawn-ready"
   ],
-  "lastObservedAt" : "2026-08-27T11:49:18Z",
-  "observationCount" : 3,
+  "lastObservedAt" : "2026-08-29T02:39:50Z",
+  "observationCount" : 4,
   "owner" : "private/universal/substrate/collectives/swift-universal/private/product-lines/vaporize/kura-spaces",
   "priority" : 2,
   "recurrenceCount" : 0,
@@ -34,5 +34,5 @@
   "sourceType" : "i18n-source-gate-finding",
   "status" : "open",
   "title" : "Resolve I18N002 at Sources/vaporize-cli/I18nSourceGatePreflight.swift",
-  "updatedAt" : "2026-08-27T11:49:18Z"
+  "updatedAt" : "2026-08-29T02:39:50Z"
 }
