@@ -25,6 +25,8 @@
       "Short packages and all non-Windows callers retain existing behavior.",
       "An explicit --scratch-path remains authoritative.",
       "Path-budget exhaustion warns with an actionable shorter-root override rather than blocking unrelated work.",
+      "Windows CLI installs warn when the canonical .swiftpm/bin projection is absent from the user PATH.",
+      "A dedicated idempotent Vaporize command can append only the canonical .swiftpm/bin projection to the Windows user PATH without rewriting unrelated entries.",
       "A follow-on lease service owns disk quotas, expiry, cleanup, and pressure notifications so short scratch state cannot grow without bound."
     ],
     "scopeBoundary": "This slice admits path planning and command adoption. It does not rename the substrate topology, claim that every Windows DocC defect is a path defect, or hide scratch lifecycle debt."

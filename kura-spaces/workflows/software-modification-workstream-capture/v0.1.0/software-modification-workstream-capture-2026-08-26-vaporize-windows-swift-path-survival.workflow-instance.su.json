@@ -4,7 +4,7 @@
   "kind": "workflow-instance",
   "slug": "software-modification-workstream-capture-2026-08-26-vaporize-windows-swift-path-survival",
   "title": "Software modification - Vaporize Windows Swift path survival",
-  "updated": "2026-08-27T03:24:00Z",
+  "updated": "2026-08-29T05:25:00Z",
   "workflowRef": {
     "LinkRefModel": "0.5.0",
     "sv": "0.5.0",
@@ -63,6 +63,14 @@
       "stateId": "build-and-test",
       "outcome": "completed",
       "summary": "swift test --filter WindowsSwiftPMPathPolicyTests passed 6 tests in one suite on x86_64 Windows. SwiftPM refreshed Package.resolved to the graph exercised by that build."
+    },
+    {
+      "schemaVersion": "0.1.0",
+      "WorkflowInstanceStateResultModel": "0.1.0",
+      "kind": "workflow-instance-state-result",
+      "stateId": "windows-user-path-projection",
+      "outcome": "completed",
+      "summary": "Vaporize now warns after Windows CLI installs when .swiftpm/bin is absent from the user PATH and exposes an explicit idempotent path add-swiftpm-bin command. The command preserves unrelated entries, recognizes equivalent %USERPROFILE% spellings, updates only the current user's PATH, and verifies the persisted write. The focused Windows CUJ passed 9 of 9 tests in an isolated short scratch path while an unrelated WCode process held the default debug executable open."
     },
     {
       "schemaVersion": "0.1.0",
