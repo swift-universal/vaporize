@@ -1,0 +1,39 @@
+{
+  "beads-issue-model": "0.0.1",
+  "id": "feature-vaporize-microsoft-store-technical-pipeline-2026-08-30",
+  "title": "Implement Vaporize technical evidence for the Microsoft Store pipeline",
+  "issueType": "feature",
+  "priority": 0,
+  "status": "open",
+  "createdAt": "2026-08-30T23:17:00Z",
+  "createdBy": "codex at operator direction",
+  "owner": "vaporize",
+  "labels": ["vaporize", "microsoft-store", "windows", "packaging", "signing", "certification", "partner-center"],
+  "description": "Add the Windows technical realization adapter needed by the canonical Microsoft Store release lane. Vaporize consumes an inspection-approved digest-bound handoff, materializes the policy-selected Windows store package, verifies identity and signing, runs certification and lifecycle journeys, and emits immutable evidence for Launch Review. It never approves a lane or publishes without a separate exact operation authorization.",
+  "expectedBehavior": "Given one declared Windows release cell, Vaporize deterministically produces or locates the store package, records package and publisher identity, signs and verifies it, validates manifest/capabilities, exercises clean install/launch/update/uninstall/rollback, invokes the configured certification adapter, and emits a submission bundle or authorized Partner Center handoff with typed receipts. The existing Apple pipeline remains intact behind its own adapter.",
+  "acceptanceCriteria": [
+    "The adapter consumes project, candidate, inspection, policy, platform, architecture, configuration, pipeline, and authorization LinkRefs and binds their resolved digests.",
+    "Package format and bundle topology are selected by effective policy and recorded rather than assumed globally.",
+    "Package identity, publisher identity, certificate chain, timestamping policy, manifest capabilities, and signature verification are emitted as typed evidence.",
+    "Automated fixtures cover clean install, first launch, update, uninstall, rollback or recovery, and declared migration paths on supported Windows cells.",
+    "The certification adapter captures tool identity/version, policy profile, diagnostics, remediation references, and terminal result.",
+    "The output includes Partner Center-ready package, listing/assets manifest, privacy/rating declarations, locale coverage, and immutable content digests.",
+    "Submission, staged rollout, halt, withdrawal, and rollback execute only with exact short-lived operation authorization and emit attempt/receipt records.",
+    "Dry-run and offline modes can produce a complete handoff without external Partner Center mutation.",
+    "Apple and Microsoft adapters share portable technical interfaces while preserving their platform-specific evidence types.",
+    "Vaporize never synthesizes Foundry Inspect compliance, Launch Review approval, or store publication authority."
+  ],
+  "risks": [
+    "Embedding store credentials or certificates in project configuration would leak authority and secrets.",
+    "Treating a successful local package build as certification or store acceptance would overstate readiness.",
+    "Coupling Microsoft implementation to Apple-specific stages would make both pipelines fragile."
+  ],
+  "relatedRefs": [
+    {
+      "link-ref-model": "0.0.5",
+      "t": "Canonical Microsoft Store release pipeline",
+      "m": [{"lane": "kind", "v": "bead"}, {"lane": "tag", "v": "parent"}],
+      "tg": [{"k": "rp", "rt": "wrkstrm", "v": "private/universal/kura-spaces/beads/feature-microsoft-store-release-pipeline-2026-08-30.beads-issue.su.json"}]
+    }
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "schemaVersion": "0.0.8",
+  "WorkflowInstanceModel": "0.0.8",
+  "kind": "workflow-instance",
+  "slug": "software-modification-workstream-capture-2026-08-30-vaporize-microsoft-store-technical-pipeline",
+  "title": "Software modification - Vaporize Microsoft Store technical pipeline backlog",
+  "updated": "2026-08-30T23:17:00Z",
+  "workflowRef": {
+    "link-ref-model": "0.0.5",
+    "t": "Software modification workstream capture",
+    "tg": [{"k": "rp", "rt": "mono", "v": "private/universal/substrate/collectives/spaces-universal/private/universal/kura-spaces/workflows/software-modification-workstream-capture/v0.1.0/software-modification-workstream-capture.workflow.su.json"}]
+  },
+  "beadTrackingRefs": [{
+    "link-ref-model": "0.0.5",
+    "t": "Vaporize Microsoft Store technical pipeline",
+    "tg": [{"k": "rp", "rt": "current-file", "v": "../../../beads/feature-vaporize-microsoft-store-technical-pipeline-2026-08-30.beads-issue.su.json"}]
+  }],
+  "stateResults": [
+    {"schemaVersion": "0.1.0", "WorkflowInstanceStateResultModel": "0.1.0", "kind": "workflow-instance-state-result", "stateId": "workspace-preflight", "outcome": "completed-with-existing-dirt-isolated", "summary": "Existing Info.plist and Package.resolved modifications predate this exact two-file backlog slice and remain excluded."},
+    {"schemaVersion": "0.1.0", "WorkflowInstanceStateResultModel": "0.1.0", "kind": "workflow-instance-state-result", "stateId": "inspect-current-contract", "outcome": "completed", "summary": "Vaporize is already assigned per-cell technical evidence responsibility by Launch Review, but no concrete Microsoft Store technical adapter feature was present."},
+    {"schemaVersion": "0.1.0", "WorkflowInstanceStateResultModel": "0.1.0", "kind": "workflow-instance-state-result", "stateId": "capture-backlog", "outcome": "completed", "summary": "The Windows package, identity, signing, certification, lifecycle-test, Partner Center handoff, and authorized rollout evidence responsibilities are now explicit."},
+    {"schemaVersion": "0.1.0", "WorkflowInstanceStateResultModel": "0.1.0", "kind": "workflow-instance-state-result", "stateId": "implementation", "outcome": "pending-owner-feature-work", "summary": "No implementation, credential use, external submission, publication, or approval is claimed."}
+  ],
+  "receiptRefs": [{
+    "link-ref-model": "0.0.5",
+    "t": "Existing Vaporize Windows app-test lifecycle contract",
+    "tg": [{"k": "rp", "rt": "current-file", "v": "../../../beads/feature-vaporize-wcode-windows-app-test-lifecycle-2026-08-28.beads-issue.su.json"}]
+  }],
+  "notes": [
+    "Dry-run and offline handoff must be the safe default until an exact external-operation authorization is supplied.",
+    "The adapter produces evidence for Launch Review; it does not become the release authority."
+  ]
+}
