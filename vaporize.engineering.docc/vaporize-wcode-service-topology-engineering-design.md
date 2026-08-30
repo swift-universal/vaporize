@@ -438,6 +438,14 @@ the driver. Names beginning with `WCODE_` remain reserved. The driver receives
 `WCODE_TEST_APPLICATION_EXECUTABLE`, `WCODE_TEST_APPLICATION_PROCESS_ID`, and
 `WCODE_TEST_APPLICATION_RESOURCE_ROOT` only after the app has launched.
 
+The forwarded command tail after the WCode authority is also supplied to the
+retained application. This is required for application-owned launch contracts,
+including unpackaged Windows App SDK protocol activation through
+`----ms-protocol:<URL>`. The driver continues to receive the same tail for
+compatibility. A future driver-only argument channel must be separately typed;
+it must not restore the previous behavior where test mode silently launched the
+application with an empty argument list.
+
 ### Self-Update Boundary
 
 Feed parsing and signature verification are portable capabilities. Replacing a

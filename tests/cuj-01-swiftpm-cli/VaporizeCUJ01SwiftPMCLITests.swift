@@ -1239,9 +1239,13 @@ private func assertActionableVaporizeProductValidationError(
       "--product", "museum.app",
       "--wcode-test-product", "museum-windows-visual-tests",
       "--configuration", "debug",
+      "--", "----ms-protocol:swiftuui-museum://open/behavior",
     ])
 
     #expect(try command.wcodeValidatedTestProduct() == "museum-windows-visual-tests")
+    #expect(try command.coreForwardedArguments() == [
+      "----ms-protocol:swiftuui-museum://open/behavior"
+    ])
     #expect(try command.wcodeTestDriverBuildArguments() == [
       "build",
       "--package-path", "C:\\workspace\\museum",

@@ -1,0 +1,35 @@
+{
+  "BeadsIssue": "0.1.0",
+  "schemaVersion": "0.1.0",
+  "id": "bug-wcode-test-does-not-forward-app-arguments-2026-08-29",
+  "title": "Bug - Forward application arguments through WCode test lifecycle",
+  "createdAt": "2026-08-30T02:40:57Z",
+  "createdBy": "codex during the SwiftUUI Museum executable parity audit",
+  "sourceSystem": "vaporize-wcode",
+  "sourceType": "native-application-test-regression",
+  "owner": "wrkstrm-core",
+  "issueType": "bug",
+  "status": "completed",
+  "priority": 1,
+  "labels": ["application-lifecycle", "arguments", "vaporize", "wcode", "windows"],
+  "description": "WCode test mode forwarded the command tail to its test driver but launched the retained application with an empty argument list, preventing realistic command-line and Windows App SDK protocol-activation tests.",
+  "acceptanceCriteria": [
+    "WCode test mode launches the retained application with the parsed core forwarded arguments.",
+    "The existing test driver continues receiving the same forwarded arguments for compatibility.",
+    "Parser coverage proves an opaque ----ms-protocol argument survives the authority grammar exactly.",
+    "A native retained-app journey proves Windows protocol activation reaches SwiftUUI onOpenURL."
+  ],
+  "implementationInstructions": [
+    "Pass coreForwardedArguments() into RetainedProcessRequest when operation is WCode application test.",
+    "Do not reparse, normalize, or strip opaque application arguments after the Vaporize authority token is resolved.",
+    "Keep the current shared application-and-driver command tail compatible until a separately typed driver-argument channel is introduced.",
+    "Verify the parser in VaporizeCUJ01SwiftPMCLITests, then run the real app and driver through Vaporize test wcode with the protocol argument."
+  ],
+  "relatedPaths": [
+    "sources/vaporize-cli/main.swift",
+    "tests/cuj-01-swiftpm-cli/VaporizeCUJ01SwiftPMCLITests.swift",
+    "vaporize.engineering.docc/vaporize-wcode-service-topology-engineering-design.md"
+  ],
+  "blockers": [],
+  "notes": "The focused parser test passed. SwiftUUI Museum subsequently launched through WCode with ----ms-protocol:swiftuui-museum://open/behavior and rendered the received URL through the native AppInstance activation path."
+}

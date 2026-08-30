@@ -2352,6 +2352,7 @@ struct VaporizeCLI: AsyncParsableCommand {
         let application = try RetainedProcessService().launch(
           RetainedProcessRequest(
             executablePath: layout.executablePath,
+            arguments: try coreForwardedArguments(),
             environmentUpdates: environment,
             workingDirectory: buildProductsDirectory.path
           )
