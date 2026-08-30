@@ -1,31 +1,32 @@
 {
   "beads-issue-model": "0.0.1",
   "id": "feature-vaporize-microsoft-store-technical-pipeline-2026-08-30",
-  "title": "Implement Vaporize technical evidence for the Microsoft Store pipeline",
+  "title": "Implement Vaporize packaging and distribution-handoff evidence for Microsoft Store",
   "issueType": "feature",
   "priority": 0,
   "status": "open",
   "createdAt": "2026-08-30T23:17:00Z",
+  "updatedAt": "2026-08-30T23:30:00Z",
   "createdBy": "codex at operator direction",
   "owner": "vaporize",
   "labels": ["vaporize", "microsoft-store", "windows", "packaging", "signing", "certification", "partner-center"],
-  "description": "Add the Windows technical realization adapter needed by the canonical Microsoft Store release lane. Vaporize consumes an inspection-approved digest-bound handoff, materializes the policy-selected Windows store package, verifies identity and signing, runs certification and lifecycle journeys, and emits immutable evidence for Launch Review. It never approves a lane or publishes without a separate exact operation authorization.",
-  "expectedBehavior": "Given one declared Windows release cell, Vaporize deterministically produces or locates the store package, records package and publisher identity, signs and verifies it, validates manifest/capabilities, exercises clean install/launch/update/uninstall/rollback, invokes the configured certification adapter, and emits a submission bundle or authorized Partner Center handoff with typed receipts. The existing Apple pipeline remains intact behind its own adapter.",
+  "description": "Add the Windows technical realization adapter needed by the canonical Microsoft Store release lane. Vaporize consumes an inspection-approved digest-bound handoff, builds and materializes the policy-selected Windows store package, verifies identity and signing, runs local package validation and lifecycle journeys, and emits immutable technical evidence plus a distribution-ready handoff. Vaporize never holds store credentials, contacts Partner Center, submits a package, changes an audience, rolls out, halts, withdraws, or rolls back a store release.",
+  "expectedBehavior": "Given one declared Windows release cell, Vaporize deterministically builds the store package, records package and publisher identity, signs and verifies it, validates manifest/capabilities, exercises clean install/launch/update/uninstall/recovery, invokes configured local certification tools, and emits a Partner Center-ready bundle plus a digest-bound Ship/Distribution handoff. The separate Ship adapter consumes that handoff only after exact Launch Review release-operation authorization.",
   "acceptanceCriteria": [
-    "The adapter consumes project, candidate, inspection, policy, platform, architecture, configuration, pipeline, and authorization LinkRefs and binds their resolved digests.",
+    "The adapter consumes project, candidate, inspection, policy, platform, architecture, configuration, and pipeline LinkRefs and binds their resolved digests; no distribution authorization or provider credential is required to build.",
     "Package format and bundle topology are selected by effective policy and recorded rather than assumed globally.",
     "Package identity, publisher identity, certificate chain, timestamping policy, manifest capabilities, and signature verification are emitted as typed evidence.",
     "Automated fixtures cover clean install, first launch, update, uninstall, rollback or recovery, and declared migration paths on supported Windows cells.",
-    "The certification adapter captures tool identity/version, policy profile, diagnostics, remediation references, and terminal result.",
+    "Local certification tooling captures tool identity/version, policy profile, diagnostics, remediation references, and terminal result without claiming provider acceptance.",
     "The output includes Partner Center-ready package, listing/assets manifest, privacy/rating declarations, locale coverage, and immutable content digests.",
-    "Submission, staged rollout, halt, withdrawal, and rollback execute only with exact short-lived operation authorization and emit attempt/receipt records.",
-    "Dry-run and offline modes can produce a complete handoff without external Partner Center mutation.",
+    "The distribution handoff binds artifact, signature, local validation, lifecycle evidence, listing/assets manifest, privacy/rating declarations, locale coverage, pipeline, and effective policy digests.",
+    "All Vaporize modes are offline with respect to Partner Center and can produce a complete handoff without store credentials or external mutation.",
     "Apple and Microsoft adapters share portable technical interfaces while preserving their platform-specific evidence types.",
-    "Vaporize never synthesizes Foundry Inspect compliance, Launch Review approval, or store publication authority."
+    "Vaporize never synthesizes Foundry Inspect compliance, Launch Review approval, provider certification, store publication authority, or Ship operation receipts."
   ],
   "risks": [
-    "Embedding store credentials or certificates in project configuration would leak authority and secrets.",
-    "Treating a successful local package build as certification or store acceptance would overstate readiness.",
+    "Embedding store credentials in project configuration or Vaporize would leak distribution authority and secrets.",
+    "Treating a successful local package build or local certification tool pass as provider certification or store acceptance would overstate readiness.",
     "Coupling Microsoft implementation to Apple-specific stages would make both pipelines fragile."
   ],
   "relatedRefs": [
@@ -34,6 +35,12 @@
       "t": "Canonical Microsoft Store release pipeline",
       "m": [{"lane": "kind", "v": "bead"}, {"lane": "tag", "v": "parent"}],
       "tg": [{"k": "rp", "rt": "wrkstrm", "v": "private/universal/kura-spaces/beads/feature-microsoft-store-release-pipeline-2026-08-30.beads-issue.su.json"}]
+    },
+    {
+      "link-ref-model": "0.0.5",
+      "t": "Ship cross-platform distribution step",
+      "m": [{"lane": "kind", "v": "bead"}, {"lane": "tag", "v": "downstream-authority"}],
+      "tg": [{"k": "rp", "rt": "wrkstrm", "v": "private/universal/kura-spaces/beads/feature-ship-cross-platform-distribution-step-2026-08-30.beads-issue.su.json"}]
     }
   ]
 }
