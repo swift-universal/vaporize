@@ -1,0 +1,33 @@
+{
+  "schemaVersion": "0.0.8",
+  "WorkflowInstanceModel": "0.0.8",
+  "kind": "workflow-instance",
+  "slug": "software-modification-workstream-capture-2026-08-30-vaporize-foundry-pre-flight-handoff-naming",
+  "title": "Software modification - Vaporize Foundry Pre-Flight handoff naming",
+  "updated": "2026-08-30T23:40:00Z",
+  "workflowRef": {
+    "link-ref-model": "0.0.5",
+    "t": "Software modification workstream capture",
+    "tg": [{"k": "rp", "rt": "mono", "v": "private/universal/substrate/collectives/spaces-universal/private/universal/kura-spaces/workflows/software-modification-workstream-capture/v0.1.0/software-modification-workstream-capture.workflow.su.json"}]
+  },
+  "beadTrackingRefs": [{
+    "link-ref-model": "0.0.5",
+    "t": "Vaporize Microsoft Store packaging and handoff",
+    "tg": [{"k": "rp", "rt": "current-file", "v": "../../../beads/feature-vaporize-microsoft-store-technical-pipeline-2026-08-30.beads-issue.su.json"}]
+  }],
+  "stateResults": [
+    {"schemaVersion": "0.1.0", "WorkflowInstanceStateResultModel": "0.1.0", "kind": "workflow-instance-state-result", "stateId": "workspace-preflight", "outcome": "completed-with-existing-dirt-isolated", "summary": "The Vaporize Microsoft Store bead was clean before this naming correction. Existing Info.plist and Package.resolved changes remain outside the exact savepoint slice."},
+    {"schemaVersion": "0.1.0", "WorkflowInstanceStateResultModel": "0.1.0", "kind": "workflow-instance-state-result", "stateId": "operator-naming-decision", "outcome": "completed", "summary": "The operator selected Foundry Pre-Flight as the canonical downstream distribution step name."},
+    {"schemaVersion": "0.1.0", "WorkflowInstanceStateResultModel": "0.1.0", "kind": "workflow-instance-state-result", "stateId": "correct-handoff-language", "outcome": "completed", "summary": "Vaporize now names its immutable downstream boundary as a Foundry Pre-Flight handoff while retaining build, package, signing, and local validation ownership."},
+    {"schemaVersion": "0.1.0", "WorkflowInstanceStateResultModel": "0.1.0", "kind": "workflow-instance-state-result", "stateId": "implementation", "outcome": "pending-owner-feature-work", "summary": "No technical adapter implementation, credential access, submission, publication, or rollout is claimed."}
+  ],
+  "receiptRefs": [{
+    "link-ref-model": "0.0.5",
+    "t": "Existing Vaporize Windows application lifecycle evidence contract",
+    "tg": [{"k": "rp", "rt": "current-file", "v": "../../../beads/feature-vaporize-wcode-windows-app-test-lifecycle-2026-08-28.beads-issue.su.json"}]
+  }],
+  "notes": [
+    "Earlier workflow captures remain immutable historical evidence of the temporary Ship working name.",
+    "Provider-side certification is a Foundry Pre-Flight receipt; local validation remains Vaporize evidence."
+  ]
+}
