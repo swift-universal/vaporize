@@ -1,0 +1,76 @@
+{
+  "schemaVersion": "0.0.8",
+  "WorkflowInstanceModel": "0.0.8",
+  "kind": "workflow-instance",
+  "slug": "software-modification-workstream-capture-2026-08-30-vaporize-pkl-tool-family-projection",
+  "title": "Software modification - Vaporize Pkl tool-family projection",
+  "updated": "2026-08-30T19:00:00Z",
+  "workflowRef": {
+    "link-ref-model": "0.0.5",
+    "t": "Software modification workstream capture",
+    "tg": [{
+      "k": "rp",
+      "rt": "mono",
+      "v": "private/universal/substrate/collectives/spaces-universal/private/universal/kura-spaces/workflows/software-modification-workstream-capture/v0.1.0/software-modification-workstream-capture.workflow.su.json"
+    }]
+  },
+  "beadTrackingRefs": [
+    {
+      "link-ref-model": "0.0.5",
+      "t": "Vaporize Pkl tool-family projection",
+      "tg": [{
+        "k": "rp",
+        "rt": "swift-universal",
+        "v": "private/product-lines/vaporize/kura-spaces/beads/feature-vaporize-pkl-tool-family-projection-2026-08-30.beads-issue.su.json"
+      }]
+    },
+    {
+      "link-ref-model": "0.0.5",
+      "t": "Follow-on tool-family build and installation materialization",
+      "tg": [{
+        "k": "rp",
+        "rt": "swift-universal",
+        "v": "private/product-lines/vaporize/kura-spaces/beads/feature-vaporize-pkl-tool-family-materialization-2026-08-30.beads-issue.su.json"
+      }]
+    }
+  ],
+  "stateResults": [
+    {
+      "schemaVersion": "0.1.0",
+      "WorkflowInstanceStateResultModel": "0.1.0",
+      "kind": "workflow-instance-state-result",
+      "stateId": "workspace-preflight",
+      "outcome": "completed-with-unrelated-dirt",
+      "summary": "The active Vaporize boundary had one pre-existing Info.plist change, which this exact-file slice excludes."
+    },
+    {
+      "schemaVersion": "0.1.0",
+      "WorkflowInstanceStateResultModel": "0.1.0",
+      "kind": "workflow-instance-state-result",
+      "stateId": "implement-change",
+      "outcome": "completed",
+      "summary": "Extended project Pkl with tool families and implemented a pure Swift canonical-name projection planner plus a CommonLog-backed plan-tool-family command whose typed record uses a temporal receptor instead of schemaVersion."
+    },
+    {
+      "schemaVersion": "0.1.0",
+      "WorkflowInstanceStateResultModel": "0.1.0",
+      "kind": "workflow-instance-state-result",
+      "stateId": "validate-change",
+      "outcome": "completed",
+      "summary": "Three Windows model tests passed and the built CLI evaluated the Pkl fixture into the expected Digi STUI debug identity."
+    }
+  ],
+  "receiptRefs": [{
+    "link-ref-model": "0.0.5",
+    "t": "Tool-family Windows proving ground",
+    "tg": [{
+      "k": "rp",
+      "rt": "swift-universal",
+      "v": "private/product-lines/vaporize/tests/proving-grounds/tool-family-project/project.pkl"
+    }]
+  }],
+  "notes": [
+    "The projection model is platform-independent Swift and adds no conditional-compilation branch.",
+    "The current command is intentionally a planner; source-product build and installed-name materialization are follow-on work."
+  ]
+}

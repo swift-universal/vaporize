@@ -1,0 +1,37 @@
+/// Vaporize proving ground for project-level CLI family declarations.
+///
+/// The source products are illustrative build inputs. The projected executable
+/// names are derived by Vaporize and are not claims that these products ship.
+
+amends "../../../Pkl/vaporize-project.pkl"
+
+name = "vaporize-tool-family-proving-ground"
+
+toolFamilies = new {
+  ["vaporize"] = new {
+    packagePath = "."
+    owner = new {
+      slug = "wrkstrm-core"
+      type = "coll"
+    }
+    variants = new {
+      ["cli"] = new {
+        surface = "cli"
+        language = "s"
+        sourceProduct = "VaporizeCLI"
+      }
+      ["digi-stui"] = new {
+        surface = "stui"
+        language = "s"
+        digi = true
+        sourceProduct = "VaporizeDigiSTUI"
+      }
+      ["digi-tui"] = new {
+        surface = "tui"
+        language = "s"
+        digi = true
+        sourceProduct = "VaporizeDigiTUI"
+      }
+    }
+  }
+}

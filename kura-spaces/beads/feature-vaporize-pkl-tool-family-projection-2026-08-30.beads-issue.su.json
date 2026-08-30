@@ -1,0 +1,31 @@
+{
+  "BeadsIssue": "0.1.0",
+  "schemaVersion": "0.1.0",
+  "id": "feature-vaporize-pkl-tool-family-projection-2026-08-30",
+  "title": "Project Vaporize CLI families from project Pkl",
+  "createdAt": "2026-08-30T19:00:00Z",
+  "createdBy": "Codex with operator direction",
+  "issueType": "feature",
+  "status": "closed",
+  "priority": 1,
+  "labels": ["vaporize", "pkl", "cli-family", "digikoma", "common-log"],
+  "owningBoundary": "private/product-lines/vaporize/kura-spaces/beads",
+  "description": "Give Vaporize a project-level Pkl declaration for ordinary and Digi CLI variants, then project canonical debug and release executable identities without coupling the model to Xcode or platform conditionals.",
+  "acceptanceCriteria": [
+    "The Vaporize project Pkl schema declares tool families, owners, and cli, stui, tui, or sd variants.",
+    "A pure Swift planner projects debug names with the temporal source coordinate immediately before @ and release names without that coordinate.",
+    "The planner validates abbreviated language and collective ownership conventions and rejects ambiguous debug or release inputs.",
+    "The materialization record hard-codes the would-be schema-universal family as the VaporizeToolMaterializationPlan receptor carrying a temporal version, with no schemaVersion or kind field.",
+    "The Vaporize CLI exposes plan-tool-family and emits its human or JSON plan through CommonLog without a new print path.",
+    "Windows tests evaluate a real Pkl fixture and prove debug, release, and refusal behavior."
+  ],
+  "evidence": {
+    "tests": "swift test --scratch-path C:\\b\\v\\vaporize-tool-family --filter VaporizeProjectModelTests: 3 tests passed",
+    "windowsProjection": "vaporize.digi-stui-s.v1_2608_30200@wrkstrm-core.coll",
+    "releaseProjection": "vaporize.digi-stui-s@wrkstrm-core.coll",
+    "recordReceptor": "VaporizeToolMaterializationPlan = v1_2608_30200",
+    "boundary": "This slice plans canonical identities; build, rename, and installation materialization remain separate follow-on work."
+  },
+  "closedAt": "2026-08-30T19:00:00Z",
+  "resolution": "Added declarative Pkl tool families, a cross-platform Swift projection model, CommonLog-backed CLI planning, and Windows proof."
+}

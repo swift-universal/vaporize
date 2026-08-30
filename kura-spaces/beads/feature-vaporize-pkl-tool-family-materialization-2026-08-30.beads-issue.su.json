@@ -1,0 +1,22 @@
+{
+  "BeadsIssue": "0.1.0",
+  "schemaVersion": "0.1.0",
+  "id": "feature-vaporize-pkl-tool-family-materialization-2026-08-30",
+  "title": "Materialize Pkl-declared Vaporize tool families",
+  "createdAt": "2026-08-30T20:41:00Z",
+  "createdBy": "Codex with operator direction",
+  "issueType": "feature",
+  "status": "open",
+  "priority": 1,
+  "labels": ["vaporize", "pkl", "cli-family", "build", "install"],
+  "owningBoundary": "private/product-lines/vaporize/kura-spaces/beads",
+  "description": "Advance the proven tool-family projection into build and installation materialization: build each declared source product, install it under its projected debug or release executable identity, and preserve platform-specific executable and PATH behavior.",
+  "acceptanceCriteria": [
+    "Vaporize consumes a selected Pkl family and variant for build or install, not only plan output.",
+    "The source SwiftPM product may differ from the projected installed executable name without weakening SwiftCLIInstaller validation.",
+    "Windows appends .exe at the filesystem boundary while the canonical identity remains platform-neutral; macOS and Linux retain their native executable spelling.",
+    "Debug installs include the temporal coordinate immediately before @ and release installs omit it.",
+    "Installation receipts use the Vaporize tool-materialization receptor with temporal versioning and include the projected destination.",
+    "Windows and macOS tests prove build, install, collision, replacement, and PATH discovery behavior."
+  ]
+}

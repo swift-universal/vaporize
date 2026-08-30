@@ -12,6 +12,7 @@ import TranslateSourceGate
 import VaporizeCLICopy_v000_000_001
 import VaporizeIssueReporting
 import VaporizeJSONSchemaValidation
+import VaporizeProjectModel
 
 @main
 enum VaporizeExecutable {
@@ -176,6 +177,7 @@ struct VaporizeCLI: AsyncParsableCommand {
     #endif
     case setup
     case path
+    case planToolFamily = "plan-tool-family"
 
     // Phase 0 vaporware-awareness modes.
     case status
@@ -531,6 +533,24 @@ struct VaporizeCLI: AsyncParsableCommand {
   var pklPath: String?
 
   @Option(
+    name: .customLong("tool-family"),
+    help: "Tool family key declared by the Vaporize project Pkl."
+  )
+  var toolFamily: String?
+
+  @Option(
+    name: .customLong("tool-variant"),
+    help: "Tool variant key declared by the selected family."
+  )
+  var toolVariant: String?
+
+  @Option(
+    name: .customLong("source-coordinate"),
+    help: "Debug source coordinate, for example v1_2608_30200."
+  )
+  var sourceCoordinate: String?
+
+  @Option(
     name: .customLong("pkl-schema-path"),
     help: ArgumentHelp(VaporizeCLICopy_v000_000_001.CLI.vaporizePathToXcodeProjectDefinitionPklForImport))
   var pklSchemaPath: String?
@@ -631,6 +651,8 @@ struct VaporizeCLI: AsyncParsableCommand {
       try await setup()
     case .path:
       try await configureInstalledBinPath()
+    case .planToolFamily:
+      try await planToolFamilyMaterialization()
     case .status:
       try await runVaporStatus()
     case .warehouse:
@@ -695,6 +717,39 @@ struct VaporizeCLI: AsyncParsableCommand {
       try await withMaintainerDependencyAuthority(packagePath: try requirePackagePath()) {
         try await installApp(launchApp: launch, buildIdentity: nil)
       }
+    }
+  }
+
+  private func planToolFamilyMaterialization() async throws {
+    guard let pklPath, !pklPath.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
+      throw ValidationError("plan-tool-family requires --pkl-path.")
+    }
+    guard let toolFamily, !toolFamily.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
+      throw ValidationError("plan-tool-family requires --tool-family.")
+    }
+    guard let toolVariant, !toolVariant.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
+      throw ValidationError("plan-tool-family requires --tool-variant.")
+    }
+
+    let project = try await VaporizeProjectLoader.load(url: absoluteURL(for: pklPath))
+    let plan = try VaporizeToolFamilyPlanner.plan(
+      project: project,
+      family: toolFamily,
+      variant: toolVariant,
+      intent: configuration.rawValue.lowercased() == "release" ? .release : .debug,
+      sourceCoordinate: sourceCoordinate
+    )
+
+    switch vaporOutputFormat {
+    case .text:
+      VaporizeLogging.command.notice(
+        "tool-family=\(plan.family) variant=\(plan.variant) source-product=\(plan.sourceProduct) executable=\(plan.executableName) configuration=\(plan.intent.rawValue)"
+      )
+    case .json:
+      let encoder = JSONEncoder()
+      encoder.outputFormatting = [.prettyPrinted, .sortedKeys, .withoutEscapingSlashes]
+      let payload = String(decoding: try encoder.encode(plan), as: UTF8.self)
+      VaporizeLogging.command.notice(payload)
     }
   }
 

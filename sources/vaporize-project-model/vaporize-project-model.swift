@@ -4,15 +4,22 @@ import PklSwift
 public struct VaporizeProject: Codable, Equatable, Sendable {
   public var name: String
   public var platformTargets: [String: VaporizePlatformTarget]
+  public var toolFamilies: [String: VaporizeToolFamily]
 
-  public init(name: String, platformTargets: [String: VaporizePlatformTarget] = [:]) {
+  public init(
+    name: String,
+    platformTargets: [String: VaporizePlatformTarget] = [:],
+    toolFamilies: [String: VaporizeToolFamily] = [:]
+  ) {
     self.name = name
     self.platformTargets = platformTargets
+    self.toolFamilies = toolFamilies
   }
 
   private enum CodingKeys: String, CodingKey {
     case name
     case platformTargets
+    case toolFamilies
   }
 
   public init(from decoder: Decoder) throws {
@@ -20,6 +27,9 @@ public struct VaporizeProject: Codable, Equatable, Sendable {
     name = try container.decode(String.self, forKey: .name)
     platformTargets =
       try container.decodeIfPresent([String: VaporizePlatformTarget].self, forKey: .platformTargets)
+      ?? [:]
+    toolFamilies =
+      try container.decodeIfPresent([String: VaporizeToolFamily].self, forKey: .toolFamilies)
       ?? [:]
   }
 }

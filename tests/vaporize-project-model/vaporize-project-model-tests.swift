@@ -48,4 +48,79 @@ struct VaporizeProjectModelTests {
     #expect(target.backend == .winui)
     #expect(target.entryPoint == "Sources/windows-app/savepoint-windows-app.swift")
   }
+
+  @Test("Vaporize projects debug and release identities from one Pkl tool family")
+  func projectsToolFamilyIdentities() async throws {
+    let fixtureURL = URL(fileURLWithPath: #filePath)
+      .deletingLastPathComponent()
+      .deletingLastPathComponent()
+      .appendingPathComponent("proving-grounds/tool-family-project/project.pkl")
+    let project = try await VaporizeProjectLoader.load(url: fixtureURL)
+
+    let debug = try VaporizeToolFamilyPlanner.plan(
+      project: project,
+      family: "vaporize",
+      variant: "digi-stui",
+      intent: .debug,
+      sourceCoordinate: "v1_2608_30200"
+    )
+    #expect(debug.sourceProduct == "VaporizeDigiSTUI")
+    #expect(debug.executableName == "vaporize.digi-stui-s.v1_2608_30200@wrkstrm-core.coll")
+    let encodedDebug = try JSONEncoder().encode(debug)
+    let debugJSON = try #require(JSONSerialization.jsonObject(with: encodedDebug) as? [String: Any])
+    #expect(debugJSON["VaporizeToolMaterializationPlan"] as? String == "v1_2608_30200")
+    #expect(debugJSON["schemaVersion"] == nil)
+    #expect(debugJSON["kind"] == nil)
+
+    let release = try VaporizeToolFamilyPlanner.plan(
+      project: project,
+      family: "vaporize",
+      variant: "digi-stui",
+      intent: .release
+    )
+    #expect(release.executableName == "vaporize.digi-stui-s@wrkstrm-core.coll")
+    #expect(release.sourceCoordinate == nil)
+  }
+
+  @Test("Tool-family projection refuses debug and release identity ambiguity")
+  func refusesAmbiguousTemporalIdentity() throws {
+    let project = VaporizeProject(
+      name: "fixture",
+      toolFamilies: [
+        "vaporize": .init(
+          owner: .init(slug: "wrkstrm-core"),
+          variants: [
+            "cli": .init(surface: .cli, sourceProduct: "VaporizeCLI")
+          ]
+        )
+      ]
+    )
+
+    #expect(throws: VaporizeToolFamilyPlanningError.debugCoordinateRequired) {
+      try VaporizeToolFamilyPlanner.plan(
+        project: project,
+        family: "vaporize",
+        variant: "cli",
+        intent: .debug
+      )
+    }
+    #expect(throws: VaporizeToolFamilyPlanningError.invalidSourceCoordinate("v0001_2608_30200")) {
+      try VaporizeToolFamilyPlanner.plan(
+        project: project,
+        family: "vaporize",
+        variant: "cli",
+        intent: .debug,
+        sourceCoordinate: "v0001_2608_30200"
+      )
+    }
+    #expect(throws: VaporizeToolFamilyPlanningError.releaseCoordinateForbidden("v1_2608_30200")) {
+      try VaporizeToolFamilyPlanner.plan(
+        project: project,
+        family: "vaporize",
+        variant: "cli",
+        intent: .release,
+        sourceCoordinate: "v1_2608_30200"
+      )
+    }
+  }
 }

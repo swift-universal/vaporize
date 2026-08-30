@@ -8,6 +8,9 @@ typealias VaporizePlatform = "macos" | "windows" | "linux"
 typealias VaporizeAdapter = "xcode" | "swiftpm" | "wcode"
 typealias VaporizePresentation = "swiftui" | "swift-uui"
 typealias VaporizeUIBackend = "appkit" | "uikit" | "winui"
+typealias VaporizeToolSurface = "cli" | "stui" | "tui" | "sd"
+typealias VaporizeToolLanguage = "j" | "p" | "s"
+typealias VaporizeToolOwnerType = "coll"
 
 class VaporizePlatformResource {
   path: String
@@ -29,4 +32,29 @@ class VaporizePlatformTarget {
   resources: Listing<VaporizePlatformResource>?
 }
 
+/// One stable owner namespace shared by every projected member of a tool family.
+class VaporizeToolOwner {
+  slug: String
+  type: VaporizeToolOwnerType = "coll"
+}
+
+/// One interaction surface backed by a concrete source product.
+///
+/// `digi = true` evolves the same deterministic tool with CommonAI intelligence;
+/// it does not replace the surface or move effects authority out of the source product.
+class VaporizeToolVariant {
+  surface: VaporizeToolSurface
+  language: VaporizeToolLanguage = "s"
+  digi: Boolean = false
+  sourceProduct: String
+}
+
+/// Project-level declaration from which Vaporize projects CLI-family artifacts.
+class VaporizeToolFamily {
+  packagePath: String = "."
+  owner: VaporizeToolOwner
+  variants: Mapping<String, VaporizeToolVariant>
+}
+
 platformTargets: Mapping<String, VaporizePlatformTarget> = new {}
+toolFamilies: Mapping<String, VaporizeToolFamily> = new {}
