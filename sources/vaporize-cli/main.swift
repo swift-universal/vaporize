@@ -1535,11 +1535,13 @@ struct VaporizeCLI: AsyncParsableCommand {
     let receipt = try await InstalledBinPathProjectionService().add()
     switch receipt.outcome {
     case .alreadyPresent:
-      print("\(receipt.platform.displayName) user PATH already contains \(receipt.binPath).")
+      VaporizeLogging.command.info(
+        "installed-bin-user-path-already-present platform=\(receipt.platform.rawValue) path=\(receipt.binPath)"
+      )
     case .added:
-      let profile = receipt.profilePath.map { " via \($0)" } ?? ""
-      print(
-        "Added \(receipt.binPath) to the \(receipt.platform.displayName) user PATH\(profile). Open a new terminal to use installed commands."
+      let persistence = receipt.profilePath ?? "HKCU\\Environment\\Path"
+      VaporizeLogging.command.info(
+        "installed-bin-user-path-added platform=\(receipt.platform.rawValue) path=\(receipt.binPath) persistence=\(persistence) next=new-terminal"
       )
     case .unsupported:
       throw ValidationError(
@@ -1560,12 +1562,8 @@ struct VaporizeCLI: AsyncParsableCommand {
     }
     guard inspection.state == .missing else { return }
     VaporizeLogging.command.warning(
-      "installed-bin-not-on-user-path platform=\(inspection.platform.rawValue) path=\(inspection.binPath) remediation=\(InstalledBinPathProjectionService.remediationCommand)"
+      "installed-bin-not-on-user-path platform=\(inspection.platform.rawValue) path=\(inspection.binPath) remediation=\(InstalledBinPathProjectionService.remediationCommand) inspect=vaporize-inspect.cli-s@wrkstrm-core.coll path swiftpm-bin"
     )
-    print(
-      "Warning: \(inspection.binPath) is not on the \(inspection.platform.displayName) user PATH. Installed commands will not resolve in a new terminal."
-    )
-    print("Fix safely with: \(InstalledBinPathProjectionService.remediationCommand)")
   }
 
   /// Resolve the Xcode build inputs for app mode so an Xcode-project app builds

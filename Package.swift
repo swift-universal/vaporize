@@ -239,6 +239,10 @@ let package = Package(
     // (CEO decision 2026-06-14). Consumers now import via swiftCLIInstallerDependency.
     .library(name: "SwiftAppInstaller", targets: ["SwiftAppInstaller"]),
     .executable(name: "vaporize.cli@wrkstrm-core.clia.sh", targets: ["VaporizeCLI"]),
+    .executable(
+      name: "vaporize-inspect.cli-s@wrkstrm-core.coll",
+      targets: ["VaporizeInspectCLI"]
+    ),
   ],
   dependencies: packageDependencies,
   targets: [
@@ -270,6 +274,15 @@ let package = Package(
       dependencies: vaporizeCLIDependencies,
       path: "sources/vaporize-cli"
     ),
+    .executableTarget(
+      name: "VaporizeInspectCLI",
+      dependencies: [
+        .product(name: "SwiftCLIInstaller", package: "swift-cli-installer"),
+        .product(name: "CommonLog", package: "common-log"),
+        .product(name: "ArgumentParser", package: "swift-argument-parser"),
+      ],
+      path: "sources/vaporize-inspect-cli"
+    ),
     .target(
       name: "VaporizeTestSupport",
       dependencies: [
@@ -293,6 +306,14 @@ let package = Package(
       name: "VaporizeProjectModelTests",
       dependencies: ["VaporizeProjectModel"],
       path: "tests/vaporize-project-model"
+    ),
+    .testTarget(
+      name: "VaporizeInspectCLITests",
+      dependencies: [
+        "VaporizeInspectCLI",
+        .product(name: "ArgumentParser", package: "swift-argument-parser"),
+      ],
+      path: "tests/vaporize-inspect-cli"
     ),
     .testTarget(
       name: "VaporizeLoggingTests",

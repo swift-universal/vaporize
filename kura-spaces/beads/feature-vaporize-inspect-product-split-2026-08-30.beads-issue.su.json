@@ -1,0 +1,29 @@
+{
+  "BeadsIssue": "0.1.0",
+  "schemaVersion": "0.1.0",
+  "id": "feature-vaporize-inspect-product-split-2026-08-30",
+  "title": "Split read-only inspection from Vaporize mutation",
+  "createdAt": "2026-08-30T23:00:00Z",
+  "createdBy": "Codex with operator direction",
+  "issueType": "feature",
+  "status": "closed",
+  "priority": 0,
+  "labels": ["vaporize", "inspection", "product-boundary", "windows", "macos", "common-log"],
+  "owningBoundary": "private/product-lines/vaporize/kura-spaces/beads",
+  "description": "Establish vaporize-inspect as the read-only product boundary while Vaporize retains explicit materialization and mutation commands.",
+  "acceptanceCriteria": [
+    "A separately buildable release product named vaporize-inspect.cli-s@wrkstrm-core.coll owns operator-facing inspection.",
+    "The first inspection reports SwiftPM bin PATH state, platform, canonical bin path, persistence surface, and remediation without changing host state.",
+    "Windows identifies HKCU\\Environment\\Path and macOS identifies the selected shell profile.",
+    "Vaporize retains the explicit path add-swiftpm-bin mutation and uses inspection only as an internal install postcondition.",
+    "New operational output uses CommonLog, new shared Swift code adds no conditional-compilation branch, and focused Windows tests pass."
+  ],
+  "evidence": {
+    "product": "vaporize-inspect.cli-s@wrkstrm-core.coll",
+    "source": "sources/vaporize-inspect-cli",
+    "tests": "swift test --scratch-path C:\\b\\t\\vaporize-inspect-split --filter VaporizeInspectCLITests: 3 tests passed on x86_64 Windows",
+    "boundary": "This slice establishes the product and PATH inspection. Migrating other historical read-only Vaporize commands is follow-on work."
+  },
+  "closedAt": "2026-08-30T23:00:00Z",
+  "resolution": "Added a read-only CommonLog-backed inspection executable and kept persistent PATH mutation in Vaporize."
+}

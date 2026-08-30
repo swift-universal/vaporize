@@ -1,0 +1,73 @@
+{
+  "schemaVersion": "0.0.8",
+  "WorkflowInstanceModel": "0.0.8",
+  "kind": "workflow-instance",
+  "slug": "software-modification-workstream-capture-2026-08-30-vaporize-inspect-product-split",
+  "title": "Software modification - Vaporize inspect product split",
+  "updated": "2026-08-30T23:00:00Z",
+  "workflowRef": {
+    "link-ref-model": "0.0.5",
+    "t": "Software modification workstream capture",
+    "tg": [{
+      "k": "rp",
+      "rt": "mono",
+      "v": "private/universal/substrate/collectives/spaces-universal/private/universal/kura-spaces/workflows/software-modification-workstream-capture/v0.1.0/software-modification-workstream-capture.workflow.su.json"
+    }]
+  },
+  "beadTrackingRefs": [{
+    "link-ref-model": "0.0.5",
+    "t": "Vaporize inspect product split",
+    "tg": [{
+      "k": "rp",
+      "rt": "current-file",
+      "v": "../../../beads/feature-vaporize-inspect-product-split-2026-08-30.beads-issue.su.json"
+    }]
+  }],
+  "stateResults": [
+    {
+      "schemaVersion": "0.1.0",
+      "WorkflowInstanceStateResultModel": "0.1.0",
+      "kind": "workflow-instance-state-result",
+      "stateId": "workspace-preflight",
+      "outcome": "completed-with-unrelated-dirt",
+      "summary": "The Vaporize boundary had one pre-existing Info.plist modification, which this exact-file slice excludes."
+    },
+    {
+      "schemaVersion": "0.1.0",
+      "WorkflowInstanceStateResultModel": "0.1.0",
+      "kind": "workflow-instance-state-result",
+      "stateId": "canonical-boundary-check",
+      "outcome": "completed",
+      "summary": "Wrkstrm Core described Vaporize as both materializer and inspector but contained no canonical separate inspect product record."
+    },
+    {
+      "schemaVersion": "0.1.0",
+      "WorkflowInstanceStateResultModel": "0.1.0",
+      "kind": "workflow-instance-state-result",
+      "stateId": "implement-change",
+      "outcome": "completed",
+      "summary": "Added vaporize-inspect.cli-s@wrkstrm-core.coll as a read-only Swift product and removed print from the PATH mutation and install-warning slice."
+    },
+    {
+      "schemaVersion": "0.1.0",
+      "WorkflowInstanceStateResultModel": "0.1.0",
+      "kind": "workflow-instance-state-result",
+      "stateId": "validate-change",
+      "outcome": "completed",
+      "summary": "The focused Windows suite passed three tests, both workflow records verified, and the built product returned a quiet typed live report for HKCU\\Environment\\Path."
+    }
+  ],
+  "receiptRefs": [{
+    "link-ref-model": "0.0.5",
+    "t": "Vaporize inspect CLI tests",
+    "tg": [{
+      "k": "rp",
+      "rt": "current-file",
+      "v": "../../../../tests/vaporize-inspect-cli/VaporizeInspectCLITests.swift"
+    }]
+  }],
+  "notes": [
+    "Vaporize keeps mutation authority; vaporize-inspect owns operator-facing read-only reports.",
+    "Other legacy inspect commands remain a separately tracked migration surface."
+  ]
+}
