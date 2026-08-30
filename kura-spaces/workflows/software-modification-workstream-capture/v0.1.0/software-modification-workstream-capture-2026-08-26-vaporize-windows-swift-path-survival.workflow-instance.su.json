@@ -4,7 +4,7 @@
   "kind": "workflow-instance",
   "slug": "software-modification-workstream-capture-2026-08-26-vaporize-windows-swift-path-survival",
   "title": "Software modification - Vaporize Windows Swift path survival",
-  "updated": "2026-08-29T05:25:00Z",
+  "updated": "2026-08-30T11:20:00Z",
   "workflowRef": {
     "LinkRefModel": "0.5.0",
     "sv": "0.5.0",
@@ -71,6 +71,14 @@
       "stateId": "windows-user-path-projection",
       "outcome": "completed",
       "summary": "Vaporize now warns after Windows CLI installs when .swiftpm/bin is absent from the user PATH and exposes an explicit idempotent path add-swiftpm-bin command. The command preserves unrelated entries, recognizes equivalent %USERPROFILE% spellings, updates only the current user's PATH, and verifies the persisted write. The focused Windows CUJ passed 9 of 9 tests in an isolated short scratch path while an unrelated WCode process held the default debug executable open."
+    },
+    {
+      "schemaVersion": "0.1.0",
+      "WorkflowInstanceStateResultModel": "0.1.0",
+      "kind": "workflow-instance-state-result",
+      "stateId": "cross-platform-swift-path-projection-refactor",
+      "outcome": "completed",
+      "summary": "Vaporize now exposes path add-swiftpm-bin on every platform and delegates inspection and mutation to SwiftCLIInstaller. The embedded PowerShell source and feature-local Windows conditionals were removed. CUJ-01 passed 7 tests on x86_64 Windows, and the built command verified the existing Windows user PATH idempotently through reg.exe."
     },
     {
       "schemaVersion": "0.1.0",

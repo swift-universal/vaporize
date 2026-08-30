@@ -5,42 +5,11 @@ import Testing
 
 @Suite("CUJ-01 Windows SwiftPM path survival")
 struct WindowsSwiftPMPathPolicyTests {
-  @Test("SwiftPM user bin is appended without rewriting existing PATH entries")
-  func swiftPMUserBinIsSafelyAppended() {
-    let home = URL(fileURLWithPath: "C:/Users/operator", isDirectory: true)
-    let plan = VaporizeWindowsUserPathPolicy.plan(
-      userPath: "C:\\Tools;%SystemRoot%\\System32",
-      homeDirectory: home
-    )
-
-    #expect(plan.changed)
-    #expect(
-      plan.swiftPMBinPath.replacingOccurrences(of: "\\", with: "/")
-        == "C:/Users/operator/.swiftpm/bin"
-    )
-    #expect(plan.updatedUserPath.hasPrefix("C:\\Tools;%SystemRoot%\\System32;"))
-    #expect(plan.updatedUserPath.hasSuffix(plan.swiftPMBinPath))
-  }
-
-  @Test("Equivalent SwiftPM user bin spelling is idempotent")
-  func equivalentSwiftPMUserBinIsIdempotent() {
-    let home = URL(fileURLWithPath: "C:/Users/operator", isDirectory: true)
-    let plan = VaporizeWindowsUserPathPolicy.plan(
-      userPath: "C:\\Tools;%USERPROFILE%\\.swiftpm\\bin\\",
-      homeDirectory: home
-    )
-
-    #expect(!plan.changed)
-    #expect(plan.updatedUserPath == "C:\\Tools;%USERPROFILE%\\.swiftpm\\bin\\")
-  }
-
-  @Test("Windows PATH command has one explicit mutation spelling")
-  func windowsPathCommandParses() throws {
-    #if os(Windows)
-      let command = try VaporizeCLI.parse(["path", "add-swiftpm-bin"])
-      #expect(command.mode == .path)
-      #expect(command.forwardedArguments == ["add-swiftpm-bin"])
-    #endif
+  @Test("PATH command has one cross-platform explicit mutation spelling")
+  func pathCommandParses() throws {
+    let command = try VaporizeCLI.parse(["path", "add-swiftpm-bin"])
+    #expect(command.mode == .path)
+    #expect(command.forwardedArguments == ["add-swiftpm-bin"])
   }
 
   @Test("Deep Windows packages receive deterministic short scratch headroom")

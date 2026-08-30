@@ -175,9 +175,7 @@ struct VaporizeCLI: AsyncParsableCommand {
       case toolchainSelection = "toolchain-selection"
     #endif
     case setup
-    #if os(Windows)
-      case path
-    #endif
+    case path
 
     // Phase 0 vaporware-awareness modes.
     case status
@@ -631,10 +629,8 @@ struct VaporizeCLI: AsyncParsableCommand {
     #endif
     case .setup:
       try await setup()
-    #if os(Windows)
-      case .path:
-        try await configureWindowsUserPath()
-    #endif
+    case .path:
+      try await configureInstalledBinPath()
     case .status:
       try await runVaporStatus()
     case .warehouse:
@@ -1472,74 +1468,50 @@ struct VaporizeCLI: AsyncParsableCommand {
       vaporizeCopyFill(
         VaporizeCLICopy_v000_000_001.CLI.vaporizeVaporizeVerifiedA1InstalledAtA2,
         ["\(product)", "\(installedPath)"]))
-    #if os(Windows)
-      try await warnIfSwiftPMBinIsMissingFromWindowsUserPath()
-    #endif
+    try await warnIfSwiftPMBinIsMissingFromUserPath()
   }
 
-  #if os(Windows)
-    private func configureWindowsUserPath() async throws {
-      guard forwardedArguments == ["add-swiftpm-bin"] else {
-        throw ValidationError(
-          "Use `\(VaporizeWindowsUserPathPolicy.remediationCommand)` to safely add the canonical SwiftPM user bin directory."
-        )
-      }
-      let output = try await runWindowsUserPathPowerShell(operation: "add")
-      let path = VaporizeWindowsUserPathPolicy.swiftPMBinPath(
-        homeDirectory: FileManager.default.homeDirectoryForCurrentUser
+  private func configureInstalledBinPath() async throws {
+    guard forwardedArguments == ["add-swiftpm-bin"] else {
+      throw ValidationError(
+        "Use `\(InstalledBinPathProjectionService.remediationCommand)` to safely add the canonical SwiftPM user bin directory."
       )
-      if output == "already-present" {
-        print("Windows user PATH already contains \(path).")
-      } else if output == "added" {
-        print("Added \(path) to the Windows user PATH. Open a new terminal to use installed commands.")
-      } else {
-        throw ValidationError("Windows user PATH update returned an unexpected result: \(output)")
-      }
     }
-
-    private func warnIfSwiftPMBinIsMissingFromWindowsUserPath() async throws {
-      let state: String
-      do {
-        state = try await runWindowsUserPathPowerShell(operation: "inspect")
-      } catch {
-        VaporizeLogging.command.warning(
-          "installed-bin-user-path-inspection-failed error=\(VaporizeLogging.redacted(String(describing: error)))"
-        )
-        return
-      }
-      guard state == "missing" else {
-        return
-      }
-      let path = VaporizeWindowsUserPathPolicy.swiftPMBinPath(
-        homeDirectory: FileManager.default.homeDirectoryForCurrentUser
-      )
-      VaporizeLogging.command.warning(
-        "installed-bin-not-on-user-path path=\(path) remediation=\(VaporizeWindowsUserPathPolicy.remediationCommand)"
-      )
+    let receipt = try await InstalledBinPathProjectionService().add()
+    switch receipt.outcome {
+    case .alreadyPresent:
+      print("\(receipt.platform.displayName) user PATH already contains \(receipt.binPath).")
+    case .added:
+      let profile = receipt.profilePath.map { " via \($0)" } ?? ""
       print(
-        "Warning: \(path) is not on the Windows user PATH. Installed commands will not resolve in a new terminal."
+        "Added \(receipt.binPath) to the \(receipt.platform.displayName) user PATH\(profile). Open a new terminal to use installed commands."
       )
-      print("Fix safely with: \(VaporizeWindowsUserPathPolicy.remediationCommand)")
+    case .unsupported:
+      throw ValidationError(
+        "Persistent PATH projection is not supported on this platform. Add \(receipt.binPath) to PATH manually."
+      )
     }
+  }
 
-    private func runWindowsUserPathPowerShell(operation: String) async throws -> String {
-      var environment = ProcessInfo.processInfo.environment
-      environment["VAPORIZE_PATH_OPERATION"] = operation
-      environment["VAPORIZE_SWIFTPM_BIN"] = VaporizeWindowsUserPathPolicy.swiftPMBinPath(
-        homeDirectory: FileManager.default.homeDirectoryForCurrentUser
+  private func warnIfSwiftPMBinIsMissingFromUserPath() async throws {
+    let inspection: InstalledBinPathProjectionInspection
+    do {
+      inspection = try await InstalledBinPathProjectionService().inspect()
+    } catch {
+      VaporizeLogging.command.warning(
+        "installed-bin-user-path-inspection-failed error=\(VaporizeLogging.redacted(String(describing: error)))"
       )
-      let output = try await runExecutableForOutput(
-        executable: .name("powershell.exe"),
-        arguments: [
-          "-NoLogo", "-NoProfile", "-NonInteractive", "-Command",
-          VaporizeWindowsUserPathPowerShell.script,
-        ],
-        sourceTag: "vaporize-windows-user-path",
-        environment: environment
-      )
-      return output.trimmingCharacters(in: .whitespacesAndNewlines)
+      return
     }
-  #endif
+    guard inspection.state == .missing else { return }
+    VaporizeLogging.command.warning(
+      "installed-bin-not-on-user-path platform=\(inspection.platform.rawValue) path=\(inspection.binPath) remediation=\(InstalledBinPathProjectionService.remediationCommand)"
+    )
+    print(
+      "Warning: \(inspection.binPath) is not on the \(inspection.platform.displayName) user PATH. Installed commands will not resolve in a new terminal."
+    )
+    print("Fix safely with: \(InstalledBinPathProjectionService.remediationCommand)")
+  }
 
   /// Resolve the Xcode build inputs for app mode so an Xcode-project app builds
   /// through the xcodebuild path instead of the SwiftPM builder.
