@@ -176,6 +176,13 @@ let bumpBuildDependency = Package.Dependency.package(
     "takumi-org/private/universal/domain/tooling/spm/bump-build@takumi-org.cli"
   )
 )
+let toolMaterializationSchemasDependency = Package.Dependency.package(
+  name: "tool-materialization-schemas-v0001-2608-30210",
+  path: repositoryPath(
+    collectivesDirectory,
+    "schema-universal/pri/o/wrkstrm/fami/d/tooling/tool-materialization/v001/spm/2608-30210"
+  )
+)
 
 let packageDependencies: [Package.Dependency] = [
   commonLogDependency,
@@ -195,6 +202,7 @@ let packageDependencies: [Package.Dependency] = [
   testFixtureLifecycleDependency,
   testServiceAdoptionPolicyDependency,
   bumpBuildDependency,
+  toolMaterializationSchemasDependency,
   .package(url: "https://github.com/apple/swift-argument-parser", from: "1.6.0"),
   .package(url: "https://github.com/apple/swift-crypto.git", from: "3.15.1"),
 ]
@@ -237,7 +245,11 @@ let package = Package(
     .target(
       name: "VaporizeProjectModel",
       dependencies: [
-        .product(name: "PklSwift", package: "pkl-swift")
+        .product(name: "PklSwift", package: "pkl-swift"),
+        .product(
+          name: "ToolMaterializationSchemas_v0001_2608_30210",
+          package: "tool-materialization-schemas-v0001-2608-30210"
+        ),
       ],
       path: "sources/vaporize-project-model"
     ),

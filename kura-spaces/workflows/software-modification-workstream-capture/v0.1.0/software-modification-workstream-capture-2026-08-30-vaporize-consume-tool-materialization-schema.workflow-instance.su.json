@@ -1,0 +1,65 @@
+{
+  "schemaVersion": "0.0.8",
+  "WorkflowInstanceModel": "0.0.8",
+  "kind": "workflow-instance",
+  "slug": "software-modification-workstream-capture-2026-08-30-vaporize-consume-tool-materialization-schema",
+  "title": "Software modification - Vaporize consumes tool materialization schema",
+  "updated": "2026-08-30T20:10:00Z",
+  "workflowRef": {
+    "link-ref-model": "0.0.5",
+    "t": "Software modification workstream capture",
+    "tg": [{
+      "k": "rp",
+      "rt": "mono",
+      "v": "private/universal/substrate/collectives/spaces-universal/private/universal/kura-spaces/workflows/software-modification-workstream-capture/v0.1.0/software-modification-workstream-capture.workflow.su.json"
+    }]
+  },
+  "beadTrackingRefs": [{
+    "link-ref-model": "0.0.5",
+    "t": "Vaporize consumes tool materialization schema",
+    "tg": [{
+      "k": "rp",
+      "rt": "swift-universal",
+      "v": "private/product-lines/vaporize/kura-spaces/beads/feature-vaporize-consume-tool-materialization-schema-2026-08-30.beads-issue.su.json"
+    }]
+  }],
+  "receiptRefs": [{
+    "link-ref-model": "0.0.5",
+    "t": "Canonical tool materialization Swift projection",
+    "tg": [{
+      "k": "rp",
+      "rt": "mono",
+      "v": "private/universal/substrate/collectives/schema-universal/pri/o/wrkstrm/fami/d/tooling/tool-materialization/v001/spm/2608-30210"
+    }]
+  }],
+  "stateResults": [
+    {
+      "schemaVersion": "0.1.0",
+      "WorkflowInstanceStateResultModel": "0.1.0",
+      "kind": "workflow-instance-state-result",
+      "stateId": "workspace-preflight",
+      "outcome": "completed-with-unrelated-dirt",
+      "summary": "The Vaporize boundary had one pre-existing Info.plist modification, which this exact-file savepoint excludes."
+    },
+    {
+      "schemaVersion": "0.1.0",
+      "WorkflowInstanceStateResultModel": "0.1.0",
+      "kind": "workflow-instance-state-result",
+      "stateId": "implement-change",
+      "outcome": "completed",
+      "summary": "Added the released Schema Universal Swift package dependency and replaced the local record implementation with compatibility type aliases to its canonical model."
+    },
+    {
+      "schemaVersion": "0.1.0",
+      "WorkflowInstanceStateResultModel": "0.1.0",
+      "kind": "workflow-instance-state-result",
+      "stateId": "validate-change",
+      "outcome": "completed",
+      "summary": "Focused Windows tests and the CLI proving ground emit the kebab-cased receptor with no schemaVersion, kind, or former Swift receptor."
+    }
+  ],
+  "notes": [
+    "This introduces no conditional-compilation branch.",
+    "The debug source coordinate remains a CLI identity coordinate; it is distinct from the Schema Universal release version."
+  ]
+}

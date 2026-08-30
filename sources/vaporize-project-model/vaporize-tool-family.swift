@@ -1,22 +1,10 @@
 import Foundation
+import ToolMaterializationSchemas_v0001_2608_30210
 
-public enum VaporizeToolSurface: String, Codable, Equatable, Sendable, CaseIterable {
-  case cli
-  case stui
-  case tui
-  case sd
-}
-
-public enum VaporizeToolLanguage: String, Codable, Equatable, Sendable, CaseIterable {
-  case javascript = "j"
-  case python = "p"
-  case swift = "s"
-}
-
-public enum VaporizeToolBuildIntent: String, Codable, Equatable, Sendable {
-  case debug
-  case release
-}
+public typealias VaporizeToolSurface = ToolMaterializationSurface
+public typealias VaporizeToolLanguage = ToolMaterializationLanguage
+public typealias VaporizeToolBuildIntent = ToolMaterializationIntent
+public typealias VaporizeToolMaterializationPlan = ToolMaterializationPlanModel
 
 public struct VaporizeToolOwner: Codable, Equatable, Sendable {
   public var slug: String
@@ -99,63 +87,6 @@ public struct VaporizeToolFamily: Codable, Equatable, Sendable {
     packagePath = try container.decodeIfPresent(String.self, forKey: .packagePath) ?? "."
     owner = try container.decode(VaporizeToolOwner.self, forKey: .owner)
     variants = try container.decode([String: VaporizeToolVariant].self, forKey: .variants)
-  }
-}
-
-public struct VaporizeToolMaterializationPlan: Codable, Equatable, Sendable {
-  public let receptorVersion: String
-  public let project: String
-  public let family: String
-  public let variant: String
-  public let intent: VaporizeToolBuildIntent
-  public let packagePath: String
-  public let sourceProduct: String
-  public let executableName: String
-  public let surface: VaporizeToolSurface
-  public let language: VaporizeToolLanguage
-  public let digi: Bool
-  public let sourceCoordinate: String?
-
-  private enum CodingKeys: String, CodingKey {
-    case receptorVersion = "VaporizeToolMaterializationPlan"
-    case project
-    case family
-    case variant
-    case intent
-    case packagePath
-    case sourceProduct
-    case executableName
-    case surface
-    case language
-    case digi
-    case sourceCoordinate
-  }
-
-  public init(
-    project: String,
-    family: String,
-    variant: String,
-    intent: VaporizeToolBuildIntent,
-    packagePath: String,
-    sourceProduct: String,
-    executableName: String,
-    surface: VaporizeToolSurface,
-    language: VaporizeToolLanguage,
-    digi: Bool,
-    sourceCoordinate: String?
-  ) {
-    self.receptorVersion = "v1_2608_30200"
-    self.project = project
-    self.family = family
-    self.variant = variant
-    self.intent = intent
-    self.packagePath = packagePath
-    self.sourceProduct = sourceProduct
-    self.executableName = executableName
-    self.surface = surface
-    self.language = language
-    self.digi = digi
-    self.sourceCoordinate = sourceCoordinate
   }
 }
 

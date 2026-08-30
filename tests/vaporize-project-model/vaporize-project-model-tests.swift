@@ -68,9 +68,10 @@ struct VaporizeProjectModelTests {
     #expect(debug.executableName == "vaporize.digi-stui-s.v1_2608_30200@wrkstrm-core.coll")
     let encodedDebug = try JSONEncoder().encode(debug)
     let debugJSON = try #require(JSONSerialization.jsonObject(with: encodedDebug) as? [String: Any])
-    #expect(debugJSON["VaporizeToolMaterializationPlan"] as? String == "v1_2608_30200")
+    #expect(debugJSON["tool-materialization-plan-model"] as? String == "v0001_2608_30210")
     #expect(debugJSON["schemaVersion"] == nil)
     #expect(debugJSON["kind"] == nil)
+    #expect(debugJSON["VaporizeToolMaterializationPlan"] == nil)
 
     let release = try VaporizeToolFamilyPlanner.plan(
       project: project,

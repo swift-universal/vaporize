@@ -1,0 +1,29 @@
+{
+  "BeadsIssue": "0.1.0",
+  "schemaVersion": "0.1.0",
+  "id": "feature-vaporize-consume-tool-materialization-schema-2026-08-30",
+  "title": "Consume the canonical tool materialization schema in Vaporize",
+  "createdAt": "2026-08-30T20:10:00Z",
+  "createdBy": "Codex with operator direction",
+  "issueType": "feature",
+  "status": "closed",
+  "priority": 1,
+  "labels": ["vaporize", "schema-universal", "tool-materialization", "kebab-case"],
+  "owningBoundary": "private/product-lines/vaporize/kura-spaces/beads",
+  "description": "Replace Vaporize's provisional Swift-named materialization record with the released Schema Universal model while preserving its canonical CLI-family naming rules.",
+  "acceptanceCriteria": [
+    "VaporizeProjectModel depends on the v0001_2608_30210 Swift schema projection.",
+    "The planner emits tool-materialization-plan-model rather than VaporizeToolMaterializationPlan.",
+    "The emitted plan contains neither schemaVersion nor kind.",
+    "The existing Digi STUI debug identity remains vaporize.digi-stui-s.v1_2608_30200@wrkstrm-core.coll.",
+    "Focused Windows tests and a built CLI proving-ground invocation pass."
+  ],
+  "evidence": {
+    "schemaRelease": "schema-universal/pri/o/wrkstrm/fami/d/tooling/tool-materialization/v001/spm/2608-30210",
+    "wireReceptor": "tool-materialization-plan-model = v0001_2608_30210",
+    "debugIdentity": "vaporize.digi-stui-s.v1_2608_30200@wrkstrm-core.coll",
+    "compatibility": "The Vaporize public names remain type aliases while the canonical implementation and wire contract are owned by Schema Universal."
+  },
+  "closedAt": "2026-08-30T20:10:00Z",
+  "resolution": "Vaporize now imports and emits the canonical cross-language ToolMaterializationPlanModel."
+}
