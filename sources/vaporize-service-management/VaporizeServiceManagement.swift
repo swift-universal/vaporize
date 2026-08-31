@@ -273,7 +273,7 @@ public struct WindowsTaskSchedulerServiceAdapter: VaporizeServiceRegistrationAda
 
     let supportDirectory = URL(fileURLWithPath: localApplicationDataDirectory)
       .appendingPathComponent("wrkstrm/services/\(serviceID)").path
-    let launcherPath = URL(fileURLWithPath: supportDirectory).appendingPathComponent("launch.ps1")
+    let launcherPath = URL(fileURLWithPath: supportDirectory).appendingPathComponent("launch.cmd")
       .path
     let taskXMLPath = URL(fileURLWithPath: supportDirectory).appendingPathComponent("task.xml").path
     let stdout = resolvePath(
@@ -291,7 +291,7 @@ public struct WindowsTaskSchedulerServiceAdapter: VaporizeServiceRegistrationAda
 
     switch action {
     case .install:
-      let launcher = renderPowerShellLauncher(
+      let launcher = renderCommandLauncher(
         service: service,
         context: context,
         environment: environment,
@@ -360,7 +360,7 @@ public struct WindowsTaskSchedulerServiceAdapter: VaporizeServiceRegistrationAda
     )
   }
 
-  private func renderPowerShellLauncher(
+  private func renderCommandLauncher(
     service: VaporizeService,
     context: VaporizeServiceRuntimeContext,
     environment: [String: String],
@@ -379,19 +379,17 @@ public struct WindowsTaskSchedulerServiceAdapter: VaporizeServiceRegistrationAda
         context: context,
         environment: environment
       )
-      return "$env:\(key) = '\(powerShellLiteral(value))'"
+      return "set \"\(key)=\(batchLiteral(value))\""
     }
-    let arguments = service.arguments.map { "'\(powerShellLiteral($0))'" }.joined(separator: ", ")
+    let arguments = service.arguments.map { "\"\(batchLiteral($0))\"" }.joined(separator: " ")
     return
       ([
-        "$ErrorActionPreference = 'Stop'",
-        "$ProgressPreference = 'SilentlyContinue'",
+        "@echo off",
+        "setlocal DisableDelayedExpansion",
       ] + environmentLines + [
-        "Set-Location -LiteralPath '\(powerShellLiteral(workingDirectory))'",
-        "$serviceArguments = @(\(arguments))",
-        "$ErrorActionPreference = 'Continue'",
-        "& '\(powerShellLiteral(executable))' @serviceArguments 1>> '\(powerShellLiteral(stdout))' 2>> '\(powerShellLiteral(stderr))'",
-        "exit $LASTEXITCODE",
+        "cd /d \"\(batchLiteral(workingDirectory))\"",
+        "\"\(batchLiteral(executable))\" \(arguments) 1>>\"\(batchLiteral(stdout))\" 2>>\"\(batchLiteral(stderr))\"",
+        "exit /b %ERRORLEVEL%",
         "",
       ]).joined(separator: "\r\n")
   }
@@ -447,8 +445,8 @@ public struct WindowsTaskSchedulerServiceAdapter: VaporizeServiceRegistrationAda
         </Settings>
         <Actions Context="Author">
           <Exec>
-            <Command>powershell.exe</Command>
-            <Arguments>-NoLogo -NoProfile -NonInteractive -ExecutionPolicy Bypass -File &quot;\(xml(launcherPath))&quot;</Arguments>
+            <Command>cmd.exe</Command>
+            <Arguments>/D /S /C &quot;&quot;\(xml(launcherPath))&quot;&quot;</Arguments>
           </Exec>
         </Actions>
       </Task>
@@ -633,8 +631,11 @@ private func resolvePath(
   return result
 }
 
-private func powerShellLiteral(_ value: String) -> String {
-  value.replacingOccurrences(of: "'", with: "''")
+private func batchLiteral(_ value: String) -> String {
+  value
+    .replacingOccurrences(of: "^", with: "^^")
+    .replacingOccurrences(of: "%", with: "%%")
+    .replacingOccurrences(of: "\"", with: "^\"")
 }
 
 private func utf16LittleEndianData(_ value: String) -> Data {
