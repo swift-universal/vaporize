@@ -309,7 +309,7 @@ public struct WindowsTaskSchedulerServiceAdapter: VaporizeServiceRegistrationAda
         .createDirectory(path: URL(fileURLWithPath: stdout).deletingLastPathComponent().path),
         .createDirectory(path: URL(fileURLWithPath: stderr).deletingLastPathComponent().path),
         .write(path: launcherPath, contents: Data(launcher.utf8)),
-        .write(path: taskXMLPath, contents: Data(taskXML.utf8)),
+        .write(path: taskXMLPath, contents: utf16LittleEndianData(taskXML)),
         .command(
           .init(
             executable: "schtasks.exe",
@@ -374,7 +374,12 @@ public struct WindowsTaskSchedulerServiceAdapter: VaporizeServiceRegistrationAda
       environment: environment
     )
     let environmentLines = service.environment.keys.sorted().map { key in
-      "$env:\(key) = '\(powerShellLiteral(service.environment[key] ?? ""))'"
+      let value = resolvePath(
+        service.environment[key] ?? "",
+        context: context,
+        environment: environment
+      )
+      return "$env:\(key) = '\(powerShellLiteral(value))'"
     }
     let arguments = service.arguments.map { "'\(powerShellLiteral($0))'" }.joined(separator: ", ")
     return
@@ -384,6 +389,7 @@ public struct WindowsTaskSchedulerServiceAdapter: VaporizeServiceRegistrationAda
       ] + environmentLines + [
         "Set-Location -LiteralPath '\(powerShellLiteral(workingDirectory))'",
         "$serviceArguments = @(\(arguments))",
+        "$ErrorActionPreference = 'Continue'",
         "& '\(powerShellLiteral(executable))' @serviceArguments 1>> '\(powerShellLiteral(stdout))' 2>> '\(powerShellLiteral(stderr))'",
         "exit $LASTEXITCODE",
         "",
@@ -410,12 +416,12 @@ public struct WindowsTaskSchedulerServiceAdapter: VaporizeServiceRegistrationAda
       ? ""
       : """
         <RestartOnFailure>
-          <Interval>PT30S</Interval>
+          <Interval>PT1M</Interval>
           <Count>3</Count>
         </RestartOnFailure>
       """
     return """
-      <?xml version="1.0" encoding="UTF-8"?>
+      <?xml version="1.0" encoding="UTF-16"?>
       <Task version="1.4" xmlns="http://schemas.microsoft.com/windows/2004/02/mit/task">
         <RegistrationInfo>
           <Description>Vaporize managed user service: \(xml(serviceID))</Description>
@@ -570,7 +576,9 @@ public struct MacOSLaunchAgentServiceAdapter: VaporizeServiceRegistrationAdapter
       )
     }
     if !service.environment.isEmpty {
-      plist["EnvironmentVariables"] = service.environment
+      plist["EnvironmentVariables"] = service.environment.mapValues {
+        resolvePath($0, context: context, environment: environment)
+      }
     }
     switch service.restartPolicy {
     case .never: break
@@ -615,7 +623,11 @@ private func resolvePath(
       .appendingPathComponent(String(result.dropFirst(2))).path
   }
   for (key, value) in environment.sorted(by: { $0.key.count > $1.key.count }) {
-    result = result.replacingOccurrences(of: "%\(key)%", with: value)
+    result = result.replacingOccurrences(
+      of: "%\(key)%",
+      with: value,
+      options: .caseInsensitive
+    )
     result = result.replacingOccurrences(of: "${\(key)}", with: value)
   }
   return result
@@ -623,6 +635,15 @@ private func resolvePath(
 
 private func powerShellLiteral(_ value: String) -> String {
   value.replacingOccurrences(of: "'", with: "''")
+}
+
+private func utf16LittleEndianData(_ value: String) -> Data {
+  var data = Data([0xFF, 0xFE])
+  for codeUnit in value.utf16 {
+    data.append(UInt8(codeUnit & 0x00FF))
+    data.append(UInt8(codeUnit >> 8))
+  }
+  return data
 }
 
 private func xml(_ value: String) -> String {

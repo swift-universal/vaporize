@@ -16,6 +16,9 @@ services = new {
       "--port"
       "8003"
     }
+    environment = new {
+      ["PATH"] = "%USERPROFILE%/.local/share/wrkstrm/model-serving/build-tools/cuda-12.9/Library/bin;%Path%"
+    }
     restartPolicy = "on-failure"
     healthCheck = new {
       kind = "http"

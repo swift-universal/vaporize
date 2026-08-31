@@ -9,7 +9,10 @@ struct VaporizeServiceManagementTests {
     executable: "%USERPROFILE%\\.swiftpm\\bin\\takumi-fused.exe",
     arguments: ["serve", "--host", "127.0.0.1", "--port", "8003"],
     workingDirectory: "%USERPROFILE%\\models\\takumi",
-    environment: ["TAKUMI_MODEL": "qwen"],
+    environment: [
+      "PATH": "%USERPROFILE%\\cuda;%Path%",
+      "TAKUMI_MODEL": "qwen",
+    ],
     restartPolicy: .onFailure,
     healthCheck: .init(kind: .http, url: "http://127.0.0.1:8003/v1/models")
   )
@@ -46,7 +49,10 @@ struct VaporizeServiceManagementTests {
       serviceID: "takumi-fused",
       service: service,
       context: context,
-      environment: ["USERPROFILE": "C:\\Users\\operator"]
+      environment: [
+        "Path": "C:\\Windows\\System32",
+        "USERPROFILE": "C:\\Users\\operator",
+      ]
     )
 
     #expect(plan.backend == "windows-task-scheduler")
@@ -59,13 +65,18 @@ struct VaporizeServiceManagementTests {
       return
     }
     let launcher = String(decoding: launcherData, as: UTF8.self)
-    let task = String(decoding: taskData, as: UTF8.self)
+    let task = try #require(String(data: taskData, encoding: .utf16LittleEndian))
     #expect(launcherPath.hasSuffix("wrkstrm/services/takumi-fused/launch.ps1"))
     #expect(taskPath.hasSuffix("wrkstrm/services/takumi-fused/task.xml"))
+    #expect(taskData.starts(with: [0xFF, 0xFE]))
     #expect(launcher.contains("C:\\Users\\operator\\.swiftpm\\bin\\takumi-fused.exe"))
+    #expect(launcher.contains("$env:PATH = 'C:\\Users\\operator\\cuda;C:\\Windows\\System32'"))
     #expect(launcher.contains("$env:TAKUMI_MODEL = 'qwen'"))
+    #expect(launcher.contains("$ErrorActionPreference = 'Continue'"))
     #expect(task.contains("<LogonTrigger>"))
+    #expect(task.contains("encoding=\"UTF-16\""))
     #expect(task.contains("<RestartOnFailure>"))
+    #expect(task.contains("<Interval>PT1M</Interval>"))
     #expect(task.contains("<LogonType>InteractiveToken</LogonType>"))
     #expect(command.executable == "schtasks.exe")
     #expect(command.arguments.contains("\\Wrkstrm\\Services\\takumi-fused"))
@@ -76,6 +87,7 @@ struct VaporizeServiceManagementTests {
     var macService = service
     macService.executable = "~/.swiftpm/bin/takumi-fused"
     macService.workingDirectory = "~/models/takumi"
+    macService.environment = ["TAKUMI_MODEL": "qwen"]
     let context = VaporizeServiceRuntimeContext(
       platform: .macos,
       homeDirectory: "/Users/operator",
@@ -108,6 +120,9 @@ struct VaporizeServiceManagementTests {
     #expect(plist["WorkingDirectory"] as? String == "/Users/operator/models/takumi")
     #expect(
       (plist["ProgramArguments"] as? [String])?.first == "/Users/operator/.swiftpm/bin/takumi-fused"
+    )
+    #expect(
+      (plist["EnvironmentVariables"] as? [String: String])?["TAKUMI_MODEL"] == "qwen"
     )
     #expect(bootout.allowFailure)
     #expect(bootstrap.arguments.first == "bootstrap")
