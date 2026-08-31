@@ -11,6 +11,9 @@ typealias VaporizeUIBackend = "appkit" | "uikit" | "winui"
 typealias VaporizeToolSurface = "cli" | "stui" | "tui" | "sd"
 typealias VaporizeToolLanguage = "j" | "p" | "s"
 typealias VaporizeToolOwnerType = "coll"
+typealias VaporizeServiceScope = "user" | "system"
+typealias VaporizeServiceActivation = "login" | "manual"
+typealias VaporizeServiceRestartPolicy = "never" | "on-failure" | "always"
 
 class VaporizePlatformResource {
   path: String
@@ -56,5 +59,26 @@ class VaporizeToolFamily {
   variants: Mapping<String, VaporizeToolVariant>
 }
 
+class VaporizeServiceHealthCheck {
+  kind: "http"
+  url: String
+}
+
+/// A long-running process that Vaporize projects into the host's native
+/// service manager. Local developer services should normally use user scope.
+class VaporizeService {
+  scope: VaporizeServiceScope = "user"
+  activation: VaporizeServiceActivation = "login"
+  executable: String
+  arguments: Listing<String> = new {}
+  workingDirectory: String?
+  environment: Mapping<String, String> = new {}
+  restartPolicy: VaporizeServiceRestartPolicy = "on-failure"
+  standardOutputPath: String?
+  standardErrorPath: String?
+  healthCheck: VaporizeServiceHealthCheck?
+}
+
 platformTargets: Mapping<String, VaporizePlatformTarget> = new {}
 toolFamilies: Mapping<String, VaporizeToolFamily> = new {}
+services: Mapping<String, VaporizeService> = new {}

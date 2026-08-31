@@ -1,0 +1,66 @@
+{
+  "schemaVersion": "0.0.8",
+  "WorkflowInstanceModel": "0.0.8",
+  "kind": "workflow-instance",
+  "slug": "software-modification-workstream-capture-2026-08-30-vaporize-managed-user-services",
+  "title": "Software modification - Vaporize managed user services",
+  "updated": "2026-08-31T05:00:00Z",
+  "workflowRef": {
+    "link-ref-model": "0.0.5",
+    "t": "Software modification workstream capture",
+    "tg": [{
+      "k": "rp",
+      "rt": "mono",
+      "v": "private/universal/substrate/collectives/spaces-universal/private/universal/kura-spaces/workflows/software-modification-workstream-capture/v0.1.0/software-modification-workstream-capture.workflow.su.json"
+    }]
+  },
+  "beadTrackingRefs": [{
+    "link-ref-model": "0.0.5",
+    "t": "Vaporize managed user services",
+    "tg": [{
+      "k": "rp",
+      "rt": "swift-universal",
+      "v": "private/product-lines/vaporize/kura-spaces/beads/feature-vaporize-managed-user-services-2026-08-30.beads-issue.su.json"
+    }]
+  }],
+  "stateResults": [
+    {
+      "schemaVersion": "0.1.0",
+      "WorkflowInstanceStateResultModel": "0.1.0",
+      "kind": "workflow-instance-state-result",
+      "stateId": "workspace-preflight",
+      "outcome": "completed-with-unrelated-dirt",
+      "summary": "The Vaporize boundary had pre-existing Info.plist and Package.resolved changes; the exact-file service slice excludes both."
+    },
+    {
+      "schemaVersion": "0.1.0",
+      "WorkflowInstanceStateResultModel": "0.1.0",
+      "kind": "workflow-instance-state-result",
+      "stateId": "implement-change",
+      "outcome": "completed",
+      "summary": "Added typed Pkl service declarations, a CommonProcess-backed service manager, Windows Task Scheduler and macOS LaunchAgent adapters, and the Vaporize service command family."
+    },
+    {
+      "schemaVersion": "0.1.0",
+      "WorkflowInstanceStateResultModel": "0.1.0",
+      "kind": "workflow-instance-state-result",
+      "stateId": "validate-change",
+      "outcome": "completed",
+      "summary": "VaporizeCLI builds on Windows; four service-management tests and three project-model tests pass; focused Swift format lint passes; and the built CLI resolves the fused-inference proving config through the read-only logs action."
+    }
+  ],
+  "receiptRefs": [{
+    "link-ref-model": "0.0.5",
+    "t": "Managed fused-inference service proving ground",
+    "tg": [{
+      "k": "rp",
+      "rt": "swift-universal",
+      "v": "private/product-lines/vaporize/tests/proving-grounds/managed-service-project/project.pkl"
+    }]
+  }],
+  "notes": [
+    "The shared service-registration implementation contains no conditional-compilation platform branches and emits CLI output through CommonLog.",
+    "The command is opt-in; explicit service mutation actions are the feature boundary, so no additional feature flag is required.",
+    "System service scope stays rejected until Vaporize has an explicit elevation and authorization contract."
+  ]
+}

@@ -13,6 +13,7 @@ import VaporizeCLICopy_v000_000_001
 import VaporizeIssueReporting
 import VaporizeJSONSchemaValidation
 import VaporizeProjectModel
+import VaporizeServiceManagement
 
 @main
 enum VaporizeExecutable {
@@ -178,6 +179,7 @@ struct VaporizeCLI: AsyncParsableCommand {
     case setup
     case path
     case planToolFamily = "plan-tool-family"
+    case service
 
     // Phase 0 vaporware-awareness modes.
     case status
@@ -653,6 +655,8 @@ struct VaporizeCLI: AsyncParsableCommand {
       try await configureInstalledBinPath()
     case .planToolFamily:
       try await planToolFamilyMaterialization()
+    case .service:
+      try await runServiceAction()
     case .status:
       try await runVaporStatus()
     case .warehouse:
@@ -750,6 +754,64 @@ struct VaporizeCLI: AsyncParsableCommand {
       encoder.outputFormatting = [.prettyPrinted, .sortedKeys, .withoutEscapingSlashes]
       let payload = String(decoding: try encoder.encode(plan), as: UTF8.self)
       VaporizeLogging.command.notice(payload)
+    }
+  }
+
+  private func runServiceAction() async throws {
+    guard let actionToken = forwardedArguments.first,
+      let action = VaporizeServiceAction(rawValue: actionToken)
+    else {
+      throw ValidationError(
+        "service requires an action: install, start, status, logs, stop, or uninstall."
+      )
+    }
+    guard forwardedArguments.count >= 2 else {
+      throw ValidationError("service \(action.rawValue) requires a service id.")
+    }
+    let serviceID = forwardedArguments[1]
+    var selectedPklPath = pklPath
+    var index = 2
+    while index < forwardedArguments.count {
+      let argument = forwardedArguments[index]
+      guard argument == "--pkl-path", index + 1 < forwardedArguments.count else {
+        throw ValidationError("unexpected service argument '\(argument)'.")
+      }
+      selectedPklPath = forwardedArguments[index + 1]
+      index += 2
+    }
+
+    let projectURL: URL
+    if let selectedPklPath, !selectedPklPath.isEmpty {
+      projectURL = absoluteURL(for: selectedPklPath)
+    } else if let packagePath, !packagePath.isEmpty {
+      projectURL = absoluteURL(for: packagePath).appendingPathComponent("project.pkl")
+    } else {
+      projectURL = URL(fileURLWithPath: FileManager.default.currentDirectoryPath)
+        .appendingPathComponent("project.pkl")
+    }
+
+    let project = try await VaporizeProjectLoader.load(url: projectURL)
+    let receipt = try await VaporizeServiceManager().perform(
+      action: action,
+      serviceID: serviceID,
+      project: project
+    )
+    switch vaporOutputFormat {
+    case .text:
+      VaporizeLogging.command.notice(
+        "service=\(receipt.serviceID) action=\(receipt.action) backend=\(receipt.backend) state=complete"
+      )
+      VaporizeLogging.command.notice("stdout=\(receipt.standardOutputPath)")
+      VaporizeLogging.command.notice("stderr=\(receipt.standardErrorPath)")
+      for output in receipt.commandOutput {
+        VaporizeLogging.command.notice(output)
+      }
+    case .json:
+      let encoder = JSONEncoder()
+      encoder.outputFormatting = [.prettyPrinted, .sortedKeys, .withoutEscapingSlashes]
+      VaporizeLogging.command.notice(
+        String(decoding: try encoder.encode(receipt), as: UTF8.self)
+      )
     }
   }
 

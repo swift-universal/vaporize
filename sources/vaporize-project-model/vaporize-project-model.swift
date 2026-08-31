@@ -5,21 +5,25 @@ public struct VaporizeProject: Codable, Equatable, Sendable {
   public var name: String
   public var platformTargets: [String: VaporizePlatformTarget]
   public var toolFamilies: [String: VaporizeToolFamily]
+  public var services: [String: VaporizeService]
 
   public init(
     name: String,
     platformTargets: [String: VaporizePlatformTarget] = [:],
-    toolFamilies: [String: VaporizeToolFamily] = [:]
+    toolFamilies: [String: VaporizeToolFamily] = [:],
+    services: [String: VaporizeService] = [:]
   ) {
     self.name = name
     self.platformTargets = platformTargets
     self.toolFamilies = toolFamilies
+    self.services = services
   }
 
   private enum CodingKeys: String, CodingKey {
     case name
     case platformTargets
     case toolFamilies
+    case services
   }
 
   public init(from decoder: Decoder) throws {
@@ -30,6 +34,9 @@ public struct VaporizeProject: Codable, Equatable, Sendable {
       ?? [:]
     toolFamilies =
       try container.decodeIfPresent([String: VaporizeToolFamily].self, forKey: .toolFamilies)
+      ?? [:]
+    services =
+      try container.decodeIfPresent([String: VaporizeService].self, forKey: .services)
       ?? [:]
   }
 }

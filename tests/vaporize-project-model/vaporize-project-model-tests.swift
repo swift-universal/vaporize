@@ -35,6 +35,19 @@ struct VaporizeProjectModelTests {
           backend = "winui"
         }
       }
+      services = new {
+        ["takumi-fused"] = new {
+          scope = "user"
+          activation = "login"
+          executable = "%USERPROFILE%/.swiftpm/bin/takumi-fused.exe"
+          arguments = new { "serve"; "--port"; "8003" }
+          restartPolicy = "on-failure"
+          healthCheck = new {
+            kind = "http"
+            url = "http://127.0.0.1:8003/v1/models"
+          }
+        }
+      }
       """
     try Data(declaration.utf8).write(to: projectURL)
 
@@ -47,6 +60,12 @@ struct VaporizeProjectModelTests {
     #expect(target.presentation == .swiftUUI)
     #expect(target.backend == .winui)
     #expect(target.entryPoint == "Sources/windows-app/savepoint-windows-app.swift")
+    let service = try #require(project.services["takumi-fused"])
+    #expect(service.scope == .user)
+    #expect(service.activation == .login)
+    #expect(service.arguments == ["serve", "--port", "8003"])
+    #expect(service.restartPolicy == .onFailure)
+    #expect(service.healthCheck?.url == "http://127.0.0.1:8003/v1/models")
   }
 
   @Test("Vaporize projects debug and release identities from one Pkl tool family")

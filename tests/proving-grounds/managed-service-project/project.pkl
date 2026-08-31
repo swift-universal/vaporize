@@ -1,0 +1,25 @@
+/// Vaporize proving ground for a user-scoped fused inference service.
+/// The executable is expected to have been installed into the user's SwiftPM bin directory.
+
+amends "../../../Pkl/vaporize-project.pkl"
+
+name = "takumi-fused-service-proving-ground"
+
+services = new {
+  ["takumi-fused"] = new {
+    scope = "user"
+    activation = "login"
+    executable = "%USERPROFILE%/.swiftpm/bin/digikoma-windows-serve.exe"
+    arguments = new {
+      "--host"
+      "127.0.0.1"
+      "--port"
+      "8003"
+    }
+    restartPolicy = "on-failure"
+    healthCheck = new {
+      kind = "http"
+      url = "http://127.0.0.1:8003/v1/models"
+    }
+  }
+}

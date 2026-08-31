@@ -1,0 +1,41 @@
+{
+  "BeadsIssue": "0.1.0",
+  "schemaVersion": "0.1.0",
+  "id": "feature-vaporize-managed-user-services-2026-08-30",
+  "title": "Feature - Register managed user services through Vaporize",
+  "createdAt": "2026-08-31T04:40:00Z",
+  "createdBy": "codex with operator direction",
+  "sourceSystem": "vaporize",
+  "sourceType": "service-registration",
+  "owner": "wrkstrm-core",
+  "issueType": "feature",
+  "status": "completed",
+  "priority": 1,
+  "labels": ["launchd", "pkl", "services", "startup", "vaporize", "windows"],
+  "description": "Let a project declare long-running user services in project.pkl and let Vaporize install, start, inspect, stop, and uninstall those services through native platform adapters. The first consumer is the Takumi fused inference HTTP server used by Codex.",
+  "acceptanceCriteria": [
+    "project.pkl can declare typed user-scoped services with login activation, arguments, environment, logs, and restart policy.",
+    "Vaporize exposes service install, start, status, logs, stop, and uninstall actions.",
+    "Windows materializes an AtLogOn Task Scheduler registration under the current user.",
+    "macOS materializes and bootstraps a per-user LaunchAgent.",
+    "Shared Swift service-registration code contains no conditional-compilation platform branches.",
+    "Focused tests prove configuration decoding, platform selection, and native plan rendering without mutating the host service registry."
+  ],
+  "implementationInstructions": [
+    "Keep service intent in Vaporize project Pkl and native registration details behind injected adapters.",
+    "Use CommonProcess through CommonShell for native command execution and CommonLog for CLI output.",
+    "Default local inference to user scope; do not register the current console server as LocalSystem.",
+    "Make native installation idempotent and make uninstall tolerate an already-absent registration.",
+    "Do not absorb unrelated Info.plist or Package.resolved changes already present in this worktree."
+  ],
+  "relatedPaths": [
+    "Pkl/vaporize-project.pkl",
+    "sources/vaporize-project-model",
+    "sources/vaporize-service-management",
+    "sources/vaporize-cli/main.swift",
+    "tests/vaporize-service-management"
+  ],
+  "blockers": [],
+  "notes": "CommonSystemScheduler is a partial ancestor but only schedules daily launchd/systemd jobs and has no Windows service-registration backend. Vaporize now owns the long-running managed-service shape. No feature flag is required: the new command is opt-in, and no host mutation occurs until the operator explicitly invokes `service install`, `start`, `stop`, or `uninstall`. Validation on Windows: VaporizeCLI and VaporizeServiceManagement build; four service-management tests and three project-model tests pass; swift-format lint passes for the new Swift files; the built CLI resolves the takumi-fused proving config through `service logs --format json` without mutating Task Scheduler."
+}
+

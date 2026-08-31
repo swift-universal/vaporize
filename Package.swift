@@ -210,6 +210,7 @@ let packageDependencies: [Package.Dependency] = [
 let vaporizeCLIDependencies: [Target.Dependency] = [
   .product(name: "VaporizeCore", package: "vaporize-core"),
   "VaporizeProjectModel",
+  "VaporizeServiceManagement",
   .product(name: "XcodeProjectDefinitionCore", package: "xcode-project-definition"),
   "VaporizeIssueReporting",
   .product(name: "CommonLog", package: "common-log"),
@@ -234,6 +235,7 @@ let package = Package(
   ],
   products: [
     .library(name: "VaporizeProjectModel", targets: ["VaporizeProjectModel"]),
+    .library(name: "VaporizeServiceManagement", targets: ["VaporizeServiceManagement"]),
     .library(name: "VaporizeIssueReporting", targets: ["VaporizeIssueReporting"]),
     // SwiftCLIInstaller library LIFTED to swift-universal/.../tooling/spm/swift-cli-installer/
     // (CEO decision 2026-06-14). Consumers now import via swiftCLIInstallerDependency.
@@ -256,6 +258,15 @@ let package = Package(
         ),
       ],
       path: "sources/vaporize-project-model"
+    ),
+    .target(
+      name: "VaporizeServiceManagement",
+      dependencies: [
+        "VaporizeProjectModel",
+        .product(name: "CommonShell", package: "common-shell"),
+        .product(name: "CommonProcess", package: "common-process"),
+      ],
+      path: "sources/vaporize-service-management"
     ),
     // SwiftCLIInstaller target REMOVED 2026-06-14 — LIFTED to swift-universal
     // package "swift-cli-installer". Consumers below import via
@@ -306,6 +317,14 @@ let package = Package(
       name: "VaporizeProjectModelTests",
       dependencies: ["VaporizeProjectModel"],
       path: "tests/vaporize-project-model"
+    ),
+    .testTarget(
+      name: "VaporizeServiceManagementTests",
+      dependencies: [
+        "VaporizeProjectModel",
+        "VaporizeServiceManagement",
+      ],
+      path: "tests/vaporize-service-management"
     ),
     .testTarget(
       name: "VaporizeInspectCLITests",
