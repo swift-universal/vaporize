@@ -7,7 +7,10 @@ import VaporizeServiceManagement
 struct VaporizeServiceManagementTests {
   private let service = VaporizeService(
     executable: "%USERPROFILE%\\.swiftpm\\bin\\takumi-fused.exe",
-    arguments: ["serve", "--host", "127.0.0.1", "--port", "8003"],
+    arguments: [
+      "serve", "--model", "%USERPROFILE%\\models\\qwen.gguf", "--host", "127.0.0.1",
+      "--port", "8003",
+    ],
     workingDirectory: "%USERPROFILE%\\models\\takumi",
     environment: [
       "PATH": "%USERPROFILE%\\cuda;%Path%",
@@ -70,6 +73,8 @@ struct VaporizeServiceManagementTests {
     #expect(taskPath.hasSuffix("wrkstrm/services/takumi-fused/task.xml"))
     #expect(taskData.starts(with: [0xFF, 0xFE]))
     #expect(launcher.contains("C:\\Users\\operator\\.swiftpm\\bin\\takumi-fused.exe"))
+    #expect(launcher.contains("C:\\Users\\operator\\models\\qwen.gguf"))
+    #expect(!launcher.contains("%USERPROFILE%"))
     #expect(launcher.contains("set \"PATH=C:\\Users\\operator\\cuda;C:\\Windows\\System32\""))
     #expect(launcher.contains("set \"TAKUMI_MODEL=qwen\""))
     #expect(launcher.contains("exit /b %ERRORLEVEL%"))
@@ -87,6 +92,7 @@ struct VaporizeServiceManagementTests {
   func rendersMacOSLaunchAgent() throws {
     var macService = service
     macService.executable = "~/.swiftpm/bin/takumi-fused"
+    macService.arguments = ["serve", "--model", "${HOME}/models/qwen.gguf"]
     macService.workingDirectory = "~/models/takumi"
     macService.environment = ["TAKUMI_MODEL": "qwen"]
     let context = VaporizeServiceRuntimeContext(
@@ -121,6 +127,10 @@ struct VaporizeServiceManagementTests {
     #expect(plist["WorkingDirectory"] as? String == "/Users/operator/models/takumi")
     #expect(
       (plist["ProgramArguments"] as? [String])?.first == "/Users/operator/.swiftpm/bin/takumi-fused"
+    )
+    #expect(
+      (plist["ProgramArguments"] as? [String])?.contains("/Users/operator/models/qwen.gguf")
+        == true
     )
     #expect(
       (plist["EnvironmentVariables"] as? [String: String])?["TAKUMI_MODEL"] == "qwen"

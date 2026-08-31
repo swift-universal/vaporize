@@ -1,0 +1,29 @@
+{
+  "BeadsIssue": "0.1.0",
+  "schemaVersion": "0.1.0",
+  "id": "bug-vaporize-service-argument-environment-expansion-2026-08-31",
+  "title": "Expand environment paths in Vaporize service arguments",
+  "status": "closed",
+  "priority": 1,
+  "issueType": "bug",
+  "labels": ["vaporize", "services", "windows", "macos", "environment", "paths"],
+  "createdAt": "2026-08-31T12:50:00-07:00",
+  "updatedAt": "2026-08-31T13:02:00-07:00",
+  "createdBy": "Codex with operator direction",
+  "description": "Vaporize expanded environment variables in a managed service executable, working directory, and environment but passed service arguments literally.",
+  "expectedBehavior": "Every service argument uses the same tilde and environment-variable projection as the executable on Windows and macOS before native service artifacts are written.",
+  "actualBehavior": "Windows launch.cmd and macOS ProgramArguments now resolve each argument through the shared path resolver. Four focused service-management tests pass. Reinstalling the Ternary Bonsai task expanded its USERPROFILE model argument and the registered service started with two healthy 262144-token slots.",
+  "acceptanceCriteria": [
+    "Windows percent-style environment references expand inside service arguments.",
+    "macOS tilde and braced environment references expand inside service arguments.",
+    "Resolved arguments remain correctly escaped for their native service artifact.",
+    "Existing executable, working-directory, and environment expansion remains unchanged.",
+    "A real Vaporize-managed model service starts successfully from a portable project.pkl declaration."
+  ],
+  "fixSteps": [
+    "Resolve every Windows launcher argument before batch escaping.",
+    "Resolve every macOS ProgramArguments entry before plist serialization.",
+    "Add cross-platform renderer assertions.",
+    "Reinstall and start the failed real service as an integration receipt."
+  ]
+}

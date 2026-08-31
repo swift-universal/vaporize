@@ -381,7 +381,10 @@ public struct WindowsTaskSchedulerServiceAdapter: VaporizeServiceRegistrationAda
       )
       return "set \"\(key)=\(batchLiteral(value))\""
     }
-    let arguments = service.arguments.map { "\"\(batchLiteral($0))\"" }.joined(separator: " ")
+    let arguments = service.arguments.map { argument in
+      let resolved = resolvePath(argument, context: context, environment: environment)
+      return "\"\(batchLiteral(resolved))\""
+    }.joined(separator: " ")
     return
       ([
         "@echo off",
@@ -560,7 +563,8 @@ public struct MacOSLaunchAgentServiceAdapter: VaporizeServiceRegistrationAdapter
     let executable = resolvePath(service.executable, context: context, environment: environment)
     var plist: [String: Any] = [
       "Label": label,
-      "ProgramArguments": [executable] + service.arguments,
+      "ProgramArguments": [executable]
+        + service.arguments.map { resolvePath($0, context: context, environment: environment) },
       "RunAtLoad": service.activation == .login,
       "StandardOutPath": stdout,
       "StandardErrorPath": stderr,
