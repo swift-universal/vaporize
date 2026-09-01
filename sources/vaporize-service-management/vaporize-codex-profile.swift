@@ -46,6 +46,9 @@ public enum VaporizeCodexProfileProjectionError: Error, CustomStringConvertible,
   case invalidProfileSlug(String)
   case invalidProvider(String)
   case invalidCompactionRatio
+  case admissionReceiptRequired(String)
+  case qualificationReferenceRequired(String)
+  case qualificationRequired(String)
 
   public var description: String {
     switch self {
@@ -66,6 +69,12 @@ public enum VaporizeCodexProfileProjectionError: Error, CustomStringConvertible,
       "Codex provider must contain only lowercase letters, numbers, and underscores: '\(value)'."
     case .invalidCompactionRatio:
       "Codex auto-compaction ratio must be greater than zero and at most one."
+    case .admissionReceiptRequired(let id):
+      "AI serving offering '\(id)' has no admission receipt."
+    case .qualificationReferenceRequired(let id):
+      "AI serving offering '\(id)' has no serving qualification reference."
+    case .qualificationRequired(let coordinate):
+      "Codex profile projection requires qualified, receipt-backed '\(coordinate)'."
     }
   }
 }
@@ -113,6 +122,24 @@ public enum VaporizeCodexProfileProjector {
       AIModelServingLoadoutModel.self,
       from: Data(contentsOf: loadoutURL)
     ).validated()
+    guard !offering.admissionReceiptRefs.isEmpty else {
+      throw VaporizeCodexProfileProjectionError.admissionReceiptRequired(offering.id)
+    }
+    guard !offering.qualificationRefs.isEmpty else {
+      throw VaporizeCodexProfileProjectionError.qualificationReferenceRequired(offering.id)
+    }
+    let qualifications = try offering.qualificationRefs.map {
+      let url = try resolve(
+        $0,
+        relativeTo: offeringURL.deletingLastPathComponent(),
+        field: "offering.qualificationRefs"
+      )
+      return try JSONDecoder().decode(
+        AIModelServingQualificationModel.self,
+        from: Data(contentsOf: url)
+      ).validated()
+    }
+    try requireProjectionQualification(loadout: loadout, qualifications: qualifications)
     guard let healthCheck = service.healthCheck else {
       throw VaporizeCodexProfileProjectionError.healthCheckRequired(serviceID)
     }
@@ -203,6 +230,51 @@ public enum VaporizeCodexProfileProjector {
     guard policy.autoCompactNumerator > 0, policy.autoCompactDenominator > 0,
       policy.autoCompactNumerator <= policy.autoCompactDenominator
     else { throw VaporizeCodexProfileProjectionError.invalidCompactionRatio }
+  }
+
+  private static func requireProjectionQualification(
+    loadout: AIModelServingLoadoutModel,
+    qualifications: [AIModelServingQualificationModel]
+  ) throws {
+    let dimensions = qualifications.flatMap(\.dimensions)
+    let required: [(AIModelQualificationDimension, AIModelContextBand?, AIModelMeasurementPhase?)] =
+      [
+        (.capacity, nil, .idle),
+        (.capacity, nil, .prefill),
+        (.capacity, nil, .decode),
+        (.placement, nil, nil),
+        (.protocol, nil, nil),
+        (.toolLoop, nil, nil),
+      ] + requiredSemanticCoordinates(for: loadout)
+
+    for (dimension, contextBand, measurementPhase) in required {
+      let qualified = dimensions.contains {
+        $0.dimension == dimension
+          && $0.contextBand == contextBand
+          && $0.measurementPhase == measurementPhase
+          && $0.status == .qualified
+          && !$0.receiptRefs.isEmpty
+      }
+      guard qualified else {
+        let coordinate = [dimension.rawValue, contextBand?.rawValue, measurementPhase?.rawValue]
+          .compactMap { $0 }
+          .joined(separator: ":")
+        throw VaporizeCodexProfileProjectionError.qualificationRequired(coordinate)
+      }
+    }
+  }
+
+  private static func requiredSemanticCoordinates(
+    for loadout: AIModelServingLoadoutModel
+  ) -> [(AIModelQualificationDimension, AIModelContextBand?, AIModelMeasurementPhase?)] {
+    let allocated = loadout.context.allocatedTokensPerSlot
+    let native = loadout.context.nativeContextTokens
+    if allocated > native {
+      return [(.semantic, .native, nil), (.semantic, .extrapolated, nil)]
+    }
+    if allocated > 32_768 { return [(.semantic, .native, nil)] }
+    if allocated > 4_096 { return [(.semantic, .thirtyTwoK, nil)] }
+    return [(.semantic, .fourK, nil)]
   }
 
   private static func isKebabCase(_ value: String) -> Bool {

@@ -53,6 +53,8 @@ struct VaporizeCodexProfileTests {
       to: models.appendingPathComponent("serving-offering.su.json"))
     try Data(loadoutJSON.utf8).write(
       to: models.appendingPathComponent("serving-loadout.su.json"))
+    try Data(qualificationJSON.utf8).write(
+      to: models.appendingPathComponent("serving-qualification.su.json"))
 
     let loaded = try await VaporizeProjectLoader.load(url: projectURL)
     let output = root.appendingPathComponent("codex")
@@ -79,6 +81,66 @@ struct VaporizeCodexProfileTests {
     #expect(catalogModels.first?["context_window"] as? Int == 524_288)
   }
 
+  @Test("Refuses an unqualified projection without replacing existing files")
+  func refusesUnqualifiedProjectionWithoutReplacingExistingFiles() async throws {
+    let root = FileManager.default.temporaryDirectory
+      .appendingPathComponent("vaporize-codex-profile-\(UUID().uuidString.lowercased())")
+    defer { try? FileManager.default.removeItem(at: root) }
+    let models = root.appendingPathComponent("models/bonsai")
+    let output = root.appendingPathComponent("codex")
+    try FileManager.default.createDirectory(at: models, withIntermediateDirectories: true)
+    try FileManager.default.createDirectory(at: output, withIntermediateDirectories: true)
+
+    let schemaURL = URL(fileURLWithPath: #filePath)
+      .deletingLastPathComponent()
+      .deletingLastPathComponent()
+      .deletingLastPathComponent()
+      .appendingPathComponent("Pkl/vaporize-project.pkl")
+    let projectURL = root.appendingPathComponent("project.pkl")
+    let project = """
+      amends "\(schemaURL.absoluteString)"
+      name = "bonsai"
+      services = new {
+        ["clia-bonsai-512k-codex"] = new {
+          activation = "manual"
+          executable = "compat.exe"
+          healthCheck = new { kind = "http"; url = "http://127.0.0.1:8006/health" }
+          aiModelServingOfferingRef = new {
+            tg = new { new { k = "rp"; v = "models/bonsai/serving-offering.su.json" } }
+          }
+          codexProfile = new {
+            slug = "clia-bonsai"
+            provider = "clia_bonsai_local"
+            baseInstructions = "Use tools precisely."
+          }
+        }
+      }
+      """
+    try Data(project.utf8).write(to: projectURL)
+    try Data(offeringJSON.utf8).write(
+      to: models.appendingPathComponent("serving-offering.su.json"))
+    try Data(loadoutJSON.utf8).write(
+      to: models.appendingPathComponent("serving-loadout.su.json"))
+    try Data(pendingQualificationJSON.utf8).write(
+      to: models.appendingPathComponent("serving-qualification.su.json"))
+    let profileURL = output.appendingPathComponent("clia-bonsai.config.toml")
+    let catalogURL = output.appendingPathComponent("clia-bonsai.models.json")
+    try Data("existing-profile".utf8).write(to: profileURL)
+    try Data("existing-catalog".utf8).write(to: catalogURL)
+
+    let loaded = try await VaporizeProjectLoader.load(url: projectURL)
+    #expect(throws: VaporizeCodexProfileProjectionError.qualificationRequired("capacity:prefill")) {
+      _ = try VaporizeCodexProfileProjector.plan(
+        serviceID: "clia-bonsai-512k-codex",
+        project: loaded,
+        projectURL: projectURL,
+        outputDirectory: output
+      )
+    }
+    #expect(try String(contentsOf: profileURL, encoding: .utf8) == "existing-profile")
+    #expect(try String(contentsOf: catalogURL, encoding: .utf8) == "existing-catalog")
+  }
+
   private var offeringJSON: String {
     """
     {
@@ -99,9 +161,13 @@ struct VaporizeCodexProfileTests {
       },
       "loadoutRef": { "link-ref-model": "0.0.5", "tg": [{ "k": "rp", "v": "serving-loadout.su.json" }] },
       "capacityPolicyRef": { "link-ref-model": "0.0.5", "tg": [{ "k": "ss", "v": "capacity://3090" }] },
-      "qualificationRefs": [],
+      "qualificationRefs": [
+        { "link-ref-model": "0.0.5", "tg": [{ "k": "rp", "v": "serving-qualification.su.json" }] }
+      ],
       "lifecycle": "preview",
-      "admissionReceiptRefs": [],
+      "admissionReceiptRefs": [
+        { "link-ref-model": "0.0.5", "tg": [{ "k": "ss", "v": "admission-receipt://bonsai/512k/001" }] }
+      ],
       "aliases": ["clia-bonsai-27b"]
     }
     """
@@ -127,6 +193,39 @@ struct VaporizeCodexProfileTests {
       "batch": { "batchTokens": 512, "microBatchTokens": 128 },
       "capacityPolicyRef": { "link-ref-model": "0.0.5", "tg": [{ "k": "ss", "v": "capacity://3090" }] },
       "configurationReceiptRefs": []
+    }
+    """
+  }
+
+  private var qualificationJSON: String {
+    qualificationJSON(prefillStatus: "qualified", prefillReceipts: receiptRefs)
+  }
+
+  private var pendingQualificationJSON: String {
+    qualificationJSON(prefillStatus: "pending", prefillReceipts: "[]")
+  }
+
+  private var receiptRefs: String {
+    #"[{ "link-ref-model": "0.0.5", "tg": [{ "k": "ss", "v": "lab-report://bonsai/512k/001" }] }]"#
+  }
+
+  private func qualificationJSON(prefillStatus: String, prefillReceipts: String) -> String {
+    """
+    {
+      "ai-model-serving-qualification-model": "2.2609.01200",
+      "id": "clia-bonsai-27b-512k-qualification-001",
+      "offeringRef": { "link-ref-model": "0.0.5", "tg": [{ "k": "rp", "v": "serving-offering.su.json" }] },
+      "recordedAt": "2026-09-01T00:00:00Z",
+      "dimensions": [
+        { "dimension": "capacity", "measurementPhase": "idle", "status": "qualified", "receiptRefs": \(receiptRefs) },
+        { "dimension": "capacity", "measurementPhase": "prefill", "status": "\(prefillStatus)", "receiptRefs": \(prefillReceipts) },
+        { "dimension": "capacity", "measurementPhase": "decode", "status": "qualified", "receiptRefs": \(receiptRefs) },
+        { "dimension": "placement", "status": "qualified", "receiptRefs": \(receiptRefs) },
+        { "dimension": "protocol", "status": "qualified", "receiptRefs": \(receiptRefs) },
+        { "dimension": "tool-loop", "status": "qualified", "receiptRefs": \(receiptRefs) },
+        { "dimension": "semantic", "contextBand": "native", "status": "qualified", "receiptRefs": \(receiptRefs) },
+        { "dimension": "semantic", "contextBand": "extrapolated", "status": "qualified", "receiptRefs": \(receiptRefs) }
+      ]
     }
     """
   }

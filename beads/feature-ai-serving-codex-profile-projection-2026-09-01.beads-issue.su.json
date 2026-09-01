@@ -8,22 +8,25 @@
   "issueType": "feature",
   "labels": ["vaporize", "ai-model", "codex", "link-ref", "pkl", "windows", "macos"],
   "createdAt": "2026-09-01T10:05:00Z",
-  "updatedAt": "2026-09-01T10:05:00Z",
+  "updatedAt": "2026-09-01T13:23:00Z",
   "createdBy": "Codex with operator direction",
   "description": "Make a Vaporize service consume a LinkRef 0.0.5 AI serving offering and generate Codex profile and model-catalog files from the canonical serving loadout instead of maintaining duplicate context and route facts by hand.",
   "expectedBehavior": "vaporize service profile resolves the declared offering and loadout, validates the Responses route, derives model alias, context, compaction, and endpoint metadata, and atomically materializes a matching Codex profile and catalog on Windows or macOS.",
-  "actualBehavior": "The Swift projector resolves AI model v002 records through LinkRef 0.0.5, generated the live CLIA Bonsai profile at 524288 tokens with a 458752-token compaction threshold and the port-8006 Responses route, and installed the generated profile into the operator Codex directory.",
+  "actualBehavior": "The Swift projector resolves AI model v002 records through LinkRef 0.0.5 and now refuses to plan or materialize a Codex profile unless the offering has an admission receipt and every required capacity, placement, protocol, tool-loop, and semantic coordinate is qualified with receipt evidence. The previously generated unqualified CLIA Bonsai profile and catalog were retired to timestamped backup names.",
   "acceptanceCriteria": [
     "Vaporize Pkl declares the AI serving offering through LinkRef 0.0.5.",
     "The projector uses the Schema Universal AI model v002 Swift package.",
     "The model alias, context window, compaction limit, display name, and Responses endpoint are generated rather than copied by hand.",
     "The profile and catalog writes are atomic and support an explicit output directory.",
-    "Windows tests cover Pkl decoding and end-to-end projection."
+    "Projection fails closed when admission or required qualification evidence is absent.",
+    "A rejected projection leaves existing profile and catalog bytes unchanged.",
+    "Windows tests cover Pkl decoding, qualification gating, non-overwrite behavior, and end-to-end projection."
   ],
   "fixSteps": [
     "Run vaporize service profile with the service id and canonical project Pkl.",
     "If resolution fails, repair the relative-path LinkRef to the offering or the offering's relative-path loadoutRef.",
-    "If Codex metadata disagrees with runtime capacity, correct and requalify the serving loadout before regenerating the client files."
+    "If Codex metadata disagrees with runtime capacity, correct and requalify the serving loadout before regenerating the client files.",
+    "Do not restore a blocked profile until its offering has an admission receipt and all projection-required qualification coordinates are receipt-backed."
   ],
   "evidenceRefs": [
     "sources/vaporize-service-management/vaporize-codex-profile.swift",
