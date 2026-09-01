@@ -1,4 +1,5 @@
 import Foundation
+import Link_Ref_Schemas_v000_000_005
 
 public enum VaporizeServiceScope: String, Codable, Equatable, Sendable {
   case user
@@ -30,6 +31,34 @@ public struct VaporizeServiceHealthCheck: Codable, Equatable, Sendable {
   }
 }
 
+public struct VaporizeCodexProfile: Codable, Equatable, Sendable {
+  public var slug: String
+  public var provider: String
+  public var autoCompactNumerator: Int
+  public var autoCompactDenominator: Int
+  public var reasoningEffort: String
+  public var reasoningSummary: String
+  public var baseInstructions: String
+
+  public init(
+    slug: String,
+    provider: String,
+    autoCompactNumerator: Int = 7,
+    autoCompactDenominator: Int = 8,
+    reasoningEffort: String = "low",
+    reasoningSummary: String = "none",
+    baseInstructions: String
+  ) {
+    self.slug = slug
+    self.provider = provider
+    self.autoCompactNumerator = autoCompactNumerator
+    self.autoCompactDenominator = autoCompactDenominator
+    self.reasoningEffort = reasoningEffort
+    self.reasoningSummary = reasoningSummary
+    self.baseInstructions = baseInstructions
+  }
+}
+
 public struct VaporizeService: Codable, Equatable, Sendable {
   public var scope: VaporizeServiceScope
   public var activation: VaporizeServiceActivation
@@ -41,6 +70,8 @@ public struct VaporizeService: Codable, Equatable, Sendable {
   public var standardOutputPath: String?
   public var standardErrorPath: String?
   public var healthCheck: VaporizeServiceHealthCheck?
+  public var aiModelServingOfferingRef: LinkRefModel?
+  public var codexProfile: VaporizeCodexProfile?
 
   public init(
     scope: VaporizeServiceScope = .user,
@@ -52,7 +83,9 @@ public struct VaporizeService: Codable, Equatable, Sendable {
     restartPolicy: VaporizeServiceRestartPolicy = .onFailure,
     standardOutputPath: String? = nil,
     standardErrorPath: String? = nil,
-    healthCheck: VaporizeServiceHealthCheck? = nil
+    healthCheck: VaporizeServiceHealthCheck? = nil,
+    aiModelServingOfferingRef: LinkRefModel? = nil,
+    codexProfile: VaporizeCodexProfile? = nil
   ) {
     self.scope = scope
     self.activation = activation
@@ -64,6 +97,8 @@ public struct VaporizeService: Codable, Equatable, Sendable {
     self.standardOutputPath = standardOutputPath
     self.standardErrorPath = standardErrorPath
     self.healthCheck = healthCheck
+    self.aiModelServingOfferingRef = aiModelServingOfferingRef
+    self.codexProfile = codexProfile
   }
 
   private enum CodingKeys: String, CodingKey {
@@ -77,6 +112,8 @@ public struct VaporizeService: Codable, Equatable, Sendable {
     case standardOutputPath
     case standardErrorPath
     case healthCheck
+    case aiModelServingOfferingRef
+    case codexProfile
   }
 
   public init(from decoder: any Decoder) throws {
@@ -97,7 +134,11 @@ public struct VaporizeService: Codable, Equatable, Sendable {
       standardOutputPath: try container.decodeIfPresent(String.self, forKey: .standardOutputPath),
       standardErrorPath: try container.decodeIfPresent(String.self, forKey: .standardErrorPath),
       healthCheck: try container.decodeIfPresent(
-        VaporizeServiceHealthCheck.self, forKey: .healthCheck)
+        VaporizeServiceHealthCheck.self, forKey: .healthCheck),
+      aiModelServingOfferingRef: try container.decodeIfPresent(
+        LinkRefModel.self, forKey: .aiModelServingOfferingRef),
+      codexProfile: try container.decodeIfPresent(
+        VaporizeCodexProfile.self, forKey: .codexProfile)
     )
   }
 }

@@ -1,0 +1,66 @@
+{
+  "schemaVersion": "0.0.8",
+  "WorkflowInstanceModel": "0.0.8",
+  "kind": "workflow-instance",
+  "slug": "software-modification-workstream-capture-2026-09-01-ai-serving-codex-profile",
+  "title": "Software modification - AI serving Codex profile projection",
+  "updated": "2026-09-01T10:05:00Z",
+  "workflowRef": {
+    "link-ref-model": "0.0.5",
+    "tg": [{
+      "k": "rp",
+      "rt": "mono",
+      "v": "private/universal/substrate/collectives/spaces-universal/private/universal/kura-spaces/workflows/software-modification-workstream-capture/v0.1.0/software-modification-workstream-capture.workflow.su.json"
+    }]
+  },
+  "beadTrackingRefs": [{
+    "link-ref-model": "0.0.5",
+    "tg": [{ "k": "rp", "rt": "vaporize", "v": "beads/feature-ai-serving-codex-profile-projection-2026-09-01.beads-issue.su.json" }]
+  }],
+  "stateResults": [
+    {
+      "schemaVersion": "0.1.0",
+      "WorkflowInstanceStateResultModel": "0.1.0",
+      "kind": "workflow-instance-state-result",
+      "stateId": "author-modification-request",
+      "outcome": "completed",
+      "summary": "The operator authorized using the new worker contracts in the real Bonsai and Codex consumer path."
+    },
+    {
+      "schemaVersion": "0.1.0",
+      "WorkflowInstanceStateResultModel": "0.1.0",
+      "kind": "workflow-instance-state-result",
+      "stateId": "workspace-preflight",
+      "outcome": "completed-with-unrelated-dirt",
+      "summary": "The Vaporize boundary was clean before editing; unrelated changes remain outside this nested repository."
+    },
+    {
+      "schemaVersion": "0.1.0",
+      "WorkflowInstanceStateResultModel": "0.1.0",
+      "kind": "workflow-instance-state-result",
+      "stateId": "implement-change",
+      "outcome": "completed",
+      "summary": "Added typed Pkl and Swift client-projection policy plus a Swift projector that consumes LinkRef-backed AI model v002 offering and loadout records."
+    },
+    {
+      "schemaVersion": "0.1.0",
+      "WorkflowInstanceStateResultModel": "0.1.0",
+      "kind": "workflow-instance-state-result",
+      "stateId": "build-and-test",
+      "outcome": "completed",
+      "summary": "The Windows Vaporize product built, four focused tests passed, strict formatting passed on owned small files, and the real Takumi loadout generated the expected Codex files."
+    }
+  ],
+  "receiptRefs": [{
+    "link-ref-model": "0.0.5",
+    "tg": [{
+      "k": "rp",
+      "rt": "vaporize",
+      "v": "tests/vaporize-service-management/vaporize-codex-profile-tests.swift"
+    }]
+  }],
+  "notes": [
+    "SwiftPM continues to emit pre-existing duplicate local and remote package-identity warnings.",
+    "The projector is platform-neutral Foundation code; native path rendering follows the host URL implementation."
+  ]
+}

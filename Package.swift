@@ -183,6 +183,20 @@ let toolMaterializationSchemasDependency = Package.Dependency.package(
     "schema-universal/pri/o/wrkstrm/fami/d/tooling/tool-materialization/v001/spm/2608-30210"
   )
 )
+let aiModelSchemasDependency = Package.Dependency.package(
+  name: "ai-model-schemas-v0002-2609-01200",
+  path: repositoryPath(
+    collectivesDirectory,
+    "schema-universal/pri/o/wrkstrm/fami/d/ai/ai-model/v002/spm/2609-01200"
+  )
+)
+let linkRefSchemasDependency = Package.Dependency.package(
+  name: "link-ref-schemas-v000-000-005",
+  path: repositoryPath(
+    collectivesDirectory,
+    "schema-universal/private/universal/domain/primitives/schema-primitives/link-ref-schemas/v0.0.5/spm/link-ref-schemas-v000-000-005"
+  )
+)
 
 let packageDependencies: [Package.Dependency] = [
   commonLogDependency,
@@ -203,6 +217,8 @@ let packageDependencies: [Package.Dependency] = [
   testServiceAdoptionPolicyDependency,
   bumpBuildDependency,
   toolMaterializationSchemasDependency,
+  aiModelSchemasDependency,
+  linkRefSchemasDependency,
   .package(url: "https://github.com/apple/swift-argument-parser", from: "1.6.0"),
   .package(url: "https://github.com/apple/swift-crypto.git", from: "3.15.1"),
 ]
@@ -256,6 +272,10 @@ let package = Package(
           name: "ToolMaterializationSchemas_v0001_2608_30210",
           package: "tool-materialization-schemas-v0001-2608-30210"
         ),
+        .product(
+          name: "Link_Ref_Schemas_v000_000_005",
+          package: "link-ref-schemas-v000-000-005"
+        ),
       ],
       path: "sources/vaporize-project-model"
     ),
@@ -263,6 +283,10 @@ let package = Package(
       name: "VaporizeServiceManagement",
       dependencies: [
         "VaporizeProjectModel",
+        .product(
+          name: "AIModelSchemas_v0002_2609_01200",
+          package: "ai-model-schemas-v0002-2609-01200"
+        ),
         .product(name: "CommonShell", package: "common-shell"),
         .product(name: "CommonProcess", package: "common-process"),
       ],

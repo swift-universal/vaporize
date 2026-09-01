@@ -1,0 +1,32 @@
+{
+  "BeadsIssue": "0.1.0",
+  "schemaVersion": "0.1.0",
+  "id": "feature-ai-serving-codex-profile-projection-2026-09-01",
+  "title": "Project Codex profiles from AI serving offerings",
+  "status": "closed",
+  "priority": 1,
+  "issueType": "feature",
+  "labels": ["vaporize", "ai-model", "codex", "link-ref", "pkl", "windows", "macos"],
+  "createdAt": "2026-09-01T10:05:00Z",
+  "updatedAt": "2026-09-01T10:05:00Z",
+  "createdBy": "Codex with operator direction",
+  "description": "Make a Vaporize service consume a LinkRef 0.0.5 AI serving offering and generate Codex profile and model-catalog files from the canonical serving loadout instead of maintaining duplicate context and route facts by hand.",
+  "expectedBehavior": "vaporize service profile resolves the declared offering and loadout, validates the Responses route, derives model alias, context, compaction, and endpoint metadata, and atomically materializes a matching Codex profile and catalog on Windows or macOS.",
+  "actualBehavior": "The Swift projector resolves AI model v002 records through LinkRef 0.0.5, generated the live CLIA Bonsai profile at 524288 tokens with a 458752-token compaction threshold and the port-8006 Responses route, and installed the generated profile into the operator Codex directory.",
+  "acceptanceCriteria": [
+    "Vaporize Pkl declares the AI serving offering through LinkRef 0.0.5.",
+    "The projector uses the Schema Universal AI model v002 Swift package.",
+    "The model alias, context window, compaction limit, display name, and Responses endpoint are generated rather than copied by hand.",
+    "The profile and catalog writes are atomic and support an explicit output directory.",
+    "Windows tests cover Pkl decoding and end-to-end projection."
+  ],
+  "fixSteps": [
+    "Run vaporize service profile with the service id and canonical project Pkl.",
+    "If resolution fails, repair the relative-path LinkRef to the offering or the offering's relative-path loadoutRef.",
+    "If Codex metadata disagrees with runtime capacity, correct and requalify the serving loadout before regenerating the client files."
+  ],
+  "evidenceRefs": [
+    "sources/vaporize-service-management/vaporize-codex-profile.swift",
+    "tests/vaporize-service-management/vaporize-codex-profile-tests.swift"
+  ]
+}

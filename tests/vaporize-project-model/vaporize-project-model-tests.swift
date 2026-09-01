@@ -46,6 +46,16 @@ struct VaporizeProjectModelTests {
             kind = "http"
             url = "http://127.0.0.1:8003/v1/models"
           }
+          aiModelServingOfferingRef = new {
+            tg = new {
+              new { k = "rp"; v = "models/takumi-fused/serving-offering.su.json" }
+            }
+          }
+          codexProfile = new {
+            slug = "takumi-fused"
+            provider = "takumi_fused_local"
+            baseInstructions = "Use tools precisely."
+          }
         }
       }
       """
@@ -66,6 +76,10 @@ struct VaporizeProjectModelTests {
     #expect(service.arguments == ["serve", "--port", "8003"])
     #expect(service.restartPolicy == .onFailure)
     #expect(service.healthCheck?.url == "http://127.0.0.1:8003/v1/models")
+    #expect(service.aiModelServingOfferingRef?.schemaVersion == "0.0.5")
+    #expect(service.codexProfile?.slug == "takumi-fused")
+    #expect(service.codexProfile?.autoCompactNumerator == 7)
+    #expect(service.codexProfile?.autoCompactDenominator == 8)
   }
 
   @Test("Vaporize projects debug and release identities from one Pkl tool family")

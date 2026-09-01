@@ -535,6 +535,12 @@ struct VaporizeCLI: AsyncParsableCommand {
   var pklPath: String?
 
   @Option(
+    name: .customLong("output-directory"),
+    help: "Destination directory for generated service client profiles."
+  )
+  var serviceOutputDirectory: String?
+
+  @Option(
     name: .customLong("tool-family"),
     help: "Tool family key declared by the Vaporize project Pkl."
   )
@@ -758,25 +764,35 @@ struct VaporizeCLI: AsyncParsableCommand {
   }
 
   private func runServiceAction() async throws {
-    guard let actionToken = forwardedArguments.first,
-      let action = VaporizeServiceAction(rawValue: actionToken)
-    else {
+    guard let actionToken = forwardedArguments.first else {
       throw ValidationError(
-        "service requires an action: install, start, status, logs, stop, or uninstall."
+        "service requires an action: install, start, status, logs, stop, uninstall, or profile."
+      )
+    }
+    let projectsCodexProfile = actionToken == "profile"
+    let action = VaporizeServiceAction(rawValue: actionToken)
+    guard projectsCodexProfile || action != nil else {
+      throw ValidationError(
+        "service requires an action: install, start, status, logs, stop, uninstall, or profile."
       )
     }
     guard forwardedArguments.count >= 2 else {
-      throw ValidationError("service \(action.rawValue) requires a service id.")
+      throw ValidationError("service \(actionToken) requires a service id.")
     }
     let serviceID = forwardedArguments[1]
     var selectedPklPath = pklPath
+    var outputDirectory = serviceOutputDirectory
     var index = 2
     while index < forwardedArguments.count {
       let argument = forwardedArguments[index]
-      guard argument == "--pkl-path", index + 1 < forwardedArguments.count else {
+      guard index + 1 < forwardedArguments.count else {
         throw ValidationError("unexpected service argument '\(argument)'.")
       }
-      selectedPklPath = forwardedArguments[index + 1]
+      switch argument {
+      case "--pkl-path": selectedPklPath = forwardedArguments[index + 1]
+      case "--output-directory": outputDirectory = forwardedArguments[index + 1]
+      default: throw ValidationError("unexpected service argument '\(argument)'.")
+      }
       index += 2
     }
 
@@ -791,6 +807,24 @@ struct VaporizeCLI: AsyncParsableCommand {
     }
 
     let project = try await VaporizeProjectLoader.load(url: projectURL)
+    if projectsCodexProfile {
+      let destination = outputDirectory.map(absoluteURL(for:))
+        ?? URL(fileURLWithPath: NSHomeDirectory()).appendingPathComponent(".codex")
+      let plan = try VaporizeCodexProfileProjector.plan(
+        serviceID: serviceID,
+        project: project,
+        projectURL: projectURL,
+        outputDirectory: destination
+      )
+      try VaporizeCodexProfileProjector.materialize(plan)
+      VaporizeLogging.command.notice(
+        "service=\(plan.serviceID) action=profile offering=\(plan.offeringID) model=\(plan.modelAlias) context=\(plan.contextWindow) state=complete"
+      )
+      VaporizeLogging.command.notice("profile=\(plan.profileURL.path)")
+      VaporizeLogging.command.notice("catalog=\(plan.catalogURL.path)")
+      return
+    }
+    guard let action else { return }
     let receipt = try await VaporizeServiceManager().perform(
       action: action,
       serviceID: serviceID,

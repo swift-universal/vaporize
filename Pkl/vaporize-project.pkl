@@ -64,6 +64,30 @@ class VaporizeServiceHealthCheck {
   url: String
 }
 
+/// LinkRef 0.0.5 target subset used for project-owned record resolution.
+class VaporizeLinkRefTarget {
+  k: "rp"
+  v: String
+  rt: String?
+}
+
+/// A portable typed reference from project Pkl to a canonical record.
+class VaporizeLinkRef {
+  `link-ref-model`: "0.0.5" = "0.0.5"
+  tg: Listing<VaporizeLinkRefTarget>
+}
+
+/// Codex is one optional client projection of an AI serving offering.
+class VaporizeCodexProfile {
+  slug: String
+  provider: String
+  autoCompactNumerator: Int = 7
+  autoCompactDenominator: Int = 8
+  reasoningEffort: String = "low"
+  reasoningSummary: String = "none"
+  baseInstructions: String
+}
+
 /// A long-running process that Vaporize projects into the host's native
 /// service manager. Local developer services should normally use user scope.
 class VaporizeService {
@@ -77,6 +101,8 @@ class VaporizeService {
   standardOutputPath: String?
   standardErrorPath: String?
   healthCheck: VaporizeServiceHealthCheck?
+  aiModelServingOfferingRef: VaporizeLinkRef?
+  codexProfile: VaporizeCodexProfile?
 }
 
 platformTargets: Mapping<String, VaporizePlatformTarget> = new {}
