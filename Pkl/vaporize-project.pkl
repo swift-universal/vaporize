@@ -33,6 +33,23 @@ class VaporizePlatformTarget {
   presentation: VaporizePresentation?
   backend: VaporizeUIBackend?
   resources: Listing<VaporizePlatformResource>?
+
+  /// Journey requirements this target must discharge, as `journey-requirement`
+  /// records from the Journey schema family, v003 and later.
+  ///
+  /// Optional, so every existing project.pkl stays valid. When present it makes
+  /// the requirement graph traversable from the build declaration. A
+  /// requirement names `platforms` and `proof-required`, and those together
+  /// select the test cells a target owes; `failure-effect` says whether a
+  /// missing proof blocks or merely advises. Without this reference the chain
+  /// from a built product back to the journey that justifies it exists only in
+  /// prose.
+  ///
+  /// Each requirement resolves onward to its journey and ranking, and forward
+  /// to the `journey-proof-receipt` records that discharge it, so a validator
+  /// can traverse either direction: from a target to what it owes, or from a
+  /// requirement to whether anything proved it.
+  journeyRequirementRefs: Listing<VaporizeLinkRef>?
 }
 
 /// One stable owner namespace shared by every projected member of a tool family.
